@@ -19,7 +19,7 @@ class NotificationRepositoryImpl extends NotificationRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
-        '/api/v1/method/paas.api.get_user_notifications',
+        '/api/v1/method/paas.api.user.user.get_user_notifications',
         queryParameters: data,
       );
       return ApiResult.success(
