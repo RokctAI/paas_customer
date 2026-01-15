@@ -15,7 +15,7 @@ class CartRepository implements CartRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
-        '/api/v1/method/paas.api.get_cart',
+        '/api/v1/method/paas.api.cart.cart.get_cart',
         queryParameters: {'shop_id': shopId},
       );
       return ApiResult.success(
@@ -152,7 +152,7 @@ class CartRepository implements CartRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/v1/method/paas.api.remove_product_cart',
+        '/api/v1/method/paas.api.cart.cart.remove_product_cart',
         data: {'cart_detail_id': cartDetailId},
       );
       return ApiResult.success(
@@ -185,7 +185,7 @@ class CartRepository implements CartRepositoryFacade {
         params['addons'] = jsonEncode(cart.toJsonCart());
       }
       final response = await client.post(
-        '/api/v1/method/paas.api.add_to_cart',
+        '/api/v1/method/paas.api.cart.cart.add_to_cart',
         data: params,
       );
       return ApiResult.success(
