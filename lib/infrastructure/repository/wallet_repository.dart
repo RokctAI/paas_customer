@@ -16,7 +16,7 @@ class WalletRepository implements WalletRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
-        '/api/v1/method/paas.api.search_users',
+        '/api/v1/method/paas.api.user.user.search_users',
         queryParameters: {
           ...params,
           'lang': LocalStorage.getLanguage()?.locale,
@@ -45,7 +45,7 @@ class WalletRepository implements WalletRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/v1/method/paas.api.send_wallet_balance',
+        '/api/v1/method/paas.api.user.user.send_wallet_balance',
         data: {
           'receiver': userUuid,
           'amount': amount,
@@ -68,7 +68,7 @@ class WalletRepository implements WalletRepositoryFacade {
   Future<ApiResult<List<WalletHistoryData>>> getWalletHistory() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get('/api/v1/method/paas.api.get_wallet_history');
+      final response = await client.get('/api/v1/method/paas.api.user.user.get_wallet_history');
 
       return ApiResult.success(
         data: (response.data['data'] as List)
@@ -94,7 +94,7 @@ class WalletRepository implements WalletRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/v1/method/paas.api.process_wallet_top_up',
+        '/api/v1/method/paas.api.payment.payment.process_wallet_top_up',
         data: {
              'amount': amount,
              'token': token
