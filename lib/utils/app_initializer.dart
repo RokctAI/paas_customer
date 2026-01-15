@@ -57,7 +57,7 @@ class _AppInitializerState extends State<AppInitializer> {
 
     try {
       // Fetch remote config for 'Customer' app type
-      final response = await http.get(Uri.parse('$tenantSite/api/method/paas.api.get_remote_config?app_type=Customer'));
+      final response = await http.get(Uri.parse('$tenantSite/api/method/paas.api.remote_config.get_remote_config?app_type=Customer'));
 
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
