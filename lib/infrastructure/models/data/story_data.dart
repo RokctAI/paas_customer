@@ -1,11 +1,25 @@
-
-
 import 'dart:convert';
 
-List<List<StoryModel?>?>? storyModelFromJson(dynamic str) => str == null ? [] : List<List<StoryModel?>?>.from(str.map((x) => x == null ? [] : List<StoryModel?>.from(x!.map((x) => StoryModel.fromJson(x)))));
+List<List<StoryModel?>?>? storyModelFromJson(dynamic str) => str == null
+    ? []
+    : List<List<StoryModel?>?>.from(
+        str.map(
+          (x) => x == null
+              ? []
+              : List<StoryModel?>.from(x!.map((x) => StoryModel.fromJson(x))),
+        ),
+      );
 
-String storyModelToJson(List<List<StoryModel?>?>? data) => json.encode(data == null ? [] : List<dynamic>.from(data.map((x) => x == null ? [] : List<dynamic>.from(x.map((x) => x!.toJson())))));
-
+String storyModelToJson(List<List<StoryModel?>?>? data) => json.encode(
+  data == null
+      ? []
+      : List<dynamic>.from(
+          data.map(
+            (x) =>
+                x == null ? [] : List<dynamic>.from(x.map((x) => x!.toJson())),
+          ),
+        ),
+);
 
 class StoryModel {
   StoryModel({
@@ -30,15 +44,15 @@ class StoryModel {
 
   factory StoryModel.fromJson(Map<String, dynamic> json) {
     return StoryModel(
-    shopId: json["shop_id"],
-    logoImg: json["logo_img"],
-    title: json["title"],
+      shopId: json["shop_id"],
+      logoImg: json["logo_img"],
+      title: json["title"],
       productUuid: json["product_uuid"],
-    productTitle: json["product_title"],
-    url: json["url"],
-    createdAt: DateTime.tryParse(json["created_at"])?.toLocal(),
-    updatedAt: DateTime.tryParse(json["updated_at"])?.toLocal(),
-  );
+      productTitle: json["product_title"],
+      url: json["url"],
+      createdAt: DateTime.tryParse(json["created_at"])?.toLocal(),
+      updatedAt: DateTime.tryParse(json["updated_at"])?.toLocal(),
+    );
   }
 
   Map<String, dynamic> toJson() => {

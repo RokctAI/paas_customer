@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:foodyman/presentation/theme/color_set.dart';
+import 'package:foodyman/presentation/theme/theme_wrapper.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/application/currency/currency_provider.dart';
 import 'package:foodyman/application/home/home_notifier.dart';
@@ -13,11 +15,8 @@ import 'package:foodyman/application/home/home_state.dart';
 import 'package:foodyman/application/map/view_map_provider.dart';
 import 'package:foodyman/application/profile/profile_provider.dart';
 import 'package:foodyman/application/shop_order/shop_order_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/text_fields/search_text_field.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/presentation/app_assets.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 import 'banner_three.dart';
@@ -35,6 +34,8 @@ import 'shimmer/shop_shimmer_three.dart';
 import 'widgets/explore_three.dart';
 import 'widgets/recommended_three_item.dart';
 import 'widgets/shop_bar_item_three.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class HomePageThree extends ConsumerStatefulWidget {
   const HomePageThree({super.key});
@@ -102,91 +103,119 @@ class _HomePageState extends ConsumerState<HomePageThree> {
   void _onRefresh() {
     ref.watch(homeProvider).selectIndexCategory == -1
         ? (event
-          ..fetchBannerPage(context, _restaurantController, isRefresh: true)
-          ..fetchRestaurantPage(context, _restaurantController, isRefresh: true)
-          ..fetchCategoriesPage(context, _restaurantController, isRefresh: true)
-          ..fetchStorePage(context, _restaurantController, isRefresh: true)
-          ..fetchShopPage(context, _restaurantController, isRefresh: true)
-          ..fetchAds(context)
-          ..fetchRestaurantPageNew(context, _restaurantController,
-              isRefresh: true)
-          ..fetchShopPageRecommend(context, _restaurantController,
-              isRefresh: true))
-        : event.fetchFilterRestaurant(context,
-            controller: _restaurantController, isRefresh: true);
+            ..fetchBannerPage(context, _restaurantController, isRefresh: true)
+            ..fetchRestaurantPage(
+              context,
+              _restaurantController,
+              isRefresh: true,
+            )
+            ..fetchCategoriesPage(
+              context,
+              _restaurantController,
+              isRefresh: true,
+            )
+            ..fetchStorePage(context, _restaurantController, isRefresh: true)
+            ..fetchShopPage(context, _restaurantController, isRefresh: true)
+            ..fetchAds(context)
+            ..fetchRestaurantPageNew(
+              context,
+              _restaurantController,
+              isRefresh: true,
+            )
+            ..fetchShopPageRecommend(
+              context,
+              _restaurantController,
+              isRefresh: true,
+            ))
+        : event.fetchFilterRestaurant(
+            context,
+            controller: _restaurantController,
+            isRefresh: true,
+          );
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(homeProvider);
     final event = ref.read(homeProvider.notifier);
-    final bool isDarkMode = LocalStorage.getAppThemeMode();
     final bool isLtr = LocalStorage.getLangLtr();
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: isDarkMode ? AppStyle.mainBackDark : AppStyle.white,
-        body: SmartRefresher(
-          enablePullDown: true,
-          enablePullUp: true,
-          physics: const BouncingScrollPhysics(),
-          controller: _restaurantController,
-          header: WaterDropMaterialHeader(
-            distance: 160.h,
-            backgroundColor: AppStyle.white,
-            color: AppStyle.textGrey,
-          ),
-          onLoading: () => _onLoading(),
-          onRefresh: () => _onRefresh(),
-          child: ListView(
-            shrinkWrap: true,
-            padding: EdgeInsets.only(bottom: 120.r),
-            children: [
-              AppBarThree(state: state, event: event),
-              12.verticalSpace,
-              Padding(
-                padding: REdgeInsets.symmetric(horizontal: 12),
-                child: SearchTextField(
-                  isRead: true,
-                  isBorder: true,
-                  onTap: () {
-                    context.pushRoute(SearchRoute());
-                  },
-                  suffixIcon: const Icon(
-                    FlutterRemix.equalizer_fill,
-                    color: AppStyle.black,
-                  ),
-                ),
+      child: ThemeWrapper(
+        builder: (colors, theme) {
+          return Scaffold(
+            backgroundColor: colors.backgroundColor,
+            body: SmartRefresher(
+              enablePullDown: true,
+              enablePullUp: true,
+              physics: const BouncingScrollPhysics(),
+              controller: _restaurantController,
+              header: WaterDropMaterialHeader(
+                distance: 160.h,
+                backgroundColor: AppStyle.white,
+                color: AppStyle.textGrey,
               ),
-              12.verticalSpace,
-              state.isBannerLoading
-                  ? const BannerShimmer()
-                  : BannerThree(
-                      bannerController: _bannerController,
-                      pageController: _pageController,
-                      banners: state.banners,
-                      notifier: event,
+              onLoading: () => _onLoading(),
+              onRefresh: () => _onRefresh(),
+              child: ListView(
+                shrinkWrap: true,
+                padding: EdgeInsets.only(bottom: 120.r),
+                children: [
+                  AppBarThree(state: state, event: event, colors: colors),
+                  12.verticalSpace,
+                  Padding(
+                    padding: REdgeInsets.symmetric(horizontal: 12),
+                    child: SearchTextField(
+                      isRead: true,
+                      isBorder: true,
+                      onTap: () {
+                        context.pushRoute(SearchRoute());
+                      },
+                      suffixIcon: const Icon(
+                        FlutterRemix.equalizer_fill,
+                        color: AppStyle.black,
+                      ),
                     ),
-              CategoryScreenThree(
-                state: state,
-                categoryController: _categoryController,
-                event: event,
-                restaurantController: _restaurantController,
+                  ),
+                  12.verticalSpace,
+                  state.isBannerLoading
+                      ? const BannerShimmer()
+                      : BannerThree(
+                          bannerController: _bannerController,
+                          pageController: _pageController,
+                          banners: state.banners,
+                          notifier: event,
+                        ),
+                  CategoryScreenThree(
+                    colors: colors,
+                    state: state,
+                    categoryController: _categoryController,
+                    event: event,
+                    restaurantController: _restaurantController,
+                  ),
+                  state.selectIndexCategory == -1
+                      ? _body(state, event, context, colors)
+                      : FilterCategoryShopThree(
+                          colors: colors,
+                          state: state,
+                          event: event,
+                          shopController: _restaurantController,
+                        ),
+                ],
               ),
-              state.selectIndexCategory == -1
-                  ? _body(state, event, context)
-                  : FilterCategoryShopThree(
-                      state: state,
-                      event: event,
-                      shopController: _restaurantController),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget _body(HomeState state, HomeNotifier event, BuildContext context) {
+  Widget _body(
+    HomeState state,
+    HomeNotifier event,
+    BuildContext context,
+    CustomColorSet colors,
+  ) {
     return Column(
       children: [
         state.isShopLoading
@@ -194,51 +223,54 @@ class _HomePageState extends ConsumerState<HomePageThree> {
                 title: AppHelpers.getTranslation(TrKeys.chooseBrand),
               )
             : state.shops.isNotEmpty
-                ? Column(
-                    children: [
-                      Text(
-                        AppHelpers.getTranslation(TrKeys.chooseBrand),
-                        style: AppStyle.interNoSemi(),
+            ? Column(
+                children: [
+                  Text(
+                    AppHelpers.getTranslation(TrKeys.chooseBrand),
+                    style: AppStyle.interNoSemi(color: colors.textBlack),
+                  ),
+                  AnimationLimiter(
+                    child: GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 8.r,
+                        crossAxisSpacing: 8.r,
+                        mainAxisExtent: 168.r,
                       ),
-                      AnimationLimiter(
-                        child: GridView.builder(
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            mainAxisSpacing: 8.r,
-                            crossAxisSpacing: 8.r,
-                            mainAxisExtent: 168.r,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16.r,
+                        vertical: 16,
+                      ),
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.shops.length > 5
+                          ? 6
+                          : state.shops.length,
+                      itemBuilder: (context, index) {
+                        return AnimationConfiguration.staggeredList(
+                          position: index,
+                          duration: const Duration(milliseconds: 375),
+                          child: SlideAnimation(
+                            verticalOffset: 50.0,
+                            child: FadeInAnimation(
+                              child: index == 5
+                                  ? ShopSeeAll(
+                                      brandCount: state.totalShops,
+                                      colors: colors,
+                                    )
+                                  : MarketThreeItem(
+                                      isShop: true,
+                                      shop: state.shops[index],
+                                    ),
+                            ),
                           ),
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 16.r, vertical: 16),
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount:
-                              state.shops.length > 5 ? 6 : state.shops.length,
-                          itemBuilder: (context, index) {
-                            return AnimationConfiguration.staggeredList(
-                              position: index,
-                              duration: const Duration(milliseconds: 375),
-                              child: SlideAnimation(
-                                verticalOffset: 50.0,
-                                child: FadeInAnimation(
-                                  child: index == 5
-                                      ? ShopSeeAll(
-                                          brandCount: state.totalShops,
-                                        )
-                                      : MarketThreeItem(
-                                          isShop: true,
-                                          shop: state.shops[index],
-                                        ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  )
-                : const SizedBox.shrink(),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              )
+            : const SizedBox.shrink(),
         if (AppHelpers.getParcel()) const DoorThree(),
         state.story?.isNotEmpty ?? false
             ? SizedBox(
@@ -259,18 +291,19 @@ class _HomePageState extends ConsumerState<HomePageThree> {
                       padding: EdgeInsets.only(left: 16.w),
                       itemBuilder: (context, index) =>
                           AnimationConfiguration.staggeredList(
-                              position: index,
-                              duration: const Duration(milliseconds: 375),
-                              child: SlideAnimation(
-                                verticalOffset: 50.0,
-                                child: FadeInAnimation(
-                                  child: ShopBarItemThree(
-                                    index: index,
-                                    controller: _storyController,
-                                    story: state.story?[index]?.first,
-                                  ),
+                            position: index,
+                            duration: const Duration(milliseconds: 375),
+                            child: SlideAnimation(
+                              verticalOffset: 50.0,
+                              child: FadeInAnimation(
+                                child: ShopBarItemThree(
+                                  index: index,
+                                  controller: _storyController,
+                                  story: state.story?[index]?.first,
                                 ),
-                              )),
+                              ),
+                            ),
+                          ),
                     ),
                   ),
                 ),
@@ -282,26 +315,27 @@ class _HomePageState extends ConsumerState<HomePageThree> {
                 title: AppHelpers.getTranslation(TrKeys.newsOfWeek),
               )
             : state.newRestaurant.isNotEmpty
-                ? Column(
-                    children: [
-                      TitleAndIcon(
-                        rightTitle: AppHelpers.getTranslation(TrKeys.seeAll),
-                        isIcon: true,
-                        title: AppHelpers.getTranslation(TrKeys.newsOfWeek),
-                        onRightTap: () {
-                          context.pushRoute(
-                              RecommendedThreeRoute(isNewsOfPage: true));
-                        },
-                      ),
-                      12.verticalSpace,
-                      AnimationLimiter(
-                        child: ListView.builder(
-                          padding: EdgeInsets.only(bottom: 16.r),
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: state.newRestaurant.length,
-                          itemBuilder: (context, index) =>
-                              AnimationConfiguration.staggeredList(
+            ? Column(
+                children: [
+                  TitleAndIcon(
+                    rightTitle: AppHelpers.getTranslation(TrKeys.seeAll),
+                    isIcon: true,
+                    title: AppHelpers.getTranslation(TrKeys.newsOfWeek),
+                    onRightTap: () {
+                      context.pushRoute(
+                        RecommendedThreeRoute(isNewsOfPage: true),
+                      );
+                    },
+                  ),
+                  12.verticalSpace,
+                  AnimationLimiter(
+                    child: ListView.builder(
+                      padding: EdgeInsets.only(bottom: 16.r),
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: state.newRestaurant.length,
+                      itemBuilder: (context, index) =>
+                          AnimationConfiguration.staggeredList(
                             position: index,
                             duration: const Duration(milliseconds: 375),
                             child: SlideAnimation(
@@ -314,56 +348,55 @@ class _HomePageState extends ConsumerState<HomePageThree> {
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                    ],
-                  )
-                : const SizedBox.shrink(),
+                    ),
+                  ),
+                ],
+              )
+            : const SizedBox.shrink(),
         24.verticalSpace,
         state.isShopRecommendLoading
             ? const RecommendShopShimmer()
             : state.shopsRecommend.isNotEmpty
-                ? Column(
-                    children: [
-                      TitleAndIcon(
-                        rightTitle: AppHelpers.getTranslation(TrKeys.seeAll),
-                        isIcon: true,
-                        title: AppHelpers.getTranslation(TrKeys.recommended),
-                        onRightTap: () {
-                          context.pushRoute(RecommendedThreeRoute());
-                        },
-                      ),
-                      12.verticalSpace,
-                      SizedBox(
-                          height: 170.h,
-                          child: AnimationLimiter(
-                            child: ListView.builder(
-                              shrinkWrap: false,
-                              scrollDirection: Axis.horizontal,
-                              padding: EdgeInsets.symmetric(horizontal: 16.w),
-                              itemCount: state.shopsRecommend.length,
-                              itemBuilder: (context, index) =>
-                                  AnimationConfiguration.staggeredList(
-                                position: index,
-                                duration: const Duration(milliseconds: 375),
-                                child: SlideAnimation(
-                                  verticalOffset: 50.0,
-                                  child: FadeInAnimation(
-                                    child: RecommendedThreeItem(
-                                      shop: state.shopsRecommend[index],
-                                    ),
+            ? Column(
+                children: [
+                  TitleAndIcon(
+                    rightTitle: AppHelpers.getTranslation(TrKeys.seeAll),
+                    isIcon: true,
+                    title: AppHelpers.getTranslation(TrKeys.recommended),
+                    onRightTap: () {
+                      context.pushRoute(RecommendedThreeRoute());
+                    },
+                  ),
+                  12.verticalSpace,
+                  SizedBox(
+                    height: 170.h,
+                    child: AnimationLimiter(
+                      child: ListView.builder(
+                        shrinkWrap: false,
+                        scrollDirection: Axis.horizontal,
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        itemCount: state.shopsRecommend.length,
+                        itemBuilder: (context, index) =>
+                            AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              child: SlideAnimation(
+                                verticalOffset: 50.0,
+                                child: FadeInAnimation(
+                                  child: RecommendedThreeItem(
+                                    shop: state.shopsRecommend[index],
                                   ),
                                 ),
                               ),
                             ),
-                          )),
-                      16.verticalSpace,
-                    ],
-                  )
-                : const SizedBox.shrink(),
-        ExploreThree(
-          list: state.ads,
-        ),
+                      ),
+                    ),
+                  ),
+                  16.verticalSpace,
+                ],
+              )
+            : const SizedBox.shrink(),
+        ExploreThree(list: state.ads),
         12.verticalSpace,
         state.isRestaurantLoading
             ? const AllShopShimmer()
@@ -382,24 +415,21 @@ class _HomePageState extends ConsumerState<HomePageThree> {
                             itemCount: state.restaurant.length,
                             itemBuilder: (context, index) =>
                                 AnimationConfiguration.staggeredList(
-                              position: index,
-                              duration: const Duration(milliseconds: 375),
-                              child: SlideAnimation(
-                                verticalOffset: 50.0,
-                                child: FadeInAnimation(
-                                  child: MarketThreeItem(
-                                    shop: state.restaurant[index],
-                                    isSimpleShop: true,
+                                  position: index,
+                                  duration: const Duration(milliseconds: 375),
+                                  child: SlideAnimation(
+                                    verticalOffset: 50.0,
+                                    child: FadeInAnimation(
+                                      child: MarketThreeItem(
+                                        shop: state.restaurant[index],
+                                        isSimpleShop: true,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
                           ),
                         )
-                      : SvgPicture.asset(
-                          "assets/svgs/empty.svg",
-                          height: 100.h,
-                        )
+                      : SvgPicture.asset(Assets.svgsEmpty, height: 100.h),
                 ],
               ),
       ],

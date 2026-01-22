@@ -1,17 +1,17 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
-import 'package:foodyman/infrastructure/models/data/referral_data.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 
 import 'package:foodyman/infrastructure/models/data/translation.dart';
 
+import '../../infrastructure/models/data/career_data.dart';
+import '../../infrastructure/models/response/pages_response.dart';
 
 part 'profile_state.freezed.dart';
 
 @freezed
-class ProfileState with _$ProfileState {
+abstract class ProfileState with _$ProfileState {
   const factory ProfileState({
-    @Default(true) bool isLoading,
+    @Default(false) bool isLoading,
     @Default(true) bool isReferralLoading,
     @Default(false) bool isSaveLoading,
     @Default(true) bool isLoadingHistory,
@@ -28,6 +28,11 @@ class ProfileState with _$ProfileState {
     @Default(null) Translation? policy,
     @Default(null) Translation? term,
     @Default([]) List<String> filepath,
+    @Default([]) List<CareerData> careers,
+    @Default(null) CareerData? selectedCareer,
+    @Default([]) List<BlogData> blogs,
+    @Default(null) BlogData? selectBlog,
+    @Default([]) List<PageData> about,
   }) = _ProfileState;
 
   const ProfileState._();

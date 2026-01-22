@@ -2,17 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:foodyman/domain/di/dependency_manager.dart';
 import 'package:foodyman/domain/interface/products.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/models/request/product_request.dart';
-import 'package:foodyman/infrastructure/models/request/search_product.dart';
-import 'package:foodyman/infrastructure/models/response/all_products_response.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
-import '../services/app_helpers.dart';
 
 class ProductsRepository implements ProductsRepositoryFacade {
   @override
-  Future<ApiResult<ProductsPaginateResponse>> searchProducts(
-      {required String text, int? page}) async {
+  Future<ApiResult<ProductsPaginateResponse>> searchProducts({
+    required String text,
+    int? page,
+  }) async {
     final data = SearchProductModel(text: text, page: page ?? 1);
     try {
       final client = dioHttp.client(requireAuth: false);
@@ -58,11 +57,18 @@ class ProductsRepository implements ProductsRepositoryFacade {
     }
   }
 
+
   @override
-  Future<ApiResult<ProductsPaginateResponse>> getProductsByCategoryPaginate(
-      {String? shopId, required int page, required int categoryId}) async {
-    final data =
-        ProductRequest(shopId: shopId!, page: page, categoryId: categoryId);
+  Future<ApiResult<ProductsPaginateResponse>> getProductsByCategoryPaginate({
+    String? shopId,
+    required int page,
+    required int categoryId,
+  }) async {
+    final data = ProductRequest(
+      shopId: shopId!,
+      page: page,
+      categoryId: categoryId,
+    );
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
@@ -115,13 +121,13 @@ class ProductsRepository implements ProductsRepositoryFacade {
         '/api/v1/rest/shops/$shopId/products',
         queryParameters: {
           "lang": LocalStorage.getLanguage()?.locale,
-          "currency_id": LocalStorage.getSelectedCurrency()?.id
+          "currency_id": LocalStorage.getSelectedCurrency()?.id,
         },
       );
       return ApiResult.success(
         data: AllProductsResponse.fromJson(response.data),
       );
-    } catch (e,s) {
+    } catch (e, s) {
       debugPrint('==> getAllProducts failure: $e, $s');
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
@@ -131,12 +137,14 @@ class ProductsRepository implements ProductsRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<ProductsPaginateResponse>> getProductsShopByCategoryPaginate(
-      {String? shopId,
-      List<int>? brands,
-      int? sortIndex,
-      required int page,
-      required int categoryId}) async {
+  Future<ApiResult<ProductsPaginateResponse>>
+  getProductsShopByCategoryPaginate({
+    String? shopId,
+    List<int>? brands,
+    int? sortIndex,
+    required int page,
+    required int categoryId,
+  }) async {
     final Map<String, dynamic> data = {
       "shop_id": shopId,
       "lang": LocalStorage.getLanguage()?.locale ?? "en",
@@ -150,7 +158,7 @@ class ProductsRepository implements ProductsRepositoryFacade {
         "column": sortIndex == 1 ? "price_asc" : "price_desc",
       if (brands?.isNotEmpty ?? false)
         for (int i = 0; i < (brands?.length ?? 0); i++)
-          'brand_ids[$i]': brands?[i]
+          'brand_ids[$i]': brands?[i],
     };
 
     try {

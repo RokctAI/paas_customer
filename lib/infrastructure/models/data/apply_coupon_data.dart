@@ -11,11 +11,7 @@ class ApplyCouponData {
     this.isError,
   });
 
-  ApplyCouponData copyWith({
-    String? coupon,
-    bool? isApplied,
-    bool? isError,
-  }) =>
+  ApplyCouponData copyWith({String? coupon, bool? isApplied, bool? isError}) =>
       ApplyCouponData(
         shopId: shopId,
         coupon: coupon ?? this.coupon,

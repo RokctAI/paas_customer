@@ -2,13 +2,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/infrastructure/models/data/shop_data.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/custom_network_image.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import '../../../routes/app_router.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class BannerScreen extends StatelessWidget {
   final String image;
@@ -17,13 +16,14 @@ class BannerScreen extends StatelessWidget {
   final bool isAds;
   final List<ShopData> list;
 
-  const BannerScreen(
-      {super.key,
-      required this.image,
-      required this.desc,
-      required this.list,
-      required this.bannerId,
-      this.isAds = false});
+  const BannerScreen({
+    super.key,
+    required this.image,
+    required this.desc,
+    required this.list,
+    required this.bannerId,
+    this.isAds = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class BannerScreen extends StatelessWidget {
             padding: EdgeInsets.all(16.r),
             child: Text(
               desc,
-              style: AppStyle.interRegular(size: 14.sp, color: AppStyle.textGrey),
+              style: AppStyle.interRegular(size: 14, color: AppStyle.textGrey),
             ),
           ),
           Padding(
@@ -68,26 +68,33 @@ class BannerScreen extends StatelessWidget {
               children: [
                 Expanded(
                   child: CustomButton(
-                      background: AppStyle.transparent,
-                      borderColor: AppStyle.tabBarBorderColor,
-                      title: AppHelpers.getTranslation(TrKeys.cancel),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
+                    background: AppStyle.transparent,
+                    borderColor: AppStyle.tabBarBorderColor,
+                    title: AppHelpers.getTranslation(TrKeys.cancel),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
                 ),
                 10.horizontalSpace,
                 Expanded(
                   child: CustomButton(
-                      title: AppHelpers.getTranslation(TrKeys.orderNow),
-                      onPressed: () {
-                        context.pushRoute(ShopsBannerRoute(
-                            bannerId: bannerId, title: desc, isAds: isAds));
-                      }),
+                    title: AppHelpers.getTranslation(TrKeys.orderNow),
+                    onPressed: () {
+                      context.pushRoute(
+                        ShopsBannerRoute(
+                          bannerId: bannerId,
+                          title: desc,
+                          isAds: isAds,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
           ),
-          16.verticalSpace
+          16.verticalSpace,
         ],
       ),
     );

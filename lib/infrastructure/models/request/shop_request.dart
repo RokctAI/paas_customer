@@ -1,5 +1,4 @@
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 
 import 'package:foodyman/app_constants.dart';
 
@@ -15,21 +14,24 @@ class ShopRequest {
   final int? categoryId;
   final bool? verify;
 
-  ShopRequest(
-      {this.orderBy,
-      this.price,
-      this.take,
-      this.freeDelivery,
-      this.onlyOpen,
-      this.deals,
-      this.rating,
-      this.categoryId,
-      this.verify,
-      required this.page});
+  ShopRequest({
+    this.orderBy,
+    this.price,
+    this.take,
+    this.freeDelivery,
+    this.onlyOpen,
+    this.deals,
+    this.rating,
+    this.categoryId,
+    this.verify,
+    required this.page,
+  });
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    if(LocalStorage.getSelectedCurrency() != null)  map["currency_id"] = LocalStorage.getSelectedCurrency()?.id;
+    if (LocalStorage.getSelectedCurrency() != null) {
+      map["currency_id"] = LocalStorage.getSelectedCurrency()?.id;
+    }
     if (price != null) {
       for (int i = 0; i < price!.length; i++) {
         map["prices[$i]"] = price?[i];
@@ -65,15 +67,15 @@ class ShopRequest {
     if (orderBy != null && (orderBy?.isNotEmpty ?? false)) {
       map["order_by"] = AppHelpers.getOrderByString(orderBy!);
     }
-    map["perPage"] =AppHelpers.getType() ==3 ? 9:6;
+    map["perPage"] = AppHelpers.getType() == 3 ? 9 : 6;
     map["lang"] = LocalStorage.getLanguage()?.locale ?? "en";
     map["address"] = {
       "latitude":
           LocalStorage.getAddressSelected()?.location?.latitude ??
-              AppConstants.demoLatitude,
+          AppConstants.demoLatitude,
       "longitude":
           LocalStorage.getAddressSelected()?.location?.longitude ??
-              AppConstants.demoLongitude
+          AppConstants.demoLongitude,
     };
     return map;
   }

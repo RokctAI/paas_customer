@@ -1,4 +1,4 @@
-import 'package:foodyman/infrastructure/services/enums.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 
 class ChatMessageData {
   final MessageOwner messageOwner;
@@ -10,6 +10,6 @@ class ChatMessageData {
     required this.messageOwner,
     required this.message,
     required this.time,
-    required this.date
+    required this.date,
   });
 }

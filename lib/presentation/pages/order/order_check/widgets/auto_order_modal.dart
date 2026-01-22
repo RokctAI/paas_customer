@@ -5,17 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/app_constants.dart';
-import 'package:foodyman/infrastructure/services/time_service.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:foodyman/application/auto_order/auto_order_provider.dart';
 import 'package:foodyman/application/order/order_provider.dart';
 import 'package:foodyman/infrastructure/models/data/repeat_data.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
+import 'package:foodyman/presentation/components/components.dart';
 
 class AutoOrderModal extends ConsumerStatefulWidget {
   final int orderId;
@@ -44,7 +41,7 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
     super.initState();
   }
 
-  init() async {
+  Future<void> init() async {
     if (widget.repeatData != null) {
       ref
           .read(autoOrderProvider.notifier)
@@ -62,11 +59,12 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
     return Container(
       margin: MediaQuery.of(context).viewInsets,
       decoration: BoxDecoration(
-          color: AppStyle.bgGrey.withOpacity(0.96),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12.r),
-            topRight: Radius.circular(12.r),
-          )),
+        color: AppStyle.bgGrey.withValues(alpha: 0.96),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12.r),
+          topRight: Radius.circular(12.r),
+        ),
+      ),
       width: double.infinity,
       child: SingleChildScrollView(
         child: Column(
@@ -83,17 +81,17 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                       height: 4.h,
                       width: 48.w,
                       decoration: BoxDecoration(
-                          color: AppStyle.dragElement,
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(40.r))),
+                        color: AppStyle.dragElement,
+                        borderRadius: BorderRadius.all(Radius.circular(40.r)),
+                      ),
                     ),
                   ),
                   14.verticalSpace,
                   TitleAndIcon(
                     title: AppHelpers.getTranslation(TrKeys.autoOrder),
                     paddingHorizontalSize: 0,
-                    rightTitle: (widget.repeatData?.updatedAt?.isNotEmpty ??
-                            false)
+                    rightTitle:
+                        (widget.repeatData?.updatedAt?.isNotEmpty ?? false)
                         ? "${AppHelpers.getTranslation(TrKeys.started)} ${Jiffy.parseFromDateTime(DateTime.parse(widget.repeatData?.updatedAt ?? '')).from(Jiffy.now())}"
                         : "",
                   ),
@@ -110,56 +108,52 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                               AppHelpers.getTranslation(TrKeys.from),
                               style: const TextStyle(fontSize: 18),
                             ),
-                            const SizedBox(
-                              width: 10,
-                            ),
+                            const SizedBox(width: 10),
                             GestureDetector(
                               onTap: () {
                                 AppHelpers.showCustomModalBottomSheet(
-                                    context: context,
-                                    modal: Container(
-                                      height: 250.h,
-                                      padding: const EdgeInsets.only(top: 6.0),
-                                      margin: EdgeInsets.only(
-                                        bottom: MediaQuery.viewInsetsOf(context)
-                                            .bottom,
-                                      ),
-                                      color: CupertinoColors.systemBackground
-                                          .resolveFrom(context),
-                                      child: SafeArea(
-                                        top: false,
-                                        child: CupertinoDatePicker(
-                                          initialDateTime: state.from
-                                                  .toLocal()
-                                                  .isAfter(DateTime(
-                                                      DateTime.now().year,
-                                                      DateTime.now().month,
-                                                      DateTime.now().day))
-                                              ? state.from.toLocal()
-                                              : state.from.toLocal().add(
-                                                    state.from
-                                                        .toLocal()
-                                                        .difference(
-                                                          DateTime(
-                                                              DateTime.now()
-                                                                  .year,
-                                                              DateTime.now()
-                                                                  .month,
-                                                              DateTime.now()
-                                                                  .day),
-                                                        ),
+                                  context: context,
+                                  modal: Container(
+                                    height: 250.h,
+                                    padding: const EdgeInsets.only(top: 6.0),
+                                    margin: EdgeInsets.only(
+                                      bottom: MediaQuery.viewInsetsOf(
+                                        context,
+                                      ).bottom,
+                                    ),
+                                    color: CupertinoColors.systemBackground
+                                        .resolveFrom(context),
+                                    child: SafeArea(
+                                      top: false,
+                                      child: CupertinoDatePicker(
+                                        initialDateTime:
+                                            state.from.toLocal().isAfter(
+                                              DateTime(
+                                                DateTime.now().year,
+                                                DateTime.now().month,
+                                                DateTime.now().day,
+                                              ),
+                                            )
+                                            ? state.from.toLocal()
+                                            : state.from.toLocal().add(
+                                                state.from.toLocal().difference(
+                                                  DateTime(
+                                                    DateTime.now().year,
+                                                    DateTime.now().month,
+                                                    DateTime.now().day,
                                                   ),
-                                          mode: CupertinoDatePickerMode.date,
-                                          use24hFormat:
-                                              AppConstants.use24Format,
-                                          onDateTimeChanged:
-                                              (DateTime newDate) {
-                                            event.pickFrom(newDate);
-                                          },
-                                        ),
+                                                ),
+                                              ),
+                                        mode: CupertinoDatePickerMode.date,
+                                        use24hFormat: AppConstants.use24Format,
+                                        onDateTimeChanged: (DateTime newDate) {
+                                          event.pickFrom(newDate);
+                                        },
                                       ),
                                     ),
-                                    isDarkMode: false);
+                                  ),
+                                  isDarkMode: false,
+                                );
                               },
                               child: Row(
                                 children: [
@@ -167,16 +161,14 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                                     TimeService.dateFormatYMD(state.from),
                                     style: const TextStyle(fontSize: 18),
                                   ),
-                                  const SizedBox(
-                                    width: 3,
-                                  ),
+                                  const SizedBox(width: 3),
                                   const Icon(
                                     CupertinoIcons.chevron_up_chevron_down,
                                     size: 20,
                                   ),
                                 ],
                               ),
-                            )
+                            ),
                           ],
                         ),
                         Row(
@@ -190,50 +182,48 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                             GestureDetector(
                               onTap: () {
                                 AppHelpers.showCustomModalBottomSheet(
-                                    context: context,
-                                    modal: Container(
-                                      height: 250.h,
-                                      padding: const EdgeInsets.only(top: 6.0),
-                                      margin: EdgeInsets.only(
-                                        bottom: MediaQuery.viewInsetsOf(context)
-                                            .bottom,
-                                      ),
-                                      color: CupertinoColors.systemBackground
-                                          .resolveFrom(context),
-                                      child: SafeArea(
-                                        top: false,
-                                        child: CupertinoDatePicker(
-                                          initialDateTime: state.to
-                                                  .toLocal()
-                                                  .isAfter(DateTime(
-                                                      DateTime.now().year,
-                                                      DateTime.now().month,
-                                                      DateTime.now().day))
-                                              ? state.to.toLocal()
-                                              : state.to.toLocal().add(
-                                                    state.to
-                                                        .toLocal()
-                                                        .difference(
-                                                          DateTime(
-                                                              DateTime.now()
-                                                                  .year,
-                                                              DateTime.now()
-                                                                  .month,
-                                                              DateTime.now()
-                                                                  .day),
-                                                        ),
+                                  context: context,
+                                  modal: Container(
+                                    height: 250.h,
+                                    padding: const EdgeInsets.only(top: 6.0),
+                                    margin: EdgeInsets.only(
+                                      bottom: MediaQuery.viewInsetsOf(
+                                        context,
+                                      ).bottom,
+                                    ),
+                                    color: CupertinoColors.systemBackground
+                                        .resolveFrom(context),
+                                    child: SafeArea(
+                                      top: false,
+                                      child: CupertinoDatePicker(
+                                        initialDateTime:
+                                            state.to.toLocal().isAfter(
+                                              DateTime(
+                                                DateTime.now().year,
+                                                DateTime.now().month,
+                                                DateTime.now().day,
+                                              ),
+                                            )
+                                            ? state.to.toLocal()
+                                            : state.to.toLocal().add(
+                                                state.to.toLocal().difference(
+                                                  DateTime(
+                                                    DateTime.now().year,
+                                                    DateTime.now().month,
+                                                    DateTime.now().day,
                                                   ),
-                                          mode: CupertinoDatePickerMode.date,
-                                          use24hFormat:
-                                              AppConstants.use24Format,
-                                          onDateTimeChanged:
-                                              (DateTime newDate) {
-                                            event.pickTo(newDate);
-                                          },
-                                        ),
+                                                ),
+                                              ),
+                                        mode: CupertinoDatePickerMode.date,
+                                        use24hFormat: AppConstants.use24Format,
+                                        onDateTimeChanged: (DateTime newDate) {
+                                          event.pickTo(newDate);
+                                        },
                                       ),
                                     ),
-                                    isDarkMode: false);
+                                  ),
+                                  isDarkMode: false,
+                                );
                               },
                               child: Row(
                                 children: [
@@ -248,7 +238,7 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                                   ),
                                 ],
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ],
@@ -274,49 +264,58 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                       children: [
                         if (!(timer?.isActive ?? false) &&
                             event.isTimeChanged(widget.repeatData))
-                          Consumer(builder: (context, ref, child) {
-                            return CustomButton(
-                              isLoading:
-                                  ref.watch(orderProvider).isButtonLoading,
-                              title: AppHelpers.getTranslation(TrKeys.save),
-                              onPressed: () {
-                                if (event.isValidDates()) {
-                                  event.startAutoOrder(
-                                    onSuccess: () {
-                                      ref
-                                          .read(orderProvider.notifier)
-                                          .showOrder(
-                                              context, widget.orderId, true);
-                                    },
-                                    orderId: widget.orderId,
+                          Consumer(
+                            builder: (context, ref, child) {
+                              return CustomButton(
+                                isLoading: ref
+                                    .watch(orderProvider)
+                                    .isButtonLoading,
+                                title: AppHelpers.getTranslation(TrKeys.save),
+                                onPressed: () {
+                                  if (event.isValidDates()) {
+                                    event.startAutoOrder(
+                                      onSuccess: () {
+                                        ref
+                                            .read(orderProvider.notifier)
+                                            .showOrder(
+                                              context,
+                                              widget.orderId,
+                                              true,
+                                            );
+                                      },
+                                      orderId: widget.orderId,
+                                      context: context,
+                                    );
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                        const SizedBox(height: 10),
+                        if (widget.repeatData != null)
+                          Consumer(
+                            builder: (context, ref, child) {
+                              return CustomButton(
+                                isLoading: ref
+                                    .watch(orderProvider)
+                                    .isButtonLoading,
+                                textColor: Colors.white,
+                                background: Colors.red,
+                                title: AppHelpers.getTranslation(
+                                  TrKeys.removeAutoOrder,
+                                ),
+                                onPressed: () {
+                                  ref
+                                      .read(orderProvider.notifier)
+                                      .showOrder(context, widget.orderId, true);
+                                  event.deleteAutoOrder(
+                                    orderId: widget.repeatData?.id ?? 0,
                                     context: context,
                                   );
-                                }
-                              },
-                            );
-                          }),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        if (widget.repeatData != null)
-                          Consumer(builder: (context, ref, child) {
-                            return CustomButton(
-                              isLoading:
-                                  ref.watch(orderProvider).isButtonLoading,
-                              textColor: Colors.white,
-                              background: Colors.red,
-                              title: AppHelpers.getTranslation(
-                                  TrKeys.removeAutoOrder),
-                              onPressed: () {
-                                ref
-                                    .read(orderProvider.notifier)
-                                    .showOrder(context, widget.orderId, true);
-                                event.deleteAutoOrder(
-                                    orderId: widget.repeatData?.id ?? 0,
-                                    context: context);
-                              },
-                            );
-                          }),
+                                },
+                              );
+                            },
+                          ),
                       ],
                     ),
                   ),

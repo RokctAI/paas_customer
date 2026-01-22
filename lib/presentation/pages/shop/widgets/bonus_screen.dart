@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/infrastructure/models/data/bonus_data.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class BonusScreen extends StatelessWidget {
   final BonusModel? bonus;
@@ -21,11 +19,12 @@ class BonusScreen extends StatelessWidget {
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Container(
         decoration: BoxDecoration(
-            color: AppStyle.bgGrey.withOpacity(0.96),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(16.r),
-              topRight: Radius.circular(16.r),
-            )),
+          color: AppStyle.bgGrey.withValues(alpha: 0.96),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16.r),
+            topRight: Radius.circular(16.r),
+          ),
+        ),
         width: double.infinity,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -39,8 +38,9 @@ class BonusScreen extends StatelessWidget {
                   height: 4.h,
                   width: 48.w,
                   decoration: BoxDecoration(
-                      color: AppStyle.dragElement,
-                      borderRadius: BorderRadius.all(Radius.circular(40.r))),
+                    color: AppStyle.dragElement,
+                    borderRadius: BorderRadius.all(Radius.circular(40.r)),
+                  ),
                 ),
               ),
               14.verticalSpace,
@@ -52,15 +52,10 @@ class BonusScreen extends StatelessWidget {
               Text(
                 bonus != null
                     ? ((bonus?.type ?? "sum") == "sum")
-                    ?  "${bonus?.bonusStock?.product?.translation?.title ?? ""} ${AppHelpers.getTranslation(TrKeys.giftBuy)} ${AppHelpers.numberFormat(
-                 number: bonus?.value,
-                )}"
-                    : "${bonus?.bonusStock?.product?.translation?.title ?? ""} ${AppHelpers.getTranslation(TrKeys.giftBuy)} ${bonus?.value ?? 0} ${AppHelpers.getTranslation(TrKeys.count)} "
+                          ? "${bonus?.bonusStock?.product?.translation?.title ?? ""} ${AppHelpers.getTranslation(TrKeys.giftBuy)} ${AppHelpers.numberFormat(bonus?.value)}"
+                          : "${bonus?.bonusStock?.product?.translation?.title ?? ""} ${AppHelpers.getTranslation(TrKeys.giftBuy)} ${bonus?.value ?? 0} ${AppHelpers.getTranslation(TrKeys.count)} "
                     : AppHelpers.getTranslation(TrKeys.bonus),
-                style: AppStyle.interRegular(
-                  size: 14,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interRegular(size: 14, color: AppStyle.black),
               ),
               30.verticalSpace,
               Padding(

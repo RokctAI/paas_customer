@@ -33,40 +33,34 @@ class PriceModel {
   DateTime timestamp;
   bool status;
   String message;
-  Data data;
+  PriceRangeData data;
 
   factory PriceModel.fromJson(Map<String, dynamic> json) => PriceModel(
-        timestamp:
-            DateTime.tryParse(json["timestamp"])?.toLocal() ?? DateTime.now(),
-        status: json["status"],
-        message: json["message"],
-        data: Data.fromJson(json["data"]),
-      );
+    timestamp:
+        DateTime.tryParse(json["timestamp"])?.toLocal() ?? DateTime.now(),
+    status: json["status"],
+    message: json["message"],
+    data: PriceRangeData.fromJson(json["data"]),
+  );
 
   Map<String, dynamic> toJson() => {
-        "timestamp": timestamp.toIso8601String(),
-        "status": status,
-        "message": message,
-        "data": data.toJson(),
-      };
+    "timestamp": timestamp.toIso8601String(),
+    "status": status,
+    "message": message,
+    "data": data.toJson(),
+  };
 }
 
-class Data {
-  Data({
-    required this.min,
-    required this.max,
-  });
+class PriceRangeData {
+  PriceRangeData({required this.min, required this.max});
 
   double min;
   double max;
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
-        min: double.tryParse(json["min"].toString()) ?? 1,
-        max: double.tryParse(json["max"].toString()) ?? 100,
-      );
+  factory PriceRangeData.fromJson(Map<String, dynamic> json) => PriceRangeData(
+    min: double.tryParse(json["min"].toString()) ?? 1,
+    max: double.tryParse(json["max"].toString()) ?? 100,
+  );
 
-  Map<String, dynamic> toJson() => {
-        "min": min,
-        "max": max,
-      };
+  Map<String, dynamic> toJson() => {"min": min, "max": max};
 }

@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:foodyman/infrastructure/services/app_connectivity.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/domain/interface/payments.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/domain/di/dependency_manager.dart';
 import 'payment_state.dart';
 
-class PaymentNotifier extends StateNotifier<PaymentState> {
-  final PaymentsRepositoryFacade _paymentsRepository;
-
-  PaymentNotifier(this._paymentsRepository) : super(const PaymentState());
+class PaymentNotifier extends Notifier<PaymentState> {
+  @override
+  PaymentState build() => const PaymentState();
 
   void change(int index) {
     state = state.copyWith(currentIndex: index);
@@ -21,19 +19,18 @@ class PaymentNotifier extends StateNotifier<PaymentState> {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isPaymentsLoading: true);
-      final response = await _paymentsRepository.getPayments();
+      final response = await paymentsRepository.getPayments();
       response.when(
         success: (data) {
           List payments = [];
           if (withOutCash) {
-            payments = data?.data?.reversed.where((e) => e.tag != "cash").toList() ?? [];
+            payments =
+                data?.data?.reversed.where((e) => e.tag != "cash").toList() ??
+                [];
           } else {
             payments = data?.data?.reversed.toList() ?? [];
           }
-          state = state.copyWith(
-            payments: payments,
-            isPaymentsLoading: false,
-          );
+          state = state.copyWith(payments: payments, isPaymentsLoading: false);
         },
         failure: (failure, status) {
           state = state.copyWith(isPaymentsLoading: false);

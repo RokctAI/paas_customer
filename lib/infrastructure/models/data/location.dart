@@ -12,7 +12,8 @@ class LocationModel {
   double? _latitude;
   double? _longitude;
 
-  LocationModel copyWith({double? latitude, double? longitude}) => LocationModel(
+  LocationModel copyWith({double? latitude, double? longitude}) =>
+      LocationModel(
         latitude: latitude ?? _latitude,
         longitude: longitude ?? _longitude,
       );

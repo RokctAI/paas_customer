@@ -10,20 +10,15 @@ import 'package:foodyman/application/profile/profile_notifier.dart';
 import 'package:foodyman/application/profile/profile_provider.dart';
 import 'package:foodyman/application/profile/profile_state.dart';
 import 'package:foodyman/app_constants.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/img_service.dart';
-import 'package:foodyman/infrastructure/services/input_formatter.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/common_app_bar.dart';
-import 'package:foodyman/presentation/components/keyboard_dismisser.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:foodyman/presentation/components/blur_wrap.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-import 'package:foodyman/presentation/components/text_fields/outline_bordered_text_field.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
+
+import '../../../theme/color_set.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 @RoutePage()
 class CreateShopPage extends ConsumerStatefulWidget {
@@ -88,20 +83,17 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
   Widget build(BuildContext context) {
     final state = ref.watch(profileProvider);
     return KeyboardDismisser(
-      child: Scaffold(
-        body: Column(
+      child: CustomScaffold(
+        body: (colors) => Column(
           children: [
             CommonAppBar(
               child: Text(
                 AppHelpers.getTranslation(TrKeys.becomeSeller),
-                style: AppStyle.interNoSemi(
-                  size: 18,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interNoSemi(size: 18, color: colors.textBlack),
               ),
             ),
             16.verticalSpace,
-            state.userData?.shop == null
+            state.userData?.shop != null
                 ? Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -116,39 +108,47 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                               children: [
                                 Column(
                                   children: [
-                                    _setBgImage(state),
+                                    _setBgImage(state, colors),
                                     24.verticalSpace,
                                     Row(
                                       children: [
                                         InkWell(
                                           onTap: () async {
                                             await ImgService.getPhotoGallery(
-                                                event.setLogoImage);
+                                              event.setLogoImage,
+                                            );
                                           },
                                           child: Container(
                                             width: 50.r,
                                             height: 50.r,
                                             padding: EdgeInsets.all(6.r),
-                                            decoration: state
-                                                    .logoImage.isNotEmpty
+                                            decoration:
+                                                state.logoImage.isNotEmpty
                                                 ? BoxDecoration(
                                                     color: AppStyle.black
-                                                        .withOpacity(0.27),
+                                                        .withValues(
+                                                          alpha: 0.27,
+                                                        ),
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            16.r),
-                                                    image: DecorationImage(
-                                                        image: FileImage(
-                                                          File(state.logoImage),
+                                                          16.r,
                                                         ),
-                                                        fit: BoxFit.cover),
+                                                    image: DecorationImage(
+                                                      image: FileImage(
+                                                        File(state.logoImage),
+                                                      ),
+                                                      fit: BoxFit.cover,
+                                                    ),
                                                   )
                                                 : BoxDecoration(
                                                     color: AppStyle.black
-                                                        .withOpacity(0.27),
+                                                        .withValues(
+                                                          alpha: 0.27,
+                                                        ),
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                            16.r),
+                                                          16.r,
+                                                        ),
                                                   ),
                                             child: const Center(
                                               child: Icon(
@@ -163,7 +163,8 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                           child: OutlinedBorderTextField(
                                             textController: shopName,
                                             label: AppHelpers.getTranslation(
-                                                TrKeys.restaurantName),
+                                              TrKeys.restaurantName,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -172,31 +173,45 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                     OutlinedBorderTextField(
                                       textController: descName,
                                       label: AppHelpers.getTranslation(
-                                          TrKeys.description),
+                                        TrKeys.description,
+                                      ),
                                     ),
                                     24.verticalSpace,
                                     OutlinedBorderTextField(
                                       textController: phoneName,
                                       inputType: TextInputType.phone,
                                       label: AppHelpers.getTranslation(
-                                          TrKeys.phoneNumber),
+                                        TrKeys.phoneNumber,
+                                      ),
                                     ),
                                     24.verticalSpace,
                                     OutlinedBorderTextField(
                                       textController: tax,
                                       inputType: TextInputType.number,
-                                      label:
-                                          AppHelpers.getTranslation(TrKeys.tax),
+                                      label: AppHelpers.getTranslation(
+                                        TrKeys.tax,
+                                      ),
                                       inputFormatters: [
-                                        InputFormatter.currency
+                                        InputFormatter.currency,
                                       ],
                                     ),
                                     24.verticalSpace,
                                     DropdownButtonFormField(
-                                      value: value,
+                                      initialValue: value,
+                                      dropdownColor: colors.textWhite,
+                                      style: AppStyle.interNormal(
+                                        size: 15,
+                                        color: colors.textBlack,
+                                      ),
                                       items: list
-                                          .map((e) => DropdownMenuItem(
-                                              value: e, child: Text(e)))
+                                          .map(
+                                            (e) => DropdownMenuItem(
+                                              value: e,
+                                              child: Text(
+                                                AppHelpers.getTranslation(e),
+                                              ),
+                                            ),
+                                          )
                                           .toList(),
                                       onChanged: (s) {
                                         if (s != null) {
@@ -205,33 +220,41 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                       },
                                       decoration: InputDecoration(
                                         labelText: AppHelpers.getTranslation(
-                                            TrKeys.deliveryTimeType),
+                                          TrKeys.deliveryTimeType,
+                                        ),
                                         labelStyle: AppStyle.interNormal(
                                           size: 12,
-                                          color: AppStyle.black,
+                                          color: colors.textBlack,
                                         ),
                                         enabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide.merge(
-                                                const BorderSide(
-                                                    color: AppStyle
-                                                        .differBorderColor),
-                                                const BorderSide(
-                                                    color: AppStyle
-                                                        .differBorderColor))),
+                                          borderSide: BorderSide.merge(
+                                            const BorderSide(
+                                              color: AppStyle.differBorderColor,
+                                            ),
+                                            const BorderSide(
+                                              color: AppStyle.differBorderColor,
+                                            ),
+                                          ),
+                                        ),
                                         errorBorder: InputBorder.none,
                                         border: const UnderlineInputBorder(),
                                         focusedErrorBorder:
-                                            const UnderlineInputBorder(),
+                                            UnderlineInputBorder(),
                                         disabledBorder: UnderlineInputBorder(
-                                            borderSide: BorderSide.merge(
-                                                const BorderSide(
-                                                    color: AppStyle
-                                                        .differBorderColor),
-                                                const BorderSide(
-                                                    color: AppStyle
-                                                        .differBorderColor))),
-                                        focusedBorder:
-                                            const UnderlineInputBorder(),
+                                          borderSide: BorderSide.merge(
+                                            const BorderSide(
+                                              color: AppStyle.differBorderColor,
+                                            ),
+                                            const BorderSide(
+                                              color: AppStyle.differBorderColor,
+                                            ),
+                                          ),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: colors.textHint,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                     24.verticalSpace,
@@ -239,9 +262,10 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                       textController: deliveryTimeFrom,
                                       inputType: TextInputType.number,
                                       label: AppHelpers.getTranslation(
-                                          TrKeys.deliveryTimeFrom),
+                                        TrKeys.deliveryTimeFrom,
+                                      ),
                                       inputFormatters: [
-                                        InputFormatter.digitsOnly
+                                        InputFormatter.digitsOnly,
                                       ],
                                     ),
                                     24.verticalSpace,
@@ -249,9 +273,10 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                       inputType: TextInputType.number,
                                       textController: deliveryTimeTo,
                                       label: AppHelpers.getTranslation(
-                                          TrKeys.deliveryTimeTo),
+                                        TrKeys.deliveryTimeTo,
+                                      ),
                                       inputFormatters: [
-                                        InputFormatter.digitsOnly
+                                        InputFormatter.digitsOnly,
                                       ],
                                     ),
                                     24.verticalSpace,
@@ -259,9 +284,10 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                       textController: startPrice,
                                       inputType: TextInputType.number,
                                       label: AppHelpers.getTranslation(
-                                          TrKeys.startPrice),
+                                        TrKeys.startPrice,
+                                      ),
                                       inputFormatters: [
-                                        InputFormatter.currency
+                                        InputFormatter.currency,
                                       ],
                                     ),
                                     24.verticalSpace,
@@ -269,21 +295,26 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                       inputType: TextInputType.number,
                                       textController: pricePerKm,
                                       label: AppHelpers.getTranslation(
-                                          TrKeys.pricePerKm),
+                                        TrKeys.pricePerKm,
+                                      ),
                                       inputFormatters: [
-                                        InputFormatter.currency
+                                        InputFormatter.currency,
                                       ],
                                     ),
                                   ],
                                 ),
                                 24.verticalSpace,
-                                _setDoc(state),
+                                _setDoc(state, colors),
                                 24.verticalSpace,
                                 const Divider(),
                                 GestureDetector(
                                   onTap: () async {
-                                    data = await context.pushRoute(ViewMapRoute(
-                                        isShopLocation: true, isParcel: true));
+                                    data = await context.pushRoute(
+                                      ViewMapRoute(
+                                        isShopLocation: true,
+                                        isParcel: true,
+                                      ),
+                                    );
                                     event.setAddress(data);
                                   },
                                   child: Container(
@@ -295,6 +326,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                           Icon(
                                             FlutterRemix.navigation_fill,
                                             size: 20.r,
+                                            color: colors.textBlack,
                                           ),
                                           8.horizontalSpace,
                                           Column(
@@ -303,29 +335,34 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                             children: [
                                               Text(
                                                 AppHelpers.getTranslation(
-                                                    TrKeys.address),
+                                                  TrKeys.address,
+                                                ),
                                                 style: AppStyle.interNormal(
-                                                    size: 12.sp,
-                                                    color: AppStyle.black),
+                                                  size: 12,
+                                                  color: colors.textBlack,
+                                                ),
                                               ),
                                               SizedBox(
                                                 width:
-                                                    MediaQuery.sizeOf(context)
-                                                            .width /
-                                                        2,
+                                                    MediaQuery.sizeOf(
+                                                      context,
+                                                    ).width /
+                                                    2,
                                                 child: Text(
-                                                  "${state.addressModel?.title ?? ""}, ${state.addressModel?.address?.address ?? ""}",
+                                                  "${state.addressModel?.title ?? ""} ${state.addressModel?.address?.address ?? ""}",
                                                   style: AppStyle.interNormal(
-                                                      size: 12.sp,
-                                                      color: AppStyle.black),
+                                                    size: 12,
+                                                    color: colors.textBlack,
+                                                  ),
                                                 ),
                                               ),
                                             ],
                                           ),
                                           const Spacer(),
-                                          const Icon(
+                                          Icon(
                                             FlutterRemix.arrow_right_s_line,
-                                          )
+                                            color: colors.textBlack,
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -337,25 +374,27 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                   padding: EdgeInsets.only(bottom: 32.h),
                                   child: CustomButton(
                                     isLoading: state.isSaveLoading,
-                                    title:
-                                        AppHelpers.getTranslation(TrKeys.save),
+                                    title: AppHelpers.getTranslation(
+                                      TrKeys.save,
+                                    ),
                                     onPressed: () {
                                       event.createShop(
-                                          context: context,
-                                          tax: tax.text,
-                                          deliveryTo: deliveryTimeTo.text,
-                                          deliveryFrom: deliveryTimeFrom.text,
-                                          phone: phoneName.text,
-                                          startPrice: startPrice.text,
-                                          name: shopName.text,
-                                          desc: descName.text,
-                                          perKm: pricePerKm.text,
-                                          address: data,
-                                          deliveryType: value,
-                                          categoryId: 0);
+                                        context: context,
+                                        tax: tax.text,
+                                        deliveryTo: deliveryTimeTo.text,
+                                        deliveryFrom: deliveryTimeFrom.text,
+                                        phone: phoneName.text,
+                                        startPrice: startPrice.text,
+                                        name: shopName.text,
+                                        desc: descName.text,
+                                        perKm: pricePerKm.text,
+                                        address: data,
+                                        deliveryType: value,
+                                        categoryId: 0,
+                                      );
                                     },
                                   ),
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -364,35 +403,39 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                     ),
                   )
                 : state.userData?.shop?.status == "new"
-                    ? Column(
-                        children: [
-                          Lottie.asset('assets/lottie/processing.json'),
-                          Text(
-                            AppHelpers.getTranslation(
-                              TrKeys.yourRequest,
-                            ),
-                            style: AppStyle.interNoSemi(
-                              size: 18,
-                              color: AppStyle.black,
-                            ),
-                          ),
-                        ],
-                      )
-                    : Padding(
-                        padding: EdgeInsets.all(24.r),
-                        child: CustomButton(
-                            title: AppHelpers.getTranslation(
-                                TrKeys.goToAdminPanel),
-                            onPressed: () async {
-                              final Uri launchUri =
-                                  Uri.parse(AppConstants.adminPageUrl);
-                              await launchUrl(launchUri);
-                            }),
+                ? Column(
+                    children: [
+                      100.verticalSpace,
+                      SizedBox(
+                        width: 250.r,
+                        height: 250.r,
+                        child: Lottie.asset('assets/lottie/processing.json'),
                       ),
+                      Text(
+                        AppHelpers.getTranslation(TrKeys.yourRequest),
+                        style: AppStyle.interNoSemi(
+                          size: 16,
+                          color: colors.textBlack,
+                        ),
+                      ),
+                    ],
+                  )
+                : Padding(
+                    padding: EdgeInsets.all(24.r),
+                    child: CustomButton(
+                      title: AppHelpers.getTranslation(TrKeys.goToAdminPanel),
+                      onPressed: () async {
+                        final Uri launchUri = Uri.parse(
+                          AppConstants.adminPageUrl,
+                        );
+                        await launchUrl(launchUri);
+                      },
+                    ),
+                  ),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-        floatingActionButton: Visibility(
+        floatingActionButton: (colors) => Visibility(
           visible: MediaQuery.of(context).viewInsets.bottom == 0.0,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -403,12 +446,12 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
     );
   }
 
-  Container _setBgImage(ProfileState state) {
+  Container _setBgImage(ProfileState state, CustomColorSet colors) {
     return Container(
       height: 180.h,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppStyle.white,
+        color: colors.icon,
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: state.bgImage.isNotEmpty
@@ -419,10 +462,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                   width: double.infinity,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(16.r),
-                    child: Image.file(
-                      File(state.bgImage),
-                      fit: BoxFit.cover,
-                    ),
+                    child: Image.file(File(state.bgImage), fit: BoxFit.cover),
                   ),
                 ),
                 Positioned(
@@ -441,7 +481,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                             width: 40.r,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: AppStyle.white.withOpacity(0.15),
+                              color: AppStyle.white.withValues(alpha: 0.15),
                             ),
                             child: const Icon(
                               FlutterRemix.image_add_fill,
@@ -462,7 +502,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                             width: 40.r,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: AppStyle.white.withOpacity(0.15),
+                              color: AppStyle.white.withValues(alpha: 0.15),
                             ),
                             child: const Icon(
                               FlutterRemix.delete_bin_fill,
@@ -486,14 +526,14 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                   Icon(
                     FlutterRemix.upload_cloud_2_line,
                     size: 42.r,
-                    color: AppStyle.primary,
+                    color: colors.primary,
                   ),
                   16.verticalSpace,
                   Text(
                     AppHelpers.getTranslation(TrKeys.bgPicture),
                     style: AppStyle.interSemi(
                       size: 14,
-                      color: AppStyle.black,
+                      color: colors.textBlack,
                       letterSpacing: -0.3,
                     ),
                   ),
@@ -501,24 +541,24 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                     AppHelpers.getTranslation(TrKeys.recommendedSize),
                     style: AppStyle.interRegular(
                       size: 14,
-                      color: AppStyle.black,
+                      color: colors.textBlack,
                       letterSpacing: -0.3,
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
     );
   }
 
-  _setDoc(ProfileState state) {
+  Column _setDoc(ProfileState state, CustomColorSet colors) {
     return Column(
       children: [
         Container(
           height: 80.h,
           width: double.infinity,
           decoration: BoxDecoration(
-            color: AppStyle.white,
+            color: colors.icon,
             borderRadius: BorderRadius.circular(12.r),
           ),
           child: InkWell(
@@ -529,14 +569,14 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                 Icon(
                   FlutterRemix.file_pdf_line,
                   size: 42.r,
-                  color: AppStyle.primary,
+                  color: colors.primary,
                 ),
                 16.verticalSpace,
                 Text(
                   AppHelpers.getTranslation(TrKeys.uploadDocuments),
                   style: AppStyle.interNoSemi(
                     size: 14,
-                    color: AppStyle.black,
+                    color: colors.textBlack,
                     letterSpacing: -0.3,
                   ),
                 ),
@@ -556,20 +596,14 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
             child: Row(
               children: [
                 Expanded(
-                  child: Text(
-                    e,
-                    style: AppStyle.interRegular(size: 12.sp),
-                  ),
+                  child: Text(e, style: AppStyle.interRegular(size: 12.sp)),
                 ),
                 IconButton(
                   onPressed: () {
                     event.deleteFile(e);
                   },
-                  icon: Icon(
-                    FlutterRemix.close_circle_line,
-                    size: 21.r,
-                  ),
-                )
+                  icon: Icon(FlutterRemix.close_circle_line, size: 21.r),
+                ),
               ],
             ),
           ),

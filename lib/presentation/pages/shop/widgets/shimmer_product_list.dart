@@ -11,32 +11,35 @@ class ShimmerProductList extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimationLimiter(
       child: GridView.builder(
-        padding: EdgeInsets.only(right: 12.w,left: 12.w,bottom: 96.h),
+        padding: EdgeInsets.only(right: 12.w, left: 12.w, bottom: 96.h),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            childAspectRatio: 0.66.r, crossAxisCount: 2),
+          childAspectRatio: 0.66.r,
+          crossAxisCount: 2,
+        ),
         itemCount: 4,
         itemBuilder: (context, index) {
-          return  AnimationConfiguration.staggeredGrid(
+          return AnimationConfiguration.staggeredGrid(
             columnCount: 4,
             position: index,
             duration: const Duration(milliseconds: 375),
-            child:  ScaleAnimation(
+            child: ScaleAnimation(
               scale: 0.5,
               child: FadeInAnimation(
                 child: Container(
                   margin: EdgeInsets.all(4.r),
                   decoration: BoxDecoration(
-                      color: AppStyle.white,
-                      borderRadius: BorderRadius.circular(10.r)),
+                    color: AppStyle.white,
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
                   width: double.infinity,
                   height: 150.h,
                   child: Container(
                     height: 150.h,
                     decoration: BoxDecoration(
-                      color:  AppStyle.shimmerBase,
-                      borderRadius: BorderRadius.circular(10.r/2),
+                      color: AppStyle.shimmerBase,
+                      borderRadius: BorderRadius.circular(10.r / 2),
                     ),
                   ),
                 ),

@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -9,19 +9,15 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/application/notification/notification_provider.dart';
 import 'package:foodyman/infrastructure/models/response/notification_response.dart';
 import 'package:foodyman/app_constants.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/common_app_bar.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-import 'package:foodyman/presentation/components/custom_network_image.dart';
-import 'package:foodyman/presentation/components/loading.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:foodyman/presentation/theme/app_style.dart';
 
+import '../../theme/color_set.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 @RoutePage()
 class NotificationListPage extends ConsumerStatefulWidget {
@@ -57,9 +53,8 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
     final event = ref.read(notificationProvider.notifier);
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: AppStyle.bgGrey,
-        body: state.isAllNotificationsLoading
+      child: CustomScaffold(
+        body: (colors) => state.isAllNotificationsLoading
             ? const Loading()
             : Column(
                 children: [
@@ -68,7 +63,7 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
                       AppHelpers.getTranslation(TrKeys.notifications),
                       style: AppStyle.interNoSemi(
                         size: 18,
-                        color: AppStyle.black,
+                        color: colors.textBlack,
                       ),
                     ),
                   ),
@@ -79,8 +74,9 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
                       enablePullUp: true,
                       onRefresh: () {
                         event.fetchNotificationsPaginate(
-                            refreshController: refreshController,
-                            isRefresh: true);
+                          refreshController: refreshController,
+                          isRefresh: true,
+                        );
                       },
                       onLoading: () {
                         event.fetchNotificationsPaginate(
@@ -88,80 +84,92 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
                         );
                       },
                       child: ListView.builder(
-                          shrinkWrap: true,
-                          padding: EdgeInsets.only(
-                              top: 24.h,
-                              right: 16.w,
-                              left: 16.w,
-                              bottom:
-                                  MediaQuery.paddingOf(context).bottom + 72.h),
-                          itemCount: state.notifications.length,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () async {
-                                if (state.notifications[index].readAt == null) {
-                                  event.readOne(
-                                      index: index,
-                                      context,
-                                      id: state.notifications[index].id);
-                                }
-                                if (state.notifications[index].orderData !=
-                                    null) {
-                                  context.pushRoute(OrderProgressRoute(
-                                      orderId: state
-                                          .notifications[index].orderData?.id));
-                                } else if (state
-                                        .notifications[index].blogData !=
-                                    null) {
-                                  await launch(
-                                    "${AppConstants.webUrl}/blog/${state.notifications[index].blogData?.uuid}",
-                                    forceSafariVC: true,
-                                    forceWebView: true,
-                                    enableJavaScript: true,
-                                  );
-                                } else if (state.notifications[index].type ==
-                                    "reservation") {
-                                  await launch(
-                                    "${AppConstants.webUrl}/reservations",
-                                    forceSafariVC: true,
-                                    forceWebView: true,
-                                    enableJavaScript: true,
-                                  );
-                                } else {
-                                  AppHelpers.showAlertDialog(
-                                      context: context,
-                                      child: Text(
-                                          '${state.notifications[index].body ?? state.notifications[index].title}'));
-                                }
-                              },
-                              child: Column(
-                                children: [
-                                  notificationItem(state.notifications[index]),
-                                  const Divider()
-                                ],
-                              ),
-                            );
-                          }),
+                        shrinkWrap: true,
+                        padding: EdgeInsets.only(
+                          top: 24.h,
+                          right: 16.w,
+                          left: 16.w,
+                          bottom: MediaQuery.paddingOf(context).bottom + 72.h,
+                        ),
+                        itemCount: state.notifications.length,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () async {
+                              if (state.notifications[index].readAt == null) {
+                                event.readOne(
+                                  index: index,
+                                  context,
+                                  id: state.notifications[index].id,
+                                );
+                              }
+                              if (state.notifications[index].orderData?.id !=
+                                  null) {
+                                context.pushRoute(
+                                  OrderProgressRoute(
+                                    orderId: state
+                                        .notifications[index]
+                                        .orderData!
+                                        .id!,
+                                  ),
+                                );
+                              } else if (state.notifications[index].blogData !=
+                                  null) {
+                                await launch(
+                                  "${AppConstants.webUrl}/blog/${state.notifications[index].blogData?.uuid}",
+                                  forceSafariVC: true,
+                                  forceWebView: true,
+                                  enableJavaScript: true,
+                                );
+                              } else if (state.notifications[index].type ==
+                                  "reservation") {
+                                await launch(
+                                  "${AppConstants.webUrl}/reservations",
+                                  forceSafariVC: true,
+                                  forceWebView: true,
+                                  enableJavaScript: true,
+                                );
+                              } else {
+                                AppHelpers.showAlertDialog(
+                                  context: context,
+                                  child: Text(
+                                    '${state.notifications[index].body ?? state.notifications[index].title}',
+                                  ),
+                                );
+                              }
+                            },
+                            child: Column(
+                              children: [
+                                notificationItem(
+                                  state.notifications[index],
+                                  colors,
+                                ),
+                                const Divider(),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],
               ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: Padding(
+        floatingActionButton: (colors) => Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Row(
             children: [
               const PopButton(),
               10.horizontalSpace,
               Expanded(
-                  child: CustomButton(
-                background: AppStyle.black,
-                textColor: AppStyle.white,
-                title: AppHelpers.getTranslation(TrKeys.readAll),
-                onPressed: () async {
-                  event.readAll(context);
-                },
-              ))
+                child: CustomButton(
+                  background: AppStyle.black,
+                  textColor: AppStyle.white,
+                  title: AppHelpers.getTranslation(TrKeys.readAll),
+                  onPressed: () async {
+                    event.readAll(context);
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -169,7 +177,10 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
     );
   }
 
-  Widget notificationItem(NotificationModel notification) {
+  Widget notificationItem(
+    NotificationModel notification,
+    CustomColorSet colors,
+  ) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 6.r),
       child: Row(
@@ -191,18 +202,22 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
                     children: [
                       Text(
                         '${notification.client?.firstname ?? ''} ${notification.client?.lastname?.substring(0, 1) ?? ''}.',
-                        style: AppStyle.interSemi(size: 16, color: AppStyle.black),
+                        style: AppStyle.interSemi(
+                          size: 16,
+                          color: colors.textBlack,
+                        ),
                       ),
                       15.horizontalSpace,
                       Container(
                         height: 8.r,
                         width: 8.r,
                         decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: notification.readAt == null
-                                ? AppStyle.primary
-                                : AppStyle.transparent),
-                      )
+                          shape: BoxShape.circle,
+                          color: notification.readAt == null
+                              ? colors.primary
+                              : AppStyle.transparent,
+                        ),
+                      ),
                     ],
                   ),
                 2.verticalSpace,
@@ -213,7 +228,10 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
                         '${notification.body ?? notification.title}',
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
-                        style: AppStyle.interRegular(size: 14, color: AppStyle.black),
+                        style: AppStyle.interRegular(
+                          size: 14,
+                          color: colors.textBlack,
+                        ),
                       ),
                     ),
                     if (notification.client == null)
@@ -222,17 +240,23 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
                         height: 8.r,
                         width: 8.r,
                         decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: notification.readAt == null
-                                ? AppStyle.primary
-                                : AppStyle.transparent),
-                      )
+                          shape: BoxShape.circle,
+                          color: notification.readAt == null
+                              ? colors.primary
+                              : AppStyle.transparent,
+                        ),
+                      ),
                   ],
                 ),
                 4.verticalSpace,
                 Text(
-                  Jiffy.parseFromDateTime(notification.createdAt ?? DateTime.now()).fromNow(),
-                  style: AppStyle.interRegular(size: 12, color: AppStyle.textGrey),
+                  Jiffy.parseFromDateTime(
+                    notification.createdAt ?? DateTime.now(),
+                  ).fromNow(),
+                  style: AppStyle.interRegular(
+                    size: 12,
+                    color: AppStyle.textGrey,
+                  ),
                 ),
               ],
             ),

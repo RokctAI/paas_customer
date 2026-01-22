@@ -2,7 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/presentation/app_assets.dart';
 
 import 'package:foodyman/presentation/theme/app_style.dart';
 
@@ -18,8 +19,8 @@ class CustomNetworkImage extends StatelessWidget {
   const CustomNetworkImage({
     super.key,
     required this.url,
-     this.height,
-     this.width,
+    this.height,
+    this.width,
     required this.radius,
     this.fit = BoxFit.cover,
     this.bgColor = AppStyle.mainBack,
@@ -43,40 +44,39 @@ class CustomNetworkImage extends StatelessWidget {
                 ),
               ),
             )
-          :  CachedNetworkImage(
+          : CachedNetworkImage(
+              height: height,
+              width: width,
+              imageUrl: url ?? "",
+              fit: fit,
+              progressIndicatorBuilder: (context, url, progress) {
+                return Container(
                   height: height,
                   width: width,
-                  imageUrl: url ?? "",
-                  fit: fit,
-                  progressIndicatorBuilder: (context, url, progress) {
-                    return Container(
-                      height: height,
-                      width: width,
-                      decoration: BoxDecoration(
-                        color: AppStyle.shimmerBase,
-                      ),
-                    );
-                  },
-                  errorWidget: (context, url, error) {
-                    return Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(radius),
-                        color: bgColor,
-                        image: profile
-                            ? const DecorationImage(
-                                image: AssetImage("assets/images/app_logo.png"))
-                            : null,
-                      ),
-                      alignment: Alignment.center,
-                      child: profile
-                          ? const SizedBox.shrink()
-                          : const Icon(
-                              FlutterRemix.image_line,
-                              color: AppStyle.shimmerBaseDark,
-                            ),
-                    );
-                  },
-                ),
+                  decoration: BoxDecoration(color: AppStyle.shimmerBase),
+                );
+              },
+              errorWidget: (context, url, error) {
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(radius),
+                    color: bgColor,
+                    image: profile
+                        ? const DecorationImage(
+                            image: AssetImage(Assets.imagesAppLogo),
+                          )
+                        : null,
+                  ),
+                  alignment: Alignment.center,
+                  child: profile
+                      ? const SizedBox.shrink()
+                      : const Icon(
+                          FlutterRemix.image_line,
+                          color: AppStyle.shimmerBaseDark,
+                        ),
+                );
+              },
+            ),
     );
   }
 }

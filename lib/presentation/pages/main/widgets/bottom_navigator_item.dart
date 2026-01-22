@@ -10,14 +10,15 @@ class BottomNavigatorItem extends StatelessWidget {
   final IconData selectIcon;
   final IconData unSelectIcon;
 
-  const BottomNavigatorItem(
-      {super.key,
-      required this.selectItem,
-      required this.index,
-      required this.selectIcon,
-      required this.unSelectIcon,
-      required this.currentIndex,
-      required this.isScrolling});
+  const BottomNavigatorItem({
+    super.key,
+    required this.selectItem,
+    required this.index,
+    required this.selectIcon,
+    required this.unSelectIcon,
+    required this.currentIndex,
+    required this.isScrolling,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,23 +35,32 @@ class BottomNavigatorItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                  child: index == currentIndex
-                      ? Icon(selectIcon,
-                          size: isScrolling ? 0.r : 24.r, color: AppStyle.white)
-                      : Icon(unSelectIcon,
-                          size: isScrolling ? 0.r : 24.r, color: AppStyle.white)),
+                child: index == currentIndex
+                    ? Icon(
+                        selectIcon,
+                        size: isScrolling ? 0.r : 24.r,
+                        color: AppStyle.white,
+                      )
+                    : Icon(
+                        unSelectIcon,
+                        size: isScrolling ? 0.r : 24.r,
+                        color: AppStyle.white,
+                      ),
+              ),
               AnimatedContainer(
                 height: isScrolling ? 0.h : 4.h,
                 width: isScrolling ? 0.w : 24.w,
                 decoration: BoxDecoration(
-                    color: index == currentIndex
-                        ? AppStyle.primary
-                        : AppStyle.transparent,
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(100.r),
-                        topRight: Radius.circular(100.r))),
+                  color: index == currentIndex
+                      ? AppStyle.primary
+                      : AppStyle.transparent,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(100.r),
+                    topRight: Radius.circular(100.r),
+                  ),
+                ),
                 duration: const Duration(milliseconds: 300),
-              )
+              ),
             ],
           ),
         ),

@@ -38,6 +38,9 @@ class OrderActiveModel {
     this.refunds,
     this.ponumHistories,
     this.afterDeliveredImage,
+    this.km,
+    this.minute,
+    this.orderStatusesData,
   });
 
   int? id;
@@ -57,21 +60,24 @@ class OrderActiveModel {
   num? deliveryFee;
   num? otp;
   CurrencyModel? currencyModel;
-  DeliveryMan? deliveryMan;
+  UserModel? deliveryMan;
   DateTime? deliveryDate;
   String? deliveryTime;
   num? totalDiscount;
   num? serviceFee;
+  num? km;
+  num? minute;
   DateTime? createdAt;
   DateTime? updatedAt;
   ShopData? shop;
   RepeatData? repeat;
   UserModel? user;
-  List<Detail>? details;
+  List<OrderProduct>? details;
   List<RefundModel>? refunds;
   TransactionData? transaction;
   dynamic review;
   List<dynamic>? ponumHistories;
+  OrderStatusesData? orderStatusesData;
 
   factory OrderActiveModel.fromJson(Map<String, dynamic> json) =>
       OrderActiveModel(
@@ -97,12 +103,17 @@ class OrderActiveModel {
             : null,
         deliveryType: json["data"]["delivery_type"],
         deliveryFee: json["data"]["delivery_fee"],
+        km: json["data"]["km"],
+        minute: json["data"]["minute"],
         otp: json["data"]["otp"],
         deliveryMan: json["data"]["deliveryman"] != null
-            ? DeliveryMan.fromJson(json["data"]["deliveryman"])
+            ? UserModel.fromJson(json["data"]["deliveryman"])
+            : null,
+        orderStatusesData: json["data"]["data"] != null
+            ? OrderStatusesData.fromJson(json["data"]["data"])
             : null,
         deliveryDate:
-            DateTime.tryParse(json["data"]?["delivery_date"] ?? '')?.toLocal(),
+        DateTime.tryParse(json["data"]?["delivery_date"] ?? '')?.toLocal(),
         deliveryTime: json["data"]["delivery_time"],
         totalDiscount: json["data"]["total_discount"],
         serviceFee: json["data"]["service_fee"],
@@ -117,14 +128,14 @@ class OrderActiveModel {
         user: json["data"]["user"] != null
             ? UserModel.fromJson(json["data"]["user"])
             : null,
-        details: List<Detail>.from(
-            json["data"]["details"].map((x) => Detail.fromJson(x))),
+        details: List<OrderProduct>.from(
+            json["data"]["details"].map((x) => OrderProduct.fromJson(x))),
         transaction: json["data"]["transaction"] != null
             ? TransactionData.fromJson(json["data"]["transaction"])
             : null,
         refunds: json["data"]["order_refunds"] != null
             ? List<RefundModel>.from(json["data"]["order_refunds"]
-                .map((x) => RefundModel.fromJson(x)))
+            .map((x) => RefundModel.fromJson(x)))
             : [],
         review: json["data"]["review"],
       );
@@ -146,26 +157,36 @@ class OrderActiveModel {
       commissionFee: json["commission_fee"],
       status: json["status"],
       location:
-          json["location"] != null ? Location.fromJson(json["location"]) : null,
+      json["location"] != null ? Location.fromJson(json["location"]) : null,
+      orderStatusesData: json["data"] != null
+          ? OrderStatusesData.fromJson(json["data"])
+          : null,
       address: AddressModel.fromJson(json["address"]),
       deliveryType: json["delivery_type"],
       deliveryFee: json["delivery_fee"],
+      km: json["km"],
+      minute: json["minute"],
       otp: json["otp"],
       serviceFee: json["service_fee"],
       deliveryMan: json["deliveryman"] != null
-          ? DeliveryMan.fromJson(json["deliveryman"])
+          ? UserModel.fromJson(json["deliveryman"])
           : null,
       deliveryDate: DateTime.tryParse(json["delivery_date"] ?? '')?.toLocal(),
       deliveryTime: json["delivery_time"],
       totalDiscount: json["total_discount"],
-      createdAt: DateTime.tryParse(json["created_at"])?.toLocal(),
-      updatedAt: DateTime.tryParse(json["updated_at"])?.toLocal(),
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json["created_at"])?.toLocal()
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.tryParse(json["updated_at"])?.toLocal()
+          : null,
       shop: json["shop"] != null ? ShopData.fromJson(json["shop"]) : null,
       repeat:
-          json["repeat"] != null ? RepeatData.fromJson(json["repeat"]) : null,
+      json["repeat"] != null ? RepeatData.fromJson(json["repeat"]) : null,
       user: json["user"] != null ? UserModel.fromJson(json["user"]) : null,
       details: json["details"] != null
-          ? List<Detail>.from(json["details"].map((x) => Detail.fromJson(x)))
+          ? List<OrderProduct>.from(
+          json["details"].map((x) => OrderProduct.fromJson(x)))
           : null,
       transaction: json["transaction"] != null
           ? TransactionData.fromJson(json["transaction"])
@@ -174,56 +195,100 @@ class OrderActiveModel {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "user_id": userId,
-        "total_price": totalPrice,
-        "origin_price": originPrice,
-        "rate": rate,
-        "tax": tax,
-        "tips": tips,
-        "commission_fee": commissionFee,
-        "status": status,
-        "image_after_delivered": afterDeliveredImage,
-        "location": location?.toJson(),
-        "address": address,
-        "delivery_type": deliveryType,
-        "delivery_fee": deliveryFee,
-        "otp": otp,
-        "service_fee": serviceFee,
-        "delivery_date":
-            "${deliveryDate?.year.toString().padLeft(4, '0')}-${deliveryDate?.month.toString().padLeft(2, '0')}-${deliveryDate?.day.toString().padLeft(2, '0')}",
-        "delivery_time": deliveryTime,
-        "total_discount": totalDiscount,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "shop": shop?.toJson(),
-        "repeat": repeat?.toJson(),
-        "user": user?.toJson(),
-        "details": List<dynamic>.from(details!.map((x) => x.toJson())),
-        "transaction": transaction,
-        "review": review,
-        "ponum_histories": List<dynamic>.from(ponumHistories!.map((x) => x)),
-      };
+  OrderActiveModel copyWith({
+    int? id,
+    num? userId,
+    num? totalPrice,
+    num? originPrice,
+    num? coupon,
+    num? rate,
+    num? tax,
+    num? tips,
+    num? commissionFee,
+    String? status,
+    Location? location,
+    AddressModel? address,
+    String? deliveryType,
+    String? afterDeliveredImage,
+    num? deliveryFee,
+    num? otp,
+    CurrencyModel? currencyModel,
+    UserModel? deliveryMan,
+    DateTime? deliveryDate,
+    String? deliveryTime,
+    num? totalDiscount,
+    num? serviceFee,
+    num? km,
+    num? minute,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    ShopData? shop,
+    RepeatData? repeat,
+    UserModel? user,
+    List<OrderProduct>? details,
+    List<RefundModel>? refunds,
+    TransactionData? transaction,
+    dynamic review,
+    List<dynamic>? ponumHistories,
+    OrderStatusesData? orderStatusesData,
+  }) =>
+      OrderActiveModel(
+        id: id ?? this.id,
+        userId: userId ?? this.userId,
+        totalPrice: totalPrice ?? this.totalPrice,
+        originPrice: originPrice ?? this.originPrice,
+        coupon: coupon ?? this.coupon,
+        rate: rate ?? this.rate,
+        tax: tax ?? this.tax,
+        tips: tips ?? this.tips,
+        commissionFee: commissionFee ?? this.commissionFee,
+        status: status ?? this.status,
+        location: location ?? this.location,
+        address: address ?? this.address,
+        deliveryType: deliveryType ?? this.deliveryType,
+        afterDeliveredImage: afterDeliveredImage ?? this.afterDeliveredImage,
+        deliveryFee: deliveryFee ?? this.deliveryFee,
+        otp: otp ?? this.otp,
+        currencyModel: currencyModel ?? this.currencyModel,
+        deliveryMan: deliveryMan ?? this.deliveryMan,
+        deliveryDate: deliveryDate ?? this.deliveryDate,
+        deliveryTime: deliveryTime ?? this.deliveryTime,
+        totalDiscount: totalDiscount ?? this.totalDiscount,
+        serviceFee: serviceFee ?? this.serviceFee,
+        km: km ?? this.km,
+        minute: minute ?? this.minute,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+        shop: shop ?? this.shop,
+        repeat: repeat ?? this.repeat,
+        user: user ?? this.user,
+        details: details ?? this.details,
+        refunds: refunds ?? this.refunds,
+        transaction: transaction ?? this.transaction,
+        review: review ?? this.review,
+        ponumHistories: ponumHistories ?? this.ponumHistories,
+        orderStatusesData: orderStatusesData ?? this.orderStatusesData,
+      );
 }
 
-class Detail {
-  Detail(
+class OrderProduct {
+  OrderProduct(
       {this.id,
-      this.orderId,
-      this.stockId,
-      this.originPrice,
-      this.totalPrice,
-      this.tax,
-      this.discount,
-      this.quantity,
-      this.bonus,
-      this.bonusShop,
-      this.note,
-      this.createdAt,
-      this.updatedAt,
-      this.stock,
-      this.addons});
+        this.orderId,
+        this.stockId,
+        this.originPrice,
+        this.totalPrice,
+        this.tax,
+        this.customName,
+        this.discount,
+        this.quantity,
+        this.bonus,
+        this.bonusShop,
+        this.note,
+        this.createdAt,
+        this.updatedAt,
+        this.stock,
+        this.addons});
 
   num? id;
   num? orderId;
@@ -233,6 +298,7 @@ class Detail {
   num? tax;
   num? discount;
   String? note;
+  String? customName;
   int? quantity;
   bool? bonus;
   bool? bonusShop;
@@ -241,108 +307,53 @@ class Detail {
   Stocks? stock;
   List<Addons>? addons;
 
-  factory Detail.fromJson(Map<String, dynamic> json) => Detail(
-        id: json["id"] ?? 0,
-        orderId: json["order_id"],
-        stockId: json["stock_id"],
-        originPrice: json["origin_price"],
-        totalPrice: json["total_price"],
-        tax: json["tax"],
-        note: json["note"],
-        discount: json["discount"],
-        quantity: json["quantity"],
-        bonus: (json["bonus"].runtimeType == int)
-            ? json["bonus"] == 1
-            : json["bonus"],
-        bonusShop: (json["bonus_shop"].runtimeType == int)
-            ? json["bonus_shop"] == 1
-            : json["bonus_shop"],
-        createdAt: DateTime.tryParse(json["created_at"])?.toLocal(),
-        updatedAt: DateTime.tryParse(json["updated_at"])?.toLocal(),
-        addons: json['addons'] != null
-            ? List<Addons>.from(json["addons"].map((x) {
-                if (x["product"] != null || x["stock"] != null || x != null) {
-                  return Addons.fromJson(x);
-                }
-              }))
-            : null,
-        stock: json["stock"] != null ? Stocks.fromJson(json["stock"]) : null,
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "order_id": orderId,
-        "stock_id": stockId,
-        "origin_price": originPrice,
-        "total_price": totalPrice,
-        "tax": tax,
-        "discount": discount,
-        "quantity": quantity,
-        "bonus": bonus,
-        "bonus_shop": bonusShop,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "stock": stock?.toJson(),
-      };
-}
-
-class DeliveryMan {
-  DeliveryMan(
-      {this.id,
-      this.uuid,
-      this.firstname,
-      this.lastname,
-      this.phone,
-      this.birthday,
-      this.gender,
-      this.emailVerifiedAt,
-      this.registeredAt,
-      this.active,
-      this.role,
-      this.img});
-
-  int? id;
-  String? uuid;
-  String? firstname;
-  String? lastname;
-  String? phone;
-  String? img;
-  DateTime? birthday;
-  String? gender;
-  DateTime? emailVerifiedAt;
-  DateTime? registeredAt;
-  bool? active;
-  String? role;
-
-  factory DeliveryMan.fromJson(Map<String, dynamic> json) {
-    return DeliveryMan(
+  factory OrderProduct.fromJson(Map<String, dynamic> json) {
+    return OrderProduct(
       id: json["id"] ?? 0,
-      uuid: json["uuid"] ?? "",
-      firstname: json["firstname"] ?? "",
-      lastname: json["lastname"] ?? "",
-      phone: json["phone"] ?? "",
-      img: json["img"] ?? "",
-      gender: json["gender"] ?? "",
-      active: json["active"].runtimeType == int
-          ? (json["active"] != 0)
-          : json["active"],
-      role: json["role"] ?? "",
+      orderId: json["order_id"],
+      stockId: json["stock_id"],
+      originPrice: json["origin_price"],
+      totalPrice: json["total_price"],
+      tax: json["tax"],
+      note: json["note"],
+      customName: json["custom_name"],
+      discount: json["discount"],
+      quantity: json["quantity"],
+      bonus: (json["bonus"].runtimeType == int)
+          ? json["bonus"] == 1
+          : json["bonus"],
+      bonusShop: (json["bonus_shop"].runtimeType == int)
+          ? json["bonus_shop"] == 1
+          : json["bonus_shop"],
+      createdAt: DateTime.tryParse(json["created_at"])?.toLocal(),
+      updatedAt: DateTime.tryParse(json["updated_at"])?.toLocal(),
+      addons: json['addons'] != null
+          ? List<Addons>.from(json["addons"].map((x) {
+        if (x["product"] != null || x["stock"] != null || x != null) {
+          return Addons.fromJson(x);
+        }
+      }))
+          : null,
+      stock: json["stock"] != null ? Stocks.fromJson(json["stock"]) : null,
     );
   }
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "uuid": uuid,
-        "firstname": firstname,
-        "lastname": lastname,
-        "phone": phone,
-        "birthday": birthday?.toIso8601String(),
-        "gender": gender,
-        "email_verified_at": emailVerifiedAt?.toIso8601String(),
-        "registered_at": registeredAt?.toIso8601String(),
-        "active": active,
-        "role": role,
-      };
+    "id": id,
+    "order_id": orderId,
+    "stock_id": stockId,
+    "origin_price": originPrice,
+    "total_price": totalPrice,
+    "tax": tax,
+    "discount": discount,
+    "quantity": quantity,
+    "bonus": bonus,
+    "custom_name": customName,
+    "bonus_shop": bonusShop,
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+    "stock": stock?.toJson(),
+  };
 }
 
 class CurrencyModel {
@@ -367,5 +378,111 @@ class CurrencyModel {
     data['title'] = title;
     data['active'] = active;
     return data;
+  }
+}
+
+class OrderStatusesData {
+  OrderStatusesData({
+    OrderStatusesEditDate? statuses,
+  }) {
+    _statuses = statuses;
+  }
+
+  OrderStatusesData.fromJson(dynamic json) {
+    _statuses = json['statuses'] != null
+        ? OrderStatusesEditDate.fromJson(json['statuses'])
+        : null;
+  }
+
+  OrderStatusesEditDate? _statuses;
+
+  OrderStatusesData copyWith({
+    OrderStatusesEditDate? statuses,
+  }) =>
+      OrderStatusesData(
+        statuses: statuses ?? _statuses,
+      );
+
+  OrderStatusesEditDate? get statuses => _statuses;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    if (_statuses != null) {
+      map['statuses'] = _statuses?.toJson();
+    }
+    return map;
+  }
+}
+
+class OrderStatusesEditDate {
+  OrderStatusesEditDate({
+    String? newStatus,
+    String? accepted,
+    String? cooking,
+    String? ready,
+    String? onAWay,
+    String? delivered,
+  }) {
+    _new = newStatus;
+    _accepted = accepted;
+    _cooking = cooking;
+    _ready = ready;
+    _onAWay = onAWay;
+    _delivered = delivered;
+  }
+
+  OrderStatusesEditDate.fromJson(dynamic json) {
+    _new = json['new'];
+    _accepted = json['accepted'];
+    _cooking = json['cooking'];
+    _ready = json['ready'];
+    _onAWay = json['on_a_way'];
+    _delivered = json['delivered'];
+  }
+
+  String? _new;
+  String? _accepted;
+  String? _cooking;
+  String? _ready;
+  String? _onAWay;
+  String? _delivered;
+
+  OrderStatusesEditDate copyWith({
+    String? newStatus,
+    String? accepted,
+    String? cooking,
+    String? ready,
+    String? onAWay,
+    String? delivered,
+  }) =>
+      OrderStatusesEditDate(
+        newStatus: newStatus ?? _new,
+        accepted: accepted ?? _accepted,
+        cooking: cooking ?? _cooking,
+        ready: ready ?? _ready,
+        onAWay: onAWay ?? _onAWay,
+        delivered: delivered ?? _delivered,
+      );
+
+  String? get newStatus => _new;
+
+  String? get accepted => _accepted;
+
+  String? get cooking => _cooking;
+
+  String? get ready => _ready;
+
+  String? get onAWay => _onAWay;
+
+  String? get delivered => _delivered;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['new'] = _new;
+    map['accepted'] = _accepted;
+    map['cooking'] = _cooking;
+    map['ready'] = _ready;
+    map['on_a_way'] = _onAWay;
+    return map;
   }
 }

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:foodyman/infrastructure/models/models.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 
 abstract class AppStyle {
   AppStyle._();
-  
-  static const Color primary = Color(0xFF83EA00);
+
   static const Color bottomNavigationBarColor = Color(0xFF191919);
   static const Color enterOrderButton = Color(0xFFF4F8F7);
   static const Color tabBarBorderColor = Color(0xFFDEDFE1);
@@ -48,6 +49,7 @@ abstract class AppStyle {
   static const Color discountProduct = Color(0xFFD21234);
   static const Color notificationTime = Color(0xFF8B8B8B);
   static const Color separatorDot = Color(0xFFD9D9D9);
+  static const Color subCategory = Color(0xffF6F6F6);
   static Color shimmerBase = Colors.grey.shade300;
   static Color shimmerHighlight = Colors.grey.shade100;
   static const Color locationAddress = Color(0xFF343434);
@@ -58,8 +60,21 @@ abstract class AppStyle {
   static const Color notDoneOrderStatus = Color(0xFFF5F6F6);
   static const Color unselectedBottomBarBack = Color(0xFFEFEFEF);
   static const Color unselectedBottomBarItem = Color(0xFFB9B9B9);
-  static const Color bottomNavigationShadow =
-      Color.fromRGBO(207, 207, 207, 0.65);
+  static const Color categoryDark = Color(0xff33393F);
+  static const Color success = Color(0xff31D0AA);
+  static const Color socialButtonDark = Color(0xff33393F);
+  static const Color socialButtonLight = Color(0x40ffffff);
+  static const Color bottomBarColorDark = Color(0xff444444);
+  static const Color bgDark = Color(0xff18191D);
+  static const Color textHint = Color(0xff939393);
+  static const Color bottomBarColorLight = Color(0xff000000);
+  static const Color icon = Color(0x30B1B1B1);
+  static const Color bottomNavigationShadow = Color.fromRGBO(
+    207,
+    207,
+    207,
+    0.65,
+  );
   static const Color profileModalBack = Color(0xFFF5F5F5);
   static const Color arrowRightProfileButton = Color(0xFFCCCCCC);
   static const Color customMarkerShadow = Color.fromRGBO(117, 117, 117, 0.29);
@@ -83,68 +98,91 @@ abstract class AppStyle {
   static const Color partnerChatBack = Color(0xFF1A222C);
   static const Color yourChatBack = Color(0xFF25303F);
 
+  static Color get primary =>
+      _getColorFromSettings('primary_color', const Color(0xFF83EA00));
+
+  static Color get buttonFontColor =>
+      _getColorFromSettings('primary_button_font_color', black);
+
+  static Color _getColorFromSettings(String key, Color defaultColor) {
+    final settings = LocalStorage.getSettingsList();
+    final setting = settings.firstWhere(
+          (s) => s.key == key,
+      orElse: () => SettingsData(),
+    );
+
+    if (setting.value == null) return defaultColor;
+
+    try {
+      return Color(int.parse('0xFF${setting.value!.substring(1, 7)}'));
+    } catch (e) {
+      return defaultColor;
+    }
+  }
+
   /// font style
 
-  static interBold({
+  static TextStyle interBold({
     double size = 18,
     Color color = AppStyle.black,
-    double letterSpacing = 0
-    }) =>
-      GoogleFonts.inter(
-          fontSize: size.sp,
-          fontWeight: FontWeight.bold,
-          color: color,
-          letterSpacing: letterSpacing.sp,
-          decoration: TextDecoration.none);
+    double letterSpacing = 0,
+  }) => GoogleFonts.inter(
+    fontSize: size.sp,
+    fontWeight: FontWeight.bold,
+    color: color,
+    letterSpacing: letterSpacing.sp,
+    decoration: TextDecoration.none,
+  );
 
-  static interSemi({
+  static TextStyle interSemi({
     double size = 18,
     Color color = AppStyle.black,
-    TextDecoration decoration =  TextDecoration.none,
-    double letterSpacing = 0}) =>
-      GoogleFonts.inter(
-          fontSize: size.sp,
-          fontWeight: FontWeight.w700,
-          color: color,
-          letterSpacing: letterSpacing.sp,
-          decoration: decoration);
+    TextDecoration decoration = TextDecoration.none,
+    double letterSpacing = 0,
+  }) => GoogleFonts.inter(
+    fontSize: size.sp,
+    fontWeight: FontWeight.w700,
+    color: color,
+    letterSpacing: letterSpacing.sp,
+    decoration: decoration,
+  );
 
-  static interNoSemi({
+  static TextStyle interNoSemi({
     double size = 18,
     Color color = AppStyle.black,
-    TextDecoration decoration =  TextDecoration.none,
-    double letterSpacing = 0}) =>
-      GoogleFonts.inter(
-          fontSize: size.sp,
-          fontWeight: FontWeight.w600,
-          color: color,
-          letterSpacing: letterSpacing.sp,
-          decoration: decoration);
+    TextDecoration decoration = TextDecoration.none,
+    double letterSpacing = 0,
+  }) => GoogleFonts.inter(
+    fontSize: size.sp,
+    fontWeight: FontWeight.w600,
+    color: color,
+    letterSpacing: letterSpacing.sp,
+    decoration: decoration,
+  );
 
-  static interNormal(
-      {double size = 16,
-        Color color = AppStyle.black,
-        TextDecoration textDecoration = TextDecoration.none,
-        double letterSpacing = 0
-      }) =>
-      GoogleFonts.inter(
-          fontSize: size.sp,
-          fontWeight: FontWeight.w500,
-          color: color,
-          letterSpacing: letterSpacing.sp,
-          decoration: textDecoration);
+  static TextStyle interNormal({
+    double size = 16,
+    Color color = AppStyle.black,
+    TextDecoration textDecoration = TextDecoration.none,
+    double letterSpacing = 0,
+  }) => GoogleFonts.inter(
+    fontSize: size.sp,
+    fontWeight: FontWeight.w500,
+    color: color,
+    letterSpacing: letterSpacing.sp,
+    decoration: textDecoration,
+  );
 
-  static interRegular(
-      {double size = 16,
-        Color color = AppStyle.black,
-        TextDecoration textDecoration = TextDecoration.none,
-        double letterSpacing = 0}) =>
-      GoogleFonts.inter(
-          fontSize: size,
-          fontWeight: FontWeight.w400,
-          color: color,
-          letterSpacing: letterSpacing.sp,
-          decoration: textDecoration);
-
-
+  static TextStyle interRegular({
+    double size = 16,
+    Color color = AppStyle.black,
+    TextDecoration textDecoration = TextDecoration.none,
+    double letterSpacing = 0,
+  }) => GoogleFonts.inter(
+    fontSize: size,
+    fontWeight: FontWeight.w400,
+    color: color,
+    letterSpacing: letterSpacing.sp,
+    decoration: textDecoration,
+  );
 }

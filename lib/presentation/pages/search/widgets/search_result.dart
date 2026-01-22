@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:foodyman/presentation/theme/color_set.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
 class SearchResultText extends StatelessWidget {
   final String title;
   final VoidCallback canceled;
   final VoidCallback onTap;
+  final CustomColorSet colors;
 
-  const SearchResultText(
-      {super.key,
-      required this.title,
-      required this.canceled,
-      required this.onTap});
-
+  const SearchResultText({
+    super.key,
+    required this.title,
+    required this.canceled,
+    required this.onTap,
+    required this.colors,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,27 +34,29 @@ class SearchResultText extends StatelessWidget {
                     Icon(
                       FlutterRemix.search_2_line,
                       size: 20.r,
-                      color: AppStyle.black,
+                      color: colors.textBlack,
                     ),
                     8.horizontalSpace,
                     Text(
                       title,
                       style: AppStyle.interNormal(
                         size: 14,
-                        color: AppStyle.black,
+                        color: colors.textBlack,
                       ),
                     ),
                   ],
                 ),
               ),
               Expanded(
-                  child: GestureDetector(
-                      onTap: onTap,
-                      child: Container(
-                        height: 20.r,
-                        width: double.infinity,
-                        color: AppStyle.transparent,
-                      ))),
+                child: GestureDetector(
+                  onTap: onTap,
+                  child: Container(
+                    height: 20.r,
+                    width: double.infinity,
+                    color: AppStyle.transparent,
+                  ),
+                ),
+              ),
               GestureDetector(
                 onTap: canceled,
                 child: Container(
@@ -61,7 +66,7 @@ class SearchResultText extends StatelessWidget {
                     child: Icon(
                       FlutterRemix.close_fill,
                       size: 20.r,
-                      color: AppStyle.black,
+                      color: colors.textBlack,
                     ),
                   ),
                 ),
@@ -69,9 +74,7 @@ class SearchResultText extends StatelessWidget {
             ],
           ),
           10.verticalSpace,
-          const Divider(
-            color: AppStyle.borderColor,
-          ),
+          const Divider(color: AppStyle.borderColor),
         ],
       ),
     );

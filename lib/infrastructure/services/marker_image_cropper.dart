@@ -9,6 +9,7 @@ import 'package:image/image.dart' as img;
 import 'dart:async';
 import 'dart:math';
 
+import 'package:foodyman/presentation/app_assets.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
 class ImageCropperForMarker {
@@ -24,7 +25,8 @@ class ImageCropperForMarker {
     String tempPath = (await getTemporaryDirectory()).path;
     File file = File('$tempPath/app_logo.png');
     await file.writeAsBytes(
-        bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+      bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes),
+    );
     return file;
   }
 
@@ -38,7 +40,12 @@ class ImageCropperForMarker {
       await file.writeAsBytes(response.bodyBytes);
       return file;
     } catch (e) {
-      return await imageToFile(imageName: "images/app_logo", ext: "png");
+      return await imageToFile(
+        imageName: Assets.imagesAppLogo
+            .replaceFirst('assets/', '')
+            .replaceFirst('.png', ''),
+        ext: "png",
+      );
     }
   }
 
@@ -47,15 +54,20 @@ class ImageCropperForMarker {
     int height,
     int width,
   ) async {
-    ByteData bytes = await rootBundle.load('assets/images/app_logo.png');
-    final img.Image? baseSizeImage =
-        img.decodeImage(data ?? bytes.buffer.asUint8List());
+    ByteData bytes = await rootBundle.load(Assets.imagesAppLogo);
+    final img.Image? baseSizeImage = img.decodeImage(
+      data ?? bytes.buffer.asUint8List(),
+    );
     final img.Image? newSizeImage = img.decodeImage(bytes.buffer.asUint8List());
 
-    final img.Image resizeImage = img.copyResize(baseSizeImage ?? newSizeImage!,
-        height: height, width: width);
+    final img.Image resizeImage = img.copyResize(
+      baseSizeImage ?? newSizeImage!,
+      height: height,
+      width: width,
+    );
     final Codec codec = await instantiateImageCodec(
-        Uint8List.fromList(img.encodePng(resizeImage)));
+      Uint8List.fromList(img.encodePng(resizeImage)),
+    );
     final FrameInfo frameInfo = await codec.getNextFrame();
     return frameInfo.image;
   }
@@ -73,7 +85,11 @@ class ImageCropperForMarker {
     final byteData = await img.toByteData(format: ImageByteFormat.png);
     final buffer = byteData?.buffer.asUint8List();
 
-    return BitmapDescriptor.fromBytes(buffer!);
+    return BitmapDescriptor.bytes(
+      buffer!,
+      height: size.height,
+      width: size.width,
+    );
   }
 
   Canvas _performCircleCrop(Image image, Size size, Canvas canvas) {
@@ -95,15 +111,11 @@ class ImageCropperForMarker {
       );
     canvas.drawRRect(
       RRect.fromRectAndRadius(
-          Rect.fromLTRB(
-            drawImageWidth,
-            drawImageHeight,
-            imageW,
-            imageH,
-          ),
-          Radius.circular(imageW / 4)),
+        Rect.fromLTRB(drawImageWidth, drawImageHeight, imageW, imageH),
+        Radius.circular(imageW / 4),
+      ),
       Paint()
-        ..color = AppStyle.white.withOpacity(0.75)
+        ..color = AppStyle.white.withValues(alpha: 0.75)
         ..imageFilter = ImageFilter.blur(sigmaX: 7, sigmaY: 7),
     );
     canvas.clipPath(path);

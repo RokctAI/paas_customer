@@ -14,7 +14,7 @@ class CategoryTwoShimmer extends StatelessWidget {
         child: ListView.builder(
           padding: EdgeInsets.only(left: 16.r, bottom: 16.r, top: 8.r),
           shrinkWrap: true,
-          
+
           scrollDirection: Axis.horizontal,
           itemCount: 6,
           itemBuilder: (context, index) {
@@ -27,21 +27,19 @@ class CategoryTwoShimmer extends StatelessWidget {
                   child: Container(
                     width: 60.w,
                     height: 100.h,
-                    margin: REdgeInsets.only(
-                      left: 6,
-                      right: 4,
-                    ),
+                    margin: REdgeInsets.only(left: 6, right: 4),
                     decoration: BoxDecoration(
-                        color: AppStyle.shimmerBase,
-                        borderRadius: BorderRadius.all(Radius.circular(36.r)),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: AppStyle.shadow,
-                            blurRadius: 15,
-                            offset: Offset(0, 4),
-                            spreadRadius: 0,
-                          )
-                        ]),
+                      color: AppStyle.shimmerBase,
+                      borderRadius: BorderRadius.all(Radius.circular(36.r)),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: AppStyle.shadow,
+                          blurRadius: 15,
+                          offset: Offset(0, 4),
+                          spreadRadius: 0,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

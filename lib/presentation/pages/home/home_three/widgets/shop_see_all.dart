@@ -2,16 +2,18 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/animation_button_effect.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
+import 'package:foodyman/presentation/theme/color_set.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class ShopSeeAll extends StatelessWidget {
   final int brandCount;
+  final CustomColorSet colors;
 
-  const ShopSeeAll({super.key, required this.brandCount});
+  const ShopSeeAll({super.key, required this.brandCount, required this.colors});
 
   @override
   Widget build(BuildContext context) {
@@ -21,16 +23,14 @@ class ShopSeeAll extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              padding: REdgeInsets.symmetric(
-                horizontal: 8,
-                vertical: 6,
-              ),
+              padding: REdgeInsets.symmetric(horizontal: 8, vertical: 6),
               decoration: BoxDecoration(
-                color: AppStyle.white,
+                color: colors.icon,
                 borderRadius: BorderRadius.circular(12.r),
                 border: Border.all(
-                    color: AppStyle.outlineButtonBorder.withOpacity(0.5),
-                    width: 1.2),
+                  color: AppStyle.outlineButtonBorder.withValues(alpha: 0.5),
+                  width: 1.2,
+                ),
               ),
               child: Center(
                 child: Column(
@@ -38,12 +38,18 @@ class ShopSeeAll extends StatelessWidget {
                   children: [
                     Text(
                       AppHelpers.getTranslation(TrKeys.seeAll),
-                      style: AppStyle.interNormal(size: 16),
+                      style: AppStyle.interNormal(
+                        size: 16,
+                        color: colors.textBlack,
+                      ),
                     ),
                     4.verticalSpace,
                     Text(
                       "$brandCount ${AppHelpers.getTranslation(TrKeys.brands)}",
-                      style: AppStyle.interNoSemi(size: 14, color: AppStyle.textGrey),
+                      style: AppStyle.interNoSemi(
+                        size: 14,
+                        color: AppStyle.textGrey,
+                      ),
                     ),
                   ],
                 ),
@@ -60,7 +66,7 @@ class ShopSeeAll extends StatelessWidget {
                   shape: OvalBorder(
                     side: BorderSide(
                       width: 0.5,
-                      color: AppStyle.black.withOpacity(0.08),
+                      color: AppStyle.black.withValues(alpha: 0.08),
                     ),
                   ),
                 ),
@@ -69,13 +75,14 @@ class ShopSeeAll extends StatelessWidget {
                     shape: OvalBorder(
                       side: BorderSide(
                         width: 0.50,
-                        color: AppStyle.black.withOpacity(0.08),
+                        color: AppStyle.black.withValues(alpha: 0.08),
                       ),
                     ),
                   ),
-                  child: const Icon(
+                  child: Icon(
                     FlutterRemix.arrow_right_up_line,
                     size: 20,
+                    color: colors.textBlack,
                   ),
                 ),
               ),

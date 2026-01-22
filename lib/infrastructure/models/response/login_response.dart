@@ -30,13 +30,12 @@ class LoginResponse {
     bool? status,
     String? message,
     UserData? data,
-  }) =>
-      LoginResponse(
-        timestamp: timestamp ?? _timestamp,
-        status: status ?? _status,
-        message: message ?? _message,
-        data: data ?? _data,
-      );
+  }) => LoginResponse(
+    timestamp: timestamp ?? _timestamp,
+    status: status ?? _status,
+    message: message ?? _message,
+    data: data ?? _data,
+  );
 
   String? get timestamp => _timestamp;
 
@@ -59,11 +58,7 @@ class LoginResponse {
 }
 
 class UserData {
-  UserData({
-    String? accessToken,
-    String? tokenType,
-    UserModel? user,
-  }) {
+  UserData({String? accessToken, String? tokenType, UserModel? user}) {
     _accessToken = accessToken;
     _tokenType = tokenType;
     _user = user;
@@ -83,12 +78,11 @@ class UserData {
     String? accessToken,
     String? tokenType,
     UserModel? user,
-  }) =>
-      UserData(
-        accessToken: accessToken ?? _accessToken,
-        tokenType: tokenType ?? _tokenType,
-        user: user ?? _user,
-      );
+  }) => UserData(
+    accessToken: accessToken ?? _accessToken,
+    tokenType: tokenType ?? _tokenType,
+    user: user ?? _user,
+  );
 
   String? get accessToken => _accessToken;
 

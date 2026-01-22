@@ -6,6 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/presentation/theme/color_set.dart';
+import 'package:foodyman/presentation/theme/theme_wrapper.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/application/order/order_notifier.dart';
@@ -13,16 +16,6 @@ import 'package:foodyman/application/order/order_provider.dart';
 import 'package:foodyman/application/payment_methods/payment_provider.dart';
 import 'package:foodyman/game/game.dart';
 import 'package:foodyman/game/game_bloc/game_bloc.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/common_app_bar.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/keyboard_dismisser.dart';
-import 'package:foodyman/presentation/components/loading.dart';
-import 'package:foodyman/presentation/components/shop_avarat.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
 import 'package:foodyman/presentation/pages/order/order_check/order_check.dart';
 import 'package:foodyman/presentation/pages/order/order_check/widgets/rating_page.dart';
 import 'package:foodyman/presentation/pages/order/order_type/widgets/order_map.dart';
@@ -30,18 +23,16 @@ import 'package:foodyman/presentation/pages/shop/cart/widgets/cart_order_item.da
 import 'package:foodyman/presentation/theme/app_style.dart';
 
 import 'package:foodyman/application/order/order_state.dart';
-import 'package:foodyman/presentation/components/buttons/pop_button.dart';
 import '../order_check/widgets/refund_info.dart';
 import 'widgets/order_status.dart';
 
+import 'package:foodyman/presentation/components/components.dart';
+
 @RoutePage()
 class OrderProgressPage extends ConsumerStatefulWidget {
-  final num? orderId;
+  final int orderId;
 
-  const OrderProgressPage({
-    super.key,
-    this.orderId,
-  });
+  const OrderProgressPage({super.key, required this.orderId});
 
   @override
   ConsumerState<OrderProgressPage> createState() => _OrderProgressPageState();
@@ -53,21 +44,32 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
   late OrderNotifier event;
   late bool isLtr;
   Timer? timer;
+  WebSocketOrderClient? _socket;
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
           .read(orderProvider.notifier)
-          .showOrder(context, widget.orderId ?? 0, false);
+          .showOrder(context, widget.orderId, false);
       ref.read(paymentProvider.notifier).fetchPayments(context);
     });
     timer = Timer.periodic(const Duration(seconds: 120), (Timer t) {
-      ref
-          .read(orderProvider.notifier)
-          .showOrder(context, widget.orderId ?? 0, true);
+      ref.read(orderProvider.notifier).showOrder(context, widget.orderId, true);
     });
+    _connectWebSocket();
     super.initState();
+  }
+
+  Future<void> _connectWebSocket() async {
+    _socket = WebSocketOrderClient(
+      orderId: widget.orderId,
+      orderUpdateEvent: ref.read(orderProvider.notifier).orderUpdatedEvent,
+      driverLocationEvent: ref
+          .read(orderProvider.notifier)
+          .driverLocationUpdatedEvent,
+    );
+    _socket?.connect();
   }
 
   @override
@@ -85,7 +87,7 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
     ref.listen(orderProvider, (previous, next) {
       if (AppHelpers.getOrderStatus(next.orderData?.status ?? "") ==
               OrderStatus.delivered &&
-          !(next.orderData?.review != null||next.orderData?.tips!=null) &&
+          !(next.orderData?.review != null || next.orderData?.tips != null) &&
           previous?.orderData?.status != next.orderData?.status) {
         AppHelpers.showCustomModalBottomSheet(
           context: context,
@@ -97,24 +99,28 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
 
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
-      child: KeyboardDismisser(
-        child: Scaffold(
-          key: _scaffoldKey,
-          resizeToAvoidBottomInset: false,
-          backgroundColor: AppStyle.bgGrey,
-          body: state.isLoading
-              ? const Loading()
-              : Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _appBar(context, state),
-                    _orderScreen(event, context, state),
-                  ],
-                ),
-          floatingActionButtonLocation:
-              FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: _bottom(context),
-        ),
+      child: ThemeWrapper(
+        builder: (colors, theme) {
+          return KeyboardDismisser(
+            child: Scaffold(
+              key: _scaffoldKey,
+              resizeToAvoidBottomInset: false,
+              backgroundColor: colors.backgroundColor,
+              body: state.isLoading
+                  ? const Loading()
+                  : Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _appBar(context, state, colors),
+                        _orderScreen(event, context, state, colors),
+                      ],
+                    ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
+              floatingActionButton: _bottom(context),
+            ),
+          );
+        },
       ),
     );
   }
@@ -128,22 +134,23 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
           16.horizontalSpace,
           Expanded(
             child: CustomButton(
-                icon: const Icon(
-                  FlutterRemix.gamepad_fill,
-                  color: AppStyle.black,
-                ),
-                title: AppHelpers.getTranslation(TrKeys.wantToPlayGame),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => BlocProvider(
-                        create: (context) =>
-                            GameBloc()..add(const GameEvent.init()),
-                        child: const Game(),
-                      ),
+              icon: Icon(
+                FlutterRemix.gamepad_fill,
+                color: AppStyle.buttonFontColor,
+              ),
+              title: AppHelpers.getTranslation(TrKeys.wantToPlayGame),
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => BlocProvider(
+                      create: (context) =>
+                          GameBloc()..add(const GameEvent.init()),
+                      child: const Game(),
                     ),
-                  );
-                }),
+                  ),
+                );
+              },
+            ),
           ),
         ],
       ),
@@ -151,7 +158,11 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
   }
 
   Widget _orderScreen(
-      OrderNotifier event, BuildContext context, OrderState state) {
+    OrderNotifier event,
+    BuildContext context,
+    OrderState state,
+    CustomColorSet colors,
+  ) {
     return Expanded(
       child: SmartRefresher(
         enablePullDown: true,
@@ -174,43 +185,56 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
                 isLoading: state.isMapLoading,
                 polylineCoordinates: state.polylineCoordinates,
                 markers: Set<Marker>.of(state.markers.values),
-                latLng: LatLng(state.orderData?.shop?.location?.latitude ?? 0,
-                    state.orderData?.shop?.location?.longitude ?? 0),
+                latLng: LatLng(
+                  state.orderData?.shop?.location?.latitude ?? 0,
+                  state.orderData?.shop?.location?.longitude ?? 0,
+                ),
               ),
               24.verticalSpace,
               TitleAndIcon(
                 title: AppHelpers.getTranslation(TrKeys.compositionOrder),
               ),
-              Consumer(builder: (context, ref, child) {
-                return ListView.builder(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+
+              Consumer(
+                builder: (context, ref, child) {
+                  return ListView.builder(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 14.h,
+                    ),
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount:
                         ref.watch(orderProvider).orderData?.details?.length ??
-                            0,
+                        0,
                     itemBuilder: (context, index) {
                       return CartOrderItem(
                         isAddComment: true,
+                        status: state.orderData?.status,
                         symbol: state.orderData?.currencyModel?.symbol ?? "",
                         isActive: false,
                         add: () {},
                         remove: () {},
-                        cartTwo:
-                            ref.watch(orderProvider).orderData?.details?[index],
+                        cartTwo: ref
+                            .watch(orderProvider)
+                            .orderData
+                            ?.details?[index],
                         cart: null,
                       );
-                    });
-              }),
+                    },
+                  );
+                },
+              ),
               OrderCheck(
-                orderStatus:
-                    AppHelpers.getOrderStatus(state.orderData?.status ?? ""),
+                orderStatus: AppHelpers.getOrderStatus(
+                  state.orderData?.status ?? "",
+                ),
+                colors: colors,
                 isOrder: true,
                 isActive: state.isActive,
                 globalKey: _scaffoldKey,
               ),
-              42.verticalSpace
+              42.verticalSpace,
             ],
           ),
         ),
@@ -218,7 +242,11 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
     );
   }
 
-  CommonAppBar _appBar(BuildContext context, OrderState state) {
+  CommonAppBar _appBar(
+    BuildContext context,
+    OrderState state,
+    CustomColorSet colors,
+  ) {
     return CommonAppBar(
       height: 170,
       child: Column(
@@ -233,7 +261,7 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
                 size: 40,
                 padding: 4,
                 radius: 8,
-                bgColor: AppStyle.black.withOpacity(0.06),
+                bgColor: colors.textBlack.withValues(alpha: 0.06),
               ),
               10.horizontalSpace,
               SizedBox(
@@ -246,7 +274,7 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
                       state.orderData?.shop?.translation?.title ?? "",
                       style: AppStyle.interSemi(
                         size: 16,
-                        color: AppStyle.black,
+                        color: colors.textBlack,
                       ),
                       maxLines: 1,
                     ),
@@ -254,7 +282,7 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
                       state.orderData?.shop?.translation?.description ?? "",
                       style: AppStyle.interNormal(
                         size: 12,
-                        color: AppStyle.black,
+                        color: colors.textBlack,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -266,7 +294,8 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
           ),
           OrderStatusScreen(
             status: AppHelpers.getOrderStatus(state.orderData?.status ?? ""),
-          )
+            colors: colors,
+          ),
         ],
       ),
     );

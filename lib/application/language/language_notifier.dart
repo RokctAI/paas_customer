@@ -1,19 +1,16 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:foodyman/domain/interface/settings.dart';
+import 'package:foodyman/domain/di/dependency_manager.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/services/app_connectivity.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 
 import 'language_state.dart';
 
-class LanguageNotifier extends StateNotifier<LanguageState> {
-  final SettingsRepositoryFacade _settingsRepository;
-
-  LanguageNotifier(this._settingsRepository) : super(const LanguageState());
+class LanguageNotifier extends Notifier<LanguageState> {
+  @override
+  LanguageState build() => const LanguageState();
 
   void change(int index) {
     state = state.copyWith(index: index);
@@ -24,7 +21,7 @@ class LanguageNotifier extends StateNotifier<LanguageState> {
     final connect = await AppConnectivity.connectivity();
     if (connect) {
       state = state.copyWith(isLoading: true, isSuccess: false);
-      final response = await _settingsRepository.getLanguages();
+      final response = await settingsRepository.getLanguages();
       response.when(
         success: (data) {
           final List<LanguageData> languages = data.data ?? [];
@@ -44,10 +41,7 @@ class LanguageNotifier extends StateNotifier<LanguageState> {
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -68,7 +62,7 @@ class LanguageNotifier extends StateNotifier<LanguageState> {
     final connect = await AppConnectivity.connectivity();
     if (connect) {
       state = state.copyWith(isLoading: true, isSuccess: false);
-      final response = await _settingsRepository.getMobileTranslations();
+      final response = await settingsRepository.getMobileTranslations();
       response.when(
         success: (data) {
           LocalStorage.setTranslations(data.data);

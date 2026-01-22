@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/application/order/order_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/text_fields/outline_bordered_text_field.dart';
+import 'package:foodyman/presentation/components/components.dart';
 
 class RefundScreen extends StatefulWidget {
   const RefundScreen({super.key});
@@ -37,11 +34,12 @@ class _RefundScreenState extends State<RefundScreen> {
     return Container(
       margin: MediaQuery.of(context).viewInsets,
       decoration: BoxDecoration(
-          color: AppStyle.bgGrey.withOpacity(0.96),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12.r),
-            topRight: Radius.circular(12.r),
-          )),
+        color: AppStyle.bgGrey.withValues(alpha: 0.96),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12.r),
+          topRight: Radius.circular(12.r),
+        ),
+      ),
       width: double.infinity,
       child: SingleChildScrollView(
         child: Column(
@@ -58,9 +56,9 @@ class _RefundScreenState extends State<RefundScreen> {
                       height: 4.h,
                       width: 48.w,
                       decoration: BoxDecoration(
-                          color: AppStyle.dragElement,
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(40.r))),
+                        color: AppStyle.dragElement,
+                        borderRadius: BorderRadius.all(Radius.circular(40.r)),
+                      ),
                     ),
                   ),
                   14.verticalSpace,
@@ -71,25 +69,31 @@ class _RefundScreenState extends State<RefundScreen> {
                   24.verticalSpace,
                   OutlinedBorderTextField(
                     textController: textEditingController,
-                    label: AppHelpers.getTranslation(TrKeys.whyDoYouWant)
-                        .toUpperCase(),
+                    label: AppHelpers.getTranslation(
+                      TrKeys.whyDoYouWant,
+                    ).toUpperCase(),
                   ),
                   146.verticalSpace,
                   Padding(
                     padding: EdgeInsets.only(
-                      bottom: MediaQuery.paddingOf(context).bottom+24.h,
+                      bottom: MediaQuery.paddingOf(context).bottom + 24.h,
                     ),
-                    child: Consumer(builder: (context, ref, child) {
-                      return CustomButton(
-                        isLoading: ref.watch(orderProvider).isButtonLoading,
-                        title: AppHelpers.getTranslation(TrKeys.send),
-                        onPressed: () {
-                          ref
-                              .read(orderProvider.notifier)
-                              .refundOrder(context, textEditingController.text);
-                        },
-                      );
-                    }),
+                    child: Consumer(
+                      builder: (context, ref, child) {
+                        return CustomButton(
+                          isLoading: ref.watch(orderProvider).isButtonLoading,
+                          title: AppHelpers.getTranslation(TrKeys.send),
+                          onPressed: () {
+                            ref
+                                .read(orderProvider.notifier)
+                                .refundOrder(
+                                  context,
+                                  textEditingController.text,
+                                );
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),

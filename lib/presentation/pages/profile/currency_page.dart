@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:foodyman/presentation/theme/color_set.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/application/currency/currency_provider.dart';
 import 'package:foodyman/application/profile/profile_provider.dart';
 import 'package:foodyman/application/shop_order/shop_order_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/keyboard_dismisser.dart';
-import 'package:foodyman/presentation/components/loading.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
 import 'widgets/currency_item.dart';
 
+import 'package:foodyman/presentation/components/components.dart';
+
 class CurrencyScreen extends ConsumerStatefulWidget {
-  const CurrencyScreen({super.key});
+  final CustomColorSet colors;
+  const CurrencyScreen({super.key, required this.colors});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _LanguagePageState();
@@ -50,11 +49,12 @@ class _LanguagePageState extends ConsumerState<CurrencyScreen> {
       child: KeyboardDismisser(
         child: Container(
           decoration: BoxDecoration(
-              color: AppStyle.bgGrey.withOpacity(0.96),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16.r),
-                topRight: Radius.circular(16.r),
-              )),
+            color: widget.colors.backgroundColor.withValues(alpha: 0.96),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16.r),
+              topRight: Radius.circular(16.r),
+            ),
+          ),
           width: double.infinity,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -67,12 +67,12 @@ class _LanguagePageState extends ConsumerState<CurrencyScreen> {
                       8.verticalSpace,
                       Center(
                         child: Container(
-                          height: 4.h,
-                          width: 48.w,
+                          height: 4.r,
+                          width: 48.r,
                           decoration: BoxDecoration(
-                              color: AppStyle.dragElement,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(40.r))),
+                            color: AppStyle.dragElement,
+                            borderRadius: BorderRadius.circular(40.r),
+                          ),
                         ),
                       ),
                       24.verticalSpace,
@@ -83,16 +83,18 @@ class _LanguagePageState extends ConsumerState<CurrencyScreen> {
                       ),
                       24.verticalSpace,
                       ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: state.list.length,
-                          itemBuilder: (context, index) {
-                            return CurrencyItem(
-                              onTap: () => event.change(index),
-                              isActive: state.index == index,
-                              title:
-                                  "${state.list[index].title ?? ""} - ${state.list[index].symbol ?? ""}",
-                            );
-                          }),
+                        shrinkWrap: true,
+                        itemCount: state.list.length,
+                        itemBuilder: (context, index) {
+                          return CurrencyItem(
+                            onTap: () => event.change(index),
+                            isActive: state.index == index,
+                            title:
+                                "${state.list[index].title ?? ""} - ${state.list[index].symbol ?? ""}",
+                            colors: widget.colors,
+                          );
+                        },
+                      ),
                       24.verticalSpace,
                     ],
                   ),

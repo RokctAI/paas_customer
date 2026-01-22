@@ -5,22 +5,27 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/application/payment_methods/payment_provider.dart';
 import 'package:foodyman/application/payment_methods/payment_state.dart';
 import 'package:foodyman/infrastructure/models/data/payment_data.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/loading.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 import 'package:foodyman/application/payment_methods/payment_notifier.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/presentation/components/select_item.dart';
+
+import 'package:foodyman/presentation/theme/color_set.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class PaymentMethods extends ConsumerStatefulWidget {
   final ValueChanged<PaymentData>? payLater;
   final Function(PaymentData, num)? tips;
   final num? tipPrice;
+  final CustomColorSet colors;
 
-  const PaymentMethods({this.payLater, this.tips, this.tipPrice, super.key});
+  const PaymentMethods({
+    this.payLater,
+    this.tips,
+    this.tipPrice,
+    super.key,
+    required this.colors,
+  });
 
   @override
   ConsumerState<PaymentMethods> createState() => _PaymentMethodsState();
@@ -54,11 +59,12 @@ class _PaymentMethodsState extends ConsumerState<PaymentMethods> {
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Container(
         decoration: BoxDecoration(
-            color: AppStyle.bgGrey.withOpacity(0.96),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12.r),
-              topRight: Radius.circular(12.r),
-            )),
+          color: widget.colors.backgroundColor.withValues(alpha: 0.96),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12.r),
+            topRight: Radius.circular(12.r),
+          ),
+        ),
         width: double.infinity,
         child: state.isPaymentsLoading
             ? const Loading()
@@ -77,15 +83,18 @@ class _PaymentMethodsState extends ConsumerState<PaymentMethods> {
                               height: 4.h,
                               width: 48.w,
                               decoration: BoxDecoration(
-                                  color: AppStyle.dragElement,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(40.r))),
+                                color: AppStyle.dragElement,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(40.r),
+                                ),
+                              ),
                             ),
                           ),
                           14.verticalSpace,
                           TitleAndIcon(
                             title: AppHelpers.getTranslation(
-                                TrKeys.paymentMethods),
+                              TrKeys.paymentMethods,
+                            ),
                           ),
                           24.verticalSpace,
                           (state.payments.isNotEmpty)
@@ -98,16 +107,22 @@ class _PaymentMethodsState extends ConsumerState<PaymentMethods> {
                                       onTap: () => event.change(index),
                                       isActive: state.currentIndex == index,
                                       title: AppHelpers.getTranslation(
-                                          state.payments[index].tag ?? ""),
+                                        state.payments[index].tag ?? "",
+                                      ),
                                     );
-                                  })
+                                  },
+                                )
                               : Center(
                                   child: Padding(
                                     padding: EdgeInsets.only(
-                                        bottom: 32.h, left: 24.w, right: 24.w),
+                                      bottom: 32.h,
+                                      left: 24.w,
+                                      right: 24.w,
+                                    ),
                                     child: Text(
                                       AppHelpers.getTranslation(
-                                          TrKeys.paymentTypeIsNotAdded),
+                                        TrKeys.paymentTypeIsNotAdded,
+                                      ),
                                       style: AppStyle.interSemi(
                                         size: 16,
                                         color: AppStyle.textGrey,
@@ -120,35 +135,39 @@ class _PaymentMethodsState extends ConsumerState<PaymentMethods> {
                             Padding(
                               padding: EdgeInsets.only(bottom: 32.r),
                               child: CustomButton(
-                                  title: AppHelpers.getTranslation(TrKeys.pay),
-                                  onPressed: () {
-                                    context.maybePop();
-                                    widget.payLater?.call(PaymentData(
-                                        id: state
-                                            .payments[state.currentIndex].id,
-                                        tag: AppHelpers.getTranslation(state
-                                            .payments[state.currentIndex]
-                                            .tag)));
-                                  }),
+                                title: AppHelpers.getTranslation(TrKeys.pay),
+                                onPressed: () {
+                                  context.maybePop();
+                                  widget.payLater?.call(
+                                    PaymentData(
+                                      id: state.payments[state.currentIndex].id,
+                                      tag: AppHelpers.getTranslation(
+                                        state.payments[state.currentIndex].tag,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           if (widget.tips != null)
                             Padding(
                               padding: EdgeInsets.only(bottom: 32.r),
                               child: CustomButton(
-                                  title: AppHelpers.getTranslation(TrKeys.pay),
-                                  onPressed: () {
-                                    context.maybePop();
-                                    widget.tips?.call(
-                                      PaymentData(
-                                          id: state
-                                              .payments[state.currentIndex].id,
-                                          tag: AppHelpers.getTranslation(state
-                                              .payments[state.currentIndex]
-                                              .tag)),
-                                      widget.tipPrice ?? 0,
-                                    );
-                                  }),
-                            )
+                                title: AppHelpers.getTranslation(TrKeys.pay),
+                                onPressed: () {
+                                  context.maybePop();
+                                  widget.tips?.call(
+                                    PaymentData(
+                                      id: state.payments[state.currentIndex].id,
+                                      tag: AppHelpers.getTranslation(
+                                        state.payments[state.currentIndex].tag,
+                                      ),
+                                    ),
+                                    widget.tipPrice ?? 0,
+                                  );
+                                },
+                              ),
+                            ),
                         ],
                       ),
                     ),

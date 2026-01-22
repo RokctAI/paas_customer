@@ -1,29 +1,33 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
-import 'package:foodyman/infrastructure/models/data/filter_model.dart';
-import 'package:foodyman/infrastructure/models/response/branches_response.dart';
-
 import 'package:foodyman/domain/handlers/handlers.dart';
-import 'package:foodyman/infrastructure/models/data/story_data.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/models/response/tag_response.dart';
 
 abstract class ShopsRepositoryFacade {
-  Future<ApiResult<ShopsPaginateResponse>> getShopFilter(
-      {int? categoryId, required int page,int? subCategoryId,});
+  Future<ApiResult<ShopsPaginateResponse>> getShopFilter({
+    int? categoryId,
+    required int page,
+    int? subCategoryId,
+  });
 
   Future<ApiResult<ShopsPaginateResponse>> getPickupShops();
 
-  Future<ApiResult<ShopsPaginateResponse>> searchShops(
-      {required String text, int? categoryId});
+  Future<ApiResult<ShopsPaginateResponse>> searchShops({
+    required String text,
+    int? categoryId,
+  });
 
   Future<ApiResult<ShopsPaginateResponse>> getNearbyShops(
     double latitude,
     double longitude,
   );
 
-  Future<ApiResult<ShopsPaginateResponse>> getAllShops(int page,
-      {int? categoryId, FilterModel? filterModel, required bool isOpen,bool? verify});
+  Future<ApiResult<ShopsPaginateResponse>> getAllShops(
+    int page, {
+    int? categoryId,
+    FilterModel? filterModel,
+    required bool isOpen,
+    bool? verify,
+  });
 
   Future<ApiResult<TagResponse>> getTags(int categoryId);
 
@@ -45,9 +49,7 @@ abstract class ShopsRepositoryFacade {
 
   Future<ApiResult<BranchResponse>> getShopBranch({required int uuid});
 
-  Future<ApiResult<ShopsPaginateResponse>> getShopsByIds(
-    List<int> shopIds,
-  );
+  Future<ApiResult<ShopsPaginateResponse>> getShopsByIds(List<int> shopIds);
 
   Future<ApiResult<void>> createShop({
     required double tax,

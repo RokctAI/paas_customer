@@ -1,13 +1,10 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-
-import 'package:foodyman/infrastructure/models/data/story_data.dart';
 
 part 'home_state.freezed.dart';
 
 @freezed
-class HomeState with _$HomeState {
+abstract class HomeState with _$HomeState {
   const factory HomeState({
     @Default(true) bool isCategoryLoading,
     @Default(true) bool isBannerLoading,
@@ -35,6 +32,4 @@ class HomeState with _$HomeState {
   }) = _HomeState;
 
   const HomeState._();
-
-
 }

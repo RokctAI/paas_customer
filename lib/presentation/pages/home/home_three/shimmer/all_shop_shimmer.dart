@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
 
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'market_shimmer_three.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class AllShopShimmer extends StatelessWidget {
   final bool isTitle;
@@ -25,25 +25,23 @@ class AllShopShimmer extends StatelessWidget {
           child: ListView.builder(
             padding: EdgeInsets.only(top: 6.h),
             shrinkWrap: true,
-            
+
             physics: const NeverScrollableScrollPhysics(),
             scrollDirection: Axis.vertical,
             itemCount: 2,
             itemBuilder: (context, index) =>
                 AnimationConfiguration.staggeredList(
-              position: index,
-              duration: const Duration(milliseconds: 375),
-              child: const SlideAnimation(
-                verticalOffset: 50.0,
-                child: FadeInAnimation(
-                  child: MarketShimmerThree(
-                    isSimpleShop: true,
+                  position: index,
+                  duration: const Duration(milliseconds: 375),
+                  child: const SlideAnimation(
+                    verticalOffset: 50.0,
+                    child: FadeInAnimation(
+                      child: MarketShimmerThree(isSimpleShop: true),
+                    ),
                   ),
                 ),
-              ),
-            ),
           ),
-        )
+        ),
       ],
     );
   }

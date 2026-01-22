@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodyman/domain/di/dependency_manager.dart';
 import 'package:foodyman/domain/interface/payments.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
 
 class PaymentsRepository implements PaymentsRepositoryFacade {
@@ -16,9 +15,7 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
         '/api/v1/rest/payments',
         queryParameters: data,
       );
-      return ApiResult.success(
-        data: PaymentsResponse.fromJson(response.data),
-      );
+      return ApiResult.success(data: PaymentsResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get payments failure: $e');
       return ApiResult.failure(

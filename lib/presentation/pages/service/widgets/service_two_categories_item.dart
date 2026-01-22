@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/presentation/components/buttons/animation_button_effect.dart';
-import 'package:foodyman/presentation/components/custom_network_image.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
+import 'package:foodyman/presentation/theme/color_set.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class ServiceTwoCategoriesItem extends StatelessWidget {
   final CategoryData category;
   final VoidCallback onTap;
-  const ServiceTwoCategoriesItem({super.key, required this.category, required this.onTap});
+  final CustomColorSet colors;
+
+  const ServiceTwoCategoriesItem({
+    super.key,
+    required this.category,
+    required this.onTap,
+    required this.colors,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return  AnimationButtonEffect(
+    return AnimationButtonEffect(
       child: GestureDetector(
         onTap: onTap,
         child: Container(
           padding: REdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
-            color: AppStyle.white,
+            color: colors.icon,
             borderRadius: BorderRadius.circular(16.r),
           ),
           child: Column(
@@ -39,13 +47,10 @@ class ServiceTwoCategoriesItem extends StatelessWidget {
               ),
               Text(
                 category.translation?.title ?? "",
-                style: AppStyle.interNormal(
-                  size: 14,
-                ),
+                style: AppStyle.interNormal(size: 14, color: colors.textBlack),
                 maxLines: 1,
               ),
               const Spacer(),
-
             ],
           ),
         ),

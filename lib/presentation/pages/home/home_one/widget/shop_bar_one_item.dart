@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
@@ -6,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/infrastructure/models/data/story_data.dart';
-import 'package:foodyman/presentation/components/custom_network_image.dart';
-import 'package:foodyman/presentation/components/shop_avarat.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class ShopBarOneItem extends StatelessWidget {
   final RefreshController controller;
@@ -29,9 +28,7 @@ class ShopBarOneItem extends StatelessWidget {
       onTap: () {
         context.pushRoute(StoryListRoute(controller: controller, index: index));
       },
-      child:
-
-      Container(
+      child: Container(
         margin: EdgeInsets.only(right: 9.r),
         width: 110.w,
         color: AppStyle.transparent,
@@ -50,18 +47,20 @@ class ShopBarOneItem extends StatelessWidget {
             Align(
               alignment: Alignment.topCenter,
               child: Padding(
-                padding: EdgeInsets.only(top: 12.h,right: 8.w,left: 8.w),
+                padding: EdgeInsets.only(top: 12.h, right: 8.w, left: 8.w),
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(100.r)),
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 4.h, horizontal: 12.w),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 4.h,
+                        horizontal: 12.w,
+                      ),
                       decoration: BoxDecoration(
-                          color: AppStyle.black.withOpacity(0.4),
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(100.r))),
+                        color: AppStyle.black.withValues(alpha: 0.4),
+                        borderRadius: BorderRadius.all(Radius.circular(100.r)),
+                      ),
                       child: Text(
                         story?.productTitle ?? "",
                         style: AppStyle.interNormal(
@@ -87,7 +86,7 @@ class ShopBarOneItem extends StatelessWidget {
                       shopImage: story?.logoImg ?? "",
                       size: 46,
                       padding: 6,
-                      bgColor: AppStyle.white.withOpacity(0.65),
+                      bgColor: AppStyle.white.withValues(alpha: 0.65),
                     ),
                     6.verticalSpace,
                     Text(

@@ -1,27 +1,18 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:foodyman/domain/interface/products.dart';
 import 'package:foodyman/infrastructure/models/data/addons_data.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/services/app_connectivity.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:http/http.dart' as http;
-import 'package:foodyman/domain/interface/cart.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/infrastructure/app_links/app_links_service.dart';
 import 'package:foodyman/infrastructure/models/request/cart_request.dart';
 import 'package:share_plus/share_plus.dart';
-import '../../app_constants.dart';
+import 'package:foodyman/domain/di/dependency_manager.dart';
 import 'product_state.dart';
 
-class ProductNotifier extends StateNotifier<ProductState> {
-  final ProductsRepositoryFacade _productsRepository;
-  final CartRepositoryFacade _cartRepository;
+class ProductNotifier extends Notifier<ProductState> {
+  @override
+  ProductState build() => const ProductState();
 
-  ProductNotifier(this._cartRepository, this._productsRepository)
-      : super(const ProductState());
   String? shareLink;
 
   void change(int index) {
@@ -53,13 +44,22 @@ class ProductNotifier extends StateNotifier<ProductState> {
       final List<int> selectedIndexes = List.filled(groupsCount, 0);
       initialSetSelectedIndexes(context, selectedIndexes);
     }
-    getProductDetailsById(context, productData.uuid ?? "", shopType, shopId,
-        isLoading: true);
+    getProductDetailsById(
+      context,
+      productData.uuid ?? "",
+      shopType,
+      shopId,
+      isLoading: true,
+    );
   }
 
   Future<void> getProductDetailsById(
-      BuildContext context, String productId, String? shopType, int? shopId,
-      {bool isLoading = true}) async {
+    BuildContext context,
+    String productId,
+    String? shopType,
+    int? shopId, {
+    bool isLoading = true,
+  }) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       if (isLoading) {
@@ -69,7 +69,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
           activeImageUrl: '',
         );
       }
-      final response = await _productsRepository.getProductDetails(productId);
+      final response = await productsRepository.getProductDetails(productId);
       response.when(
         success: (data) async {
           final List<Stocks> stocks = data.data?.stocks ?? <Stocks>[];
@@ -89,10 +89,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
         },
         failure: (failure, s) {
           state = state.copyWith(isLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
           debugPrint('==> get product details failure: $failure');
         },
       );
@@ -111,8 +108,10 @@ class ProductNotifier extends StateNotifier<ProductState> {
     if (count < (state.productData?.maxQty ?? 1)) {
       state = state.copyWith(count: ++count);
     } else {
-      AppHelpers.showCheckTopSnackBarInfo(context,
-          "${AppHelpers.getTranslation(TrKeys.maxQty)} ${state.count}");
+      AppHelpers.showCheckTopSnackBarInfo(
+        context,
+        "${AppHelpers.getTranslation(TrKeys.maxQty)} ${state.count}",
+      );
     }
   }
 
@@ -122,17 +121,23 @@ class ProductNotifier extends StateNotifier<ProductState> {
       state = state.copyWith(count: --count);
     } else {
       AppHelpers.showCheckTopSnackBarInfo(
-          context, AppHelpers.getTranslation(TrKeys.minQty));
+        context,
+        AppHelpers.getTranslation(TrKeys.minQty),
+      );
     }
   }
 
-  void createCart(BuildContext context, int shopId, VoidCallback onSuccess,
-      {int? stockId,
-      int? count,
-      VoidCallback? onError,
-      bool isGroupOrder = false,
-      String? cartId,
-      String? userUuid}) async {
+  void createCart(
+    BuildContext context,
+    int shopId,
+    VoidCallback onSuccess, {
+    int? stockId,
+    int? count,
+    VoidCallback? onError,
+    bool isGroupOrder = false,
+    String? cartId,
+    String? userUuid,
+  }) async {
     state = state.copyWith(isCheckShopOrder: false);
     if (shopId == state.productData?.shopId) {
       final connected = await AppConnectivity.connectivity();
@@ -140,33 +145,37 @@ class ProductNotifier extends StateNotifier<ProductState> {
         state = state.copyWith(isAddLoading: true);
         List<CartRequest> list = [
           CartRequest(
-              stockId: stockId ?? state.selectedStock?.id ?? 0,
-              quantity: count ?? state.count)
+            stockId: stockId ?? state.selectedStock?.id ?? 0,
+            quantity: count ?? state.count,
+          ),
         ];
         for (Addons element in state.selectedStock?.addons ?? []) {
           list.add(
             CartRequest(
-                stockId: element.product?.stock?.id,
-                quantity: (element.active ?? false) ? element.quantity : 0,
-                parentId: stockId ?? state.selectedStock?.id ?? 0),
+              stockId: element.product?.stock?.id,
+              quantity: (element.active ?? false) ? element.quantity : 0,
+              parentId: stockId ?? state.selectedStock?.id ?? 0,
+            ),
           );
         }
         final response = isGroupOrder
-            ? await _cartRepository.insertCartWithGroup(
+            ? await cartRepository.insertCartWithGroup(
                 cart: CartRequest(
-                    shopId: state.productData?.shopId ?? 0,
-                    cartId: cartId,
-                    userUuid: userUuid,
-                    stockId: stockId ?? state.selectedStock?.id ?? 0,
-                    quantity: count ?? state.count,
-                    carts: list),
+                  shopId: state.productData?.shopId ?? 0,
+                  cartId: cartId,
+                  userUuid: userUuid,
+                  stockId: stockId ?? state.selectedStock?.id ?? 0,
+                  quantity: count ?? state.count,
+                  carts: list,
+                ),
               )
-            : await _cartRepository.insertCart(
+            : await cartRepository.insertCart(
                 cart: CartRequest(
-                    shopId: state.productData?.shopId ?? 0,
-                    stockId: stockId ?? state.selectedStock?.id ?? 0,
-                    quantity: count ?? state.count,
-                    carts: list),
+                  shopId: state.productData?.shopId ?? 0,
+                  stockId: stockId ?? state.selectedStock?.id ?? 0,
+                  quantity: count ?? state.count,
+                  carts: list,
+                ),
               );
         response.when(
           success: (data) {
@@ -176,10 +185,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
           failure: (failure, status) {
             if (status != 400) {
               state = state.copyWith(isAddLoading: false);
-              AppHelpers.showCheckTopSnackBar(
-                context,
-                failure,
-              );
+              AppHelpers.showCheckTopSnackBar(context, failure);
             } else {
               onError?.call();
             }
@@ -198,8 +204,10 @@ class ProductNotifier extends StateNotifier<ProductState> {
   void updateSelectedIndexes(BuildContext context, int index, int value) {
     final newList = state.selectedIndexes.sublist(0, index);
     newList.add(value);
-    final postList =
-        List.filled(state.selectedIndexes.length - newList.length, 0);
+    final postList = List.filled(
+      state.selectedIndexes.length - newList.length,
+      0,
+    );
     newList.addAll(postList);
     initialSetSelectedIndexes(context, newList);
   }
@@ -217,8 +225,11 @@ class ProductNotifier extends StateNotifier<ProductState> {
         final TypedExtra extras = getFirstExtras(state.selectedIndexes[0]);
         groupExtras.add(extras);
       } else {
-        final TypedExtra extras =
-            getUniqueExtras(groupExtras, state.selectedIndexes, i);
+        final TypedExtra extras = getUniqueExtras(
+          groupExtras,
+          state.selectedIndexes,
+          i,
+        );
         groupExtras.add(extras);
       }
     }
@@ -241,10 +252,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
     state = state.copyWith(productData: newProduct);
   }
 
-  void addIngredient(
-    BuildContext context,
-    int selectIndex,
-  ) {
+  void addIngredient(BuildContext context, int selectIndex) {
     if ((state.selectedStock?.addons?[selectIndex].product?.maxQty ?? 0) >
             (state.selectedStock?.addons?[selectIndex].quantity ?? 0) &&
         (state.selectedStock?.addons?[selectIndex].product?.stock?.quantity ??
@@ -258,8 +266,10 @@ class ProductNotifier extends StateNotifier<ProductState> {
       ProductData? newProduct = product?.copyWith(stocks: [newStock!]);
       state = state.copyWith(productData: newProduct);
     } else {
-      AppHelpers.showCheckTopSnackBarInfo(context,
-          "${AppHelpers.getTranslation(TrKeys.maxQty)} ${state.selectedStock?.addons?[selectIndex].quantity ?? 1}");
+      AppHelpers.showCheckTopSnackBarInfo(
+        context,
+        "${AppHelpers.getTranslation(TrKeys.maxQty)} ${state.selectedStock?.addons?[selectIndex].quantity ?? 1}",
+      );
     }
   }
 
@@ -275,7 +285,9 @@ class ProductNotifier extends StateNotifier<ProductState> {
       state = state.copyWith(productData: newProduct);
     } else {
       AppHelpers.showCheckTopSnackBarInfo(
-          context, AppHelpers.getTranslation(TrKeys.minQty));
+        context,
+        AppHelpers.getTranslation(TrKeys.minQty),
+      );
     }
   }
 
@@ -307,17 +319,14 @@ class ProductNotifier extends StateNotifier<ProductState> {
       uniques.add(state.initialStocks[i].extras?[0].value ?? '');
       title = state.initialStocks[i].extras?[0].group?.translation?.title ?? '';
       type = AppHelpers.getExtraTypeByValue(
-          state.initialStocks[i].extras?[0].group?.type);
+        state.initialStocks[i].extras?[0].group?.type,
+      );
     }
     final setOfUniques = uniques.toSet().toList();
     final List<UiExtra> extras = [];
     for (int i = 0; i < setOfUniques.length; i++) {
       if (selectedIndex == i) {
-        extras.add(UiExtra(
-          setOfUniques[i],
-          true,
-          i,
-        ));
+        extras.add(UiExtra(setOfUniques[i], true, i));
       } else {
         extras.add(UiExtra(setOfUniques[i], false, i));
       }
@@ -343,7 +352,8 @@ class ProductNotifier extends StateNotifier<ProductState> {
       uniques.add(includedStocks[i].extras?[index].value ?? '');
       title = includedStocks[i].extras?[index].group?.translation?.title ?? '';
       type = AppHelpers.getExtraTypeByValue(
-          includedStocks[i].extras?[index].group?.type ?? '');
+        includedStocks[i].extras?[index].group?.type ?? '',
+      );
     }
     final setOfUniques = uniques.toSet().toList();
     final List<UiExtra> extras = [];
@@ -375,46 +385,20 @@ class ProductNotifier extends StateNotifier<ProductState> {
     state = state.copyWith(activeImageUrl: url);
   }
 
-  generateShareLink(String? shopType, int? shopId) async {
-    final productLink =
-        '${AppConstants.webUrl}/shop/$shopId?product=${state.productData?.uuid}/';
-
-    const dynamicLink =
-        'https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=${AppConstants.firebaseWebKey}';
-
-    final dataShare = {
-      "dynamicLinkInfo": {
-        "domainUriPrefix": AppConstants.uriPrefix,
-        "link": productLink,
-        "androidInfo": {
-          "androidPackageName": AppConstants.androidPackageName,
-          "androidFallbackLink":
-              "${AppConstants.webUrl}/shop/$shopId?product=${state.productData?.uuid}"
-        },
-        "iosInfo": {
-          "iosBundleId": AppConstants.iosPackageName,
-          "iosFallbackLink":
-              "${AppConstants.webUrl}/shop/$shopId?product=${state.productData?.uuid}"
-        },
-        "socialMetaTagInfo": {
-          "socialTitle": "${state.productData?.translation?.title}",
-          "socialDescription": "${state.productData?.translation?.description}",
-          "socialImageLink": '${state.productData?.img}',
-        }
-      }
-    };
-
-    final res =
-        await http.post(Uri.parse(dynamicLink), body: jsonEncode(dataShare));
-    shareLink = jsonDecode(res.body)['shortLink'];
-    debugPrint("share link product_notifier: $shareLink \n$dataShare");
-
+  Future<void> generateShareLink(String? shopType, int? shopId) async {
+    shareLink = AppLinksService.createDeepLink(
+      path: 'shop/$shopId',
+      parameters: {'product': state.productData?.uuid ?? ''},
+    );
+    debugPrint("share link product_notifier: $shareLink");
   }
 
   Future shareProduct() async {
-    await Share.share(shareLink ?? '',
-      subject: state.productData?.translation?.title ?? "Foodyman",
-      // title: state.productData?.translation?.description ?? "",
+    SharePlus.instance.share(
+      ShareParams(
+        text: shareLink,
+        sharePositionOrigin: Rect.fromLTWH(0, 0, 100, 100),
+      ),
     );
   }
 }

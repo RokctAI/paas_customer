@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/presentation/theme/color_set.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
 class ShopOrderDescription extends StatelessWidget {
@@ -11,6 +12,7 @@ class ShopOrderDescription extends StatelessWidget {
   final num price;
   final double iconSize;
   final bool discount;
+  final CustomColorSet colors;
 
   const ShopOrderDescription({
     super.key,
@@ -20,6 +22,7 @@ class ShopOrderDescription extends StatelessWidget {
     required this.description,
     this.iconSize = 24,
     this.discount = false,
+    required this.colors,
   });
 
   @override
@@ -31,6 +34,7 @@ class ShopOrderDescription extends StatelessWidget {
           svgName,
           width: iconSize.r,
           height: iconSize.r,
+          colorFilter: ColorFilter.mode(colors.textBlack, BlendMode.srcIn),
         ),
         12.horizontalSpace,
         Expanded(
@@ -39,19 +43,13 @@ class ShopOrderDescription extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: AppStyle.interNormal(
-                  size: 16,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interNormal(size: 16, color: colors.textBlack),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
                 description,
-                style: AppStyle.interNormal(
-                  size: 12,
-                  color: AppStyle.textGrey,
-                ),
+                style: AppStyle.interNormal(size: 12, color: AppStyle.textGrey),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -61,11 +59,11 @@ class ShopOrderDescription extends StatelessWidget {
         const Spacer(),
         Text(
           discount
-              ? "-${AppHelpers.numberFormat(number: price)}"
-              : AppHelpers.numberFormat(number: price),
+              ? "-${AppHelpers.numberFormat(price)}"
+              : AppHelpers.numberFormat(price),
           style: AppStyle.interSemi(
-            size: 16.sp,
-            color: discount ? AppStyle.red : AppStyle.black,
+            size: 16,
+            color: discount ? AppStyle.red : colors.textBlack,
           ),
         ),
       ],
