@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/custom_network_image.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class ImageDialog extends StatelessWidget {
   final String? img;
@@ -28,18 +28,16 @@ class ImageDialog extends StatelessWidget {
               ),
             ),
             GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Padding(
-                  padding: REdgeInsets.all(4),
-                  child: const Icon(FlutterRemix.close_circle_line),
-                )),
+              onTap: () => Navigator.pop(context),
+              child: Padding(
+                padding: REdgeInsets.all(4),
+                child: const Icon(FlutterRemix.close_circle_line),
+              ),
+            ),
           ],
         ),
         12.verticalSpace,
-        CustomNetworkImage(
-          url: img,
-          radius: 16,
-        ),
+        CustomNetworkImage(url: img, radius: 16),
       ],
     );
   }

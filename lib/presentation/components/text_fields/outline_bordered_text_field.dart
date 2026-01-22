@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:foodyman/presentation/theme/theme_wrapper.dart';
 
 class OutlinedBorderTextField extends StatelessWidget {
   final String? label;
@@ -47,97 +47,115 @@ class OutlinedBorderTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        if (label != null)
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label!,
-                style: AppStyle.interNormal(
-                  size: 9,
-                  color: AppStyle.black,
+    return ThemeWrapper(
+      builder: (colors, theme) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (label != null)
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label!,
+                    style: AppStyle.interNormal(
+                      size: 9,
+                      color: colors.textBlack,
+                    ),
+                  ),
+                ],
+              ),
+            TextFormField(
+              // maxLines: null,
+              inputFormatters: inputFormatters,
+              onTap: onTap,
+              autocorrect: true,
+              onChanged: onChanged,
+              obscureText: !(obscure ?? true),
+              obscuringCharacter: '*',
+              controller: textController,
+              validator: validation,
+              style: AppStyle.interNormal(size: 15, color: colors.textBlack),
+              cursorWidth: 1,
+              cursorColor: AppStyle.black,
+              keyboardType: inputType,
+              initialValue: initialText,
+              readOnly: readOnly,
+              textCapitalization:
+                  textCapitalization ?? TextCapitalization.sentences,
+              textInputAction: textInputAction,
+              decoration: InputDecoration(
+                suffixIconConstraints: BoxConstraints(
+                  maxHeight: 30.r,
+                  maxWidth: 30.r,
+                ),
+                suffixIcon: suffixIcon,
+                hintText: hint ?? AppHelpers.getTranslation(TrKeys.typeHere),
+                hintStyle: AppStyle.interNormal(
+                  size: 13,
+                  color: AppStyle.hintColor,
+                ),
+                contentPadding: REdgeInsets.symmetric(
+                  horizontal: 0,
+                  vertical: 8,
+                ),
+                floatingLabelBehavior: FloatingLabelBehavior.always,
+                fillColor: AppStyle.black,
+                filled: false,
+
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide.merge(
+                    const BorderSide(color: AppStyle.differBorderColor),
+                    const BorderSide(color: AppStyle.differBorderColor),
+                  ),
+                ),
+                errorBorder: UnderlineInputBorder(
+                  borderSide: BorderSide.merge(
+                    const BorderSide(color: AppStyle.differBorderColor),
+                    const BorderSide(color: AppStyle.differBorderColor),
+                  ),
+                ),
+                border: const UnderlineInputBorder(),
+                focusedErrorBorder: const UnderlineInputBorder(),
+                disabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide.merge(
+                    const BorderSide(color: AppStyle.differBorderColor),
+                    const BorderSide(color: AppStyle.differBorderColor),
+                  ),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide.merge(
+                    BorderSide(color: colors.textHint),
+                    BorderSide(color: colors.textHint),
+                  ),
                 ),
               ),
-            ],
-          ),
-        TextFormField(
-          // maxLines: null,
-          inputFormatters: inputFormatters,
-          onTap: onTap,
-          autocorrect: true,
-          onChanged: onChanged,
-          obscureText: !(obscure ?? true),
-          obscuringCharacter: '*',
-          controller: textController,
-          validator: validation,
-          style: AppStyle.interNormal(
-            size: 15.sp,
-            color: AppStyle.black,
-          ),
-          cursorWidth: 1,
-          cursorColor: AppStyle.black,
-          keyboardType: inputType,
-          initialValue: initialText,
-          readOnly: readOnly,
-          textCapitalization:
-              textCapitalization ?? TextCapitalization.sentences,
-          textInputAction: textInputAction,
-          decoration: InputDecoration(
-            suffixIconConstraints:
-                BoxConstraints(maxHeight: 30.r, maxWidth: 30.r),
-            suffixIcon: suffixIcon,
-            hintText: hint ?? AppHelpers.getTranslation(TrKeys.typeHere),
-            hintStyle: AppStyle.interNormal(
-              size: 13,
-              color: AppStyle.hintColor,
             ),
-            contentPadding: REdgeInsets.symmetric(horizontal: 0, vertical: 8),
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            fillColor: AppStyle.black,
-            filled: false,
-            enabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide.merge(
-                    const BorderSide(color: AppStyle.differBorderColor),
-                    const BorderSide(color: AppStyle.differBorderColor))),
-            errorBorder: UnderlineInputBorder(
-                borderSide: BorderSide.merge(
-                    const BorderSide(color: AppStyle.differBorderColor),
-                    const BorderSide(color: AppStyle.differBorderColor))),
-            border: const UnderlineInputBorder(),
-            focusedErrorBorder: const UnderlineInputBorder(),
-            disabledBorder: UnderlineInputBorder(
-                borderSide: BorderSide.merge(
-                    const BorderSide(color: AppStyle.differBorderColor),
-                    const BorderSide(color: AppStyle.differBorderColor))),
-            focusedBorder: const UnderlineInputBorder(),
-          ),
-        ),
-        if (descriptionText != null)
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              4.verticalSpace,
-              Text(
-                descriptionText!,
-                style: AppStyle.interRegular(
-                  letterSpacing: -0.3,
-                  size: 12,
-                  color: isError
-                      ? AppStyle.red
-                      : isSuccess
+            if (descriptionText != null)
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  4.verticalSpace,
+                  Text(
+                    descriptionText!,
+                    style: AppStyle.interRegular(
+                      letterSpacing: -0.3,
+                      size: 12,
+                      color: isError
+                          ? AppStyle.red
+                          : isSuccess
                           ? AppStyle.bgGrey
                           : AppStyle.black,
-                ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          )
-      ],
+          ],
+        );
+      },
     );
   }
 }

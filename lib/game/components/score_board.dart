@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
 import '../game_bloc/game_bloc.dart';
 
 class ScoreBoard extends StatelessWidget {
-  const ScoreBoard({
-    super.key,
-  });
+  const ScoreBoard({super.key});
 
   @override
-  Widget build(
-    BuildContext context,
-  ) {
+  Widget build(BuildContext context) {
     return BlocBuilder<GameBloc, GameState>(
       builder: (context, state) {
         final score = state.board?.score ?? 0;
@@ -29,10 +24,13 @@ class ScoreBoard extends StatelessWidget {
             ),
             16.horizontalSpace,
             Score(
-                label: AppHelpers.getTranslation(TrKeys.best),
-                score: '$best',
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0, vertical: 8.0)),
+              label: AppHelpers.getTranslation(TrKeys.best),
+              score: '$best',
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16.0,
+                vertical: 8.0,
+              ),
+            ),
           ],
         );
       },
@@ -55,20 +53,22 @@ class Score extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: padding ??
+      padding:
+          padding ??
           const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       decoration: BoxDecoration(
-          color: AppStyle.iconButtonBack, borderRadius: BorderRadius.circular(8.0)),
-      child: Column(children: [
-        Text(
-          label.toUpperCase(),
-          style: AppStyle.interNormal(color: AppStyle.black),
-        ),
-        Text(
-          score,
-          style: AppStyle.interSemi(color: AppStyle.black),
-        )
-      ]),
+        color: AppStyle.iconButtonBack,
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+      child: Column(
+        children: [
+          Text(
+            label.toUpperCase(),
+            style: AppStyle.interNormal(color: AppStyle.black),
+          ),
+          Text(score, style: AppStyle.interSemi(color: AppStyle.black)),
+        ],
+      ),
     );
   }
 }

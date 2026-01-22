@@ -1,30 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:foodyman/presentation/theme/theme_preference.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:foodyman/domain/interface/user.dart';
 import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
 import 'package:foodyman/infrastructure/models/data/address_old_data.dart';
 
-import 'package:foodyman/infrastructure/services/app_connectivity.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 
-import 'package:foodyman/domain/interface/shops.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:foodyman/domain/di/dependency_manager.dart';
 import '../../presentation/pages/home/widgets/add_address.dart';
+import '../../presentation/theme/color_set.dart';
 import 'view_map_state.dart';
 
-class ViewMapNotifier extends StateNotifier<ViewMapState> {
-  final ShopsRepositoryFacade _shopsRepository;
-  final UserRepositoryFacade _userRepository;
-
-  ViewMapNotifier(this._shopsRepository, this._userRepository)
-      : super(const ViewMapState());
+class ViewMapNotifier extends Notifier<ViewMapState> {
+  @override
+  ViewMapState build() => const ViewMapState();
 
   void scrolling(bool scroll) {
     state = state.copyWith(isScrolling: scroll);
   }
-
 
   void changePlace(AddressNewModel place) {
     state = state.copyWith(place: place, isSetAddress: true);
@@ -34,37 +28,49 @@ class ViewMapNotifier extends StateNotifier<ViewMapState> {
     AddressData? data = LocalStorage.getAddressSelected();
     if (data?.location?.latitude == null) {
       state = state.copyWith(isSetAddress: false);
-      AppHelpers.showAlertDialog(context: context, child: const AddAddress());
+      String themeKey;
+      ThemePreference.create.then((value) {
+        themeKey = value.getMode().name;
+
+        CustomColorSet colors = CustomColorSet.createOrUpdate(
+          themeKey == "light" ? CustomThemeMode.light : CustomThemeMode.dark,
+        );
+        if (context.mounted) {
+          return AppHelpers.showAlertDialog(
+            backgroundColor: colors.backgroundColor,
+            context: context,
+            child: AddAddress(colors: colors),
+          );
+        }
+      });
     } else {
       state = state.copyWith(isSetAddress: true);
     }
   }
 
-  updateActive() {
+  void updateActive() {
     state = state.copyWith(isLoading: true);
   }
 
-  saveLocation(BuildContext context, {VoidCallback? onSuccess}) async {
+  Future<void> saveLocation(
+    BuildContext context, {
+    VoidCallback? onSuccess,
+  }) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
-      state = state.copyWith(
-        isLoading: true,
-      );
-      final response = await _userRepository.saveLocation(
-        address: state.place
-            ?.copyWith(title: LocalStorage.getAddressSelected()?.title),
+      state = state.copyWith(isLoading: true);
+      final response = await userRepository.saveLocation(
+        address: state.place?.copyWith(
+          title: LocalStorage.getAddressSelected()?.title,
+        ),
       );
       response.when(
         success: (data) async {
-          state = state.copyWith(
-            isLoading: false,
-          );
+          state = state.copyWith(isLoading: false);
           onSuccess?.call();
         },
         failure: (failure, status) {
-          state = state.copyWith(
-            isLoading: false,
-          );
+          state = state.copyWith(isLoading: false);
         },
       );
     } else {
@@ -74,29 +80,27 @@ class ViewMapNotifier extends StateNotifier<ViewMapState> {
     }
   }
 
-  updateLocation(BuildContext context, int? id,
-      {VoidCallback? onSuccess}) async {
+  Future<void> updateLocation(
+    BuildContext context,
+    int? id, {
+    VoidCallback? onSuccess,
+  }) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
-      state = state.copyWith(
-        isLoading: true,
-      );
-      final response = await _userRepository.updateLocation(
-        address: state.place
-            ?.copyWith(title: LocalStorage.getAddressSelected()?.title),
+      state = state.copyWith(isLoading: true);
+      final response = await userRepository.updateLocation(
+        address: state.place?.copyWith(
+          title: LocalStorage.getAddressSelected()?.title,
+        ),
         addressId: id,
       );
       response.when(
         success: (data) async {
-          state = state.copyWith(
-            isLoading: false,
-          );
+          state = state.copyWith(isLoading: false);
           onSuccess?.call();
         },
         failure: (failure, status) {
-          state = state.copyWith(
-            isLoading: false,
-          );
+          state = state.copyWith(isLoading: false);
         },
       );
     } else {
@@ -106,15 +110,18 @@ class ViewMapNotifier extends StateNotifier<ViewMapState> {
     }
   }
 
-  Future<void> checkDriverZone(
-      {required BuildContext context,
-      required LatLng location,
-      int? shopId}) async {
+  Future<void> checkDriverZone({
+    required BuildContext context,
+    required LatLng location,
+    int? shopId,
+  }) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isLoading: true, isActive: false);
-      final response =
-          await _shopsRepository.checkDriverZone(location, shopId: shopId);
+      final response = await shopsRepository.checkDriverZone(
+        location,
+        shopId: shopId,
+      );
       response.when(
         success: (data) async {
           state = state.copyWith(isLoading: false, isActive: data);
@@ -128,10 +135,7 @@ class ViewMapNotifier extends StateNotifier<ViewMapState> {
         failure: (failure, status) {
           state = state.copyWith(isLoading: false);
           if (!(status == 400 || status == 404)) {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           }
         },
       );

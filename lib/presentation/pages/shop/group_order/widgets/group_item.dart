@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/presentation/app_assets.dart';
+import 'package:foodyman/presentation/theme/color_set.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
 class GroupItem extends StatelessWidget {
@@ -12,14 +13,17 @@ class GroupItem extends StatelessWidget {
   final num? price;
   final bool isDeleteButton;
   final VoidCallback onDelete;
+  final CustomColorSet colors;
 
-  const GroupItem(
-      {super.key,
-      required this.name,
-      required this.price,
-      required this.isChoosing,
-      required this.onDelete,
-      this.isDeleteButton = true});
+  const GroupItem({
+    super.key,
+    required this.name,
+    required this.price,
+    required this.isChoosing,
+    required this.onDelete,
+    this.isDeleteButton = true,
+    required this.colors,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +31,8 @@ class GroupItem extends StatelessWidget {
       margin: EdgeInsets.symmetric(vertical: 4.h),
       padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 10.w),
       decoration: BoxDecoration(
-        color: AppStyle.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(10.h),
-        ),
+        color: colors.icon,
+        borderRadius: BorderRadius.all(Radius.circular(10.h)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -39,19 +41,22 @@ class GroupItem extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                    width: 24.w,
-                    height: 24.h,
-                    decoration: const BoxDecoration(
-                        color: AppStyle.bgGrey, shape: BoxShape.circle),
-                    padding: EdgeInsets.all(6.r),
-                    child: SvgPicture.asset("assets/svgs/avatar.svg")),
+                  width: 24.w,
+                  height: 24.h,
+                  decoration: const BoxDecoration(
+                    color: AppStyle.bgGrey,
+                    shape: BoxShape.circle,
+                  ),
+                  padding: EdgeInsets.all(6.r),
+                  child: SvgPicture.asset(Assets.svgsAvatar),
+                ),
                 10.horizontalSpace,
                 Expanded(
                   child: Text(
                     name,
                     style: AppStyle.interNormal(
                       size: 14,
-                      color: AppStyle.black,
+                      color: AppStyle.textGrey,
                     ),
                   ),
                 ),
@@ -62,17 +67,11 @@ class GroupItem extends StatelessWidget {
             children: [
               Text(
                 "${isChoosing ? AppHelpers.getTranslation(TrKeys.choosing) : AppHelpers.getTranslation(TrKeys.done)} — ",
-                style: AppStyle.interNormal(
-                  size: 14,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interNormal(size: 14, color: AppStyle.textGrey),
               ),
               Text(
-                AppHelpers.numberFormat(number: price),
-                style: AppStyle.interSemi(
-                  size: 14,
-                  color: AppStyle.black,
-                ),
+                AppHelpers.numberFormat(price),
+                style: AppStyle.interSemi(size: 14, color: AppStyle.textGrey),
               ),
               isDeleteButton
                   ? GestureDetector(

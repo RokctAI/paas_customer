@@ -2,21 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/app_bar_bottom_sheet.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/text_fields/outline_bordered_text_field.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/presentation/components/components.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 import 'package:foodyman/application/auth/auth.dart';
-import 'package:foodyman/presentation/components/keyboard_dismisser.dart';
+
+import '../../../theme/theme_wrapper.dart';
 
 class SetPasswordPage extends ConsumerWidget {
   const SetPasswordPage({super.key});
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(resetPasswordProvider.notifier);
     final state = ref.watch(resetPasswordProvider);
     final bool isLtr = LocalStorage.getLangLtr();
@@ -24,90 +21,108 @@ class SetPasswordPage extends ConsumerWidget {
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: AbsorbPointer(
         absorbing: state.isLoading,
-        child: KeyboardDismisser(
-          child: Container(
-            padding: MediaQuery.of(context).viewInsets,
-            decoration: BoxDecoration(
-                color: AppStyle.bgGrey.withOpacity(0.96),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16.r),
-                  topRight: Radius.circular(16.r),
-                )),
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Column(
+        child: ThemeWrapper(
+          builder: (colors, theme) {
+            return KeyboardDismisser(
+              child: Container(
+                padding: MediaQuery.of(context).viewInsets,
+                decoration: BoxDecoration(
+                  color: colors.backgroundColor.withValues(alpha: 0.96),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16.r),
+                    topRight: Radius.circular(16.r),
+                  ),
+                ),
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        AppBarBottomSheet(title: AppHelpers.getTranslation(TrKeys.resetPassword),),
-                        40.verticalSpace,
-                        OutlinedBorderTextField(
-                          label: AppHelpers.getTranslation(TrKeys.password)
-                              .toUpperCase(),
-                          obscure: state.showPassword,
-                          suffixIcon: IconButton(
-                            splashRadius: 25,
-                            icon: Icon(
-                              state.showPassword
-                                  ? FlutterRemix.eye_line
-                                  : FlutterRemix.eye_close_line,
-                              size: 20.r,
+                        Column(
+                          children: [
+                            AppBarBottomSheet(
+                              title: AppHelpers.getTranslation(
+                                TrKeys.resetPassword,
+                              ),
                             ),
-                            onPressed: () => notifier.toggleShowPassword(),
-                          ),
-                          onChanged: (name) => notifier.setPassword(name),
-                          isError: state.isPasswordInvalid,
-                          descriptionText: state.isPasswordInvalid
-                              ? AppHelpers.getTranslation(TrKeys
-                              .passwordShouldContainMinimum8Characters)
-                              : null,
+                            40.verticalSpace,
+                            OutlinedBorderTextField(
+                              label: AppHelpers.getTranslation(
+                                TrKeys.password,
+                              ).toUpperCase(),
+                              obscure: state.showPassword,
+                              suffixIcon: IconButton(
+                                splashRadius: 25,
+                                icon: Icon(
+                                  state.showPassword
+                                      ? FlutterRemix.eye_line
+                                      : FlutterRemix.eye_close_line,
+                                  size: 20.r,
+                                ),
+                                onPressed: () => notifier.toggleShowPassword(),
+                              ),
+                              onChanged: (name) => notifier.setPassword(name),
+                              isError: state.isPasswordInvalid,
+                              descriptionText: state.isPasswordInvalid
+                                  ? AppHelpers.getTranslation(
+                                      TrKeys
+                                          .passwordShouldContainMinimum8Characters,
+                                    )
+                                  : null,
+                            ),
+                            34.verticalSpace,
+                            OutlinedBorderTextField(
+                              label: AppHelpers.getTranslation(
+                                TrKeys.password,
+                              ).toUpperCase(),
+                              obscure: state.showConfirmPassword,
+                              suffixIcon: IconButton(
+                                splashRadius: 25,
+                                icon: Icon(
+                                  state.showConfirmPassword
+                                      ? FlutterRemix.eye_line
+                                      : FlutterRemix.eye_close_line,
+                                  size: 20.r,
+                                ),
+                                onPressed: () =>
+                                    notifier.toggleShowConfirmPassword(),
+                              ),
+                              onChanged: (name) =>
+                                  notifier.setConfirmPassword(name),
+                              isError: state.isConfirmPasswordInvalid,
+                              descriptionText: state.isConfirmPasswordInvalid
+                                  ? AppHelpers.getTranslation(
+                                      TrKeys.confirmPasswordIsNotTheSame,
+                                    )
+                                  : null,
+                            ),
+                          ],
                         ),
-                        34.verticalSpace,
-                        OutlinedBorderTextField(
-                          label: AppHelpers.getTranslation(TrKeys.password)
-                              .toUpperCase(),
-                          obscure: state.showConfirmPassword,
-                          suffixIcon: IconButton(
-                            splashRadius: 25,
-                            icon: Icon(
-                              state.showConfirmPassword
-                                  ? FlutterRemix.eye_line
-                                  : FlutterRemix.eye_close_line,
-                              size: 20.r,
-                            ),
-                            onPressed: () =>
-                                notifier.toggleShowConfirmPassword(),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            bottom: MediaQuery.paddingOf(context).bottom,
+                            top: 120.h,
                           ),
-                          onChanged: (name) => notifier.setConfirmPassword(name),
-                          isError: state.isConfirmPasswordInvalid,
-                          descriptionText: state.isConfirmPasswordInvalid
-                              ? AppHelpers.getTranslation(
-                              TrKeys.confirmPasswordIsNotTheSame)
-                              : null,
+                          child: CustomButton(
+                            isLoading: state.isLoading,
+                            title: AppHelpers.getTranslation(TrKeys.send),
+                            onPressed: () {
+                              notifier.setResetPassword(context);
+                            },
+                            background: colors.primary,
+                            textColor: AppStyle.black,
+                          ),
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom,top: 120.h),
-                      child: CustomButton(
-                        isLoading: state.isLoading,
-                        title: AppHelpers.getTranslation(TrKeys.send),
-                        onPressed: () {
-                          notifier.setResetPassword(context);
-                        },
-                        background: AppStyle.primary,
-                        textColor: AppStyle.black,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

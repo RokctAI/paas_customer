@@ -5,46 +5,55 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
+import '../../../theme/color_set.dart';
+
 class BottomNavigatorThree extends StatelessWidget {
   final int currentIndex;
   final ValueChanged<int> onTap;
+  final CustomColorSet colors;
 
-  const BottomNavigatorThree(
-      {super.key, required this.currentIndex, required this.onTap});
+  const BottomNavigatorThree({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
+    required this.colors,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: REdgeInsets.symmetric(horizontal: 24),
       child: FloatingNavbar(
+        backgroundColor: colors.textWhite,
         onTap: onTap,
+        colors: colors,
         currentIndex: currentIndex,
         items: [
           FloatingNavbarItem(
             customWidget: SvgPicture.asset(
               "assets/svgs/home3.svg",
-              color: currentIndex == 0 ? AppStyle.black : AppStyle.textGrey,
+              color: currentIndex == 0 ? colors.textBlack : AppStyle.textGrey,
             ),
             // title: AppHelpers.getTranslation(TrKeys.shops),
           ),
           FloatingNavbarItem(
             customWidget: SvgPicture.asset(
               "assets/svgs/category3.svg",
-              color: currentIndex == 1 ? AppStyle.black : AppStyle.textGrey,
+              color: currentIndex == 1 ? colors.textBlack : AppStyle.textGrey,
             ),
             // title: AppHelpers.getTranslation(TrKeys.allServices),
           ),
           FloatingNavbarItem(
             customWidget: SvgPicture.asset(
               "assets/svgs/fosend3.svg",
-              color: currentIndex == 2 ? AppStyle.black : AppStyle.textGrey,
+              color: currentIndex == 2 ? colors.textBlack : AppStyle.textGrey,
             ),
             // title: AppHelpers.getTranslation(TrKeys.cart),
           ),
           FloatingNavbarItem(
             customWidget: SvgPicture.asset(
               "assets/svgs/bag3.svg",
-              color: currentIndex == 3 ? AppStyle.black : AppStyle.textGrey,
+              color: currentIndex == 3 ? colors.textBlack : AppStyle.textGrey,
             ),
             // title: AppHelpers.getTranslation(TrKeys.cart),
           ),
@@ -54,8 +63,8 @@ class BottomNavigatorThree extends StatelessWidget {
   }
 }
 
-typedef ItemBuilder = Widget Function(
-    BuildContext context, int index, FloatingNavbarItem items);
+typedef ItemBuilder =
+    Widget Function(BuildContext context, int index, FloatingNavbarItem items);
 
 class FloatingNavbar extends StatefulWidget {
   final List<FloatingNavbarItem> items;
@@ -68,6 +77,7 @@ class FloatingNavbar extends StatefulWidget {
   final ItemBuilder itemBuilder;
   final double width;
   final double elevation;
+  final CustomColorSet colors;
 
   FloatingNavbar({
     super.key,
@@ -81,21 +91,23 @@ class FloatingNavbar extends StatefulWidget {
     this.unselectedItemColor = AppStyle.textGrey,
     this.width = double.infinity,
     this.elevation = 0.0,
-  })  : assert(items.length > 1),
-        assert(items.length <= 5),
-        assert(currentIndex <= items.length),
-        assert(width > 50),
-        itemBuilder = itemBuilder ??
-            _defaultItemBuilder(
-              unselectedItemColor: unselectedItemColor,
-              selectedItemColor: selectedItemColor,
-              width: width,
-              backgroundColor: backgroundColor,
-              currentIndex: currentIndex,
-              items: items,
-              onTap: onTap,
-              selectedBackgroundColor: selectedBackgroundColor,
-            );
+    required this.colors,
+  }) : assert(items.length > 1),
+       assert(items.length <= 5),
+       assert(currentIndex <= items.length),
+       assert(width > 50),
+       itemBuilder =
+           itemBuilder ??
+           _defaultItemBuilder(
+             unselectedItemColor: unselectedItemColor,
+             selectedItemColor: selectedItemColor,
+             width: width,
+             backgroundColor: backgroundColor,
+             currentIndex: currentIndex,
+             items: items,
+             onTap: onTap,
+             selectedBackgroundColor: selectedBackgroundColor,
+           );
 
   @override
   _FloatingNavbarState createState() => _FloatingNavbarState();
@@ -119,7 +131,7 @@ class _FloatingNavbarState extends State<FloatingNavbar> {
                 blurRadius: 20,
                 offset: Offset(0, -4),
                 spreadRadius: 0,
-              )
+              ),
             ],
           ),
           width: widget.width,
@@ -128,7 +140,7 @@ class _FloatingNavbarState extends State<FloatingNavbar> {
             child: Container(
               padding: REdgeInsets.symmetric(vertical: 6),
               decoration: BoxDecoration(
-                color: AppStyle.bgGrey,
+                color: widget.colors.icon,
                 borderRadius: BorderRadius.circular(32.r),
               ),
               child: Row(
@@ -136,8 +148,9 @@ class _FloatingNavbarState extends State<FloatingNavbar> {
                 mainAxisSize: MainAxisSize.max,
                 children: items
                     .asMap()
-                    .map((i, f) =>
-                        MapEntry(i, widget.itemBuilder(context, i, f)))
+                    .map(
+                      (i, f) => MapEntry(i, widget.itemBuilder(context, i, f)),
+                    )
                     .values
                     .toList(),
               ),
@@ -160,58 +173,58 @@ ItemBuilder _defaultItemBuilder({
   double width = double.infinity,
 }) {
   return (BuildContext context, int index, FloatingNavbarItem item) => Expanded(
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              decoration: BoxDecoration(
-                color: currentIndex == index
-                    ? selectedBackgroundColor
-                    : Colors.transparent,
-                shape: BoxShape.circle,
-              ),
-              child: InkWell(
-                onTap: () => onTap!(index),
-                borderRadius: BorderRadius.circular(8),
-                child: Container(
-                  width: width.isFinite
-                      ? (width / items.length - 8)
-                      : MediaQuery.sizeOf(context).width / items.length - 24,
-                  padding: REdgeInsets.all(10),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      item.customWidget == null
-                          ? Icon(
-                              item.icon,
-                              color: currentIndex == index
-                                  ? selectedItemColor
-                                  : unselectedItemColor,
-                              size: currentIndex == index ? 26 : 24,
-                            )
-                          : item.customWidget!,
-                      if (item.title != null)
-                        Text(
-                          '${item.title}',
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: currentIndex == index
-                                ? selectedItemColor
-                                : unselectedItemColor,
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          decoration: BoxDecoration(
+            color: currentIndex == index
+                ? selectedBackgroundColor
+                : Colors.transparent,
+            shape: BoxShape.circle,
+          ),
+          child: InkWell(
+            onTap: () => onTap!(index),
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              width: width.isFinite
+                  ? (width / items.length - 8)
+                  : MediaQuery.sizeOf(context).width / items.length - 24,
+              padding: REdgeInsets.all(10),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  item.customWidget == null
+                      ? Icon(
+                          item.icon,
+                          color: currentIndex == index
+                              ? selectedItemColor
+                              : unselectedItemColor,
+                          size: currentIndex == index ? 26 : 24,
+                        )
+                      : item.customWidget!,
+                  if (item.title != null)
+                    Text(
+                      '${item.title}',
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: currentIndex == index
+                            ? selectedItemColor
+                            : unselectedItemColor,
+                      ),
+                    ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
-      );
+      ],
+    ),
+  );
 }
 
 class FloatingNavbarItem {
@@ -219,9 +232,6 @@ class FloatingNavbarItem {
   final IconData? icon;
   final Widget? customWidget;
 
-  FloatingNavbarItem({
-    this.icon,
-    this.title,
-    this.customWidget,
-  }) : assert(icon != null || customWidget != null);
+  FloatingNavbarItem({this.icon, this.title, this.customWidget})
+    : assert(icon != null || customWidget != null);
 }

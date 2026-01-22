@@ -1,25 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class CartClearDialog extends StatelessWidget {
   final VoidCallback cancel;
   final VoidCallback clear;
   final bool isLoading;
-  const CartClearDialog({super.key, required this.cancel, required this.clear, this.isLoading = false});
+  const CartClearDialog({
+    super.key,
+    required this.cancel,
+    required this.clear,
+    this.isLoading = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: (MediaQuery.sizeOf(context).width-60.w),
+      width: (MediaQuery.sizeOf(context).width - 60.w),
       decoration: BoxDecoration(
-        color: AppStyle.white.withOpacity(0.96),
+        color: AppStyle.white.withValues(alpha: 0.96),
         boxShadow: [
           BoxShadow(
-            color: AppStyle.white.withOpacity(0.65),
+            color: AppStyle.white.withValues(alpha: 0.65),
             spreadRadius: 0,
             blurRadius: 60,
             offset: const Offset(0, 20), // changes position of shadow
@@ -31,10 +36,7 @@ class CartClearDialog extends StatelessWidget {
         children: [
           Text(
             AppHelpers.getTranslation(TrKeys.clearCard),
-            style: AppStyle.interNormal(
-              size: 14,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interNormal(size: 14, color: AppStyle.black),
           ),
           50.verticalSpace,
           Row(

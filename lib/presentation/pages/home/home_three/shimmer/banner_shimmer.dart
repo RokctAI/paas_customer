@@ -9,13 +9,13 @@ class BannerShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
+    return Container(
       height: 160.h,
       margin: EdgeInsets.only(bottom: 30.h),
       child: AnimationLimiter(
         child: ListView.builder(
           shrinkWrap: true,
-          
+
           scrollDirection: Axis.horizontal,
           itemCount: 3,
           padding: EdgeInsets.only(left: 16.w),
@@ -31,9 +31,7 @@ class BannerShimmer extends StatelessWidget {
                   width: MediaQuery.sizeOf(context).width - 46,
                   decoration: BoxDecoration(
                     color: AppStyle.shimmerBase,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(8.r),
-                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(8.r)),
                   ),
                 ),
               ),

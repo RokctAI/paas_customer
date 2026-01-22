@@ -6,33 +6,39 @@ import 'package:flutter_svg/svg.dart';
 import 'package:foodyman/application/order/order_provider.dart';
 import 'package:foodyman/infrastructure/models/data/addons_data.dart';
 import 'package:foodyman/infrastructure/models/data/order_active_model.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/custom_network_image.dart';
+import 'package:foodyman/infrastructure/models/data/order_data.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/presentation/app_assets.dart';
 import 'package:foodyman/presentation/pages/shop/cart/widgets/note_product.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 import 'package:foodyman/infrastructure/models/data/cart_data.dart';
+import 'package:foodyman/presentation/theme/theme_wrapper.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class CartOrderItem extends StatelessWidget {
   final CartDetail? cart;
-  final Detail? cartTwo;
+  final OrderProduct? cartTwo;
   final String? symbol;
   final VoidCallback add;
   final VoidCallback remove;
   final bool isActive;
   final bool isOwn;
   final bool isAddComment;
+  final String? status;
 
-  const CartOrderItem(
-      {super.key,
-      required this.add,
-      required this.remove,
-      required this.cart,
-      this.isActive = true,
-      this.cartTwo,
-      this.isOwn = true,
-      this.symbol,
-      this.isAddComment = false});
+  const CartOrderItem({
+    super.key,
+    required this.add,
+    required this.remove,
+    required this.cart,
+    this.isActive = true,
+    this.cartTwo,
+    this.isOwn = true,
+    this.symbol,
+    this.isAddComment = false,
+    this.status,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,237 +47,272 @@ class CartOrderItem extends StatelessWidget {
     for (Addons e in (isActive ? cart?.addons ?? [] : cartTwo?.addons ?? [])) {
       sumPrice += (e.price ?? 0);
     }
-    disSumPrice = (isActive
+    disSumPrice =
+        (isActive
                 ? (cart?.stock?.totalPrice ?? 0)
                 : (cartTwo?.stock?.totalPrice ?? 0)) *
             (cart?.quantity ?? 1) +
         sumPrice +
         (isActive ? (cart?.discount ?? 0) : (cartTwo?.discount ?? 0));
-    sumPrice += (isActive
+    sumPrice +=
+        (isActive
             ? (cart?.stock?.totalPrice ?? 0)
             : (cartTwo?.stock?.totalPrice ?? 0)) *
         (isActive ? (cart?.quantity ?? 1) : (cartTwo?.quantity ?? 1));
 
     return Padding(
       padding: EdgeInsets.only(bottom: 10.h),
-      child: Container(
-        padding: EdgeInsets.all(16.r),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: AppStyle.white,
-          borderRadius: BorderRadius.all(
-            Radius.circular(10.r),
-          ),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: (MediaQuery.sizeOf(context).width - 86.w) * 2 / 3,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  isActive
-                      ? RichText(
-                          text: TextSpan(
-                              text: cart?.stock?.product?.translation?.title ??
-                                  "",
-                              style: AppStyle.interNormal(
-                                size: 16,
-                                color: AppStyle.black,
-                              ),
-                              children: [
-                              if (cart?.stock?.extras?.isNotEmpty ?? false)
-                                TextSpan(
-                                  text:
-                                      " (${cart?.stock?.extras?.first.value ?? ""})",
-                                  style: AppStyle.interNormal(
-                                    size: 14,
-                                    color: AppStyle.textGrey,
-                                  ),
-                                )
-                            ]))
-                      : Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                cartTwo?.stock?.product?.translation?.title ??
+      child: ThemeWrapper(
+        builder: (colors, theme) {
+          return Container(
+            padding: EdgeInsets.all(16.r),
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: colors.icon,
+              borderRadius: BorderRadius.all(Radius.circular(10.r)),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  width: (MediaQuery.sizeOf(context).width - 86.w) * 2 / 3,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      isActive
+                          ? RichText(
+                              text: TextSpan(
+                                text:
+                                    cart?.stock?.product?.translation?.title ??
                                     "",
                                 style: AppStyle.interNormal(
                                   size: 16,
-                                  color: AppStyle.black,
+                                  color: colors.textBlack,
                                 ),
-                              ),
-                            ),
-                            if (cartTwo?.stock?.extras?.isNotEmpty ?? false)
-                              Text(
-                                " (${cartTwo?.stock?.extras?.first.value ?? ""})",
-                                style: AppStyle.interNormal(
-                                  size: 14,
-                                  color: AppStyle.textGrey,
-                                ),
-                              ),
-                          ],
-                        ),
-                  8.verticalSpace,
-                  isActive
-                      ? Text(
-                          (cart?.stock?.product?.translation?.description ??
-                              ""),
-                          style: AppStyle.interNormal(
-                            size: 12,
-                            color: AppStyle.textGrey,
-                          ),
-                          maxLines: 2,
-                        )
-                      : Text(
-                          cartTwo?.stock?.product?.translation?.description ??
-                              "",
-                          style: AppStyle.interNormal(
-                            size: 12.sp,
-                            color: AppStyle.textGrey,
-                          ),
-                          maxLines: 2,
-                        ),
-                  8.verticalSpace,
-                  for (Addons e in (isActive
-                      ? cart?.addons ?? []
-                      : cartTwo?.addons ?? []))
-                    Text(
-                      "${e.stocks?.product?.translation?.title ?? ""} ${AppHelpers.numberFormat(symbol: symbol, isOrder: symbol != null, number: (e.price ?? 0) / (e.quantity ?? 1))} x ${(e.quantity ?? 1)}",
-                      style: AppStyle.interNormal(
-                        size: 13.sp,
-                        color: AppStyle.black,
-                      ),
-                    ),
-                  8.verticalSpace,
-                  isActive
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.circular(10.r),
-                                  border: Border.all(color: AppStyle.textGrey)),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  ((cart?.bonus ?? false) || !isOwn)
-                                      ? const SizedBox.shrink()
-                                      : GestureDetector(
-                                          onTap: remove,
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 6.h,
-                                                horizontal: 10.w),
-                                            child: const Icon(
-                                              Icons.remove,
-                                              color: AppStyle.black,
+                                  if (cart?.stock?.extras?.isNotEmpty ?? false)
+                                    TextSpan(
+                                      text:
+                                          " (${cart?.stock?.extras?.first.value ?? ""})",
+                                      style: AppStyle.interNormal(
+                                        size: 14,
+                                        color: AppStyle.textGrey,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            )
+                          : Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    cartTwo
+                                            ?.stock
+                                            ?.product
+                                            ?.translation
+                                            ?.title ??
+                                        "",
+                                    style: AppStyle.interNormal(
+                                      size: 16,
+                                      color: colors.textBlack,
+                                    ),
+                                  ),
+                                ),
+                                if (cartTwo?.stock?.extras?.isNotEmpty ?? false)
+                                  Text(
+                                    " (${cartTwo?.stock?.extras?.first.value ?? ""})",
+                                    style: AppStyle.interNormal(
+                                      size: 14,
+                                      color: AppStyle.textGrey,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                      8.verticalSpace,
+                      isActive
+                          ? Text(
+                              (cart?.stock?.product?.translation?.description ??
+                                  ""),
+                              style: AppStyle.interNormal(
+                                size: 12,
+                                color: AppStyle.textGrey,
+                              ),
+                              maxLines: 2,
+                            )
+                          : Text(
+                              cartTwo
+                                      ?.stock
+                                      ?.product
+                                      ?.translation
+                                      ?.description ??
+                                  "",
+                              style: AppStyle.interNormal(
+                                size: 12,
+                                color: AppStyle.textGrey,
+                              ),
+                              maxLines: 2,
+                            ),
+                      8.verticalSpace,
+                      for (Addons e
+                          in (isActive
+                              ? cart?.addons ?? []
+                              : cartTwo?.addons ?? []))
+                        Text(
+                          "${e.stocks?.product?.translation?.title ?? ""} ${AppHelpers.numberFormat((e.price ?? 0) / (e.quantity ?? 1), symbol: symbol, isOrder: symbol != null)} x ${(e.quantity ?? 1)}",
+                          style: AppStyle.interNormal(
+                            size: 13,
+                            color: colors.textBlack,
+                          ),
+                        ),
+                      8.verticalSpace,
+                      isActive
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10.r),
+                                    border: Border.all(
+                                      color: AppStyle.textGrey,
+                                    ),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ((cart?.bonus ?? false) || !isOwn)
+                                          ? const SizedBox.shrink()
+                                          : GestureDetector(
+                                              onTap: remove,
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 6.h,
+                                                  horizontal: 10.w,
+                                                ),
+                                                child: Icon(
+                                                  Icons.remove,
+                                                  color: colors.textBlack,
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                  Padding(
-                                    padding: !((cart?.bonus ?? false) || !isOwn)
-                                        ? EdgeInsets.zero
-                                        : EdgeInsets.symmetric(
-                                            vertical: 6.h, horizontal: 16.w),
-                                    child: RichText(
-                                        text: TextSpan(
+                                      Padding(
+                                        padding:
+                                            !((cart?.bonus ?? false) || !isOwn)
+                                            ? EdgeInsets.zero
+                                            : EdgeInsets.symmetric(
+                                                vertical: 6.h,
+                                                horizontal: 16.w,
+                                              ),
+                                        child: RichText(
+                                          text: TextSpan(
                                             text:
                                                 "${(cart?.quantity ?? 1) * (cart?.stock?.product?.interval ?? 1)}",
                                             style: AppStyle.interSemi(
                                               size: 14,
-                                              color: AppStyle.black,
+                                              color: colors.textBlack,
                                             ),
                                             children: [
-                                          TextSpan(
-                                            text:
-                                                " ${cart?.stock?.product?.unit?.translation?.title ?? ''}",
-                                            style: AppStyle.interSemi(
-                                              size: 14,
-                                              color: AppStyle.textGrey,
-                                            ),
-                                          )
-                                        ])),
-                                  ),
-                                  ((cart?.bonus ?? false) || !isOwn)
-                                      ? const SizedBox.shrink()
-                                      : GestureDetector(
-                                          onTap: add,
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 6.h,
-                                                horizontal: 10.w),
-                                            child: const Icon(
-                                              Icons.add,
-                                              color: AppStyle.black,
-                                            ),
+                                              TextSpan(
+                                                text:
+                                                    " ${cart?.stock?.product?.unit?.translation?.title ?? ''}",
+                                                style: AppStyle.interSemi(
+                                                  size: 14,
+                                                  color: AppStyle.textGrey,
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                ],
-                              ),
-                            ),
-                            16.verticalSpace,
-                            !(cart?.bonus ?? false)
-                                ? Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        AppHelpers.numberFormat(
-                                            isOrder: symbol != null,
-                                            symbol: symbol,
-                                            number: (cart?.discount ?? 0) != 0
-                                                ? disSumPrice
-                                                : sumPrice),
-                                        style: AppStyle.interSemi(
-                                            size: (cart?.discount ?? 0) != 0
-                                                ? 12
-                                                : 16,
-                                            color: AppStyle.black,
-                                            decoration:
-                                                (cart?.discount ?? 0) != 0
-                                                    ? TextDecoration.lineThrough
-                                                    : TextDecoration.none),
                                       ),
-                                      (cart?.discount ?? 0) != 0
-                                          ? Container(
-                                              margin: EdgeInsets.only(top: 8.r),
-                                              decoration: BoxDecoration(
-                                                  color: AppStyle.redBg,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          30.r)),
-                                              padding: EdgeInsets.all(4.r),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  SvgPicture.asset(
-                                                      "assets/svgs/discount.svg"),
-                                                  4.horizontalSpace,
-                                                  Text(
-                                                    AppHelpers.numberFormat(
-                                                      isOrder: symbol != null,
-                                                      symbol: symbol,
-                                                      number: sumPrice,
-                                                    ),
-                                                    style: AppStyle.interNoSemi(
-                                                        size: 14,
-                                                        color: AppStyle.red),
-                                                  )
-                                                ],
+                                      ((cart?.bonus ?? false) || !isOwn)
+                                          ? const SizedBox.shrink()
+                                          : GestureDetector(
+                                              onTap: add,
+                                              child: Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 6.h,
+                                                  horizontal: 10.w,
+                                                ),
+                                                child: Icon(
+                                                  Icons.add,
+                                                  color: colors.textBlack,
+                                                ),
                                               ),
-                                            )
-                                          : const SizedBox.shrink()
+                                            ),
                                     ],
-                                  )
-                                : const SizedBox.shrink(),
-                          ],
-                        )
-                      : !(cartTwo?.bonus ?? false)
+                                  ),
+                                ),
+                                16.verticalSpace,
+                                !(cart?.bonus ?? false)
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            AppHelpers.numberFormat(
+                                              (cart?.discount ?? 0) != 0
+                                                  ? disSumPrice
+                                                  : sumPrice,
+                                              symbol: symbol,
+                                              isOrder: symbol != null,
+                                            ),
+                                            style: AppStyle.interSemi(
+                                              size: (cart?.discount ?? 0) != 0
+                                                  ? 12
+                                                  : 16,
+                                              color: colors.textBlack,
+                                              decoration:
+                                                  (cart?.discount ?? 0) != 0
+                                                  ? TextDecoration.lineThrough
+                                                  : TextDecoration.none,
+                                            ),
+                                          ),
+                                          (cart?.discount ?? 0) != 0
+                                              ? Container(
+                                                  margin: EdgeInsets.only(
+                                                    top: 8.r,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: AppStyle.redBg,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          30.r,
+                                                        ),
+                                                  ),
+                                                  padding: EdgeInsets.all(4.r),
+                                                  child: Row(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      SvgPicture.asset(
+                                                        Assets.svgsDiscount,
+                                                      ),
+                                                      4.horizontalSpace,
+                                                      Text(
+                                                        AppHelpers.numberFormat(
+                                                          sumPrice,
+                                                          symbol: symbol,
+                                                          isOrder:
+                                                              symbol != null,
+                                                        ),
+                                                        style:
+                                                            AppStyle.interNoSemi(
+                                                              size: 14,
+                                                              color:
+                                                                  AppStyle.red,
+                                                            ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                )
+                                              : const SizedBox.shrink(),
+                                        ],
+                                      )
+                                    : const SizedBox.shrink(),
+                              ],
+                            )
+                          : !(cartTwo?.bonus ?? false)
                           ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -280,19 +321,20 @@ class CartOrderItem extends StatelessWidget {
                                   children: [
                                     Text(
                                       AppHelpers.numberFormat(
-                                          isOrder: symbol != null,
-                                          symbol: symbol,
-                                          number: cartTwo?.stock?.totalPrice),
+                                        cartTwo?.stock?.totalPrice,
+                                        isOrder: symbol != null,
+                                        symbol: symbol,
+                                      ),
                                       style: AppStyle.interSemi(
                                         size: 16,
-                                        color: AppStyle.black,
+                                        color: colors.textBlack,
                                       ),
                                     ),
                                     Text(
                                       " X ${(cartTwo?.quantity ?? 1)}",
                                       style: AppStyle.interSemi(
                                         size: 16,
-                                        color: AppStyle.black,
+                                        color: colors.textBlack,
                                       ),
                                     ),
                                     Text(
@@ -307,15 +349,15 @@ class CartOrderItem extends StatelessWidget {
                                 8.verticalSpace,
                                 Text(
                                   AppHelpers.numberFormat(
-                                      isOrder: symbol != null,
-                                      symbol: symbol,
-                                      number: sumPrice),
+                                    sumPrice,
+                                    symbol: symbol,
+                                  ),
                                   style: AppStyle.interSemi(
                                     size: 16,
-                                    color: AppStyle.black,
+                                    color: colors.textBlack,
                                   ),
                                 ),
-                                8.horizontalSpace
+                                8.horizontalSpace,
                               ],
                             )
                           : Row(
@@ -328,7 +370,7 @@ class CartOrderItem extends StatelessWidget {
                                   ),
                                   style: AppStyle.interSemi(
                                     size: 16,
-                                    color: AppStyle.black,
+                                    color: colors.textBlack,
                                   ),
                                 ),
                                 Text(
@@ -340,72 +382,101 @@ class CartOrderItem extends StatelessWidget {
                                 ),
                               ],
                             ),
-                ],
-              ),
-            ),
-            4.horizontalSpace,
-            Expanded(
-              child: Stack(
-                children: [
-                  CustomNetworkImage(
-                      url: isActive
-                          ? cart?.stock?.product?.img ?? ""
-                          : cartTwo?.stock?.product?.img ?? "",
-                      height: 120.h,
-                      width: double.infinity,
-                      radius: 10.r),
-                  (cart?.bonus ?? false) || (cartTwo?.bonus ?? false)
-                      ? Positioned(
-                          bottom: 4.r,
-                          right: 4.r,
-                          child: Container(
-                            width: 22.w,
-                            height: 22.h,
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppStyle.blueBonus),
-                            child: Icon(
-                              FlutterRemix.gift_2_fill,
-                              size: 16.r,
-                              color: AppStyle.white,
-                            ),
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                  if (isAddComment)
-                    Positioned(
-                        top: 0,
-                        right: 0,
-                        child: Consumer(
-                          builder: (context, provider, child) {
-                            return IconButton(
-                                onPressed: () {
-                                  AppHelpers.showAlertDialog(
+                    ],
+                  ),
+                ),
+                4.horizontalSpace,
+                Expanded(
+                  child: Stack(
+                    children: [
+                      CustomNetworkImage(
+                        url: isActive
+                            ? cart?.stock?.product?.img ?? ""
+                            : cartTwo?.stock?.product?.img ?? "",
+                        height: 120.h,
+                        width: double.infinity,
+                        radius: 10.r,
+                      ),
+                      (cart?.bonus ?? false) || (cartTwo?.bonus ?? false)
+                          ? Positioned(
+                              bottom: 4.r,
+                              right: 4.r,
+                              child: Container(
+                                width: 22.w,
+                                height: 22.h,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppStyle.blueBonus,
+                                ),
+                                child: Icon(
+                                  FlutterRemix.gift_2_fill,
+                                  size: 16.r,
+                                  color: AppStyle.white,
+                                ),
+                              ),
+                            )
+                          : const SizedBox.shrink(),
+                      if (isAddComment)
+                        if (status != "canceled")
+                          Positioned(
+                            top: 0,
+                            right: 0,
+                            child: Consumer(
+                              builder: (context, provider, child) {
+                                final orderState = provider.watch(
+                                  orderProvider,
+                                );
+                                final stockId = cart?.stock?.id ?? 0;
+
+                                // Find note from order state by stockId
+                                final savedNote = orderState.notes.firstWhere(
+                                  (note) => note.stockId == stockId,
+                                  orElse: () =>
+                                      ProductNote(stockId: 0, comment: ''),
+                                );
+
+                                // Use saved note if exists, otherwise use cartTwo?.note
+                                final noteText = savedNote.stockId == stockId
+                                    ? savedNote.comment
+                                    : (cartTwo?.note ?? '');
+
+                                return IconButton(
+                                  onPressed: () {
+                                    AppHelpers.showAlertDialog(
                                       context: context,
+                                      backgroundColor: colors.backgroundColor,
                                       child: NoteProduct(
                                         isSave: cartTwo == null,
-                                        comment: cartTwo?.note,
+                                        comment: noteText,
                                         onTap: (s) {
-                                          provider
-                                              .read(orderProvider.notifier)
-                                              .setNotes(
-                                                  stockId: cart?.stock?.id ?? 0,
-                                                  note: s);
+                                          if (stockId > 0) {
+                                            provider
+                                                .read(orderProvider.notifier)
+                                                .setNotes(
+                                                  stockId: stockId,
+                                                  note: s,
+                                                );
+                                          }
                                         },
-                                      ));
-                                },
-                                icon: Icon(
-                                  FlutterRemix.edit_box_line,
-                                  size: 24.r,
-                                  color: AppStyle.red,
-                                ));
-                          },
-                        )),
-                ],
-              ),
+                                      ),
+                                    );
+                                  },
+                                  icon: Icon(
+                                    FlutterRemix.edit_box_line,
+                                    size: 24.r,
+                                    color: AppStyle.red,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

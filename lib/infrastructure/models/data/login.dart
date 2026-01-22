@@ -1,13 +1,10 @@
-import 'package:foodyman/infrastructure/services/app_validators.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 
 class LoginModel {
   final String? email;
   final String? password;
 
-  LoginModel({
-    required this.email,
-    required this.password,
-  });
+  LoginModel({required this.email, required this.password});
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

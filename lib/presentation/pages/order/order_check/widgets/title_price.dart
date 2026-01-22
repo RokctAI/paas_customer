@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
-
 
 // ignore: must_be_immutable
 class TitleAndPrice extends StatelessWidget {
@@ -25,23 +23,10 @@ class TitleAndPrice extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            title,
-            style: AppStyle.interRegular(
-              size: 16,
-              color: AppStyle.black,
-            ),
-          ),
+          Text(title, style: textStyle),
           GestureDetector(
-            onTap: onRightTap ?? (){},
-            child: Row(
-              children: [
-                Text(
-                  rightTitle ?? "",
-                  style: textStyle,
-                ),
-              ],
-            ),
+            onTap: onRightTap ?? () {},
+            child: Row(children: [Text(rightTitle ?? "", style: textStyle)]),
           ),
         ],
       ),

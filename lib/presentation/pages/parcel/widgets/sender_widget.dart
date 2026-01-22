@@ -5,16 +5,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:foodyman/application/parcel/parcel_notifier.dart';
 import 'package:foodyman/application/parcel/parcel_state.dart';
-import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/animation_button_effect.dart';
-import 'package:foodyman/presentation/components/text_fields/outline_bordered_text_field.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
 import 'package:foodyman/infrastructure/models/models.dart';
+import 'package:foodyman/presentation/theme/color_set.dart';
 import 'custom_expanded.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class SenderWidget extends StatelessWidget {
   final ParcelState state;
@@ -24,16 +23,19 @@ class SenderWidget extends StatelessWidget {
   final TextEditingController house;
   final TextEditingController flour;
   final TextEditingController comment;
+  final CustomColorSet colors;
 
-  const SenderWidget(
-      {super.key,
-      required this.state,
-      required this.event,
-      required this.username,
-      required this.phone,
-      required this.house,
-      required this.flour,
-      required this.comment});
+  const SenderWidget({
+    super.key,
+    required this.state,
+    required this.event,
+    required this.username,
+    required this.phone,
+    required this.house,
+    required this.flour,
+    required this.comment,
+    required this.colors,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -50,28 +52,38 @@ class SenderWidget extends StatelessWidget {
           ),
         InkWell(
           onTap: () async {
-            final data =
-                await context.pushRoute(ViewMapRoute(isShopLocation: true,isParcel: true));
+            final data = await context.pushRoute(
+              ViewMapRoute(isShopLocation: true, isParcel: true),
+            );
             if (data.runtimeType == AddressNewModel) {
               if (context.mounted) {
                 event.setFromAddress(
-                    title: (data as AddressNewModel).address?.address,
-                    location: LocationModel(
-                        longitude: data.location?.last,
-                        latitude: data.location?.first),
-                    context: context);
+                  title: (data as AddressNewModel).address?.address,
+                  location: LocationModel(
+                    longitude: data.location?.last,
+                    latitude: data.location?.first,
+                  ),
+                  context: context,
+                );
               }
             }
           },
           child: AnimationButtonEffect(
             child: Container(
               decoration: BoxDecoration(
-                  color: AppStyle.bgGrey,
-                  borderRadius: BorderRadius.circular(10.r)),
+                color: colors.icon,
+                borderRadius: BorderRadius.circular(10.r),
+              ),
               padding: EdgeInsets.symmetric(horizontal: 20.r, vertical: 16.r),
               child: Row(
                 children: [
-                  SvgPicture.asset("assets/svgs/pickUpFrom.svg"),
+                  SvgPicture.asset(
+                    "assets/svgs/pickUpFrom.svg",
+                    colorFilter: ColorFilter.mode(
+                      colors.textBlack,
+                      BlendMode.srcIn,
+                    ),
+                  ),
                   12.horizontalSpace,
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -79,14 +91,20 @@ class SenderWidget extends StatelessWidget {
                       if (state.addressFrom != null)
                         Text(
                           AppHelpers.getTranslation(TrKeys.pickup),
-                          style: AppStyle.interRegular(size: 12),
+                          style: AppStyle.interRegular(
+                            size: 12,
+                            color: colors.textBlack,
+                          ),
                         ),
                       SizedBox(
                         width: MediaQuery.sizeOf(context).width / 2 - 20.r,
                         child: Text(
                           state.addressFrom ??
                               AppHelpers.getTranslation(TrKeys.pickup),
-                          style: AppStyle.interSemi(size: 16),
+                          style: AppStyle.interSemi(
+                            size: 16,
+                            color: colors.textBlack,
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -94,9 +112,10 @@ class SenderWidget extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  const Icon(
+                  Icon(
                     FlutterRemix.arrow_right_s_line,
-                  )
+                    color: colors.textBlack,
+                  ),
                 ],
               ),
             ),
@@ -147,7 +166,7 @@ class SenderWidget extends StatelessWidget {
               24.verticalSpace,
             ],
           ),
-        )
+        ),
       ],
     );
   }

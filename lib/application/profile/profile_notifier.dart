@@ -4,32 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/domain/di/dependency_manager.dart';
-import 'package:foodyman/domain/interface/user.dart';
-import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
-import 'package:foodyman/infrastructure/models/data/address_old_data.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/services/app_connectivity.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
-
-import 'package:foodyman/domain/interface/gallery.dart';
-import 'package:foodyman/domain/interface/shops.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
 import 'profile_state.dart';
 
-class ProfileNotifier extends StateNotifier<ProfileState> {
-  final UserRepositoryFacade _userRepository;
-  final ShopsRepositoryFacade _shopsRepository;
-  final GalleryRepositoryFacade _galleryRepository;
+class ProfileNotifier extends Notifier<ProfileState> {
+  @override
+  ProfileState build() => const ProfileState();
 
-  ProfileNotifier(
-      this._userRepository, this._shopsRepository, this._galleryRepository)
-      : super(const ProfileState());
   int page = 1;
 
-  getTerm({required BuildContext context}) async {
+  Future<void> getTerm({required BuildContext context}) async {
     state = state.copyWith(isTermLoading: state.term == null);
     final res = await settingsRepository.getTerm();
     res.when(
@@ -43,7 +29,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     );
   }
 
-  getPolicy({required BuildContext context}) async {
+  Future<void> getPolicy({required BuildContext context}) async {
     state = state.copyWith(isPolicyLoading: state.policy == null);
     final res = await settingsRepository.getPolicy();
     res.when(
@@ -57,12 +43,16 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     );
   }
 
-  resetShopData() {
+  void resetShopData() {
     state = state.copyWith(
-        bgImage: "", logoImage: "", addressModel: null, isSaveLoading: false);
+      bgImage: "",
+      logoImage: "",
+      addressModel: null,
+      isSaveLoading: false,
+    );
   }
 
-  findSelectIndex() {
+  void findSelectIndex() {
     for (int i = 0; i < (state.userData?.addresses?.length ?? 0); i++) {
       if (state.userData?.addresses?[i].active ?? false) {
         state = state.copyWith(selectAddress: i);
@@ -75,11 +65,11 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     state = state.copyWith(selectAddress: index);
   }
 
-  setAddress(dynamic data) {
+  void setAddress(dynamic data) {
     state = state.copyWith(addressModel: data);
   }
 
-  setActiveAddress({int? id, required int index}) async {
+  Future<void> setActiveAddress({int? id, required int index}) async {
     List<AddressNewModel> list = List.from(state.userData?.addresses ?? []);
     for (var element in list) {
       element.active = false;
@@ -87,18 +77,18 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     list[index].active = true;
     ProfileData newUser = state.userData!.copyWith(addresses: list);
     state = state.copyWith(userData: newUser);
-    _userRepository.setActiveAddress(id: id ?? 0);
+    userRepository.setActiveAddress(id: id ?? 0);
   }
 
-  deleteAddress({int? id, required int index}) async {
+  Future<void> deleteAddress({int? id, required int index}) async {
     List<AddressNewModel> list = List.from(state.userData?.addresses ?? []);
     list.removeAt(index);
     ProfileData newUser = state.userData!.copyWith(addresses: list);
     state = state.copyWith(userData: newUser);
-    _userRepository.deleteAddress(id: id ?? 0);
+    userRepository.deleteAddress(id: id ?? 0);
   }
 
-  setBgImage(String bgImage) {
+  void setBgImage(String bgImage) {
     state = state.copyWith(bgImage: bgImage);
   }
 
@@ -114,57 +104,40 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     state = state.copyWith(filepath: list);
   }
 
-  setLogoImage(String logoImage) {
+  void setLogoImage(String logoImage) {
     state = state.copyWith(logoImage: logoImage);
   }
 
-  Future<void> fetchUser(BuildContext context,
-      {RefreshController? refreshController, VoidCallback? onSuccess}) async {
+  Future<void> fetchUser(
+    BuildContext context, {
+    RefreshController? refreshController,
+    VoidCallback? onSuccess,
+  }) async {
     if (LocalStorage.getToken().isNotEmpty) {
       final connected = await AppConnectivity.connectivity();
       if (connected) {
         if (refreshController == null) {
           state = state.copyWith(isLoading: true);
         }
-        final response = await _userRepository.getProfileDetails();
+        final response = await userRepository.getProfileDetails();
         response.when(
           success: (data) async {
             LocalStorage.setWalletData(data.data?.wallet);
             LocalStorage.setUser(data.data);
-            LocalStorage.setAddressSelected(AddressData(
-                title: data.data?.addresses?.firstWhere(
-                        (element) => element.active ?? false, orElse: () {
-                      return AddressNewModel();
-                    }).title ??
-                    "",
-                address: data.data?.addresses
-                        ?.firstWhere((element) => element.active ?? false,
-                            orElse: () {
-                          return AddressNewModel();
-                        })
-                        .address
-                        ?.address ??
-                    "",
-                location: LocationModel(
-                    longitude: data.data?.addresses
-                        ?.firstWhere((element) => element.active ?? false,
-                            orElse: () {
-                          return AddressNewModel();
-                        })
-                        .location
-                        ?.last,
-                    latitude: data.data?.addresses
-                        ?.firstWhere((element) => element.active ?? false,
-                            orElse: () {
-                          return AddressNewModel();
-                        })
-                        .location
-                        ?.first)));
-            if (refreshController == null) {
-              state = state.copyWith(isLoading: false, userData: data.data);
-            } else {
-              state = state.copyWith(userData: data.data);
+            if ((data.data?.addresses?.isNotEmpty ?? true) &&
+                (data.data?.addresses?.first.location?.length == 2)) {
+              LocalStorage.setAddressSelected(
+                data.data!.addresses!
+                    .firstWhere(
+                      (element) => element.active ?? false,
+                      orElse: () {
+                        return AddressNewModel();
+                      },
+                    )
+                    .toAddress(),
+              );
             }
+            state = state.copyWith(isLoading: false, userData: data.data);
             refreshController?.refreshCompleted();
             onSuccess?.call();
             findSelectIndex();
@@ -177,10 +150,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
               context.router.popUntilRoot();
               context.replaceRoute(const LoginRoute());
             }
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           },
         );
       } else {
@@ -191,20 +161,24 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     }
   }
 
-  Future<void> fetchReferral(BuildContext context,
-      {RefreshController? refreshController}) async {
+  Future<void> fetchReferral(
+    BuildContext context, {
+    RefreshController? refreshController,
+  }) async {
     if (LocalStorage.getToken().isNotEmpty) {
       final connected = await AppConnectivity.connectivity();
       if (connected) {
         if (refreshController == null) {
           state = state.copyWith(isReferralLoading: true);
         }
-        final response = await _userRepository.getReferralDetails();
+        final response = await userRepository.getReferralDetails();
         response.when(
           success: (data) async {
             if (refreshController == null) {
-              state =
-                  state.copyWith(isReferralLoading: false, referralData: data);
+              state = state.copyWith(
+                isReferralLoading: false,
+                referralData: data,
+              );
             } else {
               state = state.copyWith(referralData: data);
             }
@@ -214,10 +188,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
             if (refreshController == null) {
               state = state.copyWith(isReferralLoading: false);
             }
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            // AppHelpers.showCheckTopSnackBar(context, failure);
           },
         );
       } else {
@@ -230,14 +201,14 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
 
   Future<void> logOut() async {
     final fcm = await FirebaseMessaging.instance.getToken();
-    _userRepository.logoutAccount(fcm: fcm ?? "");
+    userRepository.logoutAccount(fcm: fcm ?? "");
   }
 
   Future<void> deleteAccount(BuildContext context) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isLoading: true);
-      final response = await _userRepository.deleteAccount();
+      final response = await userRepository.deleteAccount();
       response.when(
         success: (data) async {
           context.router.popUntilRoot();
@@ -245,10 +216,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -262,8 +230,10 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     state = state.copyWith(userData: user);
   }
 
-  void getWallet(BuildContext context,
-      {RefreshController? refreshController}) async {
+  void getWallet(
+    BuildContext context, {
+    RefreshController? refreshController,
+  }) async {
     page = 1;
     if (LocalStorage.getToken().isNotEmpty) {
       final connected = await AppConnectivity.connectivity();
@@ -271,12 +241,14 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
         if (refreshController == null) {
           state = state.copyWith(isLoadingHistory: true);
         }
-        final response = await _userRepository.getWalletHistories(1);
+        final response = await userRepository.getWalletHistories(1);
         response.when(
           success: (data) async {
             if (refreshController == null) {
               state = state.copyWith(
-                  isLoadingHistory: false, walletHistory: data.data);
+                isLoadingHistory: false,
+                walletHistory: data.data,
+              );
             } else {
               state = state.copyWith(walletHistory: data.data);
             }
@@ -286,10 +258,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
             if (refreshController == null) {
               state = state.copyWith(isLoadingHistory: false);
             }
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           },
         );
       } else {
@@ -301,11 +270,13 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
   }
 
   void getWalletPage(
-      BuildContext context, RefreshController refreshController) async {
+    BuildContext context,
+    RefreshController refreshController,
+  ) async {
     if (LocalStorage.getToken().isNotEmpty) {
       final connected = await AppConnectivity.connectivity();
       if (connected) {
-        final response = await _userRepository.getWalletHistories(++page);
+        final response = await userRepository.getWalletHistories(++page);
         response.when(
           success: (data) async {
             List<WalletData> list = List.from(state.walletHistory ?? []);
@@ -321,10 +292,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
           failure: (failure, status) {
             refreshController.loadNoData();
             --page;
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           },
         );
       } else {
@@ -335,7 +303,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     }
   }
 
-  changeIndex(int index) {
+  void changeIndex(int index) {
     state = state.copyWith(typeIndex: index);
   }
 
@@ -360,7 +328,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
       String? logoImage;
       String? backgroundImage;
       List<String>? files;
-      final logoResponse = await _galleryRepository.uploadImage(
+      final logoResponse = await galleryRepository.uploadImage(
         state.logoImage,
         UploadType.shopsLogo,
       );
@@ -373,7 +341,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
           AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
-      final backgroundResponse = await _galleryRepository.uploadImage(
+      final backgroundResponse = await galleryRepository.uploadImage(
         state.bgImage,
         UploadType.shopsBack,
       );
@@ -386,7 +354,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
           AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
-      final fileResponse = await _galleryRepository.uploadMultiImage(
+      final fileResponse = await galleryRepository.uploadMultiImage(
         state.filepath,
         UploadType.shopsBack,
       );
@@ -399,7 +367,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
           AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
-      final response = await _shopsRepository.createShop(
+      final response = await shopsRepository.createShop(
         logoImage: logoImage,
         documents: files ?? [],
         backgroundImage: backgroundImage,
@@ -423,10 +391,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
         },
         failure: (failure, s) {
           state = state.copyWith(isSaveLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
           debugPrint('==> create shop failure: $failure');
         },
       );
@@ -438,5 +403,73 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
         );
       }
     }
+  }
+
+  void getCareers() async {
+    state = state.copyWith(isLoading: true);
+    final response = await userRepository.getCareers();
+    response.when(
+      success: (data) {
+        state = state.copyWith(isLoading: false, careers: data.data ?? []);
+      },
+      failure: (failure, status) {
+        state = state.copyWith(isLoading: false);
+      },
+    );
+  }
+
+  void getCareerData(int id) async {
+    state = state.copyWith(isLoading: true);
+    final response = await userRepository.getCareerData(id);
+    response.when(
+      success: (data) {
+        state = state.copyWith(isLoading: false, selectedCareer: data);
+      },
+      failure: (failure, status) {
+        state = state.copyWith(isLoading: false);
+      },
+    );
+  }
+
+  void getAbout() async {
+    state = state.copyWith(isLoading: true);
+
+    final response = await userRepository.getAbout(page: ++page);
+    response.when(
+      success: (data) {
+        state = state.copyWith(isLoading: false, about: data.data);
+      },
+      failure: (e, s) {
+        state = state.copyWith(isLoading: false);
+      },
+    );
+  }
+
+  void getBlogs() async {
+    state = state.copyWith(isLoading: true);
+
+    final response = await userRepository.getBlogs();
+    response.when(
+      success: (data) {
+        state = state.copyWith(isLoading: false, blogs: data.data);
+      },
+      failure: (e, s) {
+        state = state.copyWith(isLoading: false);
+      },
+    );
+  }
+
+  Future<void> getSelectBlog(String uuid) async {
+    state = state.copyWith(isLoading: true);
+
+    final response = await userRepository.getSingleBlog(uuid);
+    response.when(
+      success: (data) {
+        state = state.copyWith(isLoading: false, selectBlog: data);
+      },
+      failure: (e, s) {
+        state = state.copyWith(isLoading: false);
+      },
+    );
   }
 }

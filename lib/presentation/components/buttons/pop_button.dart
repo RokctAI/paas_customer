@@ -12,20 +12,19 @@ class PopButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap ??
+      onTap:
+          onTap ??
           () {
             Navigator.pop(context);
           },
       child: AnimationButtonEffect(
         child: Container(
           decoration: BoxDecoration(
-              color: AppStyle.black,
-              borderRadius: BorderRadius.circular(10.r)),
-          padding: EdgeInsets.all(14.h),
-          child: const Icon(
-            Icons.keyboard_arrow_left,
-            color: AppStyle.white,
+            color: AppStyle.black,
+            borderRadius: BorderRadius.circular(10.r),
           ),
+          padding: EdgeInsets.all(14.h),
+          child: const Icon(Icons.keyboard_arrow_left, color: AppStyle.white),
         ),
       ),
     );

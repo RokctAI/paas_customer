@@ -11,7 +11,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Foodyman</string>
+	<string>Foodyman(Demo)</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -19,11 +19,11 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Foodyman</string>
+	<string>Foodyman(Demo)</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0.6</string>
+	<string>1.0.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -35,15 +35,15 @@
 			<string>Bundle ID</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.723986947199-bl17d2hqrgqa4p6otl043sv7oju50a6j</string>
+				<string>com.googleusercontent.apps.723986947199-98a74jf2bi2frl9ma948v1b4tcsusnpp</string>
 				<string>fb3416398941970171</string>
-				<string>com.foodyman.test</string>
+				<string>foodyman.org</string>
 			</array>
 		</dict>
 		<dict/>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>9</string>
+	<string>1</string>
 	<key>FacebookAppID</key>
 	<string>3416398941970171</string>
 	<key>FacebookClientToken</key>
@@ -72,20 +72,20 @@
 		<key>NSAllowsArbitraryLoadsInWebContent</key>
 		<true/>
 	</dict>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>Your reason, why you want to track the user</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Allowing the access to your camera helps us to show you the media files to upload to Shop app</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Allowing the access to your camera helps us to show you the media files to upload to Shop app</string>
+	<string>This app needs access to location to show you nearby shops/stores</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app needs access to location when in the background.</string>
+	<string>This app needs access to location to show you nearby shops/stores</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open.</string>
+	<string>This app needs access to location to show you nearby shops/stores</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app requires access to the Microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allowing the access to your photo library helps us to show you the media files to upload to Shop app</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>Tracking is used solely for authentication purposes when using Facebook Login</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
@@ -98,7 +98,7 @@
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
 	<key>UIStatusBarHidden</key>
-	<true/>
+	<false/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

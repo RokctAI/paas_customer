@@ -2,19 +2,17 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/time_service.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/application/profile/profile_notifier.dart';
 import 'package:foodyman/application/profile/profile_provider.dart';
 import 'package:foodyman/application/profile/profile_state.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/common_app_bar.dart';
-
-import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-import 'package:foodyman/presentation/components/loading.dart';
+import 'package:foodyman/infrastructure/models/models.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
+
+import '../../theme/color_set.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 @RoutePage()
 class WalletHistoryPage extends ConsumerStatefulWidget {
@@ -26,23 +24,15 @@ class WalletHistoryPage extends ConsumerStatefulWidget {
 
 class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
   late RefreshController controller;
-  late ProfileState state;
-  late ProfileNotifier event;
   final bool isLtr = LocalStorage.getLangLtr();
 
   @override
   void initState() {
+    super.initState();
     controller = RefreshController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(profileProvider.notifier).getWallet(context);
     });
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    event = ref.read(profileProvider.notifier);
-    super.didChangeDependencies();
   }
 
   @override
@@ -53,182 +43,224 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    state = ref.watch(profileProvider);
+    final state = ref.watch(profileProvider);
+    final event = ref.read(profileProvider.notifier);
+
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: AppStyle.bgGrey,
-        body: Column(
+      child: CustomScaffold(
+        body: (colors) => Column(
           children: [
             CommonAppBar(
               child: Text(
                 AppHelpers.getTranslation(TrKeys.transactions),
-                style: AppStyle.interNoSemi(
-                  size: 18,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interNoSemi(size: 18, color: colors.textBlack),
               ),
             ),
-            state.isLoadingHistory
-                ? Padding(
-                    padding: EdgeInsets.only(top: 56.h),
-                    child: const Loading(),
-                  )
-                : Expanded(
-                    child: SmartRefresher(
-                      enablePullDown: true,
-                      enablePullUp: true,
-                      physics: const BouncingScrollPhysics(),
-                      controller: controller,
-                      onLoading: () {
-                        event.getWalletPage(context, controller);
-                      },
-                      onRefresh: () {
-                        event.getWallet(context, refreshController: controller);
-                      },
-                      child: ListView.builder(
-                        padding: EdgeInsets.all(16.r),
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        itemCount: state.walletHistory?.length ?? 0,
-                        itemBuilder: (context, index) => Container(
-                          margin: EdgeInsets.only(bottom: 16.h),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.r),
-                            color: AppStyle.white,
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    top: 16.r, right: 16.r, left: 16.r),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      TimeService.dateFormatMDYHm(
-                                        DateTime.tryParse(state
-                                                .walletHistory?[index]
-                                                .createdAt ??
-                                            ""),
-                                      ),
-                                      style: AppStyle.interRegular(
-                                        size: 12.sp,
-                                        color: AppStyle.textGrey,
-                                      ),
-                                    ),
-                                    4.verticalSpace,
-                                    Text(
-                                      state.walletHistory?[index].note ?? "",
-                                      style: AppStyle.interRegular(
-                                        size: 16.sp,
-                                        color: AppStyle.black,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const Divider(
-                                color: AppStyle.textGrey,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    bottom: 16.r, right: 16.r, left: 16.r),
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          AppHelpers.getTranslation(
-                                              TrKeys.paymentDate),
-                                          style: AppStyle.interRegular(
-                                            size: 12.sp,
-                                            color: AppStyle.textGrey,
-                                          ),
-                                        ),
-                                        Text(
-                                          TimeService.dateFormatDMY(
-                                            DateTime.tryParse(state
-                                                    .walletHistory?[index]
-                                                    .createdAt ??
-                                                ""),
-                                          ),
-                                          style: AppStyle.interRegular(
-                                            size: 16.sp,
-                                            color: AppStyle.black,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    16.verticalSpace,
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          AppHelpers.getTranslation(
-                                              TrKeys.sender),
-                                          style: AppStyle.interRegular(
-                                            size: 12.sp,
-                                            color: AppStyle.textGrey,
-                                          ),
-                                        ),
-                                        Text(
-                                          state.walletHistory?[index].author
-                                                  ?.firstname ??
-                                              "",
-                                          style: AppStyle.interRegular(
-                                            size: 16.sp,
-                                            color: AppStyle.black,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                    16.verticalSpace,
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          AppHelpers.getTranslation(
-                                              TrKeys.deposit),
-                                          style: AppStyle.interRegular(
-                                            size: 12.sp,
-                                            color: AppStyle.textGrey,
-                                          ),
-                                        ),
-                                        Text(
-                                          AppHelpers.numberFormat(
-                                              number: state
-                                                  .walletHistory?[index].price),
-                                          style: AppStyle.interRegular(
-                                            size: 16.sp,
-                                            color: AppStyle.black,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
+            _buildContent(state, event, colors),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-        floatingActionButton: Padding(
+        floatingActionButton: (colors) => Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: const PopButton(),
         ),
       ),
+    );
+  }
+
+  Widget _buildContent(
+    ProfileState state,
+    ProfileNotifier event,
+    CustomColorSet colors,
+  ) {
+    if (state.isLoadingHistory) {
+      return Padding(
+        padding: EdgeInsets.only(top: 56.h),
+        child: const Loading(),
+      );
+    }
+
+    if (state.walletHistory?.isEmpty ?? true) {
+      return Expanded(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.account_balance_wallet_outlined,
+                size: 64.r,
+                color: AppStyle.textGrey,
+              ),
+              16.verticalSpace,
+              Text(
+                AppHelpers.getTranslation(TrKeys.nothingFound),
+                style: AppStyle.interRegular(
+                  size: 16,
+                  color: AppStyle.textGrey,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return Expanded(
+      child: SmartRefresher(
+        enablePullDown: true,
+        enablePullUp: true,
+        physics: const BouncingScrollPhysics(),
+        controller: controller,
+        onLoading: () => event.getWalletPage(context, controller),
+        onRefresh: () =>
+            event.getWallet(context, refreshController: controller),
+        child: ListView.builder(
+          padding: EdgeInsets.all(16.r),
+          itemCount: state.walletHistory?.length ?? 0,
+          itemBuilder: (context, index) {
+            final history = state.walletHistory![index];
+            return WalletHistoryItem(history: history, colors: colors);
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class WalletHistoryItem extends StatelessWidget {
+  final WalletData history;
+  final CustomColorSet colors;
+
+  const WalletHistoryItem({
+    super.key,
+    required this.history,
+    required this.colors,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final createdAt = DateTime.tryParse(history.createdAt ?? "");
+
+    return Container(
+      margin: EdgeInsets.only(bottom: 12.h),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12.r),
+        color: colors.icon,
+        boxShadow: [
+          BoxShadow(
+            color: AppStyle.black.withValues(alpha: 0.05),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeader(createdAt),
+          _buildDivider(),
+          _buildDetails(createdAt),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader(DateTime? createdAt) {
+    return Padding(
+      padding: EdgeInsets.all(16.r),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (createdAt != null)
+            Text(
+              TimeService.dateFormatMDYHm(createdAt),
+              style: AppStyle.interRegular(size: 12, color: AppStyle.textGrey),
+            ),
+          if (createdAt != null) 6.verticalSpace,
+          Text(
+            history.note ?? "",
+            style: AppStyle.interSemi(size: 16, color: colors.textBlack),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDivider() {
+    return Divider(
+      height: 1,
+      thickness: 1,
+      color: AppStyle.textGrey.withValues(alpha: 0.2),
+      indent: 16.r,
+      endIndent: 16.r,
+    );
+  }
+
+  Widget _buildDetails(DateTime? createdAt) {
+    return Padding(
+      padding: EdgeInsets.all(16.r),
+      child: Column(
+        children: [
+          _buildDetailRow(
+            label: AppHelpers.getTranslation(TrKeys.paymentDate),
+            value: createdAt != null
+                ? TimeService.dateFormatDMY(createdAt)
+                : "-",
+          ),
+          12.verticalSpace,
+          if (history.author?.firstname != null)
+            _buildDetailRow(
+              label: AppHelpers.getTranslation(TrKeys.sender),
+              value: history.author?.firstname ?? "",
+            ),
+          if (history.author?.firstname != null) 12.verticalSpace,
+          _buildDetailRow(
+            label: AppHelpers.getTranslation(TrKeys.deposit),
+            value: AppHelpers.numberFormat(history.price),
+            valueStyle: AppStyle.interSemi(
+              size: 16,
+              color: (history.price ?? 0) >= 0
+                  ? colors.primary
+                  : AppStyle.red,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildDetailRow({
+    required String label,
+    required String value,
+    TextStyle? valueStyle,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Flexible(
+          child: Text(
+            label,
+            style: AppStyle.interRegular(size: 13, color: AppStyle.textGrey),
+          ),
+        ),
+        8.horizontalSpace,
+        Flexible(
+          flex: 2,
+          child: Text(
+            value,
+            style:
+                valueStyle ??
+                AppStyle.interRegular(size: 15, color: colors.textBlack),
+            textAlign: TextAlign.end,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+      ],
     );
   }
 }

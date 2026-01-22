@@ -8,13 +8,8 @@
 // import 'package:foodyman/application/shop/shop_notifier.dart';
 // import 'package:foodyman/application/shop/shop_provider.dart';
 // import 'package:foodyman/application/shop_order/shop_order_provider.dart';
-// import 'package:foodyman/infrastructure/services/app_helpers.dart';
-// import 'package:foodyman/infrastructure/services/local_storage.dart';
-// import 'package:foodyman/infrastructure/services/tr_keys.dart';
-// import 'package:foodyman/presentation/components/buttons/animation_button_effect.dart';
-// import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-// import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-// import 'package:foodyman/presentation/pages/shop/cart/cart_order_page.dart';
+// import 'package:foodyman/infrastructure/services/services.dart';
+// // // // import 'package:foodyman/presentation/pages/shop/cart/cart_order_page.dart';
 // import 'package:foodyman/presentation/pages/shop/widgets/make_tab_bar.dart';
 // import 'package:foodyman/presentation/theme/app_style.dart';
 //

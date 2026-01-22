@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/app_constants.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
@@ -24,10 +24,12 @@ class InfoItem extends StatelessWidget {
         width: MediaQuery.sizeOf(context).width / 2 - 24.r,
         height: isLarge ? 230.r : 168.r,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.r),
-            image: DecorationImage(
-                image: AssetImage(AppConstants.infoImage[index]),
-                fit: BoxFit.cover)),
+          borderRadius: BorderRadius.circular(10.r),
+          image: DecorationImage(
+            image: AssetImage(AppConstants.infoImage[index]),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Align(
           alignment: Alignment.bottomLeft,
           child: Padding(

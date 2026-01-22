@@ -1,53 +1,55 @@
 import 'dart:async';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:foodyman/presentation/pages/initial/no_connection/no_connection_page.dart';
-import 'package:foodyman/presentation/theme/app_style.dart';
+import 'package:foodyman/presentation/theme/color_set.dart';
+import 'package:foodyman/presentation/theme/theme_wrapper.dart';
 import 'keyboard_dismisser.dart';
 
-class CustomScaffold extends ConsumerStatefulWidget {
-  final Widget body;
-  final Widget? floatingActionButton;
-  final Widget? bottomNavigationBar;
-  final Widget? drawer;
+class CustomScaffold extends StatefulWidget {
+  final Widget Function(CustomColorSet colors) body;
+  final Widget? Function(CustomColorSet colors)? floatingActionButton;
+  final Widget? Function(CustomColorSet colors)? bottomNavigationBar;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
-  final PreferredSizeWidget? appBar;
+  final PreferredSizeWidget? Function(CustomColorSet colors)? appBar;
   final Color? backgroundColor;
+  final bool bgImage;
+  final bool extendBody;
 
-  const CustomScaffold(
-      {super.key,
-      required this.body,
-      this.appBar,
-      this.floatingActionButton,
-      this.floatingActionButtonLocation,
-      this.backgroundColor,
-      this.bottomNavigationBar,
-      this.drawer});
+  const CustomScaffold({
+    super.key,
+    required this.body,
+    this.appBar,
+    this.floatingActionButton,
+    this.floatingActionButtonLocation,
+    this.backgroundColor,
+    this.bottomNavigationBar,
+    this.bgImage = false,
+    this.extendBody = false,
+  });
 
   @override
-  ConsumerState<CustomScaffold> createState() => _CustomScaffoldState();
+  State<CustomScaffold> createState() => _CustomScaffoldState();
 }
 
-class _CustomScaffoldState extends ConsumerState<CustomScaffold>
+class _CustomScaffoldState extends State<CustomScaffold>
     with WidgetsBindingObserver {
   StreamSubscription? connectivitySubscription;
   ValueNotifier<bool> isNetworkDisabled = ValueNotifier(false);
 
   void _checkCurrentNetworkState() {
-    Connectivity().checkConnectivity().then((connectivityResult) {
-      isNetworkDisabled.value = connectivityResult.contains(ConnectivityResult.none);
+    Connectivity().checkConnectivity().then((result) {
+      isNetworkDisabled.value = result.contains(ConnectivityResult.none);
     });
   }
 
-  initStateFunc() {
+  void initStateFunc() {
     _checkCurrentNetworkState();
-    connectivitySubscription = Connectivity().onConnectivityChanged.listen(
-      (result) {
-        isNetworkDisabled.value = result.contains(ConnectivityResult.none);
-      },
-    );
+    connectivitySubscription = Connectivity().onConnectivityChanged.listen((
+      result,
+    ) {
+      isNetworkDisabled.value = result.contains(ConnectivityResult.none);
+    });
   }
 
   @override
@@ -75,29 +77,29 @@ class _CustomScaffoldState extends ConsumerState<CustomScaffold>
   @override
   Widget build(BuildContext context) {
     return Stack(
+      fit: StackFit.expand,
       children: [
-        ValueListenableBuilder(
-            valueListenable: isNetworkDisabled,
-            builder: (_, bool networkDisabled, __) => Visibility(
-                  visible: !networkDisabled,
-                  child: KeyboardDismisser(
-                    child: Scaffold(
-                      resizeToAvoidBottomInset: false,
-                      appBar: widget.appBar,
-                      backgroundColor:
-                          widget.backgroundColor ?? AppStyle.bgGrey,
-                      body: widget.body,
-                      drawer: widget.drawer,
-                      floatingActionButton: widget.floatingActionButton,
-                      floatingActionButtonLocation:
-                          widget.floatingActionButtonLocation,
-                      bottomNavigationBar: widget.bottomNavigationBar,
-                    ),
-                  ),
-                )),
+        ThemeWrapper(
+          builder: (colors, controller) {
+            return KeyboardDismisser(
+              child: Scaffold(
+                extendBody: widget.extendBody,
+                resizeToAvoidBottomInset: false,
+                appBar: widget.appBar?.call(colors),
+                backgroundColor:
+                    widget.backgroundColor ?? colors.backgroundColor,
+                body: widget.body(colors),
+                floatingActionButton: widget.floatingActionButton?.call(colors),
+                floatingActionButtonLocation:
+                    widget.floatingActionButtonLocation,
+                bottomNavigationBar: widget.bottomNavigationBar?.call(colors),
+              ),
+            );
+          },
+        ),
         ValueListenableBuilder(
           valueListenable: isNetworkDisabled,
-          builder: (_, bool networkDisabled, __) => Visibility(
+          builder: (_, bool networkDisabled, _) => Visibility(
             visible: networkDisabled,
             child: const NoConnectionPage(),
           ),

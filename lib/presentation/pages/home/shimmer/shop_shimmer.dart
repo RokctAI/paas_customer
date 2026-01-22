@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
 
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'market_shimmer.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class ShopShimmer extends StatelessWidget {
   final String title;
@@ -24,28 +24,26 @@ class ShopShimmer extends StatelessWidget {
         ),
         12.verticalSpace,
         SizedBox(
-            height: 130.h,
-            child: AnimationLimiter(
-              child: ListView.builder(
-                shrinkWrap: false,
-                scrollDirection: Axis.horizontal,
-                itemCount: 4,
-                itemBuilder: (context, index) =>
-                    AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 375),
-                  child: SlideAnimation(
-                    verticalOffset: 50.0,
-                    child: FadeInAnimation(
-                      child: MarketShimmer(
-                        index: index,
-                        isShop: true,
+          height: 130.h,
+          child: AnimationLimiter(
+            child: ListView.builder(
+              shrinkWrap: false,
+              scrollDirection: Axis.horizontal,
+              itemCount: 4,
+              itemBuilder: (context, index) =>
+                  AnimationConfiguration.staggeredList(
+                    position: index,
+                    duration: const Duration(milliseconds: 375),
+                    child: SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(
+                        child: MarketShimmer(index: index, isShop: true),
                       ),
                     ),
                   ),
-                ),
-              ),
-            )),
+            ),
+          ),
+        ),
       ],
     );
   }

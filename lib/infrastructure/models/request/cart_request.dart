@@ -35,7 +35,7 @@ class CartRequest {
   Map<String, dynamic> toJsonInsert() {
     final map = <String, dynamic>{};
     if (shopId != null) map["shop_id"] = shopId;
-    map["lang"] =  LocalStorage.getLanguage()?.locale;
+    map["lang"] = LocalStorage.getLanguage()?.locale;
     map["rate"] = LocalStorage.getSelectedCurrency()?.rate ?? 1;
     map["currency_id"] = LocalStorage.getSelectedCurrency()?.id ?? 0;
     if (cartId != null) map["cart_id"] = cartId;
@@ -53,10 +53,9 @@ class CartRequest {
       if (element.parentId != null) map["parent_id"] = element.parentId;
       if (cartId != null) map["cart_id"] = cartId;
       if (userUuid != null) map["user_cart_uuid"] = userUuid;
-      if(!(element.quantity == 0 && element.parentId != null)){
+      if (!(element.quantity == 0 && element.parentId != null)) {
         list.add(map);
       }
-
     });
 
     return list;

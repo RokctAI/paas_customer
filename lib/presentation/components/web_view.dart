@@ -28,7 +28,7 @@ class _WebViewPageState extends State<WebViewPage> {
           onWebResourceError: (WebResourceError error) {},
           onNavigationRequest: (NavigationRequest request) {
             if (request.url.startsWith(AppConstants.baseUrl)) {
-              context.replaceRoute(const MainRoute());
+              context.replaceRoute(MainRoute());
               return NavigationDecision.prevent;
             }
             return NavigationDecision.navigate;

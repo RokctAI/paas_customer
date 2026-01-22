@@ -5,16 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/application/parcels_list/parcel_list_notifier.dart';
 import 'package:foodyman/application/parcels_list/parcel_list_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/common_app_bar.dart';
-import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-import 'package:foodyman/presentation/components/custom_tab_bar.dart';
-import 'package:foodyman/presentation/components/loading.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
 import 'parcel_item.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 @RoutePage()
 class ParcelListPage extends ConsumerStatefulWidget {
@@ -64,22 +60,17 @@ class _ParcelListPageState extends ConsumerState<ParcelListPage>
 
   @override
   Widget build(BuildContext context) {
-    final bool isDarkMode = LocalStorage.getAppThemeMode();
     final bool isLtr = LocalStorage.getLangLtr();
     final state = ref.watch(parcelListProvider);
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: isDarkMode ? AppStyle.mainBackDark : AppStyle.bgGrey,
-        body: Column(
+      child: CustomScaffold(
+        body: (colors) => Column(
           children: [
             CommonAppBar(
               child: Text(
                 AppHelpers.getTranslation(TrKeys.parcels),
-                style: AppStyle.interNoSemi(
-                  size: 18,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interNoSemi(size: 18, color: colors.textBlack),
               ),
             ),
             16.verticalSpace,
@@ -94,72 +85,87 @@ class _ParcelListPageState extends ConsumerState<ParcelListPage>
                       tabs: _tabs,
                     ),
                     Expanded(
-                      child: TabBarView(controller: _tabController, children: [
-                        state.isActiveLoading
-                            ? const Loading()
-                            : SmartRefresher(
-                                controller: activeRefreshController,
-                                enablePullDown: true,
-                                enablePullUp: true,
-                                onRefresh: () {
-                                  event.fetchActiveOrdersPage(
-                                      context, activeRefreshController,
-                                      isRefresh: true);
-                                  activeRefreshController.refreshCompleted();
-                                },
-                                onLoading: () {
-                                  event.fetchActiveOrdersPage(
-                                      context, activeRefreshController);
-                                },
-                                child: state.activeOrders.isNotEmpty ? ListView.builder(
-                                  shrinkWrap: true,
-                                  padding: EdgeInsets.only(top: 24.h),
-                                  itemCount: state.activeOrders.length,
-                                  itemBuilder: (context, index) {
-                                    return ParcelItem(
-                                      parcel: state.activeOrders[index],
-                                      isActive: true,
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          state.isActiveLoading
+                              ? const Loading()
+                              : SmartRefresher(
+                                  controller: activeRefreshController,
+                                  enablePullDown: true,
+                                  enablePullUp: true,
+                                  onRefresh: () {
+                                    event.fetchActiveOrdersPage(
+                                      context,
+                                      activeRefreshController,
+                                      isRefresh: true,
+                                    );
+                                    activeRefreshController.refreshCompleted();
+                                  },
+                                  onLoading: () {
+                                    event.fetchActiveOrdersPage(
+                                      context,
+                                      activeRefreshController,
                                     );
                                   },
-                                ) : _resultEmpty(),
-                              ),
-                        state.isHistoryLoading
-                            ? const Loading()
-                            : SmartRefresher(
-                                controller: historyRefreshController,
-                                enablePullDown: true,
-                                enablePullUp: true,
-                                onRefresh: () {
-                                  event.fetchHistoryOrdersPage(
-                                      context, historyRefreshController,
-                                      isRefresh: true);
-                                  historyRefreshController.refreshCompleted();
-                                },
-                                onLoading: () {
-                                  event.fetchHistoryOrdersPage(
-                                      context, historyRefreshController);
-                                },
-                                child: ListView.builder(
-                                  padding: EdgeInsets.only(top: 24.h),
-                                  itemCount: state.historyOrders.length,
-                                  itemBuilder: (context, index) {
-                                    return ParcelItem(
-                                      parcel: state.historyOrders[index],
-                                      isActive: false,
-                                    );
-                                  },
+                                  child: state.activeOrders.isNotEmpty
+                                      ? ListView.builder(
+                                          shrinkWrap: true,
+                                          padding: EdgeInsets.only(top: 24.h),
+                                          itemCount: state.activeOrders.length,
+                                          itemBuilder: (context, index) {
+                                            return ParcelItem(
+                                              parcel: state.activeOrders[index],
+                                              isActive: true,
+                                              colors: colors,
+                                            );
+                                          },
+                                        )
+                                      : _resultEmpty(),
                                 ),
-                              ),
-                      ]),
-                    )
+                          state.isHistoryLoading
+                              ? const Loading()
+                              : SmartRefresher(
+                                  controller: historyRefreshController,
+                                  enablePullDown: true,
+                                  enablePullUp: true,
+                                  onRefresh: () {
+                                    event.fetchHistoryOrdersPage(
+                                      context,
+                                      historyRefreshController,
+                                      isRefresh: true,
+                                    );
+                                    historyRefreshController.refreshCompleted();
+                                  },
+                                  onLoading: () {
+                                    event.fetchHistoryOrdersPage(
+                                      context,
+                                      historyRefreshController,
+                                    );
+                                  },
+                                  child: ListView.builder(
+                                    padding: EdgeInsets.only(top: 24.h),
+                                    itemCount: state.historyOrders.length,
+                                    itemBuilder: (context, index) {
+                                      return ParcelItem(
+                                        parcel: state.historyOrders[index],
+                                        isActive: false,
+                                        colors: colors,
+                                      );
+                                    },
+                                  ),
+                                ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-        floatingActionButton: Padding(
+        floatingActionButton: (colors) => Padding(
           padding: EdgeInsets.only(left: 16.w),
           child: const PopButton(),
         ),
@@ -178,9 +184,7 @@ Widget _resultEmpty() {
         style: AppStyle.interSemi(size: 18.sp),
       ),
       Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 32.w,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 32.w),
         child: Text(
           AppHelpers.getTranslation(TrKeys.trySearchingAgain),
           style: AppStyle.interRegular(size: 14.sp),

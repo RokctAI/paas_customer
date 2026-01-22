@@ -1,29 +1,30 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:foodyman/domain/interface/notification.dart';
+import 'package:foodyman/domain/di/dependency_manager.dart';
 import 'package:foodyman/infrastructure/models/response/notification_response.dart';
-import 'package:foodyman/infrastructure/services/app_connectivity.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
 
 import 'notification_state.dart';
 
-class NotificationNotifier extends StateNotifier<NotificationState> {
-  final NotificationRepositoryFacade _notificationRepository;
+class NotificationNotifier extends Notifier<NotificationState> {
+  @override
+  NotificationState build() => const NotificationState();
 
-  int _notificationPage = 0;
-
-  NotificationNotifier(this._notificationRepository)
-      : super(const NotificationState());
+  int _notificationPage = 1;
 
   Future<void> fetchAllNotifications(BuildContext context) async {
     state = state.copyWith(isAllNotificationsLoading: true);
 
-    final response = await _notificationRepository.getNotifications();
+    final response = await notificationRepo.getNotifications();
     response.when(
       success: (data) {
         state = state.copyWith(
-            isAllNotificationsLoading: false, notifications: data.data ?? []);
+          isAllNotificationsLoading: false,
+          notifications: data.data ?? [],
+        );
       },
       failure: (failure, s) {
         AppHelpers.showCheckTopSnackBar(context, failure.toString());
@@ -31,22 +32,24 @@ class NotificationNotifier extends StateNotifier<NotificationState> {
     );
   }
 
-  Future<void> fetchNotificationsPaginate(
-      {VoidCallback? checkYourNetwork,
-      RefreshController? refreshController,
-      bool isRefresh = false}) async {
+  Future<void> fetchNotificationsPaginate({
+    VoidCallback? checkYourNetwork,
+    RefreshController? refreshController,
+    bool isRefresh = false,
+  }) async {
     final connected = await AppConnectivity.connectivity();
     if (isRefresh) {
       _notificationPage = 0;
     }
     if (connected) {
-      final response = await _notificationRepository.getNotifications(
+      final response = await notificationRepo.getNotifications(
         page: ++_notificationPage,
       );
       response.when(
         success: (data) async {
-          final List<NotificationModel> newList =
-              List.from(state.notifications);
+          final List<NotificationModel> newList = List.from(
+            state.notifications,
+          );
           newList.addAll(data.data ?? []);
           state = state.copyWith(
             notifications: isRefresh ? (data.data ?? []) : newList,
@@ -78,11 +81,12 @@ class NotificationNotifier extends StateNotifier<NotificationState> {
     }
     state = state.copyWith(
       notifications: notif,
-      countOfNotifications:
-          state.countOfNotifications?.copyWith(notification: 0),
+      countOfNotifications: state.countOfNotifications?.copyWith(
+        notification: 0,
+      ),
     );
 
-    final response = await _notificationRepository.readAll();
+    final response = await notificationRepo.readAll();
     response.when(
       success: (data) {},
       failure: (failure, s) {
@@ -91,17 +95,21 @@ class NotificationNotifier extends StateNotifier<NotificationState> {
     );
   }
 
-  Future<void> readOne(BuildContext context,
-      {int? id, required int index}) async {
+  Future<void> readOne(
+    BuildContext context, {
+    int? id,
+    required int index,
+  }) async {
     List<NotificationModel> notif = List.from(state.notifications);
-    notif[index] = notif[index].copyWith(
-      readAt: DateTime.now(),
-    );
+    notif[index] = notif[index].copyWith(readAt: DateTime.now());
     final notification = state.countOfNotifications?.copyWith(
-        notification: (state.countOfNotifications?.notification ?? 0) - 1);
+      notification: (state.countOfNotifications?.notification ?? 0) - 1,
+    );
     state = state.copyWith(
-        notifications: notif, countOfNotifications: notification);
-    final response = await _notificationRepository.readOne(id: id);
+      notifications: notif,
+      countOfNotifications: notification,
+    );
+    final response = await notificationRepo.readOne(id: id);
     response.when(
       success: (data) {},
       failure: (failure, s) {
@@ -111,12 +119,17 @@ class NotificationNotifier extends StateNotifier<NotificationState> {
   }
 
   Future<void> fetchCount(BuildContext context) async {
-    final response = await _notificationRepository.getCount();
+    final response = await notificationRepo.getCount();
     response.when(
       success: (data) {
         state = state.copyWith(countOfNotifications: data);
       },
       failure: (failure, s) {
+        if (s == 401) {
+          LocalStorage.logout();
+          context.router.popUntilRoot();
+          context.replaceRoute(const LoginRoute());
+        }
         AppHelpers.showCheckTopSnackBar(context, failure.toString());
       },
     );

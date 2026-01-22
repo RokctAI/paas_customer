@@ -1,16 +1,17 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'time_state.dart';
 
+class TimeNotifier extends Notifier<TimeState> {
+  @override
+  TimeState build() => const TimeState();
 
-
-
-class TimeNotifier extends StateNotifier<TimeState> {
-  TimeNotifier() : super(const TimeState());
-
-  void reset(){
-    state = state.copyWith(currentIndexOne: 0,currentIndexTwo: 0,selectIndex: null);
+  void reset() {
+    state = state.copyWith(
+      currentIndexOne: 0,
+      currentIndexTwo: 0,
+      selectIndex: null,
+    );
   }
 
   void changeOne(int index) {
@@ -24,5 +25,4 @@ class TimeNotifier extends StateNotifier<TimeState> {
   void changeTwo(int index) {
     state = state.copyWith(currentIndexTwo: index);
   }
-
 }

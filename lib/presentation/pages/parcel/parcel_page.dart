@@ -1,6 +1,5 @@
 // ignore_for_file: unused_result
 
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
@@ -8,14 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:foodyman/application/parcel/parcel_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/common_app_bar.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-import 'package:foodyman/presentation/components/keyboard_dismisser.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/pages/parcel/widgets/recipient_widget.dart';
 import 'package:foodyman/presentation/pages/parcel/widgets/sender_widget.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
@@ -23,6 +15,7 @@ import 'widgets/info_item.dart';
 import 'widgets/parcel_payments.dart';
 import 'widgets/time_and_type.dart';
 
+import 'package:foodyman/presentation/components/components.dart';
 
 @RoutePage()
 class ParcelPage extends ConsumerStatefulWidget {
@@ -33,9 +26,12 @@ class ParcelPage extends ConsumerStatefulWidget {
 }
 
 class _ParcelPageState extends ConsumerState<ParcelPage> {
-  final TextEditingController fromUsername =
-      TextEditingController(text: LocalStorage.getUser()?.firstname ?? '');
-  final TextEditingController fromPhone = TextEditingController(text: LocalStorage.getUser()?.phone ?? '');
+  final TextEditingController fromUsername = TextEditingController(
+    text: LocalStorage.getUser()?.firstname ?? '',
+  );
+  final TextEditingController fromPhone = TextEditingController(
+    text: LocalStorage.getUser()?.phone ?? '',
+  );
   final TextEditingController fromHouse = TextEditingController();
   final TextEditingController fromFloor = TextEditingController();
   final TextEditingController toUsername = TextEditingController();
@@ -60,18 +56,16 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
   Widget build(BuildContext context) {
     final state = ref.watch(parcelProvider);
     final event = ref.read(parcelProvider.notifier);
-    return Scaffold(
-      body: KeyboardDismisser(
+    return CustomScaffold(
+      body: (colors) => KeyboardDismisser(
         child: Column(
           children: [
             CommonAppBar(
-                child: Text(
-              AppHelpers.getTranslation(TrKeys.doorToDoor),
-              style: AppStyle.interNoSemi(
-                size: 18,
-                color: AppStyle.black,
+              child: Text(
+                AppHelpers.getTranslation(TrKeys.doorToDoor),
+                style: AppStyle.interNoSemi(size: 18, color: colors.textBlack),
               ),
-            )),
+            ),
             AppHelpers.getParcel()
                 ? Expanded(
                     child: ListView(
@@ -79,7 +73,7 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
                       shrinkWrap: true,
                       children: [
                         Container(
-                          color: AppStyle.white,
+                          color: colors.backgroundColor,
                           padding: EdgeInsets.all(16.r),
                           child: Form(
                             key: formKey,
@@ -98,6 +92,7 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
                                             house: fromHouse,
                                             flour: fromFloor,
                                             comment: comment,
+                                            colors: colors,
                                           ),
                                           10.verticalSpace,
                                           RecipientWidget(
@@ -110,6 +105,7 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
                                             description: note,
                                             addInstruction: instruction,
                                             value: itemValue,
+                                            colors: colors,
                                           ),
                                         ],
                                       ),
@@ -119,32 +115,35 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
                                         !state.expand)
                                       InkWell(
                                         onTap: () => event.switchAddress(
-                                            context: context),
+                                          context: context,
+                                        ),
                                         child: const Padding(
                                           padding: EdgeInsets.all(8.0),
                                           child: Icon(
-                                              FlutterRemix.arrow_up_down_line),
+                                            FlutterRemix.arrow_up_down_line,
+                                          ),
                                         ),
-                                      )
+                                      ),
                                   ],
                                 ),
                                 10.verticalSpace,
-                                if(state.expand)
-                                CustomButton(
+                                if (state.expand)
+                                  CustomButton(
                                     icon: const Icon(
                                       FlutterRemix.wallet_2_line,
                                       color: AppStyle.black,
                                     ),
                                     background: AppStyle.bgGrey,
                                     isLoading: state.isButtonLoading,
-                                    title: AppHelpers.getTranslation(state
-                                            .selectPayment
-                                            ?.tag ??
-                                        TrKeys.paymentMethods),
+                                    title: AppHelpers.getTranslation(
+                                      state.selectPayment?.tag ??
+                                          TrKeys.paymentMethods,
+                                    ),
                                     onPressed: () {
                                       AppHelpers.showCustomModalBottomSheet(
-                                        paddingTop:
-                                            MediaQuery.paddingOf(context).top,
+                                        paddingTop: MediaQuery.paddingOf(
+                                          context,
+                                        ).top,
                                         context: context,
                                         modal: ParcelPayments(
                                           payLater: (payment) async {
@@ -155,7 +154,8 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
                                         isDrag: true,
                                         radius: 12,
                                       );
-                                    }),
+                                    },
+                                  ),
                                 if (state.addressTo == null &&
                                     state.addressFrom == null)
                                   _infoWidget(),
@@ -168,8 +168,9 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
                           TypeAndTime(
                             event: event,
                             state: state,
+                            colors: colors,
                           ),
-                        96.verticalSpace
+                        96.verticalSpace,
                       ],
                     ),
                   )
@@ -182,35 +183,41 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
                         padding: EdgeInsets.all(16.r),
                         child: Text(
                           AppHelpers.getTranslation(
-                              TrKeys.ifYouWantToUseThisService),
+                            TrKeys.ifYouWantToUseThisService,
+                          ),
                           style: AppStyle.interNormal(),
                           textAlign: TextAlign.center,
                         ),
                       ),
                     ],
-                  )
+                  ),
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Padding(
+      floatingActionButton: (colors) => Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Row(
           children: [
             const PopButton(),
             if (state.types.isNotEmpty &&
-                (state.addressFrom?.isNotEmpty??false) &&
-                (state.addressTo?.isNotEmpty??false))
+                (state.addressFrom?.isNotEmpty ?? false) &&
+                (state.addressTo?.isNotEmpty ?? false))
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(left: 16.r),
                   child: CustomButton(
-                    borderColor:
-                        !state.error ? AppStyle.transparent : AppStyle.textGrey,
-                    background: !state.error ? AppStyle.primary : AppStyle.white,
-                    textColor: !state.error ? AppStyle.black : AppStyle.textGrey,
+                    borderColor: !state.error
+                        ? AppStyle.transparent
+                        : AppStyle.textGrey,
+                    background: !state.error
+                        ? colors.primary
+                        : AppStyle.white,
+                    textColor: !state.error
+                        ? AppStyle.black
+                        : AppStyle.textGrey,
                     title:
-                        "${state.expand ? AppHelpers.getTranslation(TrKeys.order) : AppHelpers.getTranslation(TrKeys.continueText)} ${AppHelpers.numberFormat(number: state.calculate?.data?.price ?? 0)}",
+                        "${state.expand ? AppHelpers.getTranslation(TrKeys.order) : AppHelpers.getTranslation(TrKeys.continueText)} ${AppHelpers.numberFormat(state.calculate?.data?.price ?? 0)}",
                     onPressed: () {
                       if (state.error) {
                         return;
@@ -220,26 +227,28 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
                       } else {
                         if (formKey.currentState?.validate() ?? false) {
                           event.orderParcel(
-                              context: context,
-                              note: note.text,
-                              usernameTo: toUsername.text,
-                              usernameFrom: fromUsername.text,
-                              phoneTo: toPhone.text,
-                              phoneFrom: fromPhone.text,
-                              houseFrom: fromHouse.text,
-                              houseTo: toHouse.text,
-                              floorTo: toFloor.text,
-                              floorFrom: fromFloor.text,
-                              comment: comment.text,
-                              value: itemValue.text,
-                              instruction: instruction.text, totalPrice: state.calculate?.data?.price ?? 0);
+                            context: context,
+                            note: note.text,
+                            usernameTo: toUsername.text,
+                            usernameFrom: fromUsername.text,
+                            phoneTo: toPhone.text,
+                            phoneFrom: fromPhone.text,
+                            houseFrom: fromHouse.text,
+                            houseTo: toHouse.text,
+                            floorTo: toFloor.text,
+                            floorFrom: fromFloor.text,
+                            comment: comment.text,
+                            value: itemValue.text,
+                            instruction: instruction.text,
+                            totalPrice: state.calculate?.data?.price ?? 0,
+                          );
                         }
                       }
                     },
                     isLoading: state.isLoading,
                   ),
                 ),
-              )
+              ),
           ],
         ),
       ),
@@ -256,30 +265,14 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
-              children: [
-                InfoItem(
-                  isLarge: true,
-                  index: 0,
-                ),
-                InfoItem(
-                  index: 1,
-                ),
-              ],
+              children: [InfoItem(isLarge: true, index: 0), InfoItem(index: 1)],
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                InfoItem(
-                  index: 2,
-                ),
-                InfoItem(
-                  isLarge: true,
-                  index: 3,
-                ),
-              ],
-            )
+              children: [InfoItem(index: 2), InfoItem(isLarge: true, index: 3)],
+            ),
           ],
-        )
+        ),
       ],
     );
   }

@@ -1,10 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/presentation/components/buttons/animation_button_effect.dart';
-import 'package:foodyman/presentation/components/custom_network_image.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class ShopTabBarItem extends StatelessWidget {
   final String title;
@@ -37,7 +36,7 @@ class ShopTabBarItem extends StatelessWidget {
             borderRadius: BorderRadius.circular(10.r),
             boxShadow: [
               BoxShadow(
-                color: AppStyle.white.withOpacity(0.07),
+                color: AppStyle.white.withValues(alpha: 0.07),
                 spreadRadius: 0,
                 blurRadius: 2,
                 offset: const Offset(0, 1), // changes position of shadow
@@ -52,17 +51,15 @@ class ShopTabBarItem extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(right: 6.r),
                   child: CustomNetworkImage(
-                      url: category?.img ?? image,
-                      height: 42,
-                      width: 42,
-                      radius: 2),
+                    url: category?.img ?? image,
+                    height: 42,
+                    width: 42,
+                    radius: 2,
+                  ),
                 ),
               Text(
                 category?.translation?.title ?? title,
-                style: AppStyle.interNormal(
-                  size: 13,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interNormal(size: 13, color: AppStyle.black),
               ),
             ],
           ),

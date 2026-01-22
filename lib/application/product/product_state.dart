@@ -1,13 +1,10 @@
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-
 
 part 'product_state.freezed.dart';
 
 @freezed
-class ProductState with _$ProductState {
-
+abstract class ProductState with _$ProductState {
   const factory ProductState({
     @Default(false) bool isLoading,
     @Default(false) bool isAddLoading,
@@ -23,7 +20,6 @@ class ProductState with _$ProductState {
     @Default(null) ProductData? productData,
     @Default(null) Galleries? selectImage,
     Stocks? selectedStock,
-
   }) = _ProductState;
 
   const ProductState._();

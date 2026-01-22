@@ -1,34 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:foodyman/domain/interface/settings.dart';
-import 'package:foodyman/domain/interface/user.dart';
-import 'package:foodyman/infrastructure/services/app_connectivity.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/domain/di/dependency_manager.dart';
 
 import 'package:foodyman/infrastructure/models/data/notification_list_data.dart';
 import 'setting_state.dart';
 
-class SettingNotifier extends StateNotifier<SettingState> {
-  final SettingsRepositoryFacade _settingsRepository;
-  final UserRepositoryFacade _userRepository;
-
-  SettingNotifier(this._settingsRepository, this._userRepository)
-      : super(const SettingState());
+class SettingNotifier extends Notifier<SettingState> {
+  @override
+  SettingState build() => const SettingState();
 
   void changeIndex(bool isChange) {
     state = state.copyWith(isLoading: isChange);
   }
 
-  getNotificationList(BuildContext context) async {
+  Future<void> getNotificationList(BuildContext context) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isLoading: true);
-      final response = await _settingsRepository.getNotificationList();
+      final response = await settingsRepository.getNotificationList();
 
       response.when(
         success: (data) async {
           state = state.copyWith(notifications: data.data);
-          final res = await _userRepository.getProfileDetails();
+          final res = await userRepository.getProfileDetails();
           res.when(
             success: (d) {
               for (int i = 0; i < data.data!.length; i++) {
@@ -43,19 +38,13 @@ class SettingNotifier extends StateNotifier<SettingState> {
             },
             failure: (failure, status) {
               state = state.copyWith(isLoading: false);
-              AppHelpers.showCheckTopSnackBar(
-                context,
-                failure,
-              );
+              AppHelpers.showCheckTopSnackBar(context, failure);
             },
           );
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -65,13 +54,13 @@ class SettingNotifier extends StateNotifier<SettingState> {
     }
   }
 
-  updateData(BuildContext context, int index, bool active) async {
+  Future<void> updateData(BuildContext context, int index, bool active) async {
     List<NotificationData> list = List.from(state.notifications ?? []);
     NotificationData newNotification = list[index];
     newNotification.active = active;
     list.removeAt(index);
     list.insert(index, newNotification);
     state = state.copyWith(notifications: list);
-    _settingsRepository.updateNotification(state.notifications);
+    settingsRepository.updateNotification(state.notifications);
   }
 }

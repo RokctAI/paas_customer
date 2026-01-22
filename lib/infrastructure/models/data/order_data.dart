@@ -54,8 +54,9 @@ class OrderData {
         _details?.add(ShopOrderDetails.fromJson(v));
       });
     }
-    _review =
-        json['review'] != null ? ReviewData.fromJson(json['review']) : null;
+    _review = json['review'] != null
+        ? ReviewData.fromJson(json['review'])
+        : null;
   }
 
   int? _id;
@@ -84,21 +85,20 @@ class OrderData {
     UserModel? user,
     List<ShopOrderDetails>? details,
     ReviewData? review,
-  }) =>
-      OrderData(
-        id: id ?? _id,
-        userId: userId ?? _userId,
-        price: price ?? _price,
-        currencyPrice: currencyPrice ?? _currencyPrice,
-        rate: rate ?? _rate,
-        orderDetailsCount: orderDetailsCount ?? _orderDetailsCount,
-        createdAt: createdAt ?? _createdAt,
-        updatedAt: updatedAt ?? _updatedAt,
-        currency: currency ?? _currency,
-        user: user ?? _user,
-        details: details ?? _details,
-        review: review ?? _review,
-      );
+  }) => OrderData(
+    id: id ?? _id,
+    userId: userId ?? _userId,
+    price: price ?? _price,
+    currencyPrice: currencyPrice ?? _currencyPrice,
+    rate: rate ?? _rate,
+    orderDetailsCount: orderDetailsCount ?? _orderDetailsCount,
+    createdAt: createdAt ?? _createdAt,
+    updatedAt: updatedAt ?? _updatedAt,
+    currency: currency ?? _currency,
+    user: user ?? _user,
+    details: details ?? _details,
+    review: review ?? _review,
+  );
 
   int? get id => _id;
 
@@ -204,8 +204,9 @@ class ShopOrderDetails {
         _orderStocks?.add(OrderStocks.fromJson(v));
       });
     }
-    _coupon =
-        json['coupon'] != null ? CouponData.fromJson(json['coupon']) : null;
+    _coupon = json['coupon'] != null
+        ? CouponData.fromJson(json['coupon'])
+        : null;
     _deliveryman = json['deliveryman'];
     _deliveryType = json['delivery_type'] != null
         ? DeliveryType.fromJson(json['delivery_type'])
@@ -254,25 +255,24 @@ class ShopOrderDetails {
     DeliveryType? deliveryType,
     // List<dynamic>? transactions,
     ShopData? shop,
-  }) =>
-      ShopOrderDetails(
-        id: id ?? _id,
-        shopId: shopId ?? _shopId,
-        deliveryFee: deliveryFee ?? _deliveryFee,
-        price: price ?? _price,
-        tax: tax ?? _tax,
-        status: status ?? _status,
-        deliveryDate: deliveryDate ?? _deliveryDate,
-        deliveryTime: deliveryTime ?? _deliveryTime,
-        createdAt: createdAt ?? _createdAt,
-        updatedAt: updatedAt ?? _updatedAt,
-        orderStocks: orderStocks ?? _orderStocks,
-        coupon: coupon ?? _coupon,
-        deliveryman: deliveryman ?? _deliveryman,
-        deliveryType: deliveryType ?? _deliveryType,
-        // transactions: transactions ?? _transactions,
-        shop: shop ?? _shop,
-      );
+  }) => ShopOrderDetails(
+    id: id ?? _id,
+    shopId: shopId ?? _shopId,
+    deliveryFee: deliveryFee ?? _deliveryFee,
+    price: price ?? _price,
+    tax: tax ?? _tax,
+    status: status ?? _status,
+    deliveryDate: deliveryDate ?? _deliveryDate,
+    deliveryTime: deliveryTime ?? _deliveryTime,
+    createdAt: createdAt ?? _createdAt,
+    updatedAt: updatedAt ?? _updatedAt,
+    orderStocks: orderStocks ?? _orderStocks,
+    coupon: coupon ?? _coupon,
+    deliveryman: deliveryman ?? _deliveryman,
+    deliveryType: deliveryType ?? _deliveryType,
+    // transactions: transactions ?? _transactions,
+    shop: shop ?? _shop,
+  );
 
   int? get id => _id;
 
@@ -297,7 +297,6 @@ class ShopOrderDetails {
   List<OrderStocks>? get orderStocks => _orderStocks;
 
   CouponData? get coupon => _coupon;
-
 
   dynamic get deliveryman => _deliveryman;
 
@@ -395,19 +394,18 @@ class OrderStocks {
     String? createdAt,
     String? updatedAt,
     Stocks? stock,
-  }) =>
-      OrderStocks(
-        id: id ?? _id,
-        stockId: stockId ?? _stockId,
-        originPrice: originPrice ?? _originPrice,
-        tax: tax ?? _tax,
-        discount: discount ?? _discount,
-        quantity: quantity ?? _quantity,
-        totalPrice: totalPrice ?? _totalPrice,
-        createdAt: createdAt ?? _createdAt,
-        updatedAt: updatedAt ?? _updatedAt,
-        stock: stock ?? _stock,
-      );
+  }) => OrderStocks(
+    id: id ?? _id,
+    stockId: stockId ?? _stockId,
+    originPrice: originPrice ?? _originPrice,
+    tax: tax ?? _tax,
+    discount: discount ?? _discount,
+    quantity: quantity ?? _quantity,
+    totalPrice: totalPrice ?? _totalPrice,
+    createdAt: createdAt ?? _createdAt,
+    updatedAt: updatedAt ?? _updatedAt,
+    stock: stock ?? _stock,
+  );
 
   int? get id => _id;
 
@@ -509,19 +507,18 @@ class DeliveryType {
     String? createdAt,
     String? updatedAt,
     Translation? translation,
-  }) =>
-      DeliveryType(
-        id: id ?? _id,
-        shopId: shopId ?? _shopId,
-        type: type ?? _type,
-        price: price ?? _price,
-        times: times ?? _times,
-        note: note ?? _note,
-        active: active ?? _active,
-        createdAt: createdAt ?? _createdAt,
-        updatedAt: updatedAt ?? _updatedAt,
-        translation: translation ?? _translation,
-      );
+  }) => DeliveryType(
+    id: id ?? _id,
+    shopId: shopId ?? _shopId,
+    type: type ?? _type,
+    price: price ?? _price,
+    times: times ?? _times,
+    note: note ?? _note,
+    active: active ?? _active,
+    createdAt: createdAt ?? _createdAt,
+    updatedAt: updatedAt ?? _updatedAt,
+    translation: translation ?? _translation,
+  );
 
   int? get id => _id;
 
@@ -562,10 +559,8 @@ class DeliveryType {
 }
 
 class ProductNote {
-   int stockId;
-   String comment;
+  int stockId;
+  String comment;
 
   ProductNote({required this.stockId, required this.comment});
-
-
 }

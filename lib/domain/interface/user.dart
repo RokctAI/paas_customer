@@ -1,18 +1,30 @@
-import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
-import 'package:foodyman/infrastructure/models/data/referral_data.dart';
-import 'package:foodyman/infrastructure/models/request/edit_profile.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
+import 'package:foodyman/infrastructure/models/response/blog_response.dart';
+import 'package:foodyman/infrastructure/models/response/pages_response.dart';
+
+import '../../infrastructure/models/data/career_data.dart';
+import '../../infrastructure/models/response/career_response.dart';
 
 abstract class UserRepositoryFacade {
   Future<ApiResult<ProfileResponse>> getProfileDetails();
 
   Future<ApiResult<ReferralModel>> getReferralDetails();
 
+  Future<ApiResult<CareerDataResponse>> getCareers();
+
+  Future<ApiResult<CareerData>> getCareerData(int id);
+
+  Future<ApiResult<BlogResponse>> getBlogs();
+
+  Future<ApiResult<BlogData>> getSingleBlog(String uuid);
+
   Future<ApiResult<dynamic>> saveLocation({required AddressNewModel? address});
 
-  Future<ApiResult<dynamic>> updateLocation(
-      {required AddressNewModel? address, required int? addressId});
+  Future<ApiResult<dynamic>> updateLocation({
+    required AddressNewModel? address,
+    required int? addressId,
+  });
 
   Future<ApiResult<dynamic>> setActiveAddress({required int id});
 
@@ -23,6 +35,8 @@ abstract class UserRepositoryFacade {
   Future<ApiResult<dynamic>> logoutAccount({required String fcm});
 
   Future<ApiResult<ProfileResponse>> editProfile({required EditProfile? user});
+
+  Future<ApiResult<PagesResponse>> getAbout({required int page});
 
   Future<ApiResult<ProfileResponse>> updateProfileImage({
     required String firstName,

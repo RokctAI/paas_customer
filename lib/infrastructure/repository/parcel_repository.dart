@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:foodyman/app_constants.dart';
 import 'package:intl/intl.dart';
 import 'package:foodyman/domain/di/dependency_manager.dart';
 import 'package:foodyman/domain/interface/parcel.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:foodyman/infrastructure/models/response/parcel_paginate_response.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
+import 'package:payfast/payfast.dart';
 
 class ParcelRepository implements ParcelRepositoryFacade {
   @override
@@ -71,8 +72,9 @@ class ParcelRepository implements ParcelRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-          '/api/v1/rest/parcel-order/calculate-price',
-          queryParameters: data);
+        '/api/v1/rest/parcel-order/calculate-price',
+        queryParameters: data,
+      );
       return ApiResult.success(
         data: ParcelCalculateResponse.fromJson(response.data),
       );
@@ -86,26 +88,27 @@ class ParcelRepository implements ParcelRepositoryFacade {
   }
 
   @override
-  Future<ApiResult> orderParcel(
-      {required int typeId,
-      required LocationModel from,
-      required String fromTitle,
-      required LocationModel to,
-      required String toTitle,
-      required String time,
-      required String note,
-      required String phoneFrom,
-      required String phoneTo,
-      required String usernameTo,
-      required String floorTo,
-      required String floorFrom,
-      required String houseFrom,
-      required String houseTo,
-      required String value,
-      required String comment,
-      required String instruction,
-      required bool notify,
-      required String usernameFrom}) async {
+  Future<ApiResult> orderParcel({
+    required int typeId,
+    required LocationModel from,
+    required String fromTitle,
+    required LocationModel to,
+    required String toTitle,
+    required String time,
+    required String note,
+    required String phoneFrom,
+    required String phoneTo,
+    required String usernameTo,
+    required String floorTo,
+    required String floorFrom,
+    required String houseFrom,
+    required String houseTo,
+    required String value,
+    required String comment,
+    required String instruction,
+    required bool notify,
+    required String usernameFrom,
+  }) async {
     final data = {
       'lang': LocalStorage.getLanguage()?.locale,
       'type_id': typeId,
@@ -140,8 +143,10 @@ class ParcelRepository implements ParcelRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
 
-      final res =
-          await client.post('/api/v1/dashboard/user/parcel-orders', data: data);
+      final res = await client.post(
+        '/api/v1/dashboard/user/parcel-orders',
+        data: data,
+      );
       return ApiResult.success(data: res.data["data"]["id"]);
     } catch (e) {
       debugPrint('==> get parcel order failure: $e');
@@ -164,7 +169,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
       "statuses[2]": "ready",
       "statuses[3]": "on_a_way",
       "order_statuses": true,
-      "perPage": 10
+      "perPage": 10,
     };
     try {
       final client = dioHttp.client(requireAuth: true);
@@ -194,7 +199,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
       "statuses[1]": "canceled",
       "order_statuses": true,
       "perPage": 10,
-      "page": page
+      "page": page,
     };
     try {
       final client = dioHttp.client(requireAuth: true);
@@ -219,7 +224,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
     final data = {
       if (LocalStorage.getSelectedCurrency() != null)
         'currency_id': LocalStorage.getSelectedCurrency()?.id,
-      'lang': LocalStorage.getLanguage()?.locale
+      'lang': LocalStorage.getLanguage()?.locale,
     };
     try {
       final client = dioHttp.client(requireAuth: true);
@@ -245,7 +250,29 @@ class ParcelRepository implements ParcelRepositoryFacade {
       final client = dioHttp.client(requireAuth: true);
       var res = await client.get(
         '/api/v1/dashboard/user/order-$name-process?parcel_id=$orderId',
+        queryParameters: {if (name == "pay-fast") "type": 'mobile'},
       );
+      if (name == "pay-fast") {
+        final data = res.data["data"]["data"];
+        var payfast = Payfast(
+          passphrase: AppConstants.passphrase,
+          paymentType: PaymentType.simplePayment,
+          production: data["sandbox"] != 1,
+          merchantDetails: MerchantDetails(
+            merchantId: AppConstants.merchantId,
+            merchantKey: AppConstants.merchantKey,
+            notifyUrl: data["notify_url"],
+            cancelUrl: data["cancel_url"],
+            returnUrl: data["return_url"],
+            paymentId: res.data["data"]["id"].toString(),
+          ),
+        );
+        payfast.createSimplePayment(
+          amount: data["amount"].toString(),
+          itemName: data["item_name"],
+        );
+        return ApiResult.success(data: payfast.generateURL());
+      }
       return ApiResult.success(data: res.data["data"]["data"]["url"]);
     } catch (e) {
       debugPrint('==> add order review failure: $e');

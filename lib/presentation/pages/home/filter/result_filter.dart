@@ -4,29 +4,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/application/filter/filter_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/presentation/components/app_bars/common_app_bar.dart';
-import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/pages/home/home_one/widget/market_one_item.dart';
 import 'package:foodyman/presentation/pages/home/home_three/widgets/market_three_item.dart';
 
 import 'package:foodyman/application/filter/filter_notifier.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/market_item.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 import '../home_two/widget/market_two_item.dart';
 import '../shimmer/all_shop_shimmer.dart';
 
+import 'package:foodyman/presentation/components/components.dart';
 
 @RoutePage()
 class ResultFilterPage extends ConsumerStatefulWidget {
   final int categoryId;
 
-  const ResultFilterPage({
-    super.key,
-    required this.categoryId,
-  });
+  const ResultFilterPage({super.key, required this.categoryId});
 
   @override
   ConsumerState<ResultFilterPage> createState() => _ResultFilterState();
@@ -79,12 +72,18 @@ class _ResultFilterState extends ConsumerState<ResultFilterPage> {
               enablePullDown: true,
               onLoading: () {
                 event.fetchRestaurantPage(
-                    context, _restaurantController, widget.categoryId);
+                  context,
+                  _restaurantController,
+                  widget.categoryId,
+                );
               },
               onRefresh: () {
                 event.fetchRestaurantPage(
-                    context, _restaurantController, widget.categoryId,
-                    isRefresh: true);
+                  context,
+                  _restaurantController,
+                  widget.categoryId,
+                  isRefresh: true,
+                );
               },
               child: SingleChildScrollView(
                 child: Column(
@@ -95,8 +94,9 @@ class _ResultFilterState extends ConsumerState<ResultFilterPage> {
                         : Column(
                             children: [
                               TitleAndIcon(
-                                title:
-                                    AppHelpers.getTranslation(TrKeys.allShops),
+                                title: AppHelpers.getTranslation(
+                                  TrKeys.allShops,
+                                ),
                                 rightTitle:
                                     "${AppHelpers.getTranslation(TrKeys.found)} ${state.restaurant.length.toString()} ${AppHelpers.getTranslation(TrKeys.results)}",
                               ),
@@ -108,27 +108,25 @@ class _ResultFilterState extends ConsumerState<ResultFilterPage> {
                                 itemCount: state.restaurant.length,
                                 itemBuilder: (context, index) =>
                                     AppHelpers.getType() == 0
-                                        ? MarketItem(
-                                            shop: state.restaurant[index],
-                                            isSimpleShop: true,
-                                          )
-                                        : AppHelpers.getType() == 1
-                                            ? MarketOneItem(
-                                                shop: state.restaurant[index],
-                                                isSimpleShop: true,
-                                              )
-                                            : AppHelpers.getType() == 2
-                                                ? MarketTwoItem(
-                                                    shop:
-                                                        state.restaurant[index],
-                                                    isSimpleShop: true,
-                                                    isFilter: true,
-                                                  )
-                                                : MarketThreeItem(
-                                                    shop:
-                                                        state.restaurant[index],
-                                                    isSimpleShop: true,
-                                                  ),
+                                    ? MarketItem(
+                                        shop: state.restaurant[index],
+                                        isSimpleShop: true,
+                                      )
+                                    : AppHelpers.getType() == 1
+                                    ? MarketOneItem(
+                                        shop: state.restaurant[index],
+                                        isSimpleShop: true,
+                                      )
+                                    : AppHelpers.getType() == 2
+                                    ? MarketTwoItem(
+                                        shop: state.restaurant[index],
+                                        isSimpleShop: true,
+                                        isFilter: true,
+                                      )
+                                    : MarketThreeItem(
+                                        shop: state.restaurant[index],
+                                        isSimpleShop: true,
+                                      ),
                               ),
                             ],
                           ),
@@ -136,7 +134,7 @@ class _ResultFilterState extends ConsumerState<ResultFilterPage> {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,

@@ -50,9 +50,7 @@ class BannerThree extends StatelessWidget {
                     child: SlideAnimation(
                       verticalOffset: 50.0,
                       child: FadeInAnimation(
-                        child: BannerItemThree(
-                          banner: banners[index],
-                        ),
+                        child: BannerItemThree(banner: banners[index]),
                       ),
                     ),
                   );
@@ -63,20 +61,22 @@ class BannerThree extends StatelessWidget {
         ),
         if (banners.length > 2)
           SizedBox(
-              height: 8.r,
-              child: SmoothPageIndicator(
-                  controller: pageController,
-                  count: banners.length,
-                  effect: ExpandingDotsEffect(
-                    expansionFactor: 2.2,
-                    dotWidth: 8.r,
-                    strokeWidth: 10.r,
-                    dotHeight: 4.r,
-                    activeDotColor: AppStyle.black,
-                    dotColor: AppStyle.dotColor,
-                    paintStyle: PaintingStyle.fill,
-                  ),
-                  onDotClicked: (index) {})),
+            height: 8.r,
+            child: SmoothPageIndicator(
+              controller: pageController,
+              count: banners.length,
+              effect: ExpandingDotsEffect(
+                expansionFactor: 2.2,
+                dotWidth: 8.r,
+                strokeWidth: 10.r,
+                dotHeight: 4.r,
+                activeDotColor: AppStyle.black,
+                dotColor: AppStyle.dotColor,
+                paintStyle: PaintingStyle.fill,
+              ),
+              onDotClicked: (index) {},
+            ),
+          ),
         12.verticalSpace,
       ],
     );

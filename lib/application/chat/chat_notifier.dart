@@ -3,20 +3,20 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 
 import 'chat_state.dart';
 
-class ChatNotifier extends StateNotifier<ChatState> {
+class ChatNotifier extends Notifier<ChatState> {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
-  ChatNotifier() : super(ChatState(textController: TextEditingController()));
+  @override
+  ChatState build() => ChatState(textController: TextEditingController());
+
   String roleId = "";
 
   Future<void> fetchChats(BuildContext context, String roleId) async {
-    state = state.copyWith(isLoading: true,);
+    state = state.copyWith(isLoading: true);
     roleId = roleId;
     final userId = LocalStorage.getUser()?.id;
     QuerySnapshot? query;
@@ -30,30 +30,32 @@ class ChatNotifier extends StateNotifier<ChatState> {
       state = state.copyWith(isLoading: false);
       if (context.mounted) {
         AppHelpers.showCheckTopSnackBar(
-        context,
-        AppHelpers.getTranslation(TrKeys.errorWithConnectingToFirebase),
-      );
+          context,
+          AppHelpers.getTranslation(TrKeys.errorWithConnectingToFirebase),
+        );
       }
     }
 
     if (query?.size == 0) {
       final CollectionReference chats = _fireStore.collection('chats');
-      final res = await  chats.add({
+      final res = await chats.add({
         'shop_id': -1,
         'created_at': Timestamp.now(),
         "roleId": roleId,
         'user': {
-          'firstname':  LocalStorage.getUser()?.firstname,
+          'firstname': LocalStorage.getUser()?.firstname,
           'id': LocalStorage.getUser()?.id,
           'img': LocalStorage.getUser()?.img,
           'lastname': LocalStorage.getUser()?.lastname,
-        }
+        },
       });
       final String chatId = res.id;
       state = state.copyWith(chatId: chatId, isLoading: false);
     } else {
-      state =
-          state.copyWith(chatId: query?.docs.first.id ?? '', isLoading: false);
+      state = state.copyWith(
+        chatId: query?.docs.first.id ?? '',
+        isLoading: false,
+      );
     }
   }
 
@@ -62,16 +64,14 @@ class ChatNotifier extends StateNotifier<ChatState> {
       debugPrint('===> send message chat id ${state.chatId}');
       try {
         CollectionReference message = _fireStore.collection('messages');
-        message.add(
-          {
-            'chat_content': state.textController?.text.trim(),
-            "chat_id": state.chatId,
-            "created_at": Timestamp.now(),
-            "sender": 1,
-            "roleId": roleId,
-            'unread': true,
-          },
-        );
+        message.add({
+          'chat_content': state.textController?.text.trim(),
+          "chat_id": state.chatId,
+          "created_at": Timestamp.now(),
+          "sender": 1,
+          "roleId": roleId,
+          'unread': true,
+        });
         state.textController?.clear();
       } catch (e) {
         debugPrint('==> send message send $e');

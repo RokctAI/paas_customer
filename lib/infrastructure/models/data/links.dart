@@ -1,10 +1,5 @@
 class Links {
-  Links({
-    String? first,
-    String? last,
-    dynamic prev,
-    String? next,
-  }) {
+  Links({String? first, String? last, dynamic prev, String? next}) {
     _first = first;
     _last = last;
     _prev = prev;
@@ -23,12 +18,7 @@ class Links {
   dynamic _prev;
   String? _next;
 
-  Links copyWith({
-    String? first,
-    String? last,
-    dynamic prev,
-    String? next,
-  }) =>
+  Links copyWith({String? first, String? last, dynamic prev, String? next}) =>
       Links(
         first: first ?? _first,
         last: last ?? _last,

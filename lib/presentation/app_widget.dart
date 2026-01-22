@@ -1,14 +1,16 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/presentation/theme/app_theme.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:foodyman/application/app_widget/app_provider.dart';
+import 'package:foodyman/application/app/app_provider.dart';
 import 'package:foodyman/domain/di/dependency_manager.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
-
+import 'package:provider/provider.dart' as provider;
 import 'components/custom_range_slider.dart';
 import 'routes/app_router.dart';
 
@@ -18,10 +20,8 @@ class AppWidget extends ConsumerWidget {
   final appRouter = AppRouter();
 
   Future fetchSetting() async {
-    final connect = await Connectivity().checkConnectivity();
-    if (connect.contains(ConnectivityResult.mobile) ||
-        connect.contains(ConnectivityResult.ethernet) ||
-        connect.contains(ConnectivityResult.wifi)) {
+    final connect = await AppConnectivity.connectivity();
+    if (connect) {
       settingsRepository.getGlobalSettings();
       await settingsRepository.getLanguages();
       await settingsRepository.getMobileTranslations();
@@ -32,24 +32,26 @@ class AppWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.refresh(appProvider);
     return FutureBuilder(
-        future: Future.wait([
-          FlutterDisplayMode.setHighRefreshRate(),
-          if (LocalStorage.getTranslations().isEmpty) fetchSetting()
-        ]),
-        builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
-          return ScreenUtilInit(
-            useInheritedMediaQuery: false,
-            designSize: const Size(375, 812),
-            builder: (context, child) {
-              return RefreshConfiguration(
-                footerBuilder: () => const ClassicFooter(
-                  idleIcon: SizedBox(),
-                  idleText: "",
-                ),
-                headerBuilder: () => const WaterDropMaterialHeader(
-                  backgroundColor: AppStyle.white,
-                  color: AppStyle.textGrey,
-                ),
+      future: Future.wait([
+        AppTheme.create,
+        if (!Platform.isIOS) FlutterDisplayMode.setHighRefreshRate(),
+        if (LocalStorage.getTranslations().isEmpty) fetchSetting(),
+      ]),
+      builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
+        final AppTheme theme = snapshot.data?[0];
+        return ScreenUtilInit(
+          useInheritedMediaQuery: false,
+          designSize: const Size(375, 812),
+          builder: (context, child) {
+            return RefreshConfiguration(
+              footerBuilder: () =>
+                  const ClassicFooter(idleIcon: SizedBox(), idleText: ""),
+              headerBuilder: () => const WaterDropMaterialHeader(
+                backgroundColor: AppStyle.white,
+                color: AppStyle.textGrey,
+              ),
+              child: provider.ChangeNotifierProvider(
+                create: (BuildContext context) => theme,
                 child: MaterialApp.router(
                   debugShowCheckedModeBanner: false,
                   routerDelegate: appRouter.delegate(),
@@ -64,12 +66,12 @@ class AppWidget extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  themeMode:
-                      state.isDarkMode ? ThemeMode.dark : ThemeMode.light,
                 ),
-              );
-            },
-          );
-        });
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }

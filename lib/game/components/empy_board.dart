@@ -9,18 +9,23 @@ class EmptyBoardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = max(
-        290.0,
-        min((MediaQuery.sizeOf(context).shortestSide * 0.90).floorToDouble(),
-            460.0));
+      290.0,
+      min(
+        (MediaQuery.sizeOf(context).shortestSide * 0.90).floorToDouble(),
+        460.0,
+      ),
+    );
 
-     final sizePerTile = (size / 4).floorToDouble();
+    final sizePerTile = (size / 4).floorToDouble();
     final tileSize = sizePerTile - 12.0 - (12.0 / 4);
     final boardSize = sizePerTile * 4;
     return Container(
       width: boardSize,
       height: boardSize,
       decoration: BoxDecoration(
-          color: boardColor, borderRadius: BorderRadius.circular(6.0)),
+        color: boardColor,
+        borderRadius: BorderRadius.circular(6.0),
+      ),
       child: Stack(
         children: List.generate(16, (i) {
           //Render the empty board in 4x4 GridView
@@ -38,8 +43,9 @@ class EmptyBoardWidget extends StatelessWidget {
               width: tileSize,
               height: tileSize,
               decoration: BoxDecoration(
-                  color: emptyTileColor,
-                  borderRadius: BorderRadius.circular(6.0)),
+                color: emptyTileColor,
+                borderRadius: BorderRadius.circular(6.0),
+              ),
             ),
           );
         }),
