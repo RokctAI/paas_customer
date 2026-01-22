@@ -1,37 +1,36 @@
-
+import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:foodyman/domain/interface/parcel.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/services/app_connectivity.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/app_constants.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/marker_image_cropper.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import 'package:foodyman/domain/interface/draw.dart';
+import 'package:foodyman/domain/di/dependency_manager.dart';
+import '../../presentation/app_assets.dart';
 import 'parcel_state.dart';
 
-class ParcelNotifier extends StateNotifier<ParcelState> {
-  final ParcelRepositoryFacade _parcelRepository;
-  final DrawRepositoryFacade _drawRouting;
-
-  ParcelNotifier(this._parcelRepository, this._drawRouting)
-      : super(const ParcelState());
+import 'package:foodyman/presentation/components/components.dart';
+class ParcelNotifier extends Notifier<ParcelState> {
+  @override
+  ParcelState build() => const ParcelState();
 
   Future<void> addReview(
-      BuildContext context, String comment, double rating) async {
+    BuildContext context,
+    String comment,
+    double rating,
+  ) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isButtonLoading: true);
-      final response = await _parcelRepository.addReview(state.parcel?.id ?? 0,
-          rating: rating, comment: comment);
+      final response = await parcelRepository.addReview(
+        state.parcel?.id ?? 0,
+        rating: rating,
+        comment: comment,
+      );
       response.when(
         success: (data) async {
           state = state.copyWith(isButtonLoading: false);
@@ -40,10 +39,7 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
         failure: (failure, status) {
           state = state.copyWith(isButtonLoading: false);
           if (context.mounted) {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           }
         },
       );
@@ -54,15 +50,15 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
     }
   }
 
-  changeExpand() {
+  void changeExpand() {
     state = state.copyWith(expand: !state.expand);
   }
 
-  setPayment(PaymentData selectPayment) {
+  void setPayment(PaymentData selectPayment) {
     state = state.copyWith(selectPayment: selectPayment);
   }
 
-  changeAnonymous() {
+  void changeAnonymous() {
     state = state.copyWith(anonymous: !state.anonymous);
   }
 
@@ -70,7 +66,7 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isLoading: true);
-      final response = await _parcelRepository.getTypes();
+      final response = await parcelRepository.getTypes();
       response.when(
         success: (data) {
           state = state.copyWith(isLoading: false, types: data.data ?? []);
@@ -94,20 +90,18 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isLoading: true, error: false);
-      final response = await _parcelRepository.getCalculate(
-          typeId: state.types[state.selectType]?.id ?? 0,
-          from: state.locationFrom ?? LocationModel(),
-          to: state.locationTo ?? LocationModel());
+      final response = await parcelRepository.getCalculate(
+        typeId: state.types[state.selectType]?.id ?? 0,
+        from: state.locationFrom ?? LocationModel(),
+        to: state.locationTo ?? LocationModel(),
+      );
       response.when(
         success: (data) {
           state = state.copyWith(isLoading: false, calculate: data);
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false, error: true);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -140,13 +134,15 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
     final num wallet = LocalStorage.getWalletData()?.price ?? 0;
     if (state.selectPayment?.tag == "wallet" && wallet < totalPrice) {
       AppHelpers.showCheckTopSnackBarInfo(
-          context, AppHelpers.getTranslation(TrKeys.notEnoughMoney));
+        context,
+        AppHelpers.getTranslation(TrKeys.notEnoughMoney),
+      );
       return;
     }
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isLoading: true);
-      final response = await _parcelRepository.orderParcel(
+      final response = await parcelRepository.orderParcel(
         typeId: state.types[state.selectType]?.id ?? 0,
         from: state.locationFrom ?? LocationModel(),
         to: state.locationTo ?? LocationModel(),
@@ -171,25 +167,32 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
       response.when(
         success: (data) async {
           state = state.copyWith(isLoading: false);
-          int id = state.selectPayment?.id ??
+          int id =
+              state.selectPayment?.id ??
               LocalStorage.getSelectedCurrency()?.id ??
               0;
           switch (state.selectPayment?.tag) {
             case 'cash':
             case 'wallet':
-              _parcelRepository.createTransaction(
-                  orderId: data ?? 0, paymentId: id);
+              parcelRepository.createTransaction(
+                orderId: data ?? 0,
+                paymentId: id,
+              );
               context.replaceRoute(const ParcelListRoute());
               break;
             default:
-              _parcelRepository.createTransaction(
-                  orderId: data ?? 0, paymentId: id);
-              context.replaceRoute(const ParcelListRoute());
+              parcelRepository.createTransaction(
+                orderId: data ?? 0,
+                paymentId: id,
+              );
               await makePayment(
                 context,
                 state.selectPayment?.tag ?? 'cash',
                 data,
               );
+              if (context.mounted) {
+                context.replaceRoute(const ParcelListRoute());
+              }
               break;
           }
         },
@@ -214,31 +217,27 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
     int? orderId,
   ) async {
     try {
-      final response = await _parcelRepository.process(orderId ?? 0, name);
-      response.when(
+      final response = await parcelRepository.process(orderId ?? 0, name);
+      await response.when(
         success: (data) async {
-          // ignore: deprecated_member_use
-          await launch(
-            data,
-            enableJavaScript: true,
+          await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => WebViewPage(url: data)),
           );
         },
         failure: (failure, status) {
           state = state.copyWith(isButtonLoading: false);
           if (context.mounted) {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           }
         },
       );
     } catch (e) {
-      if(context.mounted) {
+      if (context.mounted) {
         AppHelpers.showCheckTopSnackBar(
-        context,
-        AppHelpers.getTranslation(TrKeys.paymentMethodFailed),
-      );
+          context,
+          AppHelpers.getTranslation(TrKeys.paymentMethodFailed),
+        );
       }
     }
   }
@@ -252,10 +251,11 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
     }
   }
 
-  void setToAddress(
-      {required String? title,
-      required LocationModel? location,
-      required BuildContext context}) {
+  void setToAddress({
+    required String? title,
+    required LocationModel? location,
+    required BuildContext context,
+  }) {
     state = state.copyWith(addressTo: title, locationTo: location);
     if (state.types.isNotEmpty &&
         state.addressFrom != null &&
@@ -264,10 +264,11 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
     }
   }
 
-  void setFromAddress(
-      {required String? title,
-      required LocationModel? location,
-      required BuildContext context}) {
+  void setFromAddress({
+    required String? title,
+    required LocationModel? location,
+    required BuildContext context,
+  }) {
     state = state.copyWith(addressFrom: title, locationFrom: location);
     if (state.types.isNotEmpty &&
         state.addressFrom != null &&
@@ -278,10 +279,11 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
 
   void switchAddress({required BuildContext context}) {
     state = state.copyWith(
-        addressFrom: state.addressTo,
-        locationFrom: state.locationTo,
-        addressTo: state.addressFrom,
-        locationTo: state.locationFrom);
+      addressFrom: state.addressTo,
+      locationFrom: state.locationTo,
+      addressTo: state.addressFrom,
+      locationTo: state.locationFrom,
+    );
     if (state.types.isNotEmpty &&
         state.addressFrom != null &&
         state.addressTo != null) {
@@ -293,39 +295,59 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
     state = state.copyWith(time: time);
   }
 
+  Future<BitmapDescriptor> getResizedMarker(String assetPath, int width) async {
+    final byteData = await rootBundle.load(assetPath);
+    final codec = await instantiateImageCodec(
+      byteData.buffer.asUint8List(),
+      targetWidth: width,
+    );
+    final frame = await codec.getNextFrame();
+    final data = await frame.image.toByteData(format: ImageByteFormat.png);
+
+    return BitmapDescriptor.fromBytes(data!.buffer.asUint8List());
+  }
+
   Future<void> showParcel(
-      BuildContext context, num orderId, bool isRefresh) async {
+    BuildContext context,
+    num orderId,
+    bool isRefresh,
+  ) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       if (!isRefresh) {
         state = state.copyWith(isLoading: true);
       }
 
-      final response = await _parcelRepository.getSingleParcel(orderId);
+      final response = await parcelRepository.getSingleParcel(orderId);
       response.when(
         success: (data) async {
           final ImageCropperForMarker image = ImageCropperForMarker();
           if (!isRefresh) {
             state = state.copyWith(
-                parcel: data, isLoading: false, isMapLoading: true);
+              parcel: data,
+              isLoading: false,
+              isMapLoading: true,
+            );
             Map<MarkerId, Marker> list = {
               const MarkerId("Shop"): Marker(
-                  markerId: const MarkerId("Shop"),
-                  position: LatLng(
-                    data.addressFrom?.latitude ?? AppConstants.demoLatitude,
-                    data.addressFrom?.longitude ?? AppConstants.demoLongitude,
-                  ),
-                  icon: await image.resizeAndCircle(data.user?.img ?? "", 120)),
+                markerId: const MarkerId("Shop"),
+                position: LatLng(
+                  data.addressFrom?.latitude ?? AppConstants.demoLatitude,
+                  data.addressFrom?.longitude ?? AppConstants.demoLongitude,
+                ),
+                icon: await getResizedMarker(Assets.userMarker, 100),
+              ),
               const MarkerId("User"): Marker(
-                  markerId: const MarkerId("User"),
-                  position: LatLng(
-                    data.addressTo?.latitude ?? AppConstants.demoLatitude,
-                    data.addressTo?.longitude ?? AppConstants.demoLongitude,
-                  ),
-                  icon: await image.resizeAndCircle("", 120)),
+                markerId: const MarkerId("User"),
+                position: LatLng(
+                  data.addressTo?.latitude ?? AppConstants.demoLatitude,
+                  data.addressTo?.longitude ?? AppConstants.demoLongitude,
+                ),
+                icon: await image.resizeAndCircle("", 120),
+              ),
             };
             state = state.copyWith(markers: list, isMapLoading: false);
-            if(context.mounted) {
+            if (context.mounted) {
               getRoutingAll(
                 context: context,
                 end: LatLng(
@@ -335,25 +357,28 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
                 start: LatLng(
                   data.addressFrom?.latitude ?? AppConstants.demoLatitude,
                   data.addressFrom?.longitude ?? AppConstants.demoLongitude,
-                ));
+                ),
+              );
             }
           } else {
             state = state.copyWith(parcel: data);
             Map<MarkerId, Marker> list = {
               const MarkerId("Shop"): Marker(
-                  markerId: const MarkerId("Shop"),
-                  position: LatLng(
-                    data.addressFrom?.latitude ?? AppConstants.demoLatitude,
-                    data.addressFrom?.longitude ?? AppConstants.demoLongitude,
-                  ),
-                  icon: await image.resizeAndCircle(data.user?.img ?? "", 120)),
+                markerId: const MarkerId("Shop"),
+                position: LatLng(
+                  data.addressFrom?.latitude ?? AppConstants.demoLatitude,
+                  data.addressFrom?.longitude ?? AppConstants.demoLongitude,
+                ),
+                icon: await getResizedMarker(Assets.userMarker, 100),
+              ),
               const MarkerId("User"): Marker(
-                  markerId: const MarkerId("User"),
-                  position: LatLng(
-                    data.addressTo?.latitude ?? AppConstants.demoLatitude,
-                    data.addressTo?.longitude ?? AppConstants.demoLongitude,
-                  ),
-                  icon: await image.resizeAndCircle("", 120)),
+                markerId: const MarkerId("User"),
+                position: LatLng(
+                  data.addressTo?.latitude ?? AppConstants.demoLatitude,
+                  data.addressTo?.longitude ?? AppConstants.demoLongitude,
+                ),
+                icon: await image.resizeAndCircle("", 120),
+              ),
             };
 
             state = state.copyWith(markers: list);
@@ -364,10 +389,7 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
             state = state.copyWith(isLoading: false);
           }
           if (context.mounted) {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           }
         },
       );
@@ -385,7 +407,7 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
   }) async {
     if (await AppConnectivity.connectivity()) {
       state = state.copyWith(polylineCoordinates: []);
-      final response = await _drawRouting.getRouting(start: start, end: end);
+      final response = await drawRepository.getRouting(start: start, end: end);
       response.when(
         success: (data) {
           List<LatLng> list = [];
@@ -393,9 +415,7 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
           for (int i = 0; i < ls.length; i++) {
             list.add(LatLng(ls[i][1], ls[i][0]));
           }
-          state = state.copyWith(
-            polylineCoordinates: list,
-          );
+          state = state.copyWith(polylineCoordinates: list);
         },
         failure: (failure, status) {
           state = state.copyWith(polylineCoordinates: []);

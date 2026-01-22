@@ -1,5 +1,3 @@
-
-
 import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
 
 class AddressesResponse {
@@ -37,13 +35,12 @@ class AddressesResponse {
     bool? status,
     String? message,
     List<AddressNewModel>? data,
-  }) =>
-      AddressesResponse(
-        timestamp: timestamp ?? _timestamp,
-        status: status ?? _status,
-        message: message ?? _message,
-        data: data ?? _data,
-      );
+  }) => AddressesResponse(
+    timestamp: timestamp ?? _timestamp,
+    status: status ?? _status,
+    message: message ?? _message,
+    data: data ?? _data,
+  );
 
   String? get timestamp => _timestamp;
 

@@ -1,11 +1,10 @@
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
+
 part 'edit_profile_state.freezed.dart';
 
 @freezed
-class EditProfileState with _$EditProfileState {
-
+abstract class EditProfileState with _$EditProfileState {
   const factory EditProfileState({
     @Default(false) bool isLoading,
     @Default(false) bool checked,

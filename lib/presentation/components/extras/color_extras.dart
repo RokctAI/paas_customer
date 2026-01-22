@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-
 import 'package:foodyman/infrastructure/models/data/typed_extra.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
@@ -46,8 +44,10 @@ class ColorExtras extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(11.r),
                             color: AppStyle.primary,
-                            border:
-                                Border.all(color: AppStyle.white, width: 8.r),
+                            border: Border.all(
+                              color: AppStyle.white,
+                              width: 8.r,
+                            ),
                           ),
                         ),
                       )

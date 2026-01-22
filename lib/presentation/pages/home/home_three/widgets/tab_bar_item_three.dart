@@ -9,13 +9,14 @@ class TabBarItemThree extends StatelessWidget {
   final int? currentIndex;
   final VoidCallback onTap;
 
-  const TabBarItemThree(
-      {super.key,
-      required this.title,
-      required this.index,
-      this.isShopTabBar = false,
-      this.currentIndex,
-      required this.onTap});
+  const TabBarItemThree({
+    super.key,
+    required this.title,
+    required this.index,
+    this.isShopTabBar = false,
+    this.currentIndex,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class TabBarItemThree extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.r),
           boxShadow: [
             BoxShadow(
-              color: AppStyle.bgGrey.withOpacity(0.07),
+              color: AppStyle.bgGrey.withValues(alpha: 0.07),
               spreadRadius: 0,
               blurRadius: 2,
               offset: const Offset(0, 1), // changes position of shadow
@@ -42,10 +43,7 @@ class TabBarItemThree extends StatelessWidget {
         child: Center(
           child: Text(
             title,
-            style: AppStyle.interNormal(
-              size: 13,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interNormal(size: 13, color: AppStyle.black),
           ),
         ),
       ),

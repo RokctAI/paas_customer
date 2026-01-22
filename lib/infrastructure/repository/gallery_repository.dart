@@ -5,8 +5,7 @@ import 'package:foodyman/domain/interface/gallery.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:foodyman/infrastructure/models/response/multi_gallery_upload_response.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 
 class GalleryRepository implements GalleryRepositoryFacade {
   @override
@@ -40,16 +39,11 @@ class GalleryRepository implements GalleryRepositoryFacade {
       case UploadType.users:
         type = 'users';
         break;
-      default:
-        type = 'extras';
-        break;
     }
-    final data = FormData.fromMap(
-      {
-        'image': await MultipartFile.fromFile(file),
-        'type': type,
-      },
-    );
+    final data = FormData.fromMap({
+      'image': await MultipartFile.fromFile(file),
+      'type': type,
+    });
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
@@ -70,9 +64,9 @@ class GalleryRepository implements GalleryRepositoryFacade {
 
   @override
   Future<ApiResult<MultiGalleryUploadResponse>> uploadMultiImage(
-      List<String?> filePaths,
-      UploadType uploadType,
-      ) async {
+    List<String?> filePaths,
+    UploadType uploadType,
+  ) async {
     String type = '';
     switch (uploadType) {
       case UploadType.shopsLogo:
@@ -85,14 +79,12 @@ class GalleryRepository implements GalleryRepositoryFacade {
         type = uploadType.name;
         break;
     }
-    final data = FormData.fromMap(
-      {
-        for (int i = 0; i < filePaths.length; i++)
-          if (filePaths[i] != null)
-            'images[$i]': await MultipartFile.fromFile(filePaths[i]!),
-        'type': type,
-      },
-    );
+    final data = FormData.fromMap({
+      for (int i = 0; i < filePaths.length; i++)
+        if (filePaths[i] != null)
+          'images[$i]': await MultipartFile.fromFile(filePaths[i]!),
+      'type': type,
+    });
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
@@ -110,5 +102,4 @@ class GalleryRepository implements GalleryRepositoryFacade {
       );
     }
   }
-
 }

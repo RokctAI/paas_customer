@@ -14,7 +14,7 @@ class CategoryOneShimmer extends StatelessWidget {
       child: AnimationLimiter(
         child: ListView.builder(
           shrinkWrap: true,
-          
+
           scrollDirection: Axis.horizontal,
           itemCount: 5,
           itemBuilder: (context, index) {
@@ -27,9 +27,7 @@ class CategoryOneShimmer extends StatelessWidget {
                   child: Container(
                     width: 84.w,
                     height: 84.h,
-                    margin: EdgeInsets.only(
-                      left: 8.w,
-                    ),
+                    margin: EdgeInsets.only(left: 8.w),
                     decoration: BoxDecoration(
                       color: AppStyle.shimmerBase,
                       borderRadius: BorderRadius.circular(10.r),

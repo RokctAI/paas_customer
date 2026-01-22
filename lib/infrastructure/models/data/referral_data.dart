@@ -11,17 +11,17 @@ class ReferralModel {
   String? updatedAt;
   Translation? translation;
 
-  ReferralModel(
-      {this.id,
-        this.active,
-        this.priceFrom,
-        this.priceTo,
-        this.img,
-        this.expiredAt,
-        this.createdAt,
-        this.updatedAt,
-        this.translation,
-      });
+  ReferralModel({
+    this.id,
+    this.active,
+    this.priceFrom,
+    this.priceTo,
+    this.img,
+    this.expiredAt,
+    this.createdAt,
+    this.updatedAt,
+    this.translation,
+  });
 
   ReferralModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -53,4 +53,3 @@ class ReferralModel {
     return data;
   }
 }
-

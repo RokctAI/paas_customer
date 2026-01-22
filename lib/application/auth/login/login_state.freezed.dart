@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,381 +9,305 @@ part of 'login_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$LoginState {
-  bool get isLoading => throw _privateConstructorUsedError;
-  bool get showPassword => throw _privateConstructorUsedError;
-  bool get isKeepLogin => throw _privateConstructorUsedError;
-  bool get isProfileDetailsLoading => throw _privateConstructorUsedError;
-  bool get isLoginError => throw _privateConstructorUsedError;
-  bool get isEmailNotValid => throw _privateConstructorUsedError;
-  bool get isPasswordNotValid => throw _privateConstructorUsedError;
-  bool get isSelectLanguage => throw _privateConstructorUsedError;
-  List<LanguageData> get list => throw _privateConstructorUsedError;
-  String get email => throw _privateConstructorUsedError;
-  String get password => throw _privateConstructorUsedError;
 
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $LoginStateCopyWith<LoginState> get copyWith =>
-      throw _privateConstructorUsedError;
+ bool get isLoading; bool get showPassword; bool get isKeepLogin; bool get isProfileDetailsLoading; bool get isLoginError; bool get isEmailNotValid; bool get isPasswordNotValid; bool get isSelectLanguage; List<LanguageData> get list; String get email; String get phone; String get password; bool get isAgreedToTerms;
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$LoginStateCopyWith<LoginState> get copyWith => _$LoginStateCopyWithImpl<LoginState>(this as LoginState, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is LoginState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.showPassword, showPassword) || other.showPassword == showPassword)&&(identical(other.isKeepLogin, isKeepLogin) || other.isKeepLogin == isKeepLogin)&&(identical(other.isProfileDetailsLoading, isProfileDetailsLoading) || other.isProfileDetailsLoading == isProfileDetailsLoading)&&(identical(other.isLoginError, isLoginError) || other.isLoginError == isLoginError)&&(identical(other.isEmailNotValid, isEmailNotValid) || other.isEmailNotValid == isEmailNotValid)&&(identical(other.isPasswordNotValid, isPasswordNotValid) || other.isPasswordNotValid == isPasswordNotValid)&&(identical(other.isSelectLanguage, isSelectLanguage) || other.isSelectLanguage == isSelectLanguage)&&const DeepCollectionEquality().equals(other.list, list)&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.password, password) || other.password == password)&&(identical(other.isAgreedToTerms, isAgreedToTerms) || other.isAgreedToTerms == isAgreedToTerms));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,isLoading,showPassword,isKeepLogin,isProfileDetailsLoading,isLoginError,isEmailNotValid,isPasswordNotValid,isSelectLanguage,const DeepCollectionEquality().hash(list),email,phone,password,isAgreedToTerms);
+
+@override
+String toString() {
+  return 'LoginState(isLoading: $isLoading, showPassword: $showPassword, isKeepLogin: $isKeepLogin, isProfileDetailsLoading: $isProfileDetailsLoading, isLoginError: $isLoginError, isEmailNotValid: $isEmailNotValid, isPasswordNotValid: $isPasswordNotValid, isSelectLanguage: $isSelectLanguage, list: $list, email: $email, phone: $phone, password: $password, isAgreedToTerms: $isAgreedToTerms)';
+}
+
+
 }
 
 /// @nodoc
-abstract class $LoginStateCopyWith<$Res> {
-  factory $LoginStateCopyWith(
-          LoginState value, $Res Function(LoginState) then) =
-      _$LoginStateCopyWithImpl<$Res, LoginState>;
-  @useResult
-  $Res call(
-      {bool isLoading,
-      bool showPassword,
-      bool isKeepLogin,
-      bool isProfileDetailsLoading,
-      bool isLoginError,
-      bool isEmailNotValid,
-      bool isPasswordNotValid,
-      bool isSelectLanguage,
-      List<LanguageData> list,
-      String email,
-      String password});
-}
+abstract mixin class $LoginStateCopyWith<$Res>  {
+  factory $LoginStateCopyWith(LoginState value, $Res Function(LoginState) _then) = _$LoginStateCopyWithImpl;
+@useResult
+$Res call({
+ bool isLoading, bool showPassword, bool isKeepLogin, bool isProfileDetailsLoading, bool isLoginError, bool isEmailNotValid, bool isPasswordNotValid, bool isSelectLanguage, List<LanguageData> list, String email, String phone, String password, bool isAgreedToTerms
+});
 
+
+
+
+}
 /// @nodoc
-class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
+class _$LoginStateCopyWithImpl<$Res>
     implements $LoginStateCopyWith<$Res> {
-  _$LoginStateCopyWithImpl(this._value, this._then);
+  _$LoginStateCopyWithImpl(this._self, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+  final LoginState _self;
+  final $Res Function(LoginState) _then;
 
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? isLoading = null,
-    Object? showPassword = null,
-    Object? isKeepLogin = null,
-    Object? isProfileDetailsLoading = null,
-    Object? isLoginError = null,
-    Object? isEmailNotValid = null,
-    Object? isPasswordNotValid = null,
-    Object? isSelectLanguage = null,
-    Object? list = null,
-    Object? email = null,
-    Object? password = null,
-  }) {
-    return _then(_value.copyWith(
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      showPassword: null == showPassword
-          ? _value.showPassword
-          : showPassword // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isKeepLogin: null == isKeepLogin
-          ? _value.isKeepLogin
-          : isKeepLogin // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isProfileDetailsLoading: null == isProfileDetailsLoading
-          ? _value.isProfileDetailsLoading
-          : isProfileDetailsLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isLoginError: null == isLoginError
-          ? _value.isLoginError
-          : isLoginError // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isEmailNotValid: null == isEmailNotValid
-          ? _value.isEmailNotValid
-          : isEmailNotValid // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isPasswordNotValid: null == isPasswordNotValid
-          ? _value.isPasswordNotValid
-          : isPasswordNotValid // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isSelectLanguage: null == isSelectLanguage
-          ? _value.isSelectLanguage
-          : isSelectLanguage // ignore: cast_nullable_to_non_nullable
-              as bool,
-      list: null == list
-          ? _value.list
-          : list // ignore: cast_nullable_to_non_nullable
-              as List<LanguageData>,
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      password: null == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') @override $Res call({Object? isLoading = null,Object? showPassword = null,Object? isKeepLogin = null,Object? isProfileDetailsLoading = null,Object? isLoginError = null,Object? isEmailNotValid = null,Object? isPasswordNotValid = null,Object? isSelectLanguage = null,Object? list = null,Object? email = null,Object? phone = null,Object? password = null,Object? isAgreedToTerms = null,}) {
+  return _then(_self.copyWith(
+isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,showPassword: null == showPassword ? _self.showPassword : showPassword // ignore: cast_nullable_to_non_nullable
+as bool,isKeepLogin: null == isKeepLogin ? _self.isKeepLogin : isKeepLogin // ignore: cast_nullable_to_non_nullable
+as bool,isProfileDetailsLoading: null == isProfileDetailsLoading ? _self.isProfileDetailsLoading : isProfileDetailsLoading // ignore: cast_nullable_to_non_nullable
+as bool,isLoginError: null == isLoginError ? _self.isLoginError : isLoginError // ignore: cast_nullable_to_non_nullable
+as bool,isEmailNotValid: null == isEmailNotValid ? _self.isEmailNotValid : isEmailNotValid // ignore: cast_nullable_to_non_nullable
+as bool,isPasswordNotValid: null == isPasswordNotValid ? _self.isPasswordNotValid : isPasswordNotValid // ignore: cast_nullable_to_non_nullable
+as bool,isSelectLanguage: null == isSelectLanguage ? _self.isSelectLanguage : isSelectLanguage // ignore: cast_nullable_to_non_nullable
+as bool,list: null == list ? _self.list : list // ignore: cast_nullable_to_non_nullable
+as List<LanguageData>,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
+as String,isAgreedToTerms: null == isAgreedToTerms ? _self.isAgreedToTerms : isAgreedToTerms // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
 }
 
-/// @nodoc
-abstract class _$$LoginStateImplCopyWith<$Res>
-    implements $LoginStateCopyWith<$Res> {
-  factory _$$LoginStateImplCopyWith(
-          _$LoginStateImpl value, $Res Function(_$LoginStateImpl) then) =
-      __$$LoginStateImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {bool isLoading,
-      bool showPassword,
-      bool isKeepLogin,
-      bool isProfileDetailsLoading,
-      bool isLoginError,
-      bool isEmailNotValid,
-      bool isPasswordNotValid,
-      bool isSelectLanguage,
-      List<LanguageData> list,
-      String email,
-      String password});
 }
 
-/// @nodoc
-class __$$LoginStateImplCopyWithImpl<$Res>
-    extends _$LoginStateCopyWithImpl<$Res, _$LoginStateImpl>
-    implements _$$LoginStateImplCopyWith<$Res> {
-  __$$LoginStateImplCopyWithImpl(
-      _$LoginStateImpl _value, $Res Function(_$LoginStateImpl) _then)
-      : super(_value, _then);
 
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? isLoading = null,
-    Object? showPassword = null,
-    Object? isKeepLogin = null,
-    Object? isProfileDetailsLoading = null,
-    Object? isLoginError = null,
-    Object? isEmailNotValid = null,
-    Object? isPasswordNotValid = null,
-    Object? isSelectLanguage = null,
-    Object? list = null,
-    Object? email = null,
-    Object? password = null,
-  }) {
-    return _then(_$LoginStateImpl(
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      showPassword: null == showPassword
-          ? _value.showPassword
-          : showPassword // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isKeepLogin: null == isKeepLogin
-          ? _value.isKeepLogin
-          : isKeepLogin // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isProfileDetailsLoading: null == isProfileDetailsLoading
-          ? _value.isProfileDetailsLoading
-          : isProfileDetailsLoading // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isLoginError: null == isLoginError
-          ? _value.isLoginError
-          : isLoginError // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isEmailNotValid: null == isEmailNotValid
-          ? _value.isEmailNotValid
-          : isEmailNotValid // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isPasswordNotValid: null == isPasswordNotValid
-          ? _value.isPasswordNotValid
-          : isPasswordNotValid // ignore: cast_nullable_to_non_nullable
-              as bool,
-      isSelectLanguage: null == isSelectLanguage
-          ? _value.isSelectLanguage
-          : isSelectLanguage // ignore: cast_nullable_to_non_nullable
-              as bool,
-      list: null == list
-          ? _value._list
-          : list // ignore: cast_nullable_to_non_nullable
-              as List<LanguageData>,
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      password: null == password
-          ? _value.password
-          : password // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
+/// Adds pattern-matching-related methods to [LoginState].
+extension LoginStatePatterns on LoginState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>(TResult Function( _LoginState value)?  $default,{required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case _LoginState() when $default != null:
+return $default(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>(TResult Function( _LoginState value)  $default,){
+final _that = this;
+switch (_that) {
+case _LoginState():
+return $default(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>(TResult? Function( _LoginState value)?  $default,){
+final _that = this;
+switch (_that) {
+case _LoginState() when $default != null:
+return $default(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( bool isLoading,  bool showPassword,  bool isKeepLogin,  bool isProfileDetailsLoading,  bool isLoginError,  bool isEmailNotValid,  bool isPasswordNotValid,  bool isSelectLanguage,  List<LanguageData> list,  String email,  String phone,  String password,  bool isAgreedToTerms)?  $default,{required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case _LoginState() when $default != null:
+return $default(_that.isLoading,_that.showPassword,_that.isKeepLogin,_that.isProfileDetailsLoading,_that.isLoginError,_that.isEmailNotValid,_that.isPasswordNotValid,_that.isSelectLanguage,_that.list,_that.email,_that.phone,_that.password,_that.isAgreedToTerms);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( bool isLoading,  bool showPassword,  bool isKeepLogin,  bool isProfileDetailsLoading,  bool isLoginError,  bool isEmailNotValid,  bool isPasswordNotValid,  bool isSelectLanguage,  List<LanguageData> list,  String email,  String phone,  String password,  bool isAgreedToTerms)  $default,) {final _that = this;
+switch (_that) {
+case _LoginState():
+return $default(_that.isLoading,_that.showPassword,_that.isKeepLogin,_that.isProfileDetailsLoading,_that.isLoginError,_that.isEmailNotValid,_that.isPasswordNotValid,_that.isSelectLanguage,_that.list,_that.email,_that.phone,_that.password,_that.isAgreedToTerms);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( bool isLoading,  bool showPassword,  bool isKeepLogin,  bool isProfileDetailsLoading,  bool isLoginError,  bool isEmailNotValid,  bool isPasswordNotValid,  bool isSelectLanguage,  List<LanguageData> list,  String email,  String phone,  String password,  bool isAgreedToTerms)?  $default,) {final _that = this;
+switch (_that) {
+case _LoginState() when $default != null:
+return $default(_that.isLoading,_that.showPassword,_that.isKeepLogin,_that.isProfileDetailsLoading,_that.isLoginError,_that.isEmailNotValid,_that.isPasswordNotValid,_that.isSelectLanguage,_that.list,_that.email,_that.phone,_that.password,_that.isAgreedToTerms);case _:
+  return null;
+
+}
+}
+
 }
 
 /// @nodoc
 
-class _$LoginStateImpl extends _LoginState {
-  const _$LoginStateImpl(
-      {this.isLoading = false,
-      this.showPassword = false,
-      this.isKeepLogin = false,
-      this.isProfileDetailsLoading = false,
-      this.isLoginError = false,
-      this.isEmailNotValid = false,
-      this.isPasswordNotValid = false,
-      this.isSelectLanguage = true,
-      final List<LanguageData> list = const [],
-      this.email = '',
-      this.password = ''})
-      : _list = list,
-        super._();
 
-  @override
-  @JsonKey()
-  final bool isLoading;
-  @override
-  @JsonKey()
-  final bool showPassword;
-  @override
-  @JsonKey()
-  final bool isKeepLogin;
-  @override
-  @JsonKey()
-  final bool isProfileDetailsLoading;
-  @override
-  @JsonKey()
-  final bool isLoginError;
-  @override
-  @JsonKey()
-  final bool isEmailNotValid;
-  @override
-  @JsonKey()
-  final bool isPasswordNotValid;
-  @override
-  @JsonKey()
-  final bool isSelectLanguage;
-  final List<LanguageData> _list;
-  @override
-  @JsonKey()
-  List<LanguageData> get list {
-    if (_list is EqualUnmodifiableListView) return _list;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_list);
-  }
+class _LoginState extends LoginState {
+  const _LoginState({this.isLoading = false, this.showPassword = false, this.isKeepLogin = false, this.isProfileDetailsLoading = false, this.isLoginError = false, this.isEmailNotValid = false, this.isPasswordNotValid = false, this.isSelectLanguage = true, final  List<LanguageData> list = const [], this.email = '', this.phone = '', this.password = '', this.isAgreedToTerms = false}): _list = list,super._();
+  
 
-  @override
-  @JsonKey()
-  final String email;
-  @override
-  @JsonKey()
-  final String password;
-
-  @override
-  String toString() {
-    return 'LoginState(isLoading: $isLoading, showPassword: $showPassword, isKeepLogin: $isKeepLogin, isProfileDetailsLoading: $isProfileDetailsLoading, isLoginError: $isLoginError, isEmailNotValid: $isEmailNotValid, isPasswordNotValid: $isPasswordNotValid, isSelectLanguage: $isSelectLanguage, list: $list, email: $email, password: $password)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$LoginStateImpl &&
-            (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading) &&
-            (identical(other.showPassword, showPassword) ||
-                other.showPassword == showPassword) &&
-            (identical(other.isKeepLogin, isKeepLogin) ||
-                other.isKeepLogin == isKeepLogin) &&
-            (identical(
-                    other.isProfileDetailsLoading, isProfileDetailsLoading) ||
-                other.isProfileDetailsLoading == isProfileDetailsLoading) &&
-            (identical(other.isLoginError, isLoginError) ||
-                other.isLoginError == isLoginError) &&
-            (identical(other.isEmailNotValid, isEmailNotValid) ||
-                other.isEmailNotValid == isEmailNotValid) &&
-            (identical(other.isPasswordNotValid, isPasswordNotValid) ||
-                other.isPasswordNotValid == isPasswordNotValid) &&
-            (identical(other.isSelectLanguage, isSelectLanguage) ||
-                other.isSelectLanguage == isSelectLanguage) &&
-            const DeepCollectionEquality().equals(other._list, _list) &&
-            (identical(other.email, email) || other.email == email) &&
-            (identical(other.password, password) ||
-                other.password == password));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      isLoading,
-      showPassword,
-      isKeepLogin,
-      isProfileDetailsLoading,
-      isLoginError,
-      isEmailNotValid,
-      isPasswordNotValid,
-      isSelectLanguage,
-      const DeepCollectionEquality().hash(_list),
-      email,
-      password);
-
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$LoginStateImplCopyWith<_$LoginStateImpl> get copyWith =>
-      __$$LoginStateImplCopyWithImpl<_$LoginStateImpl>(this, _$identity);
+@override@JsonKey() final  bool isLoading;
+@override@JsonKey() final  bool showPassword;
+@override@JsonKey() final  bool isKeepLogin;
+@override@JsonKey() final  bool isProfileDetailsLoading;
+@override@JsonKey() final  bool isLoginError;
+@override@JsonKey() final  bool isEmailNotValid;
+@override@JsonKey() final  bool isPasswordNotValid;
+@override@JsonKey() final  bool isSelectLanguage;
+ final  List<LanguageData> _list;
+@override@JsonKey() List<LanguageData> get list {
+  if (_list is EqualUnmodifiableListView) return _list;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_list);
 }
 
-abstract class _LoginState extends LoginState {
-  const factory _LoginState(
-      {final bool isLoading,
-      final bool showPassword,
-      final bool isKeepLogin,
-      final bool isProfileDetailsLoading,
-      final bool isLoginError,
-      final bool isEmailNotValid,
-      final bool isPasswordNotValid,
-      final bool isSelectLanguage,
-      final List<LanguageData> list,
-      final String email,
-      final String password}) = _$LoginStateImpl;
-  const _LoginState._() : super._();
+@override@JsonKey() final  String email;
+@override@JsonKey() final  String phone;
+@override@JsonKey() final  String password;
+@override@JsonKey() final  bool isAgreedToTerms;
 
-  @override
-  bool get isLoading;
-  @override
-  bool get showPassword;
-  @override
-  bool get isKeepLogin;
-  @override
-  bool get isProfileDetailsLoading;
-  @override
-  bool get isLoginError;
-  @override
-  bool get isEmailNotValid;
-  @override
-  bool get isPasswordNotValid;
-  @override
-  bool get isSelectLanguage;
-  @override
-  List<LanguageData> get list;
-  @override
-  String get email;
-  @override
-  String get password;
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@override @JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+_$LoginStateCopyWith<_LoginState> get copyWith => __$LoginStateCopyWithImpl<_LoginState>(this, _$identity);
 
-  /// Create a copy of LoginState
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LoginStateImplCopyWith<_$LoginStateImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoginState&&(identical(other.isLoading, isLoading) || other.isLoading == isLoading)&&(identical(other.showPassword, showPassword) || other.showPassword == showPassword)&&(identical(other.isKeepLogin, isKeepLogin) || other.isKeepLogin == isKeepLogin)&&(identical(other.isProfileDetailsLoading, isProfileDetailsLoading) || other.isProfileDetailsLoading == isProfileDetailsLoading)&&(identical(other.isLoginError, isLoginError) || other.isLoginError == isLoginError)&&(identical(other.isEmailNotValid, isEmailNotValid) || other.isEmailNotValid == isEmailNotValid)&&(identical(other.isPasswordNotValid, isPasswordNotValid) || other.isPasswordNotValid == isPasswordNotValid)&&(identical(other.isSelectLanguage, isSelectLanguage) || other.isSelectLanguage == isSelectLanguage)&&const DeepCollectionEquality().equals(other._list, _list)&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.password, password) || other.password == password)&&(identical(other.isAgreedToTerms, isAgreedToTerms) || other.isAgreedToTerms == isAgreedToTerms));
 }
+
+
+@override
+int get hashCode => Object.hash(runtimeType,isLoading,showPassword,isKeepLogin,isProfileDetailsLoading,isLoginError,isEmailNotValid,isPasswordNotValid,isSelectLanguage,const DeepCollectionEquality().hash(_list),email,phone,password,isAgreedToTerms);
+
+@override
+String toString() {
+  return 'LoginState(isLoading: $isLoading, showPassword: $showPassword, isKeepLogin: $isKeepLogin, isProfileDetailsLoading: $isProfileDetailsLoading, isLoginError: $isLoginError, isEmailNotValid: $isEmailNotValid, isPasswordNotValid: $isPasswordNotValid, isSelectLanguage: $isSelectLanguage, list: $list, email: $email, phone: $phone, password: $password, isAgreedToTerms: $isAgreedToTerms)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class _$LoginStateCopyWith<$Res> implements $LoginStateCopyWith<$Res> {
+  factory _$LoginStateCopyWith(_LoginState value, $Res Function(_LoginState) _then) = __$LoginStateCopyWithImpl;
+@override @useResult
+$Res call({
+ bool isLoading, bool showPassword, bool isKeepLogin, bool isProfileDetailsLoading, bool isLoginError, bool isEmailNotValid, bool isPasswordNotValid, bool isSelectLanguage, List<LanguageData> list, String email, String phone, String password, bool isAgreedToTerms
+});
+
+
+
+
+}
+/// @nodoc
+class __$LoginStateCopyWithImpl<$Res>
+    implements _$LoginStateCopyWith<$Res> {
+  __$LoginStateCopyWithImpl(this._self, this._then);
+
+  final _LoginState _self;
+  final $Res Function(_LoginState) _then;
+
+/// Create a copy of LoginState
+/// with the given fields replaced by the non-null parameter values.
+@override @pragma('vm:prefer-inline') $Res call({Object? isLoading = null,Object? showPassword = null,Object? isKeepLogin = null,Object? isProfileDetailsLoading = null,Object? isLoginError = null,Object? isEmailNotValid = null,Object? isPasswordNotValid = null,Object? isSelectLanguage = null,Object? list = null,Object? email = null,Object? phone = null,Object? password = null,Object? isAgreedToTerms = null,}) {
+  return _then(_LoginState(
+isLoading: null == isLoading ? _self.isLoading : isLoading // ignore: cast_nullable_to_non_nullable
+as bool,showPassword: null == showPassword ? _self.showPassword : showPassword // ignore: cast_nullable_to_non_nullable
+as bool,isKeepLogin: null == isKeepLogin ? _self.isKeepLogin : isKeepLogin // ignore: cast_nullable_to_non_nullable
+as bool,isProfileDetailsLoading: null == isProfileDetailsLoading ? _self.isProfileDetailsLoading : isProfileDetailsLoading // ignore: cast_nullable_to_non_nullable
+as bool,isLoginError: null == isLoginError ? _self.isLoginError : isLoginError // ignore: cast_nullable_to_non_nullable
+as bool,isEmailNotValid: null == isEmailNotValid ? _self.isEmailNotValid : isEmailNotValid // ignore: cast_nullable_to_non_nullable
+as bool,isPasswordNotValid: null == isPasswordNotValid ? _self.isPasswordNotValid : isPasswordNotValid // ignore: cast_nullable_to_non_nullable
+as bool,isSelectLanguage: null == isSelectLanguage ? _self.isSelectLanguage : isSelectLanguage // ignore: cast_nullable_to_non_nullable
+as bool,list: null == list ? _self._list : list // ignore: cast_nullable_to_non_nullable
+as List<LanguageData>,email: null == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String,phone: null == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String,password: null == password ? _self.password : password // ignore: cast_nullable_to_non_nullable
+as String,isAgreedToTerms: null == isAgreedToTerms ? _self.isAgreedToTerms : isAgreedToTerms // ignore: cast_nullable_to_non_nullable
+as bool,
+  ));
+}
+
+
+}
+
+// dart format on

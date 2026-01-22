@@ -3,13 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:foodyman/domain/di/dependency_manager.dart';
 import 'package:foodyman/domain/interface/user.dart';
-import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
-import 'package:foodyman/infrastructure/models/data/referral_data.dart';
+import 'package:foodyman/infrastructure/models/data/career_data.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/models/request/edit_profile.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:foodyman/infrastructure/models/response/blog_response.dart';
+import 'package:foodyman/infrastructure/models/response/pages_response.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
+
+import '../models/response/career_response.dart';
 
 class UserRepository implements UserRepositoryFacade {
   @override
@@ -18,14 +19,14 @@ class UserRepository implements UserRepositoryFacade {
       final data = {
         if (LocalStorage.getSelectedCurrency() != null)
           'currency_id': LocalStorage.getSelectedCurrency()?.id,
-        "lang": LocalStorage.getLanguage()?.locale ?? "en"
+        "lang": LocalStorage.getLanguage()?.locale ?? "en",
       };
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get('/api/v1/dashboard/user/profile/show',
-          queryParameters: data);
-      return ApiResult.success(
-        data: ProfileResponse.fromJson(response.data),
+      final response = await client.get(
+        '/api/v1/dashboard/user/profile/show',
+        queryParameters: data,
       );
+      return ApiResult.success(data: ProfileResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get user details failure: $e');
       return ApiResult.failure(
@@ -41,12 +42,14 @@ class UserRepository implements UserRepositoryFacade {
       final data = {
         if (LocalStorage.getSelectedCurrency() != null)
           'currency_id': LocalStorage.getSelectedCurrency()?.id,
-        "lang": LocalStorage.getLanguage()?.locale ?? "en"
+        "lang": LocalStorage.getLanguage()?.locale ?? "en",
       };
 
       final client = dioHttp.client(requireAuth: true);
-      final response =
-          await client.get('/api/v1/rest/referral', queryParameters: data);
+      final response = await client.get(
+        '/api/v1/rest/referral',
+        queryParameters: data,
+      );
       return ApiResult.success(
         data: ReferralModel.fromJson(response.data["data"]),
       );
@@ -60,8 +63,9 @@ class UserRepository implements UserRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<ProfileResponse>> editProfile(
-      {required EditProfile? user}) async {
+  Future<ApiResult<ProfileResponse>> editProfile({
+    required EditProfile? user,
+  }) async {
     final data = user?.toJson();
     debugPrint('===> update general info data ${jsonEncode(data)}');
     try {
@@ -70,9 +74,7 @@ class UserRepository implements UserRepositoryFacade {
         '/api/v1/dashboard/user/profile/update',
         data: data,
       );
-      return ApiResult.success(
-        data: ProfileResponse.fromJson(response.data),
-      );
+      return ApiResult.success(data: ProfileResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> update profile details failure: $e');
       return ApiResult.failure(
@@ -97,9 +99,7 @@ class UserRepository implements UserRepositoryFacade {
         '/api/v1/dashboard/user/profile/update',
         data: data,
       );
-      return ApiResult.success(
-        data: ProfileResponse.fromJson(response.data),
-      );
+      return ApiResult.success(data: ProfileResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> update profile image failure: $e');
       return ApiResult.failure(
@@ -124,9 +124,7 @@ class UserRepository implements UserRepositoryFacade {
         '/api/v1/dashboard/user/profile/password/update',
         data: data,
       );
-      return ApiResult.success(
-        data: ProfileResponse.fromJson(response.data),
-      );
+      return ApiResult.success(data: ProfileResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> update password failure: $e');
       return ApiResult.failure(
@@ -144,7 +142,7 @@ class UserRepository implements UserRepositoryFacade {
       'page': page,
       if (LocalStorage.getSelectedCurrency() != null)
         'currency_id': LocalStorage.getSelectedCurrency()?.id,
-      "lang": LocalStorage.getLanguage()?.locale ?? "en"
+      "lang": LocalStorage.getLanguage()?.locale ?? "en",
     };
     try {
       final client = dioHttp.client(requireAuth: true);
@@ -187,9 +185,7 @@ class UserRepository implements UserRepositoryFacade {
   Future<ApiResult> deleteAccount() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      await client.delete(
-        '/api/v1/dashboard/user/profile/delete',
-      );
+      await client.delete('/api/v1/dashboard/user/profile/delete');
       return const ApiResult.success(data: null);
     } catch (e) {
       return ApiResult.failure(
@@ -203,10 +199,7 @@ class UserRepository implements UserRepositoryFacade {
   Future<ApiResult> logoutAccount({required String fcm}) async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      await client.post(
-        '/api/v1/auth/logout',
-        data: {"firebase_token": fcm},
-      );
+      await client.post('/api/v1/auth/logout', data: {"firebase_token": fcm});
       LocalStorage.logout();
       return const ApiResult.success(data: null);
     } catch (e) {
@@ -221,8 +214,10 @@ class UserRepository implements UserRepositoryFacade {
   Future<ApiResult> saveLocation({required AddressNewModel? address}) async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      await client.post('/api/v1/dashboard/user/addresses',
-          data: address?.toJson());
+      await client.post(
+        '/api/v1/dashboard/user/addresses',
+        data: address?.toJson(),
+      );
       return const ApiResult.success(data: null);
     } catch (e) {
       return ApiResult.failure(
@@ -233,8 +228,10 @@ class UserRepository implements UserRepositoryFacade {
   }
 
   @override
-  Future<ApiResult> updateLocation(
-      {required AddressNewModel? address, required int? addressId}) async {
+  Future<ApiResult> updateLocation({
+    required AddressNewModel? address,
+    required int? addressId,
+  }) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.put(
@@ -274,6 +271,122 @@ class UserRepository implements UserRepositoryFacade {
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
         statusCode: NetworkExceptions.getDioStatus(e),
+      );
+    }
+  }
+
+  @override
+  Future<ApiResult<CareerDataResponse>> getCareers() async {
+    final data = {
+      "active": 1,
+      "page": 1,
+      "lang": LocalStorage.getLanguage()?.locale ?? "en",
+    };
+    try {
+      final client = dioHttp.client(requireAuth: false);
+      final response = await client.get(
+        '/api/v1/rest/careers/paginate',
+        queryParameters: data,
+      );
+
+      return ApiResult.success(
+        data: CareerDataResponse.fromJson(response.data),
+      );
+    } catch (e) {
+      return ApiResult.failure(
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
+    }
+  }
+
+  @override
+  Future<ApiResult<CareerData>> getCareerData(int id) async {
+    final data = {"lang": LocalStorage.getLanguage()?.locale ?? "en"};
+    try {
+      final client = dioHttp.client(requireAuth: false);
+      final response = await client.get(
+        '/api/v1/rest/careers/$id',
+        queryParameters: data,
+      );
+
+      final raw = response.data["data"];
+
+      return ApiResult.success(data: CareerData.fromJson(raw));
+    } catch (e) {
+      return ApiResult.failure(
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
+    }
+  }
+
+  @override
+  Future<ApiResult<BlogResponse>> getBlogs() {
+    final data = {
+      "lang": LocalStorage.getLanguage()?.locale ?? "en",
+      "perPage": 10,
+      "active": 1,
+      "type": "blog",
+    };
+    try {
+      final client = dioHttp.client(requireAuth: false);
+      return client
+          .get('/api/v1/rest/blogs/paginate', queryParameters: data)
+          .then((response) {
+            return ApiResult.success(
+              data: BlogResponse.fromJson(response.data),
+            );
+          });
+    } catch (e) {
+      return Future.value(
+        ApiResult.failure(
+          error: AppHelpers.errorHandler(e),
+          statusCode: NetworkExceptions.getDioStatus(e),
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<ApiResult<BlogData>> getSingleBlog(String uuid) {
+    try {
+      final client = dioHttp.client(requireAuth: false);
+      return client.get('/api/v1/rest/blogs/$uuid').then((response) {
+        final raw = response.data["data"];
+        return ApiResult.success(data: BlogData.fromJson(raw));
+      });
+    } catch (e) {
+      return Future.value(
+        ApiResult.failure(
+          error: AppHelpers.errorHandler(e),
+          statusCode: NetworkExceptions.getDioStatus(e),
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<ApiResult<PagesResponse>> getAbout({required int page}) async {
+    final data = {
+      "lang": LocalStorage.getLanguage()?.locale ?? "en",
+      "page": page,
+      "type": "all_about",
+      "prePage": 10,
+    };
+    try {
+      final client = dioHttp.client(requireAuth: false);
+      final res = await client.get(
+        '/api/v1/rest/pages/paginate',
+        queryParameters: data,
+      );
+      return ApiResult.success(data: PagesResponse.fromJson(res.data));
+    } catch (e) {
+      return Future.value(
+        ApiResult.failure(
+          error: AppHelpers.errorHandler(e),
+          statusCode: NetworkExceptions.getDioStatus(e),
+        ),
       );
     }
   }

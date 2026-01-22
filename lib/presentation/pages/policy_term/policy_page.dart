@@ -4,12 +4,10 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/application/profile/profile_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/pop_button.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
-import 'package:foodyman/presentation/components/loading.dart';
+import 'package:foodyman/presentation/components/components.dart';
 
 @RoutePage()
 class PolicyPage extends ConsumerStatefulWidget {
@@ -31,43 +29,44 @@ class _PolicyPageState extends ConsumerState<PolicyPage> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(profileProvider);
-    return Scaffold(
-      body: SafeArea(
+    return CustomScaffold(
+      body: (colors) => SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               AppHelpers.getTranslation(TrKeys.privacy),
-              style: AppStyle.interNoSemi(size: 18),
+              style: AppStyle.interNoSemi(size: 18, color: colors.textBlack),
             ),
             state.isPolicyLoading
                 ? const Center(child: Loading())
                 : Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.all(16.r),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      state.policy?.title ?? "",
-                      style: AppStyle.interNoSemi(),
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.all(16.r),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            state.policy?.title ?? "",
+                            style: AppStyle.interNoSemi(
+                              color: colors.textBlack,
+                            ),
+                          ),
+                          8.verticalSpace,
+                          Html(
+                            data: state.policy?.description ?? "",
+                            style: {"body": Style(color: colors.textBlack)},
+                          ),
+                        ],
+                      ),
                     ),
-                    8.verticalSpace,
-                    Html(
-                      data: state.policy?.description ?? "",
-                      style: {
-                        "body": Style(),
-                      },
-                    )
-                  ],
-                ),
-              ),
-            )
+                  ),
           ],
         ),
       ),
+
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      floatingActionButton: const PopButton(),
+      floatingActionButton: (colors) => const PopButton(),
     );
   }
 }

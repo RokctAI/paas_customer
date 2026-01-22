@@ -3,7 +3,7 @@
 Foodyman is a multi restaurant marketplace.
 
 ## Requirements
-*  Flutter SDK setup (version 3.24.0 Stable)
+*  Flutter SDK setup (version 3.32.0 Stable)
 *  Java setup (version 23)
 *  Gradle (version 8.10)
 *  JDK with path setup (only for vs code)

@@ -15,12 +15,12 @@ abstract class SettingsRepositoryFacade {
   Future<ApiResult<NotificationsListModel>> getNotificationList();
 
   Future<ApiResult<dynamic>> updateNotification(
-      List<NotificationData>? notifications);
+    List<NotificationData>? notifications,
+  );
 
   Future<ApiResult<HelpModel>> getFaq();
 
   Future<ApiResult<Translation>> getTerm();
 
   Future<ApiResult<Translation>> getPolicy();
-
 }

@@ -6,15 +6,17 @@ import 'package:foodyman/application/home/home_provider.dart';
 import 'package:foodyman/infrastructure/models/data/address_old_data.dart';
 import 'package:foodyman/infrastructure/models/data/location.dart';
 import 'package:foodyman/app_constants.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
+import '../../../theme/color_set.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
+
 class AddAddress extends StatelessWidget {
-  const AddAddress({super.key});
+  final CustomColorSet colors;
+  const AddAddress({super.key, required this.colors});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class AddAddress extends StatelessWidget {
       children: [
         Text(
           AppHelpers.getTranslation(TrKeys.agreeLocation),
-          style: AppStyle.interSemi(size: 16.sp),
+          style: AppStyle.interSemi(size: 16.sp, color: colors.textBlack),
           textAlign: TextAlign.center,
         ),
         24.verticalSpace,
@@ -31,36 +33,46 @@ class AddAddress extends StatelessWidget {
           children: [
             Expanded(
               child: CustomButton(
-                  title: AppHelpers.getTranslation(TrKeys.cancel),
-                  borderColor: AppStyle.black,
-                  background: AppStyle.transparent,
-                  onPressed: () {
-                    Navigator.pop(context);
-                    context.pushRoute(ViewMapRoute(isPop: true));
-                  }),
+                title: AppHelpers.getTranslation(TrKeys.cancel),
+                borderColor: AppStyle.black,
+                textColor: colors.textBlack,
+                background: AppStyle.transparent,
+                onPressed: () {
+                  Navigator.pop(context);
+                  context.pushRoute(ViewMapRoute(isPop: true));
+                },
+              ),
             ),
             24.horizontalSpace,
             Expanded(
-              child: Consumer(builder: (context, ref, child) {
-                return CustomButton(
+              child: Consumer(
+                builder: (context, ref, child) {
+                  return CustomButton(
+                    textColor: colors.textBlack,
                     title: AppHelpers.getTranslation(TrKeys.yes),
                     onPressed: () {
                       Navigator.pop(context);
                       LocalStorage.setAddressSelected(
                         AddressData(
-                            title: AppHelpers.getAppAddressName(),
-                            location: LocationModel(
-                                longitude: (AppHelpers.getInitialLongitude() ??
-                                    AppConstants.demoLongitude),
-                                latitude: (AppHelpers.getInitialLatitude() ??
-                                    AppConstants.demoLatitude))),
+                          title: AppHelpers.getAppAddressName(),
+                          location: LocationModel(
+                            longitude:
+                                (AppHelpers.getInitialLongitude() ??
+                                AppConstants.demoLongitude),
+                            latitude:
+                                (AppHelpers.getInitialLatitude() ??
+                                AppConstants.demoLatitude),
+                          ),
+                        ),
                       );
                       ref.read(homeProvider.notifier).setAddress();
-                    });
-              }),
+                    },
+                  );
+                },
+              ),
             ),
           ],
-        )
+        ),
       ],
     );
   }

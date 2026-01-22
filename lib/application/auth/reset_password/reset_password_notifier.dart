@@ -4,23 +4,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:foodyman/domain/interface/auth.dart';
-import 'package:foodyman/domain/interface/user.dart';
-import 'package:foodyman/infrastructure/services/app_connectivity.dart';
-import 'package:foodyman/app_constants.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/app_validators.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:foodyman/domain/di/dependency_manager.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 
 import 'reset_password_state.dart';
 
-class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
-  final AuthRepositoryFacade _authRepository;
-  final UserRepositoryFacade _userRepositoryFacade;
-
-  ResetPasswordNotifier(this._authRepository, this._userRepositoryFacade)
-      : super(const ResetPasswordState());
+class ResetPasswordNotifier extends Notifier<ResetPasswordState> {
+  @override
+  ResetPasswordState build() => const ResetPasswordState();
 
   void setEmail(String text) {
     state = state.copyWith(email: text.trim(), isEmailError: false);
@@ -49,7 +41,7 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
     state = state.copyWith(showConfirmPassword: !state.showConfirmPassword);
   }
 
-  checkEmail() {
+  bool checkEmail() {
     return AppValidators.isValidEmail(state.email);
   }
 
@@ -68,7 +60,8 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
           AppHelpers.showCheckTopSnackBar(
             context,
             AppHelpers.getTranslation(
-                AppHelpers.getTranslation(e.message ?? "")),
+              AppHelpers.getTranslation(e.message ?? ""),
+            ),
           );
           state = state.copyWith(isLoading: false, isSuccess: false);
         },
@@ -93,8 +86,9 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isLoading: true, isSuccess: false);
-      final response =
-          await _authRepository.forgotPassword(email: state.email.trim());
+      final response = await authRepository.forgotPassword(
+        email: state.email.trim(),
+      );
       response.when(
         success: (data) async {
           state = state.copyWith(
@@ -105,7 +99,10 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
         },
         failure: (failure, status) {
           state = state.copyWith(
-              isLoading: false, isEmailError: true, isSuccess: false);
+            isLoading: false,
+            isEmailError: true,
+            isSuccess: false,
+          );
           AppHelpers.showCheckTopSnackBar(
             context,
             AppHelpers.getTranslation(status.toString()),
@@ -131,23 +128,22 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
         return;
       }
       if (!AppValidators.isValidConfirmPassword(
-          state.password, state.confirmPassword)) {
+        state.password,
+        state.confirmPassword,
+      )) {
         state = state.copyWith(isConfirmPasswordInvalid: true);
         return;
       }
       state = state.copyWith(isLoading: true, isSuccess: false);
-      final response = await _userRepositoryFacade.updatePassword(
+      final response = await userRepository.updatePassword(
         password: state.password,
         passwordConfirmation: state.confirmPassword,
       );
       response.when(
         success: (data) async {
           state = state.copyWith(isLoading: false, isSuccess: true);
-          if (AppConstants.isDemo) {
-            context.replaceRoute(UiTypeRoute());
-          } else {
-            context.replaceRoute(const MainRoute());
-          }
+          context.replaceRoute(MainRoute());
+
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false, isSuccess: false);
@@ -155,7 +151,8 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
             AppHelpers.showCheckTopSnackBar(
               context,
               AppHelpers.getTranslation(
-                  AppHelpers.getTranslation(TrKeys.emailAlreadyExists)),
+                AppHelpers.getTranslation(TrKeys.emailAlreadyExists),
+              ),
             );
           } else {
             AppHelpers.showCheckTopSnackBar(

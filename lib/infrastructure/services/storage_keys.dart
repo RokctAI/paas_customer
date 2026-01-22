@@ -20,7 +20,7 @@ abstract class StorageKeys {
   static const String keyLikedProducts = 'keyLikedProducts';
   static const String keySelectedCurrency = 'keySelectedCurrency';
   static const String keyCartProducts = 'keyCartProducts';
-  static const String keyAppThemeMode = 'keyAppThemeMode';
+  static const String keyAppThemeMode = 'theme_mode';
   static const String keyWalletData = 'keyWalletData';
   static const String keyGlobalSettings = 'keyGlobalSettings';
   static const String keySettingsFetched = 'keySettingsFetched';
@@ -28,5 +28,5 @@ abstract class StorageKeys {
   static const String keyLanguageData = 'keyLanguageData';
   static const String keyAuthenticatedWithSocial = 'keyAuthenticatedWithSocial';
   static const String keyLangLtr = 'keyLangLtr';
+  static const String keyFirstEntry = 'keyFirstEntry';
 }
-

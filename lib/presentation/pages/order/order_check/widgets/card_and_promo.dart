@@ -4,16 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/application/order/order_provider.dart';
 import 'package:foodyman/application/payment_methods/payment_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/pages/order/order_check/widgets/promo_code.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
+import 'package:foodyman/presentation/theme/color_set.dart';
 import 'payment_method.dart';
 import 'order_payment_container.dart';
 
 class CardAndPromo extends StatelessWidget {
-  const CardAndPromo({super.key});
+  final CustomColorSet colors;
+  const CardAndPromo({super.key, required this.colors});
 
   @override
   Widget build(BuildContext context) {
@@ -22,85 +23,97 @@ class CardAndPromo extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Consumer(builder: (context, ref, child) {
-            return OrderPaymentContainer(
-              onTap: () {
-                AppHelpers.showCustomModalBottomSheet(
-                  paddingTop: MediaQuery.paddingOf(context).top,
-                  context: context,
-                  modal:  const PaymentMethods(),
-                  isDarkMode: false,
-                  isDrag: true,
-                  radius: 12,
-                );
-              },
-              icon: Icon(
-                FlutterRemix.bank_card_fill,
-                color: ((AppHelpers.getPaymentType() == "admin")
+          Consumer(
+            builder: (context, ref, child) {
+              return OrderPaymentContainer(
+                colors: colors,
+                onTap: () {
+                  AppHelpers.showCustomModalBottomSheet(
+                    paddingTop: MediaQuery.paddingOf(context).top,
+                    context: context,
+                    modal: PaymentMethods(colors: colors),
+                    isDarkMode: false,
+                    isDrag: true,
+                    radius: 12,
+                  );
+                },
+                icon: Icon(
+                  FlutterRemix.bank_card_fill,
+                  color:
+                      ((AppHelpers.getPaymentType() == "admin")
+                          ? (ref.watch(paymentProvider).payments.isNotEmpty)
+                          : (ref
+                                    .watch(orderProvider)
+                                    .shopData
+                                    ?.shopPayments
+                                    ?.isNotEmpty ??
+                                false))
+                      ? colors.primary
+                      : AppStyle.black,
+                ),
+                title:
+                    ((AppHelpers.getPaymentType() == "admin")
                         ? (ref.watch(paymentProvider).payments.isNotEmpty)
                         : (ref
-                                .watch(orderProvider)
-                                .shopData
-                                ?.shopPayments
-                                ?.isNotEmpty ??
-                            false))
-                    ? AppStyle.primary
-                    : AppStyle.black,
-              ),
-              title: ((AppHelpers.getPaymentType() == "admin")
-                      ? (ref.watch(paymentProvider).payments.isNotEmpty)
-                      : (ref
+                                  .watch(orderProvider)
+                                  .shopData
+                                  ?.shopPayments
+                                  ?.isNotEmpty ??
+                              false))
+                    ? ((AppHelpers.getPaymentType() == "admin")
+                          ? (ref
+                                .watch(paymentProvider)
+                                .payments[ref
+                                    .watch(paymentProvider)
+                                    .currentIndex]
+                                .tag)
+                          : (ref
+                                    .watch(orderProvider)
+                                    .shopData
+                                    ?.shopPayments?[ref
+                                        .watch(paymentProvider)
+                                        .currentIndex]
+                                    ?.payment
+                                    ?.tag ??
+                                ""))
+                    : AppHelpers.getTranslation(TrKeys.noPaymentType),
+                isActive: ((AppHelpers.getPaymentType() == "admin")
+                    ? (ref.watch(paymentProvider).payments.isNotEmpty)
+                    : (ref
                               .watch(orderProvider)
                               .shopData
                               ?.shopPayments
                               ?.isNotEmpty ??
-                          false))
-                  ? ((AppHelpers.getPaymentType() == "admin")
-                      ? (ref
-                          .watch(paymentProvider)
-                          .payments[ref.watch(paymentProvider).currentIndex]
-                          .tag)
-                      : (ref
-                              .watch(orderProvider)
-                              .shopData
-                              ?.shopPayments?[
-                                  ref.watch(paymentProvider).currentIndex]
-                              ?.payment
-                              ?.tag ??
-                          ""))
-                  : AppHelpers.getTranslation(TrKeys.noPaymentType),
-              isActive: ((AppHelpers.getPaymentType() == "admin")
-                  ? (ref.watch(paymentProvider).payments.isNotEmpty)
-                  : (ref
-                          .watch(orderProvider)
-                          .shopData
-                          ?.shopPayments
-                          ?.isNotEmpty ??
-                      false)),
-            );
-          }),
-          Consumer(builder: (context, ref, child) {
-            return OrderPaymentContainer(
-              onTap: () {
-                AppHelpers.showCustomModalBottomSheet(
-                  context: context,
-                  modal: const PromoCodeScreen(),
-                  isDarkMode: false,
-                  isDrag: true,
-                  radius: 12,
-                );
-              },
-              isActive: ref.watch(orderProvider).promoCode != null,
-              icon: Icon(
-                FlutterRemix.ticket_line,
-                color: ref.watch(orderProvider).promoCode == null
-                    ? AppStyle.black
-                    : AppStyle.primary,
-              ),
-              title: ref.watch(orderProvider).promoCode ??
-                  AppHelpers.getTranslation(TrKeys.youHavePromoCode),
-            );
-          }),
+                          false)),
+              );
+            },
+          ),
+          Consumer(
+            builder: (context, ref, child) {
+              return OrderPaymentContainer(
+                onTap: () {
+                  AppHelpers.showCustomModalBottomSheet(
+                    context: context,
+                    modal: PromoCodeScreen(colors: colors),
+                    isDarkMode: false,
+                    isDrag: true,
+                    radius: 12,
+                  );
+                },
+                isActive: ref.watch(orderProvider).promoCode != null,
+                icon: Icon(
+                  FlutterRemix.ticket_line,
+                  color: ref.watch(orderProvider).promoCode == null
+                      ? AppStyle.black
+                      : colors.primary,
+                ),
+                title:
+                    ref.watch(orderProvider).promoCode ??
+                    AppHelpers.getTranslation(TrKeys.youHavePromoCode),
+                colors: colors,
+              );
+            },
+          ),
         ],
       ),
     );

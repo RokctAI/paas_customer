@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/text_fields/outline_bordered_text_field.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:foodyman/presentation/components/components.dart';
 
 class NoteProduct extends StatefulWidget {
   final String? comment;
   final bool isSave;
   final ValueChanged<String> onTap;
 
-  const NoteProduct(
-      {super.key, required this.onTap, this.comment, this.isSave = true});
+  const NoteProduct({
+    super.key,
+    required this.onTap,
+    this.comment,
+    this.isSave = true,
+  });
 
   @override
   State<NoteProduct> createState() => _NoteProductState();
@@ -24,9 +25,22 @@ class _NoteProductState extends State<NoteProduct> {
 
   @override
   void initState() {
-    controller =
-        TextEditingController(text: widget.comment);
     super.initState();
+    controller = TextEditingController(text: widget.comment ?? '');
+  }
+
+  @override
+  void didUpdateWidget(NoteProduct oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.comment != widget.comment) {
+      controller.text = widget.comment ?? '';
+    }
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -47,13 +61,15 @@ class _NoteProductState extends State<NoteProduct> {
         32.verticalSpace,
         if (widget.isSave)
           CustomButton(
-              title: AppHelpers.getTranslation(TrKeys.save),
-              onPressed: () {
-                if (controller.text.trim().isNotEmpty) {
-                  widget.onTap(controller.text);
-                  Navigator.pop(context);
-                }
-              }),
+            title: AppHelpers.getTranslation(TrKeys.save),
+            onPressed: () {
+              final text = controller.text.trim();
+              if (text.isNotEmpty) {
+                widget.onTap(text);
+                Navigator.pop(context);
+              }
+            },
+          ),
       ],
     );
   }

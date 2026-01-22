@@ -5,15 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/application/orders_list/orders_list_notifier.dart';
 import 'package:foodyman/application/orders_list/orders_list_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/common_app_bar.dart';
-import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-import 'package:foodyman/presentation/components/custom_tab_bar.dart';
-import 'package:foodyman/presentation/components/loading.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/presentation/app_assets.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
+import '../../theme/color_set.dart';
 import 'widgets/orders_item.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 @RoutePage()
 class OrdersListPage extends ConsumerStatefulWidget {
@@ -68,22 +66,17 @@ class _OrderPageState extends ConsumerState<OrdersListPage>
 
   @override
   Widget build(BuildContext context) {
-    final bool isDarkMode = LocalStorage.getAppThemeMode();
     final bool isLtr = LocalStorage.getLangLtr();
     final state = ref.watch(ordersListProvider);
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: isDarkMode ? AppStyle.mainBackDark : AppStyle.bgGrey,
-        body: Column(
+      child: CustomScaffold(
+        body: (colors) => Column(
           children: [
             CommonAppBar(
               child: Text(
                 AppHelpers.getTranslation(TrKeys.order),
-                style: AppStyle.interNoSemi(
-                  size: 18,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interNoSemi(size: 18, color: colors.textBlack),
               ),
             ),
             16.verticalSpace,
@@ -98,100 +91,124 @@ class _OrderPageState extends ConsumerState<OrdersListPage>
                       tabs: _tabs,
                     ),
                     Expanded(
-                      child: TabBarView(controller: _tabController, children: [
-                        state.isActiveLoading
-                            ? const Loading()
-                            : SmartRefresher(
-                                controller: activeRefreshController,
-                                enablePullDown: true,
-                                enablePullUp: true,
-                                onRefresh: () {
-                                  event.fetchActiveOrdersPage(
-                                      context, activeRefreshController,
-                                      isRefresh: true);
-                                  activeRefreshController.refreshCompleted();
-                                },
-                                onLoading: () {
-                                  event.fetchActiveOrdersPage(
-                                      context, activeRefreshController);
-                                },
-                                child: state.activeOrders.isNotEmpty ? ListView.builder(
-                                  shrinkWrap: true,
-                                  padding: EdgeInsets.only(top: 24.h),
-                                  itemCount: state.activeOrders.length,
-                                  itemBuilder: (context, index) {
-                                    return OrdersItem(
-                                      order: state.activeOrders[index],
-                                      isActive: true,
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          state.isActiveLoading
+                              ? const Loading()
+                              : SmartRefresher(
+                                  controller: activeRefreshController,
+                                  enablePullDown: true,
+                                  enablePullUp: true,
+                                  onRefresh: () {
+                                    event.fetchActiveOrdersPage(
+                                      context,
+                                      activeRefreshController,
+                                      isRefresh: true,
+                                    );
+                                    activeRefreshController.refreshCompleted();
+                                  },
+                                  onLoading: () {
+                                    event.fetchActiveOrdersPage(
+                                      context,
+                                      activeRefreshController,
                                     );
                                   },
-                                ) : _resultEmpty(),
-                              ),
-                        state.isHistoryLoading
-                            ? const Loading()
-                            : SmartRefresher(
-                                controller: historyRefreshController,
-                                enablePullDown: true,
-                                enablePullUp: true,
-                                onRefresh: () {
-                                  event.fetchHistoryOrdersPage(
-                                      context, historyRefreshController,
-                                      isRefresh: true);
-                                  historyRefreshController.refreshCompleted();
-                                },
-                                onLoading: () {
-                                  event.fetchHistoryOrdersPage(
-                                      context, historyRefreshController);
-                                },
-                                child: ListView.builder(
-                                  padding: EdgeInsets.only(top: 24.h),
-                                  itemCount: state.historyOrders.length,
-                                  itemBuilder: (context, index) {
-                                    return OrdersItem(
-                                      order: state.historyOrders[index],
-                                      isActive: false,
-                                    );
-                                  },
+                                  child: state.activeOrders.isNotEmpty
+                                      ? ListView.builder(
+                                          shrinkWrap: true,
+                                          padding: EdgeInsets.only(top: 24.h),
+                                          itemCount: state.activeOrders.length,
+                                          itemBuilder: (context, index) {
+                                            return OrdersItem(
+                                              order: state.activeOrders[index],
+                                              isActive: true,
+                                            );
+                                          },
+                                        )
+                                      : _resultEmpty(colors),
                                 ),
-                              ),
-                        state.isRefundLoading
-                            ? const Loading()
-                            : SmartRefresher(
-                                controller: refundRefreshController,
-                                enablePullDown: true,
-                                enablePullUp: true,
-                                onRefresh: () {
-                                  event.fetchRefundOrdersPage(
-                                      context, refundRefreshController,
-                                      isRefresh: true);
-                                  refundRefreshController.refreshCompleted();
-                                },
-                                onLoading: () {
-                                  event.fetchRefundOrdersPage(
-                                      context, refundRefreshController);
-                                },
-                                child: ListView.builder(
-                                  padding: EdgeInsets.only(top: 24.h),
-                                  itemCount: state.refundOrders.length,
-                                  itemBuilder: (context, index) {
-                                    return OrdersItem(
-                                      isRefund: true,
-                                      isActive: false,
-                                      refund: state.refundOrders[index],
+                          state.isHistoryLoading
+                              ? const Loading()
+                              : SmartRefresher(
+                                  controller: historyRefreshController,
+                                  enablePullDown: true,
+                                  enablePullUp: true,
+                                  onRefresh: () {
+                                    event.fetchHistoryOrdersPage(
+                                      context,
+                                      historyRefreshController,
+                                      isRefresh: true,
+                                    );
+                                    historyRefreshController.refreshCompleted();
+                                  },
+                                  onLoading: () {
+                                    event.fetchHistoryOrdersPage(
+                                      context,
+                                      historyRefreshController,
                                     );
                                   },
+                                  child: ListView.builder(
+                                    padding: EdgeInsets.only(top: 24.h),
+                                    itemCount: state.historyOrders.length,
+                                    itemBuilder: (context, index) {
+                                      return OrdersItem(
+                                        order: state.historyOrders[index],
+                                        isActive: false,
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
-                      ]),
-                    )
+                          state.isRefundLoading
+                              ? const Loading()
+                              : SmartRefresher(
+                                  controller: refundRefreshController,
+                                  enablePullDown: true,
+                                  enablePullUp: true,
+                                  onRefresh: () {
+                                    event.fetchRefundOrdersPage(
+                                      context,
+                                      refundRefreshController,
+                                      isRefresh: true,
+                                    );
+                                    refundRefreshController.refreshCompleted();
+                                  },
+                                  onLoading: () {
+                                    event.fetchRefundOrdersPage(
+                                      context,
+                                      refundRefreshController,
+                                    );
+                                  },
+                                  child: state.refundOrders.isEmpty
+                                      ? Column(
+                                          children: [
+                                            100.verticalSpace,
+                                            _resultEmpty(colors),
+                                          ],
+                                        )
+                                      : ListView.builder(
+                                          padding: EdgeInsets.only(top: 24.h),
+                                          itemCount: state.refundOrders.length,
+                                          itemBuilder: (context, index) {
+                                            return OrdersItem(
+                                              isRefund: true,
+                                              isActive: false,
+                                              refund: state.refundOrders[index],
+                                            );
+                                          },
+                                        ),
+                                ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-        floatingActionButton: Padding(
+        floatingActionButton: (colors) => Padding(
           padding: EdgeInsets.only(left: 16.w),
           child: const PopButton(),
         ),
@@ -200,22 +217,20 @@ class _OrderPageState extends ConsumerState<OrdersListPage>
   }
 }
 
-Widget _resultEmpty() {
+Widget _resultEmpty(CustomColorSet colors) {
   return Column(
     children: [
       24.verticalSpace,
-      Image.asset("assets/images/notFound.png"),
+      Image.asset(Assets.imagesNotFound),
       Text(
         AppHelpers.getTranslation(TrKeys.nothingFound),
-        style: AppStyle.interSemi(size: 18.sp),
+        style: AppStyle.interSemi(size: 18.sp, color: colors.textBlack),
       ),
       Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 32.w,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 32.w),
         child: Text(
           AppHelpers.getTranslation(TrKeys.trySearchingAgain),
-          style: AppStyle.interRegular(size: 14.sp),
+          style: AppStyle.interRegular(size: 14.sp, color: colors.textBlack),
           textAlign: TextAlign.center,
         ),
       ),

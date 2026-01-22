@@ -21,6 +21,7 @@ if (flutterRoot == null) {
     throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
+
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
     flutterVersionCode = '1'
@@ -28,21 +29,31 @@ if (flutterVersionCode == null) {
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
-    flutterVersionName = '1.0.0'
+    flutterVersionName = '1.0'
+}
+
+def dartDefines = [:]
+if (project.hasProperty('dart-defines')) {
+    dartDefines = dartDefines + project.property('dart-defines')
+            .split(',')
+            .collectEntries { entry ->
+                def pair = new String(entry.decodeBase64(), 'UTF-8').split('=')
+                pair.length == 2 ? [(pair.first()): pair.last()] : [:]
+            }
 }
 
 android {
-    namespace "com.foodyman"
-    compileSdkVersion 34
-    ndkVersion flutter.ndkVersion
+    namespace "com.foodyman.demo"
+    compileSdkVersion 36
+    ndkVersion "29.0.14206865"
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '17'
     }
 
     sourceSets {
@@ -50,12 +61,17 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.foodyman"
-        minSdkVersion 23
+        applicationId "com.foodyman.demo"
+        minSdkVersion 24
         multiDexEnabled true
-        targetSdkVersion 34
+        targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        resValue "string", "google_maps_api_key", dartDefines.GOOGLE_MAPS_API_KEY
+        resValue "string", "facebook_app_id", dartDefines.FACEBOOK_APP_ID
+        resValue "string", "facebook_client_token", dartDefines.FACEBOOK_CLIENT_TOKEN
+        resValue "string", "deep_link_host", dartDefines.DEEP_LINK_URL
+        resValue "string", "app_name", dartDefines.APP_NAME
     }
 
     signingConfigs {
@@ -80,7 +96,4 @@ flutter {
 }
 
 dependencies {
-    implementation platform('com.google.firebase:firebase-bom:32.7.2')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
-
 }

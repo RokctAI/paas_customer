@@ -1,22 +1,21 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 
 import 'main_state.dart';
 
-class MainNotifier extends StateNotifier<MainState> {
-  MainNotifier() : super(const MainState());
+class MainNotifier extends Notifier<MainState> {
+  @override
+  MainState build() => const MainState();
 
   void selectIndex(int index) {
     state = state.copyWith(selectIndex: index);
   }
 
-
-  bool checkGuest(){
+  bool checkGuest() {
     return LocalStorage.getToken().isEmpty;
   }
 
-  void changeScrolling(bool isScrolling){
+  void changeScrolling(bool isScrolling) {
     state = state.copyWith(isScrolling: isScrolling);
   }
 }

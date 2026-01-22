@@ -2,19 +2,18 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/infrastructure/models/data/shop_data.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/shop_avarat.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
+import 'package:foodyman/presentation/theme/color_set.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class RestaurantItem extends StatelessWidget {
   final ShopData shop;
+  final CustomColorSet colors;
 
-  const RestaurantItem({
-    super.key,
-    required this.shop,
-  });
+  const RestaurantItem({super.key, required this.shop, required this.colors});
 
   @override
   Widget build(BuildContext context) {
@@ -22,19 +21,15 @@ class RestaurantItem extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 8.h),
       child: GestureDetector(
         onTap: () {
-          context.pushRoute(
-            ShopRoute(
-              shopId: (shop.id ?? 0).toString(),
-            ),
-          );
+          context.pushRoute(ShopRoute(shopId: (shop.id ?? 0).toString()));
         },
         child: Container(
           decoration: BoxDecoration(
-            color: AppStyle.white,
+            color: colors.icon,
             borderRadius: BorderRadius.circular(10.r),
             boxShadow: [
               BoxShadow(
-                color: AppStyle.white.withOpacity(0.04),
+                color: AppStyle.white.withValues(alpha: 0.04),
                 spreadRadius: 0,
                 blurRadius: 2,
                 offset: const Offset(0, 2), // changes position of shadow
@@ -60,7 +55,7 @@ class RestaurantItem extends StatelessWidget {
                       shop.translation?.title ?? "",
                       style: AppStyle.interSemi(
                         size: 15,
-                        color: AppStyle.black,
+                        color: colors.textBlack,
                       ),
                     ),
                     SizedBox(
@@ -68,12 +63,12 @@ class RestaurantItem extends StatelessWidget {
                       child: Text(
                         shop.bonus != null
                             ? ((shop.bonus?.type ?? "sum") == "sum")
-                                ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(number: shop.bonus?.value)} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
-                                : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                                  ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(shop.bonus?.value)} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                                  : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
                             : shop.translation?.description ?? "",
                         style: AppStyle.interNormal(
                           size: 12,
-                          color: AppStyle.black,
+                          color: colors.textBlack,
                         ),
                         maxLines: 2,
                       ),

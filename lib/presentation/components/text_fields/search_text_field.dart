@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
+
+import '../../theme/theme_wrapper.dart';
 
 class SearchTextField extends StatelessWidget {
   final String? hintText;
@@ -33,55 +34,57 @@ class SearchTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      readOnly: isRead,
-      autocorrect: true,
-      autofocus: autofocus,
-      onTap: onTap,
-      style: AppStyle.interRegular(
-        size: 16,
-        color: AppStyle.black,
-      ),
-      onChanged: onChanged,
-      controller: textEditingController,
-      cursorColor: AppStyle.black,
-      cursorWidth: 1,
-      decoration: InputDecoration(
-        hintStyle: AppStyle.interNormal(
-          size: 13,
-          color: AppStyle.hintColor,
-        ),
-        hintText: hintText ?? AppHelpers.getTranslation(TrKeys.searchProducts),
-        contentPadding: REdgeInsets.symmetric(horizontal: 15, vertical: 14),
-        prefixIcon: isSearchIcon
-            ? Icon(
-                FlutterRemix.search_2_line,
-                size: 20.r,
-                color: AppStyle.black,
-              )
-            : null,
-        suffixIcon: suffixIcon,
-        fillColor: bgColor,
-        filled: true,
-        focusedBorder: isBorder
-            ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.r),
-                borderSide:
-                    const BorderSide(color: AppStyle.borderColor, width: 1.2))
-            : InputBorder.none,
-        border: isBorder
-            ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.r),
-                borderSide:
-                    const BorderSide(color: AppStyle.borderColor, width: 1.2))
-            : InputBorder.none,
-        enabledBorder: isBorder
-            ? OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.r),
-                borderSide:
-                    const BorderSide(color: AppStyle.borderColor, width: 1.2))
-            : InputBorder.none,
-      ),
+    return ThemeWrapper(
+      builder: (colors, theme) {
+        return TextFormField(
+          readOnly: isRead,
+          autocorrect: true,
+          autofocus: autofocus,
+          onTap: onTap,
+          style: AppStyle.interRegular(size: 16, color: colors.textBlack),
+          onChanged: onChanged,
+          controller: textEditingController,
+          cursorColor: AppStyle.black,
+          cursorWidth: 1,
+          decoration: InputDecoration(
+            hintStyle: AppStyle.interNormal(
+              size: 13,
+              color: AppStyle.hintColor,
+            ),
+            hintText:
+                hintText ?? AppHelpers.getTranslation(TrKeys.searchProducts),
+            contentPadding: REdgeInsets.symmetric(horizontal: 15, vertical: 14),
+            prefixIcon: isSearchIcon
+                ? Icon(
+                    FlutterRemix.search_2_line,
+                    size: 20.r,
+                    color: colors.textHint,
+                  )
+                : null,
+            suffixIcon: suffixIcon,
+            fillColor: bgColor,
+            filled: true,
+            focusedBorder: isBorder
+                ? OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide(color: colors.textHint, width: 1.2),
+                  )
+                : InputBorder.none,
+            border: isBorder
+                ? OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide(color: colors.textHint, width: 1.2),
+                  )
+                : InputBorder.none,
+            enabledBorder: isBorder
+                ? OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                    borderSide: BorderSide(color: colors.textHint, width: 1.2),
+                  )
+                : InputBorder.none,
+          ),
+        );
+      },
     );
   }
 }

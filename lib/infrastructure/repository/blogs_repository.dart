@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodyman/domain/di/dependency_manager.dart';
 import 'package:foodyman/domain/interface/blogs.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
 
 class BlogsRepository implements BlogsRepositoryFacade {

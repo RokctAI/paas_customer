@@ -4,23 +4,28 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:foodyman/application/home/home_notifier.dart';
 import 'package:foodyman/application/home/home_state.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/presentation/components/buttons/animation_button_effect.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/pages/home/filter/filter_page.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
+import '../../../theme/color_set.dart';
 import '../../home/home_two/widget/category_two_item.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class ServiceTwoCategory extends StatelessWidget {
   final HomeState state;
   final HomeNotifier event;
   final int categoryIndex;
+  final CustomColorSet colors;
 
-  const ServiceTwoCategory(
-      {super.key,
-      required this.state,
-      required this.event,
-      required this.categoryIndex});
+  const ServiceTwoCategory({
+    super.key,
+    required this.state,
+    required this.event,
+    required this.categoryIndex,
+    required this.colors,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +35,7 @@ class ServiceTwoCategory extends StatelessWidget {
         child: ListView.builder(
           padding: EdgeInsets.only(left: 16.r, bottom: 16.r, top: 8.r),
           shrinkWrap: true,
-          
+
           scrollDirection: Axis.horizontal,
           itemCount:
               (state.categories[categoryIndex].children?.length ?? 0) + 1,
@@ -45,8 +50,11 @@ class ServiceTwoCategory extends StatelessWidget {
                   child: index == 0
                       ? AnimationButtonEffect(
                           child: Padding(
-                            padding:
-                                REdgeInsets.only(right: 8, bottom: 8, top: 4),
+                            padding: REdgeInsets.only(
+                              right: 8,
+                              bottom: 8,
+                              top: 4,
+                            ),
                             child: InkWell(
                               borderRadius: BorderRadius.circular(24.r),
                               onTap: () {
@@ -54,18 +62,18 @@ class ServiceTwoCategory extends StatelessWidget {
                                   context: context,
                                   modal: (c) => FilterPage(
                                     controller: c,
-                                    categoryId: (state.selectIndexSubCategory !=
-                                                -1
+                                    categoryId:
+                                        (state.selectIndexSubCategory != -1
                                             ? (state
-                                                .categories[
-                                                    state.selectIndexCategory]
-                                                .children?[state
-                                                    .selectIndexSubCategory]
-                                                .id)
+                                                  .categories[state
+                                                      .selectIndexCategory]
+                                                  .children?[state
+                                                      .selectIndexSubCategory]
+                                                  .id)
                                             : state
-                                                .categories[
-                                                    state.selectIndexCategory]
-                                                .id) ??
+                                                  .categories[state
+                                                      .selectIndexCategory]
+                                                  .id) ??
                                         0,
                                   ),
                                   isDarkMode: false,
@@ -76,7 +84,9 @@ class ServiceTwoCategory extends StatelessWidget {
                               child: Container(
                                 width: 44.w,
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 6.r, vertical: 4.r),
+                                  horizontal: 6.r,
+                                  vertical: 4.r,
+                                ),
                                 decoration: BoxDecoration(
                                   color: AppStyle.black,
                                   boxShadow: const [
@@ -85,7 +95,7 @@ class ServiceTwoCategory extends StatelessWidget {
                                       blurRadius: 15,
                                       offset: Offset(0, 4),
                                       spreadRadius: 0,
-                                    )
+                                    ),
                                   ],
                                   borderRadius: BorderRadius.circular(20.r),
                                 ),
@@ -102,13 +112,17 @@ class ServiceTwoCategory extends StatelessWidget {
                       : CategoryTwoItem(
                           index: index - 1,
                           image: category.children?[index - 1].img ?? "",
-                          title: category
-                                  .children?[index - 1].translation?.title ??
+                          title:
+                              category
+                                  .children?[index - 1]
+                                  .translation
+                                  ?.title ??
                               "",
                           isActive: index - 1 == state.selectIndexSubCategory,
                           onTap: () {
                             event.setSelectSubCategory(index - 1, context);
                           },
+                          colors: colors,
                         ),
                 ),
               ),

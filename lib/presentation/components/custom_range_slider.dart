@@ -25,7 +25,8 @@ class CustomRoundRangeSliderThumbShape extends RangeSliderThumbShape {
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
     return Size.fromRadius(
-        isEnabled == true ? enabledThumbRadius : _disabledThumbRadius);
+      isEnabled == true ? enabledThumbRadius : _disabledThumbRadius,
+    );
   }
 
   @override
@@ -53,29 +54,29 @@ class CustomRoundRangeSliderThumbShape extends RangeSliderThumbShape {
       ..color = AppStyle.primary
       ..style = PaintingStyle.fill;
 
-
     if (isOnTop ?? false) {
       final Paint strokePaint = Paint()
         ..color = sliderTheme.overlappingShapeStrokeColor!
         ..strokeWidth = 8.0
         ..style = PaintingStyle.stroke;
       canvas.drawRRect(
-          RRect.fromRectAndRadius(
-              Rect.fromCenter(center: center, width: 36.r, height: 20.r),
-               Radius.circular(10.r)),
-          strokePaint);
+        RRect.fromRectAndRadius(
+          Rect.fromCenter(center: center, width: 36.r, height: 20.r),
+          Radius.circular(10.r),
+        ),
+        strokePaint,
+      );
     }
 
-
-
-    final double evaluatedElevation =
-        isPressed! ? elevationTween.evaluate(activationAnimation) : elevation;
+    final double evaluatedElevation = isPressed!
+        ? elevationTween.evaluate(activationAnimation)
+        : elevation;
     final Path shadowPath = Path()
       ..addArc(
-          Rect.fromCenter(
-              center: center, width: 36.r, height: 20.r),
-          0,
-          math.pi * 2);
+        Rect.fromCenter(center: center, width: 36.r, height: 20.r),
+        0,
+        math.pi * 2,
+      );
 
     bool paintShadows = true;
     assert(() {
@@ -90,17 +91,23 @@ class CustomRoundRangeSliderThumbShape extends RangeSliderThumbShape {
       canvas.drawShadow(shadowPath, AppStyle.black, evaluatedElevation, true);
     }
 
-    canvas..drawRRect(
+    canvas
+      ..drawRRect(
         RRect.fromRectAndRadius(
-            Rect.fromCenter(center: center, width: 36.r, height: 20.r),
-             Radius.circular(10.r)),
-        sliderPaint)..drawRRect(
+          Rect.fromCenter(center: center, width: 36.r, height: 20.r),
+          Radius.circular(10.r),
+        ),
+        sliderPaint,
+      )
+      ..drawRRect(
         RRect.fromRectAndRadius(
-            Rect.fromCenter(center: center, width: 30.r, height: 12.r),
-             Radius.circular(10.r)),
+          Rect.fromCenter(center: center, width: 30.r, height: 12.r),
+          Radius.circular(10.r),
+        ),
         Paint()
           ..color = AppStyle.white
-          ..style = PaintingStyle.fill);
+          ..style = PaintingStyle.fill,
+      );
   }
 }
 

@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/infrastructure/models/data/story_data.dart';
-import 'package:foodyman/presentation/components/custom_network_image.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class ShopBarItemThree extends StatelessWidget {
   final RefreshController controller;
@@ -38,24 +39,25 @@ class ShopBarItemThree extends StatelessWidget {
               radius: 12.r,
             ),
             Positioned(
-                child: Container(
-              decoration: ShapeDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    AppStyle.black.withOpacity(0.2),
-                    AppStyle.black.withOpacity(0.2),
-                    AppStyle.black.withOpacity(0.2),
-                    AppStyle.black.withOpacity(0.5),
-                    AppStyle.black.withOpacity(0.7),
-                  ],
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+              child: Container(
+                decoration: ShapeDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      AppStyle.black.withValues(alpha: 0.2),
+                      AppStyle.black.withValues(alpha: 0.2),
+                      AppStyle.black.withValues(alpha: 0.2),
+                      AppStyle.black.withValues(alpha: 0.5),
+                      AppStyle.black.withValues(alpha: 0.7),
+                    ],
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
                 ),
               ),
-            )),
+            ),
             Positioned(
               left: 12,
               right: 12,
@@ -63,10 +65,7 @@ class ShopBarItemThree extends StatelessWidget {
               child: Center(
                 child: Text(
                   story?.title ?? "",
-                  style: AppStyle.interNoSemi(
-                    size: 14,
-                    color: AppStyle.white,
-                  ),
+                  style: AppStyle.interNoSemi(size: 14, color: AppStyle.white),
                   maxLines: 2,
                 ),
               ),

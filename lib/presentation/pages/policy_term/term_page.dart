@@ -4,11 +4,10 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/application/profile/profile_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-import 'package:foodyman/presentation/components/loading.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 @RoutePage()
 class TermPage extends ConsumerStatefulWidget {
@@ -30,13 +29,13 @@ class _TermPageState extends ConsumerState<TermPage> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(profileProvider);
-    return Scaffold(
-      body: SafeArea(
+    return CustomScaffold(
+      body: (colors) => SafeArea(
         child: Column(
           children: [
             Text(
               AppHelpers.getTranslation(TrKeys.terms),
-              style: AppStyle.interNoSemi(size: 18),
+              style: AppStyle.interNoSemi(size: 18, color: colors.textBlack),
             ),
             state.isTermLoading
                 ? const Center(child: Loading())
@@ -48,24 +47,24 @@ class _TermPageState extends ConsumerState<TermPage> {
                         children: [
                           Text(
                             state.term?.title ?? "",
-                            style: AppStyle.interNoSemi(),
+                            style: AppStyle.interNoSemi(
+                              color: colors.textBlack,
+                            ),
                           ),
                           8.verticalSpace,
                           Html(
                             data: state.term?.description ?? "",
-                            style: {
-                              "body": Style(),
-                            },
-                          )
+                            style: {"body": Style(color: colors.textBlack)},
+                          ),
                         ],
                       ),
                     ),
-                  )
+                  ),
           ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      floatingActionButton: const PopButton(),
+      floatingActionButton: (colors) => const PopButton(),
     );
   }
 }

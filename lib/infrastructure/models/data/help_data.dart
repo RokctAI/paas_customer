@@ -10,12 +10,12 @@ class HelpModel {
   List<Datum>? data;
 
   factory HelpModel.fromJson(Map<String, dynamic> json) => HelpModel(
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-      );
+    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+  );
 
   Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+    "data": List<dynamic>.from(data!.map((x) => x.toJson())),
+  };
 }
 
 class Datum {
@@ -40,43 +40,39 @@ class Datum {
   List<String>? locales;
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        id: json["id"],
-        uuid: json["uuid"],
-        type: json["type"],
-        active: json["active"],
-        createdAt: DateTime.tryParse(json["created_at"])?.toLocal(),
-        updatedAt: DateTime.tryParse(json["updated_at"])?.toLocal(),
-        translation: json["translation"] != null
-            ? HelpTranslation.fromJson(json["translation"])
-            : null,
-      );
+    id: json["id"],
+    uuid: json["uuid"],
+    type: json["type"],
+    active: json["active"],
+    createdAt: DateTime.tryParse(json["created_at"])?.toLocal(),
+    updatedAt: DateTime.tryParse(json["updated_at"])?.toLocal(),
+    translation: json["translation"] != null
+        ? HelpTranslation.fromJson(json["translation"])
+        : null,
+  );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "uuid": uuid,
-        "type": type,
-        "active": active,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "translation": translation?.toJson(),
-        "locales": List<dynamic>.from(locales!.map((x) => x)),
-      };
+    "id": id,
+    "uuid": uuid,
+    "type": type,
+    "active": active,
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+    "translation": translation?.toJson(),
+    "locales": List<dynamic>.from(locales!.map((x) => x)),
+  };
 }
 
 class HelpTranslation {
-  HelpTranslation({
-    this.id,
-    this.locale,
-    this.question,
-    this.answer,
-  });
+  HelpTranslation({this.id, this.locale, this.question, this.answer});
 
   int? id;
   String? locale;
   String? question;
   String? answer;
 
-  factory HelpTranslation.fromJson(Map<String, dynamic> json) => HelpTranslation(
+  factory HelpTranslation.fromJson(Map<String, dynamic> json) =>
+      HelpTranslation(
         id: json["id"],
         locale: json["locale"],
         question: json["question"],
@@ -84,20 +80,15 @@ class HelpTranslation {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "locale": locale,
-        "question": question,
-        "answer": answer,
-      };
+    "id": id,
+    "locale": locale,
+    "question": question,
+    "answer": answer,
+  };
 }
 
 class Links {
-  Links({
-    this.first,
-    this.last,
-    this.prev,
-    this.next,
-  });
+  Links({this.first, this.last, this.prev, this.next});
 
   String? first;
   String? last;
@@ -105,18 +96,18 @@ class Links {
   dynamic next;
 
   factory Links.fromJson(Map<String, dynamic> json) => Links(
-        first: json["first"],
-        last: json["last"],
-        prev: json["prev"],
-        next: json["next"],
-      );
+    first: json["first"],
+    last: json["last"],
+    prev: json["prev"],
+    next: json["next"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "first": first,
-        "last": last,
-        "prev": prev,
-        "next": next,
-      };
+    "first": first,
+    "last": last,
+    "prev": prev,
+    "next": next,
+  };
 }
 
 class Meta {
@@ -141,48 +132,44 @@ class Meta {
   int? total;
 
   factory Meta.fromJson(Map<String, dynamic> json) => Meta(
-        currentPage: json["current_page"],
-        from: json["from"],
-        lastPage: json["last_page"],
-        links: List<Link>.from(json["links"].map((x) => Link.fromJson(x))),
-        path: json["path"],
-        perPage: json["per_page"],
-        to: json["to"],
-        total: json["total"],
-      );
+    currentPage: json["current_page"],
+    from: json["from"],
+    lastPage: json["last_page"],
+    links: List<Link>.from(json["links"].map((x) => Link.fromJson(x))),
+    path: json["path"],
+    perPage: json["per_page"],
+    to: json["to"],
+    total: json["total"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "current_page": currentPage,
-        "from": from,
-        "last_page": lastPage,
-        "links": List<dynamic>.from(links!.map((x) => x.toJson())),
-        "path": path,
-        "per_page": perPage,
-        "to": to,
-        "total": total,
-      };
+    "current_page": currentPage,
+    "from": from,
+    "last_page": lastPage,
+    "links": List<dynamic>.from(links!.map((x) => x.toJson())),
+    "path": path,
+    "per_page": perPage,
+    "to": to,
+    "total": total,
+  };
 }
 
 class Link {
-  Link({
-    this.url,
-    this.label,
-    this.active,
-  });
+  Link({this.url, this.label, this.active});
 
   String? url;
   String? label;
   bool? active;
 
   factory Link.fromJson(Map<String, dynamic> json) => Link(
-        url: json["url"] ?? "",
-        label: json["label"],
-        active: json["active"],
-      );
+    url: json["url"] ?? "",
+    label: json["label"],
+    active: json["active"],
+  );
 
   Map<String, dynamic> toJson() => {
-        "url": url ?? "",
-        "label": label,
-        "active": active,
-      };
+    "url": url ?? "",
+    "label": label,
+    "active": active,
+  };
 }

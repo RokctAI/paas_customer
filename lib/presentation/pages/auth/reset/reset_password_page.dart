@@ -1,30 +1,47 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/presentation/components/components.dart';
+import 'package:foodyman/presentation/theme/theme_wrapper.dart';
 import 'package:foodyman/infrastructure/models/data/user.dart';
 import 'package:foodyman/app_constants.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/app_bar_bottom_sheet.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/keyboard_dismisser.dart';
-import 'package:foodyman/presentation/components/text_fields/outline_bordered_text_field.dart';
 import 'package:foodyman/presentation/pages/auth/confirmation/register_confirmation_page.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 import 'package:foodyman/application/auth/auth.dart';
 
 @RoutePage()
-class ResetPasswordPage extends ConsumerWidget {
+class ResetPasswordPage extends ConsumerStatefulWidget {
   const ResetPasswordPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ResetPasswordPage> createState() => _ResetPasswordPageState();
+}
+
+class _ResetPasswordPageState extends ConsumerState<ResetPasswordPage>
+    with SingleTickerProviderStateMixin {
+  final formKey = GlobalKey<FormState>();
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(
+      initialIndex: AppHelpers.getAuthOption() == SignUpType.email ? 1 : 0,
+      length: 2,
+      vsync: this,
+    );
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final notifier = ref.read(resetPasswordProvider.notifier);
     final state = ref.watch(resetPasswordProvider);
     final bool isDarkMode = LocalStorage.getAppThemeMode();
@@ -47,136 +64,166 @@ class ResetPasswordPage extends ConsumerWidget {
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: AbsorbPointer(
         absorbing: state.isLoading,
-        child: KeyboardDismisser(
-          child: Container(
-            padding: MediaQuery.of(context).viewInsets,
-            decoration: BoxDecoration(
-                color: AppStyle.bgGrey.withOpacity(0.96),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16.r),
-                  topRight: Radius.circular(16.r),
-                )),
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Column(
+        child: ThemeWrapper(
+          builder: (colors, theme) {
+            return KeyboardDismisser(
+              child: Container(
+                padding: MediaQuery.of(context).viewInsets,
+                decoration: BoxDecoration(
+                  color: colors.backgroundColor.withValues(alpha: 0.96),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(16.r),
+                    topRight: Radius.circular(16.r),
+                  ),
+                ),
+                width: double.infinity,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        AppBarBottomSheet(
-                          title:
-                              AppHelpers.getTranslation(TrKeys.resetPassword),
-                        ),
-                        Text(
-                          AppHelpers.getTranslation(TrKeys.resetPasswordText),
-                          style: AppStyle.interRegular(
-                            size: 14.sp,
-                            color: AppStyle.black,
-                          ),
-                        ),
-                        40.verticalSpace,
-                        if (AppConstants.signUpType== SignUpType.phone)
-                          Directionality(
-                            textDirection:
-                                isLtr ? TextDirection.ltr : TextDirection.rtl,
-                            child: IntlPhoneField(
-                              disableLengthCheck:
-                                  !AppConstants.isNumberLengthAlwaysSame,
-                              onChanged: (phoneNum) {
-                                notifier.setEmail(phoneNum.completeNumber);
-                              },
-                              validator: (s) {
-                                if (AppConstants.isNumberLengthAlwaysSame &&
-                                    (s?.isValidNumber() ?? true)) {
-                                  return AppHelpers.getTranslation(
-                                      TrKeys.phoneNumberIsNotValid);
-                                }
-                                return null;
-                              },
-                              keyboardType: TextInputType.phone,
-                              initialCountryCode: AppConstants.countryCodeISO,
-                              invalidNumberMessage: AppHelpers.getTranslation(
-                                  TrKeys.phoneNumberIsNotValid),
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              showCountryFlag: AppConstants.showFlag,
-                              showDropdownIcon: AppConstants.showArrowIcon,
-                              autovalidateMode:
-                                  AppConstants.isNumberLengthAlwaysSame
-                                      ? AutovalidateMode.onUserInteraction
-                                      : AutovalidateMode.disabled,
-                              textAlignVertical: TextAlignVertical.center,
-                              decoration: InputDecoration(
-                                counterText: '',
-                                enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide.merge(
-                                        const BorderSide(
-                                            color: AppStyle.differBorderColor),
-                                        const BorderSide(
-                                            color:
-                                                AppStyle.differBorderColor))),
-                                errorBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide.merge(
-                                        const BorderSide(
-                                            color: AppStyle.differBorderColor),
-                                        const BorderSide(
-                                            color:
-                                                AppStyle.differBorderColor))),
-                                border: const UnderlineInputBorder(),
-                                focusedErrorBorder:
-                                    const UnderlineInputBorder(),
-                                disabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide.merge(
-                                        const BorderSide(
-                                            color: AppStyle.differBorderColor),
-                                        const BorderSide(
-                                            color:
-                                                AppStyle.differBorderColor))),
-                                focusedBorder: const UnderlineInputBorder(),
+                        Form(
+                          key: formKey,
+                          child: Column(
+                            children: [
+                              AppBarBottomSheet(
+                                title: AppHelpers.getTranslation(
+                                  TrKeys.resetPassword,
+                                ),
                               ),
-                            ),
+                              Text(
+                                AppHelpers.getTranslation(
+                                  TrKeys.resetPasswordText,
+                                ),
+                                style: AppStyle.interRegular(
+                                  size: 14,
+                                  color: colors.textBlack,
+                                ),
+                              ),
+                              24.verticalSpace,
+                              if (AppHelpers.getAuthOption() == SignUpType.both)
+                                AuthTabBar(
+                                  tabController: _tabController,
+                                  colors: colors,
+                                ),
+                              SizedBox(
+                                height: 76.r,
+                                child:
+                                    AppHelpers.getAuthOption() ==
+                                        SignUpType.both
+                                    ? TabBarView(
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        controller: _tabController,
+                                        children: [
+                                          // Phone tab
+                                          Directionality(
+                                            textDirection: isLtr
+                                                ? TextDirection.ltr
+                                                : TextDirection.rtl,
+                                            child: PhoneTextField(
+                                              onChanged: (phoneNum) {
+                                                notifier.setEmail(phoneNum);
+                                              },
+                                            ),
+                                          ),
+                                          // Email tab
+                                          OutlinedBorderTextField(
+                                            textCapitalization:
+                                                TextCapitalization.none,
+                                            label: AppHelpers.getTranslation(
+                                              TrKeys.email,
+                                            ).toUpperCase(),
+                                            onChanged: notifier.setEmail,
+                                            isError: state.isEmailError,
+                                            validation: (s) {
+                                              if (s?.isEmpty ?? true) {
+                                                return AppHelpers.getTranslation(
+                                                  TrKeys.emailIsNotValid,
+                                                );
+                                              }
+                                              return null;
+                                            },
+                                            descriptionText: state.isEmailError
+                                                ? AppHelpers.getTranslation(
+                                                    TrKeys.emailIsNotValid,
+                                                  )
+                                                : null,
+                                          ),
+                                        ],
+                                      )
+                                    : AppHelpers.getAuthOption() ==
+                                          SignUpType.phone
+                                    ? Directionality(
+                                        textDirection: isLtr
+                                            ? TextDirection.ltr
+                                            : TextDirection.rtl,
+                                        child: PhoneTextField(
+                                          onChanged: (phoneNum) {
+                                            notifier.setEmail(phoneNum);
+                                          },
+                                        ),
+                                      )
+                                    : OutlinedBorderTextField(
+                                        textCapitalization:
+                                            TextCapitalization.none,
+                                        label: AppHelpers.getTranslation(
+                                          TrKeys.email,
+                                        ).toUpperCase(),
+                                        onChanged: notifier.setEmail,
+                                        isError: state.isEmailError,
+                                        validation: (s) {
+                                          if (s?.isEmpty ?? true) {
+                                            return AppHelpers.getTranslation(
+                                              TrKeys.emailIsNotValid,
+                                            );
+                                          }
+                                          return null;
+                                        },
+                                        descriptionText: state.isEmailError
+                                            ? AppHelpers.getTranslation(
+                                                TrKeys.emailIsNotValid,
+                                              )
+                                            : null,
+                                      ),
+                              ),
+                            ],
                           ),
-                        if (AppConstants.signUpType == SignUpType.both)
-                          OutlinedBorderTextField(
-                            label: AppHelpers.getTranslation(
-                                    TrKeys.emailOrPhoneNumber)
-                                .toUpperCase(),
-                            onChanged: notifier.setEmail,
-                            isError: !state.isSuccess,
-                            descriptionText:
-                                AppHelpers.getTranslation(TrKeys.canNotBeEmpty),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            bottom: MediaQuery.paddingOf(context).bottom,
+                            top: 120.h,
                           ),
+                          child: CustomButton(
+                            isLoading: state.isLoading,
+                            title: AppHelpers.getTranslation(TrKeys.send),
+                            onPressed: () {
+                              if (!(formKey.currentState?.validate() ??
+                                  false)) {
+                                return;
+                              }
+                              if (AppConstants.isPhoneFirebase) {
+                                notifier.checkEmail()
+                                    ? notifier.sendCode(context)
+                                    : notifier.sendCodeToNumber(context);
+                              } else {
+                                notifier.sendCode(context);
+                              }
+                            },
+                            background: colors.primary,
+                            textColor: AppStyle.black,
+                          ),
+                        ),
                       ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.paddingOf(context).bottom,
-                          top: 120.h),
-                      child: CustomButton(
-                        isLoading: state.isLoading,
-                        title: AppHelpers.getTranslation(TrKeys.send),
-                        onPressed: () {
-                          if (AppConstants.isPhoneFirebase) {
-                            notifier.checkEmail()
-                                ? notifier.sendCode(context)
-                                : notifier.sendCodeToNumber(context);
-                          } else {
-                            notifier.sendCode(context);
-                          }
-                        },
-                        background: AppStyle.primary,
-                        textColor: AppStyle.black,
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ),
     );

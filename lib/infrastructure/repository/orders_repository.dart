@@ -6,9 +6,7 @@ import 'package:foodyman/domain/interface/orders.dart';
 import 'package:foodyman/infrastructure/models/data/order_active_model.dart';
 import 'package:foodyman/infrastructure/models/data/refund_data.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
 import 'package:payfast/payfast.dart';
 import '../models/data/get_calculate_data.dart';
@@ -16,16 +14,15 @@ import '../models/data/get_calculate_data.dart';
 class OrdersRepository implements OrdersRepositoryFacade {
   @override
   Future<ApiResult<OrderActiveModel>> createOrder(
-      OrderBodyData orderBody) async {
+    OrderBodyData orderBody,
+  ) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
         '/api/v1/dashboard/user/orders',
         data: orderBody.toJson(),
       );
-      return ApiResult.success(
-        data: OrderActiveModel.fromJson(response.data),
-      );
+      return ApiResult.success(data: OrderActiveModel.fromJson(response.data));
     } catch (e) {
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
@@ -107,7 +104,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
       "statuses[3]": "ready",
       "statuses[4]": "on_a_way",
       "order_statuses": true,
-      "perPage": 10
+      "perPage": 10,
     };
     try {
       final client = dioHttp.client(requireAuth: true);
@@ -137,7 +134,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
       "statuses[1]": "canceled",
       "order_statuses": true,
       "perPage": 10,
-      "page": page
+      "page": page,
     };
     try {
       final client = dioHttp.client(requireAuth: true);
@@ -162,7 +159,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
     final data = {
       if (LocalStorage.getSelectedCurrency() != null)
         'currency_id': LocalStorage.getSelectedCurrency()?.id,
-      'lang': LocalStorage.getLanguage()?.locale
+      'lang': LocalStorage.getLanguage()?.locale,
     };
     try {
       final client = dioHttp.client(requireAuth: true);
@@ -170,9 +167,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
         '/api/v1/dashboard/user/orders/$orderId',
         queryParameters: data,
       );
-      return ApiResult.success(
-        data: OrderActiveModel.fromJson(response.data),
-      );
+      return ApiResult.success(data: OrderActiveModel.fromJson(response.data));
     } catch (e, s) {
       debugPrint('==> get single order failure: $e,$s');
       return ApiResult.failure(
@@ -195,6 +190,10 @@ class OrdersRepository implements OrdersRepositoryFacade {
         '/api/v1/dashboard/user/orders/review/$orderId',
         data: data,
       );
+      await client.post(
+        '/api/v1/dashboard/user/orders/deliveryman-review/$orderId',
+        data: data,
+      );
       return const ApiResult.success(data: null);
     } catch (e) {
       debugPrint('==> add order review failure: $e');
@@ -207,14 +206,17 @@ class OrdersRepository implements OrdersRepositoryFacade {
 
   @override
   Future<ApiResult<String>> process(
-      OrderBodyData orderBody, String name) async {
+    OrderBodyData orderBody,
+    String name,
+  ) async {
     try {
       debugPrint(
-          '==> order process request: ${jsonEncode(orderBody.toJson())}');
+        '==> order process request: ${jsonEncode(orderBody.toJson(paymentTag: name))}',
+      );
       final client = dioHttp.client(requireAuth: true);
       var res = await client.get(
         '/api/v1/dashboard/user/order-$name-process',
-        data: orderBody.toJson(),
+        data: orderBody.toJson(paymentTag: name),
       );
       if (name == "pay-fast") {
         final data = res.data["data"]["data"];
@@ -259,19 +261,13 @@ class OrdersRepository implements OrdersRepositoryFacade {
       if (paymentName.toLowerCase() == 'wallet') {
         var res = await client.post(
           '/api/v1/payments/order/$orderId/transactions',
-          data: {
-            "tips": tips,
-            "payment_sys_id": paymentId,
-          },
+          data: {"tips": tips, "payment_sys_id": paymentId},
         );
         return ApiResult.success(data: res.data["data"].toString());
       } else {
         var res = await client.get(
           '/api/v1/dashboard/user/order-${paymentName.toLowerCase()}-process',
-          queryParameters: {
-            "order_id": orderId,
-            "tips": tips,
-          },
+          queryParameters: {"order_id": orderId, "tips": tips},
         );
         return ApiResult.success(data: res.data["data"]["data"]["url"]);
       }
@@ -289,10 +285,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
     required String coupon,
     required int shopId,
   }) async {
-    final data = {
-      'coupon': coupon,
-      'shop_id': shopId,
-    };
+    final data = {'coupon': coupon, 'shop_id': shopId};
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
@@ -310,8 +303,10 @@ class OrdersRepository implements OrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<CashbackResponse>> checkCashback(
-      {required double amount, required int shopId}) async {
+  Future<ApiResult<CashbackResponse>> checkCashback({
+    required double amount,
+    required int shopId,
+  }) async {
     final data = {'amount': amount, "shop_id": shopId};
     try {
       final client = dioHttp.client(requireAuth: false);
@@ -330,12 +325,13 @@ class OrdersRepository implements OrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<GetCalculateModel>> getCalculate(
-      {required int cartId,
-      required double lat,
-      required double long,
-      required DeliveryTypeEnum type,
-      String? coupon}) async {
+  Future<ApiResult<GetCalculateModel>> getCalculate({
+    required int cartId,
+    required double lat,
+    required double long,
+    required DeliveryTypeEnum type,
+    String? coupon,
+  }) async {
     final data = {
       'address[latitude]': lat,
       'address[longitude]': long,
@@ -351,7 +347,8 @@ class OrdersRepository implements OrdersRepositoryFacade {
         queryParameters: data,
       );
       return ApiResult.success(
-          data: GetCalculateModel.fromJson(response.data["data"]));
+        data: GetCalculateModel.fromJson(response.data["data"]),
+      );
     } catch (e) {
       debugPrint('==> check cashback failure: $e');
       return ApiResult.failure(
@@ -381,15 +378,10 @@ class OrdersRepository implements OrdersRepositoryFacade {
   @override
   Future<ApiResult<void>> refundOrder(num orderId, String title) async {
     try {
-      final data = {
-        "order_id": orderId,
-        "cause": title,
-      };
+      final data = {"order_id": orderId, "cause": title};
       final client = dioHttp.client(requireAuth: true);
       await client.post('/api/v1/dashboard/user/order-refunds', data: data);
-      return const ApiResult.success(
-        data: null,
-      );
+      return const ApiResult.success(data: null);
     } catch (e) {
       debugPrint('==> get cancel order failure: $e');
       return ApiResult.failure(
@@ -406,7 +398,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
         'currency_id': LocalStorage.getSelectedCurrency()?.id,
       'lang': LocalStorage.getLanguage()?.locale,
       "perPage": 10,
-      "page": page
+      "page": page,
     };
     try {
       final client = dioHttp.client(requireAuth: true);
@@ -414,9 +406,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
         '/api/v1/dashboard/user/order-refunds/paginate',
         queryParameters: data,
       );
-      return ApiResult.success(
-        data: RefundOrdersModel.fromJson(response.data),
-      );
+      return ApiResult.success(data: RefundOrdersModel.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get canceled orders failure: $e');
       return ApiResult.failure(

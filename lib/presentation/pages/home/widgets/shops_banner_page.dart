@@ -4,19 +4,16 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:foodyman/application/home/home_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/common_app_bar.dart';
-import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-import 'package:foodyman/presentation/components/loading.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/presentation/app_assets.dart';
 import 'package:foodyman/presentation/pages/home/home_one/widget/market_one_item.dart';
 import 'package:foodyman/presentation/pages/home/home_three/widgets/market_three_item.dart';
 import 'package:foodyman/infrastructure/models/data/shop_data.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/presentation/components/market_item.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
 import '../home_two/widget/market_two_item.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 @RoutePage()
 class ShopsBannerPage extends ConsumerStatefulWidget {
@@ -43,11 +40,11 @@ class _ShopsBannerPageState extends ConsumerState<ShopsBannerPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       widget.isAds
           ? ref
-              .read(homeProvider.notifier)
-              .fetchAdsById(context, widget.bannerId)
+                .read(homeProvider.notifier)
+                .fetchAdsById(context, widget.bannerId)
           : ref
-              .read(homeProvider.notifier)
-              .fetchBannerById(context, widget.bannerId);
+                .read(homeProvider.notifier)
+                .fetchBannerById(context, widget.bannerId);
     });
     super.initState();
   }
@@ -82,45 +79,47 @@ class _ShopsBannerPageState extends ConsumerState<ShopsBannerPage> {
                                 : EdgeInsets.symmetric(vertical: 24.h),
                             itemBuilder: (context, index) =>
                                 AppHelpers.getType() == 0
-                                    ? MarketItem(
-                                        shop: state.banner?.shops?[index] ??
-                                            ShopData(),
-                                        isSimpleShop: true,
-                                      )
-                                    : AppHelpers.getType() == 1
-                                        ? MarketOneItem(
-                                            shop: state.banner?.shops?[index] ??
-                                                ShopData(),
-                                            isSimpleShop: true,
-                                          )
-                                        : AppHelpers.getType() == 2
-                                            ? MarketTwoItem(
-                                                shop: state.banner
-                                                        ?.shops?[index] ??
-                                                    ShopData(),
-                                                isSimpleShop: true,
-                                              )
-                                            : MarketThreeItem(
-                                                shop: state.banner
-                                                        ?.shops?[index] ??
-                                                    ShopData(),
-                                                isSimpleShop: true,
-                                              ),
+                                ? MarketItem(
+                                    shop:
+                                        state.banner?.shops?[index] ??
+                                        ShopData(),
+                                    isSimpleShop: true,
+                                  )
+                                : AppHelpers.getType() == 1
+                                ? MarketOneItem(
+                                    shop:
+                                        state.banner?.shops?[index] ??
+                                        ShopData(),
+                                    isSimpleShop: true,
+                                  )
+                                : AppHelpers.getType() == 2
+                                ? MarketTwoItem(
+                                    shop:
+                                        state.banner?.shops?[index] ??
+                                        ShopData(),
+                                    isSimpleShop: true,
+                                  )
+                                : MarketThreeItem(
+                                    shop:
+                                        state.banner?.shops?[index] ??
+                                        ShopData(),
+                                    isSimpleShop: true,
+                                  ),
                           )
                         : Column(
                             children: [
                               16.verticalSpace,
                               SizedBox(
                                 height: MediaQuery.sizeOf(context).height / 3,
-                                child: SvgPicture.asset(
-                                  "assets/svgs/empty.svg",
-                                ),
+                                child: SvgPicture.asset(Assets.svgsEmpty),
                               ),
                               16.verticalSpace,
-                              Text(AppHelpers.getTranslation(
-                                  TrKeys.noRestaurant))
+                              Text(
+                                AppHelpers.getTranslation(TrKeys.noRestaurant),
+                              ),
                             ],
-                          ))
+                          ),
+                  ),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,

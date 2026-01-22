@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
 
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'market_shimmer_three.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class NewsShopShimmer extends StatelessWidget {
   final String title;
@@ -24,26 +24,25 @@ class NewsShopShimmer extends StatelessWidget {
         ),
         12.verticalSpace,
         SizedBox(
-            height: 246.h,
-            child: AnimationLimiter(
-              child: ListView.builder(
-                shrinkWrap: false,
-                
-                scrollDirection: Axis.horizontal,
-                itemCount: 4,
-                itemBuilder: (context, index) =>
-                    AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 375),
-                  child: const SlideAnimation(
-                    verticalOffset: 50.0,
-                    child: FadeInAnimation(
-                      child: MarketShimmerThree(),
+          height: 246.h,
+          child: AnimationLimiter(
+            child: ListView.builder(
+              shrinkWrap: false,
+
+              scrollDirection: Axis.horizontal,
+              itemCount: 4,
+              itemBuilder: (context, index) =>
+                  AnimationConfiguration.staggeredList(
+                    position: index,
+                    duration: const Duration(milliseconds: 375),
+                    child: const SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(child: MarketShimmerThree()),
                     ),
                   ),
-                ),
-              ),
-            )),
+            ),
+          ),
+        ),
       ],
     );
   }

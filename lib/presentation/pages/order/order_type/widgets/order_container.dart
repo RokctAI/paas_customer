@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:foodyman/presentation/theme/color_set.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
 class OrderContainer extends StatelessWidget {
@@ -7,13 +8,16 @@ class OrderContainer extends StatelessWidget {
   final String title;
   final String description;
   final VoidCallback onTap;
+  final CustomColorSet colors;
 
-  const OrderContainer(
-      {super.key,
-      required this.icon,
-      required this.title,
-      required this.description,
-      required this.onTap});
+  const OrderContainer({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.description,
+    required this.onTap,
+    required this.colors,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,43 +25,42 @@ class OrderContainer extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: AppStyle.bgGrey,
+          color: colors.icon,
           borderRadius: BorderRadius.circular(10.r),
         ),
         padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
         child: Row(
+          spacing: 14.r,
           children: [
             icon,
-            14.horizontalSpace,
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppStyle.interNormal(
-                    size: 12,
-                    color: AppStyle.textGrey,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: AppStyle.interNormal(
+                      size: 12,
+                      color: colors.textBlack,
+                    ),
                   ),
-                ),
-                SizedBox(
-                  width: MediaQuery.sizeOf(context).width - 164.w,
-                  child: Text(
+                  Text(
                     description,
-                    style: AppStyle.interBold(
-                      size: 14,
-                      color: AppStyle.black,
+                    style: AppStyle.interSemi(
+                      size: 13,
+                      color: colors.textBlack,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-            const Spacer(),
             Icon(
               Icons.keyboard_arrow_right,
               size: 21.r,
-            )
+              color: colors.textBlack,
+            ),
           ],
         ),
       ),

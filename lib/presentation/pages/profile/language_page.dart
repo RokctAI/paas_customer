@@ -1,22 +1,18 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/application/language/language_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/keyboard_dismisser.dart';
-import 'package:foodyman/presentation/components/loading.dart';
-import 'package:foodyman/presentation/components/select_item.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/presentation/theme/color_set.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class LanguageScreen extends ConsumerStatefulWidget {
   final VoidCallback onSave;
+  final CustomColorSet colors;
 
-  const LanguageScreen({super.key, required this.onSave});
+  const LanguageScreen({super.key, required this.onSave, required this.colors});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _LanguagePageState();
@@ -41,11 +37,12 @@ class _LanguagePageState extends ConsumerState<LanguageScreen> {
       child: KeyboardDismisser(
         child: Container(
           decoration: BoxDecoration(
-              color: AppStyle.bgGrey.withOpacity(0.96),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16.r),
-                topRight: Radius.circular(16.r),
-              )),
+            color: widget.colors.backgroundColor.withValues(alpha: 0.96),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16.r),
+              topRight: Radius.circular(16.r),
+            ),
+          ),
           width: double.infinity,
           child: state.isLoading
               ? const Loading()
@@ -77,26 +74,28 @@ class _LanguagePageState extends ConsumerState<LanguageScreen> {
                         ),
                         24.verticalSpace,
                         ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: state.list.length,
-                            itemBuilder: (context, index) {
-                              return SelectItem(
-                                onTap: () {
-                                  event.change(index);
-                                },
-                                isActive: state.index == index,
-                                title: state.list[index].title ?? "",
-                              );
-                            }),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: state.list.length,
+                          itemBuilder: (context, index) {
+                            return SelectItem(
+                              onTap: () {
+                                event.change(index);
+                              },
+                              isActive: state.index == index,
+                              title: state.list[index].title ?? "",
+                            );
+                          },
+                        ),
                         CustomButton(
-                            title: AppHelpers.getTranslation(TrKeys.save),
-                            onPressed: () {
-                              ref
-                                  .read(languageProvider.notifier)
-                                  .makeSelectedLang(context);
-                              widget.onSave();
-                            }),
+                          title: AppHelpers.getTranslation(TrKeys.save),
+                          onPressed: () async {
+                            await ref
+                                .read(languageProvider.notifier)
+                                .makeSelectedLang(context);
+                            widget.onSave();
+                          },
+                        ),
                         36.verticalSpace,
                       ],
                     ),

@@ -1,4 +1,4 @@
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:foodyman/domain/di/dependency_manager.dart';
 import 'package:foodyman/domain/handlers/network_exceptions.dart';
@@ -20,13 +20,11 @@ class DrawRepository implements DrawRepositoryFacade {
         '/v2/directions/driving-car',
         queryParameters: {
           "api_key": AppConstants.routingKey,
-          "start": (start.longitude, start.latitude),
-          "end": (end.longitude, end.latitude)
+          "start": "${start.longitude},${start.latitude}",
+          "end": "${end.longitude},${end.latitude}",
         },
       );
-      return ApiResult.success(
-        data: DrawRouting.fromJson(response.data),
-      );
+      return ApiResult.success(data: DrawRouting.fromJson(response.data));
     } catch (e) {
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),

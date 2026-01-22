@@ -3,24 +3,24 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/application/home/home_notifier.dart';
 import 'package:foodyman/application/home/home_state.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/loading.dart';
-import 'package:foodyman/presentation/components/market_item.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/pages/home/home_one/widget/market_one_item.dart';
 import 'package:foodyman/presentation/pages/home/home_three/widgets/market_three_item.dart';
 import 'package:foodyman/presentation/pages/service/widgets/service_one_category.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
+import '../../theme/color_set.dart';
 import '../home/home_two/widget/market_two_item.dart';
 import 'widgets/service_three_category.dart';
 import 'widgets/service_two_category.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class FilterCategoryService extends StatelessWidget {
   final HomeState state;
   final HomeNotifier event;
   final int categoryIndex;
   final RefreshController restaurantController;
+  final CustomColorSet colors;
 
   const FilterCategoryService({
     super.key,
@@ -28,6 +28,7 @@ class FilterCategoryService extends StatelessWidget {
     required this.event,
     required this.categoryIndex,
     required this.restaurantController,
+    required this.colors,
   });
 
   @override
@@ -46,8 +47,11 @@ class FilterCategoryService extends StatelessWidget {
         event.fetchFilterRestaurant(context, controller: restaurantController);
       },
       onRefresh: () {
-        event.fetchFilterRestaurant(context,
-            controller: restaurantController, isRefresh: true);
+        event.fetchFilterRestaurant(
+          context,
+          controller: restaurantController,
+          isRefresh: true,
+        );
       },
       child: SingleChildScrollView(
         child: Column(
@@ -56,21 +60,31 @@ class FilterCategoryService extends StatelessWidget {
             12.verticalSpace,
             AppHelpers.getType() == 1
                 ? ServiceOneCategory(
-                    state: state, event: event, categoryIndex: categoryIndex)
+                    state: state,
+                    event: event,
+                    colors: colors,
+                    categoryIndex: categoryIndex,
+                  )
                 : AppHelpers.getType() == 2
-                    ? ServiceTwoCategory(
-                        state: state,
-                        event: event,
-                        categoryIndex: categoryIndex)
-                    : AppHelpers.getType() == 3
-                        ? ServiceThreeCategory(
-                            state: state,
-                            event: event,
-                            categoryIndex: categoryIndex)
-                        : ServiceTwoCategory(
-                            state: state,
-                            event: event,
-                            categoryIndex: categoryIndex),
+                ? ServiceTwoCategory(
+                    state: state,
+                    event: event,
+                    categoryIndex: categoryIndex,
+                    colors: colors,
+                  )
+                : AppHelpers.getType() == 3
+                ? ServiceThreeCategory(
+                    state: state,
+                    event: event,
+                    categoryIndex: categoryIndex,
+                    colors: colors,
+                  )
+                : ServiceTwoCategory(
+                    state: state,
+                    event: event,
+                    categoryIndex: categoryIndex,
+                    colors: colors,
+                  ),
             TitleAndIcon(
               title: AppHelpers.getTranslation(TrKeys.restaurants),
               rightTitle:
@@ -79,40 +93,40 @@ class FilterCategoryService extends StatelessWidget {
             state.isSelectCategoryLoading == -1
                 ? const Loading()
                 : state.filterShops.isNotEmpty
-                    ? ListView.builder(
-                        padding: REdgeInsets.symmetric(vertical: 12),
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        itemCount: state.filterShops.length,
-                        itemBuilder: (context, index) => Padding(
-                          padding: REdgeInsets.only(bottom: 12),
-                          child: AppHelpers.getType() == 1
-                              ? MarketOneItem(
-                                  shop: state.filterShops[index],
-                                  isSimpleShop: true,
-                                )
-                              : AppHelpers.getType() == 2
-                                  ? MarketTwoItem(
-                                      shop: state.filterShops[index],
-                                      isSimpleShop: true,
-                                      isFilter: true,
-                                    )
-                                  : AppHelpers.getType() == 3
-                                      ? MarketThreeItem(
-                                          shop: state.filterShops[index],
-                                          isSimpleShop: true,
-                                        )
-                                      : MarketItem(
-                                          shop: state.filterShops[index],
-                                          isSimpleShop: true,
-                                        ),
-                        ),
-                      )
-                    : Padding(
-                        padding: EdgeInsets.only(top: 24.h),
-                        child: _resultEmpty(),
-                      ),
+                ? ListView.builder(
+                    padding: REdgeInsets.symmetric(vertical: 12),
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    itemCount: state.filterShops.length,
+                    itemBuilder: (context, index) => Padding(
+                      padding: REdgeInsets.only(bottom: 12),
+                      child: AppHelpers.getType() == 1
+                          ? MarketOneItem(
+                              shop: state.filterShops[index],
+                              isSimpleShop: true,
+                            )
+                          : AppHelpers.getType() == 2
+                          ? MarketTwoItem(
+                              shop: state.filterShops[index],
+                              isSimpleShop: true,
+                              isFilter: true,
+                            )
+                          : AppHelpers.getType() == 3
+                          ? MarketThreeItem(
+                              shop: state.filterShops[index],
+                              isSimpleShop: true,
+                            )
+                          : MarketItem(
+                              shop: state.filterShops[index],
+                              isSimpleShop: true,
+                            ),
+                    ),
+                  )
+                : Padding(
+                    padding: EdgeInsets.only(top: 24.h),
+                    child: _resultEmpty(),
+                  ),
           ],
         ),
       ),
@@ -129,9 +143,7 @@ Widget _resultEmpty() {
         style: AppStyle.interSemi(size: 18.sp),
       ),
       Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 32.w,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 32.w),
         child: Text(
           AppHelpers.getTranslation(TrKeys.trySearchingAgain),
           style: AppStyle.interRegular(size: 14.sp),

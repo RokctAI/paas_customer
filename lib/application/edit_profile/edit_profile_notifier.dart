@@ -2,25 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:foodyman/domain/interface/gallery.dart';
-import 'package:foodyman/domain/interface/user.dart';
+import 'package:foodyman/domain/di/dependency_manager.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/models/request/edit_profile.dart';
-import 'package:foodyman/infrastructure/services/app_connectivity.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/marker_image_cropper.dart';
 import 'edit_profile_state.dart';
 
-class EditProfileNotifier extends StateNotifier<EditProfileState> {
-  final UserRepositoryFacade _userRepository;
-  final GalleryRepositoryFacade _galleryRepository;
-
-  EditProfileNotifier(this._userRepository, this._galleryRepository)
-      : super(const EditProfileState());
+class EditProfileNotifier extends Notifier<EditProfileState> {
+  @override
+  EditProfileState build() => const EditProfileState();
 
   void setUser(ProfileData user) {
     state = state.copyWith(
@@ -62,7 +52,7 @@ class EditProfileNotifier extends StateNotifier<EditProfileState> {
     state = state.copyWith(gender: gender);
   }
 
-  getPhotoWithUrl(String url) async {
+  Future<void> getPhotoWithUrl(String url) async {
     ImageCropperForMarker imageMarker = ImageCropperForMarker();
     final file = await imageMarker.urlToFile(url);
     state = state.copyWith(imagePath: file.path);
@@ -98,17 +88,18 @@ class EditProfileNotifier extends StateNotifier<EditProfileState> {
           await updateProfileImage(context, state.imagePath);
         }
       }
-      final response = await _userRepository.editProfile(
-          user: EditProfile(
-        firstname: state.firstName.isEmpty ? user.firstname : state.firstName,
-        lastname: state.lastName.isEmpty ? user.lastname : state.lastName,
-        birthday: state.birth.isEmpty ? user.birthday : state.birth,
-        phone: state.phone.isEmpty ? user.phone : state.phone,
-        email: state.email.isEmpty ? user.email : state.email,
-        secondPhone: state.secondPhone,
-        images: state.url.isEmpty ? user.img ?? "" : state.url,
-        gender: state.gender.isEmpty ? user.gender : state.gender,
-      ));
+      final response = await userRepository.editProfile(
+        user: EditProfile(
+          firstname: state.firstName.isEmpty ? user.firstname : state.firstName,
+          lastname: state.lastName.isEmpty ? user.lastname : state.lastName,
+          birthday: state.birth.isEmpty ? user.birthday : state.birth,
+          phone: user.phone ?? state.phone,
+          email: state.email.isEmpty ? user.email : state.email,
+          secondPhone: state.secondPhone,
+          images: state.url.isEmpty ? user.img ?? "" : state.url,
+          gender: state.gender.isEmpty ? user.gender : state.gender,
+        ),
+      );
       response.when(
         success: (data) {
           LocalStorage.setUser(data.data);
@@ -141,8 +132,10 @@ class EditProfileNotifier extends StateNotifier<EditProfileState> {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       String? url;
-      final imageResponse =
-          await _galleryRepository.uploadImage(path, UploadType.users);
+      final imageResponse = await galleryRepository.uploadImage(
+        path,
+        UploadType.users,
+      );
       imageResponse.when(
         success: (data) {
           url = data.imageData?.title;

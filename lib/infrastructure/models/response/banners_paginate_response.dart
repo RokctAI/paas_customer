@@ -108,19 +108,18 @@ class BannerData {
     String? createdAt,
     String? updatedAt,
     Translation? translation,
-  }) =>
-      BannerData(
-        id: id ?? _id,
-        shopId: shopId ?? _shopId,
-        url: url ?? _url,
-        shops: shops ?? _shops,
-        img: img ?? _img,
-        active: active ?? _active,
-        likes: likes ?? _likes,
-        createdAt: createdAt ?? _createdAt,
-        updatedAt: updatedAt ?? _updatedAt,
-        translation: translation ?? _translation,
-      );
+  }) => BannerData(
+    id: id ?? _id,
+    shopId: shopId ?? _shopId,
+    url: url ?? _url,
+    shops: shops ?? _shops,
+    img: img ?? _img,
+    active: active ?? _active,
+    likes: likes ?? _likes,
+    createdAt: createdAt ?? _createdAt,
+    updatedAt: updatedAt ?? _updatedAt,
+    translation: translation ?? _translation,
+  );
 
   int? get id => _id;
 

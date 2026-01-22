@@ -1,9 +1,5 @@
 class MetaLinks {
-  MetaLinks({
-    String? url,
-    String? label,
-    bool? active,
-  }) {
+  MetaLinks({String? url, String? label, bool? active}) {
     _url = url;
     _label = label;
     _active = active;
@@ -19,16 +15,11 @@ class MetaLinks {
   String? _label;
   bool? _active;
 
-  MetaLinks copyWith({
-    String? url,
-    String? label,
-    bool? active,
-  }) =>
-      MetaLinks(
-        url: url ?? _url,
-        label: label ?? _label,
-        active: active ?? _active,
-      );
+  MetaLinks copyWith({String? url, String? label, bool? active}) => MetaLinks(
+    url: url ?? _url,
+    label: label ?? _label,
+    active: active ?? _active,
+  );
 
   String? get url => _url;
 

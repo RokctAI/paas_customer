@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:foodyman/infrastructure/models/data/chat_message_data.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
+import 'package:foodyman/presentation/theme/color_set.dart';
+
 class ChatItem extends StatelessWidget {
+  final CustomColorSet colors;
   final ChatMessageData chatData;
 
-  const ChatItem({super.key, required this.chatData});
+  const ChatItem({super.key, required this.chatData, required this.colors});
 
   @override
   Widget build(BuildContext context) {
@@ -31,21 +34,16 @@ class ChatItem extends StatelessWidget {
               ),
             ),
             color: chatData.messageOwner == MessageOwner.you
-                ? AppStyle.primary
+                ? colors.primary
                 : AppStyle.bgGrey,
           ),
-          constraints: BoxConstraints(
-            maxWidth: 256.r,
-          ),
-          padding: REdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 15,
-          ),
+          constraints: BoxConstraints(maxWidth: 256.r),
+          padding: REdgeInsets.symmetric(horizontal: 20, vertical: 15),
           child: Text(
             chatData.message,
             style: GoogleFonts.k2d(
               fontWeight: FontWeight.w500,
-              fontSize: 16.sp,
+              fontSize: 16,
               color: AppStyle.black,
               letterSpacing: -0.5,
             ),
@@ -56,8 +54,8 @@ class ChatItem extends StatelessWidget {
           chatData.time,
           style: GoogleFonts.k2d(
             fontWeight: FontWeight.w500,
-            fontSize: 10.sp,
-            color: AppStyle.black,
+            fontSize: 10,
+            color: colors.textBlack,
             letterSpacing: -0.5,
           ),
         ),

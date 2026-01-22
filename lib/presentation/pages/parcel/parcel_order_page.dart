@@ -4,35 +4,28 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/time_service.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/application/parcel/parcel_notifier.dart';
 import 'package:foodyman/application/parcel/parcel_provider.dart';
 import 'package:foodyman/application/parcel/parcel_state.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/common_app_bar.dart';
-import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-import 'package:foodyman/presentation/components/keyboard_dismisser.dart';
-import 'package:foodyman/presentation/components/loading.dart';
 import 'package:foodyman/presentation/pages/order/order_check/widgets/rating_page.dart';
 import 'package:foodyman/presentation/pages/order/order_check/widgets/title_price.dart';
 import 'package:foodyman/presentation/pages/order/order_screen/widgets/order_status.dart';
 import 'package:foodyman/presentation/pages/order/order_type/widgets/order_map.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
+import '../../theme/color_set.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
+
 @RoutePage()
 class ParcelProgressPage extends ConsumerStatefulWidget {
   final num? parcelId;
 
-  const ParcelProgressPage({
-    super.key,
-    this.parcelId,
-  });
+  const ParcelProgressPage({super.key, this.parcelId});
 
   @override
   ConsumerState<ParcelProgressPage> createState() => _ParcelProgressPageState();
@@ -73,12 +66,12 @@ class _ParcelProgressPageState extends ConsumerState<ParcelProgressPage> {
     final isLtr = LocalStorage.getLangLtr();
     ref.listen(parcelProvider, (previous, next) {
       if (AppHelpers.getOrderStatus(next.parcel?.status ?? "") ==
-          OrderStatus.delivered &&
+              OrderStatus.delivered &&
           next.parcel?.review == null &&
           previous?.parcel?.status != next.parcel?.status) {
         AppHelpers.showCustomModalBottomSheet(
           context: context,
-          modal: RatingPage(totalPrice: next.parcel?.totalPrice,parcel: true),
+          modal: RatingPage(totalPrice: next.parcel?.totalPrice, parcel: true),
           isDarkMode: false,
         );
       }
@@ -86,15 +79,13 @@ class _ParcelProgressPageState extends ConsumerState<ParcelProgressPage> {
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: KeyboardDismisser(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: AppStyle.bgGrey,
-          body: state.isLoading
+        child: CustomScaffold(
+          body: (colors) => state.isLoading
               ? const Loading()
               : Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _appBar(context, state),
+                    _appBar(context, state, colors),
                     Expanded(
                       child: SmartRefresher(
                         enablePullDown: true,
@@ -102,12 +93,17 @@ class _ParcelProgressPageState extends ConsumerState<ParcelProgressPage> {
                         controller: refreshController,
                         onRefresh: () {
                           event.showParcel(
-                              context, state.parcel?.id ?? 0, true);
+                            context,
+                            state.parcel?.id ?? 0,
+                            true,
+                          );
                           refreshController.refreshCompleted();
                         },
                         child: SingleChildScrollView(
                           padding: EdgeInsets.symmetric(
-                              vertical: 8.r, horizontal: 16.r),
+                            vertical: 8.r,
+                            horizontal: 16.r,
+                          ),
                           child: Column(
                             children: [
                               OrderMap(
@@ -115,72 +111,98 @@ class _ParcelProgressPageState extends ConsumerState<ParcelProgressPage> {
                                 polylineCoordinates: state.polylineCoordinates,
                                 markers: Set<Marker>.of(state.markers.values),
                                 latLng: LatLng(
-                                    state.parcel?.addressFrom?.latitude ?? 0,
-                                    state.parcel?.addressFrom?.longitude ?? 0),
+                                  state.parcel?.addressFrom?.latitude ?? 0,
+                                  state.parcel?.addressFrom?.longitude ?? 0,
+                                ),
                               ),
                               24.verticalSpace,
                               Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                    color: AppStyle.white,
-                                    borderRadius: BorderRadius.circular(10.r)),
+                                  color: colors.icon,
+                                  borderRadius: BorderRadius.circular(10.r),
+                                ),
                                 padding: EdgeInsets.all(16.r),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       AppHelpers.getTranslation(
-                                          TrKeys.parcelDetail),
-                                      style: AppStyle.interSemi(),
+                                        TrKeys.parcelDetail,
+                                      ),
+                                      style: AppStyle.interSemi(
+                                        color: colors.textBlack,
+                                      ),
                                     ),
                                     24.verticalSpace,
                                     Text(
                                       AppHelpers.getTranslation(TrKeys.type),
                                       style: AppStyle.interNoSemi(
-                                          color: AppStyle.textGrey, size: 16),
+                                        color: AppStyle.textGrey,
+                                        size: 16,
+                                      ),
                                     ),
                                     4.verticalSpace,
                                     Text(
                                       state.parcel?.type?.type ?? "",
-                                      style: AppStyle.interNoSemi(size: 16),
+                                      style: AppStyle.interNoSemi(
+                                        size: 16,
+                                        color: colors.textBlack,
+                                      ),
                                     ),
                                     16.verticalSpace,
                                     Text(
                                       AppHelpers.getTranslation(
-                                          TrKeys.receiver),
+                                        TrKeys.receiver,
+                                      ),
                                       style: AppStyle.interNoSemi(
-                                          color: AppStyle.textGrey, size: 16),
+                                        color: AppStyle.textGrey,
+                                        size: 16,
+                                      ),
                                     ),
                                     4.verticalSpace,
                                     Text(
                                       state.parcel?.usernameTo ?? "",
-                                      style: AppStyle.interNoSemi(size: 16),
+                                      style: AppStyle.interNoSemi(
+                                        size: 16,
+                                        color: colors.textBlack,
+                                      ),
                                     ),
                                     16.verticalSpace,
                                     Text(
                                       AppHelpers.getTranslation(
-                                          TrKeys.phoneNumber),
+                                        TrKeys.phoneNumber,
+                                      ),
                                       style: AppStyle.interNoSemi(
-                                          color: AppStyle.textGrey, size: 16),
+                                        color: AppStyle.textGrey,
+                                        size: 16,
+                                      ),
                                     ),
                                     4.verticalSpace,
                                     Text(
                                       state.parcel?.phoneTo ?? "",
-                                      style: AppStyle.interNoSemi(size: 16),
+                                      style: AppStyle.interNoSemi(
+                                        size: 16,
+                                        color: colors.textBlack,
+                                      ),
                                     ),
                                     16.verticalSpace,
                                     Text(
-                                      AppHelpers.getTranslation(
-                                          TrKeys.comment),
+                                      AppHelpers.getTranslation(TrKeys.comment),
                                       style: AppStyle.interNoSemi(
-                                          color: AppStyle.textGrey, size: 16),
+                                        color: AppStyle.textGrey,
+                                        size: 16,
+                                      ),
                                     ),
                                     4.verticalSpace,
                                     Text(
                                       state.parcel?.note ?? "",
-                                      style: AppStyle.interNoSemi(size: 16),
+                                      style: AppStyle.interNoSemi(
+                                        size: 16,
+                                        color: colors.textBlack,
+                                      ),
                                     ),
-                                    16.verticalSpace
+                                    16.verticalSpace,
                                   ],
                                 ),
                               ),
@@ -188,17 +210,18 @@ class _ParcelProgressPageState extends ConsumerState<ParcelProgressPage> {
                               Container(
                                 width: double.infinity,
                                 decoration: BoxDecoration(
-                                    color: AppStyle.white,
-                                    borderRadius: BorderRadius.circular(10.r)),
+                                  color: colors.icon,
+                                  borderRadius: BorderRadius.circular(10.r),
+                                ),
                                 padding: EdgeInsets.all(16.r),
-                                child:    Column(
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       AppHelpers.getTranslation(TrKeys.order),
                                       style: AppStyle.interNoSemi(
                                         size: 16,
-                                        color: AppStyle.black,
+                                        color: colors.textBlack,
                                       ),
                                     ),
                                     8.verticalSpace,
@@ -212,14 +235,20 @@ class _ParcelProgressPageState extends ConsumerState<ParcelProgressPage> {
                                           ),
                                         ),
                                         Container(
-                                          margin: EdgeInsets.symmetric(horizontal: 12.w),
+                                          margin: EdgeInsets.symmetric(
+                                            horizontal: 12.w,
+                                          ),
                                           width: 6.w,
                                           height: 6.h,
                                           decoration: const BoxDecoration(
-                                              color: AppStyle.textGrey, shape: BoxShape.circle),
+                                            color: AppStyle.textGrey,
+                                            shape: BoxShape.circle,
+                                          ),
                                         ),
                                         Text(
-                                          TimeService.dateFormatMDHm(state.parcel?.createdAt),
+                                          TimeService.dateFormatMDHm(
+                                            state.parcel?.createdAt,
+                                          ),
                                           style: AppStyle.interNormal(
                                             size: 14,
                                             color: AppStyle.textGrey,
@@ -228,50 +257,52 @@ class _ParcelProgressPageState extends ConsumerState<ParcelProgressPage> {
                                       ],
                                     ),
                                     16.verticalSpace,
-                                    const Divider(
-                                      color: AppStyle.textGrey,
-                                    ),
+                                    const Divider(color: AppStyle.textGrey),
                                     16.verticalSpace,
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          AppHelpers.getTranslation(TrKeys.deliveryAddress),
+                                          AppHelpers.getTranslation(
+                                            TrKeys.deliveryAddress,
+                                          ),
                                           style: AppStyle.interRegular(
                                             size: 14,
                                             color: AppStyle.textGrey,
                                           ),
                                         ),
                                         Text(
-                                          state.parcel?.addressTo?.address ?? "",
+                                          state.parcel?.addressTo?.address ??
+                                              "",
                                           style: AppStyle.interNoSemi(
                                             size: 16,
-                                            color: AppStyle.black,
+                                            color: colors.textBlack,
                                           ),
                                         ),
                                       ],
                                     ),
                                     16.verticalSpace,
-                                    const Divider(
-                                      color: AppStyle.textGrey,
-                                    ),
+                                    const Divider(color: AppStyle.textGrey),
                                     16.verticalSpace,
                                     TitleAndPrice(
-                                      title: AppHelpers.getTranslation(TrKeys.total),
+                                      title: AppHelpers.getTranslation(
+                                        TrKeys.total,
+                                      ),
                                       rightTitle: AppHelpers.numberFormat(
-                                        isOrder: true,
+                                        state.parcel?.totalPrice,
                                         symbol: state.parcel?.currency?.symbol,
-                                        number:  state.parcel?.totalPrice,
+                                        isOrder: true,
                                       ),
                                       textStyle: AppStyle.interSemi(
                                         size: 20,
-                                        color: AppStyle.black,
+                                        color: colors.textBlack,
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              100.verticalSpace
+                              100.verticalSpace,
                             ],
                           ),
                         ),
@@ -280,7 +311,7 @@ class _ParcelProgressPageState extends ConsumerState<ParcelProgressPage> {
                   ],
                 ),
           floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-          floatingActionButton: Padding(
+          floatingActionButton: (colors) => Padding(
             padding: EdgeInsets.only(left: 16.w),
             child: const PopButton(),
           ),
@@ -289,7 +320,11 @@ class _ParcelProgressPageState extends ConsumerState<ParcelProgressPage> {
     );
   }
 
-  CommonAppBar _appBar(BuildContext context, ParcelState state) {
+  CommonAppBar _appBar(
+    BuildContext context,
+    ParcelState state,
+    CustomColorSet colors,
+  ) {
     return CommonAppBar(
       height: 170,
       child: Column(
@@ -302,10 +337,7 @@ class _ParcelProgressPageState extends ConsumerState<ParcelProgressPage> {
             children: [
               Text(
                 state.parcel?.usernameFrom ?? "",
-                style: AppStyle.interSemi(
-                  size: 16,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interSemi(size: 16, color: colors.textBlack),
               ),
               SizedBox(
                 width: MediaQuery.sizeOf(context).width - 98.w,
@@ -313,7 +345,7 @@ class _ParcelProgressPageState extends ConsumerState<ParcelProgressPage> {
                   state.parcel?.addressFrom?.address ?? "",
                   style: AppStyle.interNormal(
                     size: 12,
-                    color: AppStyle.black,
+                    color: colors.textBlack,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -324,7 +356,8 @@ class _ParcelProgressPageState extends ConsumerState<ParcelProgressPage> {
           OrderStatusScreen(
             status: AppHelpers.getOrderStatus(state.parcel?.status ?? ""),
             parcel: true,
-          )
+            colors: colors,
+          ),
         ],
       ),
     );

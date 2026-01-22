@@ -1,20 +1,32 @@
 class TrKeys {
   TrKeys._();
 
+  static const String termsAndConditions = 'terms';
+  static const String iAcceptThe = 'i.have.read.and.agree.with';
+  static const String and = 'and';
   static const String bgPicture = 'bg_picture';
   static const String documents = 'documents';
   static const String uploadDocuments = 'upload.documents';
   static const String helpInfo = 'help.info';
   static const String uiType = 'ui_type';
+  static const String darkMode = 'dark.mode';
   static const String orderImage = 'order.image';
   static const String especiallyForYou = 'especially_for_you';
   static const String workForYou = 'work_for_you';
   static const String readAll = 'read_all';
   static const String to = 'to';
+  static const String allow = 'allow';
+  static const String deny = 'deny';
+  static const String chooseYourPreferredStyle = 'choose.your.preferred.style';
+  static const String guest = 'guest';
+  static const String enableLocationServices='enable.location.services';
+  static const String locationServicesDescription='to.provide.better.service.we.need.access.to.your.location.please.enable.location.services';
+  static const String tapToSignIn = 'tap.to.sign.in';
   static const String created = 'created';
   static const String offers = 'offers';
   static const String notValidDate = 'not.valid.date';
   static const String searchTheMenu = 'search.the.menu';
+  static const String role = 'role';
   static const String tellThisCodeToDriver = 'tell.this.code.to.driver';
   static const String thisImageWasUploadDriver =
       'this.image.was.uploaded.by.driver';
@@ -48,7 +60,7 @@ class TrKeys {
   static const String unpaid = 'unpaid';
   static const String payLater = 'pay.later';
   static const String pay = 'pay';
-  static const String iWantToOrderForSomeone = 'I.want.to.order.for.someone';
+  static const String iWantToOrderForSomeone = 'i.want.to.order.for.someone';
   static const String expensive = 'expensive';
   static const String leastExpensive = 'least_expensive';
   static const String standard = 'standard';
@@ -108,7 +120,7 @@ class TrKeys {
   static const String youCanOnly = 'you_can_only';
   static const String branches = 'branches';
   static const String notWork = "not_work";
-  static const String emailOrPhoneNumber = "email_or_phone_number";
+  static const String emailOrPhoneNumber = "email.or.phone";
   static const String timeSchedule = "time_schedule";
   static const String moreInfo = 'more_info';
   static const String canNotBeEmpty = 'can_not_be_empty';
@@ -271,6 +283,7 @@ class TrKeys {
   static const String mobileNumber = 'mobile_number';
   static const String alternativeNumber = 'alternative_number';
   static const String help = 'help';
+  static const String helpCenter = 'help.center';
   static const String setting = 'settings';
   static const String allRestaurants = 'popular.near.you';
   static const String newsOfWeek = 'news_of_the_week';
@@ -330,6 +343,8 @@ class TrKeys {
   static const String filter = 'filter';
   static const String clearAll = 'clear_all';
   static const String categories = 'categories';
+  static const String category = 'category';
+  static const String location = 'location';
   static const String brands = 'brands';
   static const String apply = 'apply';
   static const String thereAreNoItemsInThe = 'there_are_no_items_in_the';
@@ -415,4 +430,17 @@ class TrKeys {
       'confirm_password_is_not_the_same';
   static const String errorWithUpdatingPassword =
       'error_with_updating_password';
+
+  // Location permission benefits
+  static const String maybeLater = 'maybe.later';
+  static const String accurateDelivery = 'accurate.delivery.to.your.doorstep';
+  static const String nearbyRestaurants = 'find.nearby.restaurants.shops';
+  static const String fasterService = 'faster.delivery.times';
+
+  // Location permission states
+  static const String pleaseWait = 'please.wait';
+  static const String locationEnabled = 'location.enabled';
+  static const String locationDeniedPermanently = 'location.denied.permanently';
+  static const String locationPermissionDenied = 'location.permission.denied';
+  static const String locationPermissionDeniedDescription = 'location.permission.was.permanently.denied.please.enable.it.in.settings.to.use.this.feature';
 }

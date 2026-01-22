@@ -5,18 +5,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/application/filter/filter_notifier.dart';
 import 'package:foodyman/application/filter/filter_state.dart';
 import 'package:foodyman/infrastructure/models/data/take_data.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/custom_toggle.dart';
-import 'package:foodyman/presentation/components/loading.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
 import 'package:foodyman/application/filter/filter_provider.dart';
 import 'widgets/filter_item.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class FilterPage extends ConsumerStatefulWidget {
   final ScrollController controller;
@@ -49,32 +45,41 @@ class _FilterPageState extends ConsumerState<FilterPage> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(filterProvider.notifier)
-        ..init(context,widget.categoryId)
+        ..init(context, widget.categoryId)
         ..fetchRestaurant(context, widget.categoryId);
     });
     _freeDeliveryController.addListener(() {
-      ref.read(filterProvider.notifier).setCheck(
-          context,
-          _freeDeliveryController.value,
-          _dealsController.value,
-          _openController.value,
-          widget.categoryId);
+      ref
+          .read(filterProvider.notifier)
+          .setCheck(
+            context,
+            _freeDeliveryController.value,
+            _dealsController.value,
+            _openController.value,
+            widget.categoryId,
+          );
     });
     _dealsController.addListener(() {
-      ref.read(filterProvider.notifier).setCheck(
-          context,
-          _freeDeliveryController.value,
-          _dealsController.value,
-          _openController.value,
-          widget.categoryId);
+      ref
+          .read(filterProvider.notifier)
+          .setCheck(
+            context,
+            _freeDeliveryController.value,
+            _dealsController.value,
+            _openController.value,
+            widget.categoryId,
+          );
     });
     _openController.addListener(() {
-      ref.read(filterProvider.notifier).setCheck(
-          context,
-          _freeDeliveryController.value,
-          _dealsController.value,
-          _openController.value,
-          widget.categoryId);
+      ref
+          .read(filterProvider.notifier)
+          .setCheck(
+            context,
+            _freeDeliveryController.value,
+            _dealsController.value,
+            _openController.value,
+            widget.categoryId,
+          );
     });
     super.initState();
   }
@@ -93,170 +98,180 @@ class _FilterPageState extends ConsumerState<FilterPage> {
     final state = ref.watch(filterProvider);
     final event = ref.read(filterProvider.notifier);
     return Directionality(
-        textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
-        child: Container(
-          decoration: BoxDecoration(
-              color: AppStyle.bgGrey,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(12.r),
-                topRight: Radius.circular(12.r),
-              )),
-          width: double.infinity,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ListView(
-              controller: widget.controller,
-              children: [
-                8.verticalSpace,
-                Center(
-                  child: Container(
-                    height: 4.h,
-                    width: 48.w,
-                    decoration: BoxDecoration(
-                        color: AppStyle.dragElement,
-                        borderRadius: BorderRadius.all(Radius.circular(40.r))),
+      textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppStyle.bgGrey,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12.r),
+            topRight: Radius.circular(12.r),
+          ),
+        ),
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: ListView(
+            controller: widget.controller,
+            children: [
+              8.verticalSpace,
+              Center(
+                child: Container(
+                  height: 4.h,
+                  width: 48.w,
+                  decoration: BoxDecoration(
+                    color: AppStyle.dragElement,
+                    borderRadius: BorderRadius.circular(40.r),
                   ),
                 ),
-                18.verticalSpace,
-                TitleAndIcon(
-                  title:
-                      "${AppHelpers.getTranslation(TrKeys.filter)} (${!state.isLoading ? state.shopCount : AppHelpers.getTranslation(TrKeys.loading)})",
-                  rightTitleColor: AppStyle.red,
-                  rightTitle: AppHelpers.getTranslation(TrKeys.clearAll),
-                  onRightTap: () {
-                    event.clear(context, widget.categoryId);
-                  },
-                ),
-                state.isTagLoading
-                    ? Padding(
-                        padding: EdgeInsets.only(top: 56.h),
-                        child: const Loading(),
-                      )
-                    : Column(
-                        children: [
-                          8.verticalSpace,
-                          state.endPrice > 1
-                              ? _priceRange(state, event)
-                              : const SizedBox.shrink(),
-                          8.verticalSpace,
-                          FilterItem(
-                            title: AppHelpers.getTranslation(TrKeys.rating),
-                            list: rating,
-                            isRating: true,
-                            currentItem: state.filterModel?.rating,
-                            onTap: (s) {
-                              if (s == state.filterModel?.rating) {
-                                state.filterModel?.rating = null;
-                              } else {
-                                state.filterModel?.rating = s;
-                              }
-                              event.setFilterModel(context, state.filterModel,
-                                  widget.categoryId);
-                            },
-                          ),
-                          state.tags.isNotEmpty
-                              ? Column(
-                                  children: [
-                                    8.verticalSpace,
-                                    FilterItem(
-                                      title: AppHelpers.getTranslation(
-                                          TrKeys.specialOffers),
-                                      list: state.tags,
-                                      isOffer: true,
-                                      currentItem: state.filterModel?.offer,
-                                      onTap: (s) {
-                                        if ((s as TakeModel).id ==
-                                            state.filterModel?.offer) {
-                                          state.filterModel?.offer = null;
-                                        } else {
-                                          state.filterModel?.offer = s.id;
-                                        }
-                                        event.setFilterModel(
-                                            context,
-                                            state.filterModel,
-                                            widget.categoryId);
-                                      },
+              ),
+              18.verticalSpace,
+              TitleAndIcon(
+                title:
+                    "${AppHelpers.getTranslation(TrKeys.filter)} (${!state.isLoading ? state.shopCount : AppHelpers.getTranslation(TrKeys.loading)})",
+                rightTitleColor: AppStyle.red,
+                rightTitle: AppHelpers.getTranslation(TrKeys.clearAll),
+                onRightTap: () {
+                  event.clear(context, widget.categoryId);
+                },
+              ),
+              state.isTagLoading
+                  ? Padding(
+                      padding: EdgeInsets.only(top: 56.h),
+                      child: const Loading(),
+                    )
+                  : Column(
+                      children: [
+                        8.verticalSpace,
+                        state.endPrice > 1
+                            ? _priceRange(state, event)
+                            : const SizedBox.shrink(),
+                        8.verticalSpace,
+                        FilterItem(
+                          title: AppHelpers.getTranslation(TrKeys.rating),
+                          list: rating,
+                          isRating: true,
+                          currentItem: state.filterModel?.rating,
+                          onTap: (s) {
+                            if (s == state.filterModel?.rating) {
+                              state.filterModel?.rating = null;
+                            } else {
+                              state.filterModel?.rating = s;
+                            }
+                            event.setFilterModel(
+                              context,
+                              state.filterModel,
+                              widget.categoryId,
+                            );
+                          },
+                        ),
+                        state.tags.isNotEmpty
+                            ? Column(
+                                children: [
+                                  8.verticalSpace,
+                                  FilterItem(
+                                    title: AppHelpers.getTranslation(
+                                      TrKeys.specialOffers,
                                     ),
-                                  ],
-                                )
-                              : const SizedBox.shrink(),
-                          8.verticalSpace,
-                          FilterItem(
-                            title: AppHelpers.getTranslation(TrKeys.sortBy),
-                            list: sorts,
-                            isSort: true,
-                            currentItem: state.filterModel?.sort,
-                            onTap: (s) {
-                              if (s == state.filterModel?.sort) {
-                                state.filterModel?.sort = null;
-                              } else {
-                                state.filterModel?.sort = s;
-                              }
-                              event.setFilterModel(context, state.filterModel,
-                                  widget.categoryId);
-                            },
-                          ),
-                          8.verticalSpace,
-                          CustomToggle(
-                            title:
-                                AppHelpers.getTranslation(TrKeys.freeDelivery),
-                            isChecked: state.freeDelivery,
-                            controller: _freeDeliveryController,
-                            onChange: () {},
-                          ),
-                          8.verticalSpace,
-                          CustomToggle(
-                            title: AppHelpers.getTranslation(TrKeys.deals),
-                            isChecked: state.deals,
-                            controller: _dealsController,
-                            onChange: () {},
-                          ),
-                          8.verticalSpace,
-                          CustomToggle(
-                            title: AppHelpers.getTranslation(TrKeys.openShop),
-                            isChecked: state.open,
-                            controller: _openController,
-                            onChange: () {},
-                          ),
-                          40.verticalSpace,
-                          CustomButton(
-                            isLoading: state.isLoading,
-                            background: AppStyle.black,
-                            textColor: AppStyle.white,
-                            title:
-                                "${AppHelpers.getTranslation(TrKeys.show)} ${state.shopCount} ${AppHelpers.getTranslation(TrKeys.shops)} ",
-                            onPressed: () {
-                              context.pushRoute(
-                                  ResultFilterRoute(categoryId: widget.categoryId));
-                            },
-                          ),
-                        ],
-                      ),
-              ],
-            ),
+                                    list: state.tags,
+                                    isOffer: true,
+                                    currentItem: state.filterModel?.offer,
+                                    onTap: (s) {
+                                      if ((s as TakeModel).id ==
+                                          state.filterModel?.offer) {
+                                        state.filterModel?.offer = null;
+                                      } else {
+                                        state.filterModel?.offer = s.id;
+                                      }
+                                      event.setFilterModel(
+                                        context,
+                                        state.filterModel,
+                                        widget.categoryId,
+                                      );
+                                    },
+                                  ),
+                                ],
+                              )
+                            : const SizedBox.shrink(),
+                        8.verticalSpace,
+                        FilterItem(
+                          title: AppHelpers.getTranslation(TrKeys.sortBy),
+                          list: sorts,
+                          isSort: true,
+                          currentItem: state.filterModel?.sort,
+                          onTap: (s) {
+                            if (s == state.filterModel?.sort) {
+                              state.filterModel?.sort = null;
+                            } else {
+                              state.filterModel?.sort = s;
+                            }
+                            event.setFilterModel(
+                              context,
+                              state.filterModel,
+                              widget.categoryId,
+                            );
+                          },
+                        ),
+                        8.verticalSpace,
+                        CustomToggle(
+                          title: AppHelpers.getTranslation(TrKeys.freeDelivery),
+                          isChecked: state.freeDelivery,
+                          controller: _freeDeliveryController,
+                          onChange: () {},
+                        ),
+                        8.verticalSpace,
+                        CustomToggle(
+                          title: AppHelpers.getTranslation(TrKeys.deals),
+                          isChecked: state.deals,
+                          controller: _dealsController,
+                          onChange: () {},
+                        ),
+                        8.verticalSpace,
+                        CustomToggle(
+                          title: AppHelpers.getTranslation(TrKeys.openShop),
+                          isChecked: state.open,
+                          controller: _openController,
+                          onChange: () {},
+                        ),
+                        40.verticalSpace,
+                        CustomButton(
+                          isLoading: state.isLoading,
+                          background: AppStyle.black,
+                          textColor: AppStyle.white,
+                          title:
+                              "${AppHelpers.getTranslation(TrKeys.show)} ${state.shopCount} ${AppHelpers.getTranslation(TrKeys.shops)} ",
+                          onPressed: () {
+                            context.pushRoute(
+                              ResultFilterRoute(categoryId: widget.categoryId),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Container _priceRange(FilterState state, FilterNotifier event) {
     return Container(
       width: double.infinity,
-      padding:
-          EdgeInsets.only(left: 10.w, right: 10.w, top: 18.h, bottom: 10.h),
+      padding: EdgeInsets.only(
+        left: 10.w,
+        right: 10.w,
+        top: 18.h,
+        bottom: 10.h,
+      ),
       decoration: BoxDecoration(
-        color: AppStyle.white.withOpacity(0.9),
-        borderRadius: BorderRadius.all(
-          Radius.circular(10.r),
-        ),
+        color: AppStyle.white.withValues(alpha: 0.9),
+        borderRadius: BorderRadius.circular(10.r),
       ),
       child: Column(
         children: [
           Text(
             AppHelpers.getTranslation(TrKeys.priceRange),
-            style: AppStyle.interNoSemi(
-              size: 16,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interNoSemi(size: 16, color: AppStyle.black),
           ),
           18.verticalSpace,
           Row(
@@ -267,7 +282,7 @@ class _FilterPageState extends ConsumerState<FilterPage> {
                 child: SizedBox(
                   width: 64.w,
                   child: Text(
-                    AppHelpers.numberFormat(number: state.rangeValues.start),
+                    AppHelpers.numberFormat(state.rangeValues.start),
                     style: AppStyle.interNormal(
                       size: 14,
                       color: AppStyle.black,
@@ -279,9 +294,7 @@ class _FilterPageState extends ConsumerState<FilterPage> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(
-                        right: 22.r,
-                      ),
+                      padding: EdgeInsets.only(right: 22.r),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -291,36 +304,40 @@ class _FilterPageState extends ConsumerState<FilterPage> {
                               width: 8.w,
                               height: 100.h / state.prices[i],
                               decoration: BoxDecoration(
-                                  color: ((state.rangeValues.start /
-                                                      (state.endPrice / 20))
-                                                  .round() <=
-                                              i) &&
-                                          ((state.rangeValues.end /
-                                                      (state.endPrice / 20))
-                                                  .round() >=
-                                              i)
-                                      ? AppStyle.primary
-                                      : AppStyle.bgGrey,
-                                  borderRadius: BorderRadius.circular(48.r)),
-                            )
+                                color:
+                                    ((state.rangeValues.start /
+                                                    (state.endPrice / 20))
+                                                .round() <=
+                                            i) &&
+                                        ((state.rangeValues.end /
+                                                    (state.endPrice / 20))
+                                                .round() >=
+                                            i)
+                                    ? AppStyle.primary
+                                    : AppStyle.bgGrey,
+                                borderRadius: BorderRadius.circular(48.r),
+                              ),
+                            ),
                         ],
                       ),
                     ),
                     8.verticalSpace,
                     Padding(
-                      padding: EdgeInsets.only(
-                        right: 24.r,
-                      ),
+                      padding: EdgeInsets.only(right: 24.r),
                       child: RangeSlider(
-                          activeColor: AppStyle.primary,
-                          inactiveColor: AppStyle.bgGrey,
-                          min: state.startPrice,
-                          max: state.endPrice,
-                          values: state.rangeValues,
-                          onChanged: (value) {
-                            event.setRange(RangeValues(value.start, value.end),
-                                context, widget.categoryId);
-                          }),
+                        activeColor: AppStyle.primary,
+                        inactiveColor: AppStyle.bgGrey,
+                        min: state.startPrice,
+                        max: state.endPrice,
+                        values: state.rangeValues,
+                        onChanged: (value) {
+                          event.setRange(
+                            RangeValues(value.start, value.end),
+                            context,
+                            widget.categoryId,
+                          );
+                        },
+                      ),
                     ),
                   ],
                 ),
@@ -330,11 +347,9 @@ class _FilterPageState extends ConsumerState<FilterPage> {
                 child: SizedBox(
                   width: 64.w,
                   child: Text(
-                    AppHelpers.numberFormat(
-                      number: state.rangeValues.end,
-                    ),
+                    AppHelpers.numberFormat(state.rangeValues.end),
                     style: AppStyle.interNormal(
-                      size: 12.sp,
+                      size: 12,
                       color: AppStyle.black,
                     ),
                   ),

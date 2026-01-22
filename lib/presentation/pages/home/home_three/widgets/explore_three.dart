@@ -5,11 +5,10 @@ import 'package:collection/collection.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/custom_network_image.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/pages/home/widgets/banner_screen.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class CustomGridTile {
   CustomGridTile(this.crossAxisCount, this.mainAxisCount, {this.banner});
@@ -18,9 +17,12 @@ class CustomGridTile {
   final int crossAxisCount;
   final int mainAxisCount;
 
-  copyWith({BannerData? banner}) {
-    return CustomGridTile(crossAxisCount, mainAxisCount,
-        banner: banner ?? BannerData());
+  CustomGridTile copyWith({BannerData? banner}) {
+    return CustomGridTile(
+      crossAxisCount,
+      mainAxisCount,
+      banner: banner ?? BannerData(),
+    );
   }
 }
 
@@ -55,7 +57,7 @@ class _ExploreThreeState extends State<ExploreThree> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if(widget.list.isNotEmpty)
+        if (widget.list.isNotEmpty)
           TitleAndIcon(title: AppHelpers.getTranslation(TrKeys.explore)),
         Padding(
           padding: REdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -69,17 +71,19 @@ class _ExploreThreeState extends State<ExploreThree> {
                   crossAxisCellCount: tiles[index].crossAxisCount,
                   mainAxisCellCount: tiles[index].mainAxisCount,
                   child: InkWell(
-                    onTap: (){
+                    onTap: () {
                       AppHelpers.showCustomModalBottomSheet(
-                          context: context,
-                          modal: BannerScreen(
-                            isAds: true,
-                            bannerId:widget.list[index].id ?? 0,
-                            image: widget.list[index].img ?? "",
-                            desc: widget.list[index].translation?.description ?? "",
-                            list: widget.list[index].shops ?? [],
-                          ),
-                          isDarkMode: false);
+                        context: context,
+                        modal: BannerScreen(
+                          isAds: true,
+                          bannerId: widget.list[index].id ?? 0,
+                          image: widget.list[index].img ?? "",
+                          desc:
+                              widget.list[index].translation?.description ?? "",
+                          list: widget.list[index].shops ?? [],
+                        ),
+                        isDarkMode: false,
+                      );
                     },
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),

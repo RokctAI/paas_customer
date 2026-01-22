@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/infrastructure/models/data/story_data.dart';
-import 'package:foodyman/presentation/components/custom_network_image.dart';
-import 'package:foodyman/presentation/components/shop_avarat.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class ShopBarItem extends StatelessWidget {
   final RefreshController controller;
@@ -53,12 +53,14 @@ class ShopBarItem extends StatelessWidget {
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 4.h, horizontal: 12.w),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 4.h,
+                        horizontal: 12.w,
+                      ),
                       decoration: BoxDecoration(
-                          color: AppStyle.black.withOpacity(0.4),
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(100.r))),
+                        color: AppStyle.black.withValues(alpha: 0.4),
+                        borderRadius: BorderRadius.all(Radius.circular(100.r)),
+                      ),
                       child: Text(
                         story?.productTitle ?? "",
                         style: AppStyle.interNormal(
@@ -84,7 +86,7 @@ class ShopBarItem extends StatelessWidget {
                       shopImage: story?.logoImg ?? "",
                       size: 46,
                       padding: 6,
-                      bgColor: AppStyle.white.withOpacity(0.65),
+                      bgColor: AppStyle.white.withValues(alpha: 0.65),
                     ),
                     6.verticalSpace,
                     Text(

@@ -4,14 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/application/payment_methods/payment_provider.dart';
 import 'package:foodyman/application/shop_order/shop_order_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/pages/order/order_check/widgets/refund_screen.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
 import 'package:foodyman/application/order/order_provider.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class OrderButton extends StatelessWidget {
   final bool isOrder;
@@ -34,7 +33,7 @@ class OrderButton extends StatelessWidget {
     required this.isOrder,
     required this.orderStatus,
     required this.createOrder,
-    required this.isAutoLoading ,
+    required this.isAutoLoading,
     required this.isLoading,
     required this.cancelOrder,
     required this.callShop,
@@ -43,7 +42,8 @@ class OrderButton extends StatelessWidget {
     required this.isRefund,
     required this.repeatOrder,
     required this.isRepeatLoading,
-    required this.showImage, required this.autoOrder,
+    required this.showImage,
+    required this.autoOrder,
   });
 
   @override
@@ -104,34 +104,34 @@ class OrderButton extends StatelessWidget {
           return isRefund
               ? Column(
                   children: [
-                    if(showImage!= null)
-                    GestureDetector(
-                      onTap: showImage,
-                      child: Container(
-                        margin: EdgeInsets.only(top: 8.h),
-                        decoration: BoxDecoration(
-                          color: AppStyle.transparent,
-                          border: Border.all(color: AppStyle.black,width: 2),
-                          borderRadius: BorderRadius.circular(10.r),
-                        ),
-                        padding: REdgeInsets.all(16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              AppHelpers.getTranslation(TrKeys.orderImage),
-                              style: AppStyle.interNormal(
-                                size: 14.sp,
-                                color: AppStyle.black,
-                                letterSpacing: -0.3,
+                    if (showImage != null)
+                      GestureDetector(
+                        onTap: showImage,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 8.h),
+                          decoration: BoxDecoration(
+                            color: AppStyle.transparent,
+                            border: Border.all(color: AppStyle.black, width: 2),
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          padding: REdgeInsets.all(16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                AppHelpers.getTranslation(TrKeys.orderImage),
+                                style: AppStyle.interNormal(
+                                  size: 14,
+                                  color: AppStyle.black,
+                                  letterSpacing: -0.3,
+                                ),
                               ),
-                            ),
-                            12.horizontalSpace,
-                            const Icon(FlutterRemix.gallery_fill),
-                          ],
+                              12.horizontalSpace,
+                              const Icon(FlutterRemix.gallery_fill),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
                     10.verticalSpace,
                     CustomButton(
                       isLoading: isAutoLoading,
@@ -158,9 +158,10 @@ class OrderButton extends StatelessWidget {
                       textColor: AppStyle.white,
                       onPressed: () {
                         AppHelpers.showCustomModalBottomSheet(
-                            context: context,
-                            modal: const RefundScreen(),
-                            isDarkMode: false);
+                          context: context,
+                          modal: const RefundScreen(),
+                          isDarkMode: false,
+                        );
                       },
                     ),
                   ],
@@ -170,40 +171,43 @@ class OrderButton extends StatelessWidget {
           return const SizedBox.shrink();
       }
     } else {
-      return Consumer(builder: (context, ref, child) {
-        final bool isNotEmptyCart = (ref
-                .watch(shopOrderProvider)
-                .cart
-                ?.userCarts
-                ?.first
-                .cartDetails
-                ?.isNotEmpty ??
-            false);
-        final bool isNotEmptyPaymentType = ((AppHelpers.getPaymentType() ==
-                "admin")
-            ? (ref.watch(paymentProvider).payments.isNotEmpty)
-            : (ref.watch(orderProvider).shopData?.shopPayments?.isNotEmpty ??
-                false));
+      return Consumer(
+        builder: (context, ref, child) {
+          final state = ref.watch(orderProvider);
+          final bool isNotEmptyCart =
+              (ref
+                  .watch(shopOrderProvider)
+                  .cart
+                  ?.userCarts
+                  ?.first
+                  .cartDetails
+                  ?.isNotEmpty ??
+              false);
+          final bool isNotEmptyPaymentType =
+              ((AppHelpers.getPaymentType() == "admin")
+              ? (ref.watch(paymentProvider).payments.isNotEmpty)
+              : (ref.watch(orderProvider).shopData?.shopPayments?.isNotEmpty ??
+                    false));
 
-        return CustomButton(
-          isLoading: isLoading,
-          background: isNotEmptyCart || isNotEmptyPaymentType
-              ? (ref.watch(orderProvider).tabIndex == 0 ||
-                      (ref.watch(orderProvider).selectDate != null)
-                  ? AppStyle.primary
-                  : AppStyle.bgGrey)
-              : AppStyle.primary,
-          textColor: isNotEmptyCart || isNotEmptyPaymentType
-              ? (ref.watch(orderProvider).tabIndex == 0 ||
-                      (ref.watch(orderProvider).selectDate != null)
-                  ? AppStyle.black
-                  : AppStyle.textGrey)
-              : AppStyle.black,
-          title:
-              "${AppHelpers.getTranslation(TrKeys.continueToPayment)} — ${AppHelpers.numberFormat(number: ref.watch(orderProvider).calculateData?.totalPrice)}",
-          onPressed: createOrder,
-        );
-      });
+          return CustomButton(
+            isLoading: isLoading,
+            // isDisable: ,
+            background: isNotEmptyCart || isNotEmptyPaymentType
+                ? (state.tabIndex == 0 || (state.selectDate != null)
+                      ? null
+                      : AppStyle.bgGrey)
+                : null,
+            textColor: isNotEmptyCart || isNotEmptyPaymentType
+                ? (state.tabIndex == 0 || (state.selectDate != null)
+                      ? null
+                      : AppStyle.textGrey)
+                : null,
+            title:
+                "${AppHelpers.getTranslation(TrKeys.continueToPayment)} — ${AppHelpers.numberFormat(ref.watch(orderProvider).calculateData?.totalPrice)}",
+            onPressed: createOrder,
+          );
+        },
+      );
     }
   }
 }

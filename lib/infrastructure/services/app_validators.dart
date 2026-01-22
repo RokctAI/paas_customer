@@ -4,15 +4,13 @@ import 'tr_keys.dart';
 abstract class AppValidators {
   AppValidators._();
   static bool isValidEmail(String email) => RegExp(
-        "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*\$",
-      ).hasMatch(email);
-
-  static bool checkEmail(String email) => RegExp(
-    "/^[0-9 ()+-]+\$/"
+    "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*\$",
   ).hasMatch(email);
 
-  static bool isValidPassword(String password) => password.length > 5;
+  static bool checkEmail(String email) =>
+      RegExp("/^[0-9 ()+-]+\$/").hasMatch(email);
 
+  static bool isValidPassword(String password) => password.length > 5;
 
   static String? isNotEmptyValidator(String? title) {
     if (title?.isEmpty ?? true) {
@@ -31,7 +29,8 @@ abstract class AppValidators {
     return null;
   }
 
-  static bool isValidConfirmPassword(String password,String confirmPassword) => password == confirmPassword;
+  static bool isValidConfirmPassword(String password, String confirmPassword) =>
+      password == confirmPassword;
 
   static bool arePasswordsTheSame(String password, String confirmPassword) =>
       password == confirmPassword;

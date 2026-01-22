@@ -43,16 +43,15 @@ class BrandData {
     int? productsCount,
     String? createdAt,
     String? updatedAt,
-  }) =>
-      BrandData(
-        id: id ?? _id,
-        title: title ?? _title,
-        active: active ?? _active,
-        img: img ?? _img,
-        productsCount: productsCount ?? _productsCount,
-        createdAt: createdAt ?? _createdAt,
-        updatedAt: updatedAt ?? _updatedAt,
-      );
+  }) => BrandData(
+    id: id ?? _id,
+    title: title ?? _title,
+    active: active ?? _active,
+    img: img ?? _img,
+    productsCount: productsCount ?? _productsCount,
+    createdAt: createdAt ?? _createdAt,
+    updatedAt: updatedAt ?? _updatedAt,
+  );
 
   int? get id => _id;
 

@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+
 
 import 'dart:io';
 
@@ -43,7 +43,7 @@ class NetworkExceptions with _$NetworkExceptions {
 
   const factory NetworkExceptions.unexpectedError() = UnexpectedError;
 
-  static NetworkExceptions getDioException(error) {
+  static NetworkExceptions getDioException(dynamic error) {
     if (error is Exception) {
       try {
         if (error is DioException) {
@@ -87,8 +87,7 @@ class NetworkExceptions with _$NetworkExceptions {
               break;
           }
         } else if (error is SocketException) {
-        } else {
-        }
+        } else {}
         return const NetworkExceptions.noInternetConnection();
       } on FormatException catch (_) {
         return const NetworkExceptions.formatException();
@@ -104,7 +103,7 @@ class NetworkExceptions with _$NetworkExceptions {
     }
   }
 
-  static int getDioStatus(error) {
+  static int getDioStatus(dynamic error) {
     if (error is Exception) {
       try {
         int? status;
@@ -183,63 +182,5 @@ class NetworkExceptions with _$NetworkExceptions {
         return 500;
       }
     }
-  }
-
-  static String getErrorMessage(NetworkExceptions networkExceptions) {
-    var errorMessage = "";
-    networkExceptions.when(
-      notImplemented: () {
-        errorMessage = "Not Implemented";
-      },
-      requestCancelled: () {
-        errorMessage = "Request Cancelled";
-      },
-      internalServerError: () {
-        errorMessage = "Internal Server Error";
-      },
-      notFound: (String reason) {
-        errorMessage = reason;
-      },
-      serviceUnavailable: () {
-        errorMessage = "Service unavailable";
-      },
-      methodNotAllowed: () {
-        errorMessage = "Method Allowed";
-      },
-      badRequest: () {
-        errorMessage = "Bad request";
-      },
-      unauthorisedRequest: () {
-        errorMessage = "Unauthorised request";
-      },
-      unexpectedError: () {
-        errorMessage = "Unexpected error occurred";
-      },
-      requestTimeout: () {
-        errorMessage = "Connection request timeout";
-      },
-      noInternetConnection: () {
-        errorMessage = "No internet connection";
-      },
-      conflict: () {
-        errorMessage = "Error due to a conflict";
-      },
-      sendTimeout: () {
-        errorMessage = "Send timeout in connection with API server";
-      },
-      unableToProcess: () {
-        errorMessage = "Unable to process the data";
-      },
-      defaultError: (String error) {
-        errorMessage = error;
-      },
-      formatException: () {
-        errorMessage = "Unexpected error occurred";
-      },
-      notAcceptable: () {
-        errorMessage = "Not acceptable";
-      },
-    );
-    return errorMessage;
   }
 }

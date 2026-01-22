@@ -2,15 +2,17 @@
 class Assets {
   Assets._();
 
-  static const String assetsImagesUi3 = 'assets/images/ui3.png';
   static const String imagesAppLogo = 'assets/images/app_logo.png';
   static const String imagesDelivery = 'assets/images/delivery.png';
-  static const String imagesDeliveryBanner = 'assets/images/delivery_banner.png';
+  static const String imagesDeliveryBanner =
+      'assets/images/delivery_banner.png';
   static const String imagesDoor = 'assets/images/door.png';
   static const String imagesDoorToDoor3 = 'assets/images/door_to_door_3.png';
   static const String imagesFast = 'assets/images/fast.png';
   static const String imagesLogo = 'assets/images/logo.png';
+  static const String imagesMapMarker = 'assets/images/map_marker.bmp';
   static const String imagesMarker = 'assets/images/marker.png';
+  static const String userMarker = 'assets/images/user_marker.png';
   static const String imagesNotFound = 'assets/images/notFound.png';
   static const String imagesPerson = 'assets/images/person.png';
   static const String imagesSave = 'assets/images/save.png';
@@ -21,6 +23,7 @@ class Assets {
   static const String imagesUi1 = 'assets/images/ui1.png';
   static const String imagesUi2 = 'assets/images/ui2.png';
   static const String imagesUi3 = 'assets/images/ui3.png';
+  static const String imagesUserMarker = 'assets/images/user_marker.png';
   static const String imagesVisa = 'assets/images/visa.png';
   static const String lottieEmptyBox = 'assets/lottie/empty-box.json';
   static const String lottieGirlEmpty = 'assets/lottie/girl_empty.json';
@@ -61,5 +64,4 @@ class Assets {
   static const String svgsStar = 'assets/svgs/star.svg';
   static const String svgsTicket = 'assets/svgs/ticket.svg';
   static const String svgsVegetarin = 'assets/svgs/vegetarin.svg';
-
 }

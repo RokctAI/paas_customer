@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 
 class TokenInterceptor extends Interceptor {
   final bool requireAuth;
@@ -13,7 +13,7 @@ class TokenInterceptor extends Interceptor {
   ) async {
     final String token = LocalStorage.getToken();
     if (token.isNotEmpty && requireAuth) {
-      options.headers.addAll({'Authorization': 'Bearer  $token'});
+      options.headers.addAll({'Authorization': 'Bearer $token'});
     }
     handler.next(options);
   }

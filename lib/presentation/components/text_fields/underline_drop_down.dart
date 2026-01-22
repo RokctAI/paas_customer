@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
+import 'package:foodyman/presentation/theme/theme_wrapper.dart';
 
 class UnderlineDropDown extends StatelessWidget {
   final String? value;
@@ -23,51 +24,59 @@ class UnderlineDropDown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField(
-      padding: EdgeInsets.zero,
-      hint: Text(
-        AppHelpers.getTranslation(hint ?? ''),
-        style: AppStyle.interNormal(
-          size: 14,
-          color: AppStyle.black.withOpacity(0.7),
-        ),
-      ),
-      value: value,
-      validator: validator,
-      items: list.map((e) {
-        return DropdownMenuItem(
-            value: e,
-            child: Text(
-              AppHelpers.getTranslation(e),
-            ));
-      }).toList(),
-      onChanged: (s) => onChanged.call(s.toString()),
-      elevation: 0,
-      dropdownColor: AppStyle.white,
-      iconEnabledColor: AppStyle.black,
-      borderRadius: BorderRadius.circular(8.r),
-      style: AppStyle.interNormal(),
-      decoration: InputDecoration(
-        contentPadding: REdgeInsets.symmetric(horizontal: 2),
-        labelText:
-        label != null ? "${AppHelpers.getTranslation(label!)}*" : null,
-        labelStyle: AppStyle.interNormal(
-          size: 14,
-          color: AppStyle.black.withOpacity(0.9),
-        ),
-        enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide.merge(
-                const BorderSide(color: AppStyle.differBorderColor),
-                const BorderSide(color: AppStyle.differBorderColor))),
-        errorBorder: InputBorder.none,
-        border: const UnderlineInputBorder(),
-        focusedErrorBorder: const UnderlineInputBorder(),
-        disabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide.merge(
-                const BorderSide(color: AppStyle.differBorderColor),
-                const BorderSide(color: AppStyle.differBorderColor))),
-        focusedBorder: const UnderlineInputBorder(),
-      ),
+    return ThemeWrapper(
+      builder: (colors, theme) {
+        return DropdownButtonFormField(
+          padding: EdgeInsets.zero,
+          hint: Text(
+            AppHelpers.getTranslation(hint ?? ''),
+            style: AppStyle.interNormal(
+              size: 14,
+              color: colors.textBlack.withValues(alpha: 0.7),
+            ),
+          ),
+          initialValue: value,
+          validator: validator,
+          items: list.map((e) {
+            return DropdownMenuItem(
+              value: e,
+              child: Text(AppHelpers.getTranslation(e)),
+            );
+          }).toList(),
+          onChanged: (s) => onChanged.call(s.toString()),
+          elevation: 0,
+          dropdownColor: colors.textWhite,
+          iconEnabledColor: colors.textBlack,
+          borderRadius: BorderRadius.circular(8.r),
+          style: AppStyle.interNormal(color: colors.textBlack),
+          decoration: InputDecoration(
+            contentPadding: REdgeInsets.symmetric(horizontal: 2),
+            labelText: label != null
+                ? "${AppHelpers.getTranslation(label!)}*"
+                : null,
+            labelStyle: AppStyle.interNormal(
+              size: 14,
+              color: colors.textBlack.withValues(alpha: 0.9),
+            ),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide.merge(
+                BorderSide(color: AppStyle.differBorderColor),
+                BorderSide(color: AppStyle.differBorderColor),
+              ),
+            ),
+            errorBorder: InputBorder.none,
+            border: const UnderlineInputBorder(),
+            focusedErrorBorder: const UnderlineInputBorder(),
+            disabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide.merge(
+                BorderSide(color: AppStyle.differBorderColor),
+                BorderSide(color: AppStyle.differBorderColor),
+              ),
+            ),
+            focusedBorder: const UnderlineInputBorder(),
+          ),
+        );
+      },
     );
   }
 }

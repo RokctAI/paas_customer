@@ -1,20 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:foodyman/domain/interface/settings.dart';
-import 'package:foodyman/infrastructure/services/app_connectivity.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:foodyman/domain/di/dependency_manager.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'splash_state.dart';
 
-class SplashNotifier extends StateNotifier<SplashState> {
-  final SettingsRepositoryFacade _settingsRepository;
-
-  SplashNotifier(
-    this._settingsRepository,
-  ) : super(const SplashState());
+class SplashNotifier extends Notifier<SplashState> {
+  @override
+  SplashState build() => const SplashState();
 
   Future<void> getToken(
     BuildContext context, {
@@ -25,7 +20,7 @@ class SplashNotifier extends StateNotifier<SplashState> {
     final connect = await AppConnectivity.connectivity();
     if (connect) {
       if (LocalStorage.getSettingsFetched()) {
-        final response = await _settingsRepository.getGlobalSettings();
+        final response = await settingsRepository.getGlobalSettings();
         response.when(
           success: (data) {
             LocalStorage.setSettingsList(data.data ?? []);
@@ -33,10 +28,7 @@ class SplashNotifier extends StateNotifier<SplashState> {
           },
           failure: (failure, status) {
             debugPrint('==> error with settings fetched');
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           },
         );
       }
@@ -48,7 +40,7 @@ class SplashNotifier extends StateNotifier<SplashState> {
       }
 
       if (!LocalStorage.getSettingsFetched()) {
-        final response = await _settingsRepository.getGlobalSettings();
+        final response = await settingsRepository.getGlobalSettings();
         response.when(
           success: (data) {
             LocalStorage.setSettingsList(data.data ?? []);
@@ -56,10 +48,7 @@ class SplashNotifier extends StateNotifier<SplashState> {
           },
           failure: (failure, status) {
             debugPrint('==> error with settings fetched');
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           },
         );
       }
@@ -71,7 +60,7 @@ class SplashNotifier extends StateNotifier<SplashState> {
   Future<void> getTranslations(BuildContext context) async {
     final connect = await AppConnectivity.connectivity();
     if (connect) {
-      final response = await _settingsRepository.getMobileTranslations();
+      final response = await settingsRepository.getMobileTranslations();
       response.when(
         success: (data) {
           LocalStorage.setTranslations(data.data);

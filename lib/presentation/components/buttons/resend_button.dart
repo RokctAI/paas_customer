@@ -26,34 +26,25 @@ class ResendButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         elevation: 0,
         shadowColor: AppStyle.transparent,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         minimumSize: Size(97.r, 46.r),
         backgroundColor: AppStyle.black,
       ),
       onPressed: onPressed,
       child: isTimeExpired
           ? isResending
-              ? SizedBox(
-                  width: 10.r,
-                  height: 10.r,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 1.r,
-                    color: AppStyle.white,
-                  ),
-                )
-              : Icon(
-                  iconData,
-                  color: AppStyle.white,
-                  size: 20,
-                )
+                ? SizedBox(
+                    width: 10.r,
+                    height: 10.r,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 1.r,
+                      color: AppStyle.white,
+                    ),
+                  )
+                : Icon(iconData, color: AppStyle.white, size: 20)
           : Text(
               title,
-              style: AppStyle.interNormal(
-                size: 15,
-                color: AppStyle.white,
-              ),
+              style: AppStyle.interNormal(size: 15, color: AppStyle.white),
             ),
     );
   }

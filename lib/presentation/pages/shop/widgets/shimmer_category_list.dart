@@ -11,7 +11,7 @@ class ShimmerCategoryList extends StatelessWidget {
     return SizedBox(
       height: 100.h,
       child: ListView.builder(
-        padding: REdgeInsets.only(top: 46,bottom: 14,left: 12),
+        padding: REdgeInsets.only(top: 46, bottom: 14, left: 12),
         physics: const NeverScrollableScrollPhysics(),
         scrollDirection: Axis.horizontal,
         itemExtent: 120.r,
@@ -20,7 +20,7 @@ class ShimmerCategoryList extends StatelessWidget {
           return Container(
             height: 48.h,
             width: 100.r,
-            margin: REdgeInsets.only(right: 16,),
+            margin: REdgeInsets.only(right: 16),
             decoration: BoxDecoration(
               color: AppStyle.shimmerBase,
               borderRadius: BorderRadius.circular(10.r),

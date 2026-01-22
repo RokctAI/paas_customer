@@ -24,17 +24,17 @@ class RepeatData {
     String? to,
     String? createdAt,
     String? updatedAt,
-  }) =>
-      RepeatData(
-        id: id ?? this.id,
-        orderId: orderId ?? this.orderId,
-        from: from ?? this.from,
-        to: to ?? this.to,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-      );
+  }) => RepeatData(
+    id: id ?? this.id,
+    orderId: orderId ?? this.orderId,
+    from: from ?? this.from,
+    to: to ?? this.to,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
 
-  factory RepeatData.fromRawJson(String str) => RepeatData.fromJson(json.decode(str));
+  factory RepeatData.fromRawJson(String str) =>
+      RepeatData.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 

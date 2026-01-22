@@ -1,22 +1,21 @@
-
-
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-
+import 'package:foodyman/infrastructure/services/services.dart';
 
 class SearchShopModel {
   final String text;
   final int? categoryId;
 
-  SearchShopModel({
-    required this.text,
-    this.categoryId,
-  });
+  SearchShopModel({required this.text, this.categoryId});
 
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
+    final map = <String, dynamic>{
+      "address": {
+        "latitude": LocalStorage.getAddressSelected()?.location?.latitude,
+        "longitude": LocalStorage.getAddressSelected()?.location?.longitude,
+      }
+    };
     map["search"] = text;
     map["perPage"] = 100;
-    if(categoryId != null )  map["category_id"] = categoryId;
+    if (categoryId != null) map["category_id"] = categoryId;
     map["lang"] = LocalStorage.getLanguage()?.locale ?? "en";
     return map;
   }

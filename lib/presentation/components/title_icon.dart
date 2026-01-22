@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 
 import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:foodyman/presentation/theme/theme_wrapper.dart';
 
 // ignore: must_be_immutable
 class TitleAndIcon extends StatelessWidget {
@@ -12,58 +13,67 @@ class TitleAndIcon extends StatelessWidget {
   final bool isIcon;
   final Color rightTitleColor;
   final double paddingHorizontalSize;
-   VoidCallback? onRightTap;
+  VoidCallback? onRightTap;
 
-   TitleAndIcon({
+  TitleAndIcon({
     super.key,
     this.isIcon = false,
     required this.title,
     this.rightTitle,
     this.rightTitleColor = AppStyle.black,
     this.onRightTap,
-     this.titleSize = 20,
-     this.paddingHorizontalSize = 16,
+    this.titleSize = 18,
+    this.paddingHorizontalSize = 16,
   });
 
   @override
   Widget build(BuildContext context) {
     final bool isLtr = LocalStorage.getLangLtr();
-    return Directionality(
-      textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: paddingHorizontalSize.r),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Text(
-                title,
-                style: AppStyle.interNoSemi(
-                  size: titleSize.sp,
-                  color: AppStyle.black,
-                ),
-              ),
-            ),
-            GestureDetector(
-              onTap: onRightTap ?? (){},
-              child: Row(
-                children: [
-                  Text(
-                    rightTitle ?? "",
-                    style: AppStyle.interRegular(
-                      size: 14,
-                      color: rightTitleColor,
+    return ThemeWrapper(
+      builder: (colors, theme) {
+        return Directionality(
+          textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: paddingHorizontalSize.r),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    title,
+                    style: AppStyle.interNoSemi(
+                      size: titleSize,
+                      color: colors.textBlack,
                     ),
                   ),
-                  isIcon
-                      ?  Icon(isLtr ? Icons.keyboard_arrow_right : Icons.keyboard_arrow_left)
-                      : const SizedBox.shrink()
-                ],
-              ),
+                ),
+                GestureDetector(
+                  onTap: onRightTap ?? () {},
+                  child: Row(
+                    children: [
+                      Text(
+                        rightTitle ?? "",
+                        style: AppStyle.interRegular(
+                          size: 14,
+                          color: colors.textBlack,
+                        ),
+                      ),
+                      isIcon
+                          ? Icon(
+                              isLtr
+                                  ? Icons.keyboard_arrow_right
+                                  : Icons.keyboard_arrow_left,
+                              color: colors.textBlack,
+                            )
+                          : const SizedBox.shrink(),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

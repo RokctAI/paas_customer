@@ -1,30 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class CardClearDialog extends StatelessWidget {
   final String cardName;
   final VoidCallback cancel;
   final VoidCallback clear;
 
-  const CardClearDialog(
-      {super.key,
-      required this.cancel,
-      required this.clear,
-      required this.cardName});
+  const CardClearDialog({
+    super.key,
+    required this.cancel,
+    required this.clear,
+    required this.cardName,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: (MediaQuery.sizeOf(context).width - 60.w),
       decoration: BoxDecoration(
-        color: AppStyle.white.withOpacity(0.96),
+        color: AppStyle.white.withValues(alpha: 0.96),
         boxShadow: [
           BoxShadow(
-            color: AppStyle.white.withOpacity(0.65),
+            color: AppStyle.white.withValues(alpha: 0.65),
             spreadRadius: 0,
             blurRadius: 60,
             offset: const Offset(0, 20), // changes position of shadow
@@ -36,24 +37,15 @@ class CardClearDialog extends StatelessWidget {
         children: [
           Text(
             AppHelpers.getTranslation(TrKeys.clearCard1),
-            style: AppStyle.interNormal(
-              size: 16,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interNormal(size: 16, color: AppStyle.black),
           ),
           Text(
             cardName,
-            style: AppStyle.interSemi(
-              size: 16,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interSemi(size: 16, color: AppStyle.black),
           ),
           Text(
             AppHelpers.getTranslation(TrKeys.clearCard2),
-            style: AppStyle.interNormal(
-              size: 16,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interNormal(size: 16, color: AppStyle.black),
           ),
           50.verticalSpace,
           Row(

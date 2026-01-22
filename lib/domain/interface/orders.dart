@@ -1,18 +1,19 @@
 import 'package:foodyman/infrastructure/models/data/order_active_model.dart';
 import 'package:foodyman/infrastructure/models/data/refund_data.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 
 import 'package:foodyman/domain/handlers/handlers.dart';
 import 'package:foodyman/infrastructure/models/data/get_calculate_data.dart';
 
 abstract class OrdersRepositoryFacade {
-  Future<ApiResult<GetCalculateModel>> getCalculate(
-      {required int cartId,
-      required double lat,
-      required double long,
-      required DeliveryTypeEnum type,
-      String? coupon});
+  Future<ApiResult<GetCalculateModel>> getCalculate({
+    required int cartId,
+    required double lat,
+    required double long,
+    required DeliveryTypeEnum type,
+    String? coupon,
+  });
 
   Future<ApiResult<OrderActiveModel>> createOrder(OrderBodyData orderBody);
 
@@ -45,13 +46,19 @@ abstract class OrdersRepositoryFacade {
   Future<ApiResult<String>> process(OrderBodyData orderBody, String name);
 
   Future<ApiResult<String>> tipProcess(
-      int? orderId, String paymentName, int? paymentId, num? tips);
+    int? orderId,
+    String paymentName,
+    int? paymentId,
+    num? tips,
+  );
 
   Future<ApiResult<CouponResponse>> checkCoupon({
     required String coupon,
     required int shopId,
   });
 
-  Future<ApiResult<CashbackResponse>> checkCashback(
-      {required double amount, required int shopId});
+  Future<ApiResult<CashbackResponse>> checkCashback({
+    required double amount,
+    required int shopId,
+  });
 }

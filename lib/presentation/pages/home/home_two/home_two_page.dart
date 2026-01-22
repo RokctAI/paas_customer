@@ -12,10 +12,8 @@ import 'package:foodyman/application/home/home_state.dart';
 import 'package:foodyman/application/map/view_map_provider.dart';
 import 'package:foodyman/application/profile/profile_provider.dart';
 import 'package:foodyman/application/shop_order/shop_order_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/presentation/app_assets.dart';
 import 'package:foodyman/presentation/pages/home/shimmer/recommend_shop_shimmer.dart';
 import 'package:foodyman/presentation/pages/home/shimmer/shop_shimmer.dart';
 import 'package:foodyman/presentation/pages/home/widgets/banner_item.dart';
@@ -23,6 +21,7 @@ import 'package:foodyman/presentation/pages/home/widgets/shop_bar_item.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
+import '../../../theme/color_set.dart';
 import '../shimmer/news_shop_shimmer.dart';
 import 'app_bar_two.dart';
 import 'category_two.dart';
@@ -34,6 +33,8 @@ import 'widget/delivery_banner.dart';
 import 'widget/market_two_item.dart';
 import 'widget/recommended_two_item.dart';
 
+import 'package:foodyman/presentation/components/components.dart';
+
 class HomeTwoPage extends ConsumerStatefulWidget {
   const HomeTwoPage({super.key});
 
@@ -44,13 +45,12 @@ class HomeTwoPage extends ConsumerStatefulWidget {
 class _HomeTwoPageState extends ConsumerState<HomeTwoPage> {
   late HomeNotifier event;
   final RefreshController _bannerController = RefreshController();
-  final RefreshController _restaurantController  = RefreshController();
+  final RefreshController _restaurantController = RefreshController();
   final RefreshController _categoryController = RefreshController();
   final RefreshController _storyController = RefreshController();
 
   @override
   void initState() {
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(homeProvider.notifier)
         ..setAddress()
@@ -99,17 +99,35 @@ class _HomeTwoPageState extends ConsumerState<HomeTwoPage> {
   void _onRefresh() {
     ref.watch(homeProvider).selectIndexCategory == -1
         ? (event
-          ..fetchBannerPage(context, _restaurantController, isRefresh: true)
-          ..fetchRestaurantPage(context, _restaurantController, isRefresh: true)
-          ..fetchCategoriesPage(context, _restaurantController, isRefresh: true)
-          ..fetchStorePage(context, _restaurantController, isRefresh: true)
-          ..fetchShopPage(context, _restaurantController, isRefresh: true)
-          ..fetchAds(context)
-          ..fetchRestaurantPageNew(context, _restaurantController,
-              isRefresh: true)
-          ..fetchShopPageRecommend(context, _restaurantController,
-              isRefresh: true))
-        : event.fetchFilterRestaurant(context, controller: _restaurantController,isRefresh: true);
+            ..fetchBannerPage(context, _restaurantController, isRefresh: true)
+            ..fetchRestaurantPage(
+              context,
+              _restaurantController,
+              isRefresh: true,
+            )
+            ..fetchCategoriesPage(
+              context,
+              _restaurantController,
+              isRefresh: true,
+            )
+            ..fetchStorePage(context, _restaurantController, isRefresh: true)
+            ..fetchShopPage(context, _restaurantController, isRefresh: true)
+            ..fetchAds(context)
+            ..fetchRestaurantPageNew(
+              context,
+              _restaurantController,
+              isRefresh: true,
+            )
+            ..fetchShopPageRecommend(
+              context,
+              _restaurantController,
+              isRefresh: true,
+            ))
+        : event.fetchFilterRestaurant(
+            context,
+            controller: _restaurantController,
+            isRefresh: true,
+          );
   }
 
   @override
@@ -118,11 +136,10 @@ class _HomeTwoPageState extends ConsumerState<HomeTwoPage> {
     final bool isLtr = LocalStorage.getLangLtr();
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: AppStyle.bgGrey,
-        body: Column(
+      child: CustomScaffold(
+        body: (colors) => Column(
           children: [
-            AppBarTwo(state: state, event: event),
+            AppBarTwo(state: state, event: event, colors: colors),
             Expanded(
               child: SmartRefresher(
                 enablePullDown: true,
@@ -144,16 +161,19 @@ class _HomeTwoPageState extends ConsumerState<HomeTwoPage> {
                       state: state,
                       event: event,
                       categoryController: _categoryController,
-                      onTap: (){
+                      onTap: () {
                         _restaurantController.resetNoData();
                       },
+                      colors: colors,
                     ),
                     state.selectIndexCategory == -1
-                        ? _body(state, context)
+                        ? _body(state, context, colors)
                         : FilterCategoryShopTwo(
+                            colors: colors,
                             state: state,
                             event: event,
-                            shopController: _restaurantController),
+                            shopController: _restaurantController,
+                          ),
                   ],
                 ),
               ),
@@ -164,7 +184,7 @@ class _HomeTwoPageState extends ConsumerState<HomeTwoPage> {
     );
   }
 
-  Widget _body(HomeState state, BuildContext context) {
+  Widget _body(HomeState state, BuildContext context, CustomColorSet colors) {
     return Column(
       children: [
         state.isRestaurantLoading
@@ -185,13 +205,13 @@ class _HomeTwoPageState extends ConsumerState<HomeTwoPage> {
                           child: GridView.builder(
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              // mainAxisExtent: 238.r,
-                                  childAspectRatio: 0.75
-                            ),
+                                  crossAxisCount: 2,
+                                  // mainAxisExtent: 238.r,
+                                  childAspectRatio: 0.75,
+                                ),
                             padding: EdgeInsets.symmetric(horizontal: 8.r),
                             shrinkWrap: true,
-                            
+
                             physics: const NeverScrollableScrollPhysics(),
                             scrollDirection: Axis.vertical,
                             itemCount: state.restaurant.length > 6
@@ -199,30 +219,29 @@ class _HomeTwoPageState extends ConsumerState<HomeTwoPage> {
                                 : state.restaurant.length,
                             itemBuilder: (context, index) =>
                                 AnimationConfiguration.staggeredList(
-                              position: index,
-                              duration: const Duration(milliseconds: 375),
-                              child: SlideAnimation(
-                                verticalOffset: 50.0,
-                                child: FadeInAnimation(
-                                  child: MarketTwoItem(
-                                    shop: state.restaurant[index],
-                                    isSimpleShop: true,
+                                  position: index,
+                                  duration: const Duration(milliseconds: 375),
+                                  child: SlideAnimation(
+                                    verticalOffset: 50.0,
+                                    child: FadeInAnimation(
+                                      child: MarketTwoItem(
+                                        shop: state.restaurant[index],
+                                        isSimpleShop: true,
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
                           ),
                         )
-                      : SvgPicture.asset(
-                          "assets/svgs/empty.svg",
-                          height: 100.h,
-                        )
+                      : SvgPicture.asset(Assets.svgsEmpty, height: 100.h),
                 ],
               ),
         Container(
           margin: REdgeInsets.symmetric(vertical: 16),
           decoration: BoxDecoration(
-              color: AppStyle.white, borderRadius: BorderRadius.circular(6.r)),
+            color: colors.backgroundColor,
+            borderRadius: BorderRadius.circular(6.r),
+          ),
           child: Column(
             children: [
               state.isBannerLoading
@@ -243,7 +262,9 @@ class _HomeTwoPageState extends ConsumerState<HomeTwoPage> {
                             enablePullUp: true,
                             onLoading: () async {
                               await event.fetchBannerPage(
-                                  context, _bannerController);
+                                context,
+                                _bannerController,
+                              );
                             },
                             child: AnimationLimiter(
                               child: ListView.builder(
@@ -251,20 +272,24 @@ class _HomeTwoPageState extends ConsumerState<HomeTwoPage> {
                                 shrinkWrap: true,
                                 itemCount: state.banners.length,
                                 padding: REdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 12),
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
                                 itemBuilder: (context, index) =>
                                     AnimationConfiguration.staggeredList(
-                                  position: index,
-                                  duration: const Duration(milliseconds: 375),
-                                  child: SlideAnimation(
-                                    verticalOffset: 50.0,
-                                    child: FadeInAnimation(
-                                      child: BannerTwoItem(
-                                        banner: state.banners[index],
+                                      position: index,
+                                      duration: const Duration(
+                                        milliseconds: 375,
+                                      ),
+                                      child: SlideAnimation(
+                                        verticalOffset: 50.0,
+                                        child: FadeInAnimation(
+                                          child: BannerTwoItem(
+                                            banner: state.banners[index],
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
                               ),
                             ),
                           ),
@@ -272,41 +297,42 @@ class _HomeTwoPageState extends ConsumerState<HomeTwoPage> {
                         16.verticalSpace,
                       ],
                     ),
-              const DeliveryBanner(),
+              DeliveryBanner(colors: colors),
               state.isShopLoading
-                  ? ShopShimmer(
-                      title: AppHelpers.getTranslation(TrKeys.shops),
-                    )
+                  ? ShopShimmer(title: AppHelpers.getTranslation(TrKeys.shops))
                   : state.shops.isNotEmpty
-                      ? Column(
-                          children: [
-                            TitleAndIcon(
-                              rightTitle:
-                                  AppHelpers.getTranslation(TrKeys.seeAll),
-                              isIcon: true,
-                              title: AppHelpers.getTranslation(TrKeys.favouriteBrand),
-                              onRightTap: () {
-                                context.pushRoute(
-                                    RecommendedTwoRoute(isShop: true));
-                              },
-                            ),
-                            12.verticalSpace,
-                            AnimationLimiter(
-                              child: GridView.builder(
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 2,
-                                        mainAxisSpacing: 8.r,
-                                        crossAxisSpacing: 8.r,
-                                        mainAxisExtent: 200.r),
-                                padding: EdgeInsets.symmetric(horizontal: 16.r),
-                                physics: const NeverScrollableScrollPhysics(),
-                                shrinkWrap: true,
-                                itemCount: state.shops.length > 6
-                                    ? 6
-                                    : state.shops.length,
-                                itemBuilder: (context, index) =>
-                                    AnimationConfiguration.staggeredList(
+                  ? Column(
+                      children: [
+                        TitleAndIcon(
+                          rightTitle: AppHelpers.getTranslation(TrKeys.seeAll),
+                          isIcon: true,
+                          title: AppHelpers.getTranslation(
+                            TrKeys.favouriteBrand,
+                          ),
+                          onRightTap: () {
+                            context.pushRoute(
+                              RecommendedTwoRoute(isShop: true),
+                            );
+                          },
+                        ),
+                        12.verticalSpace,
+                        AnimationLimiter(
+                          child: GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 8.r,
+                                  crossAxisSpacing: 8.r,
+                                  mainAxisExtent: 200.r,
+                                ),
+                            padding: EdgeInsets.symmetric(horizontal: 16.r),
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: state.shops.length > 6
+                                ? 6
+                                : state.shops.length,
+                            itemBuilder: (context, index) =>
+                                AnimationConfiguration.staggeredList(
                                   position: index,
                                   duration: const Duration(milliseconds: 375),
                                   child: SlideAnimation(
@@ -319,20 +345,21 @@ class _HomeTwoPageState extends ConsumerState<HomeTwoPage> {
                                     ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            24.verticalSpace,
-                          ],
-                        )
-                      : const SizedBox.shrink(),
+                          ),
+                        ),
+                        24.verticalSpace,
+                      ],
+                    )
+                  : const SizedBox.shrink(),
               Container(
                 height: state.ads.isNotEmpty ? 200.h : 0,
                 margin: EdgeInsets.only(
-                    bottom: state.ads.isNotEmpty ? 30.h : 0),
+                  bottom: state.ads.isNotEmpty ? 30.h : 0,
+                ),
                 child: AnimationLimiter(
                   child: ListView.builder(
                     shrinkWrap: true,
-                    
+
                     scrollDirection: Axis.horizontal,
                     itemCount: state.ads.length,
                     padding: EdgeInsets.only(left: 16.w),
@@ -359,127 +386,131 @@ class _HomeTwoPageState extends ConsumerState<HomeTwoPage> {
         state.isShopRecommendLoading
             ? const RecommendShopShimmer()
             : state.shopsRecommend.isNotEmpty
-                ? Column(
-                    children: [
-                      TitleAndIcon(
-                        rightTitle: AppHelpers.getTranslation(TrKeys.seeAll),
-                        isIcon: true,
-                        title: AppHelpers.getTranslation(TrKeys.recommended),
-                        onRightTap: () {
-                          context.pushRoute(RecommendedTwoRoute());
-                        },
-                      ),
-                      12.verticalSpace,
-                      SizedBox(
-                          height: 170.h,
-                          child: AnimationLimiter(
-                            child: ListView.builder(
-                              shrinkWrap: false,
-                              
-                              scrollDirection: Axis.horizontal,
-                              padding: EdgeInsets.symmetric(horizontal: 16.w),
-                              itemCount: state.shopsRecommend.length,
-                              itemBuilder: (context, index) =>
-                                  AnimationConfiguration.staggeredList(
-                                position: index,
-                                duration: const Duration(milliseconds: 375),
-                                child: SlideAnimation(
-                                  verticalOffset: 50,
-                                  child: FadeInAnimation(
-                                    child: RecommendedTwoItem(
-                                      shop: state.shopsRecommend[index],
-                                    ),
+            ? Column(
+                children: [
+                  TitleAndIcon(
+                    rightTitle: AppHelpers.getTranslation(TrKeys.seeAll),
+                    isIcon: true,
+                    title: AppHelpers.getTranslation(TrKeys.recommended),
+                    onRightTap: () {
+                      context.pushRoute(RecommendedTwoRoute());
+                    },
+                  ),
+                  12.verticalSpace,
+                  SizedBox(
+                    height: 170.h,
+                    child: AnimationLimiter(
+                      child: ListView.builder(
+                        shrinkWrap: false,
+
+                        scrollDirection: Axis.horizontal,
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        itemCount: state.shopsRecommend.length,
+                        itemBuilder: (context, index) =>
+                            AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              child: SlideAnimation(
+                                verticalOffset: 50,
+                                child: FadeInAnimation(
+                                  child: RecommendedTwoItem(
+                                    shop: state.shopsRecommend[index],
                                   ),
                                 ),
                               ),
                             ),
-                          )),
-                      30.verticalSpace,
-                    ],
-                  )
-                : const SizedBox.shrink(),
+                      ),
+                    ),
+                  ),
+                  30.verticalSpace,
+                ],
+              )
+            : const SizedBox.shrink(),
         state.story?.isNotEmpty ?? false
             ? Padding(
-              padding:  EdgeInsets.only(bottom: 16.r),
-              child: SizedBox(
-          height: 210.r,
-          child: SmartRefresher(
-              controller: _storyController,
-              scrollDirection: Axis.horizontal,
-              enablePullDown: false,
-              enablePullUp: true,
-              onLoading: () async {
-                await event.fetchStorePage(context, _storyController);
-              },
-              child: AnimationLimiter(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: state.story?.length ?? 0,
-                  padding: EdgeInsets.only(left: 16.w),
-                  itemBuilder: (context, index) =>
-                      AnimationConfiguration.staggeredList(
-                          position: index,
-                          duration: const Duration(milliseconds: 375),
-                          child: SlideAnimation(
-                            verticalOffset: 50.0,
-                            child: FadeInAnimation(
-                              child: ShopBarItem(
-                                index: index,
-                                controller: _storyController,
-                                story: state.story?[index]?.first,
+                padding: EdgeInsets.only(bottom: 16.r),
+                child: SizedBox(
+                  height: 210.r,
+                  child: SmartRefresher(
+                    controller: _storyController,
+                    scrollDirection: Axis.horizontal,
+                    enablePullDown: false,
+                    enablePullUp: true,
+                    onLoading: () async {
+                      await event.fetchStorePage(context, _storyController);
+                    },
+                    child: AnimationLimiter(
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: state.story?.length ?? 0,
+                        padding: EdgeInsets.only(left: 16.w),
+                        itemBuilder: (context, index) =>
+                            AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              child: SlideAnimation(
+                                verticalOffset: 50.0,
+                                child: FadeInAnimation(
+                                  child: ShopBarItem(
+                                    index: index,
+                                    controller: _storyController,
+                                    story: state.story?[index]?.first,
+                                  ),
+                                ),
                               ),
                             ),
-                          )),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-          ),
-        ),
-            )
+              )
             : const SizedBox.shrink(),
         state.isRestaurantNewLoading
             ? NewsShopShimmer(
                 title: AppHelpers.getTranslation(TrKeys.newsOfWeek),
               )
             : state.newRestaurant.isNotEmpty
-                ? Column(
-                    children: [
-                      TitleAndIcon(
-                        rightTitle: AppHelpers.getTranslation(TrKeys.seeAll),
-                        isIcon: true,
-                        title: AppHelpers.getTranslation(TrKeys.newsOfWeek),
-                        onRightTap: () {
-                          context.pushRoute(
-                              RecommendedTwoRoute(isNewsOfPage: true));
-                        },
-                      ),
-                      12.verticalSpace,
-                      SizedBox(
-                          height: 216.r,
-                          child: AnimationLimiter(
-                            child: ListView.builder(
-                              padding: EdgeInsets.only(left: 16.r),
-                              
-                              scrollDirection: Axis.horizontal,
-                              itemCount: state.newRestaurant.length,
-                              itemBuilder: (context, index) =>
-                                  AnimationConfiguration.staggeredList(
-                                position: index,
-                                duration: const Duration(milliseconds: 375),
-                                child: SlideAnimation(
-                                  verticalOffset: 50.0,
-                                  child: FadeInAnimation(
-                                    child: MarketTwoItem(
-                                      shop: state.newRestaurant[index],
-                                    ),
+            ? Column(
+                children: [
+                  TitleAndIcon(
+                    rightTitle: AppHelpers.getTranslation(TrKeys.seeAll),
+                    isIcon: true,
+                    title: AppHelpers.getTranslation(TrKeys.newsOfWeek),
+                    onRightTap: () {
+                      context.pushRoute(
+                        RecommendedTwoRoute(isNewsOfPage: true),
+                      );
+                    },
+                  ),
+                  12.verticalSpace,
+                  SizedBox(
+                    height: 216.r,
+                    child: AnimationLimiter(
+                      child: ListView.builder(
+                        padding: EdgeInsets.only(left: 16.r),
+
+                        scrollDirection: Axis.horizontal,
+                        itemCount: state.newRestaurant.length,
+                        itemBuilder: (context, index) =>
+                            AnimationConfiguration.staggeredList(
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              child: SlideAnimation(
+                                verticalOffset: 50.0,
+                                child: FadeInAnimation(
+                                  child: MarketTwoItem(
+                                    shop: state.newRestaurant[index],
                                   ),
                                 ),
                               ),
                             ),
-                          )),
-                    ],
-                  )
-                : const SizedBox.shrink(),
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : const SizedBox.shrink(),
         30.verticalSpace,
       ],
     );

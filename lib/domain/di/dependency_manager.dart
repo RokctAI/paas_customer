@@ -37,7 +37,7 @@ import 'package:foodyman/infrastructure/repository/settings_repository.dart';
 import 'package:foodyman/infrastructure/repository/shops_repository.dart';
 import 'package:foodyman/infrastructure/repository/user_repository.dart';
 import 'package:foodyman/app_constants.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import '../handlers/http_service.dart';
 
 final GetIt getIt = GetIt.instance;
@@ -62,7 +62,9 @@ Future<void> setUpDependencies() async {
   getIt.registerSingleton<CartRepositoryFacade>(CartRepository());
   getIt.registerSingleton<DrawRepositoryFacade>(DrawRepository());
   getIt.registerSingleton<ParcelRepositoryFacade>(ParcelRepository());
-  getIt.registerSingleton<NotificationRepositoryFacade>(NotificationRepositoryImpl());
+  getIt.registerSingleton<NotificationRepositoryFacade>(
+    NotificationRepository(),
+  );
   getIt.registerSingleton<Map>(LocalStorage.getTranslations());
 }
 

@@ -1,11 +1,10 @@
 // ignore_for_file: depend_on_referenced_packages, void_checks
 
 import 'dart:math';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_swipe_detector/flutter_swipe_detector.dart';
 import 'package:foodyman/game/models/board.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:uuid/uuid.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:bloc/bloc.dart';
@@ -36,7 +35,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       15,
       11,
       7,
-      3
+      3,
     ];
 
     Tile random(List<int> indexes) {
@@ -74,28 +73,39 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       }
 
       return tile.copyWith(
-          nextIndex: vert ? verticalOrder.indexOf(nextIndex) : nextIndex);
+        nextIndex: vert ? verticalOrder.indexOf(nextIndex) : nextIndex,
+      );
     }
 
     on<Init>((event, emit) async {
       var board = LocalStorage.getBoard();
-      emit(state.copyWith(
-          board: board ??
-              Board.newGame(state.board?.best ?? 0 + (state.board?.score ?? 0),
-                  [random([])])));
+      emit(
+        state.copyWith(
+          board:
+              board ??
+              Board.newGame(
+                state.board?.best ?? 0 + (state.board?.score ?? 0),
+                [random([])],
+              ),
+        ),
+      );
     });
 
     on<Move>((event, emit) {
-      bool asc = event.direction == SwipeDirection.left ||
+      bool asc =
+          event.direction == SwipeDirection.left ||
           event.direction == SwipeDirection.up;
-      bool vert = event.direction == SwipeDirection.up ||
+      bool vert =
+          event.direction == SwipeDirection.up ||
           event.direction == SwipeDirection.down;
       List<Tile> list = List.from(state.board?.tiles ?? []);
-      list.sort(((a, b) =>
-          (asc ? 1 : -1) *
-          (vert
-              ? (verticalOrder[a.index].compareTo(verticalOrder[b.index]))
-              : a.index.compareTo(b.index))));
+      list.sort(
+        ((a, b) =>
+            (asc ? 1 : -1) *
+            (vert
+                ? (verticalOrder[a.index].compareTo(verticalOrder[b.index]))
+                : a.index.compareTo(b.index))),
+      );
 
       List<Tile> tiles = [];
 
@@ -150,12 +160,15 @@ class GameBloc extends Bloc<GameEvent, GameState> {
           tilesMoved = true;
         }
 
-        tiles.add(tile?.copyWith(
+        tiles.add(
+          tile?.copyWith(
                 index: tile.nextIndex ?? tile.index,
                 nextIndex: null,
                 value: value,
-                merged: merged) ??
-            Tile("", 0, 0));
+                merged: merged,
+              ) ??
+              Tile("", 0, 0),
+        );
         indexes.add(tiles.last.index);
       }
 
@@ -222,23 +235,30 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         }
       }
 
-      final board =
-          state.board?.copyWith(won: gameWon, tiles: tiles, over: gameOver);
+      final board = state.board?.copyWith(
+        won: gameWon,
+        tiles: tiles,
+        over: gameOver,
+      );
       emit(state.copyWith(board: board, position: true));
 
       var nextDirection = state.swipeDirection;
       if (nextDirection != null) {
-        bool asc = nextDirection == SwipeDirection.left ||
+        bool asc =
+            nextDirection == SwipeDirection.left ||
             nextDirection == SwipeDirection.up;
-        bool vert = nextDirection == SwipeDirection.up ||
+        bool vert =
+            nextDirection == SwipeDirection.up ||
             nextDirection == SwipeDirection.down;
         List<Tile> list = List.from(state.board?.tiles ?? []);
 
-        list.sort(((a, b) =>
-            (asc ? 1 : -1) *
-            (vert
-                ? (verticalOrder[a.index].compareTo(verticalOrder[b.index]))
-                : a.index.compareTo(b.index))));
+        list.sort(
+          ((a, b) =>
+              (asc ? 1 : -1) *
+              (vert
+                  ? (verticalOrder[a.index].compareTo(verticalOrder[b.index]))
+                  : a.index.compareTo(b.index))),
+        );
 
         List<Tile> tiles = [];
 
@@ -287,11 +307,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         bool vert =
             direction == SwipeDirection.up || direction == SwipeDirection.down;
         List<Tile> list = List.from(state.board?.tiles ?? []);
-        list.sort(((a, b) =>
-            (asc ? 1 : -1) *
-            (vert
-                ? (verticalOrder[a.index].compareTo(verticalOrder[b.index]))
-                : a.index.compareTo(b.index))));
+        list.sort(
+          ((a, b) =>
+              (asc ? 1 : -1) *
+              (vert
+                  ? (verticalOrder[a.index].compareTo(verticalOrder[b.index]))
+                  : a.index.compareTo(b.index))),
+        );
 
         List<Tile> tiles = [];
 
@@ -323,18 +345,23 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     });
 
     on<NewGame>((event, emit) {
-      emit(state.copyWith(
+      emit(
+        state.copyWith(
           board: Board.newGame(
-              state.board?.best ?? 0 + (state.board?.score ?? 0),
-              [random([])])));
+            state.board?.best ?? 0 + (state.board?.score ?? 0),
+            [random([])],
+          ),
+        ),
+      );
     });
 
     on<Undo>((event, emit) {
       if (state.board?.undo != null) {
         final board = state.board?.copyWith(
-            score: state.board?.undo!.score,
-            tiles: state.board?.undo!.tiles,
-            best: state.board?.undo!.best);
+          score: state.board?.undo!.score,
+          tiles: state.board?.undo!.tiles,
+          best: state.board?.undo!.best,
+        );
         emit(state.copyWith(board: board));
       }
     });

@@ -1,12 +1,12 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/presentation/app_assets.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class DoorToDoor extends StatelessWidget {
   const DoorToDoor({super.key});
@@ -18,7 +18,9 @@ class DoorToDoor extends StatelessWidget {
       padding: EdgeInsets.all(30.r),
       width: double.infinity,
       decoration: BoxDecoration(
-          color: AppStyle.doorColor, borderRadius: BorderRadius.circular(24.r)),
+        color: AppStyle.doorColor,
+        borderRadius: BorderRadius.circular(24.r),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -32,7 +34,7 @@ class DoorToDoor extends StatelessWidget {
             style: AppStyle.interRegular(size: 16),
           ),
           20.verticalSpace,
-          Image.asset("assets/images/door.png"),
+          Image.asset(Assets.imagesDoor),
           10.verticalSpace,
           CustomButton(
             title: AppHelpers.getTranslation(TrKeys.learnMore),
@@ -43,11 +45,10 @@ class DoorToDoor extends StatelessWidget {
               }
               context.pushRoute(const ParcelRoute());
               return;
-
             },
             background: AppStyle.transparent,
             borderColor: AppStyle.black,
-          )
+          ),
         ],
       ),
     );

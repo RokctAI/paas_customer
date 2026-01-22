@@ -1,32 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:foodyman/domain/di/dependency_manager.dart';
-import 'package:foodyman/infrastructure/models/data/login.dart';
 import 'package:foodyman/infrastructure/models/data/user.dart';
 import 'package:foodyman/infrastructure/models/request/sign_up_request.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
 import 'package:foodyman/domain/interface/auth.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/app_validators.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import '../models/models.dart';
 
 class AuthRepository implements AuthRepositoryFacade {
   @override
   Future<ApiResult<LoginResponse>> login({
     required String email,
+    required String phone,
     required String password,
   }) async {
-    final data =
-        LoginModel(email: email.replaceAll('+', ""), password: password)
-            .toJson();
+    final data = {
+      if (email.isNotEmpty) 'email': email,
+      if (phone.isNotEmpty) 'phone': phone.replaceAll('+', ""),
+      'password': password,
+    };
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.post(
-        '/api/v1/auth/login',
-        data: data,
-      );
-      return ApiResult.success(
-        data: LoginResponse.fromJson(response.data),
-      );
+      final response = await client.post('/api/v1/auth/login', data: data);
+      return ApiResult.success(data: LoginResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> login failure: $e');
       return ApiResult.failure(
@@ -37,16 +33,47 @@ class AuthRepository implements AuthRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<LoginResponse>> loginWithGoogle(
-      {required String email,
-      required String displayName,
-      required String id,
-      required String avatar}) async {
+  Future<ApiResult<LoginResponse>> loginWithSocial({
+    required String id,
+    String? email,
+    String? displayName,
+    String? avatar,
+  }) async {
     final data = {
       'email': email,
       'name': displayName,
       'id': id,
-      "avatar": avatar
+      "avatar": avatar,
+    };
+    debugPrint('===> login request $data');
+    try {
+      final client = dioHttp.client(requireAuth: false);
+      final response = await client.post(
+        '/api/v1/auth/google/callback',
+        queryParameters: data,
+      );
+      return ApiResult.success(data: LoginResponse.fromJson(response.data));
+    } catch (e) {
+      debugPrint('==> login with social failure: $e');
+      return ApiResult.failure(
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
+    }
+  }
+
+  @override
+  Future<ApiResult<LoginResponse>> loginWithGoogle({
+    required String email,
+    required String displayName,
+    required String id,
+    required String avatar,
+  }) async {
+    final data = {
+      'email': email,
+      'name': displayName,
+      'id': id,
+      "avatar": avatar,
     };
     debugPrint('===> login request $data');
     try {
@@ -70,10 +97,7 @@ class AuthRepository implements AuthRepositoryFacade {
     final data = {'phone': phone.replaceAll('+', "")};
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.post(
-        '/api/v1/auth/register',
-        data: data,
-      );
+      final response = await client.post('/api/v1/auth/register', data: data);
       return ApiResult.success(data: RegisterResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> send otp failure: $e');
@@ -90,11 +114,10 @@ class AuthRepository implements AuthRepositoryFacade {
   }) async {
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.get(
-        '/api/v1/auth/verify/$verifyCode',
-      );
+      final response = await client.get('/api/v1/auth/verify/$verifyCode');
       return ApiResult.success(
-          data: VerifyPhoneResponse.fromJson(response.data));
+        data: VerifyPhoneResponse.fromJson(response.data),
+      );
     } catch (e) {
       debugPrint('==> verify email failure: $e');
       return ApiResult.failure(
@@ -113,13 +136,11 @@ class AuthRepository implements AuthRepositoryFacade {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.post(
         '/api/v1/auth/verify/phone',
-        queryParameters: {
-          "verifyId": verifyId,
-          "verifyCode": verifyCode,
-        },
+        queryParameters: {"verifyId": verifyId, "verifyCode": verifyCode},
       );
       return ApiResult.success(
-          data: VerifyPhoneResponse.fromJson(response.data));
+        data: VerifyPhoneResponse.fromJson(response.data),
+      );
     } catch (e) {
       debugPrint('==> verify email failure: $e');
       return ApiResult.failure(
@@ -185,8 +206,10 @@ class AuthRepository implements AuthRepositoryFacade {
   }) async {
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.post('/api/v1/auth/forgot/password/confirm',
-          data: {"phone": phone.replaceAll('+', ""), "type": "firebase"});
+      final response = await client.post(
+        '/api/v1/auth/forgot/password/confirm',
+        data: {"phone": phone.replaceAll('+', ""), "type": "firebase"},
+      );
 
       return ApiResult.success(
         data: VerifyData.fromJson(response.data["data"]),
@@ -201,12 +224,8 @@ class AuthRepository implements AuthRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<dynamic>> sigUp({
-    required String email,
-  }) async {
-    final data = SignUpRequest(
-      email: email.replaceAll('+', ""),
-    );
+  Future<ApiResult<dynamic>> sigUp({required String email}) async {
+    final data = SignUpRequest(email: email.replaceAll('+', ""));
     try {
       final client = dioHttp.client(requireAuth: false);
       await client.post(
@@ -230,9 +249,7 @@ class AuthRepository implements AuthRepositoryFacade {
         '/api/v1/auth/after-verify',
         data: user.toJsonForSignUp(),
       );
-      return ApiResult.success(
-        data: VerifyData.fromJson(res.data["data"]),
-      );
+      return ApiResult.success(data: VerifyData.fromJson(res.data["data"]));
     } catch (e) {
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
@@ -242,17 +259,16 @@ class AuthRepository implements AuthRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<VerifyData>> sigUpWithPhone(
-      {required UserModel user}) async {
+  Future<ApiResult<VerifyData>> sigUpWithPhone({
+    required UserModel user,
+  }) async {
     try {
       final client = dioHttp.client(requireAuth: false);
       var res = await client.post(
         '/api/v1/auth/verify/phone',
         data: user.toJsonForSignUp(typeFirebase: true),
       );
-      return ApiResult.success(
-        data: VerifyData.fromJson(res.data["data"]),
-      );
+      return ApiResult.success(data: VerifyData.fromJson(res.data["data"]));
     } catch (e) {
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),

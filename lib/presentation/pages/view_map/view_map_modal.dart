@@ -1,22 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:foodyman/presentation/theme/color_set.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/application/home/home_provider.dart';
 import 'package:foodyman/application/map/view_map_provider.dart';
 import 'package:foodyman/application/profile/profile_provider.dart';
-import 'package:foodyman/infrastructure/models/data/address_information.dart';
-import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
-import 'package:foodyman/infrastructure/models/data/address_old_data.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/text_fields/outline_bordered_text_field.dart';
-import 'package:foodyman/presentation/components/text_fields/search_text_field.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 class ViewMapModal extends ConsumerStatefulWidget {
   final TextEditingController controller;
@@ -24,6 +19,7 @@ class ViewMapModal extends ConsumerStatefulWidget {
   final LatLng latLng;
   final bool isShopLocation;
   final VoidCallback onSearch;
+  final CustomColorSet colors;
 
   const ViewMapModal({
     super.key,
@@ -32,6 +28,7 @@ class ViewMapModal extends ConsumerStatefulWidget {
     required this.latLng,
     required this.isShopLocation,
     required this.onSearch,
+    required this.colors,
   });
 
   @override
@@ -47,13 +44,96 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
   @override
   void initState() {
     office = TextEditingController(text: widget.address?.title);
-    house = TextEditingController();
+
+    // Extract house number from address if available
+    final extractedHouse = _extractHouseNumber(widget.controller.text);
+    house = TextEditingController(text: extractedHouse);
+
     floor = TextEditingController();
+
+    widget.controller.addListener(_onAddressChanged);
+
     super.initState();
+  }
+
+  void _onAddressChanged() {
+    // Only auto-fill if house field is empty
+    if (house.text.isEmpty) {
+      final extractedHouse = _extractHouseNumber(widget.controller.text);
+      if (extractedHouse.isNotEmpty) {
+        house.text = extractedHouse;
+      }
+    }
+  }
+
+  /// Extracts house number from address string
+  /// Enhanced version with multiple pattern matching
+  String _extractHouseNumber(String address) {
+    if (address.isEmpty) return '';
+
+    final parts = address.split(',').map((e) => e.trim()).toList();
+
+    // Patterns for house number detection
+    final patterns = [
+      // Standard numbers: 123, 12A, 12/3, 12-3
+      RegExp(r'\b(\d+[A-Za-z]?(?:[/-]\d+)?)\b'),
+      // With keywords: house 123, building 45, # 12
+      RegExp(
+        r'(?:house|home|building|bldg|uy|#)\s*(\d+[A-Za-z]?)',
+        caseSensitive: false,
+      ),
+      // Street address pattern: "Street Name 123"
+      RegExp(
+        r"(?:ko'chasi|street|st\.?)\s+(\d+[A-Za-z]?)",
+        caseSensitive: false,
+      ),
+    ];
+
+    // Strategy 1: Check the first part (street address usually comes first)
+    if (parts.isNotEmpty) {
+      final firstPart = parts.first;
+      for (var pattern in patterns) {
+        final match = pattern.firstMatch(firstPart);
+        if (match != null && match.groupCount > 0) {
+          final houseNum = match.group(1) ?? '';
+          if (houseNum.isNotEmpty && _isValidHouseNumber(houseNum)) {
+            return houseNum;
+          }
+        }
+      }
+    }
+
+    // Strategy 2: Check full address
+    for (var pattern in patterns) {
+      final match = pattern.firstMatch(address);
+      if (match != null && match.groupCount > 0) {
+        final houseNum = match.group(1) ?? '';
+        if (houseNum.isNotEmpty && _isValidHouseNumber(houseNum)) {
+          return houseNum;
+        }
+      }
+    }
+
+    return '';
+  }
+
+  /// Validates if the extracted number is a valid house number
+  /// Filters out postal codes, phone numbers, etc.
+  bool _isValidHouseNumber(String number) {
+    // Remove letters for numeric check
+    final numericPart = number.replaceAll(RegExp(r'[A-Za-z]'), '');
+    if (numericPart.isEmpty) return false;
+
+    final num = int.tryParse(numericPart);
+    if (num == null) return false;
+
+    // House numbers are typically 1-9999
+    return num > 0 && num < 10000;
   }
 
   @override
   void dispose() {
+    widget.controller.removeListener(_onAddressChanged);
     office.dispose();
     house.dispose();
     floor.dispose();
@@ -64,13 +144,17 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
   Widget build(BuildContext context) {
     final state = ref.watch(viewMapProvider);
     final event = ref.read(viewMapProvider.notifier);
+    final colors = widget.colors;
     return Container(
       margin: MediaQuery.viewInsetsOf(context),
       padding: EdgeInsets.symmetric(horizontal: 16.r),
       decoration: BoxDecoration(
-          color: AppStyle.white,
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(16.r), topLeft: Radius.circular(16.r))),
+        color: widget.colors.backgroundColor,
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(16.r),
+          topLeft: Radius.circular(16.r),
+        ),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -89,7 +173,10 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
             alignment: Alignment.centerLeft,
             child: Text(
               AppHelpers.getTranslation(TrKeys.enterADeliveryAddress),
-              style: AppStyle.interNoSemi(size: 18),
+              style: AppStyle.interNoSemi(
+                size: 18,
+                color: widget.colors.textBlack,
+              ),
             ),
           ),
           24.verticalSpace,
@@ -98,7 +185,7 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
             isBorder: true,
             textEditingController: widget.controller,
             onTap: () async {
-              widget.onSearch();
+              // widget.onSearch();
             },
           ),
           24.verticalSpace,
@@ -124,16 +211,18 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
                     Expanded(
                       child: OutlinedBorderTextField(
                         textController: house,
-                        label: AppHelpers.getTranslation(TrKeys.house)
-                            .toUpperCase(),
+                        label: AppHelpers.getTranslation(
+                          TrKeys.house,
+                        ).toUpperCase(),
                       ),
                     ),
                     24.horizontalSpace,
                     Expanded(
                       child: OutlinedBorderTextField(
                         textController: floor,
-                        label: AppHelpers.getTranslation(TrKeys.floor)
-                            .toUpperCase(),
+                        label: AppHelpers.getTranslation(
+                          TrKeys.floor,
+                        ).toUpperCase(),
                       ),
                     ),
                   ],
@@ -147,15 +236,13 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
             child: CustomButton(
               isLoading: !widget.isShopLocation ? state.isLoading : false,
               background: !widget.isShopLocation
-                  ? (state.isActive ? AppStyle.primary : AppStyle.bgGrey)
-                  : AppStyle.primary,
-              textColor: !widget.isShopLocation
-                  ? (state.isActive ? AppStyle.black : AppStyle.textGrey)
-                  : AppStyle.black,
+                  ? (state.isActive ? colors.primary : AppStyle.bgGrey)
+                  : colors.primary,
+
               title: !widget.isShopLocation
                   ? (state.isActive
-                      ? AppHelpers.getTranslation(TrKeys.apply)
-                      : AppHelpers.getTranslation(TrKeys.noDriverZone))
+                        ? AppHelpers.getTranslation(TrKeys.apply)
+                        : AppHelpers.getTranslation(TrKeys.noDriverZone))
                   : AppHelpers.getTranslation(TrKeys.apply),
               onPressed: () {
                 if (widget.isShopLocation) {
@@ -163,31 +250,57 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
                 } else {
                   if (state.isActive) {
                     ref.read(homeProvider.notifier)
-                      ..fetchBannerPage(context, RefreshController(),
-                          isRefresh: true)
-                      ..fetchRestaurantPage(context, RefreshController(),
-                          isRefresh: true)
-                      ..fetchShopPageRecommend(context, RefreshController(),
-                          isRefresh: true)
-                      ..fetchShopPage(context, RefreshController(),
-                          isRefresh: true)
-                      ..fetchStorePage(context, RefreshController(),
-                          isRefresh: true)
-                      ..fetchRestaurantPageNew(context, RefreshController(),
-                          isRefresh: true)
-                      ..fetchCategoriesPage(context, RefreshController(),
-                          isRefresh: true)
+                      ..fetchBannerPage(
+                        context,
+                        RefreshController(),
+                        isRefresh: true,
+                      )
+                      ..fetchRestaurantPage(
+                        context,
+                        RefreshController(),
+                        isRefresh: true,
+                      )
+                      ..fetchShopPageRecommend(
+                        context,
+                        RefreshController(),
+                        isRefresh: true,
+                      )
+                      ..fetchShopPage(
+                        context,
+                        RefreshController(),
+                        isRefresh: true,
+                      )
+                      ..fetchStorePage(
+                        context,
+                        RefreshController(),
+                        isRefresh: true,
+                      )
+                      ..fetchRestaurantPageNew(
+                        context,
+                        RefreshController(),
+                        isRefresh: true,
+                      )
+                      ..fetchCategoriesPage(
+                        context,
+                        RefreshController(),
+                        isRefresh: true,
+                      )
                       ..setAddress();
-                    LocalStorage.setAddressSelected(AddressData(
+                    LocalStorage.setAddressSelected(
+                      AddressData(
                         title: office.text,
                         address: state.place?.address?.address ?? "",
                         location: LocationModel(
-                            latitude: state.place?.location?.first,
-                            longitude: state.place?.location?.last)));
+                          latitude: state.place?.location?.first,
+                          longitude: state.place?.location?.last,
+                        ),
+                      ),
+                    );
                     AddressInformation data = AddressInformation(
-                        address: widget.controller.text,
-                        house: house.text,
-                        floor: floor.text);
+                      address: widget.controller.text,
+                      house: house.text,
+                      floor: floor.text,
+                    );
                     LocalStorage.setAddressInformation(data);
                     if (LocalStorage.getToken().isEmpty) {
                       Navigator.pop(context);
@@ -195,20 +308,26 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
                       return;
                     }
                     if (widget.address == null) {
-                      event.saveLocation(context, onSuccess: () {
-                        ref.read(profileProvider.notifier).fetchUser(context);
-                        ref.read(homeProvider.notifier).setAddress();
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      });
+                      event.saveLocation(
+                        context,
+                        onSuccess: () {
+                          ref.read(profileProvider.notifier).fetchUser(context);
+                          ref.read(homeProvider.notifier).setAddress();
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                      );
                     } else {
-                      event.updateLocation(context, widget.address?.id,
-                          onSuccess: () {
-                        ref.read(profileProvider.notifier).fetchUser(context);
-                        ref.read(homeProvider.notifier).setAddress();
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      });
+                      event.updateLocation(
+                        context,
+                        widget.address?.id,
+                        onSuccess: () {
+                          ref.read(profileProvider.notifier).fetchUser(context);
+                          ref.read(homeProvider.notifier).setAddress();
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                      );
                     }
                   } else {
                     AppHelpers.showCheckTopSnackBarInfo(
@@ -219,7 +338,7 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
                 }
               },
             ),
-          )
+          ),
         ],
       ),
     );

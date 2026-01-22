@@ -1,7 +1,6 @@
 import 'package:foodyman/infrastructure/models/data/order_data.dart';
 import 'package:foodyman/infrastructure/models/data/shop_data.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 
 class OrderBodyData {
   final int cartId;
@@ -36,7 +35,7 @@ class OrderBodyData {
     this.phone,
   });
 
-  Map toJson() {
+  Map toJson({String? paymentTag}) {
     return {
       "cart_id": cartId,
       "currency_id": LocalStorage.getSelectedCurrency()?.id ?? 0,
@@ -47,22 +46,23 @@ class OrderBodyData {
       if (paymentId != null) "payment_id": paymentId,
       "delivery_fee": deliveryFee,
       // "address_id": addressId,
-      "delivery_type":
-          deliveryType == DeliveryTypeEnum.delivery ? "delivery" : "pickup",
-      if(coupon != null && (coupon?.trim().isNotEmpty ?? false))
-      "coupon": coupon,
+      "delivery_type": deliveryType == DeliveryTypeEnum.delivery
+          ? "delivery"
+          : "pickup",
+      if (coupon != null && (coupon?.trim().isNotEmpty ?? false))
+        "coupon": coupon,
       "location": location.toJson(),
       "address": address.toJson(),
       "delivery_date": deliveryDate,
       "delivery_time": deliveryTime,
       "note": note,
-      "type": "mobile",
+      if (paymentTag == "pay-fast") "type": "mobile",
       'lang': LocalStorage.getLanguage()?.locale,
       if (notes.isNotEmpty)
         "notes": {
           for (int i = 0; i < notes.length; i++)
-            "${notes[i].stockId}": notes[i].comment
-        }
+            "${notes[i].stockId}": notes[i].comment,
+        },
     };
   }
 }
@@ -73,19 +73,14 @@ class AddressModel {
   final String? house;
   final String? floor;
 
-  AddressModel({
-    this.address,
-    this.office,
-    this.house,
-    this.floor,
-  });
+  AddressModel({this.address, this.office, this.house, this.floor});
 
   Map toJson() {
     return {
       "address": address,
       "office": office,
       "house": house,
-      "floor": floor
+      "floor": floor,
     };
   }
 

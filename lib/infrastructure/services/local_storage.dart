@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'package:foodyman/game/models/board.dart';
-import 'package:foodyman/infrastructure/models/data/address_information.dart';
-import 'package:foodyman/infrastructure/models/data/address_old_data.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
+import 'package:foodyman/presentation/theme/theme_preference.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'storage_keys.dart';
 
@@ -13,6 +12,16 @@ abstract class LocalStorage {
   static Future<void> init() async {
     _preferences = await SharedPreferences.getInstance();
   }
+
+
+  static bool getFirstEntry() {
+    return _preferences?.getBool(StorageKeys.keyFirstEntry) ?? true;
+  }
+
+  static Future<void> setFirstEntry(bool isFirst) async {
+    await _preferences?.setBool(StorageKeys.keyFirstEntry, isFirst);
+  }
+
 
   static Future<void> setToken(String? token) async {
     await _preferences?.setString(StorageKeys.keyToken, token ?? '');
@@ -83,9 +92,12 @@ abstract class LocalStorage {
   static void deleteSavedShopsList() =>
       _preferences?.remove(StorageKeys.keySavedStores);
 
+
   static Future<void> setAddressSelected(AddressData data) async {
     await _preferences?.setString(
-        StorageKeys.keyAddressSelected, jsonEncode(data.toJson()));
+      StorageKeys.keyAddressSelected,
+      jsonEncode(data.toJson()),
+    );
   }
 
   static AddressData? getAddressSelected() {
@@ -104,15 +116,18 @@ abstract class LocalStorage {
 
   static Future<void> setAddressInformation(AddressInformation data) async {
     await _preferences?.setString(
-        StorageKeys.keyAddressInformation, jsonEncode(data.toJson()));
+      StorageKeys.keyAddressInformation,
+      jsonEncode(data.toJson()),
+    );
   }
 
   static AddressInformation? getAddressInformation() {
     String dataString =
         _preferences?.getString(StorageKeys.keyAddressInformation) ?? "";
     if (dataString.isNotEmpty) {
-      AddressInformation data =
-          AddressInformation.fromJson(jsonDecode(dataString));
+      AddressInformation data = AddressInformation.fromJson(
+        jsonDecode(dataString),
+      );
       return data;
     } else {
       return null;
@@ -135,7 +150,9 @@ abstract class LocalStorage {
   static Future<void> setSelectedCurrency(CurrencyData currency) async {
     final String currencyString = jsonEncode(currency.toJson());
     await _preferences?.setString(
-        StorageKeys.keySelectedCurrency, currencyString);
+      StorageKeys.keySelectedCurrency,
+      currencyString,
+    );
   }
 
   static CurrencyData? getSelectedCurrency() {
@@ -173,8 +190,9 @@ abstract class LocalStorage {
       _preferences?.remove(StorageKeys.keyWalletData);
 
   static Future<void> setSettingsList(List<SettingsData> settings) async {
-    final List<String> strings =
-        settings.map((setting) => jsonEncode(setting.toJson())).toList();
+    final List<String> strings = settings
+        .map((setting) => jsonEncode(setting.toJson()))
+        .toList();
     await _preferences?.setStringList(StorageKeys.keyGlobalSettings, strings);
   }
 
@@ -182,9 +200,7 @@ abstract class LocalStorage {
     final List<String> settings =
         _preferences?.getStringList(StorageKeys.keyGlobalSettings) ?? [];
     final List<SettingsData> settingsList = settings
-        .map(
-          (setting) => SettingsData.fromJson(jsonDecode(setting)),
-        )
+        .map((setting) => SettingsData.fromJson(jsonDecode(setting)))
         .toList();
     return settingsList;
   }
@@ -193,7 +209,8 @@ abstract class LocalStorage {
       _preferences?.remove(StorageKeys.keyGlobalSettings);
 
   static Future<void> setTranslations(
-      Map<String, dynamic>? translations) async {
+    Map<String, dynamic>? translations,
+  ) async {
     final String encoded = jsonEncode(translations);
     await _preferences?.setString(StorageKeys.keyTranslations, encoded);
   }
@@ -211,15 +228,12 @@ abstract class LocalStorage {
   static void deleteTranslations() =>
       _preferences?.remove(StorageKeys.keyTranslations);
 
-  static Future<void> setAppThemeMode(bool isDarkMode) async {
-    await _preferences?.setBool(StorageKeys.keyAppThemeMode, isDarkMode);
+  static bool getAppThemeMode() {
+    final modeKey = _preferences?.getString(ThemePreference.prefKey) ??
+        CustomThemeMode.light.toKey;
+
+    return CustomThemeModeX.toValue(modeKey)== CustomThemeMode.dark;
   }
-
-  static bool getAppThemeMode() =>
-      _preferences?.getBool(StorageKeys.keyAppThemeMode) ?? false;
-
-  static void deleteAppThemeMode() =>
-      _preferences?.remove(StorageKeys.keyAppThemeMode);
 
   static Future<void> setSettingsFetched(bool fetched) async {
     await _preferences?.setBool(StorageKeys.keySettingsFetched, fetched);
@@ -262,14 +276,17 @@ abstract class LocalStorage {
 
   static Future<void> setBoard(Board? board) async {
     await _preferences?.setString(
-        StorageKeys.keyBoard, jsonEncode(board?.toJson()));
+      StorageKeys.keyBoard,
+      jsonEncode(board?.toJson()),
+    );
   }
 
   static Board? getBoard() {
     Map jsonData = {};
     if (_preferences?.getString(StorageKeys.keyBoard) != null) {
-      jsonData =
-          jsonDecode(_preferences?.getString(StorageKeys.keyBoard) ?? "");
+      jsonData = jsonDecode(
+        _preferences?.getString(StorageKeys.keyBoard) ?? "",
+      );
     }
 
     if (jsonData.isNotEmpty) {
@@ -280,7 +297,7 @@ abstract class LocalStorage {
     return null;
   }
 
-  static deleteBoard() {
+  static Future<bool>? deleteBoard() {
     return _preferences?.remove(StorageKeys.keyBoard);
   }
 

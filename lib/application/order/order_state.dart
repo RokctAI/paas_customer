@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,8 +9,7 @@ import 'package:foodyman/infrastructure/models/data/shop_data.dart';
 part 'order_state.freezed.dart';
 
 @freezed
-class OrderState with _$OrderState {
-
+abstract class OrderState with _$OrderState {
   const factory OrderState({
     @Default(false) bool isActive,
     @Default(false) bool isOrder,
@@ -45,7 +43,6 @@ class OrderState with _$OrderState {
     @Default([]) List<String> todayTimes,
     @Default([]) List<List<String>> dailyTimes,
   }) = _OrderState;
-
 
   const OrderState._();
 }

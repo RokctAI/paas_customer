@@ -13,30 +13,31 @@ class SearchCategoryShimmer extends StatelessWidget {
         SizedBox(
           height: 36.h,
           child: ListView.builder(
-              shrinkWrap: true,
-              
-              scrollDirection: Axis.horizontal,
-              itemCount: 4,
-              padding: EdgeInsets.only(left: 16.w),
-              itemBuilder: (context, index) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color:  AppStyle.shimmerBase,
-                    borderRadius: BorderRadius.circular(10.r),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppStyle.white.withOpacity(0.07),
-                        spreadRadius: 0,
-                        blurRadius: 2,
-                        offset: const Offset(0, 1), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  width: 100.w,
-                  height: 64.h,
-                  margin: EdgeInsets.only(right: 9.w),
-                );
-              }),
+            shrinkWrap: true,
+
+            scrollDirection: Axis.horizontal,
+            itemCount: 4,
+            padding: EdgeInsets.only(left: 16.w),
+            itemBuilder: (context, index) {
+              return Container(
+                decoration: BoxDecoration(
+                  color: AppStyle.shimmerBase,
+                  borderRadius: BorderRadius.circular(10.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppStyle.white.withValues(alpha: 0.07),
+                      spreadRadius: 0,
+                      blurRadius: 2,
+                      offset: const Offset(0, 1), // changes position of shadow
+                    ),
+                  ],
+                ),
+                width: 100.w,
+                height: 64.h,
+                margin: EdgeInsets.only(right: 9.w),
+              );
+            },
+          ),
         ),
         30.verticalSpace,
       ],

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
+import 'package:foodyman/presentation/theme/color_set.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
 class SelectAddressItem extends StatelessWidget {
@@ -9,6 +10,7 @@ class SelectAddressItem extends StatelessWidget {
   final VoidCallback update;
   final bool isActive;
   final AddressNewModel? address;
+  final CustomColorSet colors;
 
   const SelectAddressItem({
     super.key,
@@ -16,6 +18,7 @@ class SelectAddressItem extends StatelessWidget {
     required this.isActive,
     required this.address,
     required this.update,
+    required this.colors,
   });
 
   @override
@@ -27,8 +30,9 @@ class SelectAddressItem extends StatelessWidget {
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-              color: AppStyle.white,
-              borderRadius: BorderRadius.circular(10.r)),
+            color: colors.icon,
+            borderRadius: BorderRadius.circular(10.r),
+          ),
           child: Padding(
             padding: EdgeInsets.all(18.r),
             child: Row(
@@ -39,11 +43,15 @@ class SelectAddressItem extends StatelessWidget {
                   width: 18.w,
                   height: 18.h,
                   decoration: BoxDecoration(
-                      color: isActive ? AppStyle.primary : AppStyle.transparent,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                          color: isActive ? AppStyle.black : AppStyle.textGrey,
-                          width: isActive ? 4.r : 2.r)),
+                    color: isActive
+                        ? colors.primary
+                        : AppStyle.transparent,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: AppStyle.textGrey,
+                      width: isActive ? 4.r : 2.r,
+                    ),
+                  ),
                 ),
                 16.horizontalSpace,
                 Expanded(
@@ -56,29 +64,33 @@ class SelectAddressItem extends StatelessWidget {
                           address?.title ?? address?.address?.address ?? "",
                           style: AppStyle.interNormal(
                             size: 16,
-                            color: AppStyle.black,
+                            color: colors.textBlack,
                           ),
                         ),
                       ),
-                      if(address?.title != null)
-                      SizedBox(
-                        width: MediaQuery.sizeOf(context).width - 150.r,
-                        child: Text(
-                          address?.address?.address ?? "",
-                          style: AppStyle.interNormal(
-                            size: 12,
-                            color: AppStyle.textGrey,
+                      if (address?.title != null)
+                        SizedBox(
+                          width: MediaQuery.sizeOf(context).width - 150.r,
+                          child: Text(
+                            address?.address?.address ?? "",
+                            style: AppStyle.interNormal(
+                              size: 12,
+                              color: AppStyle.textGrey,
+                            ),
                           ),
                         ),
-                      ),
                     ],
                   ),
                 ),
                 IconButton(
-                    onPressed: () {
-                      update.call();
-                    },
-                    icon: const Icon(FlutterRemix.equalizer_line)),
+                  onPressed: () {
+                    update.call();
+                  },
+                  icon: Icon(
+                    FlutterRemix.equalizer_line,
+                    color: colors.textBlack,
+                  ),
+                ),
               ],
             ),
           ),

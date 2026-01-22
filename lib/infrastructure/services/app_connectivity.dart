@@ -7,6 +7,7 @@ abstract class AppConnectivity {
     var connectivityResult = await (Connectivity().checkConnectivity());
     if (connectivityResult.contains(ConnectivityResult.mobile) ||
         connectivityResult.contains(ConnectivityResult.ethernet) ||
+        connectivityResult.contains(ConnectivityResult.other) ||
         connectivityResult.contains(ConnectivityResult.wifi)) {
       return true;
     }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:foodyman/presentation/theme/color_set.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/application/home/home_notifier.dart';
 import 'package:foodyman/application/home/home_state.dart';
@@ -13,14 +14,16 @@ class CategoryScreenThree extends StatelessWidget {
   final HomeNotifier event;
   final RefreshController categoryController;
   final RefreshController restaurantController;
+  final CustomColorSet colors;
 
-  const CategoryScreenThree(
-      {super.key,
-      required this.state,
-      required this.event,
-      required this.categoryController,
-      required this.restaurantController,
-     });
+  const CategoryScreenThree({
+    super.key,
+    required this.state,
+    required this.event,
+    required this.categoryController,
+    required this.restaurantController,
+    required this.colors,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +31,9 @@ class CategoryScreenThree extends StatelessWidget {
         ? const CategoryShimmerThree()
         : Container(
             height: state.categories.isNotEmpty ? 40.r : 0,
-            margin:
-                EdgeInsets.only(bottom: state.categories.isNotEmpty ? 16.h : 0),
+            margin: EdgeInsets.only(
+              bottom: state.categories.isNotEmpty ? 16.h : 0,
+            ),
             child: SmartRefresher(
               scrollDirection: Axis.horizontal,
               enablePullDown: false,
@@ -43,10 +47,11 @@ class CategoryScreenThree extends StatelessWidget {
                 child: ListView.builder(
                   padding: REdgeInsets.symmetric(horizontal: 12),
                   shrinkWrap: true,
-                  
+
                   scrollDirection: Axis.horizontal,
-                  itemCount:
-                      state.isCategoryLoading ? 5 : state.categories.length,
+                  itemCount: state.isCategoryLoading
+                      ? 5
+                      : state.categories.length,
                   itemBuilder: (context, index) {
                     return AnimationConfiguration.staggeredList(
                       position: index,
@@ -56,13 +61,15 @@ class CategoryScreenThree extends StatelessWidget {
                         child: FadeInAnimation(
                           child: CategoryBarItemThree(
                             image: state.categories[index].img ?? "",
-                            title: state.categories[index].translation?.title ??
+                            title:
+                                state.categories[index].translation?.title ??
                                 "",
                             isActive: state.selectIndexCategory == index,
                             onTap: () {
                               event.setSelectCategory(index, context);
                               restaurantController.resetNoData();
                             },
+                            colors: colors,
                           ),
                         ),
                       ),

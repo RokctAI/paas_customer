@@ -6,13 +6,14 @@ class TakeModel {
   String? deletedAt;
   Translation? translation;
 
-  TakeModel(
-      {this.id,
-        this.img,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt,
-        this.translation});
+  TakeModel({
+    this.id,
+    this.img,
+    this.createdAt,
+    this.updatedAt,
+    this.deletedAt,
+    this.translation,
+  });
 
   TakeModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -46,8 +47,13 @@ class Translation {
   String? locale;
   String? deletedAt;
 
-  Translation(
-      {this.id, this.shopTagId, this.title, this.locale, this.deletedAt});
+  Translation({
+    this.id,
+    this.shopTagId,
+    this.title,
+    this.locale,
+    this.deletedAt,
+  });
 
   Translation.fromJson(Map<String, dynamic> json) {
     id = json['id'];

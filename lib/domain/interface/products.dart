@@ -1,11 +1,11 @@
-import 'package:foodyman/infrastructure/models/response/all_products_response.dart';
-
 import 'package:foodyman/domain/handlers/handlers.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 
 abstract class ProductsRepositoryFacade {
-  Future<ApiResult<ProductsPaginateResponse>> searchProducts(
-      {required String text, int page});
+  Future<ApiResult<ProductsPaginateResponse>> searchProducts({
+    required String text,
+    int page,
+  });
 
   Future<ApiResult<SingleProductResponse>> getProductDetails(String uuid);
 
@@ -23,15 +23,20 @@ abstract class ProductsRepositoryFacade {
     required int page,
   });
 
-  Future<ApiResult<ProductsPaginateResponse>> getProductsByCategoryPaginate(
-      {String? shopId, required int page, required int categoryId});
+  Future<ApiResult<ProductsPaginateResponse>> getProductsByCategoryPaginate({
+    String? shopId,
+    required int page,
+    required int categoryId,
+  });
 
-  Future<ApiResult<ProductsPaginateResponse>> getProductsShopByCategoryPaginate(
-      {String? shopId,
-      List<int>? brands,
-      int? sortIndex,
-      required int page,
-      required int categoryId});
+  Future<ApiResult<ProductsPaginateResponse>>
+  getProductsShopByCategoryPaginate({
+    String? shopId,
+    List<int>? brands,
+    int? sortIndex,
+    required int page,
+    required int categoryId,
+  });
 
   Future<ApiResult<ProductsPaginateResponse>> getMostSoldProducts({
     int? shopId,
@@ -54,9 +59,7 @@ abstract class ProductsRepositoryFacade {
     List<CartProductData> cartProducts,
   );
 
-  Future<ApiResult<ProductsPaginateResponse>> getProductsByIds(
-    List<int> ids,
-  );
+  Future<ApiResult<ProductsPaginateResponse>> getProductsByIds(List<int> ids);
 
   Future<ApiResult<void>> addReview(
     String productUuid,

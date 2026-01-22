@@ -1,33 +1,43 @@
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-
-import 'infrastructure/services/enums.dart';
+import 'package:flutter_remix/flutter_remix.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
+import 'package:foodyman/presentation/app_assets.dart';
 
 abstract class AppConstants {
   AppConstants._();
 
-  /// api urls
-  static const String baseUrl = 'https://api.foodyman.org/';
-  static const String drawingBaseUrl = 'https://api.openrouteservice.org';
-  static const String googleApiKey = '';
-  static const String adminPageUrl = 'https://admin.foodyman.org';
-  static const String webUrl = 'https://foodyman.org';
-  static const String firebaseWebKey = '';
-  static const String uriPrefix = 'https://foodyman.page.link';
-  static const String routingKey =
-      '5b3ce3597851110001cf62480384c1db92764d1b8959761ea2510ac8';
-  static const String androidPackageName = 'com.foodyman';
-  static const String iosPackageName = 'com.foodyman.customer';
   static const bool isDemo = true;
   static const bool isPhoneFirebase = true;
   static const int scheduleInterval = 60;
-  static const SignUpType signUpType = SignUpType.email;
+  static const SignUpType signUpType = SignUpType.both;
   static const bool use24Format = true;
+  static const double radius = 16;
 
+  // api urls
+  static const String baseUrl = String.fromEnvironment('BASE_URL');
+  static const String wsBaseUrl = String.fromEnvironment('WS_BASE_URL');
+  static const String wsSecret = String.fromEnvironment('WS_SECRET');
+  static const String webUrl = String.fromEnvironment('WEB_URL');
+  static const String adminPageUrl = String.fromEnvironment('ADMIN_URL');
+  static const String googleApiKey = String.fromEnvironment(
+    'GOOGLE_MAPS_API_KEY',
+  );
+  static const String firebaseWebKey = String.fromEnvironment(
+    'FIREBASE_API_KEY',
+  );
+  static const String geminiKey = String.fromEnvironment('GEMINI_KEY');
+  static const String urlPrefix = String.fromEnvironment('URL_PREFIX');
+  static const String routingBaseUrl = String.fromEnvironment('ROUTING_API');
+  static const String routingKey = String.fromEnvironment('ROUTING_KEY');
+  static const String deepLinkHost = String.fromEnvironment('DEEP_LINK_URL');
 
-  /// PayFast
-  static const String passphrase = '';
-  static const String merchantId = '';
-  static const String merchantKey = '';
+  // PayFast
+  static const String passphrase = String.fromEnvironment('PAYFAST_PASSPHRASE');
+  static const String merchantId = String.fromEnvironment(
+    'PAYFAST_MERCHANT_ID',
+  );
+  static const String merchantKey = String.fromEnvironment(
+    'PAYFAST_MERCHANT_KEY',
+  );
 
   static const String demoUserLogin = 'user@githubit.com';
   static const String demoUserPassword = 'githubit';
@@ -49,11 +59,23 @@ abstract class AppConstants {
 
   static const Duration timeRefresh = Duration(seconds: 30);
 
+  /// social sign-in
+  static const socialSignIn = [
+    FlutterRemix.google_fill,
+    FlutterRemix.facebook_fill,
+    FlutterRemix.apple_fill,
+  ];
+
+  static const socialSignInAndroid = [
+    FlutterRemix.google_fill,
+    FlutterRemix.facebook_fill,
+  ];
+
   static const List infoImage = [
-    "assets/images/save.png",
-    "assets/images/delivery.png",
-    "assets/images/fast.png",
-    "assets/images/set.png",
+    Assets.imagesSave,
+    Assets.imagesDelivery,
+    Assets.imagesFast,
+    Assets.imagesSet,
   ];
 
   static const List infoTitle = [
@@ -63,15 +85,6 @@ abstract class AppConstants {
     TrKeys.set,
   ];
 
-  static const payLater = [
-    "progress",
-    "canceled",
-    "rejected",
-  ];
-  static const genderList = [
-    "male",
-    "female",
-  ];
+  static const payLater = ["progress", "canceled", "rejected"];
+  static const genderList = ["male", "female"];
 }
-
-

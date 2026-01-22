@@ -14,12 +14,12 @@ class CategoryScreen extends StatelessWidget {
   final RefreshController categoryController;
   final RefreshController restaurantController;
 
-  const CategoryScreen(
-      {super.key,
-      required this.state,
-      required this.event,
-      required this.categoryController,
-      required this.restaurantController,
+  const CategoryScreen({
+    super.key,
+    required this.state,
+    required this.event,
+    required this.categoryController,
+    required this.restaurantController,
   });
 
   @override
@@ -28,8 +28,9 @@ class CategoryScreen extends StatelessWidget {
         ? const CategoryShimmer()
         : Container(
             height: state.categories.isNotEmpty ? 90.h : 0,
-            margin:
-                EdgeInsets.only(bottom: state.categories.isNotEmpty ? 26.h : 0),
+            margin: EdgeInsets.only(
+              bottom: state.categories.isNotEmpty ? 26.h : 0,
+            ),
             child: SmartRefresher(
               scrollDirection: Axis.horizontal,
               enablePullDown: false,
@@ -43,8 +44,9 @@ class CategoryScreen extends StatelessWidget {
                   padding: EdgeInsets.only(left: 16.r),
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount:
-                      state.isCategoryLoading ? 5 : state.categories.length,
+                  itemCount: state.isCategoryLoading
+                      ? 5
+                      : state.categories.length,
                   itemBuilder: (context, index) {
                     return AnimationConfiguration.staggeredList(
                       position: index,
@@ -52,17 +54,20 @@ class CategoryScreen extends StatelessWidget {
                       child: SlideAnimation(
                         verticalOffset: 50.0,
                         child: FadeInAnimation(
-                          child:  CategoryBarItem(
+                          child: CategoryBarItem(
                             index: index,
                             image: state.categories[index].img ?? "",
-                            title: state.categories[index].translation?.title ?? "",
+                            title:
+                                state.categories[index].translation?.title ??
+                                "",
                             isActive: state.selectIndexCategory == index,
                             onTap: () {
                               event.setSelectCategory(index, context);
                               restaurantController.resetNoData();
                             },
-                          )),
+                          ),
                         ),
+                      ),
                     );
                   },
                 ),

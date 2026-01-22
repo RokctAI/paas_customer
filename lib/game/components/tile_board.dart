@@ -2,8 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:foodyman/game/models/board.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 
 import '../const/colors.dart';
 
@@ -12,12 +11,11 @@ import 'animated_tile.dart';
 import 'button.dart';
 
 class TileBoardWidget extends StatelessWidget {
-
-
-  const TileBoardWidget(
-      {super.key,
-      required this.moveAnimation,
-      required this.scaleAnimation});
+  const TileBoardWidget({
+    super.key,
+    required this.moveAnimation,
+    required this.scaleAnimation,
+  });
 
   final CurvedAnimation moveAnimation;
   final CurvedAnimation scaleAnimation;
@@ -28,11 +26,12 @@ class TileBoardWidget extends StatelessWidget {
       builder: (context, state) {
         final board = state.board ?? Board(0, 0, []);
         final size = max(
-            290.0,
-            min(
-                (MediaQuery.sizeOf(context).shortestSide * 0.90)
-                    .floorToDouble(),
-                460.0));
+          290.0,
+          min(
+            (MediaQuery.sizeOf(context).shortestSide * 0.90).floorToDouble(),
+            460.0,
+          ),
+        );
 
         final sizePerTile = (size / 4).floorToDouble();
         final tileSize = sizePerTile - 12.0 - (12.0 / 4);
@@ -55,44 +54,53 @@ class TileBoardWidget extends StatelessWidget {
                     width: tileSize,
                     height: tileSize,
                     decoration: BoxDecoration(
-                        color: tileColors[tile.value],
-                        borderRadius: BorderRadius.circular(6.0)),
+                      color: tileColors[tile.value],
+                      borderRadius: BorderRadius.circular(6.0),
+                    ),
                     child: Center(
-                        child: Text(
-                      '${tile.value}',
-                      style: TextStyle(
+                      child: Text(
+                        '${tile.value}',
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 24.0,
-                          color: tile.value < 8 ? textColor : textColorWhite),
-                    )),
+                          color: tile.value < 8 ? textColor : textColorWhite,
+                        ),
+                      ),
+                    ),
                   ),
                 );
               }),
               if (board.over)
                 Positioned.fill(
-                    child: Container(
-                  color: overlayColor,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        board.won ? AppHelpers.getTranslation(TrKeys.youWin) : AppHelpers.getTranslation(TrKeys.gameOver),
-                        style: const TextStyle(
+                  child: Container(
+                    color: overlayColor,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          board.won
+                              ? AppHelpers.getTranslation(TrKeys.youWin)
+                              : AppHelpers.getTranslation(TrKeys.gameOver),
+                          style: const TextStyle(
                             color: textColor,
                             fontWeight: FontWeight.bold,
-                            fontSize: 64.0),
-                      ),
-                      ButtonWidget(
-                        text: board.won ? AppHelpers.getTranslation(TrKeys.newGame) : AppHelpers.getTranslation(TrKeys.tryAgain),
-                        onPressed: () {
-                          context
-                              .read<GameBloc>()
-                              .add(const GameEvent.newGame());
-                        },
-                      )
-                    ],
+                            fontSize: 64.0,
+                          ),
+                        ),
+                        ButtonWidget(
+                          text: board.won
+                              ? AppHelpers.getTranslation(TrKeys.newGame)
+                              : AppHelpers.getTranslation(TrKeys.tryAgain),
+                          onPressed: () {
+                            context.read<GameBloc>().add(
+                              const GameEvent.newGame(),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                ))
+                ),
             ],
           ),
         );

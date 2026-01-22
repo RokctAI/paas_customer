@@ -2,16 +2,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/common_app_bar.dart';
-import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-import 'package:foodyman/presentation/components/keyboard_dismisser.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
 import 'notification_page.dart';
 
+import 'package:foodyman/presentation/components/components.dart';
 
 @RoutePage()
 class SettingPage extends ConsumerStatefulWidget {
@@ -60,54 +56,52 @@ class _SettingPageState extends ConsumerState<SettingPage>
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: KeyboardDismisser(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: isDarkMode ? AppStyle.mainBackDark : AppStyle.bgGrey,
-          body: Column(
+        child: CustomScaffold(
+          body: (colors) => Column(
             children: [
               CommonAppBar(
                 child: Text(
                   AppHelpers.getTranslation(TrKeys.notification),
                   style: AppStyle.interNoSemi(
                     size: 18,
-                    color: AppStyle.black,
+                    color: colors.textBlack,
                   ),
                 ),
               ),
               16.verticalSpace,
               Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: const NotificationPage()
-                  // Column(
-                  //   children: [
-                  //     CustomTabBar(
-                  //       tabController: _tabController,
-                  //       tabs: _tabs,
-                  //     ),
-                  //     SizedBox(
-                  //       height: MediaQuery.sizeOf(context).height - 180.h,
-                  //       child: TabBarView(controller: _tabController, children: [
-                  //         Column(
-                  //           children: [
-                  //             24.verticalSpace,
-                  //             const CardWidget(
-                  //               number: "8278 3100 2002 6576",
-                  //               startDate: "09 / 25",
-                  //               name: "ANTONIO BANDERO",
-                  //             ),
-                  //           ],
-                  //         ),
-                  //         const NotificationPage()
-                  //       ]),
-                  //     )
-                  //   ],
-                  // ),
-                  )
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: const NotificationPage(),
+                // Column(
+                //   children: [
+                //     CustomTabBar(
+                //       tabController: _tabController,
+                //       tabs: _tabs,
+                //     ),
+                //     SizedBox(
+                //       height: MediaQuery.sizeOf(context).height - 180.h,
+                //       child: TabBarView(controller: _tabController, children: [
+                //         Column(
+                //           children: [
+                //             24.verticalSpace,
+                //             const CardWidget(
+                //               number: "8278 3100 2002 6576",
+                //               startDate: "09 / 25",
+                //               name: "ANTONIO BANDERO",
+                //             ),
+                //           ],
+                //         ),
+                //         const NotificationPage()
+                //       ]),
+                //     )
+                //   ],
+                // ),
+              ),
             ],
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: Padding(
+          floatingActionButton: (colors) => Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

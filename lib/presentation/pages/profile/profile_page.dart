@@ -1,77 +1,75 @@
-// ignore_for_file: unused_result
-
 import 'dart:async';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/application/home/home_provider.dart';
-import 'package:foodyman/application/language/language_provider.dart';
 import 'package:foodyman/application/notification/notification_provider.dart';
 import 'package:foodyman/application/orders_list/orders_list_provider.dart';
 import 'package:foodyman/application/parcels_list/parcel_list_provider.dart';
 import 'package:foodyman/application/profile/profile_provider.dart';
 import 'package:foodyman/application/shop_order/shop_order_provider.dart';
 import 'package:foodyman/app_constants.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/common_app_bar.dart';
-import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-import 'package:foodyman/presentation/components/custom_network_image.dart';
-import 'package:foodyman/presentation/components/loading.dart';
+import 'package:foodyman/infrastructure/services/services.dart';
 import 'package:foodyman/application/like/like_provider.dart';
-import 'package:foodyman/presentation/pages/profile/currency_page.dart';
 import 'package:foodyman/presentation/pages/profile/delete_screen.dart';
-import 'package:foodyman/presentation/routes/app_router.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'edit_profile_page.dart';
-import 'package:foodyman/application/edit_profile/edit_profile_provider.dart';
-import 'language_page.dart';
-import 'reservation_shops.dart';
-import 'widgets/profile_item.dart';
+import 'package:foodyman/presentation/pages/profile/widgets/profile_header.dart';
+import 'package:foodyman/presentation/pages/profile/widgets/profile_items_list.dart';
+import '../../theme/theme_wrapper.dart';
+
+import 'package:foodyman/presentation/components/components.dart';
 
 @RoutePage()
 class ProfilePage extends ConsumerStatefulWidget {
   final bool isBackButton;
 
-  const ProfilePage({
-    super.key,
-    this.isBackButton = true,
-  });
+  const ProfilePage({super.key, this.isBackButton = true});
 
   @override
   ConsumerState<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _ProfilePageState extends ConsumerState<ProfilePage>
-    with SingleTickerProviderStateMixin {
-  late RefreshController refreshController;
-  late Timer time;
+class _ProfilePageState extends ConsumerState<ProfilePage> {
+  late RefreshController _refreshController;
+  late Timer _timer;
+
+  bool get _isAuthenticated => LocalStorage.getToken().isNotEmpty;
 
   @override
   void initState() {
-    refreshController = RefreshController();
-    if (LocalStorage.getToken().isNotEmpty) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(profileProvider.notifier).fetchUser(context);
-        ref.read(ordersListProvider.notifier).fetchActiveOrders(context);
-        ref.read(parcelListProvider.notifier).fetchActiveOrders(context);
-      });
-      time = Timer.periodic(AppConstants.timeRefresh, (timer) {
-        ref.read(notificationProvider.notifier).fetchCount(context);
-      });
-    }
-
     super.initState();
+    _refreshController = RefreshController();
+    _initializeAuthenticatedUser();
   }
 
-  getAllInformation() {
-    ref.read(homeProvider.notifier)
+  void _initializeAuthenticatedUser() {
+    if (_isAuthenticated) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _fetchUserData();
+        _startNotificationTimer();
+      });
+    }
+  }
+
+  void _fetchUserData() {
+    ref.read(profileProvider.notifier).fetchUser(context);
+    ref.read(ordersListProvider.notifier).fetchActiveOrders(context);
+    ref.read(parcelListProvider.notifier).fetchActiveOrders(context);
+  }
+
+  void _startNotificationTimer() {
+    _timer = Timer.periodic(AppConstants.timeRefresh, (_) {
+      ref.read(notificationProvider.notifier).fetchCount(context);
+    });
+  }
+
+  void _refreshAllInformation() {
+    if (!_isAuthenticated) return;
+
+    final homeNotifier = ref.read(homeProvider.notifier);
+    homeNotifier
       ..setAddress()
       ..fetchBanner(context)
       ..fetchRestaurant(context)
@@ -79,402 +77,106 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
       ..fetchShop(context)
       ..fetchStore(context)
       ..fetchRestaurantNew(context)
-      ..fetchRestaurant(context)
       ..fetchCategories(context);
+
     ref.read(shopOrderProvider.notifier).getCart(context, () {});
-
     ref.read(likeProvider.notifier).fetchLikeShop(context);
-
     ref.read(profileProvider.notifier).fetchUser(context);
+  }
+
+  void _handleRefresh() {
+    ref
+        .read(profileProvider.notifier)
+        .fetchUser(context, refreshController: _refreshController);
+    ref.read(ordersListProvider.notifier).fetchActiveOrders(context);
   }
 
   @override
   void dispose() {
-    refreshController.dispose();
+    _refreshController.dispose();
+    if (_isAuthenticated) {
+      _timer.cancel();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool isDarkMode = LocalStorage.getAppThemeMode();
-    final bool isLtr = LocalStorage.getLangLtr();
-    final state = ref.watch(profileProvider);
-    final stateNotification = ref.watch(notificationProvider);
-    ref.listen(languageProvider, (previous, next) {
-      if (next.isSuccess && next.isSuccess != previous!.isSuccess) {
-        getAllInformation();
-      }
-    });
-
-    return Directionality(
-      textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        backgroundColor: isDarkMode ? AppStyle.mainBackDark : AppStyle.bgGrey,
-        body: state.isLoading
-            ? const Loading()
-            : Column(
-                children: [
-                  CommonAppBar(
-                      child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          SizedBox(
-                            height: 40.r,
-                            width: 40.r,
-                            child: CustomNetworkImage(
-                              profile: true,
-                              url: state.userData?.img ?? "",
-                              height: 40.r,
-                              width: 40.r,
-                              radius: 30.r,
-                            ),
-                          ),
-                          12.horizontalSpace,
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              SizedBox(
-                                width:
-                                    MediaQuery.sizeOf(context).width - 150.w,
-                                child: Text(
-                                  "${state.userData?.firstname ?? ""} ${state.userData?.lastname ?? ""}",
-                                  style: AppStyle.interNormal(
-                                    size: 14,
-                                    color: AppStyle.black,
-                                  ),
-                                  maxLines: 1,
-                                ),
-                              ),
-                              SizedBox(
-                                width:
-                                    MediaQuery.sizeOf(context).width - 150.w,
-                                child: Text(
-                                  state.userData?.email ?? " ",
-                                  style: AppStyle.interRegular(
-                                    size: 12.sp,
-                                    color: AppStyle.textGrey,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
+    final profileState = ref.watch(profileProvider);
+    final notificationState = ref.watch(notificationProvider);
+    return CustomScaffold(
+      body: (colors) => profileState.isLoading
+          ? const Loading()
+          : Column(
+              children: [
+                ProfileHeader(
+                  userData: profileState.userData,
+                  onLogout: () {
+                    AppHelpers.showAlertDialog(
+                      context: context,
+                      backgroundColor: colors.backgroundColor,
+                      child: DeleteScreen(
+                        onDelete: () => _timer.cancel(),
+                        colors: colors,
                       ),
-                      IconButton(
-                          onPressed: () {
-                            AppHelpers.showAlertDialog(
+                    );
+                  },
+                  colors: colors,
+                ),
+                Expanded(
+                  child: SmartRefresher(
+                    onRefresh: _handleRefresh,
+                    enablePullDown: LocalStorage.getToken().isNotEmpty,
+                    enablePullUp: false,
+                    controller: _refreshController,
+                    child: SingleChildScrollView(
+                      padding: EdgeInsets.only(
+                        top: 24.r,
+                        right: 16.r,
+                        left: 16.r,
+                        bottom: 120.r,
+                      ),
+                      child: ThemeWrapper(
+                        builder: (co, controller) {
+                          return ProfileItemsList(
+                            isBackButton: widget.isBackButton,
+                            theme: controller,
+                            userData: profileState.userData,
+                            notificationCount: notificationState
+                                .countOfNotifications
+                                ?.notification,
+                            onLanguageChange: () {
+                              controller.toggle();
+                              controller.toggle();
+                              _refreshAllInformation();
+                            },
+                            onDeleteAccount: () {
+                              AppHelpers.showAlertDialog(
                                 context: context,
+                                backgroundColor: colors.backgroundColor,
                                 child: DeleteScreen(
-                                  onDelete: () => time.cancel(),
-                                ));
-                          },
-                          icon: const Icon(FlutterRemix.logout_circle_r_line))
-                    ],
-                  )),
-                  Expanded(
-                    child: SmartRefresher(
-                      onRefresh: () {
-                        ref.read(profileProvider.notifier).fetchUser(context,
-                            refreshController: refreshController);
-                        ref
-                            .read(ordersListProvider.notifier)
-                            .fetchActiveOrders(context);
-                      },
-                      controller: refreshController,
-                      child: SingleChildScrollView(
-                        padding: EdgeInsets.only(
-                            top: 24.h, right: 16.w, left: 16.w, bottom: 120.h),
-                        child: Column(
-                          children: [
-                            if (AppConstants.isDemo)
-                              ProfileItem(
-                                isLtr: isLtr,
-                                title: AppHelpers.getTranslation(TrKeys.uiType),
-                                icon: FlutterRemix.typhoon_line,
-                                onTap: () {
-                                  context.pushRoute(UiTypeRoute(isBack: true));
-                                },
-                              ),
-                            ProfileItem(
-                              isLtr: isLtr,
-                              title: AppHelpers.getTranslation(
-                                  TrKeys.profileSettings),
-                              icon: FlutterRemix.user_settings_line,
-                              onTap: () {
-                                ref.refresh(editProfileProvider);
-                                AppHelpers.showCustomModalBottomDragSheet(
-                                  context: context,
-                                  modal: (c) => EditProfileScreen(
-                                    controller: c,
-                                  ),
-                                  isDarkMode: isDarkMode,
-                                );
-                              },
-                            ),
-                            ProfileItem(
-                              isLtr: isLtr,
-                              title:
-                                  "${AppHelpers.getTranslation(TrKeys.wallet)}: ${AppHelpers.numberFormat(number: state.userData?.wallet?.price)}",
-                              icon: FlutterRemix.wallet_3_line,
-                              onTap: () {
-                                context.pushRoute(const WalletHistoryRoute());
-                              },
-                            ),
-                            AppHelpers.getReferralActive()
-                                ? ProfileItem(
-                                    isLtr: isLtr,
-                                    title: AppHelpers.getTranslation(
-                                        TrKeys.inviteFriend),
-                                    icon: FlutterRemix.money_dollar_circle_line,
-                                    onTap: () {
-                                      context.pushRoute(
-                                          const ShareReferralRoute());
-                                    },
-                                  )
-                                : const SizedBox.shrink(),
-                            ProfileItem(
-                              isLtr: isLtr,
-                              title: AppHelpers.getTranslation(TrKeys.order),
-                              icon: FlutterRemix.history_line,
-                              isCount: true,
-                              count: ref
-                                  .watch(ordersListProvider)
-                                  .totalActiveCount
-                                  .toString(),
-                              onTap: () {
-                                context.pushRoute(const OrdersListRoute());
-                              },
-                            ),
-                            if (AppHelpers.getParcel())
-                              ProfileItem(
-                                isLtr: isLtr,
-                                title:
-                                    AppHelpers.getTranslation(TrKeys.parcels),
-                                icon: FlutterRemix.archive_line,
-                                isCount: true,
-                                count: ref
-                                    .watch(parcelListProvider)
-                                    .totalActiveCount
-                                    .toString(),
-                                onTap: () {
-                                  context.pushRoute(const ParcelListRoute());
-                                },
-                              ),
-                            ProfileItem(
-                              isLtr: isLtr,
-                              title: AppHelpers.getTranslation(
-                                  TrKeys.notifications),
-                              icon: FlutterRemix.notification_2_line,
-                              isCount: true,
-                              count: (stateNotification
-                                          .countOfNotifications?.notification ??
-                                      0)
-                                  .toString(),
-                              onTap: () {
-                                context
-                                    .pushRoute(const NotificationListRoute());
-                              },
-                            ),
-                            if (AppHelpers.getReservationEnable())
-                              ProfileItem(
-                                isLtr: isLtr,
-                                title: AppHelpers.getTranslation(
-                                    TrKeys.reservation),
-                                icon: FlutterRemix.reserved_line,
-                                onTap: () async {
-                                  AppHelpers.showAlertDialog(
-                                    context: context,
-                                    child: const SizedBox(
-                                        child: ReservationShops()),
-                                  );
-                                },
-                              ),
-                            ProfileItem(
-                              isLtr: isLtr,
-                              title: AppHelpers.getTranslation(
-                                  TrKeys.deliveryAddress),
-                              icon: FlutterRemix.user_location_line,
-                              onTap: () {
-                                context.pushRoute(const AddressListRoute());
-                              },
-                            ),
-                            if (widget.isBackButton)
-                              ProfileItem(
-                                isLtr: isLtr,
-                                title: AppHelpers.getTranslation(TrKeys.liked),
-                                icon: FlutterRemix.heart_3_line,
-                                onTap: () {
-                                  context.pushRoute(LikeRoute());
-                                },
-                              ),
-                            ProfileItem(
-                              isLtr: isLtr,
-                              title: AppHelpers.getTranslation(
-                                  TrKeys.becomeSeller),
-                              icon: FlutterRemix.user_star_line,
-                              onTap: () {
-                                context.pushRoute(const CreateShopRoute());
-                              },
-                            ),
-                            ProfileItem(
-                              isLtr: isLtr,
-                              title: AppHelpers.getTranslation(
-                                  TrKeys.chatWithAdmin),
-                              icon: FlutterRemix.chat_1_line,
-                              onTap: () {
-                                context.pushRoute(
-                                    ChatRoute(roleId: "admin", name: "Admin"));
-                              },
-                            ),
-                            ProfileItem(
-                              isLtr: isLtr,
-                              title: AppHelpers.getTranslation(TrKeys.language),
-                              icon: FlutterRemix.global_line,
-                              onTap: () {
-                                AppHelpers.showCustomModalBottomSheet(
-                                  isDismissible: false,
-                                  context: context,
-                                  modal: LanguageScreen(
-                                    onSave: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                  isDarkMode: isDarkMode,
-                                );
-                              },
-                            ),
-                            ProfileItem(
-                              isLtr: isLtr,
-                              title:
-                                  AppHelpers.getTranslation(TrKeys.currencies),
-                              icon: FlutterRemix.bank_card_line,
-                              onTap: () {
-                                AppHelpers.showCustomModalBottomSheet(
-                                  context: context,
-                                  modal: const CurrencyScreen(),
-                                  isDarkMode: isDarkMode,
-                                );
-                              },
-                            ),
-                            ProfileItem(
-                              isLtr: isLtr,
-                              title: AppHelpers.getTranslation(
-                                  TrKeys.notification),
-                              icon: FlutterRemix.settings_4_line,
-                              onTap: () {
-                                context.pushRoute(const SettingRoute());
-                              },
-                            ),
-                            ProfileItem(
-                              isLtr: isLtr,
-                              title: AppHelpers.getTranslation(TrKeys.help),
-                              icon: FlutterRemix.question_line,
-                              onTap: () {
-                                context.pushRoute(const HelpRoute());
-                              },
-                            ),
-                            ProfileItem(
-                              isLtr: isLtr,
-                              title: AppHelpers.getTranslation(TrKeys.about),
-                              icon: FlutterRemix.bill_line,
-                              onTap: () async {
-                                // ignore: deprecated_member_use
-                                await launch(
-                                  "${AppConstants.webUrl}/about",
-                                  enableJavaScript: true,
-                                );
-                              },
-                            ),
-                            ProfileItem(
-                              isLtr: isLtr,
-                              title: AppHelpers.getTranslation(TrKeys.careers),
-                              icon: FlutterRemix.empathize_line,
-                              onTap: () async {
-                                // ignore: deprecated_member_use
-                                await launch(
-                                  "${AppConstants.webUrl}/careers",
-                                  enableJavaScript: true,
-                                );
-                              },
-                            ),
-                            ProfileItem(
-                              isLtr: isLtr,
-                              title: AppHelpers.getTranslation(TrKeys.blogs),
-                              icon: FlutterRemix.article_line,
-                              onTap: () async {
-                                // ignore: deprecated_member_use
-                                await launch(
-                                  "${AppConstants.webUrl}/blog",
-                                  enableJavaScript: true,
-                                );
-                              },
-                            ),
-                            ProfileItem(
-                              isLtr: isLtr,
-                              title: AppHelpers.getTranslation(
-                                  TrKeys.privacyPolicy),
-                              icon: FlutterRemix.information_line,
-                              onTap: () async {
-                                context.pushRoute(const PolicyRoute());
-                              },
-                            ),
-                            ProfileItem(
-                              isLtr: isLtr,
-                              title: AppHelpers.getTranslation(TrKeys.terms),
-                              icon: FlutterRemix.file_info_line,
-                              onTap: () async {
-                                context.pushRoute(const TermRoute());
-                              },
-                            ),
-                            // ProfileItem(
-                            //   isLtr: isLtr,
-                            //   title: AppHelpers.getTranslation(
-                            //       TrKeys.signUpToDeliver),
-                            //   icon: FlutterRemix.external_link_line,
-                            //   onTap: () {
-                            //     context.pushRoute(const HelpRoute());
-                            //   },
-                            // ),
-                            ProfileItem(
-                              isLtr: isLtr,
-                              title: AppHelpers.getTranslation(
-                                  TrKeys.deleteAccount),
-                              icon: FlutterRemix.logout_box_r_line,
-                              onTap: () {
-                                AppHelpers.showAlertDialog(
-                                  context: context,
-                                  child: DeleteScreen(
-                                    isDeleteAccount: true,
-                                    onDelete: () {
-                                      time.cancel();
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
+                                  isDeleteAccount: true,
+                                  onDelete: () => _timer.cancel(),
+                                  colors: colors,
+                                ),
+                              );
+                            },
+                            colors: colors,
+                          );
+                        },
                       ),
                     ),
-                  )
-                ],
-              ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-        floatingActionButton: widget.isBackButton
-            ? Padding(
-                padding: EdgeInsets.only(left: 16.w),
-                child: const PopButton(),
-              )
-            : const SizedBox.shrink(),
-      ),
+                  ),
+                ),
+              ],
+            ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+      floatingActionButton: (colors) => widget.isBackButton
+          ? Padding(
+              padding: EdgeInsets.only(left: 16.w),
+              child: const PopButton(),
+            )
+          : null,
     );
   }
 }
