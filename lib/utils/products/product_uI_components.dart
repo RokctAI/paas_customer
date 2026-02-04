@@ -5,7 +5,7 @@ import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:foodyman/application/shop_order/shop_order_provider.dart';
-import 'package:foodyman/application/product/product_provider.dart';
+
 
 import 'product_utils.dart';
 
@@ -19,7 +19,6 @@ class ProductUIComponents {
       {bool canAddDirectly = true}) {
 
     final shopOrderNotifier = ref.read(shopOrderProvider.notifier);
-    final productNotifier = ref.read(productProvider.notifier);
 
     // Get the stock ID - works for both ProductData and Product
     final stockId = product.stock?.id;
