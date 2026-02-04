@@ -52,6 +52,7 @@ GoogleService-Info.plist
 *.env.development
 *.env.production
 *.jks
+**/*.jks
 key.properties
 
 # Generated files
