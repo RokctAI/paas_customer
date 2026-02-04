@@ -19,7 +19,7 @@ class CategoriesRepository implements CategoriesRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.get_categories',
+        '/api/method/paas.api.get_categories',
         queryParameters: params,
       );
       return ApiResult.success(
@@ -40,7 +40,7 @@ class CategoriesRepository implements CategoriesRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.search_categories',
+        '/api/method/paas.api.search_categories',
         queryParameters: params,
       );
       return ApiResult.success(

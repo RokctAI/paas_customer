@@ -30,7 +30,7 @@ class LoansRepository implements LoansRepositoryFacade {
                               ((financials['existing_credits'] as num?)?.toDouble() ?? 0.0);
 
       final response = await client.post(
-        '/api/v1/method/paas.api.create_loan_application',
+        '/api/method/paas.api.create_loan_application',
         data: {
           'applicant_type': 'Customer',
           'applicant': user?.firstname != null ? "${user?.firstname} ${user?.lastname}" : user?.email, // Best guess for Name, backend should key off User though.
@@ -668,7 +668,7 @@ class LoansRepository implements LoansRepositoryFacade {
       debugPrint('==> Fetching my loan applications');
 
       final response = await client.post(
-        '/api/v1/method/paas.api.get_my_loan_applications',
+        '/api/method/paas.api.get_my_loan_applications',
       );
       debugPrint('==> My applications response: ${jsonEncode(response.data)}');
 

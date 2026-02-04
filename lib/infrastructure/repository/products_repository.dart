@@ -18,7 +18,7 @@ class ProductsRepository implements ProductsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.product.product.get_products',
+        '/api/method/paas.api.product.product.get_products',
         queryParameters: params,
       );
       return ApiResult.success(
@@ -39,7 +39,7 @@ class ProductsRepository implements ProductsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.product.product.get_product_by_uuid',
+        '/api/method/paas.api.product.product.get_product_by_uuid',
         queryParameters: {'uuid': uuid},
       );
       return ApiResult.success(
@@ -73,7 +73,7 @@ class ProductsRepository implements ProductsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.product.product.get_products',
+        '/api/method/paas.api.product.product.get_products',
         queryParameters: params,
       );
       return ApiResult.success(
@@ -99,7 +99,7 @@ class ProductsRepository implements ProductsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.product.product.most_sold_products',
+        '/api/method/paas.api.product.product.most_sold_products',
         queryParameters: params,
       );
       return ApiResult.success(
@@ -126,7 +126,7 @@ class ProductsRepository implements ProductsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.post(
-        '/api/v1/method/paas.api.product.product.order_products_calculate',
+        '/api/method/paas.api.product.product.order_products_calculate',
         data: {'products': products},
       );
       return ApiResult.success(
@@ -148,7 +148,7 @@ class ProductsRepository implements ProductsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.product.product.get_products_by_ids',
+        '/api/method/paas.api.product.product.get_products_by_ids',
         queryParameters: {'ids': ids},
       );
       return ApiResult.success(
@@ -178,7 +178,7 @@ class ProductsRepository implements ProductsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
-        '/api/v1/method/paas.api.product.product.add_product_review',
+        '/api/method/paas.api.product.product.add_product_review',
         data: data,
       );
       return const ApiResult.success(data: null);
@@ -204,7 +204,7 @@ class ProductsRepository implements ProductsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.product.product.get_discounted_products',
+        '/api/method/paas.api.product.product.get_discounted_products',
         queryParameters: params,
       );
       return ApiResult.success(
@@ -236,7 +236,7 @@ class ProductsRepository implements ProductsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.product.product.get_products',
+        '/api/method/paas.api.product.product.get_products',
         queryParameters: {'shop_id': shopId, 'limit_page_length': 100},
       );
       return ApiResult.success(

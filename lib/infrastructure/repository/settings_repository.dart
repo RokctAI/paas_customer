@@ -33,7 +33,7 @@ class SettingsRepository implements SettingsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.translation.get_mobile_translations',
+        '/api/method/paas.api.translation.get_mobile_translations',
         queryParameters: data,
       );
       return ApiResult.success(

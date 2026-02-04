@@ -19,7 +19,7 @@ class NotificationRepositoryImpl extends NotificationRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
-        '/api/v1/method/paas.api.user.user.get_user_notifications',
+        '/api/method/paas.api.user.user.get_user_notifications',
         queryParameters: data,
       );
       return ApiResult.success(
@@ -38,7 +38,7 @@ class NotificationRepositoryImpl extends NotificationRepositoryFacade {
   Future<ApiResult<NotificationResponse>> readAll() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      await client.post('/api/v1/method/paas.api.read_all_notifications');
+      await client.post('/api/method/paas.api.read_all_notifications');
       return const ApiResult.success(data: null);
     } catch (e) {
       return ApiResult.failure(
@@ -53,7 +53,7 @@ class NotificationRepositoryImpl extends NotificationRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
-        '/api/v1/method/paas.api.read_one_notification',
+        '/api/method/paas.api.read_one_notification',
         data: {'notification_id': id},
       );
       return const ApiResult.success(data: null);
@@ -69,7 +69,7 @@ class NotificationRepositoryImpl extends NotificationRepositoryFacade {
   Future<ApiResult<CountNotificationModel>> getCount() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get('/api/v1/method/paas.api.get_notification_count');
+      final response = await client.get('/api/method/paas.api.get_notification_count');
       return ApiResult.success(
         data: CountNotificationModel.fromJson(response.data['message']),
       );

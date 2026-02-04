@@ -16,9 +16,9 @@ class AuthRepository implements AuthRepositoryFacade {
   }) async {
     try {
       final client = dioHttp.client(requireAuth: false);
-      // NOTE: Frappe's core login endpoint is `/api/v1/method/login`
+      // NOTE: Frappe's core login endpoint is `/api/method/login`
       final response = await client.post(
-        '/api/v1/method/login',
+        '/api/method/login',
         data: {
           'usr': email,
           'pwd': password,
@@ -44,7 +44,7 @@ class AuthRepository implements AuthRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.post(
-        '/api/v1/method/paas.api.send_phone_verification_code',
+        '/api/method/paas.api.send_phone_verification_code',
         data: data,
       );
       // The response from this endpoint is simple, may need to adjust RegisterResponse model
@@ -65,7 +65,7 @@ class AuthRepository implements AuthRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.verify_my_email',
+        '/api/method/paas.api.verify_my_email',
         queryParameters: {'token': verifyCode},
       );
       return ApiResult.success(
@@ -87,7 +87,7 @@ class AuthRepository implements AuthRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.post(
-        '/api/v1/method/paas.api.verify_phone_code',
+        '/api/method/paas.api.verify_phone_code',
         data: {
           "phone": phone,
           "otp": otp,
@@ -111,7 +111,7 @@ class AuthRepository implements AuthRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.post(
-        '/api/v1/method/paas.api.forgot_password',
+        '/api/method/paas.api.forgot_password',
         data: {'user': email},
       );
       return ApiResult.success(data: response.data);
@@ -129,7 +129,7 @@ class AuthRepository implements AuthRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       var res = await client.post(
-        '/api/v1/method/paas.api.register_user',
+        '/api/method/paas.api.register_user',
         data: user.toJsonForSignUp(),
       );
       // This response will not contain tokens, adaptation needed
@@ -152,7 +152,7 @@ class AuthRepository implements AuthRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.post(
-        '/api/v1/method/paas.api.forgot_password_confirm',
+        '/api/method/paas.api.forgot_password_confirm',
         data: {
           'verify_code': verifyCode,
           'email': email,
@@ -187,7 +187,7 @@ class AuthRepository implements AuthRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.post(
-        '/api/v1/method/paas.api.login_with_google',
+        '/api/method/paas.api.login_with_google',
         data: {
           'email': email,
           'display_name': displayName,
@@ -210,7 +210,7 @@ class AuthRepository implements AuthRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       await client.post(
-        '/api/v1/method/paas.api.register_user',
+        '/api/method/paas.api.register_user',
         data: {'email': email},
       );
       return const ApiResult.success(data: null);
@@ -228,7 +228,7 @@ class AuthRepository implements AuthRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.post(
-        '/api/v1/method/paas.api.register_user',
+        '/api/method/paas.api.register_user',
         data: user.toJsonForSignUp(),
       );
       return ApiResult.success(data: VerifyData.fromJson(response.data['data'] ?? response.data));

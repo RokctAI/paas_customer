@@ -17,7 +17,7 @@ class BannersRepository implements BannersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.get_banners',
+        '/api/method/paas.api.get_banners',
         queryParameters: params,
       );
       return ApiResult.success(
@@ -39,7 +39,7 @@ class BannersRepository implements BannersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.get_banner',
+        '/api/method/paas.api.get_banner',
         queryParameters: {
           'id': bannerId,
           'lang': LocalStorage.getLanguage()?.locale,
@@ -72,7 +72,7 @@ class BannersRepository implements BannersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.get_ads',
+        '/api/method/paas.api.get_ads',
         queryParameters: params,
       );
       return ApiResult.success(
@@ -92,7 +92,7 @@ class BannersRepository implements BannersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.get_ad',
+        '/api/method/paas.api.get_ad',
         queryParameters: {
           'id': bannerId,
           'lang': LocalStorage.getLanguage()?.locale,
@@ -115,7 +115,7 @@ class BannersRepository implements BannersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
-        '/api/v1/method/paas.api.like_banner',
+        '/api/method/paas.api.like_banner',
         data: {
           'id': bannerId,
           'lang': LocalStorage.getLanguage()?.locale,

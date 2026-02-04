@@ -13,7 +13,7 @@ class UserRepository implements UserRepositoryFacade {
   Future<ApiResult<ProfileResponse>> getProfileDetails() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get('/api/v1/method/paas.api.user.user.get_user_profile');
+      final response = await client.get('/api/method/paas.api.user.user.get_user_profile');
       return ApiResult.success(
         data: ProfileResponse.fromJson(response.data),
       );
@@ -30,7 +30,7 @@ class UserRepository implements UserRepositoryFacade {
   Future<ApiResult<dynamic>> saveLocation({required AddressNewModel? address}) async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      await client.post('/api/v1/method/paas.api.user.user.add_user_address',
+      await client.post('/api/method/paas.api.user.user.add_user_address',
           data: address?.toJson());
       return const ApiResult.success(data: null);
     } catch (e) {
@@ -49,7 +49,7 @@ class UserRepository implements UserRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.put(
-        '/api/v1/method/paas.api.user.user.update_user_address',
+        '/api/method/paas.api.user.user.update_user_address',
         data: {
           'name': addressId,
           'address_data': address?.toJson(),
@@ -69,7 +69,7 @@ class UserRepository implements UserRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
-        '/api/v1/method/paas.api.user.user.delete_user_address',
+        '/api/method/paas.api.user.user.delete_user_address',
         data: {'name': id},
       );
       return const ApiResult.success(data: null);
@@ -85,7 +85,7 @@ class UserRepository implements UserRepositoryFacade {
   Future<ApiResult<dynamic>> logoutAccount({required String fcm}) async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      await client.post('/api/v1/method/paas.api.user.user.logout');
+      await client.post('/api/method/paas.api.user.user.logout');
       LocalStorage.logout();
       return const ApiResult.success(data: null);
     } catch (e) {
@@ -102,7 +102,7 @@ class UserRepository implements UserRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.put(
-        '/api/v1/method/paas.api.user.user.update_user_profile',
+        '/api/method/paas.api.user.user.update_user_profile',
         data: {'profile_data': data},
       );
       return ApiResult.success(
@@ -126,7 +126,7 @@ class UserRepository implements UserRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
-        '/api/v1/method/paas.api.user.user.get_wallet_history',
+        '/api/method/paas.api.user.user.get_wallet_history',
         queryParameters: data,
       );
       return ApiResult.success(
@@ -150,7 +150,7 @@ class UserRepository implements UserRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
-        '/api/v1/method/paas.api.user.user.register_device_token',
+        '/api/method/paas.api.user.user.register_device_token',
         data: data,
       );
       return const ApiResult.success(data: null);
@@ -175,7 +175,7 @@ class UserRepository implements UserRepositoryFacade {
   Future<ApiResult<ReferralModel>> getReferralDetails() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get('/api/v1/method/paas.api.user.user.get_referral_details');
+      final response = await client.get('/api/method/paas.api.user.user.get_referral_details');
       return ApiResult.success(
         data: ReferralModel.fromJson(response.data['message']),
       );
@@ -193,7 +193,7 @@ class UserRepository implements UserRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
-        '/api/v1/method/paas.api.user.user.set_active_address',
+        '/api/method/paas.api.user.user.set_active_address',
         data: {'address_id': id},
       );
       return const ApiResult.success(data: null);
@@ -209,7 +209,7 @@ class UserRepository implements UserRepositoryFacade {
   Future<ApiResult> deleteAccount() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      await client.post('/api/v1/method/paas.api.user.user.delete_account');
+      await client.post('/api/method/paas.api.user.user.delete_account');
       LocalStorage.logout();
       return const ApiResult.success(data: null);
     } catch (e) {
@@ -228,7 +228,7 @@ class UserRepository implements UserRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.put(
-        '/api/v1/method/paas.api.user.user.update_profile_image',
+        '/api/method/paas.api.user.user.update_profile_image',
         data: {
           'image_url': imageUrl,
         },
@@ -252,7 +252,7 @@ class UserRepository implements UserRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/v1/method/paas.api.user.user.update_password',
+        '/api/method/paas.api.user.user.update_password',
         data: {
           'password': password,
         },
@@ -273,7 +273,7 @@ class UserRepository implements UserRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
-        '/api/v1/method/paas.api.user.user.search_user',
+        '/api/method/paas.api.user.user.search_user',
         queryParameters: {
           'name': name,
           'page': page,

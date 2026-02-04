@@ -18,7 +18,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.shop.shop.search_shops',
+        '/api/method/paas.api.shop.shop.search_shops',
         queryParameters: params,
       );
       return ApiResult.success(
@@ -52,7 +52,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.shop.shop.get_shops',
+        '/api/method/paas.api.shop.shop.get_shops',
         queryParameters: params,
       );
       return ApiResult.success(
@@ -73,7 +73,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.shop.shop.get_shop_by_uuid',
+        '/api/method/paas.api.shop.shop.get_shop_by_uuid',
         queryParameters: {'uuid': uuid},
       );
       return ApiResult.success(
@@ -98,7 +98,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
         if (shopId != null) 'shop_id': shopId,
       };
       final response = await client.get(
-        '/api/v1/method/paas.api.shop.shop.check_delivery_zone',
+        '/api/method/paas.api.shop.shop.check_delivery_zone',
         queryParameters: data,
       );
       return ApiResult.success(
@@ -136,7 +136,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.shop.shop.get_nearby_shops',
+        '/api/method/paas.api.shop.shop.get_nearby_shops',
         queryParameters: params,
       );
       return ApiResult.success(
@@ -156,7 +156,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.shop.shop.get_shop_branch',
+        '/api/method/paas.api.shop.shop.get_shop_branch',
         queryParameters: {'shop_id': uuid},
       );
       return ApiResult.success(
@@ -177,7 +177,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
-        '/api/v1/method/paas.api.shop.shop.join_order',
+        '/api/method/paas.api.shop.shop.join_order',
         data: {
           'shop_id': shopId,
           'name': name,
@@ -204,7 +204,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
   Future<ApiResult<ShopsPaginateResponse>> getPickupShops() async {
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.get('/api/v1/method/paas.api.shop.shop.get_pickup_shops');
+      final response = await client.get('/api/method/paas.api.shop.shop.get_pickup_shops');
       return ApiResult.success(
         data: ShopsPaginateResponse.fromJson(response.data),
       );
@@ -223,7 +223,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.shop.shop.get_shops_by_ids',
+        '/api/method/paas.api.shop.shop.get_shops_by_ids',
         queryParameters: {'ids': shopIds},
       );
       return ApiResult.success(
@@ -274,7 +274,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
-        '/api/v1/method/paas.api.shop.shop.create_shop',
+        '/api/method/paas.api.shop.shop.create_shop',
         data: data,
       );
       return const ApiResult.success(data: null);
@@ -292,7 +292,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.shop.shop.get_shops_recommend',
+        '/api/method/paas.api.shop.shop.get_shops_recommend',
         queryParameters: {
           'page': page,
         },
@@ -314,7 +314,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.get_story',
+        '/api/method/paas.api.get_story',
         queryParameters: {
           'page': page,
         },
@@ -334,7 +334,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/v1/method/paas.api.shop.shop.get_tags',
+        '/api/method/paas.api.shop.shop.get_tags',
         queryParameters: {'category_id': categoryId},
       );
       return ApiResult.success(
@@ -353,7 +353,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
   Future<ApiResult<PriceModel>> getSuggestPrice() async {
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.get('/api/v1/method/paas.api.shop.shop.get_suggest_price');
+      final response = await client.get('/api/method/paas.api.shop.shop.get_suggest_price');
       return ApiResult.success(data: PriceModel.fromJson(response.data['message']));
     } catch (e) {
       debugPrint('==> get suggest price failure: $e');
