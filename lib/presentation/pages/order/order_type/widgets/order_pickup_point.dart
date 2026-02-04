@@ -112,10 +112,9 @@ class _OrderPickupPointState extends ConsumerState<OrderPickupPoint> {
                     ? null
                     : () {
                         notifier.setDeliveryPoint(_selectedPoint);
-                        AppHelpers.showCheckTopSnackBar(
+                        AppHelpers.showCheckTopSnackBarDone(
                             context,
-                            "${AppHelpers.getTranslation(TrKeys.selected)}: ${_selectedPoint!.name}",
-                            type: SnackBarType.success);
+                            "${AppHelpers.getTranslation(TrKeys.select)}: ${_selectedPoint!.name}");
                       },
               )
             ],
