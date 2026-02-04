@@ -116,8 +116,8 @@ class BrandUtils {
       List<ShopData> allShops = [];
 
       // Add shops from different lists in the HomeState
-      if (homeState.shops.isNotEmpty) {
-        allShops.addAll(homeState.shops);
+      if (homeState.allShops.isNotEmpty) {
+        allShops.addAll(homeState.allShops);
       }
       // restaurant is not in HomeState, likely removed or merged
       if (homeState.newShops.isNotEmpty) {
