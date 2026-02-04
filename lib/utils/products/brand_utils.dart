@@ -119,11 +119,9 @@ class BrandUtils {
       if (homeState.shops.isNotEmpty) {
         allShops.addAll(homeState.shops);
       }
-      if (homeState.restaurant.isNotEmpty) {
-        allShops.addAll(homeState.restaurant);
-      }
-      if (homeState.newRestaurant.isNotEmpty) {
-        allShops.addAll(homeState.newRestaurant);
+      // restaurant is not in HomeState, likely removed or merged
+      if (homeState.newShops.isNotEmpty) {
+        allShops.addAll(homeState.newShops);
       }
       if (homeState.shopsRecommend.isNotEmpty) {
         allShops.addAll(homeState.shopsRecommend);
