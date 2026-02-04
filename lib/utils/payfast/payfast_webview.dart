@@ -273,8 +273,8 @@ class _PayFastWebViewState extends State<PayFastWebView> {
   // Method to save token
   void _saveToken(String token, Map<String, String> cardData) async {
     try {
-      // Use OrderRepository to save the token with card details
-      await ordersRepository.tokenizeAfterPayment(
+      // Use PaymentRepository to save the token with card details
+      await paymentsRepository.tokenizeAfterPayment(
           '', // Empty card number since we're using token
           cardData['card_holder_name'] ?? '',
           cardData['expiry_date'] ?? '',
