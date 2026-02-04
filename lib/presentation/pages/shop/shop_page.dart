@@ -625,16 +625,10 @@ String _getCartShopName(Cart? cart, WidgetRef ref) {
 
   if (foundShop.id != null) return foundShop.translation?.title ?? "";
 
-  // Check in restaurant list
-  foundShop = homeState.restaurant.firstWhere(
-        (shop) => shop.id == shopId,
-    orElse: () => ShopData(), // Empty shop data
-  );
 
-  if (foundShop.id != null) return foundShop.translation?.title ?? "";
 
-  // Check in newRestaurant list
-  foundShop = homeState.newRestaurant.firstWhere(
+  // Check in newShops list
+  foundShop = homeState.newShops.firstWhere(
         (shop) => shop.id == shopId,
     orElse: () => ShopData(), // Empty shop data
   );
