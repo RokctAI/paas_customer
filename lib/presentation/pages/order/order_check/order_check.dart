@@ -201,7 +201,7 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
         shopId: state.shopData?.id ?? 0,
         coupon: state.promoCode,
         deliveryFee: state.calculateData?.deliveryFee ?? 0,
-        deliveryPointId: state.selectedDeliveryPoint?.id,
+        deliveryPointId: int.tryParse(state.selectedDeliveryPoint?.id.toString() ?? ""),
         deliveryType: state.tabIndex == 0
             ? DeliveryTypeEnum.delivery
             : (state.tabIndex == 1

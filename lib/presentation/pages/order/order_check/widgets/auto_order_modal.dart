@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/app_constants.dart';
 import 'package:foodyman/infrastructure/services/time_service.dart';
 import 'package:jiffy/jiffy.dart';
+import 'package:foodyman/application/auto_order/auto_order_notifier.dart';
 import 'package:foodyman/application/auto_order/auto_order_provider.dart';
 import 'package:foodyman/application/order/order_provider.dart';
 import 'package:foodyman/application/save_card/saved_cards_provider.dart';
@@ -45,7 +46,7 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
   init() async {
     final orderState = ref.read(orderProvider);
     final grandTotal = orderState.calculateData?.totalPrice ?? 0.0;
-    ref.read(autoOrderProvider.notifier).init(widget.repeatData ?? RepeatData(), grandTotal);
+    ref.read(autoOrderProvider.notifier).init(widget.repeatData ?? RepeatData(), grandTotal.toDouble());
   }
 
   @override
@@ -228,7 +229,7 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                               ),
                               Text(
                                 "Total: ${AppHelpers.numberFormat(number: state.totalBalance)}",
-                                style: AppStyle.interNormal(size: 12, color: AppStyle.grey),
+                                style: AppStyle.interNormal(size: 12, color: AppStyle.textGrey),
                               ),
                             ],
                           ),

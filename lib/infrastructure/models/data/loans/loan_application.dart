@@ -1,4 +1,3 @@
-```dart
 import 'dart:io';
 
 class LoanApplicationModel {

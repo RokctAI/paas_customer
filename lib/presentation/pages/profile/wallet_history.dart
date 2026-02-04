@@ -17,7 +17,7 @@ import '../../components/buttons/pop_button.dart';
 import '../../components/buttons/second_button.dart';
 import '../../components/loading.dart';
 import '../../theme/app_style.dart';
-import '../loans/Loan_screen.dart';
+import '../loans/loan_screen.dart';
 import 'widgets/wallet_topup_screen.dart';
 import 'widgets/wallet_send_screen.dart';
 

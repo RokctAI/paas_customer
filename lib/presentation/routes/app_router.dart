@@ -50,7 +50,7 @@ import 'package:foodyman/presentation/pages/intro/intro_page.dart';
 import 'package:foodyman/presentation/pages/order/orders_main.dart';
 import '../../presentation/pages/loans/widgets/loan_document_upload_screen.dart';
 import '../../presentation/pages/loans/widgets/loan_eligibility_screen.dart';
-import '../../presentation/pages/loans/Loan_screen.dart';
+import '../../presentation/pages/loans/loan_screen.dart';
 
 part 'app_router.gr.dart';
 
