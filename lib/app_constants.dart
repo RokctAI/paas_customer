@@ -9,7 +9,7 @@ abstract class AppConstants {
   static const String baseUrl = 'https://juvo.tenant.rokct.ai/';
   static String drawingBaseUrl = 'https://api.openrouteservice.org';
   static String googleApiKey = 'AIzaSyDJjLCq6HBCe7xae6l0D9DW1MWpE4900GU';
-  static const String adminPageUrl = baseUrl;
+  static String adminPageUrl = baseUrl;
   static String webUrl = 'https://web.juvo.app';
   static String firebaseWebKey = '';
   static String uriPrefix = 'https://foodyman.page.link';
