@@ -110,13 +110,12 @@ class ProductMainButton extends StatelessWidget {
                     if (LocalStorage.getToken().isNotEmpty) {
                       event.createCart(
                           context,
-                      event.createCart(
-                          context,
-                          (state.productData!.shopId ?? 0), () {
-                        Navigator.pop(context);
-                        eventOrderShop.getCart(context, () {},
-                            shopId: shopId, userUuid: userUuid, cartId: cartId);
-                      },
+                          (state.productData!.shopId ?? 0),
+                          () {
+                            Navigator.pop(context);
+                            eventOrderShop.getCart(context, () {},
+                                shopId: shopId, userUuid: userUuid, cartId: cartId);
+                          },
                           isGroupOrder: userUuid?.isNotEmpty ?? false,
                           cartId: cartId,
                           userUuid: userUuid);
