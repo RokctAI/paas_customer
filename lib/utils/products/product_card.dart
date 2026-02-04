@@ -5,13 +5,13 @@ import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/presentation/components/custom_network_image.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
-import 'package:foodyman/presentation/pages/product/product_page.dart';
+
 import 'package:foodyman/utils/products/product_utils.dart';
 import 'package:remixicon/remixicon.dart';
-import 'package:foodyman/application/shop_order/shop_order_provider.dart';
+
 
 import 'brand_utils.dart';
-import 'product_uI_components.dart';
+import 'product_ui_components.dart';
 
 // A generic product card that works with both ProductData and Product models
 class ProductCard extends ConsumerWidget {
