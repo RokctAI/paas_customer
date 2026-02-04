@@ -5,6 +5,7 @@ import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:foodyman/application/shop_order/shop_order_provider.dart';
+import 'package:foodyman/application/shop_order/shop_order_state.dart';
 
 
 import 'product_utils.dart';
