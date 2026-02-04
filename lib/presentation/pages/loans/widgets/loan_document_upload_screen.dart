@@ -143,7 +143,7 @@ class _LoanDocumentUploadScreenState
       final loanApplication = LoanApplicationModel(
         idNumber: idNumber,
         amount: ref.read(loanAmountProvider),
-        documents: {}, // Empty for skipped documents
+        documents: [], // Empty for skipped documents
         skipDocuments: true,
         savedApplicationId: savedApplicationId,
         financialDetails: ref.read(financialDetailsProvider),
@@ -216,7 +216,7 @@ class _LoanDocumentUploadScreenState
       final loanApplication = LoanApplicationModel(
         idNumber: idNumber,
         amount: ref.read(loanAmountProvider),
-        documents: uploadedDocs,
+        documents: uploadedDocs.values.toList(),
         savedApplicationId: savedApplicationId,
         financialDetails: ref.read(financialDetailsProvider),
       );

@@ -212,8 +212,7 @@ class _MainPageState extends State<MainPage> {
           ),
         );
       } else if (!link.queryParameters.keys.contains("product") &&
-          (link.pathSegments.contains("shop") ||
-      } else if (link.pathSegments.contains("shop")) {
+          link.pathSegments.contains("shop")) {
         context.router.popUntilRoot();
         context.pushRoute(
           ShopRoute(
@@ -401,9 +400,9 @@ class _MainPageState extends State<MainPage> {
       // Try to find the shop in any of the loaded shop lists
       final shop = homeState.shops.firstWhere(
             (s) => s.id == shopId,
-        orElse: () => homeState.restaurant.firstWhere(
+        orElse: () => homeState.allShops.firstWhere(
               (s) => s.id == shopId,
-          orElse: () => homeState.newRestaurant.firstWhere(
+          orElse: () => homeState.newShops.firstWhere(
                 (s) => s.id == shopId,
             orElse: () => homeState.shopsRecommend.firstWhere(
                   (s) => s.id == shopId,
@@ -690,9 +689,9 @@ String _getCartShopName(Cart? cart, WidgetRef ref) {
   // Look for the shop in homeState
   final shop = homeState.shops.firstWhere(
         (s) => s.id == shopId,
-    orElse: () => homeState.restaurant.firstWhere(
+    orElse: () => homeState.allShops.firstWhere(
           (s) => s.id == shopId,
-      orElse: () => homeState.newRestaurant.firstWhere(
+      orElse: () => homeState.newShops.firstWhere(
             (s) => s.id == shopId,
         orElse: () => homeState.shopsRecommend.firstWhere(
               (s) => s.id == shopId,

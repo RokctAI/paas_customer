@@ -5,10 +5,36 @@ on:
 
 jobs:
   merge:
-    uses: RokctAI/shared-workflows/.github/workflows/universal-merge.yml@main
+    runs-on: ubuntu-latest
     permissions:
-      pull-requests: write
       contents: write
-    with:
-      allowed_users: 'RendaniSinyage,Rendani Sinyage'
-    secrets: inherit
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check User and Merge
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ALLOWED_USERS: 'RendaniSinyage,Rendani Sinyage'
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          ACTOR: ${{ github.actor }}
+        run: |
+          # Check if user is allowed
+          if [[ ",$ALLOWED_USERS," == *",$ACTOR,"* ]]; then
+            echo "User $ACTOR is authorized."
+          else
+            echo "User $ACTOR is NOT authorized. Skipping auto-merge."
+            exit 0
+          fi
+
+          # Check for critical file changes
+          FILES=$(gh pr view "$PR_URL" --json files --jq '.files[].path')
+          if echo "$FILES" | grep -q ".github/workflows/"; then
+            echo "Critical files changed (.github/workflows/). Auto-merge DISABLED."
+            exit 0
+          fi
+
+          # Auto-merge the PR
+          echo "No critical changes found. Enabling auto-merge..."
+          gh pr merge "$PR_URL" --auto --merge
