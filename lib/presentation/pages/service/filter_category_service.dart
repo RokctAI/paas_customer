@@ -43,10 +43,10 @@ class FilterCategoryService extends StatelessWidget {
         color: AppStyle.textGrey,
       ),
       onLoading: () {
-        event.fetchFilterRestaurant(context, controller: restaurantController);
+        event.fetchFilterShops(context, controller: restaurantController);
       },
       onRefresh: () {
-        event.fetchFilterRestaurant(context,
+        event.fetchFilterShops(context,
             controller: restaurantController, isRefresh: true);
       },
       child: SingleChildScrollView(
