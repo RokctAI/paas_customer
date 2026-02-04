@@ -2,8 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/presentation/theme/app_style.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
+
 
 /// Helper class for size information
 class SizeInfo {
@@ -284,7 +283,7 @@ class ProductUtils {
       }
 
       // Check if the discount is marked as active
-      if (discount.active != 1 && discount.active != true) {
+      if (discount.active != 1) {
         debugPrint("Product ${product.id}: Discount marked as inactive");
         return false;
       }
