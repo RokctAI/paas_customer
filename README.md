@@ -68,3 +68,7 @@ base64 -i google-services.json | pbcopy  # Copies encoded string to clipboard
 
 Paste the resulting string into the corresponding GitHub Secret value.
 
+### 📦 Change App Package
+
+Firstly, find out the existing package name. You can find it out from top of `/app/src/main/AndroidManifest.xml` file. Then right click on project folder from android studio and click on **Replace in Path**. You will see a popup window with two input boxes. In first box you have to put existing package name that you saw in `AndroidManifest.xml` file previously and then write down your preferred package name in second box and then click on **Replace All** button.
+
