@@ -47,6 +47,7 @@ google-services.json
 GoogleService-Info.plist
 
 # Environment variables and secrets
+.env/
 .env
 .env.local
 *.env.development
