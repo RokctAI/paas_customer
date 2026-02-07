@@ -33,6 +33,38 @@ Please do NOT put slash ( / ) at the end of your base url. Use your admin url as
 `static const String baseUrl='https://your_domain.com'`
 
 
-### Change App Package
-Firstly, find out the existing package name. You can find it out from top of `/app/src/main/AndroidManifest.xml` file. Then right click on project folder from android studio and click onreplace in path. You will see a popup window with two input boxes. In first box you have to put existing package name that you saw in `AndroidManifest.xml` file previously and then write down your preferred package name in second box and then click on Replace All button.
+## Building & Release (CI/CD)
+
+The project uses GitHub Actions for automated builds and releases. To enable signed builds, you must configure the following **Secrets** in your repository settings (`Settings > Secrets and variables > Actions`).
+
+### 🔑 Required Secrets
+
+#### 🤖 Android Secrets
+*   `GOOGLE_SERVICES_JSON`: The **Base64 encoded** content of your `android/app/google-services.json`.
+*   `KEY_JKS`: The **Base64 encoded** content of your release keystore file (`.jks`).
+*   `KEY_PASSWORD`: The password for your keystore.
+*   `ALIAS_PASSWORD`: The password for your key alias.
+
+#### 🍎 iOS Secrets
+*   `IOS_GOOGLE_SERVICE_INFO_PLIST`: The **Base64 encoded** content of `ios/Runner/GoogleService-Info.plist`.
+*   `IOS_P12_BASE64`: The **Base64 encoded** `.p12` export of your Apple Distribution Certificate.
+*   `IOS_MOBILEPROVISION_BASE64`: The **Base64 encoded** `.mobileprovision` file for your app.
+*   `IOS_CERTIFICATE_PASSWORD`: The password used when exporting the `.p12` certificate.
+
+---
+
+### 🛠️ How to Encode Files
+To provide the file contents as secrets, you must encode them to Base64 first. Use the following commands in your terminal:
+
+**macOS/Linux:**
+```bash
+base64 -i google-services.json | pbcopy  # Copies encoded string to clipboard
+```
+
+**Windows (PowerShell):**
+```powershell
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("google-services.json")) | clip
+```
+
+Paste the resulting string into the corresponding GitHub Secret value.
 
