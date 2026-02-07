@@ -44,6 +44,7 @@ The project uses GitHub Actions for automated builds and releases. To enable sig
 *   `KEY_JKS`: The **Base64 encoded** content of your release keystore file (`.jks`).
 *   `KEY_PASSWORD`: The password for your keystore.
 *   `ALIAS_PASSWORD`: The password for your key alias.
+*   `PRODUCTION_ENV`: The **Base64 encoded** content of your `.env/production.env` file.
 
 #### 🍎 iOS Secrets
 *   `IOS_GOOGLE_SERVICE_INFO_PLIST`: The **Base64 encoded** content of `ios/Runner/GoogleService-Info.plist`.
@@ -63,6 +64,9 @@ base64 -i android/app/google-services.json | pbcopy
 
 # For iOS
 base64 -i ios/Runner/GoogleService-Info.plist | pbcopy
+
+# For Production Environment
+base64 -i .env/production.env | pbcopy
 ```
 
 **Windows (PowerShell):**
@@ -72,9 +76,22 @@ base64 -i ios/Runner/GoogleService-Info.plist | pbcopy
 
 # For iOS
 [Convert]::ToBase64String([IO.File]::ReadAllBytes("ios/Runner/GoogleService-Info.plist")) | clip
+
+# For Production Environment
+[Convert]::ToBase64String([IO.File]::ReadAllBytes(".env/production.env")) | clip
 ```
 
 Paste the resulting string into the corresponding GitHub Secret value.
+
+### 🏗️ Multi-Tenant Build Support (build_* branches)
+You can trigger dynamic builds for specific clients by creating a branch following the `build_<client>-*` pattern (e.g., `build_wrapzo-v1.0`).
+
+The workflow will automatically look for client-specific secrets:
+*   `GOOGLE_SERVICES_JSON_<CLIENT>`
+*   `IOS_GOOGLE_SERVICE_INFO_PLIST_<CLIENT>`
+*   `PRODUCTION_ENV_<CLIENT>`
+
+If found, these will take precedence over the default secrets. The release candidate will also be tagged with the client suffix (e.g., `v1.0.0-wrapzo`).
 
 ### 📦 Change App Package
 
