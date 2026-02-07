@@ -54,16 +54,24 @@ The project uses GitHub Actions for automated builds and releases. To enable sig
 ---
 
 ### 🛠️ How to Encode Files
-To provide the file contents as secrets, you must encode them to Base64 first. Use the following commands in your terminal:
+To provide the file contents as secrets, you must encode them to Base64 first. Use the following commands from the **root of your repository**:
 
 **macOS/Linux:**
 ```bash
-base64 -i google-services.json | pbcopy  # Copies encoded string to clipboard
+# For Android
+base64 -i android/app/google-services.json | pbcopy
+
+# For iOS
+base64 -i ios/Runner/GoogleService-Info.plist | pbcopy
 ```
 
 **Windows (PowerShell):**
 ```powershell
-[Convert]::ToBase64String([IO.File]::ReadAllBytes("google-services.json")) | clip
+# For Android
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("android/app/google-services.json")) | clip
+
+# For iOS
+[Convert]::ToBase64String([IO.File]::ReadAllBytes("ios/Runner/GoogleService-Info.plist")) | clip
 ```
 
 Paste the resulting string into the corresponding GitHub Secret value.
