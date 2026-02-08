@@ -110,6 +110,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
       // Load translations first
       await ref.read(splashProvider.notifier).getTranslations(context);
 
+      if (!mounted) return;
       // Then check authentication
       ref.read(splashProvider.notifier).getToken(
         context,
