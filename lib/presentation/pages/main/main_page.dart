@@ -1,3 +1,6 @@
+// Copyright (c) 2024 RokctAI. All rights reserved.
+// Licensed under the GPLv3. See LICENSE file in the project root for details.
+
 // ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
 import 'package:auto_route/auto_route.dart';
@@ -400,9 +403,9 @@ class _MainPageState extends State<MainPage> {
       // Try to find the shop in any of the loaded shop lists
       final shop = homeState.shops.firstWhere(
             (s) => s.id == shopId,
-        orElse: () => homeState.restaurant.firstWhere(
+        orElse: () => homeState.newShops.firstWhere(
               (s) => s.id == shopId,
-          orElse: () => homeState.newRestaurant.firstWhere(
+          orElse: () => homeState.allShops.firstWhere(
                 (s) => s.id == shopId,
             orElse: () => homeState.shopsRecommend.firstWhere(
                   (s) => s.id == shopId,
@@ -689,9 +692,9 @@ String _getCartShopName(Cart? cart, WidgetRef ref) {
   // Look for the shop in homeState
   final shop = homeState.shops.firstWhere(
         (s) => s.id == shopId,
-    orElse: () => homeState.restaurant.firstWhere(
+    orElse: () => homeState.newShops.firstWhere(
           (s) => s.id == shopId,
-      orElse: () => homeState.newRestaurant.firstWhere(
+      orElse: () => homeState.allShops.firstWhere(
             (s) => s.id == shopId,
         orElse: () => homeState.shopsRecommend.firstWhere(
               (s) => s.id == shopId,

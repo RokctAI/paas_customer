@@ -1,3 +1,6 @@
+// Copyright (c) 2024 RokctAI. All rights reserved.
+// Licensed under the GPLv3. See LICENSE file in the project root for details.
+
 import 'dart:io';
 
 class LoanApplicationModel {
