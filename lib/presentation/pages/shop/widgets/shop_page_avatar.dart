@@ -173,10 +173,12 @@ class ShopPageAvatar extends StatelessWidget {
                             .read(shopOrderProvider.notifier)
                             .deleteCart(context)
                             .then((value) async {
-                          ref.read(shopOrderProvider.notifier).createCart(
-                            context,
-                            (shop.id ?? 0),
-                          );
+                          if (context.mounted) {
+                            ref.read(shopOrderProvider.notifier).createCart(
+                              context,
+                              (shop.id ?? 0),
+                            );
+                          }
                         });
                       });
                 })),
