@@ -54,12 +54,14 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
 
       result.when(
         success: (cards) {
+          if (!mounted) return;
           setState(() {
             _savedCards = cards;
             _loadingCards = false;
           });
         },
         failure: (error, statusCode) {
+          if (!mounted) return;
           setState(() {
             _loadingCards = false;
           });
@@ -70,6 +72,7 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _loadingCards = false;
       });
@@ -121,6 +124,7 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
 
       result.when(
           success: (data) {
+              if (!mounted) return;
               AppHelpers.showCheckTopSnackBarDone(
                 context,
                 AppHelpers.getTranslation(TrKeys.topUpSuccessful),
@@ -128,6 +132,7 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
               _navigateBack();
           },
           failure: (error, s) {
+              if (!mounted) return;
               AppHelpers.showCheckTopSnackBarInfo(
                 context,
                 'Failed to process payment: $error',
@@ -135,6 +140,7 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
           }
       );
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
@@ -172,6 +178,7 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
 
       result.when(
         success: (data) {
+          if (!mounted) return;
           if (data is String && data.isNotEmpty) {
                Navigator.push(
                 context,
@@ -202,6 +209,7 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
           }
         },
         failure: (error, statusCode) {
+          if (!mounted) return;
           AppHelpers.showCheckTopSnackBarInfo(
             context,
             error,
@@ -209,6 +217,7 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
