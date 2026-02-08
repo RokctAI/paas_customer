@@ -92,7 +92,21 @@ class OrderCheck extends ConsumerStatefulWidget {
 }
 
 class _OrderCheckState extends ConsumerState<OrderCheck> {
-
+  // Check if PayFast is selected
+  bool _isPayFastSelected(PaymentState paymentState, OrderState state) {
+    if (AppHelpers.getPaymentType() == "admin") {
+      if (paymentState.payments.isEmpty || paymentState.currentIndex >= paymentState.payments.length) {
+        return false;
+      }
+      return paymentState.payments[paymentState.currentIndex].tag?.toLowerCase() == "pay-fast";
+    } else {
+      if (state.shopData?.shopPayments == null ||
+          paymentState.currentIndex >= (state.shopData?.shopPayments?.length ?? 0)) {
+        return false;
+      }
+      return state.shopData?.shopPayments?[paymentState.currentIndex]?.payment?.tag?.toLowerCase() == "pay-fast";
+    }
+  }
 
   void _createOrder(
       {required OrderState state,
