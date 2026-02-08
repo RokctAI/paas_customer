@@ -235,7 +235,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
     } else {
       state = state.copyWith(selectIndexSubCategory: index);
     }
-    fetchFilterShops(context, isRefresh: true);
+    fetchSubCategoryShops(context, isRefresh: true);
   }
 
   Future<void> fetchCategories(BuildContext context) async {
@@ -268,7 +268,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
     }
   }
 
-  fetchFilterShops(
+  fetchSubCategoryShops(
       BuildContext context, {
         bool? isRefresh,
         RefreshController? controller,
@@ -428,8 +428,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
             controller.refreshCompleted();
 
             // Clear preloaded cache and start fresh on refresh
-            _preloadedCategoryShops[categoryId] = data.data ?? [];
-            _categoryTotalShops[categoryId] = data.meta?.total ?? 0;
+            _preloadedCategoryShops.clear();
+            _categoryTotalShops.clear();
             preloadAllCategoryShops();
           } else {
             if (data.data?.isNotEmpty ?? false) {

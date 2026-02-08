@@ -91,10 +91,14 @@ class ProductsRepository implements ProductsRepositoryFacade {
   @override
   Future<ApiResult<ProductsPaginateResponse>> getMostSoldProducts({
     int? shopId,
+    int? categoryId,
+    int? brandId,
   }) async {
     final params = {
       'limit_page_length': 14,
       if (shopId != null) 'shop_id': shopId,
+      if (categoryId != null) 'category_id': categoryId,
+      if (brandId != null) 'brand_id': brandId,
     };
     try {
       final client = dioHttp.client(requireAuth: false);
@@ -194,12 +198,16 @@ class ProductsRepository implements ProductsRepositoryFacade {
   @override
   Future<ApiResult<ProductsPaginateResponse>> getDiscountProducts({
     int? shopId,
+    int? brandId,
+    int? categoryId,
     int? page,
   }) async {
      final params = {
       'limit_start': ((page ?? 1) - 1) * 14,
       'limit_page_length': 14,
       if (shopId != null) 'shop_id': shopId,
+      if (categoryId != null) 'category_id': categoryId,
+      if (brandId != null) 'brand_id': brandId,
     };
     try {
       final client = dioHttp.client(requireAuth: false);

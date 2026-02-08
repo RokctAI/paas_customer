@@ -382,7 +382,8 @@ class OrderNotifier extends StateNotifier<OrderState> {
     }
     if (payment.tag?.toLowerCase() != "cash") {
       final res = await _orderRepository.tipProcess(
-          state.orderData?.id, payment.tag ?? '', payment.id, price);
+          orderId: state.orderData?.id?.toInt() ?? 0,
+          tip: price?.toDouble() ?? 0.0);
       res.map(success: (key) {
         onSuccess?.call();
         if (payment.tag?.toLowerCase() != 'wallet') {

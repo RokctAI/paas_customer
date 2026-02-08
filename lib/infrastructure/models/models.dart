@@ -54,5 +54,13 @@ export 'data/payment_data.dart';
 export 'data/parcel_order.dart';
 export 'response/parcel_calculate_response.dart';
 export 'response/parcel_response.dart';
-
-
+export 'data/user.dart';
+export 'data/refund_data.dart';
+export 'data/get_calculate_data.dart';
+export 'response/branches_response.dart';
+export 'data/referral_data.dart';
+export 'data/address_new_data.dart';
+export 'data/story_data.dart';
+export 'response/tag_response.dart';
+export 'data/cashback_model.dart';
+export 'response/multi_gallery_upload_response.dart';

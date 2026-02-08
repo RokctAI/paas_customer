@@ -6,9 +6,7 @@ import 'package:foodyman/infrastructure/models/data/loans/loan_contract_model.da
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/infrastructure/services/local_storage.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
-import 'package:http/http.dart' as http;
 import 'dart:math';
-import 'package:http_parser/http_parser.dart';
 import 'package:payfast/payfast.dart';
 import '../../domain/interface/loans.dart';
 import '../../utils/payfast/payfast_webview.dart';
@@ -29,6 +27,7 @@ class LoansRepository implements LoansRepositoryFacade {
                               ((financials['other_expenses'] as num?)?.toDouble() ?? 0.0) +
                               ((financials['existing_credits'] as num?)?.toDouble() ?? 0.0);
 
+      final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
         '/api/method/paas.api.create_loan_application',
         data: {
@@ -638,27 +637,35 @@ class LoansRepository implements LoansRepositoryFacade {
     }
   }
 
-  Future<Result<String>> disburseLoan(String loanApplicationName) async {
+  Future<ApiResult<String>> disburseLoan(String loanApplicationName) async {
     try {
-      final response = await _dio.post(
+      final client = dioHttp.client(requireAuth: true);
+      final response = await client.post(
         '/paas.paas.api.disburse_loan',
         data: {'loan_application': loanApplicationName},
       );
-      return Result.success(response.data['message']);
+      return ApiResult.success(data: response.data['message']);
     } catch (e) {
-      return Result.failure(AppHelpers.getDioError(e), null);
+      return ApiResult.failure(
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
-  Future<Result<String>> requestPayout(String loanApplicationName) async {
+  Future<ApiResult<String>> requestPayout(String loanApplicationName) async {
     try {
-      final response = await _dio.post(
+      final client = dioHttp.client(requireAuth: true);
+      final response = await client.post(
         '/paas.paas.api.request_payout',
         data: {'loan_application': loanApplicationName},
       );
-      return Result.success("Payout request submitted successfully!");
+      return ApiResult.success(data: "Payout request submitted successfully!");
     } catch (e) {
-      return Result.failure(AppHelpers.getDioError(e), null);
+      return ApiResult.failure(
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
