@@ -42,7 +42,7 @@ class _OrderPageState extends State<OrderType> {
 
   @override
   Widget build(BuildContext context) {
-    final _tabs = [
+    final tabs = [
       Tab(text: AppHelpers.getTranslation(TrKeys.delivery)),
       Tab(text: AppHelpers.getTranslation(TrKeys.pickup)),
       Tab(text: AppHelpers.getTranslation(TrKeys.pickup_point)),
@@ -62,7 +62,7 @@ class _OrderPageState extends State<OrderType> {
           children: [
             CustomTabBar(
               tabController: widget.tabController,
-              tabs: _tabs,
+            tabs: tabs,
             ),
             SizedBox(
               height: _calculateHeight(),
