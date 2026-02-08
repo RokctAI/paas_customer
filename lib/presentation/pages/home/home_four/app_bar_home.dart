@@ -118,16 +118,16 @@ class _AppBarHomeState extends ConsumerState<AppBarHome> with SingleTickerProvid
     }
   }
 
-  void _refreshWelcomeText() {
-    setState(() {
-      _welcomeTextKey = UniqueKey();
-    });
-  }
+  // void _refreshWelcomeText() {
+  //   setState(() {
+  //     _welcomeTextKey = UniqueKey();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     final bool isDarkMode = LocalStorage.getAppThemeMode();
-    final ordersState = ref.watch(ordersListProvider);
+    // final ordersState = ref.watch(ordersListProvider);
 
     final addressData = LocalStorage.getAddressSelected();
     final currentLat = addressData?.location?.latitude;
@@ -177,12 +177,12 @@ class _AppBarHomeState extends ConsumerState<AppBarHome> with SingleTickerProvid
                 child: Consumer(
                   builder: (context, ref, child) {
                     final orders = ref.watch(shopOrderProvider).cart;
-                    final bool isCartEmpty = orders == null ||
-                        (orders.userCarts?.isEmpty ?? true) ||
-                        ((orders.userCarts?.isEmpty ?? true)
-                            ? true
-                            : (orders.userCarts?.first.cartDetails?.isEmpty ?? true)) ||
-                        orders.ownerId != LocalStorage.getUser()?.id;
+                    // final bool isCartEmpty = orders == null ||
+                    //     (orders.userCarts?.isEmpty ?? true) ||
+                    //     ((orders.userCarts?.isEmpty ?? true)
+                    //         ? true
+                    //         : (orders.userCarts?.first.cartDetails?.isEmpty ?? true)) ||
+                    //     orders.ownerId != LocalStorage.getUser()?.id;
 
                     return Row(
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -338,32 +338,31 @@ class _AppBarHomeState extends ConsumerState<AppBarHome> with SingleTickerProvid
         ),
       ],
     );
-  }
 
-  void _showInfoPopup(BuildContext context) {
-    AppHelpers.showAlertDialog(
-      context: context,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            AppHelpers.getTranslation(TrKeys.titleETA),
-            style: AppStyle.interBold(
-              size: 14,
-              color: AppStyle.black,
-            ),
-          ),
-          Text(
-            AppHelpers.getTranslation(TrKeys.etaTimeDialog),
-            style: AppStyle.interNormal(
-              size: 12,
-              color: AppStyle.textGrey,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // void _showInfoPopup(BuildContext context) {
+  //   AppHelpers.showAlertDialog(
+  //     context: context,
+  //     child: Column(
+  //       mainAxisSize: MainAxisSize.min,
+  //       children: [
+  //         Text(
+  //           AppHelpers.getTranslation(TrKeys.titleETA),
+  //           style: AppStyle.interBold(
+  //             size: 14,
+  //             color: AppStyle.black,
+  //           ),
+  //         ),
+  //         Text(
+  //           AppHelpers.getTranslation(TrKeys.etaTimeDialog),
+  //           style: AppStyle.interNormal(
+  //             size: 12,
+  //             color: AppStyle.textGrey,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
 
 class WelcomeText extends StatelessWidget {
