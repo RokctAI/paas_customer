@@ -20,7 +20,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:path/path.dart' as path;
+// import 'package:path/path.dart' as path;
 
 import '../../../../infrastructure/models/data/loans/loan_application.dart';
 import '../../../../infrastructure/repository/loans_repository.dart';
@@ -527,7 +527,7 @@ class _LoanDocumentUploadScreenState
           ),
           subtitle: isUploaded
               ? Text(
-            path.basename(uploadedFile!.path),
+            uploadedFile!.path.split(Platform.pathSeparator).last,
             style: AppStyle.interNormal(
               size: 12.sp,
               color: AppStyle.textGrey,
