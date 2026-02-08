@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:foodyman/domain/handlers/api_result.dart';
 import 'package:foodyman/domain/interface/auth.dart';
-import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
 import 'package:foodyman/infrastructure/models/data/address_old_data.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:foodyman/infrastructure/services/app_connectivity.dart';

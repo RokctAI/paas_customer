@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:foodyman/presentation/components/badges/order_badge_shimmer.dart';
 import '../../../../theme/theme.dart';
 
 class BannerShimmer extends StatelessWidget {

@@ -11,7 +11,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:remixicon/remixicon.dart';
 import 'package:foodyman/application/app_widget/app_provider.dart';
 import 'package:foodyman/application/profile/profile_provider.dart';
 import 'package:foodyman/domain/di/dependency_manager.dart';
@@ -252,7 +251,6 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderSt
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(viewMapProvider);
-    final poiData = ref.watch(poiDataProvider);
     final bool isLtr = LocalStorage.getLangLtr();
     final bool isDarkMode = ref.watch(appProvider).isDarkMode;
 

@@ -402,7 +402,6 @@ class OrderNotifier extends StateNotifier<OrderState> {
       res.map(success: (key) {
         onSuccess?.call();
         if (payment.tag?.toLowerCase() != 'wallet') {
-          // ignore: void_checks
           onWebview?.call(key.data);
         }
       }, failure: (e) {

@@ -30,7 +30,7 @@ class BannerScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Button text being used in BannerScreen: ${buttonText}");
+    // print("Button text being used in BannerScreen: ${buttonText}");
     return Container(
       decoration: BoxDecoration(
         color: AppStyle.white,

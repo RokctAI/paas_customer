@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/domain/di/dependency_manager.dart';
 import 'package:foodyman/domain/interface/user.dart';
-import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
 import 'package:foodyman/infrastructure/models/data/address_old_data.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:foodyman/infrastructure/services/app_connectivity.dart';

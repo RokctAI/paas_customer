@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodyman/domain/di/dependency_manager.dart';
 import 'package:foodyman/domain/interface/user.dart';
-import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:foodyman/infrastructure/models/request/edit_profile.dart';
 import 'package:foodyman/infrastructure/services/app_helpers.dart';

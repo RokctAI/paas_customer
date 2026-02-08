@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,7 +8,6 @@ import '../../domain/di/dependency_manager.dart';
 import '../../infrastructure/services/app_helpers.dart';
 import '../../infrastructure/services/tr_keys.dart';
 import '../../presentation/components/buttons/custom_button.dart';
-import '../../presentation/routes/app_router.dart';
 import '../../presentation/theme/theme.dart';
 
 // Provider for preloaded WebView state

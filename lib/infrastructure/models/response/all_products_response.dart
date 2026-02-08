@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../data/translation.dart';
-import '../data/unit_data.dart';
 
 class AllProductsResponse {
   DateTime? timestamp;

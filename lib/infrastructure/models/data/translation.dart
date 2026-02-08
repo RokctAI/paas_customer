@@ -27,8 +27,8 @@ class Translation {
     _buttonText = json?['button_text'];
 
     // Add debug print
-    print("Raw translation JSON: $json");
-    print("Button text extracted in Translation.fromJson: ${json?['button_text']}");
+    // print("Raw translation JSON: $json");
+    // print("Button text extracted in Translation.fromJson: ${json?['button_text']}");
   }
 
   int? _id;
@@ -65,7 +65,7 @@ class Translation {
   String? get shortDesc => _shortDesc;
   String? get address => _address;
   String? get buttonText {
-    print("Translation.buttonText getter called, returning: $_buttonText");
+    // print("Translation.buttonText getter called, returning: $_buttonText");
     return _buttonText;
   }
 

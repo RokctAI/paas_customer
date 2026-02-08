@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
-import 'package:foodyman/infrastructure/models/data/product_data.dart';
 
 import '../../app_constants.dart';
 

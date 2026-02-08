@@ -1007,7 +1007,6 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
 
     // Flag to track if higher priority items exist
     bool hasHigherPriorityItems = false;
-    bool hasPendingReviewApplication = false;
     bool isUserBlocked = false;
 
     // 1. Highest Priority: Pending Contract
@@ -1096,7 +1095,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
         'type': 'pending_review',
         'data': pendingReviewApplications.first,
       });
-      hasPendingReviewApplication = true;
+      // hasPendingReviewApplication = true;
       hasHigherPriorityItems = true;
       isUserBlocked = true;
     }
@@ -1820,7 +1819,6 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
               return dateB.compareTo(dateA);
             });
 
-            final latestActiveOverdueLoan = activeOverdueLoans.first;
 
             setState(() {
               ref.read(hasPendingApplicationProvider.notifier).state = true;

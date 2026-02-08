@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:foodyman/presentation/components/loading.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-import '../../../../infrastructure/services/app_helpers.dart';
-import '../../../../infrastructure/services/tr_keys.dart';
 import 'package:foodyman/infrastructure/services/app_assets.dart';
 import 'package:foodyman/presentation/components/app_bars/common_app_bar.dart';
 import 'package:foodyman/application/about/about_provider.dart';

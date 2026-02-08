@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
@@ -9,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import '../../presentation/routes/app_router.dart';
 import '../../presentation/components/buttons/custom_button.dart';
 import '../../presentation/theme/app_style.dart';
 import 'package:foodyman/infrastructure/services/local_storage.dart';

@@ -25,7 +25,7 @@ Future<void> initializeExcludedProductIds() async {
       .toList();
 
   excludedProductIds = excludedProductIdsFromRemoteConfig;
-  print('Excluded Product IDs: $excludedProductIds');
+  // print('Excluded Product IDs: $excludedProductIds');
 }
 Future<void> initializeExcludedCategoryIds() async {
   final remoteConfig = FirebaseRemoteConfig.instance;
@@ -47,5 +47,5 @@ Future<void> initializeExcludedCategoryIds() async {
       .toList();
 
   excludedCategoryIds = excludedCategoryIdsFromRemoteConfig;
-  print('Excluded Category IDs: $excludedCategoryIds');
+  // print('Excluded Category IDs: $excludedCategoryIds');
 }

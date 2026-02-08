@@ -21,8 +21,6 @@ import 'package:foodyman/domain/di/dependency_manager.dart';
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/infrastructure/services/local_storage.dart';
 
-import '../models/data/user.dart';
-import '../models/data/user.dart';
 import '../models/data/wallet_data.dart';
 import '../models/models.dart';
 

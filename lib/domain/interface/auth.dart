@@ -1,4 +1,3 @@
-import 'package:foodyman/infrastructure/models/data/user.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 
 import 'package:foodyman/domain/handlers/handlers.dart';

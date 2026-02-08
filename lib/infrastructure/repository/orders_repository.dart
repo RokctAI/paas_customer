@@ -378,17 +378,17 @@ class OrdersRepository implements OrdersRepositoryFacade {
 
 
   @override
-  Future<ApiResult<void>> tipProcess({
+  Future<ApiResult<String>> tipProcess({
     required int orderId,
     required double tip,
   }) async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      await client.post(
+      final response = await client.post(
         '/api/method/paas.api.tip_process',
         data: {'order_id': orderId, 'tip': tip},
       );
-      return const ApiResult.success(data: null);
+      return ApiResult.success(data: response.data['redirect_url']);
     } catch (e) {
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),

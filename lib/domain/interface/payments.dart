@@ -1,11 +1,8 @@
 import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
 
-import '../../infrastructure/models/data/order_active_model.dart';
 
-import '../../infrastructure/models/data/order_active_model.dart';
 import '../../infrastructure/models/data/saved_card.dart';
-import 'package:flutter/material.dart';
 
 abstract class PaymentsRepositoryFacade {
   Future<ApiResult<PaymentsResponse?>> getPayments();

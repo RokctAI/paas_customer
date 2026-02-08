@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:remixicon/remixicon.dart';
 import '../../../infrastructure/models/data/shop_data.dart';
-import '../../../infrastructure/services/app_helpers.dart';
-import '../../../infrastructure/services/tr_keys.dart';
 import '../../theme/app_style.dart';
 
 class OpTimeBadge extends StatelessWidget {

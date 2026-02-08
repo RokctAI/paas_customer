@@ -25,7 +25,6 @@ class DiscountedProductsSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final shopOrderState = ref.watch(shopOrderProvider);
-    final homeState = ref.watch(homeProvider);
 
     // Filter for products with valid discounts
     final validDiscountProducts = products.where((product) {
