@@ -558,28 +558,6 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
   }
 
 
-  List<Widget> _buildIneligibilityReasons(
-      Map<String, dynamic> eligibilityData) {
-    List<Widget> reasons = [];
-
-    if (eligibilityData['income_too_low'] == true) {
-      reasons.add(Text(
-        '• Monthly income is insufficient',
-        style: AppStyle.interNormal(size: 14.sp),
-      ));
-    }
-
-    if (eligibilityData['debt_to_income_ratio_high'] == true) {
-      reasons.add(Text(
-        '• Debt-to-income ratio is too high',
-        style: AppStyle.interNormal(size: 14.sp),
-      ));
-    }
-
-    // Add more specific reasons as needed
-
-    return reasons;
-  }
 
   @override
   Widget build(BuildContext context) {
