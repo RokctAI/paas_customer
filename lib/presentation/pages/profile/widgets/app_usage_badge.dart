@@ -10,7 +10,7 @@ import 'package:foodyman/presentation/theme/theme.dart';
 import '../../../../utils/app_usage_service.dart';
 
 class AppUsageBadge extends StatefulWidget {
-  const AppUsageBadge({Key? key}) : super(key: key);
+  const AppUsageBadge({super.key});
 
   @override
   State<AppUsageBadge> createState() => _AppUsageBadgeState();
