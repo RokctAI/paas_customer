@@ -245,6 +245,7 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
             final preloadedState = ref.read(preloadedWebViewProvider);
 
             if (preloadedState != null && preloadedState.url == paymentUrl && preloadedState.isReady) {
+              if (!context.mounted) return;
               // If we have a preloaded and ready WebView for this URL, use it
               Navigator.push(
                 context,
@@ -611,11 +612,18 @@ class _WebViewPageState extends State<WebViewPage> {
     // Don't process if already detected payment completion
     if (isPaymentComplete) return false;
 
-    // Check if the URL contains success indicators
-    if (url.contains('order-stripe-success') ||
+    final isSuccess = url.contains('order-stripe-success') ||
         url.contains('payment-success') ||
         url.contains('redirect-success') ||
-        url.contains(AppConstants.baseUrl)) {
+        url.contains(AppConstants.baseUrl);
+    
+    final isFailure = url.contains('payment-cancel') ||
+        url.contains('payment-failed') ||
+        url.contains('redirect-cancel');
+
+    // Check if the URL contains success indicators
+    if (isSuccess) {
+      if (!mounted) return true;
 
       isPaymentComplete = true;
 
