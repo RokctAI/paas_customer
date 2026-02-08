@@ -11,7 +11,7 @@ import 'package:foodyman/application/about/about_provider.dart';
 import 'package:foodyman/presentation/components/custom_network_image.dart';
 
 class AboutPage extends ConsumerStatefulWidget {
-  const AboutPage({Key? key}) : super(key: key);
+  const AboutPage({super.key});
 
   @override
   ConsumerState<AboutPage> createState() => _AboutPageState();
