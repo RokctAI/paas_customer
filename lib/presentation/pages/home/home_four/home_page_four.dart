@@ -62,6 +62,7 @@ class _HomePageState extends ConsumerState<HomePageFour> {
   void initState() {
     _controller = ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (!mounted) return;
       final notifier = ref.read(homeProvider.notifier);
 
       // Initialize address and basic data
@@ -69,19 +70,48 @@ class _HomePageState extends ConsumerState<HomePageFour> {
 
       // Load data in sequence, with discount products (and hence brands) last
       await Future.wait([
-        Future(() => notifier.fetchBanner(context)),
-        Future(() => notifier.fetchShopRecommend(context)),
-        Future(() => notifier.fetchShop(context)),
-        Future(() => notifier.fetchStories(context)),
-        Future(() => notifier.fetchAllShops(context)),
-        Future(() => notifier.fetchNewShops(context)),
-        Future(() => notifier.fetchAds(context)),
-        Future(() => notifier.fetchCategories(context)),
+        Future(() {
+          if (!mounted) return;
+          notifier.fetchBanner(context);
+        }),
+        Future(() {
+          if (!mounted) return;
+          notifier.fetchShopRecommend(context);
+        }),
+        Future(() {
+          if (!mounted) return;
+          notifier.fetchShop(context);
+        }),
+        Future(() {
+          if (!mounted) return;
+          notifier.fetchStories(context);
+        }),
+        Future(() {
+          if (!mounted) return;
+          notifier.fetchAllShops(context);
+        }),
+        Future(() {
+          if (!mounted) return;
+          notifier.fetchNewShops(context);
+        }),
+        Future(() {
+          if (!mounted) return;
+          notifier.fetchAds(context);
+        }),
+        Future(() {
+          if (!mounted) return;
+          notifier.fetchCategories(context);
+        }),
       ]);
 
+      if (!mounted) return;
       // Now fetch discount products which will also load brands
-      await Future(() => notifier.fetchDiscountProducts(context));
+      await Future(() {
+        if (!mounted) return;
+        notifier.fetchDiscountProducts(context);
+      });
 
+      if (!mounted) return;
       // Map and user data
       ref.read(viewMapProvider.notifier).checkAddress(context);
       ref.read(currencyProvider.notifier).fetchCurrency(context);
