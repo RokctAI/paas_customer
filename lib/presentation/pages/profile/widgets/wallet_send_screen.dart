@@ -115,10 +115,11 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
       );
       ref.read(userSearchProvider.notifier).state = [];
     } finally {
-      if (!mounted) return;
-      setState(() {
-        _isSearching = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isSearching = false;
+        });
+      }
     }
   }
 
