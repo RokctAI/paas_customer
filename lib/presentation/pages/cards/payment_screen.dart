@@ -71,6 +71,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _loadingCards = false;
       });
@@ -112,6 +113,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
 
           // Add a slight delay to ensure snackbar is visible
           Future.delayed(const Duration(milliseconds: 1000), () {
+            if (!mounted) return;
             // Refresh cart
             ref.read(shopOrderProvider.notifier).getCart(
                 context,
@@ -123,7 +125,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
             widget.onPaymentComplete(true);
 
             // Optional: Navigate to main route if needed
-            AppHelpers.goHome(context);
+            if (mounted) AppHelpers.goHome(context);
           });
         },
         failure: (error, statusCode) {
