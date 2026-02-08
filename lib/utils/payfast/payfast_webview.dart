@@ -137,6 +137,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
 
           // Show error message for serious errors
           if (error.errorCode >= 400) {
+            if (!mounted) return;
             AppHelpers.showCheckTopSnackBarInfo(
               context,
               'Payment error: ${error.description}',
@@ -227,6 +228,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
       }
 
       // Show success message
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarDone(
         context,
         AppHelpers.getTranslation(TrKeys.paymentSuccessful),
@@ -239,6 +241,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
 
       // Navigate back to main route
       Future.delayed(const Duration(milliseconds: 500), () {
+        if (!mounted) return;
         AppHelpers.goHome(context);
       });
 
@@ -249,6 +252,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
       isPaymentComplete = true;
 
       // Show error message
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         AppHelpers.getTranslation(TrKeys.paymentRejected),
@@ -260,6 +264,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
       }
 
       // Navigate back
+      if (!mounted) return;
       Navigator.pop(context);
 
       return true;
@@ -318,6 +323,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
                     textColor: AppStyle.white,
                     title: AppHelpers.getTranslation(TrKeys.cancel),
                     onPressed: () {
+                      if (!mounted) return;
                       Navigator.pop(context); // Close dialog
                       Navigator.pop(context); // Close WebView
 
@@ -333,6 +339,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
                     background: AppStyle.transparent,
                     title: AppHelpers.getTranslation(TrKeys.stay),
                     onPressed: () {
+                      if (!mounted) return;
                       Navigator.pop(context); // Just close the dialog
                     },
                   ),
