@@ -24,7 +24,7 @@ abstract class AppConnectivity {
 
     if (!hasConnection) {
       // Automatically show dialog when no connection
-      AppHelpers.showNoConnectionDialog(context);
+      if (context.mounted) AppHelpers.showNoConnectionDialog(context);
     }
 
     return hasConnection;
@@ -38,7 +38,7 @@ abstract class AppConnectivity {
         connectivityResult.contains(ConnectivityResult.wifi);
 
     if (!hasConnection) {
-      AppHelpers.showNoConnectionDialog(context);
+      if (context.mounted) AppHelpers.showNoConnectionDialog(context);
     }
 
     return hasConnection;
