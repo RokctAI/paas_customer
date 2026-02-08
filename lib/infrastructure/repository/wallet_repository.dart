@@ -24,7 +24,7 @@ import 'package:foodyman/infrastructure/services/local_storage.dart';
 import '../models/data/user.dart';
 import '../models/data/user.dart';
 import '../models/data/wallet_data.dart';
-import '../../models/models.dart';
+import '../models/models.dart';
 
 class WalletRepository implements WalletRepositoryFacade {
   @override

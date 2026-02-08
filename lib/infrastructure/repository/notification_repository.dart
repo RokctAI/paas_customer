@@ -39,7 +39,7 @@ class NotificationRepositoryImpl extends NotificationRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post('/api/method/paas.api.read_all_notifications');
-      return const ApiResult.success(data: null);
+      return ApiResult.success(data: NotificationResponse());
     } catch (e) {
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),

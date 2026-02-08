@@ -709,9 +709,9 @@ abstract class AppHelpers {
 
   static void goHome(BuildContext context) {
     if (AppConstants.enableMarketplace) {
-      context.replaceRoute(const MainRoute());
+      context.router.replace(const MainRoute());
     } else {
-      context.replaceRoute(ShopRoute(shopId: AppConstants.defaultShopId));
+      context.router.replace(ShopRoute(shopId: AppConstants.defaultShopId));
     }
   }
 }
