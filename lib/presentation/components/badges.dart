@@ -9,6 +9,6 @@ export 'badge_item.dart';
 export 'badges/order_time_badge.dart';
 export 'bonus_discount_popular.dart';
 export 'badges/organic_tag_badge.dart';
-export 'badges/AlertDialog.dart';
+export 'badges/alert_dialog.dart';
 export 'badges/upcominglist.dart';
 //export 'badges/ad_badge.dart';
