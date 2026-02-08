@@ -207,8 +207,9 @@ class _MainPageState extends State<MainPage> {
         AppHelpers.showCheckTopSnackBarInfo(context,
             "${AppHelpers.getTranslation(TrKeys.id)} #${message.notification?.title} ${message.notification?.body}",
             onTap: () async {
-              if (!context.mounted) return;
+              if (!mounted) return;
               context.router.popUntilRoot();
+              if (!mounted) return;
               context.pushRoute(
                 OrderProgressRoute(
                   orderId: data.id,
@@ -224,8 +225,9 @@ class _MainPageState extends State<MainPage> {
     dynamicLinks.onLink.listen((dynamicLinkData) {
       Uri link = dynamicLinkData.link;
       if (link.queryParameters.keys.contains('group')) {
-        if (!context.mounted) return;
+        if (!mounted) return;
         context.router.popUntilRoot();
+        if (!mounted) return;
         context.pushRoute(
           ShopRoute(
            shopId: link.pathSegments.last,
@@ -243,8 +245,9 @@ class _MainPageState extends State<MainPage> {
           ),
         );
       } else if (link.pathSegments.contains("shop")) {
-        if (!context.mounted) return;
+        if (!mounted) return;
         context.router.popUntilRoot();
+        if (!mounted) return;
         context.pushRoute(ShopRoute(
          shopId: link.pathSegments.last,
           productId: link.queryParameters['product'],
@@ -256,10 +259,12 @@ class _MainPageState extends State<MainPage> {
 
     final PendingDynamicLinkData? data =
     await FirebaseDynamicLinks.instance.getInitialLink();
+    if (!mounted) return;
     final Uri? deepLink = data?.link;
     if (deepLink?.queryParameters.keys.contains("group") ?? false) {
       if (!context.mounted) return;
       context.router.popUntilRoot();
+      if (!mounted) return;
       context.pushRoute(
         ShopRoute(
          shopId: deepLink?.pathSegments.last ?? '',
@@ -269,6 +274,7 @@ class _MainPageState extends State<MainPage> {
       );
     } else if (!(deepLink?.queryParameters.keys.contains("product") ?? false) &&
         (deepLink?.pathSegments.contains("shop") ?? false)) {
+      if (!context.mounted) return;
       context.pushRoute(
         ShopRoute(
           shopId: deepLink?.pathSegments.last ?? "",
