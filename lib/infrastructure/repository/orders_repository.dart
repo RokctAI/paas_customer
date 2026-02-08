@@ -5,6 +5,7 @@ import 'package:foodyman/infrastructure/models/data/order_active_model.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
+import 'package:foodyman/infrastructure/services/enums.dart';
 
 class OrdersRepository implements OrdersRepositoryFacade {
   @override
@@ -27,7 +28,6 @@ class OrdersRepository implements OrdersRepositoryFacade {
     }
   }
 
-  @override
   Future<ApiResult<OrderPaginateResponse>> getOrders({
     required int page,
     String? status,
@@ -104,14 +104,16 @@ class OrdersRepository implements OrdersRepositoryFacade {
 
   @override
   Future<ApiResult<String>> process(
-      dynamic orderBody, String name, {
+      OrderBodyData orderBody, String name, {
         BuildContext? context,
+        bool forceCardPayment = false,
+        bool enableTokenization = false,
       }) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       var res = await client.post(
         '/api/method/paas.api.payment.payment.initiate_${name.toLowerCase()}_payment',
-        data: {'order_id': orderBody.orderId},
+        data: {'order_id': orderBody.cartId},
       );
       return ApiResult.success(data: res.data["redirect_url"]);
     } catch (e, s) {

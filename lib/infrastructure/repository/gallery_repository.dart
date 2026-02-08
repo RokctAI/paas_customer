@@ -5,14 +5,50 @@ import 'package:foodyman/domain/interface/gallery.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
+import 'package:foodyman/infrastructure/services/enums.dart';
 
 class GalleryRepository implements GalleryRepositoryFacade {
   @override
   Future<ApiResult<GalleryUploadResponse>> uploadImage(
     String file,
-    String docType,
-    String docName,
+    UploadType uploadType,
   ) async {
+    String docType = 'User';
+    String docName = 'Profile';
+    switch (uploadType) {
+      case UploadType.extras:
+        docType = 'Extra';
+        docName = 'Extra';
+        break;
+      case UploadType.brands:
+        docType = 'Brand';
+        docName = 'Brand';
+        break;
+      case UploadType.categories:
+        docType = 'Category';
+        docName = 'Category';
+        break;
+      case UploadType.shopsLogo:
+        docType = 'Shop';
+        docName = 'Logo';
+        break;
+      case UploadType.shopsBack:
+        docType = 'Shop';
+        docName = 'Background';
+        break;
+      case UploadType.products:
+        docType = 'Product';
+        docName = 'Product';
+        break;
+      case UploadType.reviews:
+        docType = 'Review';
+        docName = 'Review';
+        break;
+      case UploadType.users:
+        docType = 'User';
+        docName = 'Profile';
+        break;
+    }
     final data = FormData.fromMap(
       {
         'file': await MultipartFile.fromFile(file),
@@ -52,7 +88,7 @@ class GalleryRepository implements GalleryRepositoryFacade {
     List<String> uploadedImages = [];
     for (var path in filePaths) {
       if (path != null) {
-        final res = await uploadImage(path, 'User', 'Profile'); // Defaults
+        final res = await uploadImage(path, uploadType);
         res.when(
           success: (data) {
             if (data.data != null) {
@@ -66,7 +102,9 @@ class GalleryRepository implements GalleryRepositoryFacade {
       }
     }
     return ApiResult.success(
-      data: MultiGalleryUploadResponse(data: uploadedImages),
+      data: MultiGalleryUploadResponse(
+        data: MultiGalleryUploadData(title: uploadedImages),
+      ),
     );
   }
 }

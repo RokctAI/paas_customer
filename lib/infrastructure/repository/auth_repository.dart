@@ -6,6 +6,7 @@ import 'package:foodyman/domain/handlers/handlers.dart';
 import 'package:foodyman/domain/interface/auth.dart';
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/infrastructure/services/app_validators.dart';
+import 'package:foodyman/infrastructure/models/data/user.dart';
 import '../models/models.dart';
 
 class AuthRepository implements AuthRepositoryFacade {
@@ -81,16 +82,16 @@ class AuthRepository implements AuthRepositoryFacade {
 
   @override
   Future<ApiResult<VerifyPhoneResponse>> verifyPhone({
-    required String phone,
-    required String otp,
+    required String verifyId,
+    required String verifyCode,
   }) async {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.post(
         '/api/method/paas.api.verify_phone_code',
         data: {
-          "phone": phone,
-          "otp": otp,
+          "phone": verifyId,
+          "otp": verifyCode,
         },
       );
       return ApiResult.success(
@@ -105,7 +106,7 @@ class AuthRepository implements AuthRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<dynamic>> forgotPassword({
+  Future<ApiResult<RegisterResponse>> forgotPassword({
     required String email,
   }) async {
     try {
@@ -114,7 +115,7 @@ class AuthRepository implements AuthRepositoryFacade {
         '/api/method/paas.api.forgot_password',
         data: {'user': email},
       );
-      return ApiResult.success(data: response.data);
+      return ApiResult.success(data: RegisterResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> forgot password failure: $e');
       return ApiResult.failure(
@@ -125,7 +126,7 @@ class AuthRepository implements AuthRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<LoginResponse>> sigUpWithData({required UserModel user}) async {
+  Future<ApiResult<VerifyData>> sigUpWithData({required UserModel user}) async {
     try {
       final client = dioHttp.client(requireAuth: false);
       var res = await client.post(
@@ -134,7 +135,7 @@ class AuthRepository implements AuthRepositoryFacade {
       );
       // This response will not contain tokens, adaptation needed
       return ApiResult.success(
-        data: LoginResponse.fromJson(res.data),
+        data: VerifyData.fromJson(res.data['data'] ?? res.data),
       );
     } catch (e) {
       return ApiResult.failure(

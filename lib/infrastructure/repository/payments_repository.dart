@@ -69,7 +69,10 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
       );
     } catch (e) {
       debugPrint('==> get saved cards failure: $e');
-      return ApiResult.failure(error: AppHelpers.errorHandler(e));
+      return ApiResult.failure(
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -97,7 +100,10 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
       return ApiResult.success(data: response.data['data']['token']);
     } catch (e) {
       debugPrint('==> tokenize card failure: $e');
-      return ApiResult.failure(error: AppHelpers.errorHandler(e));
+      return ApiResult.failure(
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
@@ -126,7 +132,10 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
       return const ApiResult.success(data: true);
     } catch (e) {
         debugPrint('==> delete card failure: $e');
-        return ApiResult.failure(error: AppHelpers.errorHandler(e));
+        return ApiResult.failure(
+          error: AppHelpers.errorHandler(e),
+          statusCode: NetworkExceptions.getDioStatus(e),
+        );
     }
   }
 

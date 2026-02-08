@@ -4,11 +4,12 @@ import 'package:foodyman/infrastructure/models/response/parcel_paginate_response
 import 'package:foodyman/infrastructure/models/models.dart';
 
 abstract class ParcelRepositoryFacade {
-  Future<ApiResult<ParcelTypeResponse>> getParcelCategories();
+  Future<ApiResult<ParcelTypeResponse>> getTypes();
 
   Future<ApiResult<ParcelCalculateResponse>> getCalculate({
-    required String categoryId,
-    required double distance,
+    required int typeId,
+    required LocationModel from,
+    required LocationModel to,
   });
 
   Future<ApiResult> orderParcel(
