@@ -24,7 +24,7 @@ class LoanApplicationModel {
   final double totalExpenses;
   final bool skipDocuments;
   final String? savedApplicationId;
-  final List<File> documents; // Assuming documents was a List<File> based on original constructor
+  final Map<String, dynamic> documents; // Changed from List<File> to Map<String, dynamic>
 
   LoanApplicationModel({
     required this.idNumber,
@@ -42,6 +42,11 @@ class LoanApplicationModel {
       'id_number': idNumber,
       'amount': amount,
       'saved_application_id': savedApplicationId,
+      'documents': documents,
+      'income': income,
+      'total_expenses': totalExpenses,
+      'skip_documents': skipDocuments,
+      'financial_details': financialDetails,
     };
   }
 }

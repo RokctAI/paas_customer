@@ -216,7 +216,7 @@ class _LoanDocumentUploadScreenState
       final loanApplication = LoanApplicationModel(
         idNumber: idNumber,
         amount: ref.read(loanAmountProvider),
-        documents: uploadedDocs,
+        documents: uploadedDocs.map((key, value) => MapEntry(key, value.path)),
         savedApplicationId: savedApplicationId,
         financialDetails: ref.read(financialDetailsProvider),
       );

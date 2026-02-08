@@ -7,6 +7,7 @@ import '../../../../application/splash/splash_provider.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import '../../../../infrastructure/services/local_storage.dart';
 import '../../../routes/app_router.dart';
+import 'package:foodyman/infrastructure/services/app_helpers.dart';
 
 @RoutePage()
 class SplashPage extends ConsumerStatefulWidget {
