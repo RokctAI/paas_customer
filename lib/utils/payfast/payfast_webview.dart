@@ -228,7 +228,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
       }
 
       // Show success message
-      if (!mounted) return;
+      if (!mounted) return true;
       AppHelpers.showCheckTopSnackBarDone(
         context,
         AppHelpers.getTranslation(TrKeys.paymentSuccessful),
@@ -252,7 +252,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
       isPaymentComplete = true;
 
       // Show error message
-      if (!mounted) return;
+      if (!mounted) return true;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         AppHelpers.getTranslation(TrKeys.paymentRejected),
@@ -264,7 +264,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
       }
 
       // Navigate back
-      if (!mounted) return;
+      if (!mounted) return true;
       Navigator.pop(context);
 
       return true;
