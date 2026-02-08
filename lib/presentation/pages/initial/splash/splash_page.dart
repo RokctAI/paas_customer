@@ -45,6 +45,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     try {
       // First, check if app is in maintenance mode
       if (AppConstants.isMaintain) {
+        if (!mounted) return;
         FlutterNativeSplash.remove();
         context.replaceRoute(const ClosedRoute());
         return;
@@ -63,6 +64,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
         } else {
           // No offline data and no internet - show no connection page
           FlutterNativeSplash.remove();
+          if (!mounted) return;
           context.replaceRoute(const NoConnectionRoute());
           return;
         }
@@ -77,6 +79,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
         await _proceedOffline();
       } else {
         FlutterNativeSplash.remove();
+        if (!mounted) return;
         context.replaceRoute(const NoConnectionRoute());
       }
     }
@@ -112,14 +115,17 @@ class _SplashPageState extends ConsumerState<SplashPage> {
         context,
         goMain: () {
           FlutterNativeSplash.remove();
+          if (!mounted) return;
           AppHelpers.goHome(context);
         },
         goLogin: () {
           FlutterNativeSplash.remove();
+          if (!mounted) return;
           context.replaceRoute(const LoginRoute());
         },
         goNoInternet: () {
           FlutterNativeSplash.remove();
+          if (!mounted) return;
           context.replaceRoute(const NoConnectionRoute());
         },
       );
@@ -140,9 +146,11 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 
     if (token.isNotEmpty) {
       // User was logged in, go to main page
+      if (!mounted) return;
       AppHelpers.goHome(context);
     } else {
       // User not logged in, go to login
+      if (!mounted) return;
       context.replaceRoute(const LoginRoute());
     }
   }
