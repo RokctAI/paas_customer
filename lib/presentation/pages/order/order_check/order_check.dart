@@ -650,15 +650,14 @@ class _WebViewPageState extends State<WebViewPage> {
 
       // Navigate back to main route
       Future.delayed(const Duration(milliseconds: 500), () {
+        if (!mounted) return;
         AppHelpers.goHome(context);
       });
 
       return true;
     }
     // Check if the URL contains cancel/failure indicators
-    else if (url.contains('payment-cancel') ||
-        url.contains('payment-failed') ||
-        url.contains('redirect-cancel')) {
+    else if (isFailure) {
 
       isPaymentComplete = true;
 
