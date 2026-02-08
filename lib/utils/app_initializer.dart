@@ -146,6 +146,7 @@ class _AppInitializerState extends State<AppInitializer> {
       final response = await http
           .get(Uri.parse('${AppConstants.baseUrl}/public/api/v1/rest/status'))
           .timeout(const Duration(seconds: 5));
+      if (!mounted) return;
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         AppConstants.isMaintain = data['status'] != 'OK';
