@@ -15,8 +15,8 @@ class SignatureService {
             (key, value) => MapEntry(key, value?.toString() ?? '')
     ));
 
-    // Filter out null values and empty strings
-    params.removeWhere((key, value) => value == null || value.isEmpty);
+    // Filter out empty strings
+    params.removeWhere((key, value) => value.isEmpty);
 
     // Sort keys alphabetically
     final sortedKeys = params.keys.toList()..sort();
