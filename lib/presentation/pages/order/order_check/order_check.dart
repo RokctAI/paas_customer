@@ -211,6 +211,7 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
 
     if (isPayFast && AppConstants.cardDirect) {
       // Open the payment screen as a bottom sheet
+      if (!mounted) return;
       AppHelpers.showCustomModalBottomSheet(
         isDismissible: true,
         context: context,
@@ -259,7 +260,7 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
             final preloadedState = ref.read(preloadedWebViewProvider);
 
             if (preloadedState != null && preloadedState.url == paymentUrl && preloadedState.isReady) {
-              if (!context.mounted) return;
+              if (!mounted) return;
               // If we have a preloaded and ready WebView for this URL, use it
               Navigator.push(
                 context,
@@ -397,6 +398,7 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
                   left: 16.w),
               child: OrderButton(
                 autoOrder: () {
+                  if (!mounted) return;
                   AppHelpers.showCustomModalBottomSheet(
                       context: context,
                       modal: AutoOrderModal(
