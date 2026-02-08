@@ -201,22 +201,4 @@ class OrderButton extends ConsumerWidget {
     }
   }
 
-  // Helper method to check if PayFast is selected as the payment method
-  bool _isPayFastSelected(WidgetRef ref) {
-    final paymentState = ref.watch(paymentProvider);
-    final orderState = ref.watch(orderProvider);
-
-    if (AppHelpers.getPaymentType() == "admin") {
-      if (paymentState.payments.isEmpty || paymentState.currentIndex >= paymentState.payments.length) {
-        return false;
-      }
-      return paymentState.payments[paymentState.currentIndex].tag?.toLowerCase() == "pay-fast";
-    } else {
-      if (orderState.shopData?.shopPayments == null ||
-          paymentState.currentIndex >= (orderState.shopData?.shopPayments?.length ?? 0)) {
-        return false;
-      }
-      return orderState.shopData?.shopPayments?[paymentState.currentIndex]?.payment?.tag?.toLowerCase() == "pay-fast";
-    }
-  }
 }
