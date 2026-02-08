@@ -92,42 +92,7 @@ class OrderCheck extends ConsumerStatefulWidget {
 }
 
 class _OrderCheckState extends ConsumerState<OrderCheck> {
-  // Method to preload a WebView
-  void _preloadWebView(String url) {
-    final controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(Theme.of(context).scaffoldBackgroundColor)
-      ..setNavigationDelegate(
-        NavigationDelegate(
-          onPageFinished: (String url) {
-            ref.read(preloadedWebViewProvider.notifier).state =
-                ref.read(preloadedWebViewProvider)?.copyWith(isReady: true);
-          },
-          onNavigationRequest: (NavigationRequest request) {
-            if (request.url.startsWith(AppConstants.baseUrl)) {
-              AppHelpers.goHome(context);
-              return NavigationDecision.prevent;
-            }
-            return NavigationDecision.navigate;
-          },
-        ),
-      )
-      ..loadRequest(Uri.parse(url));
 
-    ref.read(preloadedWebViewProvider.notifier).state = PreloadedWebViewState(
-      controller: controller,
-      url: url,
-    );
-  }
-
-  // Check if PayFast is selected
-  bool _isPayFastSelected(PaymentState paymentState, OrderState state) {
-    if (AppHelpers.getPaymentType() == "admin") {
-      return paymentState.payments[paymentState.currentIndex].tag?.toLowerCase() == "pay-fast";
-    } else {
-      return state.shopData?.shopPayments?[paymentState.currentIndex]?.payment?.tag?.toLowerCase() == "pay-fast";
-    }
-  }
 
   void _createOrder(
       {required OrderState state,
