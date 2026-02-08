@@ -6,7 +6,7 @@ import 'package:foodyman/presentation/theme/theme.dart';
 
 //@routePage()
 class WelcomeText extends StatelessWidget {
-  const WelcomeText({Key? key}) : super(key: key);
+  const WelcomeText({super.key});
 
   @override
   Widget build(BuildContext context) {
