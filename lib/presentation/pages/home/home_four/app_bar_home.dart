@@ -338,6 +338,7 @@ class _AppBarHomeState extends ConsumerState<AppBarHome> with SingleTickerProvid
         ),
       ],
     );
+  }
 
   // void _showInfoPopup(BuildContext context) {
   //   AppHelpers.showAlertDialog(
