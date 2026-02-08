@@ -138,6 +138,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
@@ -193,6 +194,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
