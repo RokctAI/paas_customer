@@ -52,81 +52,10 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
     _fetchAllLoanData();
   }
 
-  // Check loan blocking status and show dialog if needed
-  void _checkAndShowBlockedStatusIfNeeded() {
-    if (_isLoanBlocked) {
-      // Show the loan blocked dialog
-      AppHelpers.showAlertDialog(
-        isDismissible: false,
-        context: context,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.block,
-              size: 48.r,
-              color: AppStyle.red,
-            ),
-            16.verticalSpace,
-            Text(
-              'Loan Application Blocked',
-              style: AppStyle.interSemi(size: 18.sp, color: AppStyle.red),
-              textAlign: TextAlign.center,
-            ),
-            16.verticalSpace,
-            Text(
-              'You have multiple cancelled loan applications in a short time period. Please contact customer support for assistance.',
-              style: AppStyle.interNormal(size: 14.sp),
-              textAlign: TextAlign.center,
-            ),
-            24.verticalSpace,
-            Row(
-              children: [
-                Expanded(
-                  child: CustomButton(
-                    background: AppStyle.white,
-                    borderColor: AppStyle.borderColor,
-                    textColor: AppStyle.textGrey,
-                    title: 'Cancel',
-                    onPressed: () {
-                      // Close dialog and loan screen
-                      Navigator.of(context).pop(); // Close dialog
-                      Navigator.of(context).pop(); // Close loan screen
-                    },
-                  ),
-                ),
-                16.horizontalSpace,
-                Expanded(
-                  child: CustomButton(
-                    background: AppStyle.red,
-                    textColor: AppStyle.white,
-                    title: 'Support',
-                    onPressed: () {
-                      // Close dialog and loan screen, then navigate to chat route
-                      Navigator.of(context).pop(); // Close dialog
-                      Navigator.of(context).pop(); // Close loan screen
 
-                      AppHelpers.showCustomModalBottomSheet(
-                        context: context,
-                        modal: ProviderScope(
-                          child: Consumer(
-                            builder: (context, ref, _) => ChatPage(
-                                roleId: "admin",
-                                name: "Admin"), // Use the ChatRoute component
-                          ),
-                        ),
-                        isDarkMode: false,
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    }
-  }
+//  void _checkAndShowBlockedStatusIfNeeded() {
+//    // ...
+//  }
 
   Future<void> _checkConsecutiveCancelledApplications() async {
     try {
@@ -210,7 +139,10 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
       ]);
 
       final transactionsResult = results[0] as ApiResult<List<dynamic>>;
-      final savedApplicationsResult = results[1] as ApiResult<List<Map<String, dynamic>>>;
+      // final savedApplicationsResult = results[1] as ApiResult<List<Map<String, dynamic>>>;
+      // final myApplicationsResult = results[2] as ApiResult<List<dynamic>>;
+      
+      final savedApplicationsResult = results[1] as ApiResult<List<Map<String, dynamic>>>; // Keeping this for now as dynamic cast might be needed if inference fails
       final myApplicationsResult = results[2] as ApiResult<List<dynamic>>;
 
       debugPrint("All data fetched");
@@ -615,6 +547,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
         _isLoading = false;
         _loanTransactions = [];
       });
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         'Failed to load loan transactions',
@@ -645,6 +578,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
       }
     } catch (e) {
       debugPrint("Error checking pending contracts: $e");
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         'Failed to check pending contract loans',
@@ -669,6 +603,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         'Failed to fetch loan contract',
@@ -676,50 +611,9 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
     }
   }
 
-  Future<void> _acceptLoanContract(dynamic contract) async {
-    final pendingLoan = ref.read(pendingContractProvider);
-
-    if (pendingLoan == null) {
-      AppHelpers.showCheckTopSnackBarInfo(
-        context,
-        'No pending loan found',
-      );
-      return;
-    }
-
-    try {
-      final result = await _loansRepository.acceptLoanContract(
-        loanId: pendingLoan['id'].toString(),
-        contractId: contract.id,
-      );
-
-      result.when(
-        success: (_) {
-          AppHelpers.showCheckTopSnackBarDone(
-            context,
-            'Loan contract accepted successfully',
-          );
-
-          // Clear pending contract
-          ref.read(pendingContractProvider.notifier).state = null;
-
-          // Refresh loan transactions
-          _fetchLoanTransactions();
-        },
-        failure: (error, statusCode) {
-          AppHelpers.showCheckTopSnackBarInfo(
-            context,
-            error,
-          );
-        },
-      );
-    } catch (e) {
-      AppHelpers.showCheckTopSnackBarInfo(
-        context,
-        'Failed to accept loan contract',
-      );
-    }
-  }
+//  Future<void> _acceptLoanContract(dynamic contract) async {
+//
+//  }
 
   void _navigateToLoanEligibilityScreen() {
     // Store the selected loan amount in provider
