@@ -171,6 +171,7 @@ class _MainPageState extends State<MainPage> {
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
       RemoteMessageData data = RemoteMessageData.fromJson(message.data);
       if (data.type == "news_publish") {
+        if (!context.mounted) return;
         context.router.popUntilRoot();
         await launch(
           "${AppConstants.webUrl}/blog/${message.data["uuid"]}",
@@ -179,6 +180,7 @@ class _MainPageState extends State<MainPage> {
           enableJavaScript: true,
         );
       } else {
+        if (!context.mounted) return;
         context.router.popUntilRoot();
         context.pushRoute(
           OrderProgressRoute(orderId: data.id),
@@ -188,8 +190,10 @@ class _MainPageState extends State<MainPage> {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       RemoteMessageData data = RemoteMessageData.fromJson(message.data);
       if (data.type == "news_publish") {
+        if (!context.mounted) return;
         AppHelpers.showCheckTopSnackBarInfoCustom(
             context, "${message.notification?.body}", onTap: () async {
+          if (!context.mounted) return;
           context.router.popUntilRoot();
           await launch(
             "${AppConstants.webUrl}/blog/${message.data["uuid"]}",
@@ -199,9 +203,11 @@ class _MainPageState extends State<MainPage> {
           );
         });
       } else {
+        if (!context.mounted) return;
         AppHelpers.showCheckTopSnackBarInfo(context,
             "${AppHelpers.getTranslation(TrKeys.id)} #${message.notification?.title} ${message.notification?.body}",
             onTap: () async {
+              if (!context.mounted) return;
               context.router.popUntilRoot();
               context.pushRoute(
                 OrderProgressRoute(
