@@ -782,6 +782,7 @@ class _PayFastPaymentScreenState extends ConsumerState<PayFastPaymentScreen> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _loadingCards = false;
       });
@@ -829,6 +830,7 @@ class _PayFastPaymentScreenState extends ConsumerState<PayFastPaymentScreen> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
@@ -881,6 +883,7 @@ class _PayFastPaymentScreenState extends ConsumerState<PayFastPaymentScreen> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
