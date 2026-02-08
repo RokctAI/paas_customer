@@ -224,26 +224,29 @@ class _MainPageState extends State<MainPage> {
     dynamicLinks.onLink.listen((dynamicLinkData) {
       Uri link = dynamicLinkData.link;
       if (link.queryParameters.keys.contains('group')) {
+        if (!context.mounted) return;
         context.router.popUntilRoot();
         context.pushRoute(
           ShopRoute(
-            shopId: link.pathSegments.last,
+           shopId: link.pathSegments.last,
             cartId: link.queryParameters['group'],
             ownerId: int.tryParse(link.queryParameters['owner_id'] ?? ''),
           ),
         );
       } else if (!link.queryParameters.keys.contains("product") &&
           link.pathSegments.contains("shop")) {
+        if (!context.mounted) return;
         context.router.popUntilRoot();
         context.pushRoute(
           ShopRoute(
-            shopId: link.pathSegments.last,
+           shopId: link.pathSegments.last,
           ),
         );
       } else if (link.pathSegments.contains("shop")) {
+        if (!context.mounted) return;
         context.router.popUntilRoot();
         context.pushRoute(ShopRoute(
-          shopId: link.pathSegments.last,
+         shopId: link.pathSegments.last,
           productId: link.queryParameters['product'],
         ));
       }
@@ -255,10 +258,11 @@ class _MainPageState extends State<MainPage> {
     await FirebaseDynamicLinks.instance.getInitialLink();
     final Uri? deepLink = data?.link;
     if (deepLink?.queryParameters.keys.contains("group") ?? false) {
+      if (!context.mounted) return;
       context.router.popUntilRoot();
       context.pushRoute(
         ShopRoute(
-          shopId: deepLink?.pathSegments.last ?? '',
+         shopId: deepLink?.pathSegments.last ?? '',
           cartId: deepLink?.queryParameters['group'],
           ownerId: int.tryParse(deepLink?.queryParameters['owner_id'] ?? ""),
         ),
