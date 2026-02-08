@@ -92,12 +92,14 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
 
       result.when(
         success: (data) {
+          if (!mounted) return;
           ref.read(userSearchProvider.notifier).state = data;
           setState(() {
             _searchComplete = true;
           });
         },
         failure: (error, statusCode) {
+          if (!mounted) return;
           AppHelpers.showCheckTopSnackBarInfo(
             context,
             error,
@@ -106,12 +108,14 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         'Failed to search users',
       );
       ref.read(userSearchProvider.notifier).state = [];
     } finally {
+      if (!mounted) return;
       setState(() {
         _isSearching = false;
       });
@@ -157,6 +161,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
 
       result.when(
         success: (data) {
+          if (!mounted) return;
           AppHelpers.showCheckTopSnackBarDone(
             context,
             AppHelpers.getTranslation(TrKeys.moneySentSuccessfully),
@@ -164,6 +169,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
           _navigateBack();
         },
         failure: (error, statusCode) {
+          if (!mounted) return;
           AppHelpers.showCheckTopSnackBarInfo(
             context,
             error,
@@ -171,6 +177,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
