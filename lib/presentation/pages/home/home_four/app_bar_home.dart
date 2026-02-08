@@ -128,7 +128,6 @@ class _AppBarHomeState extends ConsumerState<AppBarHome> with SingleTickerProvid
   Widget build(BuildContext context) {
     final bool isDarkMode = LocalStorage.getAppThemeMode();
     final ordersState = ref.watch(ordersListProvider);
-    final mostRecentOrder = ordersState.activeOrders.isNotEmpty ? ordersState.activeOrders.first : null;
 
     final addressData = LocalStorage.getAddressSelected();
     final currentLat = addressData?.location?.latitude;

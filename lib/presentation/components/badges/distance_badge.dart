@@ -9,7 +9,6 @@ import '../../../infrastructure/services/app_helpers.dart';
 import '../../../infrastructure/services/tr_keys.dart';
 import '../../theme/app_style.dart';
 import '../../../infrastructure/services/local_storage.dart';
-import '../../../utils/utils.dart';
 
 class DistanceBadge extends StatelessWidget {
   final ShopData shop;

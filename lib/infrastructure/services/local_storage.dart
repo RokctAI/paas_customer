@@ -311,7 +311,6 @@ abstract class LocalStorage {
     return DeliveryResponse.fromJson(map);
   }
 
-  static void _deleteDeliveryInfo() => _preferences?.remove(StorageKeys.keyCarInfo);
 
 
   static void logout() {

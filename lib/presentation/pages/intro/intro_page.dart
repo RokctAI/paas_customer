@@ -7,7 +7,6 @@ import 'package:foodyman/infrastructure/services/tr_keys.dart'; //Changed
 import 'package:foodyman/infrastructure/services/app_helpers.dart'; //changed
 import 'package:foodyman/presentation/components/buttons/second_button.dart';
 //import '../../components/helper/shimmer.dart';
-import 'package:foodyman/presentation/routes/app_router.dart';
 
 import '../../../application/intro/intro_provider.dart';
 //import '../../component/components.dart';

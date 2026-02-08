@@ -16,7 +16,6 @@ import 'package:foodyman/infrastructure/services/tr_keys.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
 import '../../../components/keyboard_dismisser.dart';
-import '../../../components/loading.dart';
 import 'widgets/chat_item.dart';
 
 @RoutePage()

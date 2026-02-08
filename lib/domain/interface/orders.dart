@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foodyman/infrastructure/models/data/order_active_model.dart';
-import 'package:foodyman/infrastructure/models/data/refund_data.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:foodyman/infrastructure/services/enums.dart';
 
 import 'package:foodyman/domain/handlers/handlers.dart';
-import 'package:foodyman/infrastructure/models/data/get_calculate_data.dart';
 
-import '../../infrastructure/models/data/saved_card.dart';
 
 abstract class OrdersRepositoryFacade {
   Future<ApiResult<GetCalculateModel>> getCalculate(
@@ -73,7 +70,7 @@ abstract class OrdersRepositoryFacade {
       {BuildContext? context, bool forceCardPayment = false, bool enableTokenization = false}
       );
 
-  Future<ApiResult<void>> tipProcess({
+  Future<ApiResult<String>> tipProcess({
     required int orderId,
     required double tip,
   });

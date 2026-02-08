@@ -405,36 +405,6 @@ class _MainPageState extends State<MainPage> {
     final bool isScrollingValue =
     isFixed ? false : ref.watch(mainProvider).isScrolling;
 
-    // Get shop name from the homeProvider state
-    String? shopName;
-    if (!isCartEmpty && isFixed && orders.shopId != null) {
-      // Look for the shop in all the loaded shop lists from homeProvider
-      final homeState = ref.read(homeProvider);
-      final int shopId = orders.shopId!;
-
-      // Try to find the shop in any of the loaded shop lists
-      final shop = homeState.shops.firstWhere(
-            (s) => s.id == shopId,
-        orElse: () => homeState.newShops.firstWhere(
-              (s) => s.id == shopId,
-          orElse: () => homeState.allShops.firstWhere(
-                (s) => s.id == shopId,
-            orElse: () => homeState.shopsRecommend.firstWhere(
-                  (s) => s.id == shopId,
-              orElse: () => homeState.filterShops.firstWhere(
-                    (s) => s.id == shopId,
-                orElse: () => ShopData(), // Default empty shop data
-              ),
-            ),
-          ),
-        ),
-      );
-
-      // If we found the shop, get its name
-      if (shop.id != null) {
-        shopName = shop.translation?.title;
-      }
-    }
 
     return Column(
       mainAxisSize: MainAxisSize.min,

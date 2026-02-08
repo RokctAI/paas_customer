@@ -181,7 +181,6 @@ class OrderButton extends ConsumerWidget {
             : (orderState.shopData?.shopPayments?.isNotEmpty ?? false));
 
         // Check if PayFast is selected
-        final isPayFastSelected = _isPayFastSelected(ref);
 
         // Get the total price
         final totalPrice = orderState.calculateData?.totalPrice ?? 0;

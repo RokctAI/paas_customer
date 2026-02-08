@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/application/language/language_provider.dart';
-import 'package:foodyman/application/main/main_provider.dart';
 import '../../../../app_constants.dart';
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/infrastructure/services/local_storage.dart';
@@ -19,9 +18,7 @@ import 'login_screen.dart';
 
 import 'package:foodyman/presentation/theme/theme.dart';
 import 'package:foodyman/presentation/components/buttons/second_button.dart';
-import 'package:foodyman/infrastructure/services/app_assets.dart';
 import 'package:foodyman/presentation/pages/intro/intro_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:foodyman/presentation/pages/policy_term/policy_page.dart';
 import 'package:foodyman/presentation/pages/policy_term/term_page.dart';
 

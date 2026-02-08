@@ -106,8 +106,8 @@ class GalleryRepository implements GalleryRepositoryFacade {
         final res = await uploadImage(path, uploadType);
         res.when(
           success: (data) {
-            if (data.imageUrl != null) {
-              uploadedImages.add(data.imageUrl!);
+            if (data.imageData?.title != null) {
+              uploadedImages.add(data.imageData!.title!);
             }
           },
           failure: (error, statusCode) {

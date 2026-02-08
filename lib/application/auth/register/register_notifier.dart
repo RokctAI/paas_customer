@@ -10,7 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:foodyman/domain/interface/auth.dart';
 import 'package:foodyman/domain/interface/user.dart';
-import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
 import 'package:foodyman/infrastructure/models/data/address_old_data.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:foodyman/infrastructure/models/request/edit_profile.dart';
@@ -23,7 +22,6 @@ import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-import 'package:foodyman/infrastructure/models/data/user.dart';
 import 'package:foodyman/infrastructure/services/local_storage.dart';
 import 'register_state.dart';
 

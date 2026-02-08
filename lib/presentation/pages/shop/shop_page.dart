@@ -221,7 +221,6 @@ class _ShopPageState extends ConsumerState<ShopPage>
         orders.ownerId != LocalStorage.getUser()?.id;
 
     // Check if fixed navigation is enabled
-    final bool isFixed = AppConstants.fixed;
 
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,

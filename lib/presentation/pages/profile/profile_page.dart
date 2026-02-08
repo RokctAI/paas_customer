@@ -37,7 +37,6 @@ import '../cards/payment_screen.dart';
 import 'become_driver/become_driver.dart';
 import 'widgets/about_page.dart';
 import 'widgets/app_usage_badge.dart';
-import 'widgets/delivery_page.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:foodyman/presentation/pages/profile/widgets/my_account.dart';
 import 'reservation_shops.dart';

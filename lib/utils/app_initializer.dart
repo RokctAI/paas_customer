@@ -53,7 +53,6 @@ class _AppInitializerState extends State<AppInitializer> {
     // Use AppConstants.baseUrl as the site identifier (Tenant Site Name)
     // This assumes AppConstants.baseUrl is pre-configured with the tenant's site domain (e.g. juvo.tenant.rokct.ai)
     final String tenantSite = AppConstants.baseUrl;
-    const String controlPanelUrl = "https://platform.rokct.ai";
 
     try {
       // Fetch remote config for 'Customer' app type

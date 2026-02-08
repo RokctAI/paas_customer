@@ -32,7 +32,6 @@ class _CustomStatusBarState extends State<CustomStatusBar> {
   List<ConnectivityResult> _connectionStatus = [];
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   bool _isWifiEnabled = false;
-  bool _isMobileEnabled = false;
   bool _isHotspotEnabled = false;
 
   @override
@@ -112,7 +111,7 @@ class _CustomStatusBarState extends State<CustomStatusBar> {
 
     setState(() {
       _isWifiEnabled = isWifiEnabled;
-      _isMobileEnabled = isMobileEnabled;
+      // _isMobileEnabled = isMobileEnabled;
     });
   }
 

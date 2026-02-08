@@ -1,6 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
-import 'package:foodyman/infrastructure/models/data/referral_data.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 
 import 'package:foodyman/infrastructure/models/data/translation.dart';
