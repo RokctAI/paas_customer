@@ -176,7 +176,7 @@ class _AppBarHomeState extends ConsumerState<AppBarHome> with SingleTickerProvid
                 },
                 child: Consumer(
                   builder: (context, ref, child) {
-                    final orders = ref.watch(shopOrderProvider).cart;
+                    // final orders = ref.watch(shopOrderProvider).cart;
                     // final bool isCartEmpty = orders == null ||
                     //     (orders.userCarts?.isEmpty ?? true) ||
                     //     ((orders.userCarts?.isEmpty ?? true)
