@@ -1,4 +1,19 @@
-// ignore_for_file: use_build_context_synchronously, deprecated_member_use
+// Copyright (c) 2024 RokctAI
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
 
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
@@ -212,8 +227,7 @@ class _MainPageState extends State<MainPage> {
           ),
         );
       } else if (!link.queryParameters.keys.contains("product") &&
-          (link.pathSegments.contains("shop") ||
-      } else if (link.pathSegments.contains("shop")) {
+          link.pathSegments.contains("shop")) {
         context.router.popUntilRoot();
         context.pushRoute(
           ShopRoute(
@@ -401,9 +415,9 @@ class _MainPageState extends State<MainPage> {
       // Try to find the shop in any of the loaded shop lists
       final shop = homeState.shops.firstWhere(
             (s) => s.id == shopId,
-        orElse: () => homeState.restaurant.firstWhere(
+        orElse: () => homeState.newShops.firstWhere(
               (s) => s.id == shopId,
-          orElse: () => homeState.newRestaurant.firstWhere(
+          orElse: () => homeState.allShops.firstWhere(
                 (s) => s.id == shopId,
             orElse: () => homeState.shopsRecommend.firstWhere(
                   (s) => s.id == shopId,
@@ -679,7 +693,6 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
-// Helper method to get shop name from cart
 String _getCartShopName(Cart? cart, WidgetRef ref) {
   if (cart == null || cart.shopId == null) return "";
 
@@ -690,9 +703,9 @@ String _getCartShopName(Cart? cart, WidgetRef ref) {
   // Look for the shop in homeState
   final shop = homeState.shops.firstWhere(
         (s) => s.id == shopId,
-    orElse: () => homeState.restaurant.firstWhere(
+    orElse: () => homeState.newShops.firstWhere(
           (s) => s.id == shopId,
-      orElse: () => homeState.newRestaurant.firstWhere(
+      orElse: () => homeState.allShops.firstWhere(
             (s) => s.id == shopId,
         orElse: () => homeState.shopsRecommend.firstWhere(
               (s) => s.id == shopId,
@@ -708,7 +721,6 @@ String _getCartShopName(Cart? cart, WidgetRef ref) {
   return shop.translation?.title ?? "";
 }
 
-// Custom clipper for creating the triangle pointer
 class TriangleClipper extends CustomClipper<Path> {
   @override
   Path getClip(Size size) {

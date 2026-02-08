@@ -20,6 +20,7 @@ import 'package:foodyman/infrastructure/services/local_storage.dart';
 import 'package:foodyman/infrastructure/services/tr_keys.dart';
 import 'package:foodyman/presentation/components/app_bars/common_app_bar.dart';
 import 'package:foodyman/presentation/components/badges.dart';
+import 'package:foodyman/presentation/components/badges/alert_dialog.dart';
 import 'package:foodyman/presentation/components/buttons/pop_button.dart';
 import 'package:foodyman/presentation/components/custom_network_image.dart';
 import 'package:foodyman/presentation/components/loading.dart';

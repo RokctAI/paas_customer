@@ -198,10 +198,10 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
         email: LocalStorage.getUser()?.email,
         notes: state.notes,
         cartId: stateOrderShop.cart?.id ?? 0,
-        shopId: state.shopData?.id ?? 0,
+        shopId: int.tryParse(state.shopData?.id?.toString() ?? '') ?? 0,
         coupon: state.promoCode,
         deliveryFee: state.calculateData?.deliveryFee ?? 0,
-        deliveryPointId: state.selectedDeliveryPoint?.id,
+        deliveryPointId: int.tryParse(state.selectedDeliveryPoint?.id?.toString() ?? '') ?? 0,
         deliveryType: state.tabIndex == 0
             ? DeliveryTypeEnum.delivery
             : (state.tabIndex == 1
