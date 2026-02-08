@@ -155,8 +155,6 @@ abstract class AppHelpers {
         return "delivered";
       case OrderStatus.canceled:
         return "canceled";
-      default:
-        return "accepted";
     }
   }
 
