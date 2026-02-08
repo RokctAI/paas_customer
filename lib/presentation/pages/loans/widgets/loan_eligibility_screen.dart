@@ -323,11 +323,13 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
       );
 
       // Return to loan screen
+      if (!mounted) return;
       Navigator.of(context).pop();
 
     } catch (e) {
       debugPrint('Error in cancel flow: $e');
       // Still return to loan screen
+      if (!mounted) return;
       Navigator.of(context).pop();
     }
   }
@@ -389,6 +391,7 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
           );
 
           // Optionally navigate back or to a dashboard
+          if (!mounted) return;
           Navigator.of(context).pop();
         },
         failure: (error, statusCode) {
@@ -401,6 +404,7 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
       );
     } catch (e) {
       debugPrint("Save incomplete exception: $e");
+      if (!mounted) return;
       setState(() {
         _isLoading = false;
       });
@@ -549,6 +553,7 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         'An error occurred while processing your application',
