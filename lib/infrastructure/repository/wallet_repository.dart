@@ -82,8 +82,6 @@ class WalletRepository implements WalletRepositoryFacade {
         statusCode: NetworkExceptions.getDioStatus(e),
       );
     }
-      );
-    }
   }
 
   @override

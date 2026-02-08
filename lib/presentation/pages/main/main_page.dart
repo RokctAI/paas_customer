@@ -212,8 +212,7 @@ class _MainPageState extends State<MainPage> {
           ),
         );
       } else if (!link.queryParameters.keys.contains("product") &&
-          (link.pathSegments.contains("shop") ||
-      } else if (link.pathSegments.contains("shop")) {
+          link.pathSegments.contains("shop")) {
         context.router.popUntilRoot();
         context.pushRoute(
           ShopRoute(
