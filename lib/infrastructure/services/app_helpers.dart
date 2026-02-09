@@ -671,7 +671,7 @@ abstract class AppHelpers {
               try {
                 final hasConnection = await AppConnectivity.connectivity();
 
-                if (hasConnection) {
+                if (context.mounted && hasConnection) {
                   // Connection restored
                   AppHelpers.showCheckTopSnackBarDone(context, "Connection restored!");
                 } else {
