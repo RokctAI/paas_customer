@@ -10,7 +10,7 @@ class AppInitializerWidget extends StatefulWidget {
   const AppInitializerWidget({super.key, required this.child});
 
   @override
-  _AppInitializerWidgetState createState() => _AppInitializerWidgetState();
+  State<AppInitializerWidget> createState() => _AppInitializerWidgetState();
 }
 
 class _AppInitializerWidgetState extends State<AppInitializerWidget> {
