@@ -69,7 +69,7 @@ class _ShopPageState extends ConsumerState<ShopPage>
   @override
   void initState() {
     super.initState();
-    ref.refresh(shopProvider);
+    final _ = ref.refresh(shopProvider);
     name = TextEditingController();
     search = TextEditingController();
 
