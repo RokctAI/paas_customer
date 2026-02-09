@@ -31,7 +31,7 @@ class BannerItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (kDebugMode) {
-          print("MODAL DEBUG: About to create BannerScreen with buttonText: '${this.banner.buttonText}'");
+          print("MODAL DEBUG: About to create BannerScreen with buttonText: '${banner.buttonText}'");
         }
         AppHelpers.showCustomModalBottomSheet(
           context: context,
