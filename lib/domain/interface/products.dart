@@ -11,7 +11,10 @@ abstract class ProductsRepositoryFacade {
 
   Future<ApiResult<ProductsPaginateResponse>> getProductsPaginate({
     String? shopId,
+    String? categoryId,
+    String? brandId,
     required int page,
+    String? orderBy,
   });
 
   Future<ApiResult<AllProductsResponse>> getAllProducts({
@@ -24,29 +27,29 @@ abstract class ProductsRepositoryFacade {
   });
 
   Future<ApiResult<ProductsPaginateResponse>> getProductsByCategoryPaginate(
-      {String? shopId, required int page, required int categoryId});
+      {String? shopId, required int page, required String categoryId});
 
   Future<ApiResult<ProductsPaginateResponse>> getProductsShopByCategoryPaginate(
       {String? shopId,
-      List<int>? brands,
+      List<String>? brands,
       int? sortIndex,
       required int page,
-      required int categoryId});
+      required String categoryId});
 
   Future<ApiResult<ProductsPaginateResponse>> getMostSoldProducts({
-    int? shopId,
-    int? categoryId,
-    int? brandId,
+    String? shopId,
+    String? categoryId,
+    String? brandId,
   });
 
   Future<ApiResult<ProductsPaginateResponse>> getRelatedProducts(
-    int? brandId,
-    int? shopId,
-    int? categoryId,
+    String? brandId,
+    String? shopId,
+    String? categoryId,
   );
 
   Future<ApiResult<ProductCalculateResponse>> getProductCalculations(
-    int stockId,
+    String stockId,
     int quantity,
   );
 
@@ -55,7 +58,7 @@ abstract class ProductsRepositoryFacade {
   );
 
   Future<ApiResult<ProductsPaginateResponse>> getProductsByIds(
-    List<int> ids,
+    List<String> ids,
   );
 
   Future<ApiResult<void>> addReview(
@@ -66,22 +69,22 @@ abstract class ProductsRepositoryFacade {
   );
 
   Future<ApiResult<ProductsPaginateResponse>> getNewProducts({
-    int? shopId,
-    int? brandId,
-    int? categoryId,
+    String? shopId,
+    String? brandId,
+    String? categoryId,
     int? page,
   });
 
   Future<ApiResult<ProductsPaginateResponse>> getDiscountProducts({
-    int? shopId,
-    int? brandId,
-    int? categoryId,
+    String? shopId,
+    String? brandId,
+    String? categoryId,
     int? page,
   });
 
   Future<ApiResult<ProductsPaginateResponse>> getProfitableProducts({
-    int? brandId,
-    int? categoryId,
+    String? brandId,
+    String? categoryId,
     int? page,
   });
 }

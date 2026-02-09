@@ -56,7 +56,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<OrderActiveModel>> getSingleOrder(num orderId) async {
+  Future<ApiResult<OrderActiveModel>> getSingleOrder(String orderId) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
@@ -77,7 +77,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
 
   @override
   Future<ApiResult<void>> addReview(
-      num orderId, {
+      String orderId, {
         required double rating,
         required String comment,
       }) async {
@@ -126,7 +126,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<void>> cancelOrder(num orderId) async {
+  Future<ApiResult<void>> cancelOrder(String orderId) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
@@ -144,7 +144,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<void>> refundOrder(num orderId, String title) async {
+  Future<ApiResult<void>> refundOrder(String orderId, String title) async {
     try {
       final data = {
         "order": orderId,
@@ -167,7 +167,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
   @override
   Future<ApiResult> createAutoOrder({
     required String from,
-    required int orderId,
+    required String orderId,
     String? to,
     String? cronPattern,
     String? paymentMethod,
@@ -196,7 +196,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult> pauseAutoOrder(int autoOrderId) async {
+  Future<ApiResult> pauseAutoOrder(String autoOrderId) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
@@ -213,7 +213,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult> resumeAutoOrder(int autoOrderId) async {
+  Future<ApiResult> resumeAutoOrder(String autoOrderId) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
@@ -230,8 +230,8 @@ class OrdersRepository implements OrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult> deleteAutoOrder(int orderId) async {
-    return deleteRepeatingOrder(repeatingOrderId: orderId.toString());
+  Future<ApiResult> deleteAutoOrder(String orderId) async {
+    return deleteRepeatingOrder(repeatingOrderId: orderId);
   }
 
  @override
@@ -287,7 +287,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<CouponResponse>> checkCoupon({required String coupon, required int shopId}) async {
+  Future<ApiResult<CouponResponse>> checkCoupon({required String coupon, required String shopId}) async {
     final data = {
       'coupon': coupon,
       'shop': shopId,
@@ -332,7 +332,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
 
   @override
   Future<ApiResult<void>> createRepeatingOrder({
-    required int orderId,
+    required String orderId,
     required String startDate,
     required String cronPattern,
     String? endDate,
@@ -379,7 +379,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
 
   @override
   Future<ApiResult<String>> tipProcess({
-    required int orderId,
+    required String orderId,
     required double tip,
   }) async {
     try {
@@ -399,7 +399,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
 
   @override
   Future<ApiResult<CashbackModel>> checkCashback({
-    required int shopId,
+    required String shopId,
     required double amount,
   }) async {
     try {
@@ -420,7 +420,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<LocalLocation>> getDriverLocation(int deliveryId) async {
+  Future<ApiResult<LocalLocation>> getDriverLocation(String deliveryId) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(

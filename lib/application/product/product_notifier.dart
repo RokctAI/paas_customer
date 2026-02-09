@@ -36,7 +36,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
     BuildContext context,
     ProductData productData,
     String? shopType,
-    int? shopId,
+    String? shopId,
   ) async {
     final List<Stocks> stocks = productData.stocks ?? <Stocks>[];
     state = state.copyWith(
@@ -58,7 +58,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
   }
 
   Future<void> getProductDetailsById(
-      BuildContext context, String productId, String? shopType, int? shopId,
+      BuildContext context, String productId, String? shopType, String? shopId,
       {bool isLoading = true}) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
@@ -126,8 +126,8 @@ class ProductNotifier extends StateNotifier<ProductState> {
     }
   }
 
-  void createCart(BuildContext context, int shopId, VoidCallback onSuccess,
-      {int? stockId,
+  void createCart(BuildContext context, String shopId, VoidCallback onSuccess,
+      {String? stockId,
       int? count,
       VoidCallback? onError,
       bool isGroupOrder = false,
@@ -140,7 +140,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
         state = state.copyWith(isAddLoading: true);
         List<CartRequest> list = [
           CartRequest(
-              stockId: stockId ?? state.selectedStock?.id ?? 0,
+              stockId: stockId ?? state.selectedStock?.id ?? "",
               quantity: count ?? state.count)
         ];
         for (Addons element in state.selectedStock?.addons ?? []) {
@@ -148,25 +148,25 @@ class ProductNotifier extends StateNotifier<ProductState> {
             CartRequest(
                 stockId: element.product?.stock?.id,
                 quantity: (element.active ?? false) ? element.quantity : 0,
-                parentId: stockId ?? state.selectedStock?.id ?? 0),
+                parentId: stockId ?? state.selectedStock?.id ?? ""),
           );
         }
         final response = isGroupOrder
             ? await _cartRepository.insertCartWithGroup(
                 cart: CartRequest(
-                    shopId: state.productData?.shopId ?? 0,
+                    shopId: state.productData?.shopId ?? "",
                     cartId: cartId,
                     userUuid: userUuid,
                     productId: state.productData?.uuid,
-                    stockId: stockId ?? state.selectedStock?.id ?? 0,
+                    stockId: stockId ?? state.selectedStock?.id ?? "",
                     quantity: count ?? state.count,
                     carts: list),
               )
             : await _cartRepository.insertCart(
                 cart: CartRequest(
-                    shopId: state.productData?.shopId ?? 0,
+                    shopId: state.productData?.shopId ?? "",
                     productId: state.productData?.uuid,
-                    stockId: stockId ?? state.selectedStock?.id ?? 0,
+                    stockId: stockId ?? state.selectedStock?.id ?? "",
                     quantity: count ?? state.count,
                     carts: list),
               );
@@ -377,7 +377,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
     state = state.copyWith(activeImageUrl: url);
   }
 
-  generateShareLink(String? shopType, int? shopId) async {
+  generateShareLink(String? shopType, String? shopId) async {
     final productLink =
         '${AppConstants.webUrl}/shop/$shopId?product=${state.productData?.uuid}/';
 

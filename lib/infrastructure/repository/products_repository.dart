@@ -57,8 +57,8 @@ class ProductsRepository implements ProductsRepositoryFacade {
   @override
   Future<ApiResult<ProductsPaginateResponse>> getProductsPaginate({
     String? shopId,
-    int? categoryId,
-    int? brandId,
+    String? categoryId,
+    String? brandId,
     int? page,
     String? orderBy,
   }) async {
@@ -90,9 +90,9 @@ class ProductsRepository implements ProductsRepositoryFacade {
 
   @override
   Future<ApiResult<ProductsPaginateResponse>> getMostSoldProducts({
-    int? shopId,
-    int? categoryId,
-    int? brandId,
+    String? shopId,
+    String? categoryId,
+    String? brandId,
   }) async {
     final params = {
       'limit_page_length': 14,
@@ -147,7 +147,7 @@ class ProductsRepository implements ProductsRepositoryFacade {
 
   @override
   Future<ApiResult<ProductsPaginateResponse>> getProductsByIds(
-    List<int> ids,
+    List<String> ids,
   ) async {
     try {
       final client = dioHttp.client(requireAuth: false);
@@ -197,9 +197,9 @@ class ProductsRepository implements ProductsRepositoryFacade {
 
   @override
   Future<ApiResult<ProductsPaginateResponse>> getDiscountProducts({
-    int? shopId,
-    int? brandId,
-    int? categoryId,
+    String? shopId,
+    String? brandId,
+    String? categoryId,
     int? page,
   }) async {
      final params = {
@@ -261,9 +261,9 @@ class ProductsRepository implements ProductsRepositoryFacade {
 
   @override
   Future<ApiResult<ProductsPaginateResponse>> getNewProducts(
-      {int? shopId, int? brandId, int? categoryId, int? page}) async {
+      {String? shopId, String? brandId, String? categoryId, int? page}) async {
     return getProductsPaginate(
-      shopId: shopId?.toString(),
+      shopId: shopId,
       brandId: brandId,
       categoryId: categoryId,
       page: page,
@@ -273,7 +273,7 @@ class ProductsRepository implements ProductsRepositoryFacade {
 
   @override
   Future<ApiResult<ProductCalculateResponse>> getProductCalculations(
-      int stockId, int quantity) async {
+      String stockId, int quantity) async {
     return getAllCalculations([
       CartProductData(
         selectedStock: Stocks(id: stockId),
@@ -284,7 +284,7 @@ class ProductsRepository implements ProductsRepositoryFacade {
 
   @override
   Future<ApiResult<ProductsPaginateResponse>> getProductsByCategoryPaginate(
-      {String? shopId, required int page, required int categoryId}) async {
+      {String? shopId, required int page, required String categoryId}) async {
     return getProductsPaginate(
       shopId: shopId,
       categoryId: categoryId,
@@ -306,10 +306,10 @@ class ProductsRepository implements ProductsRepositoryFacade {
   Future<ApiResult<ProductsPaginateResponse>>
       getProductsShopByCategoryPaginate(
           {String? shopId,
-          List<int>? brands,
+          List<String>? brands,
           int? sortIndex,
           required int page,
-          required int categoryId}) async {
+          required String categoryId}) async {
     return getProductsPaginate(
       shopId: shopId,
       categoryId: categoryId,
@@ -320,7 +320,7 @@ class ProductsRepository implements ProductsRepositoryFacade {
 
   @override
   Future<ApiResult<ProductsPaginateResponse>> getProfitableProducts(
-      {int? brandId, int? categoryId, int? page}) async {
+      {String? brandId, String? categoryId, int? page}) async {
     return getProductsPaginate(
       brandId: brandId,
       categoryId: categoryId,
@@ -331,9 +331,9 @@ class ProductsRepository implements ProductsRepositoryFacade {
 
   @override
   Future<ApiResult<ProductsPaginateResponse>> getRelatedProducts(
-      int? brandId, int? shopId, int? categoryId) async {
+      String? brandId, String? shopId, String? categoryId) async {
     return getProductsPaginate(
-      shopId: shopId?.toString(),
+      shopId: shopId,
       brandId: brandId,
       categoryId: categoryId,
       page: 1,

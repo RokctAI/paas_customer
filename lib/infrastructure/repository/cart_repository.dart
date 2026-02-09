@@ -39,7 +39,7 @@ class CartRepository implements CartRepositoryFacade {
       cart: CartRequest(
         productId: itemCode,
         quantity: qty,
-        shopId: int.tryParse(shopId),
+        shopId: shopId,
       ),
     );
   }
@@ -71,7 +71,7 @@ class CartRepository implements CartRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<dynamic>> startGroupOrder({required int cartId}) async {
+  Future<ApiResult<dynamic>> startGroupOrder({required String cartId}) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
@@ -108,7 +108,7 @@ class CartRepository implements CartRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<CartModel>> deleteCart({required int cartId}) async {
+  Future<ApiResult<CartModel>> deleteCart({required String cartId}) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
@@ -129,7 +129,7 @@ class CartRepository implements CartRepositoryFacade {
 
   @override
   Future<ApiResult<dynamic>> deleteUser(
-      {required int cartId, required String userId}) async {
+      {required String cartId, required String userId}) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
@@ -148,7 +148,7 @@ class CartRepository implements CartRepositoryFacade {
 
   @override
   Future<ApiResult<CartModel>> removeProductCart(
-      {required int cartDetailId, List<int>? listOfId}) async {
+      {required String cartDetailId, List<String>? listOfId}) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
@@ -224,7 +224,7 @@ class CartRepository implements CartRepositoryFacade {
   @override
   Future<ApiResult<CartModel>> createCart({required CartRequest cart}) async {
     if (cart.shopId != null) {
-      return getCart(cart.shopId.toString());
+      return getCart(cart.shopId!);
     }
     return ApiResult.failure(
       error: "Shop ID is required",

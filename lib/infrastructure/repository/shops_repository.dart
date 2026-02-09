@@ -10,7 +10,7 @@ import '../models/data/filter_model.dart';
 class ShopsRepository implements ShopsRepositoryFacade {
   @override
   Future<ApiResult<ShopsPaginateResponse>> searchShops(
-      {required String text, int? categoryId}) async {
+      {required String text, String? categoryId}) async {
     final params = {
       'search': text,
       if (categoryId != null) 'category_id': categoryId,
@@ -36,7 +36,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
   @override
   Future<ApiResult<ShopsPaginateResponse>> getAllShops(
     int page, {
-    int? categoryId,
+    String? categoryId,
     FilterModel? filterModel,
     bool? isOpen,
     bool? verify,
@@ -89,7 +89,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
 
   @override
   Future<ApiResult<bool>> checkDriverZone(LatLng location,
-      {int? shopId}) async {
+      {String? shopId}) async {
     try {
       final client = dioHttp.client(requireAuth: false);
       final data = {
@@ -152,7 +152,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<BranchResponse>> getShopBranch({required int uuid}) async {
+  Future<ApiResult<BranchResponse>> getShopBranch({required String uuid}) async {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
@@ -196,7 +196,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
 
   @override
   Future<ApiResult<ShopsPaginateResponse>> getShopFilter(
-      {int? categoryId, required int page, int? subCategoryId}) async {
+      {String? categoryId, required int page, String? subCategoryId}) async {
     return getAllShops(page, categoryId: categoryId);
   }
 
@@ -219,7 +219,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
 
   @override
   Future<ApiResult<ShopsPaginateResponse>> getShopsByIds(
-      List<int> shopIds) async {
+      List<String> shopIds) async {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
@@ -247,7 +247,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
     required String deliveryType,
     required String phone,
     required String name,
-    required num category,
+    required String category,
     required String description,
     required double startPrice,
     required double perKm,
@@ -330,7 +330,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<TagResponse>> getTags(int categoryId) async {
+  Future<ApiResult<TagResponse>> getTags(String categoryId) async {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(

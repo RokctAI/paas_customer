@@ -8,7 +8,7 @@ import 'package:foodyman/domain/handlers/handlers.dart';
 
 abstract class OrdersRepositoryFacade {
   Future<ApiResult<GetCalculateModel>> getCalculate(
-      {required int cartId,
+      {required String cartId,
       required double lat,
       required double long,
       required DeliveryTypeEnum type,
@@ -18,21 +18,21 @@ abstract class OrdersRepositoryFacade {
 
   Future<ApiResult> createAutoOrder({
     required String from,
-    required int orderId,
+    required String orderId,
     String? to,
     String? cronPattern,
     String? paymentMethod,
     String? savedCardId,
   });
 
-  Future<ApiResult> pauseAutoOrder(int autoOrderId);
+  Future<ApiResult> pauseAutoOrder(String autoOrderId);
 
-  Future<ApiResult> resumeAutoOrder(int autoOrderId);
+  Future<ApiResult> resumeAutoOrder(String autoOrderId);
 
-  Future<ApiResult> deleteAutoOrder(int orderId);
+  Future<ApiResult> deleteAutoOrder(String orderId);
 
   Future<ApiResult<void>> createRepeatingOrder({
-    required int orderId,
+    required String orderId,
     required String startDate,
     required String cronPattern,
     String? endDate,
@@ -50,16 +50,16 @@ abstract class OrdersRepositoryFacade {
 
   Future<ApiResult<RefundOrdersModel>> getRefundOrders(int page);
 
-  Future<ApiResult<OrderActiveModel>> getSingleOrder(num orderId);
+  Future<ApiResult<OrderActiveModel>> getSingleOrder(String orderId);
 
-  Future<ApiResult<LocalLocation>> getDriverLocation(int deliveryId);
+  Future<ApiResult<LocalLocation>> getDriverLocation(String deliveryId);
 
-  Future<ApiResult<void>> cancelOrder(num orderId);
+  Future<ApiResult<void>> cancelOrder(String orderId);
 
-  Future<ApiResult<void>> refundOrder(num orderId, String title);
+  Future<ApiResult<void>> refundOrder(String orderId, String title);
 
   Future<ApiResult<void>> addReview(
-    num orderId, {
+    String orderId, {
     required double rating,
     required String comment,
   });
@@ -71,17 +71,17 @@ abstract class OrdersRepositoryFacade {
       );
 
   Future<ApiResult<String>> tipProcess({
-    required int orderId,
+    required String orderId,
     required double tip,
   });
 
   Future<ApiResult<CouponResponse>> checkCoupon({
     required String coupon,
-    required int shopId,
+    required String shopId,
   });
 
   Future<ApiResult<CashbackModel>> checkCashback({
-    required int shopId,
+    required String shopId,
     required double amount,
   });
 

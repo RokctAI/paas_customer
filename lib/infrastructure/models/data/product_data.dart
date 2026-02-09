@@ -5,12 +5,12 @@ import 'translation.dart';
 
 class ProductData {
   ProductData({
-    int? id,
+    String? id,
     String? uuid,
-    int? shopId,
-    int? categoryId,
+    String? shopId,
+    String? categoryId,
     String? keywords,
-    int? brandId,
+    String? brandId,
     num? tax,
     num? interval,
     int? minQty,
@@ -65,17 +65,17 @@ class ProductData {
   }
 
   ProductData.fromJson(dynamic json) {
-    _id = json['id'];
+    _id = json['id']?.toString();
     _uuid = json['uuid'];
-    _shopId = json['shop_id'];
-    _categoryId = json['category_id'];
+    _shopId = json['shop_id']?.toString();
+    _categoryId = json['category_id']?.toString();
     _keywords = json['keywords'];
-    _brandId = json['brand_id'];
+    _brandId = json['brand_id']?.toString();
     _tax = json['tax'];
     _interval = json['interval'];
     _minQty = json['min_qty'];
     _maxQty = json['max_qty'];
-    _img = json['img'];
+    _img = json['img'] ?? json['image'];
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
     _ratingAvg = json['rating_avg'];
@@ -106,12 +106,12 @@ class ProductData {
     }
   }
 
-  int? _id;
+  String? _id;
   String? _uuid;
-  int? _shopId;
-  int? _categoryId;
+  String? _shopId;
+  String? _categoryId;
   String? _keywords;
-  int? _brandId;
+  String? _brandId;
   num? _tax;
   num? _interval;
   int? _minQty;
@@ -137,12 +137,12 @@ class ProductData {
   int? _count;
 
   ProductData copyWith({
-    int? id,
+    String? id,
     String? uuid,
-    int? shopId,
-    int? categoryId,
+    String? shopId,
+    String? categoryId,
     String? keywords,
-    int? brandId,
+    String? brandId,
     num? tax,
     num? interval,
     int? minQty,
@@ -193,17 +193,17 @@ class ProductData {
         galleries: galleries ?? _galleries,
       );
 
-  int? get id => _id;
+  String? get id => _id;
 
   String? get uuid => _uuid;
 
-  int? get shopId => _shopId;
+  String? get shopId => _shopId;
 
-  int? get categoryId => _categoryId;
+  String? get categoryId => _categoryId;
 
   String? get keywords => _keywords;
 
-  int? get brandId => _brandId;
+  String? get brandId => _brandId;
 
   num? get tax => _tax;
 
@@ -304,7 +304,7 @@ class ProductData {
 
 class Unit {
   Unit({
-    int? id,
+    String? id,
     bool? active,
     String? position,
     String? createdAt,
@@ -320,7 +320,7 @@ class Unit {
   }
 
   Unit.fromJson(dynamic json) {
-    _id = json['id'];
+    _id = json['id']?.toString();
     _active = json['active'];
     _position = json['position'];
     _createdAt = json['created_at'];
@@ -330,7 +330,7 @@ class Unit {
         : null;
   }
 
-  int? _id;
+  String? _id;
   bool? _active;
   String? _position;
   String? _createdAt;
@@ -338,7 +338,7 @@ class Unit {
   Translation? _translation;
 
   Unit copyWith({
-    int? id,
+    String? id,
     bool? active,
     String? position,
     String? createdAt,
@@ -354,16 +354,11 @@ class Unit {
         translation: translation ?? _translation,
       );
 
-  int? get id => _id;
-
+  String? get id => _id;
   bool? get active => _active;
-
   String? get position => _position;
-
   String? get createdAt => _createdAt;
-
   String? get updatedAt => _updatedAt;
-
   Translation? get translation => _translation;
 
   Map<String, dynamic> toJson() {
@@ -382,7 +377,7 @@ class Unit {
 
 class Brand {
   Brand({
-    int? id,
+    String? id,
     String? uuid,
     String? title,
   }) {
@@ -392,17 +387,17 @@ class Brand {
   }
 
   Brand.fromJson(dynamic json) {
-    _id = json['id'];
+    _id = json['id']?.toString();
     _uuid = json['uuid'];
     _title = json['title'];
   }
 
-  int? _id;
+  String? _id;
   String? _uuid;
   String? _title;
 
   Brand copyWith({
-    int? id,
+    String? id,
     String? uuid,
     String? title,
   }) =>
@@ -412,10 +407,8 @@ class Brand {
         title: title ?? _title,
       );
 
-  int? get id => _id;
-
+  String? get id => _id;
   String? get uuid => _uuid;
-
   String? get title => _title;
 
   Map<String, dynamic> toJson() {
@@ -429,9 +422,9 @@ class Brand {
 
 class Category {
   Category({
-    int? id,
+    String? id,
     String? uuid,
-    int? parentId,
+    String? parentId,
     Translation? translation,
   }) {
     _id = id;
@@ -441,23 +434,23 @@ class Category {
   }
 
   Category.fromJson(dynamic json) {
-    _id = json['id'];
+    _id = json['id']?.toString();
     _uuid = json['uuid'];
-    _parentId = json['parent_id'];
+    _parentId = json['parent_id']?.toString();
     _translation = json['translation'] != null
         ? Translation.fromJson(json['translation'])
         : null;
   }
 
-  int? _id;
+  String? _id;
   String? _uuid;
-  int? _parentId;
+  String? _parentId;
   Translation? _translation;
 
   Category copyWith({
-    int? id,
+    String? id,
     String? uuid,
-    int? parentId,
+    String? parentId,
     Translation? translation,
   }) =>
       Category(
@@ -467,12 +460,9 @@ class Category {
         translation: translation ?? _translation,
       );
 
-  int? get id => _id;
-
+  String? get id => _id;
   String? get uuid => _uuid;
-
-  int? get parentId => _parentId;
-
+  String? get parentId => _parentId;
   Translation? get translation => _translation;
 
   Map<String, dynamic> toJson() {
@@ -489,8 +479,8 @@ class Category {
 
 class Stocks {
   Stocks({
-    int? id,
-    int? countableId,
+    String? id,
+    String? countableId,
     num? price,
     int? quantity,
     num? discount,
@@ -516,8 +506,8 @@ class Stocks {
 
   Stocks.fromJson(Map<String,dynamic> json) {
     _bonus = json["bonus"] == null ? null : BonusModel.fromJson(json["bonus"]);
-    _id = json['id'];
-    _countableId = json['countable_id'];
+    _id = json['id']?.toString();
+    _countableId = json['countable_id']?.toString();
     _price = json['price'];
     _quantity = json['quantity'];
     _discount = json['discount'];
@@ -544,8 +534,8 @@ class Stocks {
         json['product'] != null ? ProductData.fromJson(json['product']) : null;
   }
 
-  int? _id;
-  int? _countableId;
+  String? _id;
+  String? _countableId;
   num? _price;
   int? _quantity;
   num? _discount;
@@ -557,8 +547,8 @@ class Stocks {
   List<Addons>? _addons;
 
   Stocks copyWith({
-    int? id,
-    int? countableId,
+    String? id,
+    String? countableId,
     num? price,
     int? quantity,
     num? discount,
@@ -582,9 +572,9 @@ class Stocks {
           product: product ?? _product,
           addons: addons ?? _addons);
 
-  int? get id => _id;
+  String? get id => _id;
 
-  int? get countableId => _countableId;
+  String? get countableId => _countableId;
 
   num? get price => _price;
 
@@ -794,8 +784,8 @@ class Properties {
 }
 
 class DiscountData {
-  int? id;
-  int? shopId;
+  String? id;
+  String? shopId;
   String? type;
   num? price;
   DateTime? start;

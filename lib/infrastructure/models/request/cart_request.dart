@@ -1,12 +1,12 @@
 import '../../services/local_storage.dart';
 
 class CartRequest {
-  final int? shopId;
+  final String? shopId;
   final String? cartId;
   final String? userUuid;
-  final int? stockId;
+  final String? stockId;
   final String? productId;
-  final int? parentId;
+  final String? parentId;
   final int? quantity;
   final List<CartRequest>? carts;
 

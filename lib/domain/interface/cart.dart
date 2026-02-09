@@ -10,15 +10,15 @@ abstract class CartRepositoryFacade{
 
   Future<ApiResult<CartModel>> getCartInGroup(String? cartId,String? shopId,String? cartUuid);
 
-  Future<ApiResult<dynamic>> startGroupOrder({required int cartId});
+  Future<ApiResult<dynamic>> startGroupOrder({required String cartId});
 
   Future<ApiResult<dynamic>> changeStatus({required String? userUuid,required String? cartId});
 
-  Future<ApiResult<CartModel>> deleteCart({required int cartId});
+  Future<ApiResult<CartModel>> deleteCart({required String cartId});
 
-  Future<ApiResult<dynamic>> deleteUser({required int cartId,required String userId});
+  Future<ApiResult<dynamic>> deleteUser({required String cartId,required String userId});
 
-  Future<ApiResult<CartModel>> removeProductCart({required int cartDetailId,List<int> listOfId});
+  Future<ApiResult<CartModel>> removeProductCart({required String cartDetailId,List<String> listOfId});
 
   Future<ApiResult<CartModel>> createAndCart({required CartRequest cart});
 

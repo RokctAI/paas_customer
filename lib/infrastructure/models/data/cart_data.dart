@@ -67,9 +67,9 @@ class Cart {
     this.shopTax,
     this.group});
 
-  int? id;
-  int? ownerId;
-  int? shopId;
+  String? id;
+  String? ownerId;
+  String? shopId;
   bool? status;
   bool? group;
   num? totalPrice;
@@ -82,9 +82,9 @@ class Cart {
   List<UserCart>? userCarts;
 
   Cart copyWith({
-    int? id,
-    int? ownerId,
-    int? shopId,
+    String? id,
+    String? ownerId,
+    String? shopId,
     bool? status,
     bool? group,
     num? totalPrice,
@@ -112,9 +112,9 @@ class Cart {
 
   factory Cart.fromJson(Map<String, dynamic> json) =>
       Cart(
-        id: json["id"],
-        ownerId: json["owner_id"],
-        shopId: json["shop_id"],
+        id: json["id"]?.toString(),
+        ownerId: json["owner_id"]?.toString(),
+        shopId: json["shop_id"]?.toString(),
         status: json["status"].runtimeType == int
             ? (json["status"] == 1)
             : json["status"],
@@ -159,18 +159,18 @@ class UserCart {
     this.cartDetails,
   });
 
-  int? id;
-  int? cartId;
-  int? userId;
+  String? id;
+  String? cartId;
+  String? userId;
   bool? status;
   String? name;
   String? uuid;
   List<CartDetail>? cartDetails;
 
   UserCart copyWith({
-    int? id,
-    int? cartId,
-    int? userId,
+    String? id,
+    String? cartId,
+    String? userId,
     bool? status,
     String? name,
     String? uuid,
@@ -188,9 +188,9 @@ class UserCart {
 
   factory UserCart.fromJson(Map<String, dynamic> json) {
     return UserCart(
-      id: json["id"],
-      cartId: json["cart_id"],
-      userId: json["user_id"],
+      id: json["id"]?.toString(),
+      cartId: json["cart_id"]?.toString(),
+      userId: json["user_id"]?.toString(),
       status: json["status"].runtimeType == int
           ? (json["status"] == 1)
           : json["status"],
@@ -227,7 +227,7 @@ class CartDetail {
     this.addons
   });
 
-  int? id;
+  String? id;
   int? quantity;
   bool? bonus;
   num? price;
@@ -237,7 +237,7 @@ class CartDetail {
   List<Addons>? addons;
 
   CartDetail copyWith({
-    int? id,
+    String? id,
     int? quantity,
     bool? bonus,
     int? price,
@@ -257,7 +257,7 @@ class CartDetail {
 
   factory CartDetail.fromJson(Map<String, dynamic> json) =>
       CartDetail(
-        id: json["id"],
+        id: json["id"]?.toString(),
         quantity: json["quantity"],
         bonus: json["bonus"].runtimeType == int
             ? (json["bonus"] == 1)

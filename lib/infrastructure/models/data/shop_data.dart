@@ -41,8 +41,8 @@ class ShopData {
     this.enableCod,
   });
 
-  int? id;
-  int? userId;
+  String? id;
+  String? userId;
   num? tax;
   num? pricePerKm;
   num? minPrice;
@@ -94,9 +94,9 @@ class ShopData {
     }
 
     return ShopData(
-      id: json["id"] ?? 0,
+      id: json["id"]?.toString(),
       // uuid: json["uuid"] ?? 0,
-      userId: json["user_id"] ?? 0,
+      userId: json["user_id"]?.toString(),
       tax: json["tax"] ?? 0,
       pricePerKm: json["price_per_km"] ?? 0,
       minPrice: json["price"] ?? 0,
@@ -241,14 +241,14 @@ class Seller {
     this.role,
   });
 
-  num? id;
+  String? id;
   String? firstname;
   String? lastname;
   bool? active;
   String? role;
 
   factory Seller.fromJson(Map<String, dynamic> json) => Seller(
-        id: json["id"],
+        id: json["id"]?.toString(),
         firstname: json["firstname"],
         lastname: json["lastname"],
         active: json["active"],
@@ -342,8 +342,8 @@ class ShopPayment {
     this.payment,
   });
 
-  int? id;
-  int? shopId;
+  String? id;
+  String? shopId;
   int? status;
   dynamic clientId;
   dynamic secretId;
@@ -351,8 +351,8 @@ class ShopPayment {
 
   factory ShopPayment.fromJson(Map<String, dynamic> json) {
     return ShopPayment(
-        id: json["id"],
-        shopId: json["shop_id"],
+        id: json["id"]?.toString(),
+        shopId: json["shop_id"]?.toString(),
         status: json["status"],
         clientId: json["client_id"],
         secretId: json["secret_id"],
