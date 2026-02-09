@@ -53,7 +53,6 @@ class Vibrate {
       case FeedbackType.light:
         _channel.invokeMethod('light');
         break;
-      default:
     }
   }
 
