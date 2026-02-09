@@ -159,6 +159,7 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
       setState(() {
         _isLoading = false;
       });
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         'Failed to check loan history',
@@ -225,6 +226,7 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
       setState(() {
         _isLoading = false;
       });
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         'Failed to check financial eligibility',
@@ -255,6 +257,7 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
       setState(() {
         _isLoading = false;
       });
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         'Failed to calculate pre-approval amount',
