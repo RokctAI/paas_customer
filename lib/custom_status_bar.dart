@@ -107,8 +107,6 @@ class _CustomStatusBarState extends State<CustomStatusBar> {
     if (!mounted) return;
 
     bool isWifiEnabled = _connectionStatus.contains(ConnectivityResult.wifi);
-    bool isMobileEnabled = _connectionStatus.contains(ConnectivityResult.mobile);
-
     setState(() {
       _isWifiEnabled = isWifiEnabled;
       // _isMobileEnabled = isMobileEnabled;
