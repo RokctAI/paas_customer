@@ -113,6 +113,7 @@ class _LoanDocumentUploadScreenState
         debugPrint("File size: $fileSize bytes");
 
         if (fileSize > 5 * 1024 * 1024) {
+          if (!mounted) return;
           AppHelpers.showCheckTopSnackBarInfo(
             context,
             'File size must be less than 5MB',
@@ -130,6 +131,7 @@ class _LoanDocumentUploadScreenState
       }
     } catch (e) {
       debugPrint("Error uploading document: $e");
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         'Failed to upload document',
@@ -183,6 +185,7 @@ class _LoanDocumentUploadScreenState
         },
       );
     } catch (e) {
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(context, 'Failed to submit loan application');
     } finally {
       setState(() {
@@ -274,6 +277,7 @@ class _LoanDocumentUploadScreenState
       );
     } catch (e) {
       debugPrint("Exception submitting loan application: $e");
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         'Failed to submit loan application',
@@ -348,6 +352,7 @@ class _LoanDocumentUploadScreenState
       );
     } catch (e) {
       debugPrint("Exception saving incomplete application: $e");
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         'Failed to save loan application',
