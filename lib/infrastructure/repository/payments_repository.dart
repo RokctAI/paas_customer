@@ -32,8 +32,8 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
 
   @override
   Future<ApiResult<TransactionsResponse>> createTransaction({
-    required int orderId,
-    required int paymentId,
+    required String orderId,
+    required String paymentId,
   }) async {
     try {
       final client = dioHttp.client(requireAuth: true);

@@ -30,7 +30,7 @@ class MarketItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         context.pushRoute(
-            ShopRoute(shopId: (shop.id ?? 0).toString(), shop: shop));
+            ShopRoute(shopId: (shop.id ?? ""), shop: shop));
       },
       child: isShop
           ? _shopItem(context)

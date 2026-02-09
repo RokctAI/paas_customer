@@ -41,8 +41,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
   final BrandsRepositoryFacade _brandsRepository;
 
   // Cache for preloaded category shops
-  final Map<int, List<ShopData>> _preloadedCategoryShops = {};
-  final Map<int, int> _categoryTotalShops = {};
+  final Map<String, List<ShopData>> _preloadedCategoryShops = {};
+  final Map<String, int> _categoryTotalShops = {};
 
   // Keep track of navigation state to avoid showing loading screens
   bool _isNavigatingToShop = false;
@@ -79,7 +79,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
   }
 
   // Function to preload shops for a specific category
-  Future<void> _preloadShopsForCategory(int categoryId) async {
+  Future<void> _preloadShopsForCategory(String categoryId) async {
     if (_preloadedCategoryShops.containsKey(categoryId)) {
       // Already preloaded
       return;
@@ -138,7 +138,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
         filterMarket: [],
       );
     } else {
-      final int? categoryId = index >= 0 && index < state.categories.length
+      final String? categoryId = index >= 0 && index < state.categories.length
           ? state.categories[index].id
           : null;
 
@@ -305,11 +305,11 @@ class HomeNotifier extends StateNotifier<HomeState> {
       }
 
       // Get category ID and subcategory ID if applicable
-      final int? categoryId = state.selectIndexCategory >= 0 && state.selectIndexCategory < state.categories.length
+      final String? categoryId = state.selectIndexCategory >= 0 && state.selectIndexCategory < state.categories.length
           ? state.categories[state.selectIndexCategory].id
           : null;
 
-      final int? subCategoryId;
+      final String? subCategoryId;
       if (state.selectIndexSubCategory != -1 &&
           state.selectIndexCategory >= 0 &&
           state.selectIndexCategory < state.categories.length &&

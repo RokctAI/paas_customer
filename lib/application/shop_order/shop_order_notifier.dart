@@ -58,7 +58,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
       List<CartRequest> list = [
         CartRequest(
             stockId:
-                state.cart?.userCarts?.first.cartDetails?[index].stock?.id ?? 0,
+                state.cart?.userCarts?.first.cartDetails?[index].stock?.id ?? "",
             quantity:
                 state.cart?.userCarts?.first.cartDetails?[index].quantity ?? 1)
       ];
@@ -68,14 +68,14 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
           stockId: element.stocks?.id,
           quantity: element.quantity,
           parentId:
-              state.cart?.userCarts?.first.cartDetails?[index].stock?.id ?? 0,
+              state.cart?.userCarts?.first.cartDetails?[index].stock?.id ?? "",
         ));
       }
       final response = await _cartRepository.insertCart(
         cart: CartRequest(
-            shopId: state.cart?.shopId ?? 0,
+            shopId: state.cart?.shopId ?? "",
             stockId:
-                state.cart?.userCarts?.first.cartDetails?[index].stock?.id ?? 0,
+                state.cart?.userCarts?.first.cartDetails?[index].stock?.id ?? "",
             quantity:
                 state.cart?.userCarts?.first.cartDetails?[index].quantity ?? 1,
             carts: list),
@@ -125,7 +125,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
           CartRequest(
               stockId: state
                   .cart?.userCarts?.first.cartDetails?[index].stock?.id ??
-                  0,
+                  "",
               quantity:
               state.cart?.userCarts?.first.cartDetails?[index].quantity ??
                   1)
@@ -138,15 +138,15 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
             quantity: element.quantity,
             parentId:
             state.cart?.userCarts?.first.cartDetails?[index].stock?.id ??
-                0,
+                "",
           ));
         }
         final response = await _cartRepository.insertCart(
           cart: CartRequest(
-              shopId: state.cart?.shopId ?? 0,
+              shopId: state.cart?.shopId ?? "",
               stockId: state
                   .cart?.userCarts?.first.cartDetails?[index].stock?.id ??
-                  0,
+                  "",
               quantity:
               state.cart?.userCarts?.first.cartDetails?[index].quantity ??
                   1,
@@ -181,9 +181,9 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
         state = state.copyWith(
           isAddAndRemoveLoading: true,
         );
-        final cartId = state.cart?.id ?? 0;
+        final cartId = state.cart?.id ?? "";
         final cartDetailId =
-            state.cart?.userCarts?.first.cartDetails?[index].id ?? 0;
+            state.cart?.userCarts?.first.cartDetails?[index].id ?? "";
         List<CartDetail> newCartList =
             state.cart?.userCarts?.first.cartDetails ?? [];
         newCartList.removeAt(index);
@@ -266,7 +266,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
           CartRequest(
               stockId: state.cart?.userCarts?[userIndex]
                       .cartDetails?[productIndex].stock?.id ??
-                  0,
+                  "",
               quantity: state.cart?.userCarts?[userIndex]
                       .cartDetails?[productIndex].quantity ??
                   1)
@@ -279,17 +279,17 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
             quantity: element.quantity,
             parentId: state.cart?.userCarts?[userIndex]
                     .cartDetails?[productIndex].stock?.id ??
-                0,
+                "",
           ));
         }
         final response = await _cartRepository.insertCartWithGroup(
           cart: CartRequest(
               cartId: state.cart?.id.toString(),
               userUuid: state.cart?.userCarts?[userIndex].uuid,
-              shopId: state.cart?.shopId ?? 0,
+              shopId: state.cart?.shopId ?? "",
               stockId: state.cart?.userCarts?[userIndex]
                       .cartDetails?[productIndex].stock?.id ??
-                  0,
+                  "",
               quantity: state.cart?.userCarts?[userIndex]
                       .cartDetails?[productIndex].quantity ??
                   1,
@@ -349,7 +349,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
             CartRequest(
                 stockId: state.cart?.userCarts?[userIndex]
                         .cartDetails?[productIndex].stock?.id ??
-                    0,
+                    "",
                 quantity: state.cart?.userCarts?[userIndex]
                         .cartDetails?[productIndex].quantity ??
                     1)
@@ -362,17 +362,17 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
               quantity: element.quantity,
               parentId: state.cart?.userCarts?[userIndex]
                       .cartDetails?[productIndex].stock?.id ??
-                  0,
+                  "",
             ));
           }
           final response = await _cartRepository.insertCartWithGroup(
             cart: CartRequest(
                 cartId: state.cart?.id.toString(),
                 userUuid: state.cart?.userCarts?[userIndex].uuid,
-                shopId: state.cart?.shopId ?? 0,
+                shopId: state.cart?.shopId ?? "",
                 stockId: state.cart?.userCarts?[userIndex]
                         .cartDetails?[productIndex].stock?.id ??
-                    0,
+                    "",
                 quantity: state.cart?.userCarts?[userIndex]
                         .cartDetails?[productIndex].quantity ??
                     1,
@@ -404,10 +404,10 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
         state = state.copyWith(
           isAddAndRemoveLoading: true,
         );
-        final cartId = state.cart?.id ?? 0;
+        final cartId = state.cart?.id ?? "";
         final cartDetailId =
             state.cart?.userCarts?[userIndex].cartDetails?[productIndex].id ??
-                0;
+                "";
         List<CartDetail> newCartList =
             state.cart?.userCarts?[userIndex].cartDetails ?? [];
         newCartList.removeAt(productIndex);
@@ -617,7 +617,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
 
   Future<void> startGroupOrder(
     BuildContext context,
-    int cartId,
+    String cartId,
   ) async {
     final connected = await AppConnectivity.connectivity();
     state = state.copyWith(
@@ -654,7 +654,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
     }
   }
 
-  void createCart(BuildContext context, int shopId) async {
+  void createCart(BuildContext context, String shopId) async {
     state = state.copyWith(isCheckShopOrder: false, isOtherShop: false);
     final connected = await AppConnectivity.connectivity();
     if (connected) {
@@ -667,7 +667,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
           state = state.copyWith(isCheckShopOrder: false, cart: data.data);
           startGroupOrder(
             context,
-            data.data?.id ?? 0,
+            data.data?.id ?? "",
           );
         },
         failure: (failure, status) {

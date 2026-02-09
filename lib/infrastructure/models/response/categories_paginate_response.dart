@@ -60,10 +60,10 @@ class CategoriesPaginateResponse {
 
 class CategoryData {
   CategoryData({
-    int? id,
+    String? id,
     String? uuid,
     String? keywords,
-    int? parentId,
+    String? parentId,
     String? type,
     String? img,
     bool? active,
@@ -85,10 +85,10 @@ class CategoryData {
   }
 
   CategoryData.fromJson(dynamic json) {
-    _id = json['id'];
+    _id = json['id']?.toString();
     _uuid = json['uuid'];
     _keywords = json['keywords'];
-    _parentId = json['parent_id'];
+    _parentId = json['parent_id']?.toString();
     _type = json['type'];
     _img = json['img'];
     _active = json['active'];
@@ -105,10 +105,10 @@ class CategoryData {
     }
   }
 
-  int? _id;
+  String? _id;
   String? _uuid;
   String? _keywords;
-  int? _parentId;
+  String? _parentId;
   String? _type;
   String? _img;
   bool? _active;
@@ -118,10 +118,10 @@ class CategoryData {
   List<CategoryData>? _children;
 
   CategoryData copyWith({
-    int? id,
+    String? id,
     String? uuid,
     String? keywords,
-    int? parentId,
+    String? parentId,
     String? type,
     String? img,
     bool? active,
@@ -143,13 +143,13 @@ class CategoryData {
         translation: translation ?? _translation,
       );
 
-  int? get id => _id;
+  String? get id => _id;
 
   String? get uuid => _uuid;
 
   String? get keywords => _keywords;
 
-  int? get parentId => _parentId;
+  String? get parentId => _parentId;
 
   String? get type => _type;
 

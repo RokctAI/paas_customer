@@ -1,6 +1,6 @@
 class BrandData {
   BrandData({
-    int? id,
+    String? id,
     String? title,
     bool? active,
     String? img,
@@ -18,7 +18,7 @@ class BrandData {
   }
 
   BrandData.fromJson(dynamic json) {
-    _id = json['id'];
+    _id = json['id']?.toString();
     _title = json['title'];
     _active = json['active'];
     _img = json['img'];
@@ -27,7 +27,7 @@ class BrandData {
     _updatedAt = json['updated_at'];
   }
 
-  int? _id;
+  String? _id;
   String? _title;
   bool? _active;
   String? _img;
@@ -36,7 +36,7 @@ class BrandData {
   String? _updatedAt;
 
   BrandData copyWith({
-    int? id,
+    String? id,
     String? title,
     bool? active,
     String? img,
@@ -54,7 +54,7 @@ class BrandData {
         updatedAt: updatedAt ?? _updatedAt,
       );
 
-  int? get id => _id;
+  String? get id => _id;
 
   String? get title => _title;
 

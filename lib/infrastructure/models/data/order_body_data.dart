@@ -4,11 +4,11 @@ import 'package:foodyman/infrastructure/services/enums.dart';
 import 'package:foodyman/infrastructure/services/local_storage.dart';
 
 class OrderBodyData {
-  final int cartId;
-  final int? deliveryPointId;
+  final String cartId;
+  final String? deliveryPointId;
   final String? note;
-  final int shopId;
-  final int? paymentId;
+  final String shopId;
+  final String? paymentId;
   final num deliveryFee;
   final DeliveryTypeEnum deliveryType;
   final String? coupon;
@@ -105,10 +105,10 @@ class AddressModel {
 }
 
 class ShopOrder {
-  final int shopId;
-  final int? deliveryAddressId;
+  final String shopId;
+  final String? deliveryAddressId;
   final num? deliveryFee;
-  final int? deliveryTypeId;
+  final String? deliveryTypeId;
   final String? coupon;
   final String? deliveryDate;
   final String? deliveryTime;
@@ -134,7 +134,7 @@ class ShopOrder {
 }
 
 class ProductOrder {
-  final int stockId;
+  final String stockId;
   final num price;
   final int quantity;
   final num tax;

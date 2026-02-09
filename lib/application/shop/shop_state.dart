@@ -46,7 +46,7 @@ class ShopState with _$ShopState {
     @Default([]) List<CategoryData>? category,
     @Default([]) List<BrandData>? brands,
     @Default([]) List<BranchModel>? branches,
-    @Default([]) List<int> brandIds,
+    @Default([]) List<String> brandIds,
     @Default(0) int sortIndex,
   }) = _ShopState;
 

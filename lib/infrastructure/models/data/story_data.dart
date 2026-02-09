@@ -19,7 +19,7 @@ class StoryModel {
     this.updatedAt,
   });
 
-  int? shopId;
+  String? shopId;
   String? logoImg;
   String? title;
   String? productUuid;
@@ -30,7 +30,7 @@ class StoryModel {
 
   factory StoryModel.fromJson(Map<String, dynamic> json) {
     return StoryModel(
-    shopId: json["shop_id"],
+    shopId: json["shop_id"]?.toString(),
     logoImg: json["logo_img"],
     title: json["title"],
       productUuid: json["product_uuid"],

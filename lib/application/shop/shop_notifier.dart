@@ -35,7 +35,7 @@ class ShopNotifier extends StateNotifier<ShopState> {
       this._categoriesRepository, this._drawRouting, this._brandsRepository)
       : super(const ShopState());
   int page = 1;
-  List<int> _list = [];
+  List<String> _list = [];
   String? shareLink;
 
   void showWeekTime() {
@@ -138,7 +138,7 @@ class ShopNotifier extends StateNotifier<ShopState> {
     });
     state = state.copyWith(shopMarkers: markers, isMapLoading: false);
     final res =
-        await _shopsRepository.getShopBranch(uuid: state.shopData?.id ?? 0);
+        await _shopsRepository.getShopBranch(uuid: state.shopData?.id ?? "");
     res.when(
         success: (data) {
           state = state.copyWith(branches: data.data);
@@ -155,7 +155,7 @@ class ShopNotifier extends StateNotifier<ShopState> {
         }
       }
     } else {
-      _list.add(state.shopData?.id ?? 0);
+      _list.add(state.shopData?.id ?? "");
     }
     state = state.copyWith(isLike: !state.isLike);
     LocalStorage.setSavedShopsList(_list);
@@ -250,7 +250,7 @@ class ShopNotifier extends StateNotifier<ShopState> {
 
   Future<void> setShop(ShopData shop) async {
     _list = LocalStorage.getSavedShopsList();
-    for (int e in _list) {
+    for (String e in _list) {
       if (e == shop.id) {
         state = state.copyWith(
           isLike: true,
@@ -264,11 +264,11 @@ class ShopNotifier extends StateNotifier<ShopState> {
     generateShareLink();
     checkWorkingDay();
     final response =
-        await _shopsRepository.getSingleShop(uuid: (shop.id ?? 0).toString());
+        await _shopsRepository.getSingleShop(uuid: (shop.id ?? "").toString());
     response.when(
       success: (data) async {
         _list = LocalStorage.getSavedShopsList();
-        for (int e in _list) {
+        for (String e in _list) {
           if (e == data.data?.id) {
             state = state.copyWith(
               isLike: true,
@@ -328,7 +328,7 @@ class ShopNotifier extends StateNotifier<ShopState> {
       response.when(
         success: (data) async {
           _list = LocalStorage.getSavedShopsList();
-          for (int e in _list) {
+          for (String e in _list) {
             if (e == data.data?.id) {
               state = state.copyWith(
                 isLike: true,
@@ -435,7 +435,7 @@ class ShopNotifier extends StateNotifier<ShopState> {
             // Get recommended products
             if (data.data?.recommended?.isNotEmpty ?? false) {
               // Create a map of regular products by ID for fast lookup
-              final Map<int, Product> productsById = {};
+              final Map<String, Product> productsById = {};
               for (final category in allList) {
                 for (final product in category.products ?? []) {
                   if (product.id != null) {
@@ -770,8 +770,8 @@ class ShopNotifier extends StateNotifier<ShopState> {
 
 
 
-  setBrands({required int id}) {
-    List<int> list = List.from(state.brandIds);
+  setBrands({required String id}) {
+    List<String> list = List.from(state.brandIds);
     if (list.contains(id)) {
       list.remove(id);
     } else {

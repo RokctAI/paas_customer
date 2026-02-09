@@ -20,7 +20,7 @@ import 'widgets/filter_item.dart';
 
 class FilterPage extends ConsumerStatefulWidget {
   final ScrollController controller;
-  final int categoryId;
+  final String categoryId;
 
   const FilterPage({
     super.key,
