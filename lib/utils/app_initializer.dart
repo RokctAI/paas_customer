@@ -19,29 +19,24 @@ class AppInitializer extends StatefulWidget {
   const AppInitializer({super.key, required this.providerContainer});
 
   Future<void> initializeApp() async {
-    await initializeRemoteConfigWithoutAPICall();
-    await checkAppStatusFromAPI();
+    await _initializeRemoteConfigWithoutAPICallStatic(providerContainer);
+    await _checkAppStatusFromAPIStatic();
     // Add other app initialization tasks here
   }
 
   Future<void> initializeRemoteConfigWithoutAPICall() async {
-    final initializer = _AppInitializerState(providerContainer);
-    await initializer._initializeRemoteConfigWithoutAPICall();
+    await _initializeRemoteConfigWithoutAPICallStatic(providerContainer);
   }
 
   Future<void> checkAppStatusFromAPI() async {
-    final initializer = _AppInitializerState(providerContainer);
-    await initializer._checkAppStatusFromAPI();
+    await _checkAppStatusFromAPIStatic();
   }
 
   @override
-  _AppInitializerState createState() => _AppInitializerState(providerContainer);
+  State<AppInitializer> createState() => _AppInitializerState();
 }
 
 class _AppInitializerState extends State<AppInitializer> {
-  final ProviderContainer providerContainer;
-
-  _AppInitializerState(this.providerContainer);
 
   @override
   void initState() {
@@ -49,7 +44,7 @@ class _AppInitializerState extends State<AppInitializer> {
     // You can perform additional setup here if needed
   }
 
-  Future<void> _initializeRemoteConfigWithoutAPICall() async {
+  static Future<void> _initializeRemoteConfigWithoutAPICallStatic(ProviderContainer providerContainer) async {
     // Use AppConstants.baseUrl as the site identifier (Tenant Site Name)
     // This assumes AppConstants.baseUrl is pre-configured with the tenant's site domain (e.g. juvo.tenant.rokct.ai)
     final String tenantSite = AppConstants.baseUrl;
@@ -140,13 +135,21 @@ class _AppInitializerState extends State<AppInitializer> {
     }
   }
 
-  Future<void> _checkAppStatusFromAPI() async {
+  static Future<void> _checkAppStatusFromAPIStatic() async {
     // Check the app status from the API with a 5-second timeout
     try {
       final response = await http
           .get(Uri.parse('${AppConstants.baseUrl}/public/api/v1/rest/status'))
           .timeout(const Duration(seconds: 5));
-      if (!mounted) return;
+      // if (!mounted) return; // Removed this because we are in static context and not affecting UI state directly here
+      // But wait, the original code had `if (!mounted) return;`.
+      // This refers to the State object. 
+      // This static method cannot check if a widget is mounted.
+      // However, this method only updates a static variable `AppConstants.isMaintain`.
+      // So it doesn't strictly depend on the widget being mounted for safety,
+      // UNLESS the caller depends on it.
+      // Since `initializeApp` awaits this, and `AppConstants` is global, it s safe to update it even if the widget is disposed.
+      
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         AppConstants.isMaintain = data['status'] != 'OK';
