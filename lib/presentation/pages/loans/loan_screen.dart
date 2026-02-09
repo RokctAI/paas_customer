@@ -138,12 +138,12 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
         _loansRepository.fetchMyLoanApplications(), // Fetch my apps
       ]);
 
-      final transactionsResult = results[0] as ApiResult<List<dynamic>>;
+      final transactionsResult = results[0];
       // final savedApplicationsResult = results[1] as ApiResult<List<Map<String, dynamic>>>;
       // final myApplicationsResult = results[2] as ApiResult<List<dynamic>>;
       
-      final savedApplicationsResult = results[1] as ApiResult<List<Map<String, dynamic>>>; // Keeping this for now as dynamic cast might be needed if inference fails
-      final myApplicationsResult = results[2] as ApiResult<List<dynamic>>;
+      final savedApplicationsResult = results[1]; // Keeping this for now as dynamic cast might be needed if inference fails
+      final myApplicationsResult = results[2];
 
       debugPrint("All data fetched");
 
@@ -519,41 +519,6 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
     });
   }
 
-  Future<void> _fetchLoanTransactions() async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final result = await _loansRepository.fetchLoanTransactions(1);
-
-      result.when(
-        success: (transactions) {
-          setState(() {
-            _loanTransactions = transactions;
-            _isLoading = false;
-          });
-        },
-        failure: (error, statusCode) {
-          setState(() {
-            _isLoading = false;
-            _loanTransactions = [];
-          });
-          AppHelpers.showCheckTopSnackBarInfo(context, error);
-        },
-      );
-    } catch (e) {
-      setState(() {
-        _isLoading = false;
-        _loanTransactions = [];
-      });
-      if (!mounted) return;
-      AppHelpers.showCheckTopSnackBarInfo(
-        context,
-        'Failed to load loan transactions',
-      );
-    }
-  }
 
   Future<void> _checkPendingContractLoans(List<dynamic> transactions) async {
     try {
