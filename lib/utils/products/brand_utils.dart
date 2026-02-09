@@ -10,7 +10,7 @@ import 'package:foodyman/application/shop/shop_provider.dart';
 
 class BrandUtils {
   /// Get brand from product using brand ID and provider references
-  static BrandData? getBrandFromProduct(int? brandId, WidgetRef ref) {
+  static BrandData? getBrandFromProduct(String? brandId, WidgetRef ref) {
     if (brandId == null) {
       debugPrint("No brandId available");
       return null;
@@ -105,7 +105,7 @@ class BrandUtils {
   }
 
   /// Get shop name from ID using provider references
-  static String? getShopNameFromId(int? shopId, WidgetRef ref) {
+  static String? getShopNameFromId(String? shopId, WidgetRef ref) {
     if (shopId == null) return null;
 
     try {

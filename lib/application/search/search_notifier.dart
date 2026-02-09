@@ -22,7 +22,7 @@ class SearchNotifier extends StateNotifier<SearchState> {
     state = state.copyWith(searchHistory: list,search: "");
   }
 
-  void setSelectCategory(int index, BuildContext context,{int? categoryId}) {
+  void setSelectCategory(int index, BuildContext context,{String? categoryId}) {
     if (state.selectIndexCategory == index) {
       state = state.copyWith(
         selectIndexCategory: -1,
@@ -60,7 +60,7 @@ class SearchNotifier extends StateNotifier<SearchState> {
   }
 
   Future<void> searchShop(
-      BuildContext context, String text, {int? categoryId}) async {
+      BuildContext context, String text, {String? categoryId}) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isShopLoading: true);

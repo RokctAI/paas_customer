@@ -7,7 +7,7 @@ import 'membership_data.dart';
 
 class ProfileData {
   ProfileData({
-    int? id,
+    String? id,
     String? uuid,
     String? firstname,
     String? lastname,
@@ -60,7 +60,7 @@ class ProfileData {
   }
 
   ProfileData.fromJson(dynamic json) {
-    _id = json['id'];
+    _id = json['id']?.toString();
     _uuid = json['uuid'];
     _firstname = json['firstname'];
     _lastname = json['lastname'];
@@ -100,7 +100,7 @@ class ProfileData {
     _ringfencedBalance = json['ringfenced_balance'];
   }
 
-  int? _id;
+  String? _id;
   String? _uuid;
   String? _firstname;
   String? _lastname;
@@ -127,7 +127,7 @@ class ProfileData {
   num? _ringfencedBalance;
 
   ProfileData copyWith({
-    int? id,
+    String? id,
     String? uuid,
     String? firstname,
     String? lastname,
@@ -171,7 +171,7 @@ class ProfileData {
         ringfencedBalance: ringfencedBalance ?? _ringfencedBalance,
       );
 
-  int? get id => _id;
+  String? get id => _id;
 
   String? get uuid => _uuid;
 

@@ -14,7 +14,6 @@ class AuthRepository implements AuthRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       // NOTE: Frappe's core login endpoint is `/api/method/login`
-      final response = await client.post(
       // NOTE: Using custom PaaS login endpoint to match frontend behavior
       final response = await client.post(
           '/api/method/paas.api.user.user.login',

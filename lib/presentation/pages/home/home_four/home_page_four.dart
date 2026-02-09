@@ -185,7 +185,7 @@ class _HomePageState extends ConsumerState<HomePageFour> {
     }
 
     // Group products by shop
-    final Map<int?, List<ProductData>> shopGroups = {};
+    final Map<String?, List<ProductData>> shopGroups = {};
 
     for (var product in products) {
       final shopId = product.shopId;
@@ -215,14 +215,14 @@ class _HomePageState extends ConsumerState<HomePageFour> {
     int currentShopIndex = 0;
 
     // Remove empty shop groups and make a copy for manipulation
-    final Map<int?, List<ProductData>> workingGroups = {};
+    final Map<String?, List<ProductData>> workingGroups = {};
     for (var shopId in shopIds) {
       if (shopGroups[shopId]!.isNotEmpty) {
         workingGroups[shopId] = List<ProductData>.from(shopGroups[shopId]!);
       }
     }
 
-    final List<int?> nonEmptyShopIds = workingGroups.keys.toList();
+    final List<String?> nonEmptyShopIds = workingGroups.keys.toList();
 
     // While there are still products to distribute and we haven't hit the max
     while (result.length < products.length && result.length < maxProducts) {

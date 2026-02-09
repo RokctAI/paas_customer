@@ -1,10 +1,10 @@
 import 'address_information.dart';
 
 class AddressNewModel {
-  int? id;
+  String? id;
   bool? active;
   String? title;
-  int? userId;
+  String? userId;
   AddressInformation? address;
   List? location;
   DateTime? createdAt;
@@ -21,9 +21,9 @@ class AddressNewModel {
       this.active});
 
   AddressNewModel copyWith(
-          {int? id,
+          {String? id,
           String? title,
-          int? userId,
+          String? userId,
           AddressInformation? address,
           List? location,
           DateTime? createdAt,
@@ -41,9 +41,9 @@ class AddressNewModel {
 
   factory AddressNewModel.fromJson(Map<String, dynamic> json) =>
       AddressNewModel(
-        id: json["id"],
+        id: json["id"]?.toString(),
         title: json["title"],
-        userId: json["user_id"],
+        userId: json["user_id"]?.toString(),
         active: json["active"] is int ? json["active"] == 1 : json["active"],
         address: json["address"] == null && json["address"].runtimeType == List
             ? null

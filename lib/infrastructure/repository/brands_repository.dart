@@ -57,7 +57,7 @@ class BrandsRepository implements BrandsRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<BrandsPaginateResponse>> getAllBrands({int? categoryId, String? shopId}) {
+  Future<ApiResult<BrandsPaginateResponse>> getAllBrands({String? categoryId, String? shopId}) {
     return getBrandsPaginate(1);
   }
 

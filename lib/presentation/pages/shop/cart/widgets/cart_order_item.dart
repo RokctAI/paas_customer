@@ -389,7 +389,7 @@ class CartOrderItem extends StatelessWidget {
                                           provider
                                               .read(orderProvider.notifier)
                                               .setNotes(
-                                                  stockId: cart?.stock?.id ?? 0,
+                                                  stockId: cart?.stock?.id ?? "",
                                                   note: s);
                                         },
                                       ));

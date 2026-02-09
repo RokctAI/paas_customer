@@ -13,7 +13,7 @@ import 'package:foodyman/application/shop/shop_provider.dart';
 
 class ProductFilter extends ConsumerWidget {
   final String shopId;
-  final int categoryId;
+  final String categoryId;
   final List<String> sort;
 
   const ProductFilter({
@@ -136,7 +136,7 @@ class ProductFilter extends ConsumerWidget {
                           ?.map((e) => GestureDetector(
                                 onTap: () {
                                   event.setBrands(
-                                    id: e.id ?? 0,
+                                    id: (e.id ?? "").toString(),
                                   );
                                 },
                                 child: AnimatedContainer(
@@ -148,7 +148,7 @@ class ProductFilter extends ConsumerWidget {
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(10.r)),
-                                      color: state.brandIds.contains(e.id)
+                                      color: state.brandIds.contains(e.id.toString())
                                           ? AppStyle.primary
                                           : AppStyle.white),
                                   child: Text(

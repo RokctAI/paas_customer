@@ -87,7 +87,7 @@ class _OrderPageState extends ConsumerState<OrderPage>
             ref.read(orderProvider.notifier).getCalculate(
                 isLoading: false,
                 context: context,
-                cartId: ref.read(shopOrderProvider).cart?.id ?? 0,
+                cartId: ref.read(shopOrderProvider).cart?.id ?? "",
                 long: long,
                 lat: lat,
                 type: DeliveryTypeEnum.pickup);
@@ -97,7 +97,7 @@ class _OrderPageState extends ConsumerState<OrderPage>
             ref.read(orderProvider.notifier).getCalculate(
                 isLoading: false,
                 context: context,
-                cartId: ref.read(shopOrderProvider).cart?.id ?? 0,
+                cartId: ref.read(shopOrderProvider).cart?.id ?? "",
                 long: long,
                 lat: lat,
                 type: DeliveryTypeEnum.delivery);
@@ -110,12 +110,12 @@ class _OrderPageState extends ConsumerState<OrderPage>
         ref.read(orderProvider.notifier)
           ..resetState()
           ..fetchShop(context,
-              (ref.watch(shopOrderProvider).cart?.shopId ?? 0).toString())
+              (ref.watch(shopOrderProvider).cart?.shopId ?? "").toString())
           ..fetchShopBranch(
-              context, (ref.watch(shopOrderProvider).cart?.shopId ?? 0))
+              context, (ref.watch(shopOrderProvider).cart?.shopId ?? ""))
           ..getCalculate(
             context: context,
-            cartId: ref.watch(shopOrderProvider).cart?.id ?? 0,
+            cartId: ref.watch(shopOrderProvider).cart?.id ?? "",
             long: long,
             lat: lat,
             type: DeliveryTypeEnum.delivery,
@@ -217,7 +217,7 @@ class _OrderPageState extends ConsumerState<OrderPage>
                 ? RefreshController()
                 : refreshController,
             onRefresh: () {
-              event.showOrder(context, state.orderData?.id ?? 0, true);
+              event.showOrder(context, state.orderData?.id ?? "", true);
               refreshController.refreshCompleted();
             },
             child: SingleChildScrollView(
@@ -235,7 +235,7 @@ class _OrderPageState extends ConsumerState<OrderPage>
                         )
                       : OrderType(
                           sendUser: ref.watch(orderProvider).sendOtherUser,
-                          shopId: state.shopData?.id ?? 0,
+                          shopId: state.shopData?.id ?? "",
                           tabController: _tabController,
                           onChange: (s) => event.changeActive(s),
                           getLocation: () {
@@ -243,7 +243,7 @@ class _OrderPageState extends ConsumerState<OrderPage>
                             event.getCalculate(
                               isLoading: false,
                               context: context,
-                              cartId: ref.read(shopOrderProvider).cart?.id ?? 0,
+                              cartId: ref.read(shopOrderProvider).cart?.id ?? "",
                               long: long,
                               lat: lat,
                               type: _tabController.index == 0

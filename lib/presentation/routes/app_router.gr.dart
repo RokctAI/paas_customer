@@ -482,7 +482,7 @@ class OrderRoute extends PageRouteInfo<void> {
 class OrderProgressRoute extends PageRouteInfo<OrderProgressRouteArgs> {
   OrderProgressRoute({
     Key? key,
-    num? orderId,
+    String? orderId,
     List<PageRouteInfo>? children,
   }) : super(
           OrderProgressRoute.name,
@@ -516,7 +516,7 @@ class OrderProgressRouteArgs {
 
   final Key? key;
 
-  final num? orderId;
+  final String? orderId;
 
   @override
   String toString() {
@@ -1106,7 +1106,7 @@ class ResetPasswordRoute extends PageRouteInfo<void> {
 class ResultFilterRoute extends PageRouteInfo<ResultFilterRouteArgs> {
   ResultFilterRoute({
     Key? key,
-    required int categoryId,
+    required String categoryId,
     List<PageRouteInfo>? children,
   }) : super(
           ResultFilterRoute.name,
@@ -1139,7 +1139,7 @@ class ResultFilterRouteArgs {
 
   final Key? key;
 
-  final int categoryId;
+  final String categoryId;
 
   @override
   String toString() {
@@ -1386,7 +1386,7 @@ class ShopRoute extends PageRouteInfo<ShopRouteArgs> {
     String? productId,
     String? cartId,
     ShopData? shop,
-    int? ownerId,
+    String? ownerId,
     List<PageRouteInfo>? children,
   }) : super(
           ShopRoute.name,
@@ -1439,7 +1439,7 @@ class ShopRouteArgs {
 
   final ShopData? shop;
 
-  final int? ownerId;
+  final String? ownerId;
 
   @override
   String toString() {
@@ -1650,7 +1650,7 @@ class ViewMapRoute extends PageRouteInfo<ViewMapRouteArgs> {
     bool isParcel = false,
     bool isPop = true,
     bool isShopLocation = false,
-    int? shopId,
+    String? shopId,
     int? indexAddress,
     AddressNewModel? address,
     List<PageRouteInfo>? children,
@@ -1707,7 +1707,7 @@ class ViewMapRouteArgs {
 
   final bool isShopLocation;
 
-  final int? shopId;
+  final String? shopId;
 
   final int? indexAddress;
 

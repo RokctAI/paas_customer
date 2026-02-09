@@ -102,7 +102,7 @@ class _PromoCodeState extends ConsumerState<PromoCodeScreen> {
                     onChanged: (s) {
                       _delayed.run(() {
                         event.checkPromoCode(context, s,
-                            ref.read(orderProvider).shopData?.id ?? 0);
+                            ref.read(orderProvider).shopData?.id ?? "");
                       });
                     },
                     suffixIcon: state.isActive

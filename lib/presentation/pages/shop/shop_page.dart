@@ -41,7 +41,7 @@ class ShopPage extends ConsumerStatefulWidget {
   final ShopData? shop;
   final String shopId;
   final String? cartId;
-  final int? ownerId;
+  final String? ownerId;
   final String? productId;
 
   const ShopPage({
@@ -594,7 +594,7 @@ class _ShopPageState extends ConsumerState<ShopPage>
               }
             },
             child: ProductsList(
-              shopId: int.tryParse(widget.shopId),
+              shopId: widget.shopId,
               cartId: widget.cartId,
               all: item,
             ),
@@ -608,7 +608,7 @@ class _ShopPageState extends ConsumerState<ShopPage>
 String _getCartShopName(Cart? cart, WidgetRef ref) {
   if (cart == null) return "";
 
-  final int? shopId = cart.shopId;
+  final String? shopId = cart.shopId;
   if (shopId == null) return "";
 
   final homeState = ref.read(homeProvider);

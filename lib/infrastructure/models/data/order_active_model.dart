@@ -38,8 +38,8 @@ class OrderActiveModel {
     this.afterDeliveredImage,
   });
 
-  int? id;
-  num? userId;
+  String? id;
+  String? userId;
   num? totalPrice;
   num? originPrice;
   num? coupon;
@@ -53,7 +53,7 @@ class OrderActiveModel {
   num? tips;
   String? afterDeliveredImage;
   num? deliveryFee;
-  num? otp;
+  String? otp;
   CurrencyModel? currencyModel;
   DeliveryMan? deliveryMan;
   DateTime? deliveryDate;
@@ -73,8 +73,8 @@ class OrderActiveModel {
 
   factory OrderActiveModel.fromJson(Map<String, dynamic> json) =>
       OrderActiveModel(
-        id: json["data"]["id"],
-        userId: json["data"]["user_id"],
+        id: json["data"]["id"]?.toString(),
+        userId: json["data"]["user_id"]?.toString(),
         afterDeliveredImage: json["data"]["image_after_delivered"],
         totalPrice: json["data"]["total_price"],
         originPrice: json["data"]["origin_price"],
@@ -95,7 +95,7 @@ class OrderActiveModel {
             : null,
         deliveryType: json["data"]["delivery_type"],
         deliveryFee: json["data"]["delivery_fee"],
-        otp: json["data"]["otp"],
+        otp: json["data"]["otp"]?.toString(),
         deliveryMan: json["data"]["deliveryman"] != null
             ? DeliveryMan.fromJson(json["data"]["deliveryman"])
             : null,
@@ -129,8 +129,8 @@ class OrderActiveModel {
 
   factory OrderActiveModel.fromJsonWithoutData(Map<String, dynamic> json) {
     return OrderActiveModel(
-      id: json["id"] ?? 0,
-      userId: json["user_id"],
+      id: json["id"]?.toString() ?? "",
+      userId: json["user_id"]?.toString(),
       afterDeliveredImage: json["image_after_delivered"],
       totalPrice: json["total_price"],
       originPrice: json["origin_price"],
@@ -148,7 +148,7 @@ class OrderActiveModel {
       address: AddressModel.fromJson(json["address"]),
       deliveryType: json["delivery_type"],
       deliveryFee: json["delivery_fee"],
-      otp: json["otp"],
+      otp: json["otp"]?.toString(),
       serviceFee: json["service_fee"],
       deliveryMan: json["deliveryman"] != null
           ? DeliveryMan.fromJson(json["deliveryman"])
@@ -223,9 +223,9 @@ class Detail {
       this.stock,
       this.addons});
 
-  num? id;
-  num? orderId;
-  num? stockId;
+  String? id;
+  String? orderId;
+  String? stockId;
   num? originPrice;
   num? totalPrice;
   num? tax;
@@ -240,9 +240,9 @@ class Detail {
   List<Addons>? addons;
 
   factory Detail.fromJson(Map<String, dynamic> json) => Detail(
-        id: json["id"] ?? 0,
-        orderId: json["order_id"],
-        stockId: json["stock_id"],
+        id: json["id"]?.toString() ?? "",
+        orderId: json["order_id"]?.toString(),
+        stockId: json["stock_id"]?.toString(),
         originPrice: json["origin_price"],
         totalPrice: json["total_price"],
         tax: json["tax"],
@@ -299,7 +299,7 @@ class DeliveryMan {
       this.role,
       this.img});
 
-  int? id;
+  String? id;
   String? uuid;
   String? firstname;
   String? lastname;
@@ -314,7 +314,7 @@ class DeliveryMan {
 
   factory DeliveryMan.fromJson(Map<String, dynamic> json) {
     return DeliveryMan(
-      id: json["id"] ?? 0,
+      id: json["id"]?.toString() ?? "",
       uuid: json["uuid"] ?? "",
       firstname: json["firstname"] ?? "",
       lastname: json["lastname"] ?? "",
@@ -344,7 +344,7 @@ class DeliveryMan {
 }
 
 class CurrencyModel {
-  int? id;
+  String? id;
   String? symbol;
   String? title;
   bool? active;
@@ -352,7 +352,7 @@ class CurrencyModel {
   CurrencyModel({this.id, this.symbol, this.title, this.active});
 
   CurrencyModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['id']?.toString();
     symbol = json['symbol'];
     title = json['title'];
     active = json['active'];

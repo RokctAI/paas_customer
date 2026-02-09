@@ -19,7 +19,7 @@ import 'package:foodyman/presentation/theme/app_style.dart';
 import 'package:foodyman/presentation/components/buttons/custom_button.dart';
 
 class AutoOrderModal extends ConsumerStatefulWidget {
-  final int orderId;
+  final String orderId;
   final String time;
   final RepeatData? repeatData;
 
@@ -323,7 +323,7 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                                   .read(orderProvider.notifier)
                                   .showOrder(context, widget.orderId, true);
                               event.deleteAutoOrder(
-                                  orderId: widget.repeatData?.id ?? 0,
+                                  orderId: widget.repeatData?.id ?? "",
                                   context: context);
                             },
                           ),

@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 class RepeatData {
-  int? id;
-  int? orderId;
+  String? id;
+  String? orderId;
   String? from;
   String? to;
   String? createdAt;
@@ -24,8 +24,8 @@ class RepeatData {
   });
 
   RepeatData copyWith({
-    int? id,
-    int? orderId,
+    String? id,
+    String? orderId,
     String? from,
     String? to,
     String? createdAt,
@@ -51,8 +51,8 @@ class RepeatData {
   String toRawJson() => json.encode(toJson());
 
   factory RepeatData.fromJson(Map<String, dynamic> json) => RepeatData(
-    id: json["id"],
-    orderId: json["order_id"],
+    id: json["id"]?.toString(),
+    orderId: json["order_id"]?.toString(),
     from: json["from"],
     to: json["to"],
     createdAt: json["created_at"],

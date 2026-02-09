@@ -155,7 +155,7 @@ class AutoOrderNotifier extends StateNotifier<AutoOrderState> {
   }
 
   Future<void> startAutoOrder(
-      {required int orderId,
+      {required String orderId,
       required BuildContext context,
       VoidCallback? onSuccess}) async {
     final res = await ordersRepository.createAutoOrder(
@@ -237,7 +237,7 @@ class AutoOrderNotifier extends StateNotifier<AutoOrderState> {
        );
   }
 
-  Future<void> pauseAutoOrder(int autoOrderId, BuildContext context) async {
+  Future<void> pauseAutoOrder(String autoOrderId, BuildContext context) async {
     final res = await ordersRepository.pauseAutoOrder(autoOrderId);
     res.when(
       success: (_) {
@@ -249,7 +249,7 @@ class AutoOrderNotifier extends StateNotifier<AutoOrderState> {
     );
   }
 
-  Future<void> resumeAutoOrder(int autoOrderId, BuildContext context) async {
+  Future<void> resumeAutoOrder(String autoOrderId, BuildContext context) async {
     final res = await ordersRepository.resumeAutoOrder(autoOrderId);
     res.when(
       success: (_) {
@@ -262,7 +262,7 @@ class AutoOrderNotifier extends StateNotifier<AutoOrderState> {
   }
 
   Future<void> deleteAutoOrder(
-      {required int orderId, required BuildContext context}) async {
+      {required String orderId, required BuildContext context}) async {
     final res = await ordersRepository.deleteAutoOrder(orderId);
 
     res.when(

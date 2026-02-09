@@ -232,7 +232,7 @@ class _MainPageState extends State<MainPage> {
           ShopRoute(
            shopId: link.pathSegments.last,
             cartId: link.queryParameters['group'],
-            ownerId: int.tryParse(link.queryParameters['owner_id'] ?? ''),
+            ownerId: link.queryParameters['owner_id'] ?? '',
           ),
         );
       } else if (!link.queryParameters.keys.contains("product") &&
@@ -269,7 +269,7 @@ class _MainPageState extends State<MainPage> {
         ShopRoute(
          shopId: deepLink?.pathSegments.last ?? '',
           cartId: deepLink?.queryParameters['group'],
-          ownerId: int.tryParse(deepLink?.queryParameters['owner_id'] ?? ""),
+          ownerId: deepLink?.queryParameters['owner_id'] ?? "",
         ),
       );
     } else if (!(deepLink?.queryParameters.keys.contains("product") ?? false) &&

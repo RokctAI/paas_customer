@@ -47,7 +47,7 @@ class _GroupOrderPageState extends ConsumerState<GroupOrderScreen> {
           isShowLoading: false,
           userUuid: ref.watch(shopProvider).userUuid,
           cartId: widget.cartId,
-          shopId: (widget.shop.id ?? 0).toString());
+          shopId: (widget.shop.id ?? "").toString());
       ref.read(shopOrderProvider.notifier).generateShareLink(
           widget.shop.translation?.title ?? "",
           widget.shop.logoImg ?? "",
@@ -58,7 +58,7 @@ class _GroupOrderPageState extends ConsumerState<GroupOrderScreen> {
       ref.read(shopOrderProvider.notifier).getCart(context, () {},
           isShowLoading: false,
           cartId: widget.cartId,
-          shopId: (widget.shop.id ?? 0).toString(),
+          shopId: (widget.shop.id ?? "").toString(),
           userUuid: ref.watch(shopProvider).userUuid);
     });
   }

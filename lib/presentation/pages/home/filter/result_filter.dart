@@ -21,7 +21,7 @@ import '../shimmer/all_shop_shimmer.dart';
 
 @RoutePage()
 class ResultFilterPage extends ConsumerStatefulWidget {
-  final int categoryId;
+  final String categoryId;
 
   const ResultFilterPage({
     super.key,

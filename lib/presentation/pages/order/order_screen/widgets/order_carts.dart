@@ -79,7 +79,7 @@ class _OrderCartsState extends State<OrderCarts> {
                                                 .getCalculate(
                                                     isLoading: false,
                                                     context: context,
-                                                    cartId: stateCart?.id ?? 0,
+                                                    cartId: stateCart?.id ?? "",
                                                     long: widget.long,
                                                     lat: widget.lat,
                                                     type:
@@ -102,7 +102,7 @@ class _OrderCartsState extends State<OrderCarts> {
                                                 .getCalculate(
                                                   isLoading: false,
                                                   context: context,
-                                                  cartId: stateCart?.id ?? 0,
+                                                  cartId: stateCart?.id ?? "",
                                                   long: widget.long,
                                                   lat: widget.lat,
                                                   type: widget.tabBarIndex == 0
@@ -194,7 +194,7 @@ class _OrderCartsState extends State<OrderCarts> {
                                   ref.read(orderProvider.notifier).getCalculate(
                                       isLoading: false,
                                       context: context,
-                                      cartId: stateCart?.id ?? 0,
+                                      cartId: stateCart?.id ?? "",
                                       long: widget.long,
                                       lat: widget.lat,
                                       type: widget.tabBarIndex == 0
@@ -212,7 +212,7 @@ class _OrderCartsState extends State<OrderCarts> {
                                   ref.read(orderProvider.notifier).getCalculate(
                                         isLoading: false,
                                         context: context,
-                                        cartId: stateCart?.id ?? 0,
+                                        cartId: stateCart?.id ?? "",
                                         long: widget.long,
                                         lat: widget.lat,
                                         type: widget.tabBarIndex == 0

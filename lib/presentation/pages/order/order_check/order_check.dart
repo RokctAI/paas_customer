@@ -176,11 +176,11 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
         phone: state.phoneNumber ?? LocalStorage.getUser()?.phone,
         email: LocalStorage.getUser()?.email,
         notes: state.notes,
-        cartId: stateOrderShop.cart?.id ?? 0,
-        shopId: int.tryParse(state.shopData?.id?.toString() ?? '') ?? 0,
+        cartId: stateOrderShop.cart?.id ?? "",
+        shopId: state.shopData?.id ?? "",
         coupon: state.promoCode,
         deliveryFee: state.calculateData?.deliveryFee ?? 0,
-        deliveryPointId: int.tryParse(state.selectedDeliveryPoint?.id?.toString() ?? '') ?? 0,
+        deliveryPointId: state.selectedDeliveryPoint?.id?.toString() ?? "",
         deliveryType: state.tabIndex == 0
             ? DeliveryTypeEnum.delivery
             : (state.tabIndex == 1
@@ -324,7 +324,7 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
                             .deleteCart(context);
                         ref.read(orderProvider.notifier).repeatOrder(
                           context: context,
-                          shopId: 0,
+                          shopId: "",
                           listOfProduct:
                           ref.watch(orderProvider).orderData?.details ??
                               [],
@@ -403,7 +403,7 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
                       context: context,
                       modal: AutoOrderModal(
                         repeatData: state.orderData?.repeat,
-                        orderId: state.orderData?.id ?? 0,
+                        orderId: state.orderData?.id ?? "",
                         time: TimeService.timeFormat(
                             state.orderData?.createdAt ?? DateTime.now()),
                       ),
@@ -428,7 +428,7 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
                   );
                 },
                 cancelOrder: () {
-                  event.cancelOrder(context, state.orderData?.id ?? 0, () {
+                  event.cancelOrder(context, state.orderData?.id ?? "", () {
                     ref
                         .read(ordersListProvider.notifier)
                         .fetchActiveOrders(context);
@@ -480,7 +480,7 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
                 repeatOrder: () {
                   event.repeatOrder(
                     context: context,
-                    shopId: ref.watch(shopOrderProvider).cart?.shopId ?? 0,
+                    shopId: ref.watch(shopOrderProvider).cart?.shopId ?? "",
                     listOfProduct: state.orderData?.details ?? [],
                     onSuccess: () {
                       ref.read(shopOrderProvider.notifier).getCart(context, () {

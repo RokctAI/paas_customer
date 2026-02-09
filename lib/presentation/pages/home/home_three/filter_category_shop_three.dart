@@ -60,7 +60,7 @@ class FilterCategoryShopThree extends StatelessWidget {
                                       : state
                                           .categories[state.selectIndexCategory]
                                           .id) ??
-                                  0,
+                                  "",
                             ),
                             isDarkMode: false,
                             isDrag: false,

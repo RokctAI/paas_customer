@@ -809,8 +809,8 @@ class DiscountData {
   });
 
   DiscountData copyWith({
-    int? id,
-    int? shopId,
+    String? id,
+    String? shopId,
     String? type,
     num? price,
     DateTime? start,
@@ -834,8 +834,8 @@ class DiscountData {
       );
 
   factory DiscountData.fromJson(Map<String, dynamic> json) => DiscountData(
-        id: json["id"],
-        shopId: json["shop_id"],
+        id: json["id"]?.toString(),
+        shopId: json["shop_id"]?.toString(),
         type: json["type"],
         price: json["price"],
         start: json["start"] == null ? null : DateTime.parse(json["start"]),

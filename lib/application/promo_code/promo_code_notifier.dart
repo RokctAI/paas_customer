@@ -15,7 +15,7 @@ class PromoCodeNotifier extends StateNotifier<PromoCodeState> {
     state = state.copyWith(isActive: isActive);
   }
 
-  Future<void> checkPromoCode(BuildContext context,String promoCode,int shopId) async {
+  Future<void> checkPromoCode(BuildContext context,String promoCode,String shopId) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(

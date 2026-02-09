@@ -498,7 +498,7 @@ class ShopNotifier extends StateNotifier<ShopState> {
   }
 
 // Modified fetchBrands method - only used as a fallback
-  Future<void> fetchBrands(BuildContext context, int categoryId) async {
+  Future<void> fetchBrands(BuildContext context, {String? categoryId, String? shopId}) async {
     // If we already have brands, don't fetch again
     if (state.brands != null && state.brands!.isNotEmpty) {
       return;
@@ -507,7 +507,7 @@ class ShopNotifier extends StateNotifier<ShopState> {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isBrandsLoading: true);
-      final response = await _brandsRepository.getAllBrands(categoryId: categoryId);
+      final response = await _brandsRepository.getAllBrands(categoryId: categoryId, shopId: shopId);
       response.when(
         success: (data) {
           state = state.copyWith(
@@ -536,7 +536,7 @@ class ShopNotifier extends StateNotifier<ShopState> {
 
   // ignore: unused_element
   Future<void> _fetchBrandForCategory(
-      BuildContext context, int page, int categoryId) async {
+      BuildContext context, int page, String categoryId) async {
     try {
       final result = await _brandsRepository.getAllBrands(
         categoryId: categoryId,
@@ -618,7 +618,7 @@ class ShopNotifier extends StateNotifier<ShopState> {
   // }
 
   Future<void> fetchProductsByCategory(
-      BuildContext context, String shopId, int categoryId) async {
+      BuildContext context, String shopId, String categoryId) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(
@@ -657,7 +657,7 @@ class ShopNotifier extends StateNotifier<ShopState> {
   }
 
   Future<void> fetchProductsByCategoryPage(
-      BuildContext context, String shopId, int categoryId,
+      BuildContext context, String shopId, String categoryId,
       {RefreshController? controller}) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {

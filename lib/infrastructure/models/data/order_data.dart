@@ -551,7 +551,7 @@ class DeliveryType {
 }
 
 class ProductNote {
-   int stockId;
+   String stockId;
    String comment;
 
   ProductNote({required this.stockId, required this.comment});

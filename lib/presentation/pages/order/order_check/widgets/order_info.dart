@@ -29,7 +29,7 @@ class OrderInfo extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  "#${AppHelpers.getTranslation(TrKeys.id)}${ref.read(orderProvider).orderData?.id ?? 0}",
+                  "#${AppHelpers.getTranslation(TrKeys.id)}${ref.read(orderProvider).orderData?.id ?? ""}",
                   style: AppStyle.interNormal(
                     size: 14,
                     color: AppStyle.textGrey,

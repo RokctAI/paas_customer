@@ -43,7 +43,7 @@ class UserRepository implements UserRepositoryFacade {
   @override
   Future<ApiResult<dynamic>> updateLocation({
     required AddressNewModel? address,
-    required int? addressId,
+    required String? addressId,
   }) async {
     try {
       final client = dioHttp.client(requireAuth: true);
@@ -64,7 +64,7 @@ class UserRepository implements UserRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<dynamic>> deleteAddress({required int id}) async {
+  Future<ApiResult<dynamic>> deleteAddress({required String id}) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
@@ -188,7 +188,7 @@ class UserRepository implements UserRepositoryFacade {
   }
 
   @override
-  Future<ApiResult> setActiveAddress({required int id}) async {
+  Future<ApiResult> setActiveAddress({required String id}) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(

@@ -59,11 +59,11 @@ class FilterCategoryShopThree extends StatelessWidget {
                             .categories[state.selectIndexCategory]
                             .children?[
                         state.selectIndexSubCategory]
-                            .id)
+                            .id?.toString())
                             : state
                             .categories[state.selectIndexCategory]
-                            .id) ??
-                            0,
+                            .id?.toString()) ??
+                            "",
                       ),
                       isDarkMode: false,
                       isDrag: false,

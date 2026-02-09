@@ -31,7 +31,7 @@ import 'widgets/order_status.dart';
 
 @RoutePage()
 class OrderProgressPage extends ConsumerStatefulWidget {
-  final num? orderId;
+  final String? orderId;
 
   const OrderProgressPage({
     super.key,
@@ -54,13 +54,13 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
           .read(orderProvider.notifier)
-          .showOrder(context, widget.orderId ?? 0, false);
+          .showOrder(context, widget.orderId ?? "", false);
       ref.read(paymentProvider.notifier).fetchPayments(context);
     });
     timer = Timer.periodic(const Duration(seconds: 120), (Timer t) {
       ref
           .read(orderProvider.notifier)
-          .showOrder(context, widget.orderId ?? 0, true);
+          .showOrder(context, widget.orderId ?? "", true);
     });
     super.initState();
   }
@@ -134,7 +134,7 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
         enablePullUp: false,
         controller: refreshController,
         onRefresh: () {
-          event.showOrder(context, state.orderData?.id ?? 0, true);
+          event.showOrder(context, state.orderData?.id ?? "", true);
           refreshController.refreshCompleted();
         },
         child: SingleChildScrollView(

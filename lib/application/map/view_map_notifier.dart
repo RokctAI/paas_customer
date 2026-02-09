@@ -74,7 +74,7 @@ class ViewMapNotifier extends StateNotifier<ViewMapState> {
     }
   }
 
-  updateLocation(BuildContext context, int? id,
+  updateLocation(BuildContext context, String? id,
       {VoidCallback? onSuccess}) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
@@ -109,7 +109,7 @@ class ViewMapNotifier extends StateNotifier<ViewMapState> {
   Future<void> checkDriverZone(
       {required BuildContext context,
       required LatLng location,
-      int? shopId}) async {
+      String? shopId}) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isLoading: true, isActive: false);

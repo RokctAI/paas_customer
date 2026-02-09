@@ -259,7 +259,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
 
   @override
   Future<ApiResult<GetCalculateModel>> getCalculate(
-      {required int cartId,
+      {required String cartId,
         required double lat,
         required double long,
         required DeliveryTypeEnum type,

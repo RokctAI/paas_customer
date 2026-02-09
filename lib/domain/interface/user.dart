@@ -11,11 +11,11 @@ abstract class UserRepositoryFacade {
   Future<ApiResult<dynamic>> saveLocation({required AddressNewModel? address});
 
   Future<ApiResult<dynamic>> updateLocation(
-      {required AddressNewModel? address, required int? addressId});
+      {required AddressNewModel? address, required String? addressId});
 
-  Future<ApiResult<dynamic>> setActiveAddress({required int id});
+  Future<ApiResult<dynamic>> setActiveAddress({required String id});
 
-  Future<ApiResult<dynamic>> deleteAddress({required int id});
+  Future<ApiResult<dynamic>> deleteAddress({required String id});
 
   Future<ApiResult<dynamic>> deleteAccount();
 

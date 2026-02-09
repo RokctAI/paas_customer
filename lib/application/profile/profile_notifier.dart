@@ -78,7 +78,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     state = state.copyWith(addressModel: data);
   }
 
-  setActiveAddress({int? id, required int index}) async {
+  setActiveAddress({String? id, required int index}) async {
     List<AddressNewModel> list = List.from(state.userData?.addresses ?? []);
     for (var element in list) {
       element.active = false;
@@ -86,15 +86,15 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     list[index].active = true;
     ProfileData newUser = state.userData!.copyWith(addresses: list);
     state = state.copyWith(userData: newUser);
-    _userRepository.setActiveAddress(id: id ?? 0);
+    _userRepository.setActiveAddress(id: id ?? "");
   }
 
-  deleteAddress({int? id, required int index}) async {
+  deleteAddress({String? id, required int index}) async {
     List<AddressNewModel> list = List.from(state.userData?.addresses ?? []);
     list.removeAt(index);
     ProfileData newUser = state.userData!.copyWith(addresses: list);
     state = state.copyWith(userData: newUser);
-    _userRepository.deleteAddress(id: id ?? 0);
+    _userRepository.deleteAddress(id: id ?? "");
   }
 
   setBgImage(String bgImage) {
@@ -350,7 +350,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     required String perKm,
     required AddressNewModel address,
     required String deliveryType,
-    required num categoryId,
+    required String categoryId,
   }) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {

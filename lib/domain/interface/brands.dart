@@ -9,7 +9,7 @@ abstract class BrandsRepositoryFacade {
   Future<ApiResult<SingleBrandResponse>> getSingleBrand(String uuid);
 
   Future<ApiResult<BrandsPaginateResponse>> getAllBrands({
-    int? categoryId,
+    String? categoryId,
     String? shopId,
   });
 }

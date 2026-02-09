@@ -549,7 +549,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
     state = state.copyWith(isDeleteLoading: true);
     if (connected) {
       final response =
-          await _cartRepository.deleteCart(cartId: state.cart?.id ?? 0);
+          await _cartRepository.deleteCart(cartId: state.cart?.id ?? "");
       response.when(
         success: (data) async {
           state = state.copyWith(isDeleteLoading: false, cart: null);
@@ -581,7 +581,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
     if (connected) {
       if (userId == null) {
         _cartRepository.deleteUser(
-            cartId: state.cart?.id ?? 0,
+            cartId: state.cart?.id ?? "",
             userId: state.cart?.userCarts?[index].uuid ?? "");
         Cart? cart = state.cart;
         List<UserCart>? list = cart?.userCarts;
@@ -592,7 +592,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
         if (context.mounted) {
           context.maybePop();
         }
-        _cartRepository.deleteUser(cartId: state.cart?.id ?? 0, userId: userId);
+        _cartRepository.deleteUser(cartId: state.cart?.id ?? "", userId: userId);
         state = state.copyWith(
           isStartGroup: false,
           cart: null,

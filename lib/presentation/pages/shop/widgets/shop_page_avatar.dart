@@ -176,7 +176,7 @@ class ShopPageAvatar extends StatelessWidget {
                           if (context.mounted) {
                             ref.read(shopOrderProvider.notifier).createCart(
                               context,
-                              (shop.id ?? 0),
+                              (shop.id ?? ""),
                             );
                           }
                         });
@@ -230,7 +230,7 @@ class ShopPageAvatar extends StatelessWidget {
             !isStartOrder
                 ? ref.read(shopOrderProvider.notifier).createCart(
               context,
-              shop.id ?? 0,
+              shop.id ?? "",
             )
                 : AppHelpers.showCustomModalBottomSheet(
               paddingTop: MediaQuery.paddingOf(context).top + 160.h,

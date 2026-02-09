@@ -85,11 +85,11 @@ class Data {
 
 class All {
   GlobalKey? key;
-  int? id;
+  String? id;
   String? uuid;
   String? type;
   int? input;
-  int? shopId;
+  String? shopId;
   String? img;
   bool? active;
   String? status;
@@ -113,12 +113,12 @@ class All {
   });
 
   All copyWith({
-    int? id,
+    String? id,
     GlobalKey? key,
     String? uuid,
     String? type,
     int? input,
-    int? shopId,
+    String? shopId,
     String? img,
     bool? active,
     String? status,
@@ -142,11 +142,11 @@ class All {
       );
 
   factory All.fromJson(Map<String, dynamic> json) => All(
-    id: json["id"],
+    id: json["id"]?.toString(),
     uuid: json["uuid"],
     type: json["type"],
     input: json["input"],
-    shopId: json["shop_id"],
+    shopId: json["shop_id"]?.toString(),
     img: json["img"],
     active: json["active"],
     status: json["status"],
@@ -181,11 +181,11 @@ class All {
 }
 
 class Product {
-  int? id;
+  String? id;
   String? uuid;
-  int? shopId;
-  int? categoryId;
-  int? brandId;
+  String? shopId;
+  String? categoryId;
+  String? brandId;
   String? status;
   bool? active;
   bool? addon;
@@ -218,11 +218,11 @@ class Product {
   });
 
   Product copyWith({
-    int? id,
+    String? id,
     String? uuid,
-    int? shopId,
-    int? categoryId,
-    int? brandId,
+    String? shopId,
+    String? categoryId,
+    String? brandId,
     String? status,
     bool? active,
     bool? addon,
@@ -256,11 +256,11 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      id: json["id"],
+      id: json["id"]?.toString(),
       uuid: json["uuid"],
-      shopId: json["shop_id"],
-      categoryId: json["category_id"],
-      brandId: json["brand_id"],
+      shopId: json["shop_id"]?.toString(),
+      categoryId: json["category_id"]?.toString(),
+      brandId: json["brand_id"]?.toString(),
       status: json["status"],
       active: json["active"],
       addon: json["addon"],
@@ -303,8 +303,8 @@ class Product {
 }
 
 class Stock {
-  int? id;
-  int? countableId;
+  String? id;
+  String? countableId;
   double? price;
   int? quantity;
   double? tax;
@@ -324,8 +324,8 @@ class Stock {
   });
 
   Stock copyWith({
-    int? id,
-    int? countableId,
+    String? id,
+    String? countableId,
     double? price,
     int? quantity,
     double? tax,
@@ -345,8 +345,8 @@ class Stock {
       );
 
   factory Stock.fromJson(Map<String, dynamic> json) => Stock(
-    id: json["id"],
-    countableId: json["countable_id"],
+    id: json["id"]?.toString(),
+    countableId: json["countable_id"]?.toString(),
     price: json["price"]?.toDouble(),
     quantity: json["quantity"],
     tax: json["tax"]?.toDouble(),

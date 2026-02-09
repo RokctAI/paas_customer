@@ -42,7 +42,7 @@ extension MyExtension1 on Iterable<Product> {
     }).toList();
   }
 
-  List<Product> category(int id) {
+  List<Product> category(String id) {
     return where((element) {
       return element.categoryId == id;
     }).toList();
@@ -51,7 +51,7 @@ extension MyExtension1 on Iterable<Product> {
 
 class ProductsList extends ConsumerStatefulWidget {
   final All? all;
-  final int? shopId;
+  final String? shopId;
   final String? cartId;
 
   const ProductsList({
@@ -80,7 +80,7 @@ class _ProductsListState extends ConsumerState<ProductsList> {
       if ((shopState.brands == null || shopState.brands!.isEmpty) &&
           widget.shopId != null) {
         // Use shop ID to get all brands at once instead of by category
-        ref.read(shopProvider.notifier).fetchBrands(context, widget.shopId!);
+        ref.read(shopProvider.notifier).fetchBrands(context, shopId: widget.shopId);
       }
     });
   }

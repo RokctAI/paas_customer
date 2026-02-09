@@ -42,8 +42,8 @@ class ProductCard extends ConsumerWidget {
     final String? title = product.translation?.title;
     final String? description = product.translation?.description;
     final String imageUrl = product.img ?? "";
-    final int? brandId = product.brandId;
-    final int? shopId = product.shopId;
+    final String? brandId = product.brandId;
+    final String? shopId = product.shopId;
 
     // Get brand information
     final BrandData? brand = BrandUtils.getBrandFromProduct(brandId, ref);
