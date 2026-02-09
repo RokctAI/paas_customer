@@ -12,8 +12,7 @@ final aboutProvider = FutureProvider<Map<String, dynamic>?>((ref) async {
       final data = jsonDecode(response.body);
       final translation = data['data']['translation'];
 
-      // Include the image URL in the returned data
-      final imgUrl = data['data']['img'] != null ? data['data']['img'] : null;
+      final imgUrl = data['data']['img'];
 
 
       return {
