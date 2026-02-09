@@ -32,7 +32,7 @@ class _CustomStatusBarState extends State<CustomStatusBar> {
   List<ConnectivityResult> _connectionStatus = [];
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   bool _isWifiEnabled = false;
-  bool _isHotspotEnabled = false;
+  final bool _isHotspotEnabled = false;
 
   @override
   void initState() {
