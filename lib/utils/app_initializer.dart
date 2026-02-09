@@ -34,15 +34,6 @@ class AppInitializer extends StatefulWidget {
 
   @override
   State<AppInitializer> createState() => _AppInitializerState();
-}
-
-class _AppInitializerState extends State<AppInitializer> {
-
-  @override
-  void initState() {
-    super.initState();
-    // You can perform additional setup here if needed
-  }
 
   static Future<void> _initializeRemoteConfigWithoutAPICallStatic(ProviderContainer providerContainer) async {
     // Use AppConstants.baseUrl as the site identifier (Tenant Site Name)
@@ -141,14 +132,6 @@ class _AppInitializerState extends State<AppInitializer> {
       final response = await http
           .get(Uri.parse('${AppConstants.baseUrl}/public/api/v1/rest/status'))
           .timeout(const Duration(seconds: 5));
-      // if (!mounted) return; // Removed this because we are in static context and not affecting UI state directly here
-      // But wait, the original code had `if (!mounted) return;`.
-      // This refers to the State object. 
-      // This static method cannot check if a widget is mounted.
-      // However, this method only updates a static variable `AppConstants.isMaintain`.
-      // So it doesn't strictly depend on the widget being mounted for safety,
-      // UNLESS the caller depends on it.
-      // Since `initializeApp` awaits this, and `AppConstants` is global, it s safe to update it even if the widget is disposed.
       
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -162,6 +145,16 @@ class _AppInitializerState extends State<AppInitializer> {
       AppConstants.isMaintain = true; // Set isMaintain to true if an exception occurs
     }
   }
+}
+
+class _AppInitializerState extends State<AppInitializer> {
+
+  @override
+  void initState() {
+    super.initState();
+    // You can perform additional setup here if needed
+  }
+
 
   @override
   Widget build(BuildContext context) {
