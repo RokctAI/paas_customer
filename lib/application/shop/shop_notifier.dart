@@ -538,8 +538,7 @@ class ShopNotifier extends StateNotifier<ShopState> {
   Future<void> _fetchBrandForCategory(
       BuildContext context, int page, int categoryId) async {
     try {
-      final result = await _productsRepository.getBrandForCategory(
-        page: page,
+      final result = await _brandsRepository.getAllBrands(
         categoryId: categoryId,
       );
       result.when(
