@@ -6,7 +6,7 @@ import 'package:foodyman/presentation/theme/theme.dart';
 
 
 class AdBadge extends StatelessWidget {
-  const AdBadge({Key? key}) : super(key: key);
+  const AdBadge({super.key});
 
   @override
   Widget build(BuildContext context) {
