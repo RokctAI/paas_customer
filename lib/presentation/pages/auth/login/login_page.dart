@@ -110,6 +110,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     });
   }
 
+  // ignore: unused_element
+  void _closeIntroPage() {
+    setState(() {
+      _showIntro = false;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
