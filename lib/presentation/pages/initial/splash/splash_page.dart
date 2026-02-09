@@ -160,9 +160,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white, // Ensure background color for dark theme
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
+      body: SizedBox.expand(
         child: Image.asset(
           "assets/images/splash.png",
           fit: BoxFit.fill,
