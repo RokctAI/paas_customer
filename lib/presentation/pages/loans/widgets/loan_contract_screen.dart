@@ -93,6 +93,7 @@ class _LoanContractScreenState extends ConsumerState<LoanContractScreen> {
       setState(() {
         _isLoading = false;
       });
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         'Failed to fetch loan contract',
@@ -133,6 +134,7 @@ class _LoanContractScreenState extends ConsumerState<LoanContractScreen> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         'Failed to accept contract',
@@ -172,6 +174,7 @@ class _LoanContractScreenState extends ConsumerState<LoanContractScreen> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         'Failed to decline contract',
@@ -206,6 +209,7 @@ class _LoanContractScreenState extends ConsumerState<LoanContractScreen> {
         },
       );
     } catch (e) {
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         'Failed to generate contract PDF',
