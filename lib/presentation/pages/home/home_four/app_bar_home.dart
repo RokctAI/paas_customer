@@ -13,10 +13,8 @@ import 'package:foodyman/presentation/components/app_bars/common_app_bar2.dart';
 import 'package:foodyman/presentation/components/sellect_address_screen.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
-import 'package:foodyman/application/shop_order/shop_order_provider.dart';
 import 'package:flutter/gestures.dart';
 import '../../../../app_constants.dart';
-import '../../../../application/orders_list/orders_list_provider.dart';
 
 class AppBarHome extends ConsumerStatefulWidget {
   final HomeState state;
