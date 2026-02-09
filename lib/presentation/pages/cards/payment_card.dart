@@ -90,6 +90,7 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
         _isLoading = false;
       });
 
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         'Failed to load saved cards',
@@ -149,6 +150,7 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
         _deletingCard = false;
       });
 
+      if (!mounted) return;
       AppHelpers.showCheckTopSnackBarInfo(
         context,
         'Failed to delete card',
