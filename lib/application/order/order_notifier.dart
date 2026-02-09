@@ -154,7 +154,9 @@ class OrderNotifier extends StateNotifier<OrderState> {
     List<ShopClosedDate> closedDays = state.shopData?.shopClosedDate ?? [];
     DateTime now = DateTime.now().add(Duration(days: i + 1));
     if (closedDays.any(
-        (e) => e.day?.withoutTime.compareTo(now.withoutTime) == 0)) return [];
+        (e) => e.day?.withoutTime.compareTo(now.withoutTime) == 0)) {
+      return [];
+    }
     List<String> times = [];
     final yesterday = DateFormat("EEEE")
         .format(now.subtract(const Duration(days: 1)))
