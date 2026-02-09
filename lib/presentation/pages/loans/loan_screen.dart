@@ -519,6 +519,47 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
     });
   }
 
+  // ignore: unused_element
+  Future<void> _fetchLoanTransactions() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final result = await _loansRepository.fetchLoanTransactions(1);
+
+      result.when(
+        success: (transactions) {
+          if (mounted) {
+            setState(() {
+              _loanTransactions = transactions;
+              _isLoading = false;
+            });
+          }
+        },
+        failure: (error, statusCode) {
+          if (mounted) {
+            setState(() {
+              _isLoading = false;
+              _loanTransactions = [];
+            });
+            AppHelpers.showCheckTopSnackBarInfo(context, error);
+          }
+        },
+      );
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _loanTransactions = [];
+        });
+        AppHelpers.showCheckTopSnackBarInfo(
+          context,
+          'Failed to load loan transactions',
+        );
+      }
+    }
+  }
 
   Future<void> _checkPendingContractLoans(List<dynamic> transactions) async {
     try {
