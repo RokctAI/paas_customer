@@ -533,31 +533,21 @@ class ShopNotifier extends StateNotifier<ShopState> {
     }
   }
 
-  // Helper method to fetch brands for a single category
-  Future<void> _fetchBrandForCategory(BuildContext context, int categoryId) async {
+
+  // ignore: unused_element
+  Future<void> _fetchBrandForCategory(
+      BuildContext context, int page, int categoryId) async {
     try {
-      final response = await _brandsRepository.getAllBrands(categoryId: categoryId);
-      response.when(
+      final result = await _productsRepository.getBrandForCategory(
+        page: page,
+        categoryId: categoryId,
+      );
+      result.when(
         success: (data) {
-          // More aggressive deduplication
-          final List<BrandData> newBrands = data.data ?? [];
-          final Set<int> existingBrandIds = {
-            ...state.brands?.map((b) => b.id).whereType<int>() ?? {}
-          };
-
-          final List<BrandData> brandsToAdd = newBrands.where((brand) =>
-          brand.id != null && !existingBrandIds.contains(brand.id)
-          ).toList();
-
-          state = state.copyWith(
-              brands: [
-                ...?state.brands,
-                ...brandsToAdd
-              ]
-          );
+          state = state.copyWith(brands: data.data ?? []);
         },
-        failure: (failure, status) {
-          debugPrint('Failed to fetch brands for category $categoryId: $failure');
+        failure: (error, statusCode) {
+          debugPrint(error);
         },
       );
     } catch (e) {
