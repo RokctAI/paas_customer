@@ -22,7 +22,7 @@ class UpComingList extends ConsumerStatefulWidget {
   const UpComingList({super.key});
 
   @override
-  State<UpComingList> createState() => _UpComingListState();
+  ConsumerState<UpComingList> createState() => _UpComingListState();
 }
 
 class _UpComingListState extends ConsumerState<UpComingList> {
