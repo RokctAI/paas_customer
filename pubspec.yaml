@@ -43,7 +43,7 @@ dependencies:
   flutter_svg: ^2.0.9
   share_plus: ^10.1.1
   card_swiper: ^3.0.1
-  sms_autofill: ^2.2.0
+  sms_autofill: ^2.4.1
   blur: ^4.0.0
   palette_generator: ^0.3.3
   url_launcher: ^6.3.0
