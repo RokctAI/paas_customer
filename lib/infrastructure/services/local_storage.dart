@@ -83,20 +83,12 @@ abstract class LocalStorage {
   static void deleteSearchList() =>
       _preferences?.remove(StorageKeys.keySearchStores);
 
-  static Future<void> setSavedShopsList(List<int> ids) async {
-    final List<String> idsStrings = ids.map((e) => e.toString()).toList();
-    await _preferences?.setStringList(StorageKeys.keySavedStores, idsStrings);
+  static Future<void> setSavedShopsList(List<String> ids) async {
+    await _preferences?.setStringList(StorageKeys.keySavedStores, ids);
   }
 
-  static List<int> getSavedShopsList() {
-    final List<String> strings =
-        _preferences?.getStringList(StorageKeys.keySavedStores) ?? [];
-    if (strings.isNotEmpty) {
-      final List<int> ids = strings.map((e) => int.parse(e)).toList();
-      return ids;
-    } else {
-      return [];
-    }
+  static List<String> getSavedShopsList() {
+    return _preferences?.getStringList(StorageKeys.keySavedStores) ?? [];
   }
 
   static void deleteSavedShopsList() =>

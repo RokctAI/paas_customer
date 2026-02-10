@@ -183,7 +183,7 @@ class _MainPageState extends State<MainPage> {
         if (!mounted) return;
         context.router.popUntilRoot();
         context.pushRoute(
-          OrderProgressRoute(orderId: data.id),
+          OrderProgressRoute(orderId: data.id?.toString()),
         );
       }
     });
@@ -212,7 +212,7 @@ class _MainPageState extends State<MainPage> {
               if (!mounted) return;
               context.pushRoute(
                 OrderProgressRoute(
-                  orderId: data.id,
+                  orderId: data.id?.toString(),
                 ),
               );
             });

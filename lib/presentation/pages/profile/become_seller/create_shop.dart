@@ -352,7 +352,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                           perKm: pricePerKm.text,
                                           address: data,
                                           deliveryType: value,
-                                          categoryId: 0);
+                                          categoryId: "");
                                     },
                                   ),
                                 )

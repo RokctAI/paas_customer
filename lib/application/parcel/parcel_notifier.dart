@@ -30,7 +30,7 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isButtonLoading: true);
-      final response = await _parcelRepository.addReview(state.parcel?.id ?? 0,
+      final response = await _parcelRepository.addReview((state.parcel?.id ?? "").toString(),
           rating: rating, comment: comment);
       response.when(
         success: (data) async {
@@ -95,7 +95,7 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
     if (connected) {
       state = state.copyWith(isLoading: true, error: false);
       final response = await _parcelRepository.getCalculate(
-          typeId: state.types[state.selectType]?.id ?? 0,
+          typeId: state.types[state.selectType]?.id ?? "",
           from: state.locationFrom ?? LocationModel(),
           to: state.locationTo ?? LocationModel());
       response.when(
@@ -147,7 +147,7 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
     if (connected) {
       state = state.copyWith(isLoading: true);
       final response = await _parcelRepository.orderParcel(
-        typeId: state.types[state.selectType]?.id ?? 0,
+        typeId: state.types[state.selectType]?.id ?? "",
         from: state.locationFrom ?? LocationModel(),
         to: state.locationTo ?? LocationModel(),
         fromTitle: state.addressFrom ?? "",
@@ -171,9 +171,8 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
       response.when(
         success: (data) async {
           state = state.copyWith(isLoading: false);
-          int id = state.selectPayment?.id ??
-              LocalStorage.getSelectedCurrency()?.id ??
-              0;
+          String id = state.selectPayment?.id ??
+              (LocalStorage.getSelectedCurrency()?.id ?? "").toString();
           switch (state.selectPayment?.tag) {
             case 'cash':
             case 'wallet':
@@ -188,7 +187,7 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
               await makePayment(
                 context,
                 state.selectPayment?.tag ?? 'cash',
-                data,
+                data.toString(),
               );
               break;
           }
@@ -211,10 +210,10 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
   Future<void> makePayment(
     BuildContext context,
     String name,
-    int? orderId,
+    String? orderId,
   ) async {
     try {
-      final response = await _parcelRepository.process(orderId ?? 0, name);
+      final response = await _parcelRepository.process((orderId ?? "").toString(), name);
       response.when(
         success: (data) async {
           // ignore: deprecated_member_use
@@ -294,7 +293,7 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
   }
 
   Future<void> showParcel(
-      BuildContext context, num orderId, bool isRefresh) async {
+      BuildContext context, String orderId, bool isRefresh) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       if (!isRefresh) {

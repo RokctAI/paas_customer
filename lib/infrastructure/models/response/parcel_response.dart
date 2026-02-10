@@ -40,7 +40,7 @@ class ParcelTypeResponse {
 }
 
 class TypeModel {
-  int? id;
+  String? id;
   String? type;
   String? img;
   num? minWidth;
@@ -77,7 +77,7 @@ class TypeModel {
   });
 
   TypeModel copyWith({
-    int? id,
+    String? id,
     String? type,
     String? img,
     num? minWidth,
@@ -114,7 +114,7 @@ class TypeModel {
       );
 
   factory TypeModel.fromJson(Map<String, dynamic> json) => TypeModel(
-    id: json["id"],
+    id: json["id"]?.toString(),
     type: json["type"],
     img: json["img"],
     minWidth: json["min_width"],
@@ -155,7 +155,7 @@ class TypeModel {
 }
 
 class Option {
-  int? id;
+  String? id;
   DateTime? createdAt;
   DateTime? updatedAt;
   Translation? translation;
@@ -168,7 +168,7 @@ class Option {
   });
 
   Option copyWith({
-    int? id,
+    String? id,
     DateTime? createdAt,
     DateTime? updatedAt,
     Translation? translation,
@@ -181,7 +181,7 @@ class Option {
       );
 
   factory Option.fromJson(Map<String, dynamic> json) => Option(
-    id: json["id"],
+    id: json["id"]?.toString(),
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
     translation: json["translation"] == null ? null : Translation.fromJson(json["translation"]),

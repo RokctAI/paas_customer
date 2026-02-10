@@ -7,13 +7,13 @@ abstract class ParcelRepositoryFacade {
   Future<ApiResult<ParcelTypeResponse>> getTypes();
 
   Future<ApiResult<ParcelCalculateResponse>> getCalculate({
-    required int typeId,
+    required String typeId,
     required LocationModel from,
     required LocationModel to,
   });
 
   Future<ApiResult> orderParcel(
-      {required int typeId,
+      {required String typeId,
         required LocationModel from,
         required String fromTitle,
         required LocationModel to,
@@ -39,21 +39,20 @@ abstract class ParcelRepositoryFacade {
 
   Future<ApiResult<ParcelPaginateResponse>> getHistoryParcel(int page);
 
-  Future<ApiResult<ParcelOrder>> getSingleParcel(num orderId);
+  Future<ApiResult<ParcelOrder>> getSingleParcel(String orderId);
 
 
   Future<ApiResult<void>> addReview(
-      num orderId, {
+      String orderId, {
         required double rating,
         required String comment,
       });
 
   Future<ApiResult<String>> process(
-      num orderId,String name);
+      String orderId,String name);
 
   Future<ApiResult<TransactionsResponse>> createTransaction({
-    required int orderId,
-    required int paymentId,
+    required String orderId,
+    required String paymentId,
   });
 }
-

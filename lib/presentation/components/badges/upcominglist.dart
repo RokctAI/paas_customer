@@ -112,7 +112,7 @@ class _UpComingListState extends ConsumerState<UpComingList> {
       onTap: () {
         context.pushRoute(
           OrderProgressRoute(
-            orderId: (order.id ?? 0),
+            orderId: (order.id ?? ""),
           ),
         );
       },

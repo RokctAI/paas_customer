@@ -23,7 +23,7 @@ import 'package:foodyman/presentation/components/sellect_address_screen.dart';
 class OrderDelivery extends StatefulWidget {
   final ValueChanged<bool> onChange;
   final VoidCallback getLocation;
-  final int shopId;
+  final String shopId;
 
   const OrderDelivery({
     super.key,

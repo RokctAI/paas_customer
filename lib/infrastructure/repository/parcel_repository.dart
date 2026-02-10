@@ -11,7 +11,7 @@ import 'package:foodyman/domain/handlers/handlers.dart';
 class ParcelRepository implements ParcelRepositoryFacade {
   @override
   Future<ApiResult<void>> addReview(
-    num orderId, {
+    String orderId, {
     required double rating,
     required String comment,
   }) async {
@@ -55,7 +55,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
 
   @override
   Future<ApiResult<ParcelCalculateResponse>> getCalculate({
-    required int typeId,
+    required String typeId,
     required LocationModel from,
     required LocationModel to,
   }) async {
@@ -87,7 +87,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
 
   @override
   Future<ApiResult> orderParcel(
-      {required int typeId,
+      {required String typeId,
       required LocationModel from,
       required String fromTitle,
       required LocationModel to,
@@ -215,7 +215,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<ParcelOrder>> getSingleParcel(num orderId) async {
+  Future<ApiResult<ParcelOrder>> getSingleParcel(String orderId) async {
     final data = {
       if (LocalStorage.getSelectedCurrency() != null)
         'currency_id': LocalStorage.getSelectedCurrency()?.id,
@@ -240,7 +240,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<String>> process(num orderId, String name) async {
+  Future<ApiResult<String>> process(String orderId, String name) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       var res = await client.get(
@@ -258,8 +258,8 @@ class ParcelRepository implements ParcelRepositoryFacade {
 
   @override
   Future<ApiResult<TransactionsResponse>> createTransaction({
-    required int orderId,
-    required int paymentId,
+    required String orderId,
+    required String paymentId,
   }) async {
     final data = {'payment_sys_id': paymentId};
     try {

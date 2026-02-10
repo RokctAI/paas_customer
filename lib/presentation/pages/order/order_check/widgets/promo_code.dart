@@ -139,7 +139,7 @@ class _PromoCodeState extends ConsumerState<PromoCodeScreen> {
                           ref.read(orderProvider.notifier).getCalculate(
                               context: context,
                               isLoading: false,
-                              cartId: ref.read(shopOrderProvider).cart?.id ?? 0,
+                              cartId: ref.read(shopOrderProvider).cart?.id ?? "",
                               long: LocalStorage
                                       .getAddressSelected()
                                       ?.location

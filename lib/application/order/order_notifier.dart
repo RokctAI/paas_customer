@@ -803,7 +803,7 @@ class OrderNotifier extends StateNotifier<OrderState> {
     if (connected) {
       state = state.copyWith(isButtonLoading: true);
       final response = await _orderRepository.addReview(
-          state.orderData?.id ?? 0,
+          (state.orderData?.id ?? "").toString(),
           rating: rating,
           comment: comment);
       response.when(

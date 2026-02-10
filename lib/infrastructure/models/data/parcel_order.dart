@@ -7,8 +7,8 @@ import 'package:foodyman/infrastructure/models/data/user.dart';
 import 'package:foodyman/infrastructure/models/response/parcel_response.dart';
 
 class ParcelOrder {
-  int? id;
-  int? userId;
+  String? id;
+  String? userId;
   num? totalPrice;
   num? rate;
   String? status;
@@ -17,7 +17,7 @@ class ParcelOrder {
   String? note;
   Address? addressFrom;
   Address? addressTo;
-  int? typeId;
+  String? typeId;
   num? deliveryFee;
   DateTime? deliveryDate;
   String? deliveryTime;
@@ -64,8 +64,8 @@ class ParcelOrder {
   });
 
   ParcelOrder copyWith({
-    int? id,
-    int? userId,
+    String? id,
+    String? userId,
     num? totalPrice,
     num? rate,
     String? status,
@@ -74,7 +74,7 @@ class ParcelOrder {
     String? usernameTo,
     Address? addressFrom,
     Address? addressTo,
-    int? typeId,
+    String? typeId,
     num? deliveryFee,
     DateTime? deliveryDate,
     String? deliveryTime,
@@ -122,8 +122,8 @@ class ParcelOrder {
 
   factory ParcelOrder.fromJson(Map<String, dynamic> json) {
     return ParcelOrder(
-      id: json["id"],
-      userId: json["user_id"],
+      id: json["id"]?.toString(),
+      userId: json["userId"]?.toString() ?? json["user_id"]?.toString(),
       totalPrice: json["total_price"],
       rate: json["rate"],
       status: json["status"],
@@ -138,7 +138,7 @@ class ParcelOrder {
           : Address.fromJson(json["address_to"]),
       review:
           json["review"] == null ? null : ReviewData.fromJson(json["review"]),
-      typeId: json["type_id"],
+      typeId: json["type_id"]?.toString(),
       deliveryFee: json["delivery_fee"],
       deliveryDate: json["delivery_date"] == null
           ? null
@@ -229,7 +229,7 @@ class Address {
 }
 
 class Currency {
-  int? id;
+  String? id;
   String? symbol;
   String? title;
   num? rate;
@@ -252,7 +252,7 @@ class Currency {
   });
 
   Currency copyWith({
-    int? id,
+    String? id,
     String? symbol,
     String? title,
     num? rate,
@@ -275,7 +275,7 @@ class Currency {
       );
 
   factory Currency.fromJson(Map<String, dynamic> json) => Currency(
-        id: json["id"],
+        id: json["id"]?.toString(),
         symbol: json["symbol"],
         title: json["title"],
         rate: json["rate"],

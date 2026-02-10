@@ -36,7 +36,7 @@ class OrdersItem extends StatelessWidget {
       onTap: () {
         context.pushRoute(
           OrderProgressRoute(
-            orderId: isRefund ? (refund?.order?.id ?? 0) : (order?.id ?? 0),
+            orderId: isRefund ? (refund?.order?.id ?? "") : (order?.id ?? ""),
           ),
         );
       },
@@ -172,7 +172,7 @@ class OrdersItem extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "№${order?.id.toString() ?? "0"} • ${order?.deliveryType ?? ""} • ",
+                        "№${order?.id ?? ""} • ${order?.deliveryType ?? ""} • ",
                         style: AppStyle.interRegular(
                           size: 14,
                         ),
@@ -224,7 +224,7 @@ class OrdersItem extends StatelessWidget {
               onRightTap: () {
                 context.pushRoute(
                   OrderProgressRoute(
-                    orderId: isRefund ? (refund?.order?.id ?? 0) : (order?.id ?? 0),
+                    orderId: isRefund ? (refund?.order?.id ?? "") : (order?.id ?? ""),
                   ),
                 );
               },

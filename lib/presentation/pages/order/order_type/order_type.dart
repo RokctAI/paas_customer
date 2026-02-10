@@ -13,7 +13,7 @@ class OrderType extends StatefulWidget {
   final ValueChanged<bool> onChange;
   final VoidCallback getLocation;
   final TabController tabController;
-  final int shopId;
+  final String shopId;
   final bool sendUser;
 
   const OrderType({

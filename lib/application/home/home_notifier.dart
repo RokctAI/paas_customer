@@ -1058,7 +1058,7 @@ class HomeNotifier extends StateNotifier<HomeState> {
             final List<ProductData> products = data.data ?? [];
 
             // Step 1: Extract all brand IDs from the products
-            final Set<int> brandIds = {};
+            final Set<String> brandIds = {};
             for (final product in products) {
               if (product.brandId != null) {
                 brandIds.add(product.brandId!);
@@ -1066,10 +1066,10 @@ class HomeNotifier extends StateNotifier<HomeState> {
             }
 
             // Step 2: Get existing cached brands
-            final Set<int> cachedBrandIds = state.brands.map((b) => b.id).whereType<int>().toSet();
+            final Set<String> cachedBrandIds = state.brands.map((b) => b.id).whereType<String>().toSet();
 
             // Step 3: Determine which brands we need to fetch
-            final Set<int> missingBrandIds = brandIds.difference(cachedBrandIds);
+            final Set<String> missingBrandIds = brandIds.difference(cachedBrandIds);
 
             // Step 4: Prefetch all missing brands before updating the UI
             List<BrandData> newBrands = [];
