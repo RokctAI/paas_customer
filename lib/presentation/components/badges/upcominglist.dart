@@ -22,7 +22,7 @@ class UpComingList extends ConsumerStatefulWidget {
   const UpComingList({super.key});
 
   @override
-  _UpComingListState createState() => _UpComingListState();
+  State<UpComingList> createState() => _UpComingListState();
 }
 
 class _UpComingListState extends ConsumerState<UpComingList> {
@@ -242,7 +242,7 @@ class ETADisplay extends StatefulWidget {
   const ETADisplay({super.key, required this.order, required this.shopData});
 
   @override
-  _ETADisplayState createState() => _ETADisplayState();
+  State<ETADisplay> createState() => _ETADisplayState();
 }
 
 class _ETADisplayState extends State<ETADisplay> {

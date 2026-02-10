@@ -66,7 +66,7 @@ class OrderBodyData {
       if (notes.isNotEmpty)
         "notes": {
           for (int i = 0; i < notes.length; i++)
-            "${notes[i].stockId}": notes[i].comment
+            notes[i].stockId: notes[i].comment
         }
     };
   }

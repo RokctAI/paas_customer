@@ -11,11 +11,11 @@ class OrderBadge extends StatelessWidget {
   final Color? textColor;
 
   const OrderBadge({
-    Key? key, // Add key parameter
+    super.key, // Add key parameter
     // this.imageColor,
     this.containerColor,
     this.textColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

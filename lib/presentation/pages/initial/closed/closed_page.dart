@@ -14,7 +14,7 @@ import 'package:foodyman/presentation/theme/theme.dart';
 
 @RoutePage()
 class ClosedPage extends ConsumerStatefulWidget {
-  const ClosedPage({Key? key}) : super(key: key);
+  const ClosedPage({super.key});
 
   @override
   ConsumerState<ClosedPage> createState() => _ClosedPageState();

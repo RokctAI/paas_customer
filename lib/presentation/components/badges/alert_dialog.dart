@@ -4,7 +4,7 @@ import '../../../infrastructure/services/tr_keys.dart';
 import '../../../presentation/theme/theme.dart'; // Import your theme file
 
 class ComingSoonDialog extends StatelessWidget {
-  const ComingSoonDialog({Key? key}) : super(key: key);
+  const ComingSoonDialog({super.key});
 
   @override
   Widget build(BuildContext context) {

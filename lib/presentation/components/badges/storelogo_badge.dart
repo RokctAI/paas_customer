@@ -34,7 +34,7 @@ class ShopBadge extends StatefulWidget {
   });
 
   @override
-  _ShopBadgeState createState() => _ShopBadgeState();
+  State<ShopBadge> createState() => _ShopBadgeState();
 }
 
 class _ShopBadgeState extends State<ShopBadge> with SingleTickerProviderStateMixin {

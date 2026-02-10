@@ -14,7 +14,7 @@ class EmptyBadge extends StatelessWidget {
   final GestureTapCallback? onLinkTap;
 
   EmptyBadge({
-    Key? key,
+    super.key,
     this.imagePath = 'assets/lottie/notification_empty.json',
     String? titleText,
     String? subtitleText,
@@ -22,8 +22,7 @@ class EmptyBadge extends StatelessWidget {
     this.onLinkTap,
   }) :
         titleText = titleText ?? AppHelpers.getTranslation(TrKeys.nothingFound),
-        subtitleText = subtitleText ?? AppHelpers.getTranslation(TrKeys.trySearchingAgain),
-        super(key: key);
+        subtitleText = subtitleText ?? AppHelpers.getTranslation(TrKeys.trySearchingAgain);
 
   @override
   Widget build(BuildContext context) {

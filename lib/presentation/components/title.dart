@@ -14,13 +14,12 @@ class TitleWidget extends StatelessWidget {
   final bool isSale;
 
   const TitleWidget(
-      {Key? key,
+      {super.key,
         required this.title,
         this.subTitle,
         this.onTap,
         required this.titleColor,
-        this.isSale = false})
-      : super(key: key);
+        this.isSale = false});
 
   @override
   Widget build(BuildContext context) {

@@ -22,7 +22,7 @@ class CustomTextFormField extends StatelessWidget {
   final double radius;
 
   const CustomTextFormField({
-    Key? key,
+    super.key,
     this.suffixIcon,
     this.prefixIcon,
     this.onTap,
@@ -38,7 +38,7 @@ class CustomTextFormField extends StatelessWidget {
     this.radius = 16,
     this.autoFocus = false,
     this.inputFormatters,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -18,7 +18,7 @@ class CustomNetworkImage extends StatelessWidget {
   final String? name;
 
   const CustomNetworkImage({
-    Key? key,
+    super.key,
     required this.url,
      this.height,
      this.width,
@@ -27,7 +27,7 @@ class CustomNetworkImage extends StatelessWidget {
     this.color, // New color parameter
     this.bgColor = AppStyle.mainBack,
     this.profile = false, this.name,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
