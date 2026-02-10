@@ -84,14 +84,14 @@ base64 -i .env/production.env | pbcopy
 Paste the resulting string into the corresponding GitHub Secret value.
 
 ### 🏗️ Multi-Tenant Build Support (build_* branches)
-You can trigger dynamic builds for specific clients by creating a branch following the `build_<client>-*` pattern (e.g., `build_wrapzo-v1.0`).
+You can trigger dynamic builds for specific clients by creating a branch following the `build_<client>-*` pattern (e.g., `build_clientname-v1.0`).
 
 The workflow will automatically look for client-specific secrets:
 *   `GOOGLE_SERVICES_JSON_<CLIENT>`
 *   `IOS_GOOGLE_SERVICE_INFO_PLIST_<CLIENT>`
 *   `PRODUCTION_ENV_<CLIENT>`
 
-If found, these will take precedence over the default secrets. The release candidate will also be tagged with the client suffix (e.g., `v1.0.0-wrapzo`).
+If found, these will take precedence over the default secrets. The release candidate will also be tagged with the client suffix (e.g., `v1.0.0-clientname`).
 
 ### 📦 Change App Package
 
