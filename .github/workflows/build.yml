@@ -89,12 +89,12 @@ jobs:
       # Deployment Configuration (Immediate release on Main)
       release_strategy: 'immediate'
       # Environment configuration
-      node-version: ${{ inputs.node-version }}
-      python-version: ${{ inputs.python-version }}
-      mariadb-version: ${{ inputs.mariadb-version }}
-      postgres-version: ${{ inputs.postgres-version }}
-      db-type: ${{ inputs.db-type }}
-      flutter-channel: ${{ inputs.flutter-channel }}
-      java-version: ${{ inputs.java-version }}
+      node-version: ${{ inputs.node-version || '24' }}
+      python-version: ${{ inputs.python-version || '3.14' }}
+      mariadb-version: ${{ inputs.mariadb-version || '10.6' }}
+      postgres-version: ${{ inputs.postgres-version || '15' }}
+      db-type: ${{ inputs.db-type || 'mariadb' }}
+      flutter-channel: ${{ inputs.flutter-channel || 'stable' }}
+      java-version: ${{ inputs.java-version || '17' }}
       version_format: ${{ inputs.version_format || '##.##.##' }}
     secrets: inherit
