@@ -633,7 +633,7 @@ class ParcelRouteArgs {
 class ParcelProgressRoute extends PageRouteInfo<ParcelProgressRouteArgs> {
   ParcelProgressRoute({
     Key? key,
-    num? parcelId,
+    String? parcelId,
     List<PageRouteInfo>? children,
   }) : super(
           ParcelProgressRoute.name,
