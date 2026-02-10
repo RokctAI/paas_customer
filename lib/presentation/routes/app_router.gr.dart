@@ -667,7 +667,7 @@ class ParcelProgressRouteArgs {
 
   final Key? key;
 
-  final num? parcelId;
+  final String? parcelId;
 
   @override
   String toString() {
