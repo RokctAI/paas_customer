@@ -26,7 +26,7 @@ class ParcelItem extends StatelessWidget {
       onTap: () {
         context.pushRoute(
           ParcelProgressRoute(
-            parcelId: (parcel?.id ?? 0),
+            parcelId: (parcel?.id ?? ""),
           ),
         );
       },
