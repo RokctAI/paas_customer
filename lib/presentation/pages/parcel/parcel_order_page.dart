@@ -27,7 +27,7 @@ import '../../../infrastructure/services/enums.dart';
 
 @RoutePage()
 class ParcelProgressPage extends ConsumerStatefulWidget {
-  final num? parcelId;
+  final String? parcelId;
 
   const ParcelProgressPage({
     super.key,
@@ -49,12 +49,12 @@ class _ParcelProgressPageState extends ConsumerState<ParcelProgressPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
           .read(parcelProvider.notifier)
-          .showParcel(context, widget.parcelId ?? 0, false);
+          .showParcel(context, widget.parcelId ?? "", false);
     });
     timer = Timer.periodic(const Duration(seconds: 120), (Timer t) {
       ref
           .read(parcelProvider.notifier)
-          .showParcel(context, widget.parcelId ?? 0, true);
+          .showParcel(context, widget.parcelId ?? "", true);
     });
     super.initState();
   }
@@ -102,7 +102,7 @@ class _ParcelProgressPageState extends ConsumerState<ParcelProgressPage> {
                   controller: refreshController,
                   onRefresh: () {
                     event.showParcel(
-                        context, state.parcel?.id ?? 0, true);
+                        context, state.parcel?.id ?? "", true);
                     refreshController.refreshCompleted();
                   },
                   child: SingleChildScrollView(
