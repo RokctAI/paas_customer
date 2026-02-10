@@ -32,7 +32,7 @@ class RefundModel {
     this.order,
   });
 
-  int? id;
+  String? id;
   String? status;
   String? cause;
   String? answer;
@@ -41,7 +41,7 @@ class RefundModel {
   Order? order;
 
   factory RefundModel.fromJson(Map<String, dynamic> json) => RefundModel(
-        id: json["id"],
+        id: json["id"]?.toString(),
         status: json["status"],
         cause: json["cause"],
         answer: json["answer"],
@@ -67,11 +67,11 @@ class Order {
     this.shop
   });
 
-  int? id;
+  String? id;
   ShopData? shop;
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
-        id: json["id"],
+        id: json["id"]?.toString(),
         shop: json["shop"] != null ? ShopData.fromJson(json["shop"]) : null
       );
 
