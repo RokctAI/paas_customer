@@ -66,7 +66,7 @@ abstract class AppConstants {
   static const String demoUserPassword = String.fromEnvironment('DEMO_USER_PASSWORD');
 
   /// locales
-  static String localeCodeEn = 'en';
+  static String localeCodeEn = const String.fromEnvironment('LOCALE_CODE');
 
   /// auth phone fields
   static bool isNumberLengthAlwaysSame = const bool.fromEnvironment('IS_NUMBER_LENGTH_ALWAYS_SAME');
