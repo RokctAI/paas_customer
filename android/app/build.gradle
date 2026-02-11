@@ -30,22 +30,20 @@ def flutterVersionName = localProperties.getProperty('flutter.versionName')
 if (flutterVersionName == null) {
     flutterVersionName = '1.0.0'
 }
+def dartDefines = [:]
+if (project.hasProperty('flutter.dart-defines')) {
+    dartDefines = dartDefines + project.property('flutter.dart-defines')
+        .split(',')
+        .collectEntries { entry ->
+            def pair = new String(entry.decodeBase64(), 'UTF-8').split('=')
+            [(pair[0]): pair.length > 1 ? pair[1] : '']
+        }
+}
 
 android {
     namespace dartDefines.CUSTOMER_ANDROID_PACKAGE_NAME
     compileSdkVersion 34
     ndkVersion flutter.ndkVersion
-
-    def dartDefines = [:]
-
-    if (project.hasProperty('flutter.dart-defines')) {
-        dartDefines = dartDefines + project.property('flutter.dart-defines')
-            .split(',')
-            .collectEntries { entry ->
-                def pair = new String(entry.decodeBase64(), 'UTF-8').split('=')
-                [(pair[0]): pair.length > 1 ? pair[1] : '']
-            }
-    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
