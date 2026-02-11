@@ -8,10 +8,10 @@ import 'infrastructure/services/enums.dart';
 abstract class AppConstants {
   AppConstants._();
 
-  static const bool isDemo = false;
+  static const bool isDemo = bool.fromEnvironment('IS_DEMO');
   static const bool isPhoneFirebase = true;
   static const int scheduleInterval = 60;
-  static const SignUpType signUpType = SignUpType.phone;
+  static SignUpType get signUpType => SignUpType.values.byName(const String.fromEnvironment('SIGN_UP_TYPE'));
   static const bool use24Format = true;
   static const double radius = 16;
 
@@ -62,8 +62,8 @@ abstract class AppConstants {
     'PAYFAST_MERCHANT_KEY',
   );
 
-  static const String demoUserLogin = 'user@githubit.com';
-  static const String demoUserPassword = 'githubit';
+  static const String demoUserLogin = String.fromEnvironment('DEMO_USER_LOGIN');
+  static const String demoUserPassword = String.fromEnvironment('DEMO_USER_PASSWORD');
 
   /// locales
   static String localeCodeEn = 'en';
