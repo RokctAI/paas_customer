@@ -69,10 +69,10 @@ abstract class AppConstants {
   static String localeCodeEn = 'en';
 
   /// auth phone fields
-  static bool isNumberLengthAlwaysSame = true;
+  static bool isNumberLengthAlwaysSame = const bool.fromEnvironment('IS_NUMBER_LENGTH_ALWAYS_SAME');
   static const String countryCodeISO = String.fromEnvironment('COUNTRY_ISO');
-  static bool showFlag = true;
-  static bool showArrowIcon = true;
+  static bool showFlag = const bool.fromEnvironment('SHOW_FLAG');
+  static bool showArrowIcon = const bool.fromEnvironment('SHOW_ARROW_ICON');
 
   /// location
   static final double demoLatitude = double.parse(const String.fromEnvironment('DEMO_LATITUDE'));
