@@ -20,32 +20,33 @@ abstract class AppConstants {
   static const String wsBaseUrl = String.fromEnvironment('WS_BASE_URL');
   static const String wsSecret = String.fromEnvironment('WS_SECRET');
   static const String webUrl = String.fromEnvironment('WEB_URL');
-  static const String adminPageUrl = String.fromEnvironment('ADMIN_URL');
-  static const String googleApiKey = String.fromEnvironment(
+  static String drawingBaseUrl = String.fromEnvironment('ROUTING_API');
+  static String adminPageUrl = String.fromEnvironment('ADMIN_URL');
+  static String googleApiKey = String.fromEnvironment(
     'GOOGLE_MAPS_API_KEY',
   );
-  static const String firebaseWebKey = String.fromEnvironment(
+  static String firebaseWebKey = String.fromEnvironment(
     'FIREBASE_API_KEY',
   );
-  static const String geminiKey = String.fromEnvironment('GEMINI_KEY');
-  static const String urlPrefix = String.fromEnvironment('URL_PREFIX');
-  static const String routingBaseUrl = String.fromEnvironment('ROUTING_API');
-  static const String routingKey = String.fromEnvironment('ROUTING_KEY');
-  static const String deepLinkHost = String.fromEnvironment('DEEP_LINK_URL');
+  static String geminiKey = String.fromEnvironment('GEMINI_KEY');
+  static String uriPrefix = String.fromEnvironment('URL_PREFIX');
+  static String routingBaseUrl = String.fromEnvironment('ROUTING_API');
+  static String routingKey = String.fromEnvironment('ROUTING_KEY');
+  static String deepLinkHost = String.fromEnvironment('DEEP_LINK_URL');
   static const String androidPackageName = String.fromEnvironment('CUSTOMER_ANDROID_PACKAGE_NAME');
   static const String iosPackageName = String.fromEnvironment('CUSTOMER_IOS_PACKAGE_NAME');
 
   /// newStores and Recommendation Time
-  static const int newShopDays = 60;
+  static int newShopDays = 60;
 
   /// Operating time
-  static const String isOpen = '6am';
-  static const String isClosed = '10pm';
-  static const bool isMaintain = false;
-  static const bool bgImg = true;
+  static String isOpen = '6am';
+  static String isClosed = '10pm';
+  static bool isMaintain = false;
+  static bool bgImg = true;
 
   /// Google Maps POI
-  static const bool showGooglePOILayer = true;
+  static bool showGooglePOILayer = true;
 
   /// hero tags
   static const String heroTagSelectUser = 'heroTagSelectUser';
@@ -65,19 +66,19 @@ abstract class AppConstants {
   static const String demoUserPassword = 'githubit';
 
   /// locales
-  static const String localeCodeEn = 'en';
+  static String localeCodeEn = 'en';
 
   /// auth phone fields
-  static const bool isNumberLengthAlwaysSame = true;
-  static const String countryCodeISO = String.fromEnvironment('COUNTRY_ISO');
-  static const bool showFlag = true;
-  static const bool showArrowIcon = true;
+  static bool isNumberLengthAlwaysSame = true;
+  static String countryCodeISO = String.fromEnvironment('COUNTRY_ISO');
+  static bool showFlag = true;
+  static bool showArrowIcon = true;
 
   /// location
-  static final double demoLatitude = double.parse(const String.fromEnvironment('DEMO_LATITUDE'));
-  static final double demoLongitude = double.parse(const String.fromEnvironment('DEMO_LONGITUDE'));
-  static const double pinLoadingMin = 0.116666667;
-  static const double pinLoadingMax = 0.611111111;
+  static double demoLatitude = double.parse(const String.fromEnvironment('DEMO_LATITUDE'));
+  static double demoLongitude = double.parse(const String.fromEnvironment('DEMO_LONGITUDE'));
+  static double pinLoadingMin = 0.116666667;
+  static double pinLoadingMax = 0.611111111;
 
   /// Weather
   static const String openWeatherApiKey = String.fromEnvironment('OPEN_WEATHER_API_KEY');
@@ -124,9 +125,9 @@ abstract class AppConstants {
 
   static const bool fixed = true;
 
-  static const bool cardDirect = false;
+  static bool cardDirect = false;
 
   /// Marketplace Settings
-  static const bool enableMarketplace = true;
-  static const String defaultShopId = "";
+  static bool enableMarketplace = true;
+  static String defaultShopId = "";
 }
