@@ -1,83 +1,108 @@
 import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:flutter_remix/flutter_remix.dart';
+import 'package:foodyman/presentation/app_assets.dart';
 
 import 'infrastructure/services/enums.dart';
+
 
 abstract class AppConstants {
   AppConstants._();
 
+  static const bool isDemo = false;
+  static const bool isPhoneFirebase = true;
+  static const int scheduleInterval = 60;
+  static const SignUpType signUpType = SignUpType.phone;
+  static const bool use24Format = true;
+  static const double radius = 16;
+
   /// api urls
-  static const String baseUrl = 'https://juvo.tenant.rokct.ai/';
-  static String drawingBaseUrl = 'https://api.openrouteservice.org';
-  static String googleApiKey = 'AIzaSyDJjLCq6HBCe7xae6l0D9DW1MWpE4900GU';
-  static String adminPageUrl = baseUrl;
-  static String webUrl = 'https://web.juvo.app';
-  static String firebaseWebKey = '';
-  static String uriPrefix = 'https://foodyman.page.link';
-  static String routingKey =
-      '5b3ce3597851110001cf62480384c1db92764d1b8959761ea2510ac8';
-  static String androidPackageName = 'com.foodyman';
-  static String iosPackageName = 'com.foodyman.customer';
-  static bool isDemo = false;
-  static bool isPhoneFirebase = true;
-  static int scheduleInterval = 60;
-  static SignUpType signUpType = SignUpType.phone;
-  static bool use24Format = true;
+  static const String baseUrl = String.fromEnvironment('BASE_URL');
+  static const String wsBaseUrl = String.fromEnvironment('WS_BASE_URL');
+  static const String wsSecret = String.fromEnvironment('WS_SECRET');
+  static const String webUrl = String.fromEnvironment('WEB_URL');
+  static const String adminPageUrl = String.fromEnvironment('ADMIN_URL');
+  static const String googleApiKey = String.fromEnvironment(
+    'GOOGLE_MAPS_API_KEY',
+  );
+  static const String firebaseWebKey = String.fromEnvironment(
+    'FIREBASE_API_KEY',
+  );
+  static const String geminiKey = String.fromEnvironment('GEMINI_KEY');
+  static const String urlPrefix = String.fromEnvironment('URL_PREFIX');
+  static const String routingBaseUrl = String.fromEnvironment('ROUTING_API');
+  static const String routingKey = String.fromEnvironment('ROUTING_KEY');
+  static const String deepLinkHost = String.fromEnvironment('DEEP_LINK_URL');
+  static const String androidPackageName = String.fromEnvironment('CUSTOMER_ANDROID_PACKAGE_NAME');
+  static const String iosPackageName = String.fromEnvironment('CUSTOMER_IOS_PACKAGE_NAME');
 
-///newStores and Recommendation Time
-  static int newShopDays = 60;
+  /// newStores and Recommendation Time
+  static const int newShopDays = 60;
 
-  ///Operating time
-  static String isOpen = '6am';
-  static String isClosed = '10pm';
-  static bool isMaintain = false;
-  static bool bgImg = true;
+  /// Operating time
+  static const String isOpen = '6am';
+  static const String isClosed = '10pm';
+  static const bool isMaintain = false;
+  static const bool bgImg = true;
 
-  ///Google Maps POI
-  static bool showGooglePOILayer = true;
+  /// Google Maps POI
+  static const bool showGooglePOILayer = true;
 
- /// hero tags
+  /// hero tags
   static const String heroTagSelectUser = 'heroTagSelectUser';
   static const String heroTagSelectAddress = 'heroTagSelectAddress';
   static const String heroTagSelectCurrency = 'heroTagSelectCurrency';
 
-
   /// PayFast
-  static String passphrase = 'Sgosouthbwi1';
-  static String merchantId = '12035225';
-  static String merchantKey = 'j5gtf8n3jvxo3';
-
+  static const String passphrase = String.fromEnvironment('PAYFAST_PASSPHRASE');
+  static const String merchantId = String.fromEnvironment(
+    'PAYFAST_MERCHANT_ID',
+  );
+  static const String merchantKey = String.fromEnvironment(
+    'PAYFAST_MERCHANT_KEY',
+  );
 
   static const String demoUserLogin = 'user@githubit.com';
   static const String demoUserPassword = 'githubit';
 
   /// locales
-  static String localeCodeEn = 'en';
+  static const String localeCodeEn = 'en';
 
   /// auth phone fields
-  static bool isNumberLengthAlwaysSame = true;
-  static String countryCodeISO = 'UZ';
-  static bool showFlag = true;
-  static bool showArrowIcon = true;
+  static const bool isNumberLengthAlwaysSame = true;
+  static const String countryCodeISO = String.fromEnvironment('COUNTRY_ISO');
+  static const bool showFlag = true;
+  static const bool showArrowIcon = true;
 
   /// location
-  static double demoLatitude = 41.304223;
-  static double demoLongitude = 69.2348277;
-  static double pinLoadingMin = 0.116666667;
-  static double pinLoadingMax = 0.611111111;
+  static final double demoLatitude = double.parse(const String.fromEnvironment('DEMO_LATITUDE'));
+  static final double demoLongitude = double.parse(const String.fromEnvironment('DEMO_LONGITUDE'));
+  static const double pinLoadingMin = 0.116666667;
+  static const double pinLoadingMax = 0.611111111;
 
-  ///Weather
-  static String openWeatherApiKey = '9fcb56b26484500d5db76b8ab71cdcdf';
-  static bool weatherIcon = true;
-  static var rainPOP = 60;
-
+  /// Weather
+  static const String openWeatherApiKey = String.fromEnvironment('OPEN_WEATHER_API_KEY');
+  static const bool weatherIcon = true;
+  static const int rainPOP = 60;
 
   static const Duration timeRefresh = Duration(seconds: 30);
 
+  /// social sign-in
+  static const socialSignIn = [
+    FlutterRemix.google_fill,
+    FlutterRemix.facebook_fill,
+    FlutterRemix.apple_fill,
+  ];
+
+  static const socialSignInAndroid = [
+    FlutterRemix.google_fill,
+    FlutterRemix.facebook_fill,
+  ];
+
   static const List infoImage = [
-    "assets/images/save.png",
-    "assets/images/delivery.png",
-    "assets/images/fast.png",
-    "assets/images/set.png",
+    Assets.imagesSave,
+    Assets.imagesDelivery,
+    Assets.imagesFast,
+    Assets.imagesSet,
   ];
 
   static const List infoTitle = [
@@ -97,13 +122,11 @@ abstract class AppConstants {
     "female",
   ];
 
-  static bool fixed = true;
+  static const bool fixed = true;
 
-  static bool cardDirect = false;
+  static const bool cardDirect = false;
 
   /// Marketplace Settings
-  static bool enableMarketplace = true;
-  static String defaultShopId = "";
+  static const bool enableMarketplace = true;
+  static const String defaultShopId = "";
 }
-
-
