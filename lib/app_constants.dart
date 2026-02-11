@@ -20,19 +20,19 @@ abstract class AppConstants {
   static const String wsBaseUrl = String.fromEnvironment('WS_BASE_URL');
   static const String wsSecret = String.fromEnvironment('WS_SECRET');
   static const String webUrl = String.fromEnvironment('WEB_URL');
-  static String drawingBaseUrl = String.fromEnvironment('ROUTING_API');
+  static const String drawingBaseUrl = String.fromEnvironment('ROUTING_API');
   static String adminPageUrl = String.fromEnvironment('ADMIN_URL');
-  static String googleApiKey = String.fromEnvironment(
+  static const String googleApiKey = String.fromEnvironment(
     'GOOGLE_MAPS_API_KEY',
   );
-  static String firebaseWebKey = String.fromEnvironment(
+  static const String firebaseWebKey = String.fromEnvironment(
     'FIREBASE_API_KEY',
   );
-  static String geminiKey = String.fromEnvironment('GEMINI_KEY');
-  static String uriPrefix = String.fromEnvironment('URL_PREFIX');
-  static String routingBaseUrl = String.fromEnvironment('ROUTING_API');
-  static String routingKey = String.fromEnvironment('ROUTING_KEY');
-  static String deepLinkHost = String.fromEnvironment('DEEP_LINK_URL');
+  static const String geminiKey = String.fromEnvironment('GEMINI_KEY');
+  static const String uriPrefix = String.fromEnvironment('URL_PREFIX');
+  static const String routingBaseUrl = String.fromEnvironment('ROUTING_API');
+  static const String routingKey = String.fromEnvironment('ROUTING_KEY');
+  static const String deepLinkHost = String.fromEnvironment('DEEP_LINK_URL');
   static const String androidPackageName = String.fromEnvironment('CUSTOMER_ANDROID_PACKAGE_NAME');
   static const String iosPackageName = String.fromEnvironment('CUSTOMER_IOS_PACKAGE_NAME');
 
@@ -70,15 +70,15 @@ abstract class AppConstants {
 
   /// auth phone fields
   static bool isNumberLengthAlwaysSame = true;
-  static String countryCodeISO = String.fromEnvironment('COUNTRY_ISO');
+  static const String countryCodeISO = String.fromEnvironment('COUNTRY_ISO');
   static bool showFlag = true;
   static bool showArrowIcon = true;
 
   /// location
-  static double demoLatitude = double.parse(const String.fromEnvironment('DEMO_LATITUDE'));
-  static double demoLongitude = double.parse(const String.fromEnvironment('DEMO_LONGITUDE'));
-  static double pinLoadingMin = 0.116666667;
-  static double pinLoadingMax = 0.611111111;
+  static final double demoLatitude = double.parse(const String.fromEnvironment('DEMO_LATITUDE'));
+  static final double demoLongitude = double.parse(const String.fromEnvironment('DEMO_LONGITUDE'));
+  static const double pinLoadingMin = 0.116666667;
+  static const double pinLoadingMax = 0.611111111;
 
   /// Weather
   static const String openWeatherApiKey = String.fromEnvironment('OPEN_WEATHER_API_KEY');
