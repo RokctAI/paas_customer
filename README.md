@@ -71,13 +71,13 @@ base64 -i .env/production.env | pbcopy
 
 **Windows (PowerShell):**
 ```powershell
-# For Android
+# For Android (Auto-Clip)
 [Convert]::ToBase64String([IO.File]::ReadAllBytes("android/app/google-services.json")) | clip
 
-# For iOS
+# For iOS (Auto-Clip)
 [Convert]::ToBase64String([IO.File]::ReadAllBytes("ios/Runner/GoogleService-Info.plist")) | clip
 
-# For Production Environment
+# For Production Environment (Auto-Clip)
 [Convert]::ToBase64String([IO.File]::ReadAllBytes(".env/production.env")) | clip
 ```
 
