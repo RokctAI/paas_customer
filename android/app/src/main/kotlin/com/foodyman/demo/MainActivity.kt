@@ -1,4 +1,4 @@
-package com.foodyman
+package com.foodyman.demo
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterFragmentActivity
