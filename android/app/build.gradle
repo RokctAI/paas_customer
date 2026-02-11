@@ -31,6 +31,22 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0.0'
 }
 def dartDefines = [:]
+
+// 1. Load from .env/production.env in repo root (useful for CI and local fallbacks)
+def envFile = rootProject.file("../.env/production.env")
+if (envFile.exists()) {
+    envFile.eachLine { line ->
+        def trimmed = line.trim()
+        if (trimmed && !trimmed.startsWith('#')) {
+            def parts = trimmed.split('=', 2)
+            if (parts.length == 2) {
+                dartDefines[parts[0].trim()] = parts[1].trim()
+            }
+        }
+    }
+}
+
+// 2. Load from flutter.dart-defines (CLI / IDE injection) - Highest priority
 if (project.hasProperty('flutter.dart-defines')) {
     dartDefines = dartDefines + project.property('flutter.dart-defines')
         .split(',')
