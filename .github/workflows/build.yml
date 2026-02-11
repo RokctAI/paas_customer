@@ -45,6 +45,9 @@ on:
       java-version:
         type: string
         default: '17'
+      flutter-version:
+        type: string
+        default: '3.24.0'
       version_format:
         type: string
         default: '##.##.##'
@@ -95,6 +98,7 @@ jobs:
       postgres-version: ${{ inputs.postgres-version || '15' }}
       db-type: ${{ inputs.db-type || 'mariadb' }}
       flutter-channel: ${{ inputs.flutter-channel || 'stable' }}
+      flutter-version: ${{ inputs.flutter-version || '3.24.0' }}
       java-version: ${{ inputs.java-version || '17' }}
       version_format: ${{ inputs.version_format || '##.##.##' }}
       app-type: 'customer'
