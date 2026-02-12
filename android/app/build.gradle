@@ -57,7 +57,7 @@ if (project.hasProperty('flutter.dart-defines')) {
 }
 
 android {
-    namespace dartDefines.CUSTOMER_ANDROID_PACKAGE_NAME
+    namespace "com.foodyman.demo"
     compileSdkVersion 34
     ndkVersion "26.1.10909125"
 
@@ -79,7 +79,7 @@ android {
     }
 
     defaultConfig {
-        applicationId dartDefines.CUSTOMER_ANDROID_PACKAGE_NAME
+        applicationId "com.foodyman.demo"
         minSdkVersion 23
         multiDexEnabled true
         targetSdkVersion 34
