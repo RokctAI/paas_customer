@@ -70,6 +70,9 @@ base64 -i .env/production.env | pbcopy
 ```
 
 **Windows (PowerShell):**
+> [!WARNING]
+> **DO NOT** use `cat`, `type`, or `Get-Content` to read these files. They introduce CRLF line endings which corrupts the secret (altering the file size). Always use `[IO.File]::ReadAllBytes`.
+
 ```powershell
 # For Android (Auto-Clip)
 [Convert]::ToBase64String([IO.File]::ReadAllBytes("android/app/google-services.json")) | clip
