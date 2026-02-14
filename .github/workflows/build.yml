@@ -91,6 +91,7 @@ jobs:
       run_ci: true
       # Deployment Configuration (Immediate release on Main)
       release_strategy: 'immediate'
+      build_android: true
       # Environment configuration
       node-version: ${{ inputs.node-version || '24' }}
       python-version: ${{ inputs.python-version || '3.14' }}
