@@ -79,7 +79,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.foodyman.demo"
+        applicationId dartDefines.CUSTOMER_ANDROID_PACKAGE_NAME
         minSdkVersion 23
         multiDexEnabled true
         targetSdkVersion 34
@@ -90,6 +90,7 @@ android {
         resValue "string", "google_maps_api_key", dartDefines.GOOGLE_MAPS_API_KEY ?: ""
         resValue "string", "facebook_app_id", dartDefines.FACEBOOK_APP_ID ?: ""
         resValue "string", "facebook_client_token", dartDefines.FACEBOOK_CLIENT_TOKEN ?: ""
+        resValue "string", "fb_login_protocol_scheme", dartDefines.FB_LOGIN_PROTOCOL_SCHEME ?: ""
         resValue "string", "deep_link_host", dartDefines.DEEP_LINK_URL ?: ""
         resValue "string", "app_name", dartDefines.CUSTOMER_APP_NAME ?: ""
     }
