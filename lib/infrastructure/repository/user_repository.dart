@@ -12,7 +12,7 @@ class UserRepository implements UserRepositoryFacade {
   Future<ApiResult<ProfileResponse>> getProfileDetails() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get('/api/method/paas.api.user.user.get_user_profile');
+      final response = await client.post('/api/method/paas.api.user.user.get_user_profile');
       return ApiResult.success(
         data: ProfileResponse.fromJson(response.data),
       );
@@ -124,9 +124,9 @@ class UserRepository implements UserRepositoryFacade {
     };
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get(
+      final response = await client.post(
         '/api/method/paas.api.user.user.get_wallet_history',
-        queryParameters: data,
+        data: data,
       );
       return ApiResult.success(
         data: WalletHistoriesResponse.fromJson(response.data),
@@ -174,7 +174,7 @@ class UserRepository implements UserRepositoryFacade {
   Future<ApiResult<ReferralModel>> getReferralDetails() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get('/api/method/paas.api.user.user.get_referral_details');
+      final response = await client.post('/api/method/paas.api.user.user.get_referral_details');
       return ApiResult.success(
         data: ReferralModel.fromJson(response.data['message']),
       );
@@ -271,9 +271,9 @@ class UserRepository implements UserRepositoryFacade {
   Future<dynamic> searchUser({required String name, required int page}) async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get(
+      final response = await client.post(
         '/api/method/paas.api.user.user.search_user',
-        queryParameters: {
+        data: {
           'name': name,
           'page': page,
         },
