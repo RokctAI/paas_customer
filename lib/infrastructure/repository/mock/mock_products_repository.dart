@@ -5,6 +5,8 @@ import 'package:foodyman/infrastructure/models/data/translation.dart';
 import 'package:foodyman/infrastructure/models/response/products_paginate_response.dart';
 import 'package:foodyman/infrastructure/models/response/single_product_response.dart';
 import 'package:foodyman/infrastructure/models/response/product_calculate_response.dart';
+import 'package:foodyman/infrastructure/models/response/all_products_response.dart';
+import 'package:foodyman/infrastructure/models/data/cart_product_data.dart';
 
 class MockProductsRepository implements ProductsRepositoryFacade {
   final ProductData _demoProduct = ProductData(
@@ -27,7 +29,7 @@ class MockProductsRepository implements ProductsRepositoryFacade {
     translation: Translation(
       title: "Demo Product",
       description: "This is a demo product description",
-      lang: "en",
+      locale: "en",
     ),
     stocks: [
       Stocks(
@@ -40,7 +42,7 @@ class MockProductsRepository implements ProductsRepositoryFacade {
   );
 
   @override
-  Future<ApiResult<ProductsPaginateResponse>> getProductsPaginate(int page, {int? categoryId, int? brandId, int? shopId, bool? verify, bool? hasDiscount, double? minPrice, double? maxPrice, int? sort}) async {
+  Future<ApiResult<ProductsPaginateResponse>> getProductsPaginate({String? shopId, String? categoryId, String? brandId, required int page, String? orderBy}) async {
     return ApiResult.success(
       data: ProductsPaginateResponse(
         data: [_demoProduct, _demoProduct.copyWith(id: "2", translation: Translation(title: "Another Product"))],
@@ -49,7 +51,7 @@ class MockProductsRepository implements ProductsRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<ProductsPaginateResponse>> searchProducts(String query, int page) async {
+  Future<ApiResult<ProductsPaginateResponse>> searchProducts({required String text, int? page}) async {
     return ApiResult.success(
       data: ProductsPaginateResponse(
         data: [_demoProduct],
@@ -67,7 +69,7 @@ class MockProductsRepository implements ProductsRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<ProductCalculateResponse>> getProductsCalculations(int stockId, int quantity) async {
+  Future<ApiResult<ProductCalculateResponse>> getProductCalculations(String stockId, int quantity) async {
     // Mock calculation logic
     double price = 150.0;
     double total = price * quantity;
@@ -76,7 +78,7 @@ class MockProductsRepository implements ProductsRepositoryFacade {
         data: CalculatedData(
             products: [
                 CalculatedProduct(
-                    id: stockId,
+                    id: int.tryParse(stockId) ?? 0,
                     qty: quantity,
                     price: price,
                     totalPrice: total,
@@ -96,7 +98,7 @@ class MockProductsRepository implements ProductsRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<ProductsPaginateResponse>> getMostSoldProducts(int page, {int? shopId, int? categoryId, int? brandId}) async{
+  Future<ApiResult<ProductsPaginateResponse>> getMostSoldProducts({String? shopId, String? categoryId, String? brandId}) async{
     return ApiResult.success(
       data: ProductsPaginateResponse(
         data: [_demoProduct],
@@ -105,7 +107,7 @@ class MockProductsRepository implements ProductsRepositoryFacade {
   }
  
   @override
-  Future<ApiResult<ProductsPaginateResponse>> getRelatedProducts(String productUuid, int page) async{
+  Future<ApiResult<ProductsPaginateResponse>> getRelatedProducts(String? brandId, String? shopId, String? categoryId) async{
        return ApiResult.success(
       data: ProductsPaginateResponse(
         data: [_demoProduct],
@@ -114,7 +116,80 @@ class MockProductsRepository implements ProductsRepositoryFacade {
   }
 
   @override
-  Future<ApiResult> addReview(String productUuid, String comment, double rating, {String? img}) async{
+  Future<ApiResult<void>> addReview(String productUuid, String comment, double rating, String? imageUrl) async{
       return ApiResult.success(data: null);
+  }
+
+  @override
+  Future<ApiResult<ProductCalculateResponse>> getAllCalculations(List<CartProductData> cartProducts) async {
+    return ApiResult.success(
+      data: ProductCalculateResponse(
+        data: CalculatedData(
+            products: [],
+            productTotal: 0,
+            orderTotal: 0,
+            productTax: 0,
+            orderTax: 0
+        )
+      ),
+    );
+  }
+
+  @override
+  Future<ApiResult<AllProductsResponse>> getAllProducts({required String shopId}) async {
+    return ApiResult.success(
+      data: AllProductsResponse(
+        data: Data(
+            all: [
+                All(
+                    products: [
+                        Product(
+                            id: _demoProduct.id,
+                            uuid: _demoProduct.uuid,
+                            shopId: _demoProduct.shopId,
+                            img: _demoProduct.img,
+                            translation: _demoProduct.translation,
+                        )
+                    ]
+                )
+            ]
+        ),
+      ),
+    );
+  }
+
+  @override
+  Future<ApiResult<ProductsPaginateResponse>> getDiscountProducts({String? shopId, String? brandId, String? categoryId, int? page}) async {
+    return getProductsPaginate(page: 1);
+  }
+
+  @override
+  Future<ApiResult<ProductsPaginateResponse>> getNewProducts({String? shopId, String? brandId, String? categoryId, int? page}) async {
+     return getProductsPaginate(page: 1);
+  }
+
+  @override
+  Future<ApiResult<ProductsPaginateResponse>> getProductsByCategoryPaginate({String? shopId, required int page, required String categoryId}) async {
+     return getProductsPaginate(page: page, shopId: shopId, categoryId: categoryId);
+  }
+
+  @override
+  Future<ApiResult<ProductsPaginateResponse>> getProductsByIds(List<String> ids) async {
+     return getProductsPaginate(page: 1);
+  }
+
+  @override
+  Future<ApiResult<ProductsPaginateResponse>> getProductsPopularPaginate({String? shopId, required int page}) async {
+     return getProductsPaginate(page: page, shopId: shopId);
+  }
+
+  @override
+  Future<ApiResult<ProductsPaginateResponse>> getProductsShopByCategoryPaginate({String? shopId, List<String>? brands, int? sortIndex, required int page, required String categoryId}) async {
+     return getProductsPaginate(page: page, shopId: shopId, categoryId: categoryId);
+  }
+
+  @override
+  Future<ApiResult<ProductsPaginateResponse>> getProfitableProducts({String? brandId, String? categoryId, int? page}) async {
+     return getProductsPaginate(page: 1);
   }
 }
