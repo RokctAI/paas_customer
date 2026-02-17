@@ -1,18 +1,40 @@
 import 'package:foodyman/domain/handlers/api_result.dart';
 import 'package:foodyman/domain/interface/auth.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/models/response/login_response.dart';
-import 'package:foodyman/infrastructure/models/response/register_response.dart';
-import 'package:foodyman/infrastructure/models/response/verify_phone_response.dart';
-import 'package:foodyman/infrastructure/models/data/user_data.dart';
+import 'package:foodyman/infrastructure/models/data/user.dart';
+import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
+import 'package:foodyman/infrastructure/models/data/address_information.dart';
 
 class MockAuthRepository implements AuthRepositoryFacade {
+
+  final UserModel _demoUser = UserModel(
+    id: "1",
+    uuid: "demo_uuid",
+    firstname: "Demo",
+    lastname: "User",
+    email: "demo@example.com",
+    phone: "+1234567890",
+    role: "customer",
+    active: true,
+    img: "https://via.placeholder.com/150",
+    addresses: [
+        AddressNewModel(
+            active: true,
+            address: AddressInformation(address: "123 Demo St"),
+            id: "1",
+            location: [37.7749, -122.4194],
+            title: "Home"
+        )
+    ]
+  );
+
+
   @override
   Future<ApiResult<VerifyData>> forgotPasswordConfirm({required String verifyCode, required String email}) async {
     return ApiResult.success(
       data: VerifyData(
         token: "demo_token",
-        user: UserModel(email: email, firstname: "Demo", lastname: "User"),
+        user: _demoUser,
       ),
     );
   }
@@ -22,7 +44,7 @@ class MockAuthRepository implements AuthRepositoryFacade {
     return ApiResult.success(
       data: VerifyData(
         token: "demo_token",
-        user: UserModel(phone: phone, firstname: "Demo", lastname: "User"),
+        user: _demoUser.copyWith(phone: phone),
       ),
     );
   }
@@ -44,26 +66,7 @@ class MockAuthRepository implements AuthRepositoryFacade {
         data: LoginData(
           accessToken: "demo_access_token",
           tokenType: "Bearer",
-          user: UserModel(
-            id: 1,
-            uuid: "demo_uuid",
-            firstname: "Demo",
-            lastname: "User",
-            email: email,
-            phone: "+1234567890",
-            role: "customer",
-            active: 1,
-            img: "https://via.placeholder.com/150",
-            addresses: [
-                AddressModel(
-                    active: true,
-                    address: "123 Demo St",
-                    id: 1,
-                    location: [LocationModel(latitude: 37.7749, longitude: -122.4194)],
-                    title: "Home"
-                )
-            ]
-          ),
+          user: _demoUser.copyWith(email: email),
         ),
       ),
     );
@@ -76,24 +79,7 @@ class MockAuthRepository implements AuthRepositoryFacade {
         data: LoginData(
           accessToken: "demo_google_token",
           tokenType: "Bearer",
-          user: UserModel(
-            id: 1,
-            uuid: "demo_uuid",
-            firstname: displayName,
-            lastname: "",
-            email: email,
-            img: avatar,
-            role: "customer",
-             addresses: [
-                AddressModel(
-                    active: true,
-                    address: "123 Demo St",
-                    id: 1,
-                    location: [LocationModel(latitude: 37.7749, longitude: -122.4194)],
-                    title: "Home"
-                )
-            ]
-          ),
+          user: _demoUser.copyWith(email: email, firstname: displayName, img: avatar),
         ),
       ),
     );
@@ -139,7 +125,7 @@ class MockAuthRepository implements AuthRepositoryFacade {
       return ApiResult.success(
       data: VerifyPhoneResponse(
         token: "demo_token",
-        user: UserModel(id: 1, firstname: "Demo"),
+        user: _demoUser,
       ),
     );
   }
@@ -149,7 +135,7 @@ class MockAuthRepository implements AuthRepositoryFacade {
       return ApiResult.success(
       data: VerifyPhoneResponse(
         token: "demo_token",
-        user: UserModel(id: 1, firstname: "Demo"),
+        user: _demoUser,
       ),
     );
   }
