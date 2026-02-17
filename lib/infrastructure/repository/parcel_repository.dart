@@ -19,7 +19,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
-        '/api/v1/dashboard/user/parcel-orders/deliveryman-review/$orderId',
+        '/api/method/paas.api.parcel.parcel.add_parcel_review',
         data: data,
       );
       return const ApiResult.success(data: null);
@@ -37,9 +37,9 @@ class ParcelRepository implements ParcelRepositoryFacade {
     final data = {'lang': LocalStorage.getLanguage()?.locale};
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.get(
-        '/api/v1/rest/parcel-order/types',
-        queryParameters: data,
+      final response = await client.post(
+        '/api/method/paas.api.parcel.parcel.get_types',
+        data: data,
       );
       return ApiResult.success(
         data: ParcelTypeResponse.fromJson(response.data),
@@ -70,9 +70,10 @@ class ParcelRepository implements ParcelRepositoryFacade {
     };
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.get(
-          '/api/v1/rest/parcel-order/calculate-price',
-          queryParameters: data);
+      final response = await client.post(
+        '/api/method/paas.api.parcel.parcel.calculate_price',
+        data: data,
+      );
       return ApiResult.success(
         data: ParcelCalculateResponse.fromJson(response.data),
       );
@@ -139,9 +140,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
     };
     try {
       final client = dioHttp.client(requireAuth: true);
-
-      final res =
-          await client.post('/api/v1/dashboard/user/parcel-orders', data: data);
+      final res = await client.post('/api/method/paas.api.parcel.parcel.create_parcel_order', data: {'order_data': data});
       return ApiResult.success(data: res.data["data"]["id"]);
     } catch (e) {
       debugPrint('==> get parcel order failure: $e');
@@ -168,9 +167,14 @@ class ParcelRepository implements ParcelRepositoryFacade {
     };
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get(
-        '/api/v1/dashboard/user/parcel-orders',
-        queryParameters: data,
+      // Status filtering logic as implemented in previous session
+      if (data['statuses[0]'] != null) {
+          data['status'] = [data['statuses[0]'], data['statuses[1]'], data['statuses[2]'], data['statuses[3]']];
+          data.removeWhere((key, value) => key.startsWith('statuses'));
+      }
+      final response = await client.post(
+        '/api/method/paas.api.parcel.parcel.get_parcel_orders',
+        data: data,
       );
       return ApiResult.success(
         data: ParcelPaginateResponse.fromJson(response.data),
@@ -198,9 +202,13 @@ class ParcelRepository implements ParcelRepositoryFacade {
     };
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get(
-        '/api/v1/dashboard/user/parcel-orders',
-        queryParameters: data,
+      if (data['statuses[0]'] != null) {
+          data['status'] = [data['statuses[0]'], data['statuses[1]']];
+          data.removeWhere((key, value) => key.startsWith('statuses'));
+      }
+      final response = await client.post(
+        '/api/method/paas.api.parcel.parcel.get_parcel_orders',
+        data: data,
       );
       return ApiResult.success(
         data: ParcelPaginateResponse.fromJson(response.data),
@@ -223,9 +231,9 @@ class ParcelRepository implements ParcelRepositoryFacade {
     };
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get(
-        '/api/v1/dashboard/user/parcel-orders/$orderId',
-        queryParameters: data,
+      final response = await client.post(
+        '/api/method/paas.api.parcel.parcel.get_user_parcel_order',
+        data: {'name': orderId},
       );
       return ApiResult.success(
         data: ParcelOrder.fromJson(response.data["data"]),
