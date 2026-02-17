@@ -5,21 +5,24 @@ import 'package:foodyman/infrastructure/models/data/coupon_data.dart';
 import 'package:foodyman/infrastructure/models/data/get_calculate_data.dart';
 import 'package:foodyman/infrastructure/models/data/local_location.dart';
 import 'package:foodyman/infrastructure/models/data/order_active_model.dart';
+import 'package:foodyman/infrastructure/models/data/order_body_data.dart';
 import 'package:foodyman/infrastructure/models/data/refund_data.dart';
+import 'package:foodyman/infrastructure/models/data/shop_data.dart';
+import 'package:foodyman/infrastructure/models/data/translation.dart';
+import 'package:foodyman/infrastructure/models/data/cashback_model.dart';
 import 'package:foodyman/infrastructure/models/response/coupon_response.dart';
 import 'package:foodyman/infrastructure/models/response/order_paginate_response.dart';
-import 'package:foodyman/infrastructure/models/response/cashback_response.dart';
 import 'package:foodyman/infrastructure/services/enums.dart';
 
 class MockOrdersRepository implements OrdersRepositoryFacade {
   final OrderActiveModel _demoOrder = OrderActiveModel(
-    id: 1,
+    id: "1",
     status: "delivered",
     totalPrice: 45.0,
-    createdAt: DateTime.now().toString(),
-    shop: ShopData(id: "demo_shop_1", name: "Demo Pizza Shop", logoImg: "https://via.placeholder.com/150"),
+    createdAt: DateTime.now(),
+    shop: ShopData(id: "demo_shop_1", translation: Translation(title: "Demo Pizza Shop"), logoImg: "https://via.placeholder.com/150"),
     details: [],
-    currency: "USD",
+    currencyModel: CurrencyModel(id: "1", symbol: "\$", title: "USD", active: true),
   );
 
   @override
@@ -49,7 +52,7 @@ class MockOrdersRepository implements OrdersRepositoryFacade {
 
   @override
   Future<ApiResult<OrderActiveModel>> createOrder(OrderBodyData orderBody) async {
-    return ApiResult.success(data: _demoOrder.copyWith(id: 2, status: "pending"));
+    return ApiResult.success(data: _demoOrder.copyWith(id: "2", status: "pending"));
   }
 
   @override
@@ -71,7 +74,7 @@ class MockOrdersRepository implements OrdersRepositoryFacade {
   Future<ApiResult<OrderPaginateResponse>> getActiveOrders(int page) async {
     return ApiResult.success(
       data: OrderPaginateResponse(
-        data: [_demoOrder.copyWith(id: 3, status: "accepted")],
+        data: [_demoOrder.copyWith(id: "3", status: "accepted")],
       ),
     );
   }
@@ -108,7 +111,7 @@ class MockOrdersRepository implements OrdersRepositoryFacade {
   Future<ApiResult<OrderPaginateResponse>> getHistoryOrders(int page) async {
     return ApiResult.success(
       data: OrderPaginateResponse(
-        data: [_demoOrder, _demoOrder.copyWith(id: 4, createdAt: DateTime.now().subtract(Duration(days: 1)).toString())],
+        data: [_demoOrder, _demoOrder.copyWith(id: "4", createdAt: DateTime.now().subtract(Duration(days: 1)))],
       ),
     );
   }
