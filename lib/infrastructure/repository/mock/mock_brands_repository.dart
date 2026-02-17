@@ -6,10 +6,9 @@ import 'package:foodyman/infrastructure/models/response/single_brand_response.da
 
 class MockBrandsRepository implements BrandsRepositoryFacade {
   final BrandData _demoBrand = BrandData(
-    id: 1,
-    uuid: "demo_brand_1",
+    id: "1",
     title: "Demo Brand",
-    brandImg: "https://via.placeholder.com/150",
+    img: "https://via.placeholder.com/150",
     active: true,
     createdAt: DateTime.now().toString(),
     updatedAt: DateTime.now().toString(),
@@ -19,7 +18,7 @@ class MockBrandsRepository implements BrandsRepositoryFacade {
   Future<ApiResult<BrandsPaginateResponse>> getAllBrands({String? categoryId, String? shopId}) async {
     return ApiResult.success(
       data: BrandsPaginateResponse(
-        data: [_demoBrand, _demoBrand.copyWith(id: 2, uuid: "demo_brand_2", title: "Another Brand")],
+        data: [_demoBrand, _demoBrand.copyWith(id: "2", title: "Another Brand")],
       ),
     );
   }
