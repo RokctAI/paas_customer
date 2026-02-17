@@ -1,21 +1,21 @@
 import 'package:foodyman/domain/handlers/api_result.dart';
 import 'package:foodyman/domain/interface/address.dart';
 import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
-import 'package:foodyman/infrastructure/models/data/location.dart';
+import 'package:foodyman/infrastructure/models/data/address_information.dart';
 import 'package:foodyman/infrastructure/models/response/addresses_response.dart';
 import 'package:foodyman/infrastructure/models/response/single_address_response.dart';
 
 class MockAddressRepository implements AddressRepositoryFacade {
   final AddressNewModel _demoAddress = AddressNewModel(
-    id: 1,
+    id: "1",
     title: "Home",
-    address: "123 Demo St",
+    address: AddressInformation(address: "123 Demo St", street: "Demo St", house: "123", floor: "1"),
     active: true,
-    location: LocationModel(latitude: 37.7749, longitude: -122.4194),
+    location: [37.7749, -122.4194],
   );
 
   @override
-  Future<ApiResult<SingleAddressResponse>> createAddress(LocalAddressData address) async {
+  Future<ApiResult<SingleAddressResponse>> createAddress(AddressNewModel address) async {
     return ApiResult.success(
       data: SingleAddressResponse(
         data: _demoAddress.copyWith(
@@ -36,7 +36,7 @@ class MockAddressRepository implements AddressRepositoryFacade {
   Future<ApiResult<AddressesResponse>> getUserAddresses() async {
     return ApiResult.success(
       data: AddressesResponse(
-        data: [_demoAddress, _demoAddress.copyWith(id: 2, title: "Work", address: "456 Office Blvd")],
+        data: [_demoAddress, _demoAddress.copyWith(id: "2", title: "Work", address: AddressInformation(address: "456 Office Blvd"))],
       ),
     );
   }
