@@ -1,11 +1,13 @@
 import 'package:foodyman/domain/handlers/api_result.dart';
 import 'package:foodyman/domain/interface/shops.dart';
 import 'package:foodyman/infrastructure/models/data/shop_data.dart';
-import 'package:foodyman/infrastructure/models/data/location.dart';
 import 'package:foodyman/infrastructure/models/data/translation.dart';
 import 'package:foodyman/infrastructure/models/response/shops_paginate_response.dart';
 import 'package:foodyman/infrastructure/models/response/single_shop_response.dart';
-import 'package:foodyman/infrastructure/models/response/stories_response.dart';
+import 'package:foodyman/infrastructure/models/data/filter_model.dart';
+import 'package:foodyman/infrastructure/models/response/branches_response.dart';import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
+import 'package:foodyman/infrastructure/models/data/story_data.dart';
+import 'package:foodyman/infrastructure/models/response/tag_response.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MockShopsRepository implements ShopsRepositoryFacade {
@@ -42,15 +44,10 @@ class MockShopsRepository implements ShopsRepositoryFacade {
 
   @override
   Future<ApiResult<ShopsPaginateResponse>> getAllShops(int page, {
-    int? categoryId,
-    bool? isOpen,
+    String? categoryId,
+    FilterModel? filterModel,
+    required bool isOpen,
     bool? verify,
-    bool? hasDiscount,
-    double? minPrice,
-    double? maxPrice,
-    int? sort,
-    int? type,
-    int? deliveryType,
   }) async {
     return ApiResult.success(
       data: ShopsPaginateResponse(
@@ -60,24 +57,13 @@ class MockShopsRepository implements ShopsRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<ShopsPaginateResponse>> getNearbyShops(int page, {
-    int? categoryId,
-    bool? isOpen,
-    bool? verify,
-    bool? hasDiscount,
-    double? minPrice,
-    double? maxPrice,
-    int? sort,
-    int? type,
-    int? deliveryType,
-  }) async {
+  Future<ApiResult<ShopsPaginateResponse>> getNearbyShops(double latitude, double longitude) async {
       return ApiResult.success(
       data: ShopsPaginateResponse(
         data: [_demoShop],
       ),
     );
   }
-
 
   @override
   Future<ApiResult<ShopsPaginateResponse>> getShopsRecommend(int page) async {
@@ -89,7 +75,7 @@ class MockShopsRepository implements ShopsRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<SingleShopResponse>> getShopById(int shopId) async {
+  Future<ApiResult<SingleShopResponse>> getSingleShop({required String uuid}) async {
     return ApiResult.success(
       data: SingleShopResponse(
         data: _demoShop,
@@ -97,22 +83,9 @@ class MockShopsRepository implements ShopsRepositoryFacade {
     );
   }
 
-  @override
-  Future<ApiResult<SingleShopResponse>> getShopBySlug(String slug) async {
-      return ApiResult.success(
-      data: SingleShopResponse(
-        data: _demoShop,
-      ),
-    );
-  }
-
-  @override
-  Future<ApiResult<StoriesResponse>> getShopStories(int page) async {
-    return ApiResult.success(data: StoriesResponse(data: []));
-  }
   
   @override
-  Future<ApiResult<ShopsPaginateResponse>> searchShops(String text, int page) async {
+  Future<ApiResult<ShopsPaginateResponse>> searchShops({required String text, String? categoryId}) async {
        return ApiResult.success(
       data: ShopsPaginateResponse(
         data: [_demoShop],
@@ -120,18 +93,87 @@ class MockShopsRepository implements ShopsRepositoryFacade {
     );
   }
 
-  // Implementing missing methods from interface if any, returning empty/default
   @override
-  Future<ApiResult<dynamic>> createShop({required ShopData shop}) async {
+  Future<ApiResult<void>> createShop({
+    required double tax,
+    required List<String> documents,
+    required double deliveryTo,
+    required double deliveryFrom,
+    required String deliveryType,
+    required String phone,
+    required String name,
+    required String category,
+    required String description,
+    required double startPrice,
+    required double perKm,
+    required AddressNewModel address,
+    String? logoImage,
+    String? backgroundImage,
+  }) async {
       return ApiResult.success(data: null);
   }
 
   @override
-  Future<ApiResult<ShopsPaginateResponse>> getPickupShops(int page, {int? categoryId, bool? isOpen, bool? verify, bool? hasDiscount, double? minPrice, double? maxPrice, int? sort, int? type, int? deliveryType}) async{
+  Future<ApiResult<ShopsPaginateResponse>> getPickupShops() async{
       return ApiResult.success(
       data: ShopsPaginateResponse(
         data: [_demoShop],
       ),
     );
+  }
+
+  @override
+  Future<ApiResult<bool>> checkDriverZone(LatLng location, {String? shopId}) async {
+    return ApiResult.success(data: true);
+  }
+
+  @override
+  Future<ApiResult<BranchResponse>> getShopBranch({required String uuid}) async {
+    return ApiResult.success(data: BranchResponse(data: []));
+  }
+
+  @override
+  Future<ApiResult<ShopsPaginateResponse>> getShopFilter({String? categoryId, required int page, String? subCategoryId}) async {
+     return ApiResult.success(
+      data: ShopsPaginateResponse(
+        data: [_demoShop],
+      ),
+    );
+  }
+
+  @override
+  Future<ApiResult<ShopsPaginateResponse>> getShopsByIds(List<String> shopIds) async {
+     return ApiResult.success(
+      data: ShopsPaginateResponse(
+        data: [_demoShop],
+      ),
+    );
+  }
+
+  @override
+  Future<ApiResult<List<List<StoryModel?>?>?>> getStory(int page) async {
+    return ApiResult.success(data: []);
+  }
+
+  @override
+  Future<ApiResult<PriceModel>> getSuggestPrice() async {
+    return ApiResult.success(
+        data: PriceModel(
+            timestamp: DateTime.now(),
+            status: true,
+            message: "Success",
+            data: Data(min: 10, max: 100)
+        )
+    );
+  }
+
+  @override
+  Future<ApiResult<TagResponse>> getTags(String categoryId) async {
+     return ApiResult.success(data: TagResponse(data: []));
+  }
+
+  @override
+  Future<ApiResult> joinOrder({required String shopId, required String name, required String cartId}) async {
+    return ApiResult.success(data: null);
   }
 }
