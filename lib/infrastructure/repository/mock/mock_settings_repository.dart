@@ -13,11 +13,9 @@ class MockSettingsRepository implements SettingsRepositoryFacade {
     return ApiResult.success(
       data: HelpModel(
         data: [
-          HelpData(
+          Datum(
             id: 1,
-            question: "How to order?",
-            answer: "Select items, add to cart, and checkout.",
-            translation: Translation(title: "How to order?", description: "Select items and checkout"),
+            translation: HelpTranslation(question: "How to order?", answer: "Select items and checkout", locale: "en"),
           )
         ],
       ),
@@ -77,10 +75,8 @@ class MockSettingsRepository implements SettingsRepositoryFacade {
            NotificationData(
             id: 1,
             type: "order",
-            title: "Order Update",
-            body: "Your order has been placed.",
-            readAt: null,
-            createdAt: DateTime.now().toIso8601String(),
+            createdAt: DateTime.now(),
+            payload: ["Order Update", "Your order has been placed."],
            )
         ]
       ),
@@ -93,6 +89,7 @@ class MockSettingsRepository implements SettingsRepositoryFacade {
       data: Translation(
         title: "Privacy Policy",
         description: "This is a demo privacy policy.",
+        locale: "en",
       ),
     );
   }
@@ -103,6 +100,7 @@ class MockSettingsRepository implements SettingsRepositoryFacade {
       data: Translation(
         title: "Terms of Service",
         description: "These are demo terms of service.",
+        locale: "en",
       ),
     );
   }
