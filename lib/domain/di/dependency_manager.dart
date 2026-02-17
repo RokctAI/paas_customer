@@ -46,26 +46,53 @@ import '../interface/wallet.dart';
 import 'package:foodyman/domain/interface/delivery_points.dart';
 import 'package:foodyman/infrastructure/repository/delivery_points_repository.dart';
 
+import 'package:foodyman/infrastructure/repository/mock/mock_auth_repository.dart';
+import 'package:foodyman/infrastructure/repository/mock/mock_settings_repository.dart';
+import 'package:foodyman/infrastructure/repository/mock/mock_shops_repository.dart';
+import 'package:foodyman/infrastructure/models/data/product_data.dart';
+import 'package:foodyman/infrastructure/repository/mock/mock_products_repository.dart';
+import 'package:foodyman/infrastructure/repository/mock/mock_categories_repository.dart';
+import 'package:foodyman/infrastructure/repository/mock/mock_banners_repository.dart';
+import 'package:foodyman/infrastructure/repository/mock/mock_cart_repository.dart';
+import 'package:foodyman/infrastructure/repository/mock/mock_orders_repository.dart';
+import 'package:foodyman/infrastructure/repository/mock/mock_address_repository.dart';
+
 final GetIt getIt = GetIt.instance;
 
 Future<void> setUpDependencies() async {
   getIt.registerLazySingleton<HttpService>(() => HttpService());
-  getIt.registerSingleton<SettingsRepositoryFacade>(SettingsRepository());
-  getIt.registerSingleton<AuthRepositoryFacade>(AuthRepository());
-  getIt.registerSingleton<ProductsRepositoryFacade>(ProductsRepository());
-  getIt.registerSingleton<ShopsRepositoryFacade>(ShopsRepository());
+  
+  if (AppConstants.isDemo) {
+      getIt.registerSingleton<SettingsRepositoryFacade>(MockSettingsRepository());
+      getIt.registerSingleton<AuthRepositoryFacade>(MockAuthRepository());
+      getIt.registerSingleton<ShopsRepositoryFacade>(MockShopsRepository());
+      getIt.registerSingleton<ProductsRepositoryFacade>(MockProductsRepository());
+      getIt.registerSingleton<CategoriesRepositoryFacade>(MockCategoriesRepository());
+      getIt.registerSingleton<BannersRepositoryFacade>(MockBannersRepository());
+      getIt.registerSingleton<CartRepositoryFacade>(MockCartRepository());
+      getIt.registerSingleton<OrdersRepositoryFacade>(MockOrdersRepository());
+      getIt.registerSingleton<AddressRepositoryFacade>(MockAddressRepository());
+  } else {
+      getIt.registerSingleton<SettingsRepositoryFacade>(SettingsRepository());
+      getIt.registerSingleton<AuthRepositoryFacade>(AuthRepository());
+      getIt.registerSingleton<ShopsRepositoryFacade>(ShopsRepository());
+      getIt.registerSingleton<ProductsRepositoryFacade>(ProductsRepository());
+      getIt.registerSingleton<CategoriesRepositoryFacade>(CategoriesRepository());
+      getIt.registerSingleton<BannersRepositoryFacade>(BannersRepository());
+      getIt.registerSingleton<CartRepositoryFacade>(CartRepository());
+      getIt.registerSingleton<OrdersRepositoryFacade>(OrdersRepository());
+      getIt.registerSingleton<AddressRepositoryFacade>(AddressRepository());
+  }
+
+  getIt.registerSingleton<brandsRepositoryFacade>(BrandsRepository()); // Skipping brands mock for now or implemented inside products mock logic if needed?
+  // Wait, BrandsRepositoryFacade is needed.
   getIt.registerSingleton<BrandsRepositoryFacade>(BrandsRepository());
   getIt.registerSingleton<GalleryRepositoryFacade>(GalleryRepository());
-  getIt.registerSingleton<CategoriesRepositoryFacade>(CategoriesRepository());
   getIt.registerSingleton<CurrenciesRepositoryFacade>(CurrenciesRepository());
-  getIt.registerSingleton<AddressRepositoryFacade>(AddressRepository());
-  getIt.registerSingleton<BannersRepositoryFacade>(BannersRepository());
   getIt.registerSingleton<GooglePlace>(GooglePlace(AppConstants.googleApiKey));
   getIt.registerSingleton<PaymentsRepositoryFacade>(PaymentsRepository());
-  getIt.registerSingleton<OrdersRepositoryFacade>(OrdersRepository());
   getIt.registerSingleton<UserRepositoryFacade>(UserRepository());
   getIt.registerSingleton<BlogsRepositoryFacade>(BlogsRepository());
-  getIt.registerSingleton<CartRepositoryFacade>(CartRepository());
   getIt.registerSingleton<DrawRepositoryFacade>(DrawRepository());
   getIt.registerSingleton<ParcelRepositoryFacade>(ParcelRepository());
   getIt.registerSingleton<NotificationRepositoryFacade>(NotificationRepositoryImpl());
