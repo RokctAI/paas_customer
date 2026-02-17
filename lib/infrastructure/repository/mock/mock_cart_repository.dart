@@ -19,8 +19,8 @@ class MockCartRepository implements CartRepositoryFacade {
         price: 150,
         bonus: false,
         stock: Stocks(
-            id: 1,
             price: 150,
+            quantity: 100, 
         ),
       )
     ],
@@ -28,22 +28,7 @@ class MockCartRepository implements CartRepositoryFacade {
 
 
   @override
-  Future<ApiResult<CartModel>> calculateCart({required int cartId}) async {
-      return ApiResult.success(
-      data: CartModel(
-        data: Cart(
-             id: "1",
-             totalPrice: 300,
-             userCarts: [_demoUserCart]
-        )
-      ),
-    );
-     // Note: Real implementation might return a CartCalculateResponse or similar, 
-     // but the interface return type is CartModel.
-  }
-
-  @override
-  Future<ApiResult<CartModel>> deleteCart({required int cartId}) async {
+  Future<ApiResult<CartModel>> deleteCart({required String cartId}) async {
       return ApiResult.success(
       data: CartModel(
         data: Cart(id: "1", userCarts: [])
@@ -52,16 +37,7 @@ class MockCartRepository implements CartRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<CartModel>> deleteCartItem({required int cartId, required int cartDetailId}) async {
-       return ApiResult.success(
-      data: CartModel(
-        data: Cart(id: "1", userCarts: [_demoUserCart.copyWith(cartDetails: [])])
-      ),
-    );
-  }
-
-  @override
-  Future<ApiResult<CartModel>> getCart({required int cartId}) async {
+  Future<ApiResult<CartModel>> getCart(String shopId) async {
     return ApiResult.success(
       data: CartModel(
         data: Cart(
@@ -86,8 +62,48 @@ class MockCartRepository implements CartRepositoryFacade {
     );
   }
 
+
   @override
-  Future<ApiResult<CartModel>> openCart({required int cartId}) async {
-      return getCart(cartId: cartId);
+  Future<ApiResult<dynamic>> changeStatus({required String? userUuid, required String? cartId}) async {
+    return ApiResult.success(data: null);
+  }
+
+  @override
+  Future<ApiResult<CartModel>> createAndCart({required CartRequest cart}) async {
+    return insertCart(cart: cart);
+  }
+
+  @override
+  Future<ApiResult<CartModel>> createCart({required CartRequest cart}) async {
+    return insertCart(cart: cart);
+  }
+
+  @override
+  Future<ApiResult<dynamic>> deleteUser({required String cartId, required String userId}) async {
+     return ApiResult.success(data: null);
+  }
+
+  @override
+  Future<ApiResult<CartModel>> getCartInGroup(String? cartId, String? shopId, String? cartUuid) async {
+    return getCart(shopId ?? "0");
+  }
+
+  @override
+  Future<ApiResult<CartModel>> insertCartWithGroup({required CartRequest cart}) async {
+     return insertCart(cart: cart);
+  }
+
+  @override
+  Future<ApiResult<CartModel>> removeProductCart({required String cartDetailId, List<String>? listOfId}) async {
+     return ApiResult.success(
+      data: CartModel(
+        data: Cart(id: "1", userCarts: [_demoUserCart.copyWith(cartDetails: [])])
+      ),
+    );
+  }
+
+  @override
+  Future<ApiResult<dynamic>> startGroupOrder({required String cartId}) async {
+     return ApiResult.success(data: null);
   }
 }
