@@ -18,10 +18,23 @@ class HttpService {
         ),
       )
         ..interceptors.add(TokenInterceptor(requireAuth: requireAuth))
+        ..interceptors.add(const FrappeResponseInterceptor())
         ..interceptors.add(LogInterceptor(
             responseHeader: false,
             requestHeader: true,
             responseBody: true,
             requestBody: true));
+}
+
+class FrappeResponseInterceptor extends Interceptor {
+  const FrappeResponseInterceptor();
+
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    if (response.data is Map && response.data.containsKey('message')) {
+      response.data = response.data['message'];
+    }
+    handler.next(response);
+  }
 }
 
