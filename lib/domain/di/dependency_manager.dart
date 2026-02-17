@@ -49,13 +49,14 @@ import 'package:foodyman/infrastructure/repository/delivery_points_repository.da
 import 'package:foodyman/infrastructure/repository/mock/mock_auth_repository.dart';
 import 'package:foodyman/infrastructure/repository/mock/mock_settings_repository.dart';
 import 'package:foodyman/infrastructure/repository/mock/mock_shops_repository.dart';
-import 'package:foodyman/infrastructure/models/data/product_data.dart';
 import 'package:foodyman/infrastructure/repository/mock/mock_products_repository.dart';
 import 'package:foodyman/infrastructure/repository/mock/mock_categories_repository.dart';
 import 'package:foodyman/infrastructure/repository/mock/mock_banners_repository.dart';
 import 'package:foodyman/infrastructure/repository/mock/mock_cart_repository.dart';
 import 'package:foodyman/infrastructure/repository/mock/mock_orders_repository.dart';
 import 'package:foodyman/infrastructure/repository/mock/mock_address_repository.dart';
+import 'package:foodyman/infrastructure/repository/mock/mock_brands_repository.dart';
+
 
 final GetIt getIt = GetIt.instance;
 
@@ -72,6 +73,7 @@ Future<void> setUpDependencies() async {
       getIt.registerSingleton<CartRepositoryFacade>(MockCartRepository());
       getIt.registerSingleton<OrdersRepositoryFacade>(MockOrdersRepository());
       getIt.registerSingleton<AddressRepositoryFacade>(MockAddressRepository());
+      getIt.registerSingleton<BrandsRepositoryFacade>(MockBrandsRepository());
   } else {
       getIt.registerSingleton<SettingsRepositoryFacade>(SettingsRepository());
       getIt.registerSingleton<AuthRepositoryFacade>(AuthRepository());
@@ -82,11 +84,9 @@ Future<void> setUpDependencies() async {
       getIt.registerSingleton<CartRepositoryFacade>(CartRepository());
       getIt.registerSingleton<OrdersRepositoryFacade>(OrdersRepository());
       getIt.registerSingleton<AddressRepositoryFacade>(AddressRepository());
+      getIt.registerSingleton<BrandsRepositoryFacade>(BrandsRepository());
   }
 
-  getIt.registerSingleton<brandsRepositoryFacade>(BrandsRepository()); // Skipping brands mock for now or implemented inside products mock logic if needed?
-  // Wait, BrandsRepositoryFacade is needed.
-  getIt.registerSingleton<BrandsRepositoryFacade>(BrandsRepository());
   getIt.registerSingleton<GalleryRepositoryFacade>(GalleryRepository());
   getIt.registerSingleton<CurrenciesRepositoryFacade>(CurrenciesRepository());
   getIt.registerSingleton<GooglePlace>(GooglePlace(AppConstants.googleApiKey));
@@ -127,4 +127,3 @@ final translation = getIt.get<Map>();
 final walletRepository = getIt.get<WalletRepositoryFacade>();
 final loansRepository = getIt.get<LoansRepositoryFacade>();
 final deliveryPointsRepository = getIt.get<DeliveryPointsRepositoryFacade>();
-
