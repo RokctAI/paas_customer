@@ -14,7 +14,7 @@ class SettingsRepository implements SettingsRepositoryFacade {
   Future<ApiResult<GlobalSettingsResponse>> getGlobalSettings() async {
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.get('/api/v1/rest/settings');
+      final response = await client.get('/api/method/paas.api.system.system.get_global_settings');
       return ApiResult.success(
         data: GlobalSettingsResponse.fromJson(response.data),
       );
@@ -37,7 +37,7 @@ class SettingsRepository implements SettingsRepositoryFacade {
         queryParameters: data,
       );
       return ApiResult.success(
-        data: MobileTranslationsResponse.fromJson(response.data['message']),
+        data: MobileTranslationsResponse.fromJson(response.data),
       );
     } catch (e) {
       debugPrint('==> get translations failure: $e');
@@ -52,7 +52,7 @@ class SettingsRepository implements SettingsRepositoryFacade {
   Future<ApiResult<LanguagesResponse>> getLanguages() async {
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.get('/api/v1/rest/languages/active');
+      final response = await client.get('/api/method/paas.api.system.system.get_languages');
       if (LocalStorage.getLanguage() == null ||
           !(LanguagesResponse.fromJson(response.data)
                   .data
@@ -81,7 +81,7 @@ class SettingsRepository implements SettingsRepositoryFacade {
   Future<ApiResult<HelpModel>> getFaq() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get('/api/v1/rest/faqs/paginate');
+      final response = await client.get('/api/method/paas.api.admin_content.admin_content.get_admin_faqs');
       return ApiResult.success(
         data: HelpModel.fromJson(response.data),
       );
@@ -98,9 +98,14 @@ class SettingsRepository implements SettingsRepositoryFacade {
   Future<ApiResult<Translation>> getTerm() async {
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.get('/api/v1/rest/term');
+      final response = await client.get(
+        '/api/method/paas.api.page.page.get_page',
+        queryParameters: {'slug': 'term'},
+      );
+      // Response structure adaptation needed. Assuming get_page returns the page doc.
+      // Translation.fromJson expects map.
       return ApiResult.success(
-        data: Translation.fromJson(response.data["data"]["translation"]),
+        data: Translation.fromJson(response.data),
       );
     } catch (e) {
       debugPrint('==> get term failure: $e');
@@ -115,9 +120,12 @@ class SettingsRepository implements SettingsRepositoryFacade {
   Future<ApiResult<Translation>> getPolicy() async {
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.get('/api/v1/rest/policy');
+      final response = await client.get(
+        '/api/method/paas.api.page.page.get_page',
+        queryParameters: {'slug': 'policy'},
+      );
       return ApiResult.success(
-        data: Translation.fromJson(response.data["data"]["translation"]),
+        data: Translation.fromJson(response.data),
       );
     } catch (e) {
       debugPrint('==> get policy failure: $e');
@@ -132,13 +140,14 @@ class SettingsRepository implements SettingsRepositoryFacade {
   Future<ApiResult<NotificationsListModel>> getNotificationList() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get('/api/v1/dashboard/user/notifications');
+      // Using parities with NotificationRepository or dedicated settings endpoint
+      final response = await client.get('/api/method/paas.api.notification.notification.get_notification_settings');
       return ApiResult.success(
         data: notificationsListModelFromJson(response.data) ??
             NotificationsListModel(),
       );
     } catch (e) {
-      debugPrint('==> get languages failure: $e');
+      debugPrint('==> get notification settings failure: $e');
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
         statusCode: NetworkExceptions.getDioStatus(e),
@@ -152,13 +161,10 @@ class SettingsRepository implements SettingsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final data = {
-        for (int i = 0; i < notifications!.length; i++)
-          "notifications[$i][notification_id]": notifications[i].id,
-        for (int i = 0; i < notifications.length; i++)
-          "notifications[$i][active]": notifications[i].active! ? 1 : 0,
+        'notifications': notifications?.map((n) => {'notification_id': n.id, 'active': n.active}).toList(),
       };
-      await client.post('/api/v1/dashboard/user/update/notifications',
-          queryParameters: data);
+      await client.post('/api/method/paas.api.notification.notification.update_notification_settings',
+          data: data);
       return const ApiResult.success(
         data: null,
       );
