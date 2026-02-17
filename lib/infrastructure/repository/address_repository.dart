@@ -10,7 +10,7 @@ class AddressRepository implements AddressRepositoryFacade {
   Future<ApiResult<AddressesResponse>> getUserAddresses() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get('/api/method/paas.api.addresses');
+      final response = await client.post('/api/method/paas.api.user.user.get_user_addresses');
       return ApiResult.success(
         data: AddressesResponse.fromJson(response.data),
       );
@@ -27,7 +27,10 @@ class AddressRepository implements AddressRepositoryFacade {
   Future<ApiResult<void>> deleteAddress(int addressId) async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      await client.delete('/api/method/paas.api.addresses/$addressId');
+      await client.post(
+        '/api/method/paas.api.user.user.delete_user_address',
+        data: {'name': addressId.toString()},
+      );
       return const ApiResult.success(data: null);
     } catch (e) {
       debugPrint('==> delete address failure: $e');
@@ -45,8 +48,8 @@ class AddressRepository implements AddressRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/method/paas.api.addresses',
-        data: address.toJson(),
+        '/api/method/paas.api.user.user.add_user_address',
+        data: {'address_data': address.toJson()},
       );
       return ApiResult.success(
         data: SingleAddressResponse.fromJson(response.data),
