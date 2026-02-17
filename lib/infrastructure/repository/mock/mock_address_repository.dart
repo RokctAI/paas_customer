@@ -2,6 +2,7 @@ import 'package:foodyman/domain/handlers/api_result.dart';
 import 'package:foodyman/domain/interface/address.dart';
 import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
 import 'package:foodyman/infrastructure/models/data/address_information.dart';
+import 'package:foodyman/infrastructure/models/data/local_address_data.dart';
 import 'package:foodyman/infrastructure/models/response/addresses_response.dart';
 import 'package:foodyman/infrastructure/models/response/single_address_response.dart';
 
@@ -9,19 +10,19 @@ class MockAddressRepository implements AddressRepositoryFacade {
   final AddressNewModel _demoAddress = AddressNewModel(
     id: "1",
     title: "Home",
-    address: AddressInformation(address: "123 Demo St", street: "Demo St", house: "123", floor: "1"),
+    address: AddressInformation(address: "123 Demo St", house: "123", floor: "1"),
     active: true,
     location: [37.7749, -122.4194],
   );
 
   @override
-  Future<ApiResult<SingleAddressResponse>> createAddress(AddressNewModel address) async {
+  Future<ApiResult<SingleAddressResponse>> createAddress(LocalAddressData address) async {
     return ApiResult.success(
       data: SingleAddressResponse(
         data: _demoAddress.copyWith(
             title: address.title,
-            address: address.address,
-            location: address.location
+            address: AddressInformation(address: address.address),
+            location: address.location != null ? [address.location!.latitude ?? 0.0, address.location!.longitude ?? 0.0] : null
         ),
       ),
     );
