@@ -1,4 +1,3 @@
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
 
@@ -16,4 +15,3 @@ class ViewMapState with _$ViewMapState {
 
   const ViewMapState._();
 }
-

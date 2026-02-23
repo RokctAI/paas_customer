@@ -47,8 +47,10 @@ abstract class AppHelpers {
     final charset =
         '0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-.';
     final random = Random.secure();
-    return List.generate(length, (i) => charset[random.nextInt(charset.length)])
-        .join();
+    return List.generate(
+      length,
+      (i) => charset[random.nextInt(charset.length)],
+    ).join();
   }
 
   static bool checkYesterday(String? startTime, String? endTime) {
@@ -59,12 +61,23 @@ abstract class AppHelpers {
     DateTime end = format.parse(endTime.toSingleTime);
 
     start = DateTime(
-        now.year, now.month, now.day, start.hour, start.minute, start.second);
+      now.year,
+      now.month,
+      now.day,
+      start.hour,
+      start.minute,
+      start.second,
+    );
     end = DateTime(
-        now.year, now.month, now.day, end.hour, end.minute, end.second);
+      now.year,
+      now.month,
+      now.day,
+      end.hour,
+      end.minute,
+      end.second,
+    );
     return end.isBefore(start);
   }
-
 
   static showNoConnectionSnackBar(BuildContext context) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -74,10 +87,7 @@ abstract class AppHelpers {
       duration: const Duration(seconds: 3),
       content: Text(
         'No internet connection',
-        style: AppStyle.interNoSemi(
-          size: 14,
-          color: AppStyle.white,
-        ),
+        style: AppStyle.interNoSemi(size: 14, color: AppStyle.white),
       ),
       action: SnackBarAction(
         label: 'Close',
@@ -160,55 +170,61 @@ abstract class AppHelpers {
 
   static showCheckTopSnackBar(BuildContext context, String text) {
     return showTopSnackBar(
-        Overlay.of(context),
-        CustomSnackBar.error(
-          message: text.isEmpty
-              ? "Please check your credentials and try again"
-              : text,
-        ),
-        animationDuration: const Duration(milliseconds: 700),
-        reverseAnimationDuration: const Duration(milliseconds: 700),
-        displayDuration: const Duration(milliseconds: 700));
+      Overlay.of(context),
+      CustomSnackBar.error(
+        message: text.isEmpty
+            ? "Please check your credentials and try again"
+            : text,
+      ),
+      animationDuration: const Duration(milliseconds: 700),
+      reverseAnimationDuration: const Duration(milliseconds: 700),
+      displayDuration: const Duration(milliseconds: 700),
+    );
   }
 
-  static showCheckTopSnackBarInfo(BuildContext context, String text,
-      {VoidCallback? onTap}) {
+  static showCheckTopSnackBarInfo(
+    BuildContext context,
+    String text, {
+    VoidCallback? onTap,
+  }) {
     return showTopSnackBar(
-        Overlay.of(context),
-        CustomSnackBar.info(
-          message: text,
-        ),
-        animationDuration: const Duration(milliseconds: 700),
-        reverseAnimationDuration: const Duration(milliseconds: 700),
-        displayDuration: const Duration(milliseconds: 700),
-        onTap: onTap);
+      Overlay.of(context),
+      CustomSnackBar.info(message: text),
+      animationDuration: const Duration(milliseconds: 700),
+      reverseAnimationDuration: const Duration(milliseconds: 700),
+      displayDuration: const Duration(milliseconds: 700),
+      onTap: onTap,
+    );
   }
 
   static showCheckTopSnackBarDone(BuildContext context, String text) {
     return showTopSnackBar(
-        Overlay.of(context),
-        CustomSnackBar.success(
-          message: text,
-        ),
-        animationDuration: const Duration(milliseconds: 700),
-        reverseAnimationDuration: const Duration(milliseconds: 700),
-        displayDuration: const Duration(milliseconds: 700));
+      Overlay.of(context),
+      CustomSnackBar.success(message: text),
+      animationDuration: const Duration(milliseconds: 700),
+      reverseAnimationDuration: const Duration(milliseconds: 700),
+      displayDuration: const Duration(milliseconds: 700),
+    );
   }
 
-  static showCheckTopSnackBarInfoCustom(BuildContext context, String text,
-      {VoidCallback? onTap}) {
+  static showCheckTopSnackBarInfoCustom(
+    BuildContext context,
+    String text, {
+    VoidCallback? onTap,
+  }) {
     return showTopSnackBar(
-        Overlay.of(context),
-        CustomSnackBar.info(
-          message: text,
-          icon: const SizedBox.shrink(),
-          backgroundColor: AppStyle.primary,
-          textStyle: AppStyle.interNormal(),
-        ),
-        animationDuration: const Duration(milliseconds: 700),
-        reverseAnimationDuration: const Duration(milliseconds: 700),
-        displayDuration: const Duration(milliseconds: 700),
-        onTap: onTap);
+      Overlay.of(context),
+      CustomSnackBar.info(
+        message: text,
+        icon: const SizedBox.shrink(),
+        backgroundColor: AppStyle.primary,
+        textStyle: AppStyle.interNormal(),
+      ),
+      animationDuration: const Duration(milliseconds: 700),
+      reverseAnimationDuration: const Duration(milliseconds: 700),
+      displayDuration: const Duration(milliseconds: 700),
+      onTap: onTap,
+    );
   }
 
   static double getOrderStatusProgress(String? status) {
@@ -355,8 +371,13 @@ abstract class AppHelpers {
     final Map<String, dynamic> translations = LocalStorage.getTranslations();
     return translations[trKey] ??
         (trKey.isNotEmpty
-            ? trKey.replaceAll(".", " ").replaceAll("_", " ").replaceFirst(
-                trKey.substring(0, 1), trKey.substring(0, 1).toUpperCase())
+            ? trKey
+                  .replaceAll(".", " ")
+                  .replaceAll("_", " ")
+                  .replaceFirst(
+                    trKey.substring(0, 1),
+                    trKey.substring(0, 1).toUpperCase(),
+                  )
             : '');
   }
 
@@ -382,8 +403,10 @@ abstract class AppHelpers {
     final List<SettingsData> settings = LocalStorage.getSettingsList();
     for (final setting in settings) {
       if (setting.key == 'location') {
-        final String? latString =
-            setting.value?.substring(0, setting.value?.indexOf(','));
+        final String? latString = setting.value?.substring(
+          0,
+          setting.value?.indexOf(','),
+        );
         if (latString == null) {
           return null;
         }
@@ -398,13 +421,17 @@ abstract class AppHelpers {
     final List<SettingsData> settings = LocalStorage.getSettingsList();
     for (final setting in settings) {
       if (setting.key == 'location') {
-        final String? latString =
-            setting.value?.substring(0, setting.value?.indexOf(','));
+        final String? latString = setting.value?.substring(
+          0,
+          setting.value?.indexOf(','),
+        );
         if (latString == null) {
           return null;
         }
-        final String? lonString = setting.value
-            ?.substring((latString.length) + 2, setting.value?.length);
+        final String? lonString = setting.value?.substring(
+          (latString.length) + 2,
+          setting.value?.length,
+        );
         if (lonString == null) {
           return null;
         }
@@ -487,9 +514,7 @@ abstract class AppHelpers {
   }) {
     AlertDialog alert = AlertDialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(radius.r),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(radius.r)),
       ),
       contentPadding: EdgeInsets.all(20.r),
       iconPadding: EdgeInsets.zero,
@@ -505,27 +530,26 @@ abstract class AppHelpers {
     );
   }
 
-
   static String errorHandler(e) {
     try {
       return (e.runtimeType == DioException)
           ? ((e as DioException).response?.data["message"] == "Bad request."
-          ? (e.response?.data["params"] as Map).values.first[0]
-          : e.response?.data["message"])
+                ? (e.response?.data["params"] as Map).values.first[0]
+                : e.response?.data["message"])
           : e.toString();
     } catch (s) {
       try {
         return (e.runtimeType == DioException)
             ? ((e as DioException).response?.data.toString().substring(
-            (e.response?.data.toString().indexOf("<title>") ?? 0) + 7,
-            e.response?.data.toString().indexOf("</title") ?? 0))
-            .toString()
+                (e.response?.data.toString().indexOf("<title>") ?? 0) + 7,
+                e.response?.data.toString().indexOf("</title") ?? 0,
+              )).toString()
             : e.toString();
       } catch (r) {
         try {
           return (e.runtimeType == DioException)
               ? ((e as DioException).response?.data["error"]["message"])
-              .toString()
+                    .toString()
               : e.toString();
         } catch (f) {
           return e.toString();
@@ -562,45 +586,44 @@ abstract class AppHelpers {
     return AppHelpers.getTranslation(TrKeys.newKey);
   }
 
-  static openDialog({
-    required BuildContext context,
-    required String title,
-  }) {
+  static openDialog({required BuildContext context, required String title}) {
     return showDialog(
       context: context,
       builder: (_) {
-            return Dialog(
-              backgroundColor: AppStyle.transparent,
-              insetPadding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: Container(
-                margin: EdgeInsets.all(24.w),
-                width: double.infinity,
-                padding: EdgeInsets.all(24.w),
-                decoration: BoxDecoration(
-                  color: AppStyle.bgGrey,
-                  borderRadius: BorderRadius.circular(16.r),
-                ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Text(
-                        title,
-                        textAlign: TextAlign.center,
-                        style: AppStyle.interNormal(
-                            color: AppStyle.textGrey, size: 18),
-                      ),
-                      24.verticalSpace,
-                      CustomButton(
-                        onPressed: () => Navigator.pop(context),
-                        title: AppHelpers.getTranslation(TrKeys.close),
-                        background: AppStyle.primary,
-                        textColor: AppStyle.white,
-                      ),
-                    ],
+        return Dialog(
+          backgroundColor: AppStyle.transparent,
+          insetPadding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: Container(
+            margin: EdgeInsets.all(24.w),
+            width: double.infinity,
+            padding: EdgeInsets.all(24.w),
+            decoration: BoxDecoration(
+              color: AppStyle.bgGrey,
+              borderRadius: BorderRadius.circular(16.r),
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: AppStyle.interNormal(
+                      color: AppStyle.textGrey,
+                      size: 18,
+                    ),
                   ),
-                ),
+                  24.verticalSpace,
+                  CustomButton(
+                    onPressed: () => Navigator.pop(context),
+                    title: AppHelpers.getTranslation(TrKeys.close),
+                    background: AppStyle.primary,
+                    textColor: AppStyle.white,
+                  ),
+                ],
               ),
-            );
+            ),
+          ),
+        );
       },
     );
   }
@@ -622,7 +645,9 @@ abstract class AppHelpers {
     final double defaultLng = AppConstants.demoLongitude;
 
     // If location is null or coordinates are null, consider it as using default
-    if (addressData?.location == null || currentLat == null || currentLng == null) {
+    if (addressData?.location == null ||
+        currentLat == null ||
+        currentLng == null) {
       return true;
     }
 
@@ -654,10 +679,7 @@ abstract class AppHelpers {
           12.verticalSpace,
           Text(
             'Please check your internet connection and try again.',
-            style: AppStyle.interNormal(
-              size: 14.sp,
-              color: AppStyle.textGrey,
-            ),
+            style: AppStyle.interNormal(size: 14.sp, color: AppStyle.textGrey),
             textAlign: TextAlign.center,
           ),
           32.verticalSpace,
@@ -673,7 +695,10 @@ abstract class AppHelpers {
 
                 if (context.mounted && hasConnection) {
                   // Connection restored
-                  AppHelpers.showCheckTopSnackBarDone(context, "Connection restored!");
+                  AppHelpers.showCheckTopSnackBarDone(
+                    context,
+                    "Connection restored!",
+                  );
                 } else {
                   // Still no connection, show dialog again
                   Future.delayed(const Duration(milliseconds: 500), () {
@@ -719,10 +744,16 @@ abstract class AppHelpers {
 extension TimeOfDayExtension on TimeOfDay {
   TimeOfDay plusMinutes({required int minute}) {
     DateTime today = DateTime.now();
-    DateTime customDateTime =
-    DateTime(today.year, today.month, today.day, hour, this.minute);
+    DateTime customDateTime = DateTime(
+      today.year,
+      today.month,
+      today.day,
+      hour,
+      this.minute,
+    );
     return TimeOfDay.fromDateTime(
-        customDateTime.add(Duration(minutes: minute)));
+      customDateTime.add(Duration(minutes: minute)),
+    );
   }
 }
 
@@ -732,4 +763,3 @@ extension ExtendedIterable<E> on Iterable<E> {
     return map((e) => f(e, i++));
   }
 }
-

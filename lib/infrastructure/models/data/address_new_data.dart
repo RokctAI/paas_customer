@@ -10,34 +10,36 @@ class AddressNewModel {
   DateTime? createdAt;
   DateTime? updatedAt;
 
-  AddressNewModel(
-      {this.id,
-      this.title,
-      this.userId,
-      this.address,
-      this.location,
-      this.createdAt,
-      this.updatedAt,
-      this.active});
+  AddressNewModel({
+    this.id,
+    this.title,
+    this.userId,
+    this.address,
+    this.location,
+    this.createdAt,
+    this.updatedAt,
+    this.active,
+  });
 
-  AddressNewModel copyWith(
-          {String? id,
-          String? title,
-          String? userId,
-          AddressInformation? address,
-          List? location,
-          DateTime? createdAt,
-          DateTime? updatedAt,
-          bool? active}) =>
-      AddressNewModel(
-          id: id ?? this.id,
-          title: title ?? this.title,
-          userId: userId ?? this.userId,
-          address: address ?? this.address,
-          location: location ?? this.location,
-          createdAt: createdAt ?? this.createdAt,
-          updatedAt: updatedAt ?? this.updatedAt,
-          active: active ?? this.active);
+  AddressNewModel copyWith({
+    String? id,
+    String? title,
+    String? userId,
+    AddressInformation? address,
+    List? location,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    bool? active,
+  }) => AddressNewModel(
+    id: id ?? this.id,
+    title: title ?? this.title,
+    userId: userId ?? this.userId,
+    address: address ?? this.address,
+    location: location ?? this.location,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    active: active ?? this.active,
+  );
 
   factory AddressNewModel.fromJson(Map<String, dynamic> json) =>
       AddressNewModel(
@@ -60,15 +62,15 @@ class AddressNewModel {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        if (title != null && (title?.isNotEmpty ?? false)) "title": title,
-        "active": 1,
-        "user_id": userId,
-        "address": address?.toJson(),
-        "location":
-            location == null ? [] : List<dynamic>.from(location!.map((x) => x)),
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-      };
+    "id": id,
+    if (title != null && (title?.isNotEmpty ?? false)) "title": title,
+    "active": 1,
+    "user_id": userId,
+    "address": address?.toJson(),
+    "location": location == null
+        ? []
+        : List<dynamic>.from(location!.map((x) => x)),
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+  };
 }
-

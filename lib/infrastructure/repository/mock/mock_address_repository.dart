@@ -10,19 +10,30 @@ class MockAddressRepository implements AddressRepositoryFacade {
   final AddressNewModel _demoAddress = AddressNewModel(
     id: "1",
     title: "Home",
-    address: AddressInformation(address: "123 Demo St", house: "123", floor: "1"),
+    address: AddressInformation(
+      address: "123 Demo St",
+      house: "123",
+      floor: "1",
+    ),
     active: true,
     location: [37.7749, -122.4194],
   );
 
   @override
-  Future<ApiResult<SingleAddressResponse>> createAddress(LocalAddressData address) async {
+  Future<ApiResult<SingleAddressResponse>> createAddress(
+    LocalAddressData address,
+  ) async {
     return ApiResult.success(
       data: SingleAddressResponse(
         data: _demoAddress.copyWith(
-            title: address.title,
-            address: AddressInformation(address: address.address),
-            location: address.location != null ? [address.location!.latitude ?? 0.0, address.location!.longitude ?? 0.0] : null
+          title: address.title,
+          address: AddressInformation(address: address.address),
+          location: address.location != null
+              ? [
+                  address.location!.latitude ?? 0.0,
+                  address.location!.longitude ?? 0.0,
+                ]
+              : null,
         ),
       ),
     );
@@ -37,7 +48,14 @@ class MockAddressRepository implements AddressRepositoryFacade {
   Future<ApiResult<AddressesResponse>> getUserAddresses() async {
     return ApiResult.success(
       data: AddressesResponse(
-        data: [_demoAddress, _demoAddress.copyWith(id: "2", title: "Work", address: AddressInformation(address: "456 Office Blvd"))],
+        data: [
+          _demoAddress,
+          _demoAddress.copyWith(
+            id: "2",
+            title: "Work",
+            address: AddressInformation(address: "456 Office Blvd"),
+          ),
+        ],
       ),
     );
   }

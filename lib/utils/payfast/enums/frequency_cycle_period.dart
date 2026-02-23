@@ -1,7 +1,1 @@
-enum FrequencyCyclePeriod {
-  monthly,
-  quaterly,
-  biannually,
-  annual,
-}
-
+enum FrequencyCyclePeriod { monthly, quaterly, biannually, annual }

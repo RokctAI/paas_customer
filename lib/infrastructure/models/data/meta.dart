@@ -19,4 +19,3 @@ class Meta {
     return map;
   }
 }
-

@@ -26,7 +26,8 @@ class AppBarHome extends ConsumerStatefulWidget {
   ConsumerState<AppBarHome> createState() => _AppBarHomeState();
 }
 
-class _AppBarHomeState extends ConsumerState<AppBarHome> with SingleTickerProviderStateMixin {
+class _AppBarHomeState extends ConsumerState<AppBarHome>
+    with SingleTickerProviderStateMixin {
   late StreamController<bool> _toggleStreamController;
   late StreamController<bool> _alternateAppNameController;
   late UniqueKey _welcomeTextKey;
@@ -89,7 +90,6 @@ class _AppBarHomeState extends ConsumerState<AppBarHome> with SingleTickerProvid
     super.dispose();
   }
 
-
   void _startAlternating() async {
     while (true) {
       await Future.delayed(const Duration(seconds: 3));
@@ -135,21 +135,22 @@ class _AppBarHomeState extends ConsumerState<AppBarHome> with SingleTickerProvid
 
     debugPrint("Current coordinates: $currentLat, $currentLng");
     debugPrint("Default coordinates: $defaultLat, $defaultLng");
-    debugPrint("Difference lat: ${(currentLat ?? 0) - defaultLat}, lng: ${(currentLng ?? 0) - defaultLng}");
+    debugPrint(
+      "Difference lat: ${(currentLat ?? 0) - defaultLat}, lng: ${(currentLng ?? 0) - defaultLng}",
+    );
     debugPrint("Address title: ${addressData?.title}");
     debugPrint("Address text: ${addressData?.address}");
 
     // Check if using default coordinates
-    final bool isUsingDefaultCoordinates = AppHelpers.isUsingDefaultCoordinates();
+    final bool isUsingDefaultCoordinates =
+        AppHelpers.isUsingDefaultCoordinates();
     debugPrint("Using default coordinates: $isUsingDefaultCoordinates");
 
     return Stack(
       children: [
         // Background
         Positioned.fill(
-          child: Container(
-            color: AppStyle.primary.withOpacity(0.28),
-          ),
+          child: Container(color: AppStyle.primary.withOpacity(0.28)),
         ),
 
         // Main content
@@ -192,11 +193,14 @@ class _AppBarHomeState extends ConsumerState<AppBarHome> with SingleTickerProvid
                               stream: _alternateAppNameController.stream,
                               initialData: true,
                               builder: (context, snapshot) {
-                                final isShowingFormattedMotto = snapshot.data ?? true;
+                                final isShowingFormattedMotto =
+                                    snapshot.data ?? true;
                                 return Row(
                                   children: [
                                     Image.asset(
-                                      isShowingFormattedMotto ? AppAssets.pngLogo : AppAssets.pngMotto,
+                                      isShowingFormattedMotto
+                                          ? AppAssets.pngLogo
+                                          : AppAssets.pngMotto,
                                       width: 50.r,
                                       height: 50.r,
                                     ),
@@ -222,11 +226,19 @@ class _AppBarHomeState extends ConsumerState<AppBarHome> with SingleTickerProvid
                             Row(
                               children: [
                                 SizedBox(
-                                  width: MediaQuery.of(context).size.width - 120.w,
+                                  width:
+                                      MediaQuery.of(context).size.width - 120.w,
                                   child: Text(
-                                    (LocalStorage.getAddressSelected()?.title?.isEmpty ?? true)
-                                        ? LocalStorage.getAddressSelected()?.address ?? ''
-                                        : LocalStorage.getAddressSelected()?.title ?? "",
+                                    (LocalStorage.getAddressSelected()
+                                                ?.title
+                                                ?.isEmpty ??
+                                            true)
+                                        ? LocalStorage.getAddressSelected()
+                                                  ?.address ??
+                                              ''
+                                        : LocalStorage.getAddressSelected()
+                                                  ?.title ??
+                                              "",
                                     style: AppStyle.interBold(
                                       size: 14,
                                       color: AppStyle.black,
@@ -268,20 +280,28 @@ class _AppBarHomeState extends ConsumerState<AppBarHome> with SingleTickerProvid
                         return Opacity(
                           opacity: _tooltipAnimation.value,
                           child: Transform.translate(
-                            offset: Offset(0, 10 * (1 - _tooltipAnimation.value)),
+                            offset: Offset(
+                              0,
+                              10 * (1 - _tooltipAnimation.value),
+                            ),
                             child: Stack(
                               clipBehavior: Clip.none,
                               children: [
                                 // Main container
                                 Container(
                                   width: double.infinity,
-                                  padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: 8.h,
+                                    horizontal: 16.w,
+                                  ),
                                   decoration: BoxDecoration(
                                     color: AppStyle.primary,
                                     borderRadius: BorderRadius.circular(8.r),
                                   ),
                                   child: Text(
-                                    AppHelpers.getTranslation(TrKeys.usingDefaultLocation),
+                                    AppHelpers.getTranslation(
+                                      TrKeys.usingDefaultLocation,
+                                    ),
                                     style: AppStyle.interRegular(
                                       size: 14,
                                       color: AppStyle.white,
@@ -375,11 +395,14 @@ class WelcomeText extends StatelessWidget {
     String signedText = '';
 
     if (isLoggedIn && firstName.isNotEmpty) {
-      greetingText = '${AppHelpers.getTranslation(TrKeys.hello)} \u{1F44B}\n$firstName';
+      greetingText =
+          '${AppHelpers.getTranslation(TrKeys.hello)} \u{1F44B}\n$firstName';
       signedText = '${AppHelpers.getTranslation(TrKeys.signedtext)}\n';
     } else {
-      greetingText = '${AppHelpers.getTranslation(TrKeys.hey)} \u{1F44B}\n${AppHelpers.getTranslation(TrKeys.there)}';
-      signedText = 'login or signup ${AppHelpers.getTranslation(TrKeys.signtext)}';
+      greetingText =
+          '${AppHelpers.getTranslation(TrKeys.hey)} \u{1F44B}\n${AppHelpers.getTranslation(TrKeys.there)}';
+      signedText =
+          'login or signup ${AppHelpers.getTranslation(TrKeys.signtext)}';
     }
 
     List<String> words = signedText.split(' ');
@@ -461,7 +484,10 @@ class WelcomeText extends StatelessWidget {
                             context.router.push(const LoginRoute());
                           },
                       ),
-                      TextSpan(text: ' ${AppHelpers.getTranslation(TrKeys.signtext)}\n${AppHelpers.getTranslation(TrKeys.signtext2)}'),
+                      TextSpan(
+                        text:
+                            ' ${AppHelpers.getTranslation(TrKeys.signtext)}\n${AppHelpers.getTranslation(TrKeys.signtext2)}',
+                      ),
                     ],
                   ),
                 ),
@@ -472,6 +498,7 @@ class WelcomeText extends StatelessWidget {
     );
   }
 }
+
 // Custom clipper for creating the triangle pointer
 class TriangleClipper extends CustomClipper<Path> {
   @override

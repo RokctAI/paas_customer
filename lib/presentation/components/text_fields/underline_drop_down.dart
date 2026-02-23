@@ -36,10 +36,9 @@ class UnderlineDropDown extends StatelessWidget {
       validator: validator,
       items: list.map((e) {
         return DropdownMenuItem(
-            value: e,
-            child: Text(
-              AppHelpers.getTranslation(e),
-            ));
+          value: e,
+          child: Text(AppHelpers.getTranslation(e)),
+        );
       }).toList(),
       onChanged: (s) => onChanged.call(s.toString()),
       elevation: 0,
@@ -49,23 +48,28 @@ class UnderlineDropDown extends StatelessWidget {
       style: AppStyle.interNormal(),
       decoration: InputDecoration(
         contentPadding: REdgeInsets.symmetric(horizontal: 2),
-        labelText:
-        label != null ? "${AppHelpers.getTranslation(label!)}*" : null,
+        labelText: label != null
+            ? "${AppHelpers.getTranslation(label!)}*"
+            : null,
         labelStyle: AppStyle.interNormal(
           size: 14,
           color: AppStyle.black.withOpacity(0.9),
         ),
         enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide.merge(
-                const BorderSide(color: AppStyle.differBorderColor),
-                const BorderSide(color: AppStyle.differBorderColor))),
+          borderSide: BorderSide.merge(
+            const BorderSide(color: AppStyle.differBorderColor),
+            const BorderSide(color: AppStyle.differBorderColor),
+          ),
+        ),
         errorBorder: InputBorder.none,
         border: const UnderlineInputBorder(),
         focusedErrorBorder: const UnderlineInputBorder(),
         disabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide.merge(
-                const BorderSide(color: AppStyle.differBorderColor),
-                const BorderSide(color: AppStyle.differBorderColor))),
+          borderSide: BorderSide.merge(
+            const BorderSide(color: AppStyle.differBorderColor),
+            const BorderSide(color: AppStyle.differBorderColor),
+          ),
+        ),
         focusedBorder: const UnderlineInputBorder(),
       ),
     );

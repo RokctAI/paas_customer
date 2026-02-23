@@ -107,19 +107,17 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
         success: (transactionId) {
           // Show success message
           AppHelpers.showCheckTopSnackBarDone(
-              context,
-              AppHelpers.getTranslation(TrKeys.paymentSuccessful)
+            context,
+            AppHelpers.getTranslation(TrKeys.paymentSuccessful),
           );
 
           // Add a slight delay to ensure snackbar is visible
           Future.delayed(const Duration(milliseconds: 1000), () {
             if (!mounted) return;
             // Refresh cart
-            ref.read(shopOrderProvider.notifier).getCart(
-                context,
-                    () {},
-                isShowLoading: false
-            );
+            ref
+                .read(shopOrderProvider.notifier)
+                .getCart(context, () {}, isShowLoading: false);
 
             // Call the payment complete callback
             widget.onPaymentComplete(true);
@@ -133,10 +131,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
             _isLoading = false;
           });
 
-          AppHelpers.showCheckTopSnackBarInfo(
-            context,
-            error,
-          );
+          AppHelpers.showCheckTopSnackBarInfo(context, error);
         },
       );
     } catch (e) {
@@ -189,10 +184,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
           );
         },
         failure: (error, statusCode) {
-          AppHelpers.showCheckTopSnackBarInfo(
-            context,
-            error,
-          );
+          AppHelpers.showCheckTopSnackBarInfo(context, error);
         },
       );
     } catch (e) {
@@ -216,7 +208,9 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     // Only apply height constraint if there are fewer than 2 saved cards
     if (!_loadingCards && _savedCards.length <= 2) {
       heightConstraint = BoxConstraints(
-        maxHeight: MediaQuery.of(context).size.height * 0.3, // Smaller height with fewer cards
+        maxHeight:
+            MediaQuery.of(context).size.height *
+            0.3, // Smaller height with fewer cards
       );
     }
 
@@ -245,116 +239,113 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
       return _loadingCards
           ? Center(child: CircularProgressIndicator(color: AppStyle.primary))
           : Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          4.verticalSpace,
-          Center(
-            child: Container(
-              height: 4.h,
-              width: 48.w,
-              decoration: BoxDecoration(
-                color: AppStyle.dragElement,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(40.r),
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                4.verticalSpace,
+                Center(
+                  child: Container(
+                    height: 4.h,
+                    width: 48.w,
+                    decoration: BoxDecoration(
+                      color: AppStyle.dragElement,
+                      borderRadius: BorderRadius.all(Radius.circular(40.r)),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
-          8.verticalSpace,
-          Text(
-            AppHelpers.getTranslation(TrKeys.cards),
-            style: AppStyle.interBold(
-              size: 20.sp, // Slightly smaller text
-              color: AppStyle.black,
-            ),
-          ),
-          8.verticalSpace,
-          SavedCardsWidget(
-            onCardSelected: (_) {}, // No action needed
-            hideManagement: false, // Hide card management options
-          ),
-          16.verticalSpace, // Reduced bottom spacing
-        ],
-      );
+                8.verticalSpace,
+                Text(
+                  AppHelpers.getTranslation(TrKeys.cards),
+                  style: AppStyle.interBold(
+                    size: 20.sp, // Slightly smaller text
+                    color: AppStyle.black,
+                  ),
+                ),
+                8.verticalSpace,
+                SavedCardsWidget(
+                  onCardSelected: (_) {}, // No action needed
+                  hideManagement: false, // Hide card management options
+                ),
+                16.verticalSpace, // Reduced bottom spacing
+              ],
+            );
     } else {
       // Regular payment mode with proper styling
       return _loadingCards
           ? Center(child: CircularProgressIndicator(color: AppStyle.primary))
           : SingleChildScrollView(
-        controller: widget.scrollController,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            4.verticalSpace,
-            Center(
-              child: Container(
-                height: 4.h,
-                width: 48.w,
-                decoration: BoxDecoration(
-                  color: AppStyle.dragElement,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(40.r),
-                  ),
-                ),
-              ),
-            ),
-            // Only show this section if we have saved cards
-            if (_savedCards.isNotEmpty) ...[
-              // Use the SavedCardsWidget
-              SavedCardsWidget(
-                onCardSelected: (card) {
-                  setState(() {
-                    _selectedCard = card;
-                  });
-                },
-                hideManagement: false,
-              ),
-
-              4.verticalSpace,
-
-              // Pay with selected card button - only show if card is selected
-              if (_selectedCard != null)
-                CustomButton(
-                  isLoading: _isLoading,
-                  title: AppHelpers.getTranslation(TrKeys.payWithSavedCard),
-                  onPressed: _processTokenPayment,
-                ),
-
-              4.verticalSpace,
-              Row(
+              controller: widget.scrollController,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Expanded(child: Divider(color: AppStyle.black)),
+                  4.verticalSpace,
+                  Center(
+                    child: Container(
+                      height: 4.h,
+                      width: 48.w,
+                      decoration: BoxDecoration(
+                        color: AppStyle.dragElement,
+                        borderRadius: BorderRadius.all(Radius.circular(40.r)),
+                      ),
+                    ),
+                  ),
+                  // Only show this section if we have saved cards
+                  if (_savedCards.isNotEmpty) ...[
+                    // Use the SavedCardsWidget
+                    SavedCardsWidget(
+                      onCardSelected: (card) {
+                        setState(() {
+                          _selectedCard = card;
+                        });
+                      },
+                      hideManagement: false,
+                    ),
+
+                    4.verticalSpace,
+
+                    // Pay with selected card button - only show if card is selected
+                    if (_selectedCard != null)
+                      CustomButton(
+                        isLoading: _isLoading,
+                        title: AppHelpers.getTranslation(
+                          TrKeys.payWithSavedCard,
+                        ),
+                        onPressed: _processTokenPayment,
+                      ),
+
+                    4.verticalSpace,
+                    Row(
+                      children: [
+                        const Expanded(child: Divider(color: AppStyle.black)),
+                      ],
+                    ),
+                    4.verticalSpace,
+                  ],
+
+                  // Button to use PayFast WebView for new card
+                  CustomButton(
+                    isLoading: _isLoading,
+                    title: _selectedCard != null
+                        ? AppHelpers.getTranslation(TrKeys.payWithNewCard)
+                        : AppHelpers.getTranslation(TrKeys.payWithCard),
+                    onPressed: _redirectToPayFastWebView,
+                  ),
+
+                  10.verticalSpace,
+
+                  Center(
+                    child: Text(
+                      AppHelpers.getTranslation(TrKeys.cardWillBeSaved),
+                      style: AppStyle.interNormal(
+                        size: 13.sp,
+                        color: AppStyle.textGrey,
+                      ),
+                    ),
+                  ),
+                  16.verticalSpace,
                 ],
               ),
-              4.verticalSpace,
-            ],
-
-            // Button to use PayFast WebView for new card
-            CustomButton(
-              isLoading: _isLoading,
-              title: _selectedCard != null
-                  ? AppHelpers.getTranslation(TrKeys.payWithNewCard)
-                  : AppHelpers.getTranslation(TrKeys.payWithCard),
-              onPressed: _redirectToPayFastWebView,
-            ),
-
-            10.verticalSpace,
-
-            Center(
-              child: Text(
-                AppHelpers.getTranslation(TrKeys.cardWillBeSaved),
-                style: AppStyle.interNormal(
-                  size: 13.sp,
-                  color: AppStyle.textGrey,
-                ),
-              ),
-            ),
-            16.verticalSpace,
-          ],
-        ),
-      );
+            );
     }
   }
 }
-

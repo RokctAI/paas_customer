@@ -34,9 +34,6 @@ import 'package:lottie/lottie.dart' as lottie;
 
 import '../../../app_constants.dart';
 
-
-
-
 @RoutePage()
 class ViewMapPage extends ConsumerStatefulWidget {
   final bool isShopLocation;
@@ -60,8 +57,11 @@ class ViewMapPage extends ConsumerStatefulWidget {
   ConsumerState<ViewMapPage> createState() => _ViewMapPageState();
 }
 
-class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderStateMixin {
-  late final AnimationController _animationController = AnimationController(vsync: this);
+class _ViewMapPageState extends ConsumerState<ViewMapPage>
+    with TickerProviderStateMixin {
+  late final AnimationController _animationController = AnimationController(
+    vsync: this,
+  );
   late ViewMapNotifier event;
   late TextEditingController controller;
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
@@ -108,7 +108,8 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderSt
         poi.longitude,
       );
 
-      if (distance < minDistance && distance <= 1000) { // 1000 meters = 1 km
+      if (distance < minDistance && distance <= 1000) {
+        // 1000 meters = 1 km
         minDistance = distance;
         nearestPOI = poi;
       }
@@ -120,7 +121,9 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderSt
   Future<Set<Marker>> _getMarkers(List<POIData> poiData) async {
     List<Future<Marker>> markerFutures = poiData.map((poi) async {
       // Load the PNG image
-      final ByteData data = await rootBundle.load('assets/images/poi/${poi.pin}');
+      final ByteData data = await rootBundle.load(
+        'assets/images/poi/${poi.pin}',
+      );
       final Uint8List bytes = data.buffer.asUint8List();
 
       // Decode the PNG image
@@ -137,16 +140,25 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderSt
       canvas.drawImage(image, Offset.zero, paint);
 
       // Apply color filter
-      paint.colorFilter = ColorFilter.mode(poi.titleColor.withOpacity(0.5),BlendMode.srcATop);
+      paint.colorFilter = ColorFilter.mode(
+        poi.titleColor.withOpacity(0.5),
+        BlendMode.srcATop,
+      );
       //canvas.drawRect(Rect.fromLTWH(0, 0, image.width.toDouble(), image.height.toDouble()), paint);
 
       // Convert to image
-      final ui.Image coloredImage = await pictureRecorder.endRecording().toImage(image.width, image.height);
-      final ByteData? byteData = await coloredImage.toByteData(format: ui.ImageByteFormat.png);
+      final ui.Image coloredImage = await pictureRecorder
+          .endRecording()
+          .toImage(image.width, image.height);
+      final ByteData? byteData = await coloredImage.toByteData(
+        format: ui.ImageByteFormat.png,
+      );
       final Uint8List coloredImageData = byteData!.buffer.asUint8List();
 
       // Create BitmapDescriptor from the colored image
-      final BitmapDescriptor customMarkerIcon = BitmapDescriptor.fromBytes(coloredImageData);
+      final BitmapDescriptor customMarkerIcon = BitmapDescriptor.fromBytes(
+        coloredImageData,
+      );
 
       return Marker(
         markerId: MarkerId(poi.name),
@@ -179,22 +191,29 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderSt
       final markers = await _getMarkers(filteredPoiData);
 
       // Find the nearest POI
-      final nearestPOI = _findNearestPOI(cameraPosition.target, filteredPoiData);
+      final nearestPOI = _findNearestPOI(
+        cameraPosition.target,
+        filteredPoiData,
+      );
 
       setState(() {
         this.markers = markers;
         if (nearestPOI != null) {
-          final distance = GeolocatorPlatform.instance.distanceBetween(
-            cameraPosition.target.latitude,
-            cameraPosition.target.longitude,
-            nearestPOI.latitude,
-            nearestPOI.longitude,
-          ).round();
+          final distance = GeolocatorPlatform.instance
+              .distanceBetween(
+                cameraPosition.target.latitude,
+                cameraPosition.target.longitude,
+                nearestPOI.latitude,
+                nearestPOI.longitude,
+              )
+              .round();
           _nearestPOIInfo = 'Nearest POI: ${nearestPOI.name} (${distance}m)';
 
           // Open the info window of the nearest POI
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            googleMapController?.showMarkerInfoWindow(MarkerId(nearestPOI.name));
+            googleMapController?.showMarkerInfoWindow(
+              MarkerId(nearestPOI.name),
+            );
           });
         } else {
           _nearestPOIInfo = '';
@@ -259,7 +278,9 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderSt
         textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: isDarkMode ? AppStyle.mainBackDark : AppStyle.mainBack,
+          backgroundColor: isDarkMode
+              ? AppStyle.mainBackDark
+              : AppStyle.mainBack,
           body: SizedBox(
             width: MediaQuery.sizeOf(context).width,
             height: MediaQuery.sizeOf(context).height,
@@ -289,18 +310,22 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderSt
                       delayed.run(() async {
                         try {
                           final List<Placemark> placemarks =
-                          await placemarkFromCoordinates(
-                            cameraPosition?.target.latitude ?? latLng.latitude,
-                            cameraPosition?.target.longitude ?? latLng.longitude,
-                          );
+                              await placemarkFromCoordinates(
+                                cameraPosition?.target.latitude ??
+                                    latLng.latitude,
+                                cameraPosition?.target.longitude ??
+                                    latLng.longitude,
+                              );
                           if (placemarks.isNotEmpty) {
                             final Placemark pos = placemarks[0];
                             final List<String> addressData = [];
                             addressData.add(pos.locality!);
-                            if (pos.subLocality != null && pos.subLocality!.isNotEmpty) {
+                            if (pos.subLocality != null &&
+                                pos.subLocality!.isNotEmpty) {
                               addressData.add(pos.subLocality!);
                             }
-                            if (pos.thoroughfare != null && pos.thoroughfare!.isNotEmpty) {
+                            if (pos.thoroughfare != null &&
+                                pos.thoroughfare!.isNotEmpty) {
                               addressData.add(pos.thoroughfare!);
                             }
                             addressData.add(pos.name!);
@@ -315,40 +340,52 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderSt
                           ..checkDriverZone(
                             context: context,
                             location: LatLng(
-                              cameraPosition?.target.latitude ?? latLng.latitude,
-                              cameraPosition?.target.longitude ?? latLng.longitude,
+                              cameraPosition?.target.latitude ??
+                                  latLng.latitude,
+                              cameraPosition?.target.longitude ??
+                                  latLng.longitude,
                             ),
                             shopId: widget.shopId,
                           )
                           ..changePlace(
                             AddressNewModel(
-                              address: AddressInformation(address: controller.text),
+                              address: AddressInformation(
+                                address: controller.text,
+                              ),
                               location: [
-                                cameraPosition?.target.latitude ?? latLng.latitude,
-                                cameraPosition?.target.longitude ?? latLng.longitude,
+                                cameraPosition?.target.latitude ??
+                                    latLng.latitude,
+                                cameraPosition?.target.longitude ??
+                                    latLng.longitude,
                               ],
                             ),
                           );
                       });
-                      googleMapController!.animateCamera(CameraUpdate.newLatLng(latLng));
+                      googleMapController!.animateCamera(
+                        CameraUpdate.newLatLng(latLng),
+                      );
                     },
                     onCameraIdle: () {
                       event.updateActive();
                       delayed.run(() async {
                         try {
                           final List<Placemark> placemarks =
-                          await placemarkFromCoordinates(
-                            cameraPosition?.target.latitude ?? latLng.latitude,
-                            cameraPosition?.target.longitude ?? latLng.longitude,
-                          );
+                              await placemarkFromCoordinates(
+                                cameraPosition?.target.latitude ??
+                                    latLng.latitude,
+                                cameraPosition?.target.longitude ??
+                                    latLng.longitude,
+                              );
                           if (placemarks.isNotEmpty) {
                             final Placemark pos = placemarks[0];
                             final List<String> addressData = [];
                             addressData.add(pos.locality!);
-                            if (pos.subLocality != null && pos.subLocality!.isNotEmpty) {
+                            if (pos.subLocality != null &&
+                                pos.subLocality!.isNotEmpty) {
                               addressData.add(pos.subLocality!);
                             }
-                            if (pos.thoroughfare != null && pos.thoroughfare!.isNotEmpty) {
+                            if (pos.thoroughfare != null &&
+                                pos.thoroughfare!.isNotEmpty) {
                               addressData.add(pos.thoroughfare!);
                             }
                             addressData.add(pos.name!);
@@ -364,27 +401,37 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderSt
                             ..checkDriverZone(
                               context: context,
                               location: LatLng(
-                                cameraPosition?.target.latitude ?? latLng.latitude,
-                                cameraPosition?.target.longitude ?? latLng.longitude,
+                                cameraPosition?.target.latitude ??
+                                    latLng.latitude,
+                                cameraPosition?.target.longitude ??
+                                    latLng.longitude,
                               ),
                               shopId: widget.shopId,
                             )
                             ..changePlace(
                               AddressNewModel(
-                                address: AddressInformation(address: controller.text),
+                                address: AddressInformation(
+                                  address: controller.text,
+                                ),
                                 location: [
-                                  cameraPosition?.target.latitude ?? latLng.latitude,
-                                  cameraPosition?.target.longitude ?? latLng.longitude,
+                                  cameraPosition?.target.latitude ??
+                                      latLng.latitude,
+                                  cameraPosition?.target.longitude ??
+                                      latLng.longitude,
                                 ],
                               ),
                             );
                         } else {
                           event.changePlace(
                             AddressNewModel(
-                              address: AddressInformation(address: controller.text),
+                              address: AddressInformation(
+                                address: controller.text,
+                              ),
                               location: [
-                                cameraPosition?.target.latitude ?? latLng.latitude,
-                                cameraPosition?.target.longitude ?? latLng.longitude,
+                                cameraPosition?.target.latitude ??
+                                    latLng.latitude,
+                                cameraPosition?.target.longitude ??
+                                    latLng.longitude,
                               ],
                             ),
                           );
@@ -407,9 +454,7 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderSt
                 IgnorePointer(
                   child: Center(
                     child: Padding(
-                      padding: const EdgeInsets.only(
-                        bottom: 78.0,
-                      ),
+                      padding: const EdgeInsets.only(bottom: 78.0),
                       child: lottie.Lottie.asset(
                         "assets/lottie/pin.json",
                         onLoaded: (composition) {
@@ -435,17 +480,24 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderSt
                           10.horizontalSpace,
                           Container(
                             decoration: const BoxDecoration(
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                    color: AppStyle.textGrey,
-                                    offset: Offset(0, 2),
-                                    blurRadius: 2,
-                                    spreadRadius: 0,
-                                  ),
-                                ],
-                                shape: BoxShape.circle, color: AppStyle.white),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                  color: AppStyle.textGrey,
+                                  offset: Offset(0, 2),
+                                  blurRadius: 2,
+                                  spreadRadius: 0,
+                                ),
+                              ],
+                              shape: BoxShape.circle,
+                              color: AppStyle.white,
+                            ),
                             padding: EdgeInsets.all(10.r),
-                            child: const Center(child: Icon(FlutterRemix.map_pin_range_line, size: 30)),
+                            child: const Center(
+                              child: Icon(
+                                FlutterRemix.map_pin_range_line,
+                                size: 30,
+                              ),
+                            ),
                           ),
                           6.horizontalSpace,
                           Container(
@@ -499,21 +551,26 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderSt
                           ),
                         ],
                       ),
-                      child: const Center(child: Icon(FlutterRemix.navigation_line)),
+                      child: const Center(
+                        child: Icon(FlutterRemix.navigation_line),
+                      ),
                     ),
                   ),
                 ),
-                if (widget.address != null && !(widget.address?.active ?? false))
+                if (widget.address != null &&
+                    !(widget.address?.active ?? false))
                   AnimatedPositioned(
                     duration: const Duration(milliseconds: 500),
                     top: 32.r,
                     right: state.isScrolling ? -100 : 16.w,
                     child: InkWell(
                       onTap: () async {
-                        ref.read(profileProvider.notifier).deleteAddress(
-                          index: widget.indexAddress ?? 0,
-                          id: widget.address?.id,
-                        );
+                        ref
+                            .read(profileProvider.notifier)
+                            .deleteAddress(
+                              index: widget.indexAddress ?? 0,
+                              id: widget.address?.id,
+                            );
                         context.maybePop();
                       },
                       child: Container(
@@ -552,7 +609,10 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderSt
                           padding: EdgeInsets.only(bottom: 8.r),
                           child: Text(
                             _nearestPOIInfo,
-                            style: AppStyle.interNormal(size: 14, color: AppStyle.black),
+                            style: AppStyle.interNormal(
+                              size: 14,
+                              color: AppStyle.black,
+                            ),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -568,13 +628,17 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderSt
                               opacity: state.isScrolling ? 0.5 : 1,
                               child: CustomButton(
                                 isLoading: controller.text.isEmpty,
-                                title: AppHelpers.getTranslation(TrKeys.confirmLocation),
+                                title: AppHelpers.getTranslation(
+                                  TrKeys.confirmLocation,
+                                ),
                                 onPressed: () {
                                   if (widget.isParcel) {
                                     Navigator.pop(
                                       context,
                                       AddressNewModel(
-                                        address: AddressInformation(address: controller.text),
+                                        address: AddressInformation(
+                                          address: controller.text,
+                                        ),
                                         location: [
                                           cameraPosition?.target.latitude ??
                                               latLng.latitude,
@@ -596,35 +660,54 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderSt
                                         isShopLocation: widget.isShopLocation,
                                         onSearch: () async {
                                           final placeId = await context
-                                              .pushRoute(const MapSearchRoute());
+                                              .pushRoute(
+                                                const MapSearchRoute(),
+                                              );
                                           if (placeId != null) {
-                                            final res = await googlePlace.details
+                                            final res = await googlePlace
+                                                .details
                                                 .get(placeId.toString());
                                             try {
                                               final List<Placemark> placemarks =
-                                              await placemarkFromCoordinates(
-                                                res?.result?.geometry?.location
-                                                    ?.lat ??
-                                                    latLng.latitude,
-                                                res?.result?.geometry?.location
-                                                    ?.lng ??
-                                                    latLng.longitude,
-                                              );
+                                                  await placemarkFromCoordinates(
+                                                    res
+                                                            ?.result
+                                                            ?.geometry
+                                                            ?.location
+                                                            ?.lat ??
+                                                        latLng.latitude,
+                                                    res
+                                                            ?.result
+                                                            ?.geometry
+                                                            ?.location
+                                                            ?.lng ??
+                                                        latLng.longitude,
+                                                  );
                                               if (placemarks.isNotEmpty) {
-                                                final Placemark pos = placemarks[0];
-                                                final List<String> addressData = [];
+                                                final Placemark pos =
+                                                    placemarks[0];
+                                                final List<String> addressData =
+                                                    [];
                                                 addressData.add(pos.locality!);
                                                 if (pos.subLocality != null &&
-                                                    pos.subLocality!.isNotEmpty) {
-                                                  addressData.add(pos.subLocality!);
+                                                    pos
+                                                        .subLocality!
+                                                        .isNotEmpty) {
+                                                  addressData.add(
+                                                    pos.subLocality!,
+                                                  );
                                                 }
                                                 if (pos.thoroughfare != null &&
-                                                    pos.thoroughfare!.isNotEmpty) {
-                                                  addressData.add(pos.thoroughfare!);
+                                                    pos
+                                                        .thoroughfare!
+                                                        .isNotEmpty) {
+                                                  addressData.add(
+                                                    pos.thoroughfare!,
+                                                  );
                                                 }
                                                 addressData.add(pos.name!);
                                                 final String placeName =
-                                                addressData.join(', ');
+                                                    addressData.join(', ');
                                                 controller.text = placeName;
                                               }
                                             } catch (e) {
@@ -634,11 +717,17 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderSt
                                             googleMapController!.animateCamera(
                                               CameraUpdate.newLatLngZoom(
                                                 LatLng(
-                                                  res?.result?.geometry
-                                                      ?.location?.lat ??
+                                                  res
+                                                          ?.result
+                                                          ?.geometry
+                                                          ?.location
+                                                          ?.lat ??
                                                       latLng.latitude,
-                                                  res?.result?.geometry
-                                                      ?.location?.lng ??
+                                                  res
+                                                          ?.result
+                                                          ?.geometry
+                                                          ?.location
+                                                          ?.lng ??
                                                       latLng.longitude,
                                                 ),
                                                 15,
@@ -650,9 +739,13 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage> with TickerProviderSt
                                                   address: controller.text,
                                                 ),
                                                 location: [
-                                                  cameraPosition?.target.latitude ??
+                                                  cameraPosition
+                                                          ?.target
+                                                          .latitude ??
                                                       latLng.latitude,
-                                                  cameraPosition?.target.longitude ??
+                                                  cameraPosition
+                                                          ?.target
+                                                          .longitude ??
                                                       latLng.longitude,
                                                 ],
                                               ),

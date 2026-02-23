@@ -8,11 +8,15 @@ import 'package:foodyman/presentation/theme/app_style.dart';
 class ServiceTwoCategoriesItem extends StatelessWidget {
   final CategoryData category;
   final VoidCallback onTap;
-  const ServiceTwoCategoriesItem({super.key, required this.category, required this.onTap});
+  const ServiceTwoCategoriesItem({
+    super.key,
+    required this.category,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return  AnimationButtonEffect(
+    return AnimationButtonEffect(
       child: GestureDetector(
         onTap: onTap,
         child: Container(
@@ -39,13 +43,10 @@ class ServiceTwoCategoriesItem extends StatelessWidget {
               ),
               Text(
                 category.translation?.title ?? "",
-                style: AppStyle.interNormal(
-                  size: 14,
-                ),
+                style: AppStyle.interNormal(size: 14),
                 maxLines: 1,
               ),
               const Spacer(),
-
             ],
           ),
         ),
@@ -53,4 +54,3 @@ class ServiceTwoCategoriesItem extends StatelessWidget {
     );
   }
 }
-

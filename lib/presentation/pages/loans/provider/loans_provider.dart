@@ -8,7 +8,9 @@ final loanAmountProvider = StateProvider<double>((ref) => 200.0);
 final idNumberProvider = StateProvider<String>((ref) => '');
 
 // Provider to store financial details
-final financialDetailsProvider = StateProvider<Map<String, dynamic>>((ref) => {});
+final financialDetailsProvider = StateProvider<Map<String, dynamic>>(
+  (ref) => {},
+);
 
 // Provider to store uploaded documents
 final uploadedDocumentsProvider = StateProvider<Map<String, File>>((ref) => {});

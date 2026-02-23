@@ -112,22 +112,21 @@ class _IntroPageState extends ConsumerState<IntroPage>
 
   @override
   void initState() {
-    controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 5),
-    )..addListener(() {
-        setState(() {});
-        if (controller.value > 0.99) {
-          if (ref.watch(introProvider).currentIndex == 4) {
-            AppHelpers.goHome(context);
-          } else {
-            pageController.nextPage(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeIn,
-            );
-          }
-        }
-      });
+    controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 5))
+          ..addListener(() {
+            setState(() {});
+            if (controller.value > 0.99) {
+              if (ref.watch(introProvider).currentIndex == 4) {
+                AppHelpers.goHome(context);
+              } else {
+                pageController.nextPage(
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeIn,
+                );
+              }
+            }
+          });
     controller.repeat();
     super.initState();
   }
@@ -168,7 +167,7 @@ class _IntroPageState extends ConsumerState<IntroPage>
                           AppStyle.primary.withOpacity(0.26),
                           AppStyle.primary.withOpacity(0),
                           AppStyle.primary.withOpacity(0),
-                          AppStyle.primary.withOpacity(0.26)
+                          AppStyle.primary.withOpacity(0.26),
                         ],
                       ),
                     ),
@@ -181,7 +180,7 @@ class _IntroPageState extends ConsumerState<IntroPage>
                           end: Alignment.bottomCenter,
                           colors: [
                             AppStyle.black.withOpacity(0.4),
-                            AppStyle.black.withOpacity(0.4)
+                            AppStyle.black.withOpacity(0.4),
                           ],
                         ),
                       ),
@@ -244,21 +243,20 @@ class _IntroPageState extends ConsumerState<IntroPage>
                     ],
                   ),
                   Container(
-  alignment: Alignment.topRight,
-  margin: const EdgeInsets.only(right: 16, top: 48),
-  child: SecondButton(
-    onTap: () {
-      AppHelpers.goHome(context);
-    },
-    title: AppHelpers.getTranslation(TrKeys.close),
-    bgColor: AppStyle.primary,
-    titleColor: AppStyle.white,
-  //  icon: FlutterRemix.close,
-  //  iconColor: AppStyle.white,
-  //  iconSize: 30,
-  ),
-)
-
+                    alignment: Alignment.topRight,
+                    margin: const EdgeInsets.only(right: 16, top: 48),
+                    child: SecondButton(
+                      onTap: () {
+                        AppHelpers.goHome(context);
+                      },
+                      title: AppHelpers.getTranslation(TrKeys.close),
+                      bgColor: AppStyle.primary,
+                      titleColor: AppStyle.white,
+                      //  icon: FlutterRemix.close,
+                      //  iconColor: AppStyle.white,
+                      //  iconSize: 30,
+                    ),
+                  ),
                 ],
               );
             }).toList(),
@@ -290,24 +288,24 @@ class _IntroPageState extends ConsumerState<IntroPage>
                               borderRadius: BorderRadius.circular(122),
                               child: LinearProgressIndicator(
                                 value: controller.value,
-                                valueColor:
-                                    const AlwaysStoppedAnimation<Color>(
-                                        AppStyle.primary),
+                                valueColor: const AlwaysStoppedAnimation<Color>(
+                                  AppStyle.primary,
+                                ),
                                 backgroundColor: AppStyle.white,
                               ),
                             )
                           : state.currentIndex > index
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(122),
-                                  child: const LinearProgressIndicator(
-                                    value: 1,
-                                    valueColor:
-                                        AlwaysStoppedAnimation<Color>(
-                                            AppStyle.primary),
-                                    backgroundColor: AppStyle.white,
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(122),
+                              child: const LinearProgressIndicator(
+                                value: 1,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppStyle.primary,
+                                ),
+                                backgroundColor: AppStyle.white,
+                              ),
+                            )
+                          : const SizedBox.shrink(),
                     );
                   },
                 ),
@@ -319,4 +317,3 @@ class _IntroPageState extends ConsumerState<IntroPage>
     );
   }
 }
-

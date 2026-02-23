@@ -9,12 +9,17 @@ class CartClearDialog extends StatelessWidget {
   final VoidCallback cancel;
   final VoidCallback clear;
   final bool isLoading;
-  const CartClearDialog({super.key, required this.cancel, required this.clear, this.isLoading = false});
+  const CartClearDialog({
+    super.key,
+    required this.cancel,
+    required this.clear,
+    this.isLoading = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: (MediaQuery.sizeOf(context).width-60.w),
+      width: (MediaQuery.sizeOf(context).width - 60.w),
       decoration: BoxDecoration(
         color: AppStyle.white.withOpacity(0.96),
         boxShadow: [
@@ -31,10 +36,7 @@ class CartClearDialog extends StatelessWidget {
         children: [
           Text(
             AppHelpers.getTranslation(TrKeys.clearCard),
-            style: AppStyle.interNormal(
-              size: 14,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interNormal(size: 14, color: AppStyle.black),
           ),
           50.verticalSpace,
           Row(
@@ -66,4 +68,3 @@ class CartClearDialog extends StatelessWidget {
     );
   }
 }
-

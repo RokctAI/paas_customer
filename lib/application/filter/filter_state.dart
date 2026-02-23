@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:foodyman/infrastructure/models/data/filter_model.dart';
@@ -9,7 +8,6 @@ part 'filter_state.freezed.dart';
 
 @freezed
 class FilterState with _$FilterState {
-
   const factory FilterState({
     @Default(null) FilterModel? filterModel,
     @Default(false) bool freeDelivery,
@@ -27,7 +25,6 @@ class FilterState with _$FilterState {
     @Default([]) List<TakeModel> tags,
     @Default([]) List<int> prices,
     @Default([]) List<ShopData> allShops,
-
   }) = _FilterState;
 
   const FilterState._();

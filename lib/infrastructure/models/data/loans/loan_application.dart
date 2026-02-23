@@ -13,8 +13,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
-
 class LoanApplicationModel {
   final String idNumber;
   final double amount;
@@ -23,7 +21,8 @@ class LoanApplicationModel {
   final double totalExpenses;
   final bool skipDocuments;
   final String? savedApplicationId;
-  final Map<String, dynamic> documents; // Changed from List<File> to Map<String, dynamic>
+  final Map<String, dynamic>
+  documents; // Changed from List<File> to Map<String, dynamic>
 
   LoanApplicationModel({
     required this.idNumber,

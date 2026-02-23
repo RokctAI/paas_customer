@@ -10,4 +10,3 @@ double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
   final double a = 0.5 - c1 / 2 + c2 * c3 * (1 - c4) / 2;
   return 12742 * asin(sqrt(a)); // 2 * R; R = 6371 km
 }
-

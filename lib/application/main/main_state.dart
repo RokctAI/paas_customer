@@ -5,7 +5,6 @@ part 'main_state.freezed.dart';
 
 @freezed
 class MainState with _$MainState {
-
   const factory MainState({
     @Default([]) List<Widget> listOfWidget,
     @Default(0) int selectIndex,

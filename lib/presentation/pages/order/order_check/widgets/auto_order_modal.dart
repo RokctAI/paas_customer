@@ -46,7 +46,9 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
   init() async {
     final orderState = ref.read(orderProvider);
     final grandTotal = (orderState.calculateData?.totalPrice ?? 0).toDouble();
-    ref.read(autoOrderProvider.notifier).init(widget.repeatData ?? RepeatData(), grandTotal);
+    ref
+        .read(autoOrderProvider.notifier)
+        .init(widget.repeatData ?? RepeatData(), grandTotal);
   }
 
   @override
@@ -58,11 +60,12 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
     return Container(
       margin: MediaQuery.of(context).viewInsets,
       decoration: BoxDecoration(
-          color: AppStyle.bgGrey.withOpacity(0.96),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12.r),
-            topRight: Radius.circular(12.r),
-          )),
+        color: AppStyle.bgGrey.withOpacity(0.96),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12.r),
+          topRight: Radius.circular(12.r),
+        ),
+      ),
       width: double.infinity,
       child: SingleChildScrollView(
         child: Column(
@@ -79,17 +82,17 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                       height: 4.h,
                       width: 48.w,
                       decoration: BoxDecoration(
-                          color: AppStyle.dragElement,
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(40.r))),
+                        color: AppStyle.dragElement,
+                        borderRadius: BorderRadius.all(Radius.circular(40.r)),
+                      ),
                     ),
                   ),
                   14.verticalSpace,
                   TitleAndIcon(
                     title: AppHelpers.getTranslation(TrKeys.autoOrder),
                     paddingHorizontalSize: 0,
-                    rightTitle: (widget.repeatData?.updatedAt?.isNotEmpty ??
-                            false)
+                    rightTitle:
+                        (widget.repeatData?.updatedAt?.isNotEmpty ?? false)
                         ? "${AppHelpers.getTranslation(TrKeys.started)} ${Jiffy.parseFromDateTime(DateTime.parse(widget.repeatData?.updatedAt ?? '')).from(Jiffy.now())}"
                         : "",
                   ),
@@ -97,18 +100,41 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                   // Period Selection
                   Text(
                     AppHelpers.getTranslation(TrKeys.period),
-                    style: AppStyle.interNormal(size: 14, color: AppStyle.black),
+                    style: AppStyle.interNormal(
+                      size: 14,
+                      color: AppStyle.black,
+                    ),
                   ),
                   8.verticalSpace,
                   Row(
                     children: [
-                      _buildChip(0, "Daily", state.cronPattern == '0 0 * * *', event),
+                      _buildChip(
+                        0,
+                        "Daily",
+                        state.cronPattern == '0 0 * * *',
+                        event,
+                      ),
                       8.horizontalSpace,
-                      _buildChip(1, "Weekly", state.cronPattern == '0 0 * * 1', event),
+                      _buildChip(
+                        1,
+                        "Weekly",
+                        state.cronPattern == '0 0 * * 1',
+                        event,
+                      ),
                       8.horizontalSpace,
-                      _buildChip(2, "Bi-Weekly", state.cronPattern == '0 0 1,15 * *', event),
+                      _buildChip(
+                        2,
+                        "Bi-Weekly",
+                        state.cronPattern == '0 0 1,15 * *',
+                        event,
+                      ),
                       8.horizontalSpace,
-                      _buildChip(3, "Monthly", state.cronPattern == '0 0 1 * *', event),
+                      _buildChip(
+                        3,
+                        "Monthly",
+                        state.cronPattern == '0 0 1 * *',
+                        event,
+                      ),
                     ],
                   ),
                   16.verticalSpace,
@@ -128,7 +154,11 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                             const SizedBox(width: 10),
                             GestureDetector(
                               onTap: () {
-                                _showDatePicker(context, state.from, event.pickFrom);
+                                _showDatePicker(
+                                  context,
+                                  state.from,
+                                  event.pickFrom,
+                                );
                               },
                               child: Row(
                                 children: [
@@ -137,13 +167,17 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                                     style: const TextStyle(fontSize: 18),
                                   ),
                                   const SizedBox(width: 3),
-                                  const Icon(CupertinoIcons.chevron_up_chevron_down, size: 20),
+                                  const Icon(
+                                    CupertinoIcons.chevron_up_chevron_down,
+                                    size: 20,
+                                  ),
                                 ],
                               ),
-                            )
+                            ),
                           ],
                         ),
-                        if (state.cronPattern == '0 0 * * *') // Only show "To" for Daily
+                        if (state.cronPattern ==
+                            '0 0 * * *') // Only show "To" for Daily
                           Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -155,24 +189,39 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                               GestureDetector(
                                 onTap: () {
                                   if (state.to != null) {
-                                    _showDatePicker(context, state.to!, event.pickTo);
+                                    _showDatePicker(
+                                      context,
+                                      state.to!,
+                                      event.pickTo,
+                                    );
                                   } else {
-                                    _showDatePicker(context, DateTime.now().add(const Duration(days: 7)), event.pickTo);
+                                    _showDatePicker(
+                                      context,
+                                      DateTime.now().add(
+                                        const Duration(days: 7),
+                                      ),
+                                      event.pickTo,
+                                    );
                                   }
                                 },
                                 child: Row(
                                   children: [
                                     Text(
-                                      state.to != null 
-                                          ? TimeService.dateFormatYMD(state.to!) 
-                                          : AppHelpers.getTranslation(TrKeys.select),
+                                      state.to != null
+                                          ? TimeService.dateFormatYMD(state.to!)
+                                          : AppHelpers.getTranslation(
+                                              TrKeys.select,
+                                            ),
                                       style: const TextStyle(fontSize: 18),
                                     ),
                                     const SizedBox(width: 3),
-                                    const Icon(CupertinoIcons.chevron_up_chevron_down, size: 20),
+                                    const Icon(
+                                      CupertinoIcons.chevron_up_chevron_down,
+                                      size: 20,
+                                    ),
                                   ],
                                 ),
-                              )
+                              ),
                             ],
                           ),
                       ],
@@ -182,14 +231,25 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                   16.verticalSpace,
                   Text(
                     AppHelpers.getTranslation(TrKeys.paymentMethod),
-                    style: AppStyle.interNormal(size: 14, color: AppStyle.black),
+                    style: AppStyle.interNormal(
+                      size: 14,
+                      color: AppStyle.black,
+                    ),
                   ),
                   8.verticalSpace,
                   Row(
                     children: [
-                      _buildPaymentChip("Wallet", state.paymentMethod == "Wallet", event),
+                      _buildPaymentChip(
+                        "Wallet",
+                        state.paymentMethod == "Wallet",
+                        event,
+                      ),
                       8.horizontalSpace,
-                      _buildPaymentChip("Saved Card", state.paymentMethod == "Saved Card", event),
+                      _buildPaymentChip(
+                        "Saved Card",
+                        state.paymentMethod == "Saved Card",
+                        event,
+                      ),
                     ],
                   ),
                   if (state.paymentMethod == "Saved Card")
@@ -199,16 +259,20 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                         8.verticalSpace,
                         DropdownButton<String>(
                           value: state.savedCardId,
-                          hint: Text(AppHelpers.getTranslation(TrKeys.selectCard)),
+                          hint: Text(
+                            AppHelpers.getTranslation(TrKeys.selectCard),
+                          ),
                           isExpanded: true,
                           items: savedCardsState.cards.map((card) {
                             return DropdownMenuItem<String>(
                               value: card.id.toString(),
-                              child: Text("${card.cardType} **** ${card.lastFour}"),
+                              child: Text(
+                                "${card.cardType} **** ${card.lastFour}",
+                              ),
                             );
                           }).toList(),
                           onChanged: (val) {
-                             event.setPaymentMethod("Saved Card", cardId: val);
+                            event.setPaymentMethod("Saved Card", cardId: val);
                           },
                         ),
                       ],
@@ -225,27 +289,39 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                             children: [
                               Text(
                                 "Available Balance: ${AppHelpers.numberFormat(number: state.availableBalance)}",
-                                style: AppStyle.interNormal(size: 14, color: AppStyle.black),
+                                style: AppStyle.interNormal(
+                                  size: 14,
+                                  color: AppStyle.black,
+                                ),
                               ),
                               Text(
                                 "Total: ${AppHelpers.numberFormat(number: state.totalBalance)}",
-                                style: AppStyle.interNormal(size: 12, color: AppStyle.textGrey),
+                                style: AppStyle.interNormal(
+                                  size: 12,
+                                  color: AppStyle.textGrey,
+                                ),
                               ),
                             ],
                           ),
                           4.verticalSpace,
                           Text(
                             "Reserved Amount (Entire Period): ${AppHelpers.numberFormat(number: state.orderTotal)}",
-                            style: AppStyle.interSemi(size: 14, color: AppStyle.black),
+                            style: AppStyle.interSemi(
+                              size: 14,
+                              color: AppStyle.black,
+                            ),
                           ),
                           if (state.availableBalance < state.orderTotal)
-                             Padding(
-                               padding: EdgeInsets.only(top: 4.h),
-                               child: Text(
+                            Padding(
+                              padding: EdgeInsets.only(top: 4.h),
+                              child: Text(
                                 "* ${AppHelpers.getTranslation(TrKeys.insufficientBalance)}",
-                                style: AppStyle.interNormal(size: 12, color: Colors.red),
+                                style: AppStyle.interNormal(
+                                  size: 12,
+                                  color: Colors.red,
+                                ),
                               ),
-                             ),
+                            ),
                         ],
                       ),
                     ),
@@ -268,31 +344,50 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                     ),
                     child: Column(
                       children: [
-                         if (widget.repeatData != null) ...[
-                           Row(
-                             children: [
-                               Expanded(
-                                 child: CustomButton(
-                                   title: (widget.repeatData?.to != null && DateTime.parse(widget.repeatData!.to!).isBefore(DateTime.now()))
-                                       ? AppHelpers.getTranslation(TrKeys.ended)
-                                       : (widget.repeatData?.isActive == 1 
-                                           ? AppHelpers.getTranslation(TrKeys.pause) 
-                                           : AppHelpers.getTranslation(TrKeys.resume)),
-                                   onPressed: (widget.repeatData?.to != null && DateTime.parse(widget.repeatData!.to!).isBefore(DateTime.now()))
-                                       ? null
-                                       : () {
-                                     if (widget.repeatData?.isActive == 1) {
-                                       event.pauseAutoOrder(widget.repeatData!.id!, context);
-                                     } else {
-                                       event.resumeAutoOrder(widget.repeatData!.id!, context);
-                                     }
-                                   },
-                                 ),
-                               ),
-                             ],
-                           ),
-                           10.verticalSpace,
-                         ],
+                        if (widget.repeatData != null) ...[
+                          Row(
+                            children: [
+                              Expanded(
+                                child: CustomButton(
+                                  title:
+                                      (widget.repeatData?.to != null &&
+                                          DateTime.parse(
+                                            widget.repeatData!.to!,
+                                          ).isBefore(DateTime.now()))
+                                      ? AppHelpers.getTranslation(TrKeys.ended)
+                                      : (widget.repeatData?.isActive == 1
+                                            ? AppHelpers.getTranslation(
+                                                TrKeys.pause,
+                                              )
+                                            : AppHelpers.getTranslation(
+                                                TrKeys.resume,
+                                              )),
+                                  onPressed:
+                                      (widget.repeatData?.to != null &&
+                                          DateTime.parse(
+                                            widget.repeatData!.to!,
+                                          ).isBefore(DateTime.now()))
+                                      ? null
+                                      : () {
+                                          if (widget.repeatData?.isActive ==
+                                              1) {
+                                            event.pauseAutoOrder(
+                                              widget.repeatData!.id!,
+                                              context,
+                                            );
+                                          } else {
+                                            event.resumeAutoOrder(
+                                              widget.repeatData!.id!,
+                                              context,
+                                            );
+                                          }
+                                        },
+                                ),
+                              ),
+                            ],
+                          ),
+                          10.verticalSpace,
+                        ],
                         if (event.isTimeChanged(widget.repeatData))
                           CustomButton(
                             isLoading: ref.watch(orderProvider).isButtonLoading,
@@ -303,7 +398,11 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                                   onSuccess: () {
                                     ref
                                         .read(orderProvider.notifier)
-                                        .showOrder(context, widget.orderId, true);
+                                        .showOrder(
+                                          context,
+                                          widget.orderId,
+                                          true,
+                                        );
                                   },
                                   orderId: widget.orderId,
                                   context: context,
@@ -317,14 +416,17 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                             isLoading: ref.watch(orderProvider).isButtonLoading,
                             textColor: Colors.white,
                             background: Colors.red,
-                            title: AppHelpers.getTranslation(TrKeys.removeAutoOrder),
+                            title: AppHelpers.getTranslation(
+                              TrKeys.removeAutoOrder,
+                            ),
                             onPressed: () {
                               ref
                                   .read(orderProvider.notifier)
                                   .showOrder(context, widget.orderId, true);
                               event.deleteAutoOrder(
-                                  orderId: widget.repeatData?.id ?? "",
-                                  context: context);
+                                orderId: widget.repeatData?.id ?? "",
+                                context: context,
+                              );
                             },
                           ),
                       ],
@@ -339,45 +441,64 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
     );
   }
 
-  Widget _buildChip(int index, String title, bool isSelected, AutoOrderNotifier event) {
+  Widget _buildChip(
+    int index,
+    String title,
+    bool isSelected,
+    AutoOrderNotifier event,
+  ) {
     return ActionChip(
       label: Text(title),
       backgroundColor: isSelected ? AppStyle.primary : AppStyle.white,
-      labelStyle: TextStyle(color: isSelected ? AppStyle.white : AppStyle.black),
+      labelStyle: TextStyle(
+        color: isSelected ? AppStyle.white : AppStyle.black,
+      ),
       onPressed: () => event.setPeriod(index),
     );
   }
 
-  Widget _buildPaymentChip(String title, bool isSelected, AutoOrderNotifier event) {
+  Widget _buildPaymentChip(
+    String title,
+    bool isSelected,
+    AutoOrderNotifier event,
+  ) {
     return ActionChip(
       label: Text(title),
       backgroundColor: isSelected ? AppStyle.primary : AppStyle.white,
-      labelStyle: TextStyle(color: isSelected ? AppStyle.white : AppStyle.black),
+      labelStyle: TextStyle(
+        color: isSelected ? AppStyle.white : AppStyle.black,
+      ),
       onPressed: () => event.setPaymentMethod(title),
     );
   }
 
-  void _showDatePicker(BuildContext context, DateTime initial, Function(DateTime) onChanged) {
-     AppHelpers.showCustomModalBottomSheet(
-        context: context,
-        modal: Container(
-          height: 250.h,
-          padding: const EdgeInsets.only(top: 6.0),
-          margin: EdgeInsets.only(bottom: MediaQuery.viewInsetsOf(context).bottom),
-          color: CupertinoColors.systemBackground.resolveFrom(context),
-          child: SafeArea(
-            top: false,
-            child: CupertinoDatePicker(
-              initialDateTime: initial,
-              mode: CupertinoDatePickerMode.date,
-              use24hFormat: AppConstants.use24Format,
-              onDateTimeChanged: (DateTime newDate) {
-                onChanged(newDate);
-              },
-            ),
+  void _showDatePicker(
+    BuildContext context,
+    DateTime initial,
+    Function(DateTime) onChanged,
+  ) {
+    AppHelpers.showCustomModalBottomSheet(
+      context: context,
+      modal: Container(
+        height: 250.h,
+        padding: const EdgeInsets.only(top: 6.0),
+        margin: EdgeInsets.only(
+          bottom: MediaQuery.viewInsetsOf(context).bottom,
+        ),
+        color: CupertinoColors.systemBackground.resolveFrom(context),
+        child: SafeArea(
+          top: false,
+          child: CupertinoDatePicker(
+            initialDateTime: initial,
+            mode: CupertinoDatePickerMode.date,
+            use24hFormat: AppConstants.use24Format,
+            onDateTimeChanged: (DateTime newDate) {
+              onChanged(newDate);
+            },
           ),
         ),
-        isDarkMode: false);
+      ),
+      isDarkMode: false,
+    );
   }
 }
-

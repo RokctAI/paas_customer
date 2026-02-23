@@ -3,7 +3,6 @@ import 'package:foodyman/infrastructure/models/models.dart';
 
 import 'package:foodyman/infrastructure/models/data/translation.dart';
 
-
 part 'profile_state.freezed.dart';
 
 @freezed
@@ -30,6 +29,4 @@ class ProfileState with _$ProfileState {
   }) = _ProfileState;
 
   const ProfileState._();
-
 }
-

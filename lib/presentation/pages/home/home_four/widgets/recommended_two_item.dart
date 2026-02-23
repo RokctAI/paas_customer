@@ -15,11 +15,7 @@ class RecommendedTwoItem extends StatelessWidget {
   final ShopData shop;
   final bool? bgImg;
 
-  const RecommendedTwoItem({
-    super.key,
-    required this.shop,
-    this.bgImg,
-  });
+  const RecommendedTwoItem({super.key, required this.shop, this.bgImg});
 
   @override
   Widget build(BuildContext context) {
@@ -33,19 +29,21 @@ class RecommendedTwoItem extends StatelessWidget {
         width: MediaQuery.of(context).size.width / 3,
         height: 190.h,
         decoration: BoxDecoration(
-            color: AppStyle.recommendBg,
-            borderRadius: BorderRadius.all(Radius.circular(10.r)),
-            // Add border when background image is disabled
-            border: !shouldUseBgImg ? Border.all(color: AppStyle.textGrey) : null),
+          color: AppStyle.recommendBg,
+          borderRadius: BorderRadius.all(Radius.circular(10.r)),
+          // Add border when background image is disabled
+          border: !shouldUseBgImg ? Border.all(color: AppStyle.textGrey) : null,
+        ),
         child: Stack(
           children: [
             // Background image or Container with border - only construct the widget we need
             if (shouldUseBgImg)
               CustomNetworkImage(
-                  url: shop.backgroundImg ?? "",
-                  width: MediaQuery.of(context).size.width / 2,
-                  height: 190.h,
-                  radius: 10.r)
+                url: shop.backgroundImg ?? "",
+                width: MediaQuery.of(context).size.width / 2,
+                height: 190.h,
+                radius: 10.r,
+              )
             else
               ClipRRect(
                 borderRadius: BorderRadius.circular(10.r),
@@ -84,11 +82,13 @@ class RecommendedTwoItem extends StatelessWidget {
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(
-                        vertical: 4.h, horizontal: 12.w),
+                      vertical: 4.h,
+                      horizontal: 12.w,
+                    ),
                     decoration: BoxDecoration(
-                        color: AppStyle.black.withOpacity(0.8),
-                        borderRadius:
-                        BorderRadius.all(Radius.circular(100.r))),
+                      color: AppStyle.black.withOpacity(0.8),
+                      borderRadius: BorderRadius.all(Radius.circular(100.r)),
+                    ),
                     child: Text(
                       "${shop.productsCount ?? 0}  ${AppHelpers.getTranslation(TrKeys.products)}",
                       style: AppStyle.interNormal(

@@ -24,15 +24,16 @@ class SenderWidget extends StatelessWidget {
   final TextEditingController flour;
   final TextEditingController comment;
 
-  const SenderWidget(
-      {super.key,
-      required this.state,
-      required this.event,
-      required this.username,
-      required this.phone,
-      required this.house,
-      required this.flour,
-      required this.comment});
+  const SenderWidget({
+    super.key,
+    required this.state,
+    required this.event,
+    required this.username,
+    required this.phone,
+    required this.house,
+    required this.flour,
+    required this.comment,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -49,24 +50,28 @@ class SenderWidget extends StatelessWidget {
           ),
         InkWell(
           onTap: () async {
-            final data =
-                await context.pushRoute(ViewMapRoute(isShopLocation: true,isParcel: true));
+            final data = await context.pushRoute(
+              ViewMapRoute(isShopLocation: true, isParcel: true),
+            );
             if (data.runtimeType == AddressNewModel) {
               if (context.mounted) {
                 event.setFromAddress(
-                    title: (data as AddressNewModel).address?.address,
-                    location: LocationModel(
-                        longitude: data.location?.last,
-                        latitude: data.location?.first),
-                    context: context);
+                  title: (data as AddressNewModel).address?.address,
+                  location: LocationModel(
+                    longitude: data.location?.last,
+                    latitude: data.location?.first,
+                  ),
+                  context: context,
+                );
               }
             }
           },
           child: AnimationButtonEffect(
             child: Container(
               decoration: BoxDecoration(
-                  color: AppStyle.bgGrey,
-                  borderRadius: BorderRadius.circular(10.r)),
+                color: AppStyle.bgGrey,
+                borderRadius: BorderRadius.circular(10.r),
+              ),
               padding: EdgeInsets.symmetric(horizontal: 20.r, vertical: 16.r),
               child: Row(
                 children: [
@@ -93,9 +98,7 @@ class SenderWidget extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  const Icon(
-                    FlutterRemix.arrow_right_s_line,
-                  )
+                  const Icon(FlutterRemix.arrow_right_s_line),
                 ],
               ),
             ),
@@ -146,9 +149,8 @@ class SenderWidget extends StatelessWidget {
               24.verticalSpace,
             ],
           ),
-        )
+        ),
       ],
     );
   }
 }
-

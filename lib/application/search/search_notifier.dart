@@ -14,26 +14,26 @@ class SearchNotifier extends StateNotifier<SearchState> {
   final ProductsRepositoryFacade _productsRepository;
 
   SearchNotifier(this._shopsRepository, this._productsRepository)
-      : super(const SearchState());
+    : super(const SearchState());
   int productIndex = 1;
 
   init() {
     List<String> list = LocalStorage.getSearchList();
-    state = state.copyWith(searchHistory: list,search: "");
+    state = state.copyWith(searchHistory: list, search: "");
   }
 
-  void setSelectCategory(int index, BuildContext context,{String? categoryId}) {
+  void setSelectCategory(
+    int index,
+    BuildContext context, {
+    String? categoryId,
+  }) {
     if (state.selectIndexCategory == index) {
-      state = state.copyWith(
-        selectIndexCategory: -1,
-      );
+      state = state.copyWith(selectIndexCategory: -1);
     } else {
-      state = state.copyWith(
-        selectIndexCategory: index,
-      );
+      state = state.copyWith(selectIndexCategory: index);
     }
-    if(state.search.isNotEmpty){
-      searchProduct(context,state.search);
+    if (state.search.isNotEmpty) {
+      searchProduct(context, state.search);
       searchShop(context, state.search, categoryId: categoryId);
     }
   }
@@ -60,22 +60,24 @@ class SearchNotifier extends StateNotifier<SearchState> {
   }
 
   Future<void> searchShop(
-      BuildContext context, String text, {String? categoryId}) async {
+    BuildContext context,
+    String text, {
+    String? categoryId,
+  }) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isShopLoading: true);
       final response = await _shopsRepository.searchShops(
-          text: text, categoryId: categoryId);
+        text: text,
+        categoryId: categoryId,
+      );
       response.when(
         success: (data) async {
           state = state.copyWith(isShopLoading: false, shops: data.data ?? []);
         },
         failure: (failure, status) {
           state = state.copyWith(isShopLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -93,14 +95,13 @@ class SearchNotifier extends StateNotifier<SearchState> {
       response.when(
         success: (data) async {
           state = state.copyWith(
-              isProductLoading: false, products: data.data ?? []);
+            isProductLoading: false,
+            products: data.data ?? [],
+          );
         },
         failure: (failure, status) {
           state = state.copyWith(isProductLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -114,25 +115,22 @@ class SearchNotifier extends StateNotifier<SearchState> {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       final response = await _productsRepository.searchProducts(
-          text: text, page: ++productIndex);
+        text: text,
+        page: ++productIndex,
+      );
       response.when(
         success: (data) async {
           if (data.data != null) {
             List<ProductData> list = List.from(state.products);
             list.addAll(data.data!);
-            state = state.copyWith(
-              products: list,
-            );
+            state = state.copyWith(products: list);
           } else {
             productIndex--;
           }
         },
         failure: (failure, status) {
           productIndex--;
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -142,4 +140,3 @@ class SearchNotifier extends StateNotifier<SearchState> {
     }
   }
 }
-

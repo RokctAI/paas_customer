@@ -4,10 +4,7 @@ class LoginModel {
   final String? email;
   final String? password;
 
-  LoginModel({
-    required this.email,
-    required this.password,
-  });
+  LoginModel({required this.email, required this.password});
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -18,4 +15,3 @@ class LoginModel {
     return map;
   }
 }
-

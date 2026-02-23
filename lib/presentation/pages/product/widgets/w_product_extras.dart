@@ -18,10 +18,12 @@ class WProductExtras extends ConsumerWidget {
     final state = ref.watch(productProvider);
     final notifier = ref.read(productProvider.notifier);
 
-    return  Container(
+    return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: state.typedExtras.isEmpty ? AppStyle.transparent : AppStyle.white,
+        color: state.typedExtras.isEmpty
+            ? AppStyle.transparent
+            : AppStyle.white,
         borderRadius: BorderRadius.circular(10.r),
       ),
       padding: REdgeInsets.all(18),
@@ -38,7 +40,7 @@ class WProductExtras extends ConsumerWidget {
               return Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
-                  color:  AppStyle.white,
+                  color: AppStyle.white,
                 ),
                 padding: REdgeInsets.symmetric(horizontal: 12, vertical: 14),
                 margin: REdgeInsets.only(bottom: 14),
@@ -50,7 +52,7 @@ class WProductExtras extends ConsumerWidget {
                       typedExtra.title,
                       style: AppStyle.interNoSemi(
                         size: 16,
-                        color:  AppStyle.black ,
+                        color: AppStyle.black,
                         letterSpacing: -0.4,
                       ),
                     ),
@@ -68,31 +70,31 @@ class WProductExtras extends ConsumerWidget {
                             },
                           )
                         : typedExtra.type == ExtrasType.color
-                            ? ColorExtras(
-                                uiExtras: typedExtra.uiExtras,
-                                groupIndex: typedExtra.groupIndex,
-                                onUpdate: (uiExtra) {
-                                  notifier.updateSelectedIndexes(
-                                    context,
-                                    typedExtra.groupIndex,
-                                    uiExtra.index,
-                                  );
-                                },
-                              )
-                            : typedExtra.type == ExtrasType.image
-                                ? ImageExtras(
-                                    uiExtras: typedExtra.uiExtras,
-                                    groupIndex: typedExtra.groupIndex,
-                                    updateImage: notifier.changeActiveImageUrl,
-                                    onUpdate: (uiExtra) {
-                                      notifier.updateSelectedIndexes(
-                                        context,
-                                        typedExtra.groupIndex,
-                                        uiExtra.index,
-                                      );
-                                    },
-                                  )
-                                : const SizedBox(),
+                        ? ColorExtras(
+                            uiExtras: typedExtra.uiExtras,
+                            groupIndex: typedExtra.groupIndex,
+                            onUpdate: (uiExtra) {
+                              notifier.updateSelectedIndexes(
+                                context,
+                                typedExtra.groupIndex,
+                                uiExtra.index,
+                              );
+                            },
+                          )
+                        : typedExtra.type == ExtrasType.image
+                        ? ImageExtras(
+                            uiExtras: typedExtra.uiExtras,
+                            groupIndex: typedExtra.groupIndex,
+                            updateImage: notifier.changeActiveImageUrl,
+                            onUpdate: (uiExtra) {
+                              notifier.updateSelectedIndexes(
+                                context,
+                                typedExtra.groupIndex,
+                                uiExtra.index,
+                              );
+                            },
+                          )
+                        : const SizedBox(),
                   ],
                 ),
               );
@@ -103,4 +105,3 @@ class WProductExtras extends ConsumerWidget {
     );
   }
 }
-

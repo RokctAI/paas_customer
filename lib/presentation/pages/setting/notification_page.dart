@@ -39,28 +39,32 @@ class _NotificationPageState extends ConsumerState<NotificationPage> {
         : Column(
             children: [
               ListView.builder(
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  itemCount: state.notifications?.length ?? 0,
-                  itemBuilder: (context, index) {
-                    return Column(
-                      children: [
-                        CustomToggle(
-                          controller: ValueNotifier<bool>(state.notifications?[index].active ?? false,),
-                          title: state.notifications?[index].type ?? "",
-                          isChecked:
-                              state.notifications?[index].active ?? false,
-                          onChange: () {
-                            event.updateData(context, index,
-                                !(state.notifications?[index].active ?? false));
-                          },
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: state.notifications?.length ?? 0,
+                itemBuilder: (context, index) {
+                  return Column(
+                    children: [
+                      CustomToggle(
+                        controller: ValueNotifier<bool>(
+                          state.notifications?[index].active ?? false,
                         ),
-                        8.verticalSpace,
-                      ],
-                    );
-                  })
+                        title: state.notifications?[index].type ?? "",
+                        isChecked: state.notifications?[index].active ?? false,
+                        onChange: () {
+                          event.updateData(
+                            context,
+                            index,
+                            !(state.notifications?[index].active ?? false),
+                          );
+                        },
+                      ),
+                      8.verticalSpace,
+                    ],
+                  );
+                },
+              ),
             ],
           );
   }
 }
-

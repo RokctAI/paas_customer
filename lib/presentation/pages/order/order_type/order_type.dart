@@ -60,22 +60,22 @@ class _OrderPageState extends State<OrderType> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CustomTabBar(
-              tabController: widget.tabController,
-            tabs: tabs,
-            ),
+            CustomTabBar(tabController: widget.tabController, tabs: tabs),
             SizedBox(
               height: _calculateHeight(),
-              child: TabBarView(controller: widget.tabController, children: [
-                OrderDelivery(
-                  onChange: widget.onChange,
-                  getLocation: widget.getLocation,
-                  shopId: widget.shopId,
-                ),
-                const OrderPickUp(),
-                const OrderPickupPoint(),
-              ]),
-            )
+              child: TabBarView(
+                controller: widget.tabController,
+                children: [
+                  OrderDelivery(
+                    onChange: widget.onChange,
+                    getLocation: widget.getLocation,
+                    shopId: widget.shopId,
+                  ),
+                  const OrderPickUp(),
+                  const OrderPickupPoint(),
+                ],
+              ),
+            ),
           ],
         ),
       ),

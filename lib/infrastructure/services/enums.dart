@@ -39,7 +39,4 @@ enum LookProductStockStatus { outOfStock, alreadyAdded, notAdded }
 enum SignUpType { phone, email, both }
 
 // Enums for payment methods
-enum PaymentMethodType {
-  directCard,
-  savedCard,
-}
+enum PaymentMethodType { directCard, savedCard }

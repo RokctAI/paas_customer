@@ -13,13 +13,13 @@ class CategoryTwo extends StatelessWidget {
   final RefreshController categoryController;
   final VoidCallback onTap;
 
-
-  const CategoryTwo(
-      {super.key,
-      required this.state,
-      required this.event,
-      required this.categoryController,
-      required this.onTap,});
+  const CategoryTwo({
+    super.key,
+    required this.state,
+    required this.event,
+    required this.categoryController,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,10 +39,11 @@ class CategoryTwo extends StatelessWidget {
                 child: ListView.builder(
                   padding: EdgeInsets.only(left: 16.r, bottom: 16.r, top: 8.r),
                   shrinkWrap: true,
-                  
+
                   scrollDirection: Axis.horizontal,
-                  itemCount:
-                      state.isCategoryLoading ? 5 : state.categories.length,
+                  itemCount: state.isCategoryLoading
+                      ? 5
+                      : state.categories.length,
                   itemBuilder: (context, index) {
                     return AnimationConfiguration.staggeredList(
                       position: index,
@@ -51,17 +52,17 @@ class CategoryTwo extends StatelessWidget {
                         verticalOffset: 50.0,
                         child: FadeInAnimation(
                           child: CategoryTwoItem(
-                                  index: index,
-                                  image: state.categories[index].img ?? "",
-                                  title: state.categories[index].translation
-                                          ?.title ??
-                                      "",
-                                  isActive: state.selectIndexCategory == index,
-                                  onTap: () {
-                                    event.setSelectCategory(index, context);
-                                    onTap.call();
-                                  },
-                                ),
+                            index: index,
+                            image: state.categories[index].img ?? "",
+                            title:
+                                state.categories[index].translation?.title ??
+                                "",
+                            isActive: state.selectIndexCategory == index,
+                            onTap: () {
+                              event.setSelectCategory(index, context);
+                              onTap.call();
+                            },
+                          ),
                         ),
                       ),
                     );
@@ -72,4 +73,3 @@ class CategoryTwo extends StatelessWidget {
           );
   }
 }
-

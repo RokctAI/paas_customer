@@ -4,6 +4,7 @@ import 'saved_card_notifier.dart';
 import 'saved_cards_state.dart';
 
 // Provider for saved cards
-final savedCardsProvider = StateNotifierProvider<SavedCardsNotifier, SavedCardsState>((ref) {
-  return SavedCardsNotifier();
-});
+final savedCardsProvider =
+    StateNotifierProvider<SavedCardsNotifier, SavedCardsState>((ref) {
+      return SavedCardsNotifier();
+    });

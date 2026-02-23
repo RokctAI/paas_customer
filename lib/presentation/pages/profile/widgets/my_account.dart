@@ -19,55 +19,48 @@ import 'package:foodyman/presentation/pages/profile/edit_profile_page.dart';
 import 'package:foodyman/presentation/pages/auth/reset/reset_password_page.dart';
 import 'package:foodyman/presentation/pages/profile/currency_page.dart';
 import 'package:foodyman/presentation/pages/profile/language_page.dart';
+
 //import 'package:foodyman/application/like/like_provider.dart';
 class MyAccount extends StatelessWidget {
   final bool isBackButton;
 
-
-  const MyAccount({ super.key,
-    this.isBackButton = true,
-  });
+  const MyAccount({super.key, this.isBackButton = true});
 
   @override
   Widget build(BuildContext context) {
     final bool isDarkMode = LocalStorage.getAppThemeMode();
     final bool isLtr = LocalStorage.getLangLtr();
     return Directionality(
-        textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
-        child:  Scaffold(backgroundColor: isDarkMode ? AppStyle.mainBackDark : AppStyle.bgGrey,
-      body:
-        Column(
+      textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
+      child: Scaffold(
+        backgroundColor: isDarkMode ? AppStyle.mainBackDark : AppStyle.bgGrey,
+        body: Column(
           children: [
             Row(
               children: [
-               // const PopButton(),
+                // const PopButton(),
                 const SizedBox(width: 20, height: 120),
-             //  CommonAppBar( child:
-                SafeArea(child:
-               Text(
-                  AppHelpers.getTranslation(TrKeys.account),
-                  style: AppStyle.interNoSemi(
-                    color: Colors.black,
-                    size: 18,
+                //  CommonAppBar( child:
+                SafeArea(
+                  child: Text(
+                    AppHelpers.getTranslation(TrKeys.account),
+                    style: AppStyle.interNoSemi(color: Colors.black, size: 18),
                   ),
-                ),),
+                ),
                 const Spacer(),
-
               ],
             ),
             const SizedBox(height: 24),
             ButtonItem(
               isLtr: isLtr,
-              
+
               icon: FlutterRemix.edit_2_line,
               title: AppHelpers.getTranslation(TrKeys.editAccount),
               onTap: () {
-              //  ref.refresh(editProfileProvider);
+                //  ref.refresh(editProfileProvider);
                 AppHelpers.showCustomModalBottomDragSheet(
                   context: context,
-                  modal: (c) => EditProfileScreen(
-                    controller: c,
-                  ),
+                  modal: (c) => EditProfileScreen(controller: c),
                   isDarkMode: isDarkMode,
                 );
               },
@@ -76,14 +69,14 @@ class MyAccount extends StatelessWidget {
               isLtr: isLtr,
               icon: FlutterRemix.lock_2_line,
               title: AppHelpers.getTranslation(TrKeys.changePassword),
-              onTap:  () {
-            Navigator.pop(context);
-            AppHelpers.showCustomModalBottomSheet(
-            context: context,
-            modal: const ResetPasswordPage(),
-            isDarkMode: isDarkMode,
-            );
-            },
+              onTap: () {
+                Navigator.pop(context);
+                AppHelpers.showCustomModalBottomSheet(
+                  context: context,
+                  modal: const ResetPasswordPage(),
+                  isDarkMode: isDarkMode,
+                );
+              },
             ),
             ButtonItem(
               isLtr: isLtr,
@@ -103,8 +96,7 @@ class MyAccount extends StatelessWidget {
             ),
             ButtonItem(
               isLtr: isLtr,
-              title: AppHelpers.getTranslation(
-                  TrKeys.language),
+              title: AppHelpers.getTranslation(TrKeys.language),
               icon: FlutterRemix.global_line,
               onTap: () {
                 AppHelpers.showCustomModalBottomSheet(
@@ -113,7 +105,6 @@ class MyAccount extends StatelessWidget {
                   modal: LanguageScreen(
                     onSave: () {
                       Navigator.pop(context);
-
                     },
                   ),
                   isDarkMode: isDarkMode,
@@ -122,8 +113,7 @@ class MyAccount extends StatelessWidget {
             ),
             ButtonItem(
               isLtr: isLtr,
-              title: AppHelpers.getTranslation(
-                  TrKeys.currencies),
+              title: AppHelpers.getTranslation(TrKeys.currencies),
               icon: FlutterRemix.bank_card_line,
               onTap: () {
                 AppHelpers.showCustomModalBottomSheet(
@@ -133,17 +123,17 @@ class MyAccount extends StatelessWidget {
                 );
               },
             ),
-
           ],
         ),
 
-      floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
-      floatingActionButton: //isBackButton ?
-       Padding(
-        padding: EdgeInsets.only(left: 16.w),
-        child: const PopButton(),
-      )
-         // : const SizedBox.shrink(),
-    ),);
+        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+        floatingActionButton: //isBackButton ?
+        Padding(
+          padding: EdgeInsets.only(left: 16.w),
+          child: const PopButton(),
+        ),
+        // : const SizedBox.shrink(),
+      ),
+    );
   }
 }

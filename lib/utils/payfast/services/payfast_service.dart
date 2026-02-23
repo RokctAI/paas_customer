@@ -106,19 +106,22 @@ class PayFastService {
 
       // Configure the controller
       webController.setJavaScriptMode(JavaScriptMode.unrestricted);
-      webController.setBackgroundColor(Theme.of(context).scaffoldBackgroundColor);
+      webController.setBackgroundColor(
+        Theme.of(context).scaffoldBackgroundColor,
+      );
 
       // Set the navigation delegate after controller is fully created
       webController.setNavigationDelegate(
         NavigationDelegate(
           onPageFinished: (String loadedUrl) {
             // Update the state when page is loaded
-            ProviderScope.containerOf(context).read(preloadedWebViewProvider.notifier).state =
-                PreloadedWebViewState(
-                  controller: webController,
-                  url: paymentUrl,
-                  isReady: true,
-                );
+            ProviderScope.containerOf(context)
+                .read(preloadedWebViewProvider.notifier)
+                .state = PreloadedWebViewState(
+              controller: webController,
+              url: paymentUrl,
+              isReady: true,
+            );
           },
           onNavigationRequest: (NavigationRequest request) {
             // Allow all navigation during preload
@@ -128,12 +131,13 @@ class PayFastService {
       );
 
       // Set initial state with the controller
-      ProviderScope.containerOf(context).read(preloadedWebViewProvider.notifier).state =
-          PreloadedWebViewState(
-            controller: webController,
-            url: paymentUrl,
-            isReady: false,
-          );
+      ProviderScope.containerOf(
+        context,
+      ).read(preloadedWebViewProvider.notifier).state = PreloadedWebViewState(
+        controller: webController,
+        url: paymentUrl,
+        isReady: false,
+      );
 
       // Load the URL last
       webController.loadRequest(Uri.parse(paymentUrl));
@@ -238,7 +242,10 @@ class PayFastService {
   }
 
   /// Creates a signature exactly as specified in PayFast documentation
-  static String _createSignaturePerDocumentation(Map<String, String> params, String passphrase) {
+  static String _createSignaturePerDocumentation(
+    Map<String, String> params,
+    String passphrase,
+  ) {
     // 1. Concatenate all non-blank variables in specified order with & separator
     final StringBuffer pfOutput = StringBuffer();
 

@@ -20,13 +20,26 @@ class MockOrdersRepository implements OrdersRepositoryFacade {
     status: "delivered",
     totalPrice: 45.0,
     createdAt: DateTime.now(),
-    shop: ShopData(id: "demo_shop_1", translation: Translation(title: "Demo Pizza Shop"), logoImg: "https://via.placeholder.com/150"),
+    shop: ShopData(
+      id: "demo_shop_1",
+      translation: Translation(title: "Demo Pizza Shop"),
+      logoImg: "https://via.placeholder.com/150",
+    ),
     details: [],
-    currencyModel: CurrencyModel(id: "1", symbol: "\$", title: "USD", active: true),
+    currencyModel: CurrencyModel(
+      id: "1",
+      symbol: "\$",
+      title: "USD",
+      active: true,
+    ),
   );
 
   @override
-  Future<ApiResult<void>> addReview(String orderId, {required double rating, required String comment}) async {
+  Future<ApiResult<void>> addReview(
+    String orderId, {
+    required double rating,
+    required String comment,
+  }) async {
     return ApiResult.success(data: null);
   }
 
@@ -36,27 +49,51 @@ class MockOrdersRepository implements OrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<CashbackModel>> checkCashback({required String shopId, required double amount}) async {
+  Future<ApiResult<CashbackModel>> checkCashback({
+    required String shopId,
+    required double amount,
+  }) async {
     return ApiResult.success(data: CashbackModel(price: 0));
   }
 
   @override
-  Future<ApiResult<CouponResponse>> checkCoupon({required String coupon, required String shopId}) async {
-    return ApiResult.success(data: CouponResponse(data: CouponData(price: 5.0, type: "fixed")));
+  Future<ApiResult<CouponResponse>> checkCoupon({
+    required String coupon,
+    required String shopId,
+  }) async {
+    return ApiResult.success(
+      data: CouponResponse(data: CouponData(price: 5.0, type: "fixed")),
+    );
   }
 
   @override
-  Future<ApiResult> createAutoOrder({required String from, required String orderId, String? to, String? cronPattern, String? paymentMethod, String? savedCardId}) async {
+  Future<ApiResult> createAutoOrder({
+    required String from,
+    required String orderId,
+    String? to,
+    String? cronPattern,
+    String? paymentMethod,
+    String? savedCardId,
+  }) async {
     return ApiResult.success(data: null);
   }
 
   @override
-  Future<ApiResult<OrderActiveModel>> createOrder(OrderBodyData orderBody) async {
-    return ApiResult.success(data: _demoOrder.copyWith(id: "2", status: "pending"));
+  Future<ApiResult<OrderActiveModel>> createOrder(
+    OrderBodyData orderBody,
+  ) async {
+    return ApiResult.success(
+      data: _demoOrder.copyWith(id: "2", status: "pending"),
+    );
   }
 
   @override
-  Future<ApiResult<void>> createRepeatingOrder({required String orderId, required String startDate, required String cronPattern, String? endDate}) async {
+  Future<ApiResult<void>> createRepeatingOrder({
+    required String orderId,
+    required String startDate,
+    required String cronPattern,
+    String? endDate,
+  }) async {
     return ApiResult.success(data: null);
   }
 
@@ -66,7 +103,9 @@ class MockOrdersRepository implements OrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<void>> deleteRepeatingOrder({required String repeatingOrderId}) async {
+  Future<ApiResult<void>> deleteRepeatingOrder({
+    required String repeatingOrderId,
+  }) async {
     return ApiResult.success(data: null);
   }
 
@@ -80,7 +119,13 @@ class MockOrdersRepository implements OrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<GetCalculateModel>> getCalculate({required String cartId, required double lat, required double long, required DeliveryTypeEnum type, String? coupon}) async {
+  Future<ApiResult<GetCalculateModel>> getCalculate({
+    required String cartId,
+    required double lat,
+    required double long,
+    required DeliveryTypeEnum type,
+    String? coupon,
+  }) async {
     return ApiResult.success(
       data: GetCalculateModel(
         totalPrice: 50.0,
@@ -95,23 +140,27 @@ class MockOrdersRepository implements OrdersRepositoryFacade {
 
   @override
   Future<ApiResult<OrderPaginateResponse>> getCompletedOrders(int page) async {
-    return ApiResult.success(
-      data: OrderPaginateResponse(
-        data: [_demoOrder],
-      ),
-    );
+    return ApiResult.success(data: OrderPaginateResponse(data: [_demoOrder]));
   }
 
   @override
   Future<ApiResult<LocalLocation>> getDriverLocation(String deliveryId) async {
-    return ApiResult.success(data: LocalLocation(latitude: 37.7749, longitude: -122.4194));
+    return ApiResult.success(
+      data: LocalLocation(latitude: 37.7749, longitude: -122.4194),
+    );
   }
 
   @override
   Future<ApiResult<OrderPaginateResponse>> getHistoryOrders(int page) async {
     return ApiResult.success(
       data: OrderPaginateResponse(
-        data: [_demoOrder, _demoOrder.copyWith(id: "4", createdAt: DateTime.now().subtract(Duration(days: 1)))],
+        data: [
+          _demoOrder,
+          _demoOrder.copyWith(
+            id: "4",
+            createdAt: DateTime.now().subtract(Duration(days: 1)),
+          ),
+        ],
       ),
     );
   }
@@ -132,7 +181,13 @@ class MockOrdersRepository implements OrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<String>> process(OrderBodyData orderBody, String name, {BuildContext? context, bool forceCardPayment = false, bool enableTokenization = false}) async {
+  Future<ApiResult<String>> process(
+    OrderBodyData orderBody,
+    String name, {
+    BuildContext? context,
+    bool forceCardPayment = false,
+    bool enableTokenization = false,
+  }) async {
     return ApiResult.success(data: "http://mock-payment-url.com");
   }
 
@@ -147,7 +202,10 @@ class MockOrdersRepository implements OrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<String>> tipProcess({required String orderId, required double tip}) async {
+  Future<ApiResult<String>> tipProcess({
+    required String orderId,
+    required double tip,
+  }) async {
     return ApiResult.success(data: "http://mock-tip-payment-url.com");
   }
 }

@@ -30,4 +30,3 @@ class ParcelState with _$ParcelState {
 
   const ParcelState._();
 }
-

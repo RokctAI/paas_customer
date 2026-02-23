@@ -114,8 +114,8 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
     try {
       // Process the token payment
       final result = await _walletRepository.walletTopUp(
-          amount: amount,
-          token: _selectedCard!.token
+        amount: amount,
+        token: _selectedCard!.token,
       );
 
       setState(() {
@@ -123,21 +123,21 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
       });
 
       result.when(
-          success: (data) {
-              if (!mounted) return;
-              AppHelpers.showCheckTopSnackBarDone(
-                context,
-                AppHelpers.getTranslation(TrKeys.topUpSuccessful),
-              );
-              _navigateBack();
-          },
-          failure: (error, s) {
-              if (!mounted) return;
-              AppHelpers.showCheckTopSnackBarInfo(
-                context,
-                'Failed to process payment: $error',
-              );
-          }
+        success: (data) {
+          if (!mounted) return;
+          AppHelpers.showCheckTopSnackBarDone(
+            context,
+            AppHelpers.getTranslation(TrKeys.topUpSuccessful),
+          );
+          _navigateBack();
+        },
+        failure: (error, s) {
+          if (!mounted) return;
+          AppHelpers.showCheckTopSnackBarInfo(
+            context,
+            'Failed to process payment: $error',
+          );
+        },
       );
     } catch (e) {
       if (!mounted) return;
@@ -168,9 +168,7 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
     });
 
     try {
-      final result = await _walletRepository.walletTopUp(
-        amount: amount,
-      );
+      final result = await _walletRepository.walletTopUp(amount: amount);
 
       setState(() {
         _isLoading = false;
@@ -180,40 +178,37 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
         success: (data) {
           if (!mounted) return;
           if (data is String && data.isNotEmpty) {
-               Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => PayFastWebView(
-                    url: data,
-                    onComplete: (success) {
-                      if (success) {
-                        _loadSavedCards();
-                        AppHelpers.showCheckTopSnackBarDone(
-                          context,
-                          AppHelpers.getTranslation(TrKeys.topUpSuccessful),
-                        );
-                        _navigateBack();
-                      }
-                    },
-                  ),
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => PayFastWebView(
+                  url: data,
+                  onComplete: (success) {
+                    if (success) {
+                      _loadSavedCards();
+                      AppHelpers.showCheckTopSnackBarDone(
+                        context,
+                        AppHelpers.getTranslation(TrKeys.topUpSuccessful),
+                      );
+                      _navigateBack();
+                    }
+                  },
                 ),
-              );
+              ),
+            );
           } else {
-             // Direct success (unlikely for new card, but possible if changed)
-             _loadSavedCards();
-             AppHelpers.showCheckTopSnackBarDone(
-                context, 
-                AppHelpers.getTranslation(TrKeys.topUpSuccessful)
-             );
-             _navigateBack();
+            // Direct success (unlikely for new card, but possible if changed)
+            _loadSavedCards();
+            AppHelpers.showCheckTopSnackBarDone(
+              context,
+              AppHelpers.getTranslation(TrKeys.topUpSuccessful),
+            );
+            _navigateBack();
           }
         },
         failure: (error, statusCode) {
           if (!mounted) return;
-          AppHelpers.showCheckTopSnackBarInfo(
-            context,
-            error,
-          );
+          AppHelpers.showCheckTopSnackBarInfo(context, error);
         },
       );
     } catch (e) {
@@ -279,7 +274,9 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
                   16.verticalSpace,
                   TextField(
                     controller: _amountController,
-                    keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: const TextInputType.numberWithOptions(
+                      decimal: true,
+                    ),
                     decoration: InputDecoration(
                       hintText: '0.00',
                       prefixIcon: Padding(
@@ -289,10 +286,15 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
                           style: AppStyle.interBold(size: 18.sp),
                         ),
                       ),
-                      prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+                      prefixIconConstraints: BoxConstraints(
+                        minWidth: 0,
+                        minHeight: 0,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.r),
-                        borderSide: const BorderSide(color: AppStyle.borderColor),
+                        borderSide: const BorderSide(
+                          color: AppStyle.borderColor,
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.r),
@@ -317,7 +319,10 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
                           });
                         },
                         child: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16.w,
+                            vertical: 10.h,
+                          ),
                           decoration: BoxDecoration(
                             color: AppStyle.white,
                             borderRadius: BorderRadius.circular(8.r),
@@ -342,7 +347,9 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
 
                   // Saved Cards Section
                   if (_loadingCards)
-                    Center(child: CircularProgressIndicator(color: AppStyle.primary))
+                    Center(
+                      child: CircularProgressIndicator(color: AppStyle.primary),
+                    )
                   else if (_savedCards.isNotEmpty) ...[
                     Text(
                       AppHelpers.getTranslation(TrKeys.selectCard),
@@ -375,20 +382,22 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
                         ),
                         child: _isLoading
                             ? SizedBox(
-                          height: 20.h,
-                          width: 20.w,
-                          child: CircularProgressIndicator(
-                            color: AppStyle.white,
-                            strokeWidth: 2,
-                          ),
-                        )
+                                height: 20.h,
+                                width: 20.w,
+                                child: CircularProgressIndicator(
+                                  color: AppStyle.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
                             : Text(
-                          AppHelpers.getTranslation(TrKeys.payWithSavedCard),
-                          style: AppStyle.interSemi(
-                            size: 16.sp,
-                            color: AppStyle.white,
-                          ),
-                        ),
+                                AppHelpers.getTranslation(
+                                  TrKeys.payWithSavedCard,
+                                ),
+                                style: AppStyle.interSemi(
+                                  size: 16.sp,
+                                  color: AppStyle.white,
+                                ),
+                              ),
                       ),
                     4.verticalSpace,
                     Row(
@@ -403,8 +412,12 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
                   ElevatedButton(
                     onPressed: _isLoading ? null : _topUpWithNewCard,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _savedCards.isNotEmpty ? AppStyle.transparent : AppStyle.primary,
-                      foregroundColor: _savedCards.isNotEmpty ? AppStyle.primary : AppStyle.white,
+                      backgroundColor: _savedCards.isNotEmpty
+                          ? AppStyle.transparent
+                          : AppStyle.primary,
+                      foregroundColor: _savedCards.isNotEmpty
+                          ? AppStyle.primary
+                          : AppStyle.white,
                       minimumSize: Size(double.infinity, 50.h),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8.r),
@@ -416,22 +429,28 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
                     ),
                     child: _isLoading
                         ? SizedBox(
-                      height: 20.h,
-                      width: 20.w,
-                      child: CircularProgressIndicator(
-                        color: _savedCards.isNotEmpty ? AppStyle.primary : AppStyle.white,
-                        strokeWidth: 2,
-                      ),
-                    )
+                            height: 20.h,
+                            width: 20.w,
+                            child: CircularProgressIndicator(
+                              color: _savedCards.isNotEmpty
+                                  ? AppStyle.primary
+                                  : AppStyle.white,
+                              strokeWidth: 2,
+                            ),
+                          )
                         : Text(
-                      _savedCards.isNotEmpty
-                          ? AppHelpers.getTranslation(TrKeys.payWithNewCard)
-                          : AppHelpers.getTranslation(TrKeys.topUpNow),
-                      style: AppStyle.interSemi(
-                        size: 16.sp,
-                        color: _savedCards.isNotEmpty ? AppStyle.primary : AppStyle.white,
-                      ),
-                    ),
+                            _savedCards.isNotEmpty
+                                ? AppHelpers.getTranslation(
+                                    TrKeys.payWithNewCard,
+                                  )
+                                : AppHelpers.getTranslation(TrKeys.topUpNow),
+                            style: AppStyle.interSemi(
+                              size: 16.sp,
+                              color: _savedCards.isNotEmpty
+                                  ? AppStyle.primary
+                                  : AppStyle.white,
+                            ),
+                          ),
                   ),
 
                   24.verticalSpace,

@@ -23,7 +23,7 @@ class OrderBadge extends StatelessWidget {
       decoration: const BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: AppStyle.white,//.withOpacity(0.9), // Shadow color
+            color: AppStyle.white, //.withOpacity(0.9), // Shadow color
             spreadRadius: 2, // Spread radius
             blurRadius: 7, // Blur radius
             offset: Offset(0, 3), // Offset in x and y directions
@@ -44,21 +44,33 @@ class OrderBadge extends StatelessWidget {
           Container(
             height: 22.h, // Adjust height as needed using ScreenUtil
             decoration: BoxDecoration(
-              color: containerColor ?? AppStyle.primary, // Use customizable color with default
+              color:
+                  containerColor ??
+                  AppStyle.primary, // Use customizable color with default
               borderRadius: const BorderRadius.only(
-                topRight: Radius.circular(10.0), // Adjust top-right radius as needed
-                bottomRight: Radius.circular(10.0), // Adjust bottom-right radius as needed
+                topRight: Radius.circular(
+                  10.0,
+                ), // Adjust top-right radius as needed
+                bottomRight: Radius.circular(
+                  10.0,
+                ), // Adjust bottom-right radius as needed
               ), // Adjust the radius as needed
             ),
-            padding: EdgeInsets.symmetric(horizontal: 5.w), // Adjust padding as needed using ScreenUtil
+            padding: EdgeInsets.symmetric(
+              horizontal: 5.w,
+            ), // Adjust padding as needed using ScreenUtil
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  AppHelpers.getTranslation(TrKeys.orderNow), // Make sure AppHelpers is imported and accessible
+                  AppHelpers.getTranslation(
+                    TrKeys.orderNow,
+                  ), // Make sure AppHelpers is imported and accessible
                   style: AppStyle.interNoSemi(
                     size: 12,
-                    color: textColor ?? AppStyle.white, // Use customizable color with default
+                    color:
+                        textColor ??
+                        AppStyle.white, // Use customizable color with default
                   ),
                 ),
               ],
@@ -69,4 +81,3 @@ class OrderBadge extends StatelessWidget {
     );
   }
 }
-

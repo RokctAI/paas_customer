@@ -30,5 +30,3 @@ abstract class StorageKeys {
   static const String keyLangLtr = 'keyLangLtr';
   static const String keyCarInfo = 'keyCarInfo';
 }
-
-

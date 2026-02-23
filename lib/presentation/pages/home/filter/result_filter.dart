@@ -18,15 +18,11 @@ import 'package:foodyman/presentation/theme/app_style.dart';
 import '../home_two/widget/market_two_item.dart';
 import '../shimmer/all_shop_shimmer.dart';
 
-
 @RoutePage()
 class ResultFilterPage extends ConsumerStatefulWidget {
   final String categoryId;
 
-  const ResultFilterPage({
-    super.key,
-    required this.categoryId,
-  });
+  const ResultFilterPage({super.key, required this.categoryId});
 
   @override
   ConsumerState<ResultFilterPage> createState() => _ResultFilterState();
@@ -35,7 +31,6 @@ class ResultFilterPage extends ConsumerStatefulWidget {
 class _ResultFilterState extends ConsumerState<ResultFilterPage> {
   late FilterNotifier event;
   final RefreshController _shopController = RefreshController();
-
 
   @override
   void initState() {
@@ -79,12 +74,18 @@ class _ResultFilterState extends ConsumerState<ResultFilterPage> {
               enablePullDown: true,
               onLoading: () {
                 event.fetchAllShopsPage(
-                    context, _shopController, widget.categoryId);
+                  context,
+                  _shopController,
+                  widget.categoryId,
+                );
               },
               onRefresh: () {
                 event.fetchAllShopsPage(
-                    context, _shopController, widget.categoryId,
-                    isRefresh: true);
+                  context,
+                  _shopController,
+                  widget.categoryId,
+                  isRefresh: true,
+                );
               },
               child: SingleChildScrollView(
                 child: Column(
@@ -95,8 +96,9 @@ class _ResultFilterState extends ConsumerState<ResultFilterPage> {
                         : Column(
                             children: [
                               TitleAndIcon(
-                                title:
-                                    AppHelpers.getTranslation(TrKeys.allShops),
+                                title: AppHelpers.getTranslation(
+                                  TrKeys.allShops,
+                                ),
                                 rightTitle:
                                     "${AppHelpers.getTranslation(TrKeys.found)} ${state.allShops.length.toString()} ${AppHelpers.getTranslation(TrKeys.results)}",
                               ),
@@ -108,27 +110,25 @@ class _ResultFilterState extends ConsumerState<ResultFilterPage> {
                                 itemCount: state.allShops.length,
                                 itemBuilder: (context, index) =>
                                     AppHelpers.getType() == 0
-                                        ? MarketItem(
-                                            shop: state.allShops[index],
-                                            isSimpleShop: true,
-                                          )
-                                        : AppHelpers.getType() == 1
-                                            ? MarketOneItem(
-                                                shop: state.allShops[index],
-                                                isSimpleShop: true,
-                                              )
-                                            : AppHelpers.getType() == 2
-                                                ? MarketTwoItem(
-                                                    shop:
-                                                        state.allShops[index],
-                                                    isSimpleShop: true,
-                                                    isFilter: true,
-                                                  )
-                                                : MarketThreeItem(
-                                                    shop:
-                                                        state.allShops[index],
-                                                    isSimpleShop: true,
-                                                  ),
+                                    ? MarketItem(
+                                        shop: state.allShops[index],
+                                        isSimpleShop: true,
+                                      )
+                                    : AppHelpers.getType() == 1
+                                    ? MarketOneItem(
+                                        shop: state.allShops[index],
+                                        isSimpleShop: true,
+                                      )
+                                    : AppHelpers.getType() == 2
+                                    ? MarketTwoItem(
+                                        shop: state.allShops[index],
+                                        isSimpleShop: true,
+                                        isFilter: true,
+                                      )
+                                    : MarketThreeItem(
+                                        shop: state.allShops[index],
+                                        isSimpleShop: true,
+                                      ),
                               ),
                             ],
                           ),
@@ -136,7 +136,7 @@ class _ResultFilterState extends ConsumerState<ResultFilterPage> {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
@@ -147,4 +147,3 @@ class _ResultFilterState extends ConsumerState<ResultFilterPage> {
     );
   }
 }
-

@@ -22,95 +22,102 @@ class AppBarThree extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CommonAppBar(
-        child: Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        InkWell(
-          onTap: () {
-            if(LocalStorage.getToken().isEmpty){
-              context.pushRoute(ViewMapRoute());
-              return;
-            }
-            AppHelpers.showCustomModalBottomSheet(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          InkWell(
+            onTap: () {
+              if (LocalStorage.getToken().isEmpty) {
+                context.pushRoute(ViewMapRoute());
+                return;
+              }
+              AppHelpers.showCustomModalBottomSheet(
                 context: context,
                 modal: SelectAddressScreen(
                   addAddress: () async {
                     await context.pushRoute(ViewMapRoute());
                   },
                 ),
-                isDarkMode: false);
-          },
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Container(
-                decoration: const BoxDecoration(
-                    shape: BoxShape.circle, color: AppStyle.white),
-                padding: EdgeInsets.all(12.r),
-                child: SvgPicture.asset("assets/svgs/adress.svg"),
-              ),
-              10.horizontalSpace,
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    AppHelpers.getTranslation(TrKeys.deliveryAddress),
-                    style: AppStyle.interNormal(
-                      size: 12,
-                      color: AppStyle.textGrey,
-                    ),
+                isDarkMode: false,
+              );
+            },
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppStyle.white,
                   ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: MediaQuery.sizeOf(context).width - 160.w,
-                        child: Text(
-                          (LocalStorage.getAddressSelected()?.title?.isEmpty ??
-                              true)
-                              ? LocalStorage.getAddressSelected()?.address ?? ''
-                              : LocalStorage.getAddressSelected()?.title ?? "",
-                          style: AppStyle.interBold(
-                            size: 14,
-                            color: AppStyle.black,
-                          ),
-                          maxLines: 1,
-                        ),
+                  padding: EdgeInsets.all(12.r),
+                  child: SvgPicture.asset("assets/svgs/adress.svg"),
+                ),
+                10.horizontalSpace,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      AppHelpers.getTranslation(TrKeys.deliveryAddress),
+                      style: AppStyle.interNormal(
+                        size: 12,
+                        color: AppStyle.textGrey,
                       ),
-                      const Icon(Icons.keyboard_arrow_down_sharp)
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        const Spacer(),
-        GestureDetector(
-          onTap: () {
-            if (LocalStorage.getToken().isEmpty) {
-              context.replaceRoute(const LoginRoute());
-            } else {
-              context.pushRoute( ProfileRoute());
-            }
-          },
-          child: Container(
-            width: 40.r,
-            height: 40.r,
-            decoration: const BoxDecoration(shape: BoxShape.circle),
-            child: CustomNetworkImage(
-              profile: true,
-              url: LocalStorage.getUser()?.img,
-              height: 40.r,
-              width: 40.r,
-              radius: 20.r,
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.sizeOf(context).width - 160.w,
+                          child: Text(
+                            (LocalStorage.getAddressSelected()
+                                        ?.title
+                                        ?.isEmpty ??
+                                    true)
+                                ? LocalStorage.getAddressSelected()?.address ??
+                                      ''
+                                : LocalStorage.getAddressSelected()?.title ??
+                                      "",
+                            style: AppStyle.interBold(
+                              size: 14,
+                              color: AppStyle.black,
+                            ),
+                            maxLines: 1,
+                          ),
+                        ),
+                        const Icon(Icons.keyboard_arrow_down_sharp),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-        )
-      ],
-    ));
+          const Spacer(),
+          GestureDetector(
+            onTap: () {
+              if (LocalStorage.getToken().isEmpty) {
+                context.replaceRoute(const LoginRoute());
+              } else {
+                context.pushRoute(ProfileRoute());
+              }
+            },
+            child: Container(
+              width: 40.r,
+              height: 40.r,
+              decoration: const BoxDecoration(shape: BoxShape.circle),
+              child: CustomNetworkImage(
+                profile: true,
+                url: LocalStorage.getUser()?.img,
+                height: 40.r,
+                width: 40.r,
+                radius: 20.r,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
-

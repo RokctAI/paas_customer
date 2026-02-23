@@ -57,34 +57,35 @@ import 'package:foodyman/infrastructure/repository/mock/mock_orders_repository.d
 import 'package:foodyman/infrastructure/repository/mock/mock_address_repository.dart';
 import 'package:foodyman/infrastructure/repository/mock/mock_brands_repository.dart';
 
-
 final GetIt getIt = GetIt.instance;
 
 Future<void> setUpDependencies() async {
   getIt.registerLazySingleton<HttpService>(() => HttpService());
-  
+
   if (AppConstants.isDemo) {
-      getIt.registerSingleton<SettingsRepositoryFacade>(MockSettingsRepository());
-      getIt.registerSingleton<AuthRepositoryFacade>(MockAuthRepository());
-      getIt.registerSingleton<ShopsRepositoryFacade>(MockShopsRepository());
-      getIt.registerSingleton<ProductsRepositoryFacade>(MockProductsRepository());
-      getIt.registerSingleton<CategoriesRepositoryFacade>(MockCategoriesRepository());
-      getIt.registerSingleton<BannersRepositoryFacade>(MockBannersRepository());
-      getIt.registerSingleton<CartRepositoryFacade>(MockCartRepository());
-      getIt.registerSingleton<OrdersRepositoryFacade>(MockOrdersRepository());
-      getIt.registerSingleton<AddressRepositoryFacade>(MockAddressRepository());
-      getIt.registerSingleton<BrandsRepositoryFacade>(MockBrandsRepository());
+    getIt.registerSingleton<SettingsRepositoryFacade>(MockSettingsRepository());
+    getIt.registerSingleton<AuthRepositoryFacade>(MockAuthRepository());
+    getIt.registerSingleton<ShopsRepositoryFacade>(MockShopsRepository());
+    getIt.registerSingleton<ProductsRepositoryFacade>(MockProductsRepository());
+    getIt.registerSingleton<CategoriesRepositoryFacade>(
+      MockCategoriesRepository(),
+    );
+    getIt.registerSingleton<BannersRepositoryFacade>(MockBannersRepository());
+    getIt.registerSingleton<CartRepositoryFacade>(MockCartRepository());
+    getIt.registerSingleton<OrdersRepositoryFacade>(MockOrdersRepository());
+    getIt.registerSingleton<AddressRepositoryFacade>(MockAddressRepository());
+    getIt.registerSingleton<BrandsRepositoryFacade>(MockBrandsRepository());
   } else {
-      getIt.registerSingleton<SettingsRepositoryFacade>(SettingsRepository());
-      getIt.registerSingleton<AuthRepositoryFacade>(AuthRepository());
-      getIt.registerSingleton<ShopsRepositoryFacade>(ShopsRepository());
-      getIt.registerSingleton<ProductsRepositoryFacade>(ProductsRepository());
-      getIt.registerSingleton<CategoriesRepositoryFacade>(CategoriesRepository());
-      getIt.registerSingleton<BannersRepositoryFacade>(BannersRepository());
-      getIt.registerSingleton<CartRepositoryFacade>(CartRepository());
-      getIt.registerSingleton<OrdersRepositoryFacade>(OrdersRepository());
-      getIt.registerSingleton<AddressRepositoryFacade>(AddressRepository());
-      getIt.registerSingleton<BrandsRepositoryFacade>(BrandsRepository());
+    getIt.registerSingleton<SettingsRepositoryFacade>(SettingsRepository());
+    getIt.registerSingleton<AuthRepositoryFacade>(AuthRepository());
+    getIt.registerSingleton<ShopsRepositoryFacade>(ShopsRepository());
+    getIt.registerSingleton<ProductsRepositoryFacade>(ProductsRepository());
+    getIt.registerSingleton<CategoriesRepositoryFacade>(CategoriesRepository());
+    getIt.registerSingleton<BannersRepositoryFacade>(BannersRepository());
+    getIt.registerSingleton<CartRepositoryFacade>(CartRepository());
+    getIt.registerSingleton<OrdersRepositoryFacade>(OrdersRepository());
+    getIt.registerSingleton<AddressRepositoryFacade>(AddressRepository());
+    getIt.registerSingleton<BrandsRepositoryFacade>(BrandsRepository());
   }
 
   getIt.registerSingleton<GalleryRepositoryFacade>(GalleryRepository());
@@ -95,11 +96,15 @@ Future<void> setUpDependencies() async {
   getIt.registerSingleton<BlogsRepositoryFacade>(BlogsRepository());
   getIt.registerSingleton<DrawRepositoryFacade>(DrawRepository());
   getIt.registerSingleton<ParcelRepositoryFacade>(ParcelRepository());
-  getIt.registerSingleton<NotificationRepositoryFacade>(NotificationRepositoryImpl());
+  getIt.registerSingleton<NotificationRepositoryFacade>(
+    NotificationRepositoryImpl(),
+  );
   getIt.registerSingleton<Map>(LocalStorage.getTranslations());
   getIt.registerSingleton<WalletRepositoryFacade>(WalletRepository());
   getIt.registerSingleton<LoansRepositoryFacade>(LoansRepository());
-  getIt.registerSingleton<DeliveryPointsRepositoryFacade>(DeliveryPointsRepository());
+  getIt.registerSingleton<DeliveryPointsRepositoryFacade>(
+    DeliveryPointsRepository(),
+  );
 }
 
 final dioHttp = getIt.get<HttpService>();

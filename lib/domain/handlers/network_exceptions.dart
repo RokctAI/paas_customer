@@ -87,8 +87,7 @@ class NetworkExceptions with _$NetworkExceptions {
               break;
           }
         } else if (error is SocketException) {
-        } else {
-        }
+        } else {}
         return const NetworkExceptions.noInternetConnection();
       } on FormatException catch (_) {
         return const NetworkExceptions.formatException();
@@ -243,4 +242,3 @@ class NetworkExceptions with _$NetworkExceptions {
     return errorMessage;
   }
 }
-

@@ -20,11 +20,12 @@ class FilterCategoryShopThree extends StatelessWidget {
   final HomeNotifier event;
   final RefreshController shopController;
 
-  const FilterCategoryShopThree(
-      {super.key,
-      required this.state,
-      required this.event,
-      required this.shopController});
+  const FilterCategoryShopThree({
+    super.key,
+    required this.state,
+    required this.event,
+    required this.shopController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +40,8 @@ class FilterCategoryShopThree extends StatelessWidget {
             shrinkWrap: true,
             itemCount:
                 (state.categories[state.selectIndexCategory].children?.length ??
-                        0) +
-                    1,
+                    0) +
+                1,
             itemBuilder: (BuildContext context, int index) {
               final category = state.categories[state.selectIndexCategory];
               return index == 0
@@ -51,15 +52,18 @@ class FilterCategoryShopThree extends StatelessWidget {
                             context: context,
                             modal: (c) => FilterPage(
                               controller: c,
-                              categoryId: (state.selectIndexSubCategory != -1
+                              categoryId:
+                                  (state.selectIndexSubCategory != -1
                                       ? (state
-                                          .categories[state.selectIndexCategory]
-                                          .children?[
-                                              state.selectIndexSubCategory]
-                                          .id)
+                                            .categories[state
+                                                .selectIndexCategory]
+                                            .children?[state
+                                                .selectIndexSubCategory]
+                                            .id)
                                       : state
-                                          .categories[state.selectIndexCategory]
-                                          .id) ??
+                                            .categories[state
+                                                .selectIndexCategory]
+                                            .id) ??
                                   "",
                             ),
                             isDarkMode: false,
@@ -70,7 +74,9 @@ class FilterCategoryShopThree extends StatelessWidget {
                         child: Container(
                           margin: EdgeInsets.only(right: 8.r),
                           padding: EdgeInsets.symmetric(
-                              horizontal: 16.r, vertical: 6.r),
+                            horizontal: 16.r,
+                            vertical: 6.r,
+                          ),
                           decoration: BoxDecoration(
                             color: AppStyle.bgGrey,
                             borderRadius: BorderRadius.circular(12.r),
@@ -85,7 +91,7 @@ class FilterCategoryShopThree extends StatelessWidget {
                                   size: 13,
                                   color: AppStyle.black,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -93,7 +99,8 @@ class FilterCategoryShopThree extends StatelessWidget {
                     )
                   : TabBarItemThree(
                       isShopTabBar: index - 1 == state.selectIndexSubCategory,
-                      title: category.children?[index - 1].translation?.title ??
+                      title:
+                          category.children?[index - 1].translation?.title ??
                           "",
                       index: index - 1,
                       currentIndex: state.selectIndexSubCategory,
@@ -106,45 +113,45 @@ class FilterCategoryShopThree extends StatelessWidget {
         state.isSelectCategoryLoading == -1
             ? const Loading()
             : Column(
-          mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   state.isShopLoading
                       ? NewsShopShimmer(
                           title: AppHelpers.getTranslation(TrKeys.shops),
                         )
                       : state.filterMarket.isNotEmpty
-                          ? Column(
-                              children: [
-                                TitleAndIcon(
-                                  title:
-                                      AppHelpers.getTranslation(TrKeys.shops),
-                                  rightTitle:
-                                      "${AppHelpers.getTranslation(TrKeys.found)} ${state.totalShops} ${AppHelpers.getTranslation(TrKeys.results)}",
-                                ),
-                                12.verticalSpace,
-                                SizedBox(
-                                    height: 246.h,
-                                    child: SmartRefresher(
-                                      scrollDirection: Axis.horizontal,
-                                      controller: shopController,
-                                      enablePullDown: false,
-                                      enablePullUp: true,
-                                      onLoading: () async {},
-                                      child: ListView.builder(
-                                        padding: EdgeInsets.only(left: 16.r),
-                                        shrinkWrap: false,
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: state.filterMarket.length,
-                                        itemBuilder: (context, index) =>
-                                            MarketThreeItem(
-                                          shop: state.filterMarket[index],
-                                        ),
+                      ? Column(
+                          children: [
+                            TitleAndIcon(
+                              title: AppHelpers.getTranslation(TrKeys.shops),
+                              rightTitle:
+                                  "${AppHelpers.getTranslation(TrKeys.found)} ${state.totalShops} ${AppHelpers.getTranslation(TrKeys.results)}",
+                            ),
+                            12.verticalSpace,
+                            SizedBox(
+                              height: 246.h,
+                              child: SmartRefresher(
+                                scrollDirection: Axis.horizontal,
+                                controller: shopController,
+                                enablePullDown: false,
+                                enablePullUp: true,
+                                onLoading: () async {},
+                                child: ListView.builder(
+                                  padding: EdgeInsets.only(left: 16.r),
+                                  shrinkWrap: false,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: state.filterMarket.length,
+                                  itemBuilder: (context, index) =>
+                                      MarketThreeItem(
+                                        shop: state.filterMarket[index],
                                       ),
-                                    )),
-                                16.verticalSpace,
-                              ],
-                            )
-                          : const SizedBox.shrink(),
+                                ),
+                              ),
+                            ),
+                            16.verticalSpace,
+                          ],
+                        )
+                      : const SizedBox.shrink(),
                   TitleAndIcon(
                     title: AppHelpers.getTranslation(TrKeys.restaurants),
                     rightTitle:
@@ -154,7 +161,7 @@ class FilterCategoryShopThree extends StatelessWidget {
                       ? ListView.builder(
                           padding: EdgeInsets.only(top: 6.h),
                           shrinkWrap: true,
-                          
+
                           physics: const NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           itemCount: state.filterShops.length,
@@ -183,9 +190,7 @@ Widget _resultEmpty() {
         style: AppStyle.interSemi(size: 18.sp),
       ),
       Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 32.w,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 32.w),
         child: Text(
           AppHelpers.getTranslation(TrKeys.trySearchingAgain),
           style: AppStyle.interRegular(size: 14.sp),
@@ -195,4 +200,3 @@ Widget _resultEmpty() {
     ],
   );
 }
-

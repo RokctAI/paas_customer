@@ -15,25 +15,24 @@ class PromoCodeNotifier extends StateNotifier<PromoCodeState> {
     state = state.copyWith(isActive: isActive);
   }
 
-  Future<void> checkPromoCode(BuildContext context,String promoCode,String shopId) async {
+  Future<void> checkPromoCode(
+    BuildContext context,
+    String promoCode,
+    String shopId,
+  ) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
-      state = state.copyWith(
-        isLoading: true,
-        isActive: false,
+      state = state.copyWith(isLoading: true, isActive: false);
+      final response = await _orderRepository.checkCoupon(
+        coupon: promoCode,
+        shopId: shopId,
       );
-      final response =
-          await _orderRepository.checkCoupon(coupon: promoCode, shopId: shopId);
       response.when(
         success: (data) {
-          state = state.copyWith(
-                isLoading: false, isActive: true);
+          state = state.copyWith(isLoading: false, isActive: true);
         },
         failure: (failure, status) {
-          state = state.copyWith(
-            isLoading: false,
-            isActive: false,
-          );
+          state = state.copyWith(isLoading: false, isActive: false);
         },
       );
     } else {
@@ -43,4 +42,3 @@ class PromoCodeNotifier extends StateNotifier<PromoCodeState> {
     }
   }
 }
-

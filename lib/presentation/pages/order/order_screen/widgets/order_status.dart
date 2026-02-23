@@ -12,15 +12,20 @@ class OrderStatusScreen extends StatelessWidget {
   final OrderStatus status;
   final bool parcel;
 
-  const OrderStatusScreen({super.key, required this.status, this.parcel = false});
+  const OrderStatusScreen({
+    super.key,
+    required this.status,
+    this.parcel = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 16.h),
       decoration: BoxDecoration(
-          color: AppStyle.bgGrey,
-          borderRadius: BorderRadius.circular(10.r)),
+        color: AppStyle.bgGrey,
+        borderRadius: BorderRadius.circular(10.r),
+      ),
       padding: EdgeInsets.all(14.r),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -29,11 +34,9 @@ class OrderStatusScreen extends StatelessWidget {
             children: [
               Text(
                 AppHelpers.getTranslation(
-                    AppHelpers.getOrderStatusText(status)),
-                style: AppStyle.interNormal(
-                  size: 13,
-                  color: AppStyle.black,
+                  AppHelpers.getOrderStatusText(status),
                 ),
+                style: AppStyle.interNormal(size: 13, color: AppStyle.black),
               ),
             ],
           ),
@@ -53,9 +56,7 @@ class OrderStatusScreen extends StatelessWidget {
                       duration: const Duration(milliseconds: 500),
                       height: 6.h,
                       width: 12.w,
-                      decoration: const BoxDecoration(
-                        color: AppStyle.red,
-                      ),
+                      decoration: const BoxDecoration(color: AppStyle.red),
                     ),
                     OrderStatusItem(
                       icon: Icon(
@@ -71,9 +72,7 @@ class OrderStatusScreen extends StatelessWidget {
                       duration: const Duration(milliseconds: 500),
                       height: 6.h,
                       width: 12.w,
-                      decoration: const BoxDecoration(
-                        color: AppStyle.red,
-                      ),
+                      decoration: const BoxDecoration(color: AppStyle.red),
                     ),
                     OrderStatusItem(
                       icon: parcel
@@ -90,15 +89,10 @@ class OrderStatusScreen extends StatelessWidget {
                       duration: const Duration(milliseconds: 500),
                       height: 6.h,
                       width: 12.w,
-                      decoration: const BoxDecoration(
-                        color: AppStyle.red,
-                      ),
+                      decoration: const BoxDecoration(color: AppStyle.red),
                     ),
                     OrderStatusItem(
-                      icon: Icon(
-                        Icons.flag,
-                        size: 16.r,
-                      ),
+                      icon: Icon(Icons.flag, size: 16.r),
                       bgColor: AppStyle.red,
                       isActive: true,
                       isProgress: false,
@@ -106,156 +100,136 @@ class OrderStatusScreen extends StatelessWidget {
                   ],
                 )
               : status == OrderStatus.delivered
-                  ? Row(
-                      children: [
-                        OrderStatusItem(
-                          icon: Icon(
-                            parcel
-                                ? FlutterRemix.survey_fill
-                                : Icons.done_all,
-                            size: 16.r,
-                          ),
-                          bgColor: AppStyle.primary,
-                          isActive: true,
-                          isProgress: false,
-                        ),
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          height: 6.h,
-                          width: 12.w,
-                          decoration: const BoxDecoration(
-                            color: AppStyle.primary,
-                          ),
-                        ),
-                        OrderStatusItem(
-                          icon: Icon(
-                            parcel
-                                ? Icons.done_all
-                                : Icons.restaurant_rounded,
-                            size: 16.r,
-                            color: AppStyle.black,
-                          ),
-                          bgColor: AppStyle.primary,
-                          isActive: true,
-                          isProgress: false,
-                        ),
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          height: 6.h,
-                          width: 12.w,
-                          decoration: const BoxDecoration(
-                            color: AppStyle.primary,
-                          ),
-                        ),
-                        OrderStatusItem(
-                          icon: parcel
-                              ? const Icon(FlutterRemix.truck_fill)
-                              : SvgPicture.asset(
-                                  "assets/svgs/delivery2.svg",
-                                  width: 20.w,
-                                ),
-                          bgColor: AppStyle.primary,
-                          isActive: true,
-                          isProgress: false,
-                        ),
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          height: 6.h,
-                          width: 12.w,
-                          decoration: const BoxDecoration(
-                            color: AppStyle.primary,
-                          ),
-                        ),
-                        OrderStatusItem(
-                          icon: Icon(
-                            Icons.flag,
-                            size: 16.r,
-                          ),
-                          bgColor: AppStyle.primary,
-                          isActive: true,
-                          isProgress: false,
-                        ),
-                      ],
-                    )
-                  : Row(
-                      children: [
-                        OrderStatusItem(
-                          icon: Icon(
-                            parcel
-                                ? FlutterRemix.survey_fill
-                                : Icons.done_all,
-                            size: 16.r,
-                          ),
-                          isActive: status != OrderStatus.open,
-                          isProgress: status == OrderStatus.open,
-                        ),
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          height: 6.h,
-                          width: 12.w,
-                          decoration: BoxDecoration(
-                            color: status != OrderStatus.open
-                                ? AppStyle.primary
-                                : AppStyle.white,
-                          ),
-                        ),
-                        OrderStatusItem(
-                          icon: Icon(
-                            parcel
-                                ? Icons.done_all
-                                : Icons.restaurant_rounded,
-                            size: 16.r,
-                            color: AppStyle.black,
-                          ),
-                          isActive: status == OrderStatus.ready ||
-                              status == OrderStatus.onWay,
-                          isProgress: status == OrderStatus.accepted,
-                        ),
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          height: 6.h,
-                          width: 12.w,
-                          decoration: BoxDecoration(
-                            color: status == OrderStatus.ready ||
-                                    status == OrderStatus.onWay
-                                ? AppStyle.primary
-                                : AppStyle.white,
-                          ),
-                        ),
-                        OrderStatusItem(
-                          icon: parcel
-                              ? const Icon(FlutterRemix.truck_fill)
-                              : SvgPicture.asset(
-                                  status == OrderStatus.onWay
-                                      ? "assets/svgs/delivery2.svg"
-                                      : "assets/svgs/delivery.svg",
-                                  width: 20.w,
-                                ),
-                          isActive: status == OrderStatus.onWay,
-                          isProgress: status == OrderStatus.ready ||
-                              status == OrderStatus.delivered,
-                        ),
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 500),
-                          height: 6.h,
-                          width: 12.w,
-                          decoration: const BoxDecoration(
-                            color: AppStyle.white,
-                          ),
-                        ),
-                        OrderStatusItem(
-                          icon: Icon(
-                            Icons.flag,
-                            size: 16.r,
-                          ),
-                          isActive: false,
-                          isProgress: false,
-                        ),
-                      ],
-                    )
+              ? Row(
+                  children: [
+                    OrderStatusItem(
+                      icon: Icon(
+                        parcel ? FlutterRemix.survey_fill : Icons.done_all,
+                        size: 16.r,
+                      ),
+                      bgColor: AppStyle.primary,
+                      isActive: true,
+                      isProgress: false,
+                    ),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 500),
+                      height: 6.h,
+                      width: 12.w,
+                      decoration: const BoxDecoration(color: AppStyle.primary),
+                    ),
+                    OrderStatusItem(
+                      icon: Icon(
+                        parcel ? Icons.done_all : Icons.restaurant_rounded,
+                        size: 16.r,
+                        color: AppStyle.black,
+                      ),
+                      bgColor: AppStyle.primary,
+                      isActive: true,
+                      isProgress: false,
+                    ),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 500),
+                      height: 6.h,
+                      width: 12.w,
+                      decoration: const BoxDecoration(color: AppStyle.primary),
+                    ),
+                    OrderStatusItem(
+                      icon: parcel
+                          ? const Icon(FlutterRemix.truck_fill)
+                          : SvgPicture.asset(
+                              "assets/svgs/delivery2.svg",
+                              width: 20.w,
+                            ),
+                      bgColor: AppStyle.primary,
+                      isActive: true,
+                      isProgress: false,
+                    ),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 500),
+                      height: 6.h,
+                      width: 12.w,
+                      decoration: const BoxDecoration(color: AppStyle.primary),
+                    ),
+                    OrderStatusItem(
+                      icon: Icon(Icons.flag, size: 16.r),
+                      bgColor: AppStyle.primary,
+                      isActive: true,
+                      isProgress: false,
+                    ),
+                  ],
+                )
+              : Row(
+                  children: [
+                    OrderStatusItem(
+                      icon: Icon(
+                        parcel ? FlutterRemix.survey_fill : Icons.done_all,
+                        size: 16.r,
+                      ),
+                      isActive: status != OrderStatus.open,
+                      isProgress: status == OrderStatus.open,
+                    ),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 500),
+                      height: 6.h,
+                      width: 12.w,
+                      decoration: BoxDecoration(
+                        color: status != OrderStatus.open
+                            ? AppStyle.primary
+                            : AppStyle.white,
+                      ),
+                    ),
+                    OrderStatusItem(
+                      icon: Icon(
+                        parcel ? Icons.done_all : Icons.restaurant_rounded,
+                        size: 16.r,
+                        color: AppStyle.black,
+                      ),
+                      isActive:
+                          status == OrderStatus.ready ||
+                          status == OrderStatus.onWay,
+                      isProgress: status == OrderStatus.accepted,
+                    ),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 500),
+                      height: 6.h,
+                      width: 12.w,
+                      decoration: BoxDecoration(
+                        color:
+                            status == OrderStatus.ready ||
+                                status == OrderStatus.onWay
+                            ? AppStyle.primary
+                            : AppStyle.white,
+                      ),
+                    ),
+                    OrderStatusItem(
+                      icon: parcel
+                          ? const Icon(FlutterRemix.truck_fill)
+                          : SvgPicture.asset(
+                              status == OrderStatus.onWay
+                                  ? "assets/svgs/delivery2.svg"
+                                  : "assets/svgs/delivery.svg",
+                              width: 20.w,
+                            ),
+                      isActive: status == OrderStatus.onWay,
+                      isProgress:
+                          status == OrderStatus.ready ||
+                          status == OrderStatus.delivered,
+                    ),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 500),
+                      height: 6.h,
+                      width: 12.w,
+                      decoration: const BoxDecoration(color: AppStyle.white),
+                    ),
+                    OrderStatusItem(
+                      icon: Icon(Icons.flag, size: 16.r),
+                      isActive: false,
+                      isProgress: false,
+                    ),
+                  ],
+                ),
         ],
       ),
     );
   }
 }
-

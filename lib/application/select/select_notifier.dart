@@ -8,4 +8,3 @@ class SelectNotifier extends StateNotifier<SelectState> {
     state = state.copyWith(selectedIndex: index);
   }
 }
-

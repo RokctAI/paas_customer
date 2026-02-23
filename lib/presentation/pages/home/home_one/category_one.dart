@@ -14,13 +14,13 @@ class CategoryOne extends StatelessWidget {
   final RefreshController categoryController;
   final RefreshController shopController;
 
-  const CategoryOne(
-      {super.key,
-      required this.state,
-      required this.event,
-      required this.categoryController,
-      required this.shopController,
- });
+  const CategoryOne({
+    super.key,
+    required this.state,
+    required this.event,
+    required this.categoryController,
+    required this.shopController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +28,9 @@ class CategoryOne extends StatelessWidget {
         ? const CategoryOneShimmer()
         : Container(
             height: state.categories.isNotEmpty ? 100.h : 0,
-            margin:
-                EdgeInsets.only(bottom: state.categories.isNotEmpty ? 26.h : 0),
+            margin: EdgeInsets.only(
+              bottom: state.categories.isNotEmpty ? 26.h : 0,
+            ),
             child: SmartRefresher(
               scrollDirection: Axis.horizontal,
               enablePullDown: false,
@@ -43,8 +44,9 @@ class CategoryOne extends StatelessWidget {
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   padding: EdgeInsets.only(left: 16.r),
-                  itemCount:
-                      state.isCategoryLoading ? 5 : state.categories.length,
+                  itemCount: state.isCategoryLoading
+                      ? 5
+                      : state.categories.length,
                   itemBuilder: (context, index) {
                     return AnimationConfiguration.staggeredList(
                       position: index,
@@ -55,7 +57,9 @@ class CategoryOne extends StatelessWidget {
                           child: CategoryOneItem(
                             index: index,
                             image: state.categories[index].img ?? "",
-                            title: state.categories[index].translation?.title ?? "",
+                            title:
+                                state.categories[index].translation?.title ??
+                                "",
                             isActive: state.selectIndexCategory == index,
                             onTap: () {
                               event.setSelectCategory(index, context);
@@ -72,4 +76,3 @@ class CategoryOne extends StatelessWidget {
           );
   }
 }
-

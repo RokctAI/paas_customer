@@ -9,7 +9,6 @@ import 'package:foodyman/presentation/theme/app_style.dart';
 import 'package:foodyman/infrastructure/services/local_storage.dart';
 import 'package:foodyman/presentation/components/buttons/pop_button.dart';
 
-
 @RoutePage()
 class ShareReferralFaqPage extends StatefulWidget {
   final String terms;
@@ -33,22 +32,16 @@ class _ShareReferralFaqPageState extends State<ShareReferralFaqPage> {
             CommonAppBar(
               child: Text(
                 AppHelpers.getTranslation(TrKeys.referralFaq),
-                style: AppStyle.interNoSemi(
-                  size: 18,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interNoSemi(size: 18, color: AppStyle.black),
               ),
             ),
             Padding(
               padding: EdgeInsets.all(16.r),
               child: Text(
                 widget.terms,
-                style: AppStyle.interNoSemi(
-                  size: 20,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interNoSemi(size: 20, color: AppStyle.black),
               ),
-            )
+            ),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
@@ -60,4 +53,3 @@ class _ShareReferralFaqPageState extends State<ShareReferralFaqPage> {
     );
   }
 }
-

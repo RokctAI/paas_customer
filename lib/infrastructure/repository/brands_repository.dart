@@ -8,7 +8,11 @@ import 'package:foodyman/infrastructure/services/local_storage.dart';
 
 class BrandsRepository implements BrandsRepositoryFacade {
   @override
-  Future<ApiResult<BrandsPaginateResponse>> getBrandsPaginate(int page, {int? pageSize, String? search}) async {
+  Future<ApiResult<BrandsPaginateResponse>> getBrandsPaginate(
+    int page, {
+    int? pageSize,
+    String? search,
+  }) async {
     final params = {
       'limit_start': (page - 1) * (pageSize ?? 18),
       'limit_page_length': pageSize ?? 18,
@@ -57,7 +61,10 @@ class BrandsRepository implements BrandsRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<BrandsPaginateResponse>> getAllBrands({String? categoryId, String? shopId}) {
+  Future<ApiResult<BrandsPaginateResponse>> getAllBrands({
+    String? categoryId,
+    String? shopId,
+  }) {
     return getBrandsPaginate(1);
   }
 

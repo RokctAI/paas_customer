@@ -21,21 +21,20 @@ extension MyExtension1 on Iterable<Product> {
       if (state.searchText.isNotEmpty) {
         bool isOk = false;
         int level = 0;
-        state.searchText.split(' ').forEach(
-              (e) {
-            isOk = (element.translation?.title
-                ?.toLowerCase()
-                .contains(e.toLowerCase()) ??
-                false) ||
-                (element.translation?.description
-                    ?.toLowerCase()
-                    .contains(e.toLowerCase()) ??
-                    false);
-            if (isOk) {
-              level++;
-            }
-          },
-        );
+        state.searchText.split(' ').forEach((e) {
+          isOk =
+              (element.translation?.title?.toLowerCase().contains(
+                    e.toLowerCase(),
+                  ) ??
+                  false) ||
+              (element.translation?.description?.toLowerCase().contains(
+                    e.toLowerCase(),
+                  ) ??
+                  false);
+          if (isOk) {
+            level++;
+          }
+        });
         return level == state.searchText.split(' ').length;
       }
       return true;
@@ -54,12 +53,7 @@ class ProductsList extends ConsumerStatefulWidget {
   final String? shopId;
   final String? cartId;
 
-  const ProductsList({
-    super.key,
-    this.cartId,
-    this.all,
-    required this.shopId,
-  });
+  const ProductsList({super.key, this.cartId, this.all, required this.shopId});
 
   @override
   ConsumerState<ProductsList> createState() => _ProductsListState();
@@ -80,11 +74,12 @@ class _ProductsListState extends ConsumerState<ProductsList> {
       if ((shopState.brands == null || shopState.brands!.isEmpty) &&
           widget.shopId != null) {
         // Use shop ID to get all brands at once instead of by category
-        ref.read(shopProvider.notifier).fetchBrands(context, shopId: widget.shopId);
+        ref
+            .read(shopProvider.notifier)
+            .fetchBrands(context, shopId: widget.shopId);
       }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -93,19 +88,15 @@ class _ProductsListState extends ConsumerState<ProductsList> {
 
     // Check if there are products to display
     final bool hasProducts =
-        (widget.all?.products
-            ?.search(state)
-            .isNotEmpty ?? false) &&
-            (widget.all?.products?.isNotEmpty ?? false);
+        (widget.all?.products?.search(state).isNotEmpty ?? false) &&
+        (widget.all?.products?.isNotEmpty ?? false);
 
     // Hide if it's the popular section with search text
     final bool shouldHidePopular =
-        (widget.all?.products
-            ?.search(state)
-            .isNotEmpty ?? false) &&
-            widget.all?.translation?.title ==
-                AppHelpers.getTranslation(TrKeys.popular) &&
-            state.searchText.isNotEmpty;
+        (widget.all?.products?.search(state).isNotEmpty ?? false) &&
+        widget.all?.translation?.title ==
+            AppHelpers.getTranslation(TrKeys.popular) &&
+        state.searchText.isNotEmpty;
 
     if (shouldHidePopular) {
       return const SizedBox.shrink();
@@ -138,26 +129,27 @@ class _ProductsListState extends ConsumerState<ProductsList> {
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
                   physics: const BouncingScrollPhysics(),
-                  itemCount: widget.all?.products
-                      ?.search(state)
-                      .length ?? 0,
+                  itemCount: widget.all?.products?.search(state).length ?? 0,
                   itemBuilder: (context, index) {
                     final product = (widget.all?.products?.search(state) ?? [])
                         .toList()[index];
                     final String imageUrl = product.img ?? "";
-                    final bool isTransparentFormat = ProductUtils
-                        .hasTransparentBackground(imageUrl);
+                    final bool isTransparentFormat =
+                        ProductUtils.hasTransparentBackground(imageUrl);
 
                     // Get cart quantity
                     int cartQuantity = 0;
                     if (shopOrderState.cart != null) {
-                      for (var userCart in shopOrderState.cart!.userCarts ??
-                          []) {
+                      for (var userCart
+                          in shopOrderState.cart!.userCarts ?? []) {
                         if (userCart.cartDetails != null) {
                           for (var cartDetail in userCart.cartDetails!) {
                             if (cartDetail.stock?.id == product.stock?.id) {
-                              final qtyInt = int.tryParse(
-                                  cartDetail.quantity.toString()) ?? 0;
+                              final qtyInt =
+                                  int.tryParse(
+                                    cartDetail.quantity.toString(),
+                                  ) ??
+                                  0;
                               cartQuantity += qtyInt;
                             }
                           }
@@ -178,13 +170,13 @@ class _ProductsListState extends ConsumerState<ProductsList> {
                               onTap: () {
                                 AppHelpers.showCustomModalBottomDragSheet(
                                   context: context,
-                                  modal: (c) =>
-                                      ProductScreen(
-                                        cartId: widget.cartId,
-                                        data: ProductData.fromJson(
-                                            product.toJson()),
-                                        controller: c,
-                                      ),
+                                  modal: (c) => ProductScreen(
+                                    cartId: widget.cartId,
+                                    data: ProductData.fromJson(
+                                      product.toJson(),
+                                    ),
+                                    controller: c,
+                                  ),
                                   isDarkMode: false,
                                   isDrag: true,
                                   radius: 16,
@@ -198,13 +190,13 @@ class _ProductsListState extends ConsumerState<ProductsList> {
                                 onTap: () {
                                   AppHelpers.showCustomModalBottomDragSheet(
                                     context: context,
-                                    modal: (c) =>
-                                        ProductScreen(
-                                          cartId: widget.cartId,
-                                          data: ProductData.fromJson(
-                                              product.toJson()),
-                                          controller: c,
-                                        ),
+                                    modal: (c) => ProductScreen(
+                                      cartId: widget.cartId,
+                                      data: ProductData.fromJson(
+                                        product.toJson(),
+                                      ),
+                                      controller: c,
+                                    ),
                                     isDarkMode: false,
                                     isDrag: true,
                                     radius: 16,

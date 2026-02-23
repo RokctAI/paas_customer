@@ -20,11 +20,12 @@ class FilterCategoryOneShop extends StatelessWidget {
   final HomeNotifier event;
   final RefreshController shopController;
 
-  const FilterCategoryOneShop(
-      {super.key,
-      required this.state,
-      required this.event,
-      required this.shopController});
+  const FilterCategoryOneShop({
+    super.key,
+    required this.state,
+    required this.event,
+    required this.shopController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,40 +38,49 @@ class FilterCategoryOneShop extends StatelessWidget {
             padding: EdgeInsets.only(bottom: 8.r, left: 16.r),
             scrollDirection: Axis.horizontal,
             shrinkWrap: true,
-            itemCount: (state.categories[state.selectIndexCategory].children?.length ?? 0) + 1,
+            itemCount:
+                (state.categories[state.selectIndexCategory].children?.length ??
+                    0) +
+                1,
             itemBuilder: (BuildContext context, int index) {
               final category = state.categories[state.selectIndexCategory];
               return index == 0
                   ? AnimationButtonEffect(
-                    child: InkWell(
-                      onTap: (){
-                        AppHelpers.showCustomModalBottomDragSheet(
-                          context: context,
-                          modal: (c)=> FilterPage(controller: c,categoryId: (state
-                              .selectIndexSubCategory != -1
-                              ? (state
-                              .categories[state
-                              .selectIndexCategory]
-                              .children?[state
-                              .selectIndexSubCategory]
-                              .id)
-                              : state
-                              .categories[state
-                              .selectIndexCategory]
-                              .id) ??
-                              "",),
-                          isDarkMode: false,
-                          isDrag: false,
-                          radius: 12,
-                        );
-                      },
-                      child: Container(
+                      child: InkWell(
+                        onTap: () {
+                          AppHelpers.showCustomModalBottomDragSheet(
+                            context: context,
+                            modal: (c) => FilterPage(
+                              controller: c,
+                              categoryId:
+                                  (state.selectIndexSubCategory != -1
+                                      ? (state
+                                            .categories[state
+                                                .selectIndexCategory]
+                                            .children?[state
+                                                .selectIndexSubCategory]
+                                            .id)
+                                      : state
+                                            .categories[state
+                                                .selectIndexCategory]
+                                            .id) ??
+                                  "",
+                            ),
+                            isDarkMode: false,
+                            isDrag: false,
+                            radius: 12,
+                          );
+                        },
+                        child: Container(
                           margin: EdgeInsets.only(right: 8.r),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 16.r, vertical: 6.r),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16.r,
+                            vertical: 6.r,
+                          ),
                           decoration: BoxDecoration(
-                              color: AppStyle.white,
-                              borderRadius: BorderRadius.circular(10.r)),
+                            color: AppStyle.white,
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
                           child: Row(
                             children: [
                               SvgPicture.asset("assets/svgs/filter.svg"),
@@ -81,15 +91,16 @@ class FilterCategoryOneShop extends StatelessWidget {
                                   size: 13,
                                   color: AppStyle.black,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
-                    ),
-                  )
+                      ),
+                    )
                   : TabBarItem(
                       isShopTabBar: index - 1 == state.selectIndexSubCategory,
-                      title: category.children?[index - 1].translation?.title ??
+                      title:
+                          category.children?[index - 1].translation?.title ??
                           "",
                       index: index - 1,
                       currentIndex: state.selectIndexSubCategory,
@@ -110,7 +121,7 @@ class FilterCategoryOneShop extends StatelessWidget {
             ? ListView.builder(
                 padding: EdgeInsets.only(top: 6.h),
                 shrinkWrap: true,
-                
+
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 itemCount: state.filterShops.length,
@@ -137,9 +148,7 @@ Widget _resultEmpty() {
         style: AppStyle.interSemi(size: 18.sp),
       ),
       Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 32.w,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 32.w),
         child: Text(
           AppHelpers.getTranslation(TrKeys.trySearchingAgain),
           style: AppStyle.interRegular(size: 14.sp),
@@ -149,4 +158,3 @@ Widget _resultEmpty() {
     ],
   );
 }
-

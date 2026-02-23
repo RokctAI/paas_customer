@@ -23,16 +23,17 @@ class CartOrderItem extends StatelessWidget {
   final bool isOwn;
   final bool isAddComment;
 
-  const CartOrderItem(
-      {super.key,
-      required this.add,
-      required this.remove,
-      required this.cart,
-      this.isActive = true,
-      this.cartTwo,
-      this.isOwn = true,
-      this.symbol,
-      this.isAddComment = false});
+  const CartOrderItem({
+    super.key,
+    required this.add,
+    required this.remove,
+    required this.cart,
+    this.isActive = true,
+    this.cartTwo,
+    this.isOwn = true,
+    this.symbol,
+    this.isAddComment = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,13 +42,15 @@ class CartOrderItem extends StatelessWidget {
     for (Addons e in (isActive ? cart?.addons ?? [] : cartTwo?.addons ?? [])) {
       sumPrice += (e.price ?? 0);
     }
-    disSumPrice = (isActive
+    disSumPrice =
+        (isActive
                 ? (cart?.stock?.totalPrice ?? 0)
                 : (cartTwo?.stock?.totalPrice ?? 0)) *
             (cart?.quantity ?? 1) +
         sumPrice +
         (isActive ? (cart?.discount ?? 0) : (cartTwo?.discount ?? 0));
-    sumPrice += (isActive
+    sumPrice +=
+        (isActive
             ? (cart?.stock?.totalPrice ?? 0)
             : (cartTwo?.stock?.totalPrice ?? 0)) *
         (isActive ? (cart?.quantity ?? 1) : (cartTwo?.quantity ?? 1));
@@ -59,9 +62,7 @@ class CartOrderItem extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           color: AppStyle.white,
-          borderRadius: BorderRadius.all(
-            Radius.circular(10.r),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(10.r)),
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,13 +77,13 @@ class CartOrderItem extends StatelessWidget {
                   isActive
                       ? RichText(
                           text: TextSpan(
-                              text: cart?.stock?.product?.translation?.title ??
-                                  "",
-                              style: AppStyle.interNormal(
-                                size: 16,
-                                color: AppStyle.black,
-                              ),
-                              children: [
+                            text:
+                                cart?.stock?.product?.translation?.title ?? "",
+                            style: AppStyle.interNormal(
+                              size: 16,
+                              color: AppStyle.black,
+                            ),
+                            children: [
                               if (cart?.stock?.extras?.isNotEmpty ?? false)
                                 TextSpan(
                                   text:
@@ -91,8 +92,10 @@ class CartOrderItem extends StatelessWidget {
                                     size: 14,
                                     color: AppStyle.textGrey,
                                   ),
-                                )
-                            ]))
+                                ),
+                            ],
+                          ),
+                        )
                       : Row(
                           children: [
                             Expanded(
@@ -136,9 +139,10 @@ class CartOrderItem extends StatelessWidget {
                           maxLines: 2,
                         ),
                   8.verticalSpace,
-                  for (Addons e in (isActive
-                      ? cart?.addons ?? []
-                      : cartTwo?.addons ?? []))
+                  for (Addons e
+                      in (isActive
+                          ? cart?.addons ?? []
+                          : cartTwo?.addons ?? []))
                     Text(
                       "${e.stocks?.product?.translation?.title ?? ""} ${AppHelpers.numberFormat(symbol: symbol, isOrder: symbol != null, number: (e.price ?? 0) / (e.quantity ?? 1))} x ${(e.quantity ?? 1)}",
                       style: AppStyle.interNormal(
@@ -153,9 +157,9 @@ class CartOrderItem extends StatelessWidget {
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                  borderRadius:
-                                      BorderRadius.circular(10.r),
-                                  border: Border.all(color: AppStyle.textGrey)),
+                                borderRadius: BorderRadius.circular(10.r),
+                                border: Border.all(color: AppStyle.textGrey),
+                              ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -165,8 +169,9 @@ class CartOrderItem extends StatelessWidget {
                                           onTap: remove,
                                           child: Padding(
                                             padding: EdgeInsets.symmetric(
-                                                vertical: 6.h,
-                                                horizontal: 10.w),
+                                              vertical: 6.h,
+                                              horizontal: 10.w,
+                                            ),
                                             child: const Icon(
                                               Icons.remove,
                                               color: AppStyle.black,
@@ -177,16 +182,18 @@ class CartOrderItem extends StatelessWidget {
                                     padding: !((cart?.bonus ?? false) || !isOwn)
                                         ? EdgeInsets.zero
                                         : EdgeInsets.symmetric(
-                                            vertical: 6.h, horizontal: 16.w),
+                                            vertical: 6.h,
+                                            horizontal: 16.w,
+                                          ),
                                     child: RichText(
-                                        text: TextSpan(
-                                            text:
-                                                "${(cart?.quantity ?? 1) * (cart?.stock?.product?.interval ?? 1)}",
-                                            style: AppStyle.interSemi(
-                                              size: 14,
-                                              color: AppStyle.black,
-                                            ),
-                                            children: [
+                                      text: TextSpan(
+                                        text:
+                                            "${(cart?.quantity ?? 1) * (cart?.stock?.product?.interval ?? 1)}",
+                                        style: AppStyle.interSemi(
+                                          size: 14,
+                                          color: AppStyle.black,
+                                        ),
+                                        children: [
                                           TextSpan(
                                             text:
                                                 " ${cart?.stock?.product?.unit?.translation?.title ?? ''}",
@@ -194,8 +201,10 @@ class CartOrderItem extends StatelessWidget {
                                               size: 14,
                                               color: AppStyle.textGrey,
                                             ),
-                                          )
-                                        ])),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                   ((cart?.bonus ?? false) || !isOwn)
                                       ? const SizedBox.shrink()
@@ -203,8 +212,9 @@ class CartOrderItem extends StatelessWidget {
                                           onTap: add,
                                           child: Padding(
                                             padding: EdgeInsets.symmetric(
-                                                vertical: 6.h,
-                                                horizontal: 10.w),
+                                              vertical: 6.h,
+                                              horizontal: 10.w,
+                                            ),
                                             child: const Icon(
                                               Icons.add,
                                               color: AppStyle.black,
@@ -222,35 +232,37 @@ class CartOrderItem extends StatelessWidget {
                                     children: [
                                       Text(
                                         AppHelpers.numberFormat(
-                                            isOrder: symbol != null,
-                                            symbol: symbol,
-                                            number: (cart?.discount ?? 0) != 0
-                                                ? disSumPrice
-                                                : sumPrice),
+                                          isOrder: symbol != null,
+                                          symbol: symbol,
+                                          number: (cart?.discount ?? 0) != 0
+                                              ? disSumPrice
+                                              : sumPrice,
+                                        ),
                                         style: AppStyle.interSemi(
-                                            size: (cart?.discount ?? 0) != 0
-                                                ? 12
-                                                : 16,
-                                            color: AppStyle.black,
-                                            decoration:
-                                                (cart?.discount ?? 0) != 0
-                                                    ? TextDecoration.lineThrough
-                                                    : TextDecoration.none),
+                                          size: (cart?.discount ?? 0) != 0
+                                              ? 12
+                                              : 16,
+                                          color: AppStyle.black,
+                                          decoration: (cart?.discount ?? 0) != 0
+                                              ? TextDecoration.lineThrough
+                                              : TextDecoration.none,
+                                        ),
                                       ),
                                       (cart?.discount ?? 0) != 0
                                           ? Container(
                                               margin: EdgeInsets.only(top: 8.r),
                                               decoration: BoxDecoration(
-                                                  color: AppStyle.redBg,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          30.r)),
+                                                color: AppStyle.redBg,
+                                                borderRadius:
+                                                    BorderRadius.circular(30.r),
+                                              ),
                                               padding: EdgeInsets.all(4.r),
                                               child: Row(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   SvgPicture.asset(
-                                                      "assets/svgs/discount.svg"),
+                                                    "assets/svgs/discount.svg",
+                                                  ),
                                                   4.horizontalSpace,
                                                   Text(
                                                     AppHelpers.numberFormat(
@@ -259,73 +271,39 @@ class CartOrderItem extends StatelessWidget {
                                                       number: sumPrice,
                                                     ),
                                                     style: AppStyle.interNoSemi(
-                                                        size: 14,
-                                                        color: AppStyle.red),
-                                                  )
+                                                      size: 14,
+                                                      color: AppStyle.red,
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                             )
-                                          : const SizedBox.shrink()
+                                          : const SizedBox.shrink(),
                                     ],
                                   )
                                 : const SizedBox.shrink(),
                           ],
                         )
                       : !(cartTwo?.bonus ?? false)
-                          ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      AppHelpers.numberFormat(
-                                          isOrder: symbol != null,
-                                          symbol: symbol,
-                                          number: cartTwo?.stock?.totalPrice),
-                                      style: AppStyle.interSemi(
-                                        size: 16,
-                                        color: AppStyle.black,
-                                      ),
-                                    ),
-                                    Text(
-                                      " X ${(cartTwo?.quantity ?? 1)}",
-                                      style: AppStyle.interSemi(
-                                        size: 16,
-                                        color: AppStyle.black,
-                                      ),
-                                    ),
-                                    Text(
-                                      " (${(cartTwo?.quantity ?? 1) * (cartTwo?.stock?.product?.interval ?? 1)} ${cartTwo?.stock?.product?.unit?.translation?.title})",
-                                      style: AppStyle.interNormal(
-                                        size: 12,
-                                        color: AppStyle.textGrey,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                8.verticalSpace,
                                 Text(
                                   AppHelpers.numberFormat(
-                                      isOrder: symbol != null,
-                                      symbol: symbol,
-                                      number: sumPrice),
+                                    isOrder: symbol != null,
+                                    symbol: symbol,
+                                    number: cartTwo?.stock?.totalPrice,
+                                  ),
                                   style: AppStyle.interSemi(
                                     size: 16,
                                     color: AppStyle.black,
                                   ),
                                 ),
-                                8.horizontalSpace
-                              ],
-                            )
-                          : Row(
-                              children: [
                                 Text(
-                                  AppHelpers.getTranslation(
-                                    (cartTwo?.bonusShop ?? false)
-                                        ? TrKeys.shopBonus
-                                        : TrKeys.bonus,
-                                  ),
+                                  " X ${(cartTwo?.quantity ?? 1)}",
                                   style: AppStyle.interSemi(
                                     size: 16,
                                     color: AppStyle.black,
@@ -340,6 +318,43 @@ class CartOrderItem extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            8.verticalSpace,
+                            Text(
+                              AppHelpers.numberFormat(
+                                isOrder: symbol != null,
+                                symbol: symbol,
+                                number: sumPrice,
+                              ),
+                              style: AppStyle.interSemi(
+                                size: 16,
+                                color: AppStyle.black,
+                              ),
+                            ),
+                            8.horizontalSpace,
+                          ],
+                        )
+                      : Row(
+                          children: [
+                            Text(
+                              AppHelpers.getTranslation(
+                                (cartTwo?.bonusShop ?? false)
+                                    ? TrKeys.shopBonus
+                                    : TrKeys.bonus,
+                              ),
+                              style: AppStyle.interSemi(
+                                size: 16,
+                                color: AppStyle.black,
+                              ),
+                            ),
+                            Text(
+                              " (${(cartTwo?.quantity ?? 1) * (cartTwo?.stock?.product?.interval ?? 1)} ${cartTwo?.stock?.product?.unit?.translation?.title})",
+                              style: AppStyle.interNormal(
+                                size: 12,
+                                color: AppStyle.textGrey,
+                              ),
+                            ),
+                          ],
+                        ),
                 ],
               ),
             ),
@@ -348,12 +363,13 @@ class CartOrderItem extends StatelessWidget {
               child: Stack(
                 children: [
                   CustomNetworkImage(
-                      url: isActive
-                          ? cart?.stock?.product?.img ?? ""
-                          : cartTwo?.stock?.product?.img ?? "",
-                      height: 120.h,
-                      width: double.infinity,
-                      radius: 10.r),
+                    url: isActive
+                        ? cart?.stock?.product?.img ?? ""
+                        : cartTwo?.stock?.product?.img ?? "",
+                    height: 120.h,
+                    width: double.infinity,
+                    radius: 10.r,
+                  ),
                   (cart?.bonus ?? false) || (cartTwo?.bonus ?? false)
                       ? Positioned(
                           bottom: 4.r,
@@ -362,8 +378,9 @@ class CartOrderItem extends StatelessWidget {
                             width: 22.w,
                             height: 22.h,
                             decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppStyle.blueBonus),
+                              shape: BoxShape.circle,
+                              color: AppStyle.blueBonus,
+                            ),
                             child: Icon(
                               FlutterRemix.gift_2_fill,
                               size: 16.r,
@@ -374,33 +391,37 @@ class CartOrderItem extends StatelessWidget {
                       : const SizedBox.shrink(),
                   if (isAddComment)
                     Positioned(
-                        top: 0,
-                        right: 0,
-                        child: Consumer(
-                          builder: (context, provider, child) {
-                            return IconButton(
-                                onPressed: () {
-                                  AppHelpers.showAlertDialog(
-                                      context: context,
-                                      child: NoteProduct(
-                                        isSave: cartTwo == null,
-                                        comment: cartTwo?.note,
-                                        onTap: (s) {
-                                          provider
-                                              .read(orderProvider.notifier)
-                                              .setNotes(
-                                                  stockId: cart?.stock?.id ?? "",
-                                                  note: s);
-                                        },
-                                      ));
-                                },
-                                icon: Icon(
-                                  FlutterRemix.edit_box_line,
-                                  size: 24.r,
-                                  color: AppStyle.red,
-                                ));
-                          },
-                        )),
+                      top: 0,
+                      right: 0,
+                      child: Consumer(
+                        builder: (context, provider, child) {
+                          return IconButton(
+                            onPressed: () {
+                              AppHelpers.showAlertDialog(
+                                context: context,
+                                child: NoteProduct(
+                                  isSave: cartTwo == null,
+                                  comment: cartTwo?.note,
+                                  onTap: (s) {
+                                    provider
+                                        .read(orderProvider.notifier)
+                                        .setNotes(
+                                          stockId: cart?.stock?.id ?? "",
+                                          note: s,
+                                        );
+                                  },
+                                ),
+                              );
+                            },
+                            icon: Icon(
+                              FlutterRemix.edit_box_line,
+                              size: 24.r,
+                              color: AppStyle.red,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                 ],
               ),
             ),
@@ -410,4 +431,3 @@ class CartOrderItem extends StatelessWidget {
     );
   }
 }
-

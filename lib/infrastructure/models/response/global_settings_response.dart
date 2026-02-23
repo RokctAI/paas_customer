@@ -33,13 +33,12 @@ class GlobalSettingsResponse {
     bool? status,
     String? message,
     List<SettingsData>? data,
-  }) =>
-      GlobalSettingsResponse(
-        timestamp: timestamp ?? _timestamp,
-        status: status ?? _status,
-        message: message ?? _message,
-        data: data ?? _data,
-      );
+  }) => GlobalSettingsResponse(
+    timestamp: timestamp ?? _timestamp,
+    status: status ?? _status,
+    message: message ?? _message,
+    data: data ?? _data,
+  );
 
   String? get timestamp => _timestamp;
 
@@ -96,14 +95,13 @@ class SettingsData {
     String? value,
     String? createdAt,
     String? updatedAt,
-  }) =>
-      SettingsData(
-        id: id ?? _id,
-        key: key ?? _key,
-        value: value ?? _value,
-        createdAt: createdAt ?? _createdAt,
-        updatedAt: updatedAt ?? _updatedAt,
-      );
+  }) => SettingsData(
+    id: id ?? _id,
+    key: key ?? _key,
+    value: value ?? _value,
+    createdAt: createdAt ?? _createdAt,
+    updatedAt: updatedAt ?? _updatedAt,
+  );
 
   int? get id => _id;
 
@@ -125,4 +123,3 @@ class SettingsData {
     return map;
   }
 }
-

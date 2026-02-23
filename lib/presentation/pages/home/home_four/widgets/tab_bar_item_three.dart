@@ -9,13 +9,14 @@ class TabBarItemThree extends StatelessWidget {
   final int? currentIndex;
   final VoidCallback onTap;
 
-  const TabBarItemThree(
-      {super.key,
-      required this.title,
-      required this.index,
-      this.isShopTabBar = false,
-      this.currentIndex,
-      required this.onTap});
+  const TabBarItemThree({
+    super.key,
+    required this.title,
+    required this.index,
+    this.isShopTabBar = false,
+    this.currentIndex,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,9 @@ class TabBarItemThree extends StatelessWidget {
         duration: const Duration(milliseconds: 500),
         decoration: BoxDecoration(
           color: isShopTabBar
-              ? (currentIndex == index ? AppStyle.primary : AppStyle.primary.withOpacity(0.07))
+              ? (currentIndex == index
+                    ? AppStyle.primary
+                    : AppStyle.primary.withOpacity(0.07))
               : AppStyle.primary.withOpacity(0.07),
           borderRadius: BorderRadius.all(Radius.circular(10.r)),
           boxShadow: [
@@ -44,8 +47,7 @@ class TabBarItemThree extends StatelessWidget {
             title,
             style: AppStyle.interNormal(
               size: 13,
-              color: isShopTabBar
-                  ? AppStyle.white : AppStyle.primary,
+              color: isShopTabBar ? AppStyle.white : AppStyle.primary,
             ),
           ),
         ),
@@ -53,4 +55,3 @@ class TabBarItemThree extends StatelessWidget {
     );
   }
 }
-

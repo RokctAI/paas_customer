@@ -10,7 +10,6 @@ import 'package:foodyman/presentation/routes/app_router.dart';
 
 import '../../../../theme/theme.dart';
 
-
 class MarketOneItem extends StatelessWidget {
   final ShopData shop;
   final bool isSimpleShop;
@@ -30,7 +29,8 @@ class MarketOneItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         context.pushRoute(
-            ShopRoute(shopId: (shop.id ?? 0).toString(), shop: shop));
+          ShopRoute(shopId: (shop.id ?? 0).toString(), shop: shop),
+        );
       },
       child: isShop ? _shopItem() : _regularItem(context),
     );
@@ -44,8 +44,11 @@ class MarketOneItem extends StatelessWidget {
       width: isNewRestaurant ? 250.w : 268.w,
       height: isNewRestaurant ? 250.h : 250.h,
       decoration: BoxDecoration(
-          color: AppStyle.transparent,
-          borderRadius: BorderRadius.all(Radius.circular(isNewRestaurant ? 40.r : 24.r))),
+        color: AppStyle.transparent,
+        borderRadius: BorderRadius.all(
+          Radius.circular(isNewRestaurant ? 40.r : 24.r),
+        ),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -55,19 +58,21 @@ class MarketOneItem extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: AppStyle.white,
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(isNewRestaurant ? 40.r : 24.r),
-                      topRight: Radius.circular(isNewRestaurant ? 40.r : 24.r),
-                      bottomLeft: Radius.circular(isNewRestaurant ? 40.r : 0),
-                      bottomRight: Radius.circular(isNewRestaurant ? 40.r : 0)),
+                    topLeft: Radius.circular(isNewRestaurant ? 40.r : 24.r),
+                    topRight: Radius.circular(isNewRestaurant ? 40.r : 24.r),
+                    bottomLeft: Radius.circular(isNewRestaurant ? 40.r : 0),
+                    bottomRight: Radius.circular(isNewRestaurant ? 40.r : 0),
+                  ),
                 ),
                 width: double.infinity,
                 height: isNewRestaurant ? 190.h : 190.h,
                 child: ClipRRect(
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(isNewRestaurant ? 40.r : 24.r),
-                      topRight: Radius.circular(isNewRestaurant ? 40.r : 24.r),
-                      bottomLeft: Radius.circular(isNewRestaurant ? 40.r : 0),
-                      bottomRight: Radius.circular(isNewRestaurant ? 40.r : 0)),
+                    topLeft: Radius.circular(isNewRestaurant ? 40.r : 24.r),
+                    topRight: Radius.circular(isNewRestaurant ? 40.r : 24.r),
+                    bottomLeft: Radius.circular(isNewRestaurant ? 40.r : 0),
+                    bottomRight: Radius.circular(isNewRestaurant ? 40.r : 0),
+                  ),
                   child: CustomNetworkImage(
                     url: shop.backgroundImg ?? '',
                     height: isNewRestaurant ? 190.h : 190.h,
@@ -83,9 +88,10 @@ class MarketOneItem extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.only(bottom: isSimpleShop ? 6.h : 0),
                     child: BonusDiscountPopular(
-                        isPopular: shop.isRecommend ?? false,
-                        bonus: shop.bonus,
-                        isDiscount: shop.isDiscount ?? false),
+                      isPopular: shop.isRecommend ?? false,
+                      bonus: shop.bonus,
+                      isDiscount: shop.isDiscount ?? false,
+                    ),
                   ),
                 ),
               ),
@@ -107,11 +113,11 @@ class MarketOneItem extends StatelessWidget {
                           color: AppStyle.black,
                         ),
                       ),
-                      if(shop.verify ?? false)
+                      if (shop.verify ?? false)
                         Padding(
                           padding: EdgeInsets.only(left: 4.r),
                           child: const BadgeItem(),
-                        )
+                        ),
                     ],
                   ),
                   SizedBox(
@@ -132,7 +138,7 @@ class MarketOneItem extends StatelessWidget {
                 size: isSimpleShop ? 50 : 44,
                 padding: 4.r,
                 bgColor: AppStyle.transparent,
-              )
+              ),
             ],
           ),
         ],

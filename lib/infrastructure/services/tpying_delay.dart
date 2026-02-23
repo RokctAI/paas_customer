@@ -1,4 +1,3 @@
-
 import 'dart:async';
 import 'dart:ui';
 
@@ -10,7 +9,7 @@ class Delayed {
   Delayed({required this.milliseconds});
 
   run(VoidCallback action) {
-    if (_timer!= null) {
+    if (_timer != null) {
       _timer!.cancel();
     }
     _timer = Timer(Duration(milliseconds: milliseconds), action);

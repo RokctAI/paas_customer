@@ -4,8 +4,10 @@ import 'package:foodyman/domain/handlers/handlers.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 
 abstract class ProductsRepositoryFacade {
-  Future<ApiResult<ProductsPaginateResponse>> searchProducts(
-      {required String text, int page});
+  Future<ApiResult<ProductsPaginateResponse>> searchProducts({
+    required String text,
+    int page,
+  });
 
   Future<ApiResult<SingleProductResponse>> getProductDetails(String uuid);
 
@@ -26,15 +28,20 @@ abstract class ProductsRepositoryFacade {
     required int page,
   });
 
-  Future<ApiResult<ProductsPaginateResponse>> getProductsByCategoryPaginate(
-      {String? shopId, required int page, required String categoryId});
+  Future<ApiResult<ProductsPaginateResponse>> getProductsByCategoryPaginate({
+    String? shopId,
+    required int page,
+    required String categoryId,
+  });
 
-  Future<ApiResult<ProductsPaginateResponse>> getProductsShopByCategoryPaginate(
-      {String? shopId,
-      List<String>? brands,
-      int? sortIndex,
-      required int page,
-      required String categoryId});
+  Future<ApiResult<ProductsPaginateResponse>>
+  getProductsShopByCategoryPaginate({
+    String? shopId,
+    List<String>? brands,
+    int? sortIndex,
+    required int page,
+    required String categoryId,
+  });
 
   Future<ApiResult<ProductsPaginateResponse>> getMostSoldProducts({
     String? shopId,
@@ -88,4 +95,3 @@ abstract class ProductsRepositoryFacade {
     int? page,
   });
 }
-

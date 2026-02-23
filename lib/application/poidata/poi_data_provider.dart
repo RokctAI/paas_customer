@@ -2,7 +2,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:foodyman/infrastructure/models/data/poi_data.dart';
 
-final poiDataProvider = StateNotifierProvider<POIDataNotifier, List<POIData>>((ref) {
+final poiDataProvider = StateNotifierProvider<POIDataNotifier, List<POIData>>((
+  ref,
+) {
   return POIDataNotifier();
 });
 
@@ -12,4 +14,4 @@ class POIDataNotifier extends StateNotifier<List<POIData>> {
   void updatePOIData(List<POIData> newData) {
     state = newData;
   }
-} 
+}

@@ -28,7 +28,8 @@ class RecommendedItem extends StatelessWidget {
         return GestureDetector(
           onTap: () {
             context.pushRoute(
-                ShopRoute(shopId: (shop.id ?? 0).toString(), shop: shop));
+              ShopRoute(shopId: (shop.id ?? 0).toString(), shop: shop),
+            );
           },
           child: Container(
             margin: EdgeInsets.only(left: 0, right: 9.r),
@@ -55,8 +56,12 @@ class RecommendedItem extends StatelessWidget {
                   top: 8.h,
                   left: 8.w,
                   iconSize: itemCount == 1 ? 40 : (isNarrow ? 22 : 22),
-                  containerHeight: itemCount == 1 ? 40.h : (isNarrow ? 30 : 30.h),
-                  containerWidth: itemCount == 1 ? 170.w : (isNarrow ? 130.w : 100.w),
+                  containerHeight: itemCount == 1
+                      ? 40.h
+                      : (isNarrow ? 30 : 30.h),
+                  containerWidth: itemCount == 1
+                      ? 170.w
+                      : (isNarrow ? 130.w : 100.w),
                   fontSize: itemCount == 1 ? 18 : (isNarrow ? 10 : 8),
                   maxTextLength: 12,
                 ),
@@ -64,13 +69,18 @@ class RecommendedItem extends StatelessWidget {
                   bottom: 12.h,
                   left: 12.w,
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 12.w),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 4.h,
+                      horizontal: 12.w,
+                    ),
                     decoration: BoxDecoration(
                       color: AppStyle.black.withOpacity(0.8),
                       borderRadius: BorderRadius.all(Radius.circular(100.r)),
                     ),
                     child: Text(
-                      itemCount == 1 ? "${shop.productsCount ?? 0} Recommended ${AppHelpers.getTranslation(TrKeys.products)} in this Store" : "${shop.productsCount ?? 0}  ${AppHelpers.getTranslation(TrKeys.products)}",
+                      itemCount == 1
+                          ? "${shop.productsCount ?? 0} Recommended ${AppHelpers.getTranslation(TrKeys.products)} in this Store"
+                          : "${shop.productsCount ?? 0}  ${AppHelpers.getTranslation(TrKeys.products)}",
                       style: AppStyle.interNormal(
                         size: itemCount == 1 ? 16 : 12,
                         color: AppStyle.white,

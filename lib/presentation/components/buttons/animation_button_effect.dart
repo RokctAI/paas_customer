@@ -1,16 +1,15 @@
-
 import 'package:flutter/material.dart';
-
 
 class AnimationButtonEffect extends StatefulWidget {
   final bool disabled;
 
   final Widget child;
 
-  const AnimationButtonEffect(
-      {super.key,
-      this.disabled = true,
-      required this.child});
+  const AnimationButtonEffect({
+    super.key,
+    this.disabled = true,
+    required this.child,
+  });
 
   @override
   State createState() => _AnimationButtonEffectState();
@@ -57,12 +56,8 @@ class _AnimationButtonEffectState extends State<AnimationButtonEffect>
               _controllerA!.forward(from: 1.0);
               if (!widget.disabled) {}
             },
-            child: Transform.scale(
-              scale: squareScaleA,
-              child: widget.child,
-            ),
+            child: Transform.scale(scale: squareScaleA, child: widget.child),
           )
         : widget.child;
   }
 }
-

@@ -30,22 +30,18 @@ class AllShopShimmer extends StatelessWidget {
             itemCount: 2,
             itemBuilder: (context, index) =>
                 AnimationConfiguration.staggeredList(
-              position: index,
-              duration: const Duration(milliseconds: 375),
-              child: SlideAnimation(
-                verticalOffset: 50.0,
-                child: FadeInAnimation(
-                  child: MarketShimmer(
-                    isSimpleShop: true,
-                    index: index,
+                  position: index,
+                  duration: const Duration(milliseconds: 375),
+                  child: SlideAnimation(
+                    verticalOffset: 50.0,
+                    child: FadeInAnimation(
+                      child: MarketShimmer(isSimpleShop: true, index: index),
+                    ),
                   ),
                 ),
-              ),
-            ),
           ),
-        )
+        ),
       ],
     );
   }
 }
-

@@ -64,7 +64,9 @@ class AppRouter extends RootStackRouter {
     MaterialRoute(path: '/ui-type', page: UiTypeRoute.page),
     MaterialRoute(path: '/reset', page: ResetPasswordRoute.page),
     MaterialRoute(
-        path: '/register-confirmation', page: RegisterConfirmationRoute.page),
+      path: '/register-confirmation',
+      page: RegisterConfirmationRoute.page,
+    ),
     MaterialRoute(path: '/register', page: RegisterRoute.page),
     MaterialRoute(path: '/main', page: MainRoute.page),
     MaterialRoute(path: '/shop', page: ShopRoute.page),
@@ -87,10 +89,15 @@ class AppRouter extends RootStackRouter {
     MaterialRoute(path: '/shops_banner', page: ShopsBannerRoute.page),
     MaterialRoute(path: '/shops_detail', page: ShopDetailRoute.page),
     MaterialRoute(path: '/share_referral', page: ShareReferralRoute.page),
-    MaterialRoute(path: '/share_referral_faq', page: ShareReferralFaqRoute.page),
+    MaterialRoute(
+      path: '/share_referral_faq',
+      page: ShareReferralFaqRoute.page,
+    ),
     MaterialRoute(path: '/chat', page: ChatRoute.page),
     MaterialRoute(
-        path: '/notification_list_page', page: NotificationListRoute.page),
+      path: '/notification_list_page',
+      page: NotificationListRoute.page,
+    ),
     MaterialRoute(
       path: '/service_two_category_page',
       page: ServiceTwoCategoryRoute.page,
@@ -101,7 +108,9 @@ class AppRouter extends RootStackRouter {
     MaterialRoute(path: '/like_page', page: LikeRoute.page),
     MaterialRoute(path: '/parcel_list_page', page: ParcelListRoute.page),
     MaterialRoute(
-        path: '/parcel_progress_page', page: ParcelProgressRoute.page),
+      path: '/parcel_progress_page',
+      page: ParcelProgressRoute.page,
+    ),
     // MaterialRoute(path: '/sub_category_page', page: SubCategoryRoute.page),
     MaterialRoute(path: '/address_list_page', page: AddressListRoute.page),
     MaterialRoute(path: '/term', page: TermRoute.page),
@@ -109,12 +118,14 @@ class AppRouter extends RootStackRouter {
     MaterialRoute(path: '/ClosedPage', page: ClosedRoute.page),
     MaterialRoute(path: '/IntroPage', page: IntroRoute.page),
     MaterialRoute(path: '/OrdesMainPage', page: OrdersMainRoute.page),
-    MaterialRoute(path: '/LoanEligibilityScreen', page: LoanEligibilityRoute.page),
-    MaterialRoute(path: '/LoanDocumentUploadScreen', page: LoanDocumentUploadRoute.page),
+    MaterialRoute(
+      path: '/LoanEligibilityScreen',
+      page: LoanEligibilityRoute.page,
+    ),
+    MaterialRoute(
+      path: '/LoanDocumentUploadScreen',
+      page: LoanDocumentUploadRoute.page,
+    ),
     MaterialRoute(path: '/LoanScreen', page: LoanRoute.page),
-
-
   ];
 }
-
-

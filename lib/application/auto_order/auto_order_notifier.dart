@@ -10,12 +10,12 @@ import 'package:foodyman/infrastructure/services/tr_keys.dart';
 
 class AutoOrderNotifier extends StateNotifier<AutoOrderState> {
   AutoOrderNotifier()
-      : super(AutoOrderState(
+    : super(
+        AutoOrderState(
           from: DateTime.now().add(const Duration(days: 1)),
-          to: DateTime.now().add(
-            const Duration(days: 7),
-          ),
-        ));
+          to: DateTime.now().add(const Duration(days: 7)),
+        ),
+      );
 
   void init(RepeatData data, double grandTotal) {
     state = state.copyWith(
@@ -35,7 +35,7 @@ class AutoOrderNotifier extends StateNotifier<AutoOrderState> {
         final wallet = profile.data?.wallet;
         final total = wallet?.price?.toDouble() ?? 0.0;
         final ringfenced = profile.data?.ringfencedBalance?.toDouble() ?? 0.0;
-        
+
         state = state.copyWith(
           totalBalance: total,
           availableBalance: total - ringfenced,
@@ -63,12 +63,12 @@ class AutoOrderNotifier extends StateNotifier<AutoOrderState> {
   int _getExecutionsCount(DateTime start, DateTime end, String cron) {
     int count = 0;
     DateTime current = start;
-    
+
     // Daily
     if (cron == '0 0 * * *') {
       return end.difference(start).inDays + 1;
     }
-    
+
     // Weekly (Simplified: every 7 days)
     if (cron == '0 0 * * 1') {
       while (current.isBefore(end) || current.isAtSameMomentAs(end)) {
@@ -77,7 +77,7 @@ class AutoOrderNotifier extends StateNotifier<AutoOrderState> {
       }
       return count;
     }
-    
+
     // Bi-Weekly (1st and 15th)
     if (cron == '0 0 1,15 * *') {
       while (current.isBefore(end) || current.isAtSameMomentAs(end)) {
@@ -86,7 +86,7 @@ class AutoOrderNotifier extends StateNotifier<AutoOrderState> {
       }
       return count;
     }
-    
+
     // Monthly (1st)
     if (cron == '0 0 1 * *') {
       while (current.isBefore(end) || current.isAtSameMomentAs(end)) {
@@ -146,95 +146,114 @@ class AutoOrderNotifier extends StateNotifier<AutoOrderState> {
     if (repeatData == null) {
       return true;
     }
-    return (((DateTime.parse(repeatData.from ?? "")
-                .difference(state.from)
-                .inDays) !=
+    return (((DateTime.parse(
+              repeatData.from ?? "",
+            ).difference(state.from).inDays) !=
             0) ||
-        (state.to != null && (DateTime.parse(repeatData.to ?? "").difference(state.to!).inDays) !=
-            0));
+        (state.to != null &&
+            (DateTime.parse(
+                  repeatData.to ?? "",
+                ).difference(state.to!).inDays) !=
+                0));
   }
 
-  Future<void> startAutoOrder(
-      {required String orderId,
-      required BuildContext context,
-      VoidCallback? onSuccess}) async {
+  Future<void> startAutoOrder({
+    required String orderId,
+    required BuildContext context,
+    VoidCallback? onSuccess,
+  }) async {
     final res = await ordersRepository.createAutoOrder(
-        from: DateFormat('yyyy-MM-dd').format(state.from),
-        to: state.to != null ? DateFormat('yyyy-MM-dd').format(state.to!) : null,
-        orderId: orderId,
-        cronPattern: state.cronPattern,
-        paymentMethod: state.paymentMethod,
-        savedCardId: state.savedCardId,
+      from: DateFormat('yyyy-MM-dd').format(state.from),
+      to: state.to != null ? DateFormat('yyyy-MM-dd').format(state.to!) : null,
+      orderId: orderId,
+      cronPattern: state.cronPattern,
+      paymentMethod: state.paymentMethod,
+      savedCardId: state.savedCardId,
     );
 
     res.when(
       success: (data) {
         onSuccess?.call();
-        AppHelpers.showCheckTopSnackBarDone(context,
-            AppHelpers.getTranslation(TrKeys.autoOrderCreatedSuccessfully));
+        AppHelpers.showCheckTopSnackBarDone(
+          context,
+          AppHelpers.getTranslation(TrKeys.autoOrderCreatedSuccessfully),
+        );
         context.router.maybePop();
       },
       failure: (error, statusCode) {
         if (error.toString().contains("Suggest Topup")) {
-            AppHelpers.showCheckTopSnackBar(
-                context, 
-                AppHelpers.getTranslation(error),
-            );
-            _showTopUpDialog(context);
+          AppHelpers.showCheckTopSnackBar(
+            context,
+            AppHelpers.getTranslation(error),
+          );
+          _showTopUpDialog(context);
         } else {
-            AppHelpers.showCheckTopSnackBar(
-                context, AppHelpers.getTranslation(error));
+          AppHelpers.showCheckTopSnackBar(
+            context,
+            AppHelpers.getTranslation(error),
+          );
         }
       },
     );
   }
 
   void _showTopUpDialog(BuildContext context) {
-      showDialog(
-          context: context,
-          builder: (context) {
-             return AlertDialog(
-              title: const Text("Insufficient Wallet Balance"),
-              content: const Text("Your wallet balance is too low for this auto-order schedule. Would you like to top up from your saved card?"),
-              actions: [
-                  TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text("Cancel"),
-                  ),
-                  TextButton(
-                      onPressed: () {
-                          Navigator.pop(context);
-                          _processTopUp(context);
-                      },
-                      child: const Text("Top Up & Create"),
-                  ),
-              ],
-          );
-         }
-      );
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Insufficient Wallet Balance"),
+          content: const Text(
+            "Your wallet balance is too low for this auto-order schedule. Would you like to top up from your saved card?",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                _processTopUp(context);
+              },
+              child: const Text("Top Up & Create"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> _processTopUp(BuildContext context) async {
-       final amount = (state.orderTotal - state.availableBalance).abs(); 
-       if (state.savedCardId == null) {
-            AppHelpers.showCheckTopSnackBar(context, "Please select a Saved Card first.");
-            return;
-       }
-       
-       final res = await walletRepository.walletTopUp(
-          amount: amount, 
-          token: state.savedCardId
-       );
-       
-       res.when(
-          success: (data) {
-              AppHelpers.showCheckTopSnackBarDone(context, "Wallet topped up successfully! Please click Save again.");
-              fetchBalance();
-          },
-          failure: (e, s) {
-             AppHelpers.showCheckTopSnackBar(context, "Top-up failed: ${e.toString()}");
-          }
-       );
+    final amount = (state.orderTotal - state.availableBalance).abs();
+    if (state.savedCardId == null) {
+      AppHelpers.showCheckTopSnackBar(
+        context,
+        "Please select a Saved Card first.",
+      );
+      return;
+    }
+
+    final res = await walletRepository.walletTopUp(
+      amount: amount,
+      token: state.savedCardId,
+    );
+
+    res.when(
+      success: (data) {
+        AppHelpers.showCheckTopSnackBarDone(
+          context,
+          "Wallet topped up successfully! Please click Save again.",
+        );
+        fetchBalance();
+      },
+      failure: (e, s) {
+        AppHelpers.showCheckTopSnackBar(
+          context,
+          "Top-up failed: ${e.toString()}",
+        );
+      },
+    );
   }
 
   Future<void> pauseAutoOrder(String autoOrderId, BuildContext context) async {
@@ -244,7 +263,10 @@ class AutoOrderNotifier extends StateNotifier<AutoOrderState> {
         AppHelpers.showCheckTopSnackBarDone(context, "Order paused");
       },
       failure: (error, _) {
-        AppHelpers.showCheckTopSnackBar(context, AppHelpers.getTranslation(error));
+        AppHelpers.showCheckTopSnackBar(
+          context,
+          AppHelpers.getTranslation(error),
+        );
       },
     );
   }
@@ -256,26 +278,34 @@ class AutoOrderNotifier extends StateNotifier<AutoOrderState> {
         AppHelpers.showCheckTopSnackBarDone(context, "Order resumed");
       },
       failure: (error, _) {
-        AppHelpers.showCheckTopSnackBar(context, AppHelpers.getTranslation(error));
+        AppHelpers.showCheckTopSnackBar(
+          context,
+          AppHelpers.getTranslation(error),
+        );
       },
     );
   }
 
-  Future<void> deleteAutoOrder(
-      {required String orderId, required BuildContext context}) async {
+  Future<void> deleteAutoOrder({
+    required String orderId,
+    required BuildContext context,
+  }) async {
     final res = await ordersRepository.deleteAutoOrder(orderId);
 
     res.when(
       success: (data) {
-        AppHelpers.showCheckTopSnackBarDone(context,
-            AppHelpers.getTranslation(TrKeys.autoOrderDeletedSuccessfully));
+        AppHelpers.showCheckTopSnackBarDone(
+          context,
+          AppHelpers.getTranslation(TrKeys.autoOrderDeletedSuccessfully),
+        );
         context.router.maybePop();
       },
       failure: (error, statusCode) {
         AppHelpers.showCheckTopSnackBar(
-            context, AppHelpers.getTranslation(error));
+          context,
+          AppHelpers.getTranslation(error),
+        );
       },
     );
   }
 }
-

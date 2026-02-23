@@ -36,29 +36,26 @@ class OrderPaymentContainer extends ConsumerWidget {
         height: 120.h,
         decoration: BoxDecoration(
           color: AppStyle.bgGrey,
-          borderRadius: BorderRadius.all(
-            Radius.circular(10.r),
-          ),
+          borderRadius: BorderRadius.all(Radius.circular(10.r)),
         ),
         padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-                decoration: BoxDecoration(
-                    color: isActive ? AppStyle.black : AppStyle.white,
-                    borderRadius: BorderRadius.all(Radius.circular(8.r))),
-                padding: EdgeInsets.all(8.r),
-                child: icon),
+              decoration: BoxDecoration(
+                color: isActive ? AppStyle.black : AppStyle.white,
+                borderRadius: BorderRadius.all(Radius.circular(8.r)),
+              ),
+              padding: EdgeInsets.all(8.r),
+              child: icon,
+            ),
             8.verticalSpace,
             Text(
               AppHelpers.getTranslation(title),
-              style: AppStyle.interSemi(
-                size: 13,
-                color: AppStyle.black,
-              ),
+              style: AppStyle.interSemi(size: 13, color: AppStyle.black),
               textAlign: TextAlign.center,
-            )
+            ),
           ],
         ),
       ),

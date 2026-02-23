@@ -3,10 +3,7 @@ import 'package:foodyman/infrastructure/models/data/order_active_model.dart';
 import '../data/meta.dart';
 
 class OrderPaginateResponse {
-  OrderPaginateResponse({
-    List<OrderActiveModel>? data,
-    Meta? meta,
-  }) {
+  OrderPaginateResponse({List<OrderActiveModel>? data, Meta? meta}) {
     _data = data;
     _meta = meta;
   }
@@ -24,14 +21,8 @@ class OrderPaginateResponse {
   List<OrderActiveModel>? _data;
   Meta? _meta;
 
-  OrderPaginateResponse copyWith({
-    List<OrderActiveModel>? data,
-    Meta? meta,
-  }) =>
-      OrderPaginateResponse(
-        data: data ?? _data,
-        meta: meta ?? _meta,
-      );
+  OrderPaginateResponse copyWith({List<OrderActiveModel>? data, Meta? meta}) =>
+      OrderPaginateResponse(data: data ?? _data, meta: meta ?? _meta);
 
   List<OrderActiveModel>? get data => _data;
 
@@ -48,4 +39,3 @@ class OrderPaginateResponse {
     return map;
   }
 }
-

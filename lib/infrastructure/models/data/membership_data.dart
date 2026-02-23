@@ -34,8 +34,8 @@ class MembershipData {
     _endDate = json['end_date'];
     _isActive = json['is_active'] != null
         ? json['is_active'].runtimeType == int
-        ? (json['is_active'] == 1)
-        : json['is_active']
+              ? (json['is_active'] == 1)
+              : json['is_active']
         : false;
 
     if (json['benefits'] != null) {
@@ -105,8 +105,8 @@ class MembershipBenefit {
     _description = json['description'];
     _enabled = json['enabled'] != null
         ? json['enabled'].runtimeType == int
-        ? (json['enabled'] == 1)
-        : json['enabled']
+              ? (json['enabled'] == 1)
+              : json['enabled']
         : false;
   }
 

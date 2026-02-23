@@ -1,5 +1,3 @@
-
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,10 +12,7 @@ import 'package:foodyman/presentation/theme/theme.dart';
 class RecommendedItem extends StatelessWidget {
   final ShopData shop;
 
-  const RecommendedItem({
-    super.key,
-    required this.shop,
-  });
+  const RecommendedItem({super.key, required this.shop});
 
   @override
   Widget build(BuildContext context) {
@@ -30,15 +25,17 @@ class RecommendedItem extends StatelessWidget {
         width: MediaQuery.sizeOf(context).width / 3,
         height: 190.h,
         decoration: BoxDecoration(
-            color: AppStyle.recommendBg,
-            borderRadius: BorderRadius.circular(10.r)),
+          color: AppStyle.recommendBg,
+          borderRadius: BorderRadius.circular(10.r),
+        ),
         child: Stack(
           children: [
             CustomNetworkImage(
-                url: shop.backgroundImg ?? "",
-                width: MediaQuery.sizeOf(context).width / 2,
-                height: 190.h,
-                radius: 10.r),
+              url: shop.backgroundImg ?? "",
+              width: MediaQuery.sizeOf(context).width / 2,
+              height: 190.h,
+              radius: 10.r,
+            ),
             Padding(
               padding: EdgeInsets.all(12.r),
               child: Column(
@@ -68,11 +65,13 @@ class RecommendedItem extends StatelessWidget {
                   ),
                   Container(
                     padding: EdgeInsets.symmetric(
-                        vertical: 4.h, horizontal: 12.w),
+                      vertical: 4.h,
+                      horizontal: 12.w,
+                    ),
                     decoration: BoxDecoration(
-                        color: AppStyle.black.withOpacity(0.8),
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(100.r))),
+                      color: AppStyle.black.withOpacity(0.8),
+                      borderRadius: BorderRadius.all(Radius.circular(100.r)),
+                    ),
                     child: Text(
                       "${shop.productsCount ?? 0}  ${AppHelpers.getTranslation(TrKeys.products)}",
                       style: AppStyle.interNormal(
@@ -90,4 +89,3 @@ class RecommendedItem extends StatelessWidget {
     );
   }
 }
-

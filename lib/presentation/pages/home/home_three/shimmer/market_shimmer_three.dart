@@ -7,10 +7,11 @@ class MarketShimmerThree extends StatelessWidget {
   final bool isSimpleShop;
   final bool isShop;
 
-  const MarketShimmerThree(
-      {super.key,
-      this.isSimpleShop = false,
-      this.isShop = false});
+  const MarketShimmerThree({
+    super.key,
+    this.isSimpleShop = false,
+    this.isShop = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +21,9 @@ class MarketShimmerThree extends StatelessWidget {
             width: 134.w,
             height: 130.h,
             decoration: BoxDecoration(
-                color: AppStyle.shimmerBase,
-                borderRadius: BorderRadius.circular(10.r)),
+              color: AppStyle.shimmerBase,
+              borderRadius: BorderRadius.circular(10.r),
+            ),
           )
         : Container(
             margin: isSimpleShop
@@ -30,9 +32,9 @@ class MarketShimmerThree extends StatelessWidget {
             width: 268.w,
             height: 260.h,
             decoration: BoxDecoration(
-                color: AppStyle.shimmerBase,
-                borderRadius: BorderRadius.circular(10.r)),
+              color: AppStyle.shimmerBase,
+              borderRadius: BorderRadius.circular(10.r),
+            ),
           );
   }
 }
-

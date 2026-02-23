@@ -21,22 +21,24 @@ class ProductMainButton extends StatelessWidget {
   final String? cartId;
   final String? userUuid;
 
-  const ProductMainButton(
-      {super.key,
-      required this.state,
-      required this.event,
-      required this.stateOrderShop,
-      required this.eventOrderShop,
-      this.shopId,
-      this.cartId,
-      this.userUuid});
+  const ProductMainButton({
+    super.key,
+    required this.state,
+    required this.event,
+    required this.stateOrderShop,
+    required this.eventOrderShop,
+    this.shopId,
+    this.cartId,
+    this.userUuid,
+  });
 
   @override
   Widget build(BuildContext context) {
     num sumTotalPrice = 0;
     state.selectedStock?.addons?.forEach((element) {
       if (element.active ?? false) {
-        sumTotalPrice += ((element.product?.stock?.totalPrice ?? 0) *
+        sumTotalPrice +=
+            ((element.product?.stock?.totalPrice ?? 0) *
             (element.quantity ?? 1));
       }
     });
@@ -55,8 +57,9 @@ class ProductMainButton extends StatelessWidget {
               Container(
                 height: 50.h,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.r),
-                    border: Border.all(color: AppStyle.textGrey)),
+                  borderRadius: BorderRadius.circular(10.r),
+                  border: Border.all(color: AppStyle.textGrey),
+                ),
                 child: Row(
                   children: [
                     GestureDetector(
@@ -65,19 +68,21 @@ class ProductMainButton extends StatelessWidget {
                       },
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                            vertical: 8.h, horizontal: 10.w),
+                          vertical: 8.h,
+                          horizontal: 10.w,
+                        ),
                         child: const Icon(Icons.remove),
                       ),
                     ),
                     RichText(
-                        text: TextSpan(
-                            text:
-                                "${state.count * (state.productData?.interval ?? 1)}",
-                            style: AppStyle.interSemi(
-                              size: 14,
-                              color: AppStyle.black,
-                            ),
-                            children: [
+                      text: TextSpan(
+                        text:
+                            "${state.count * (state.productData?.interval ?? 1)}",
+                        style: AppStyle.interSemi(
+                          size: 14,
+                          color: AppStyle.black,
+                        ),
+                        children: [
                           TextSpan(
                             text:
                                 " ${state.productData?.unit?.translation?.title ?? ""}",
@@ -85,15 +90,19 @@ class ProductMainButton extends StatelessWidget {
                               size: 14,
                               color: AppStyle.textGrey,
                             ),
-                          )
-                        ])),
+                          ),
+                        ],
+                      ),
+                    ),
                     GestureDetector(
                       onTap: () {
                         event.addCount(context);
                       },
                       child: Padding(
                         padding: EdgeInsets.symmetric(
-                            vertical: 8.h, horizontal: 10.w),
+                          vertical: 8.h,
+                          horizontal: 10.w,
+                        ),
                         child: const Icon(Icons.add),
                       ),
                     ),
@@ -109,16 +118,22 @@ class ProductMainButton extends StatelessWidget {
                   onPressed: () {
                     if (LocalStorage.getToken().isNotEmpty) {
                       event.createCart(
-                          context,
-                          (state.productData!.shopId ?? ""),
-                          () {
-                            Navigator.pop(context);
-                            eventOrderShop.getCart(context, () {},
-                                shopId: shopId, userUuid: userUuid, cartId: cartId);
-                          },
-                          isGroupOrder: userUuid?.isNotEmpty ?? false,
-                          cartId: cartId,
-                          userUuid: userUuid);
+                        context,
+                        (state.productData!.shopId ?? ""),
+                        () {
+                          Navigator.pop(context);
+                          eventOrderShop.getCart(
+                            context,
+                            () {},
+                            shopId: shopId,
+                            userUuid: userUuid,
+                            cartId: cartId,
+                          );
+                        },
+                        isGroupOrder: userUuid?.isNotEmpty ?? false,
+                        cartId: cartId,
+                        userUuid: userUuid,
+                      );
                     } else {
                       context.pushRoute(const LoginRoute());
                     }
@@ -134,23 +149,16 @@ class ProductMainButton extends StatelessWidget {
             children: [
               Text(
                 AppHelpers.getTranslation(TrKeys.total),
-                style: AppStyle.interNormal(
-                  size: 14,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interNormal(size: 14, color: AppStyle.black),
               ),
               Text(
                 AppHelpers.numberFormat(number: sumTotalPrice),
-                style: AppStyle.interNoSemi(
-                  size: 20,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interNoSemi(size: 20, color: AppStyle.black),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
   }
 }
-

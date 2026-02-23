@@ -9,13 +9,14 @@ class TabBarItem extends StatelessWidget {
   final int? currentIndex;
   final VoidCallback onTap;
 
-  const TabBarItem(
-      {super.key,
-      required this.title,
-      required this.index,
-        this.isShopTabBar = false,
-         this.currentIndex,
-        required this.onTap});
+  const TabBarItem({
+    super.key,
+    required this.title,
+    required this.index,
+    this.isShopTabBar = false,
+    this.currentIndex,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,9 @@ class TabBarItem extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 500),
         decoration: BoxDecoration(
-          color: isShopTabBar ?  (currentIndex == index ? AppStyle.primary : AppStyle.white) :  AppStyle.white,
+          color: isShopTabBar
+              ? (currentIndex == index ? AppStyle.primary : AppStyle.white)
+              : AppStyle.white,
           borderRadius: BorderRadius.circular(10.r),
           boxShadow: [
             BoxShadow(
@@ -36,18 +39,14 @@ class TabBarItem extends StatelessWidget {
           ],
         ),
         padding: EdgeInsets.symmetric(horizontal: 18.w),
-        margin: EdgeInsets.only( right: 9.w),
+        margin: EdgeInsets.only(right: 9.w),
         child: Center(
           child: Text(
             title,
-            style: AppStyle.interNormal(
-              size: 13,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interNormal(size: 13, color: AppStyle.black),
           ),
         ),
       ),
     );
   }
 }
-

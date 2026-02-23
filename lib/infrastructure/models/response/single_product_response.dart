@@ -30,13 +30,12 @@ class SingleProductResponse {
     bool? status,
     String? message,
     ProductData? data,
-  }) =>
-      SingleProductResponse(
-        timestamp: timestamp ?? _timestamp,
-        status: status ?? _status,
-        message: message ?? _message,
-        data: data ?? _data,
-      );
+  }) => SingleProductResponse(
+    timestamp: timestamp ?? _timestamp,
+    status: status ?? _status,
+    message: message ?? _message,
+    data: data ?? _data,
+  );
 
   String? get timestamp => _timestamp;
 
@@ -57,4 +56,3 @@ class SingleProductResponse {
     return map;
   }
 }
-

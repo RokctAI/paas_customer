@@ -61,7 +61,9 @@ class _CustomStatusBarState extends State<CustomStatusBar> {
       _batteryState = await _battery.batteryState;
 
       // Listen for battery changes
-      _batteryStateSubscription = _battery.onBatteryStateChanged.listen((BatteryState state) async {
+      _batteryStateSubscription = _battery.onBatteryStateChanged.listen((
+        BatteryState state,
+      ) async {
         if (mounted) {
           setState(() {
             _batteryState = state;
@@ -90,7 +92,9 @@ class _CustomStatusBarState extends State<CustomStatusBar> {
       _updateNetworkStatus();
 
       // Listen for connectivity changes
-      _connectivitySubscription = _connectivity.onConnectivityChanged.listen((List<ConnectivityResult> results) {
+      _connectivitySubscription = _connectivity.onConnectivityChanged.listen((
+        List<ConnectivityResult> results,
+      ) {
         if (mounted) {
           setState(() {
             _connectionStatus = results;
@@ -131,7 +135,8 @@ class _CustomStatusBarState extends State<CustomStatusBar> {
   }
 
   Color _getBatteryColor() {
-    if (_batteryState == BatteryState.charging || _batteryState == BatteryState.full) {
+    if (_batteryState == BatteryState.charging ||
+        _batteryState == BatteryState.full) {
       return Colors.green;
     } else if (_batteryLevel <= 15) {
       return AppStyle.red;
@@ -175,7 +180,7 @@ class _CustomStatusBarState extends State<CustomStatusBar> {
                   // Time on left
                   Text(
                     _formattedTime,
-                      style: AppStyle.logoFontBold(color: textColor, size: 16.sp)
+                    style: AppStyle.logoFontBold(color: textColor, size: 16.sp),
                   ),
 
                   // Network and Battery on right
@@ -189,7 +194,11 @@ class _CustomStatusBarState extends State<CustomStatusBar> {
                       if (_isHotspotEnabled)
                         const Padding(
                           padding: EdgeInsets.only(left: 4),
-                          child: Icon(Remix.wifi_fill, size: 14, color: textColor),
+                          child: Icon(
+                            Remix.wifi_fill,
+                            size: 14,
+                            color: textColor,
+                          ),
                         ),
 
                       const SizedBox(width: 8),
@@ -205,10 +214,7 @@ class _CustomStatusBarState extends State<CustomStatusBar> {
                       const SizedBox(width: 4),
                       Text(
                         "$_batteryLevel%",
-                        style: const TextStyle(
-                          fontSize: 10,
-                          color: textColor,
-                        ),
+                        style: const TextStyle(fontSize: 10, color: textColor),
                       ),
                     ],
                   ),

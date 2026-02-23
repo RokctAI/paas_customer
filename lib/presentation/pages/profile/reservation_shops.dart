@@ -70,62 +70,64 @@ class _ReservationShopsState extends ConsumerState<ReservationShops> {
                 await event.fetchShopPage(context, _recommendedController);
               },
               onRefresh: () async {
-                await event.fetchShopPage(context, _recommendedController,
-                    isRefresh: true);
+                await event.fetchShopPage(
+                  context,
+                  _recommendedController,
+                  isRefresh: true,
+                );
               },
               child: ListView.builder(
-                  itemCount: 6,
-                  shrinkWrap: true,
-                  padding: REdgeInsets.symmetric(vertical: 8),
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: REdgeInsets.only(bottom: 8),
-                      child: AnimationButtonEffect(
-                        child: GestureDetector(
-                          onTap: () {
-                            ref
-                                .read(selectProvider.notifier)
-                                .selectIndex(index);
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
+                itemCount: 6,
+                shrinkWrap: true,
+                padding: REdgeInsets.symmetric(vertical: 8),
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: REdgeInsets.only(bottom: 8),
+                    child: AnimationButtonEffect(
+                      child: GestureDetector(
+                        onTap: () {
+                          ref.read(selectProvider.notifier).selectIndex(index);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: selectState.selectedIndex == index
+                                ? AppStyle.primary.withOpacity(0.4)
+                                : AppStyle.bgGrey,
+                            borderRadius: BorderRadius.circular(8.r),
+                            border: Border.all(
                               color: selectState.selectedIndex == index
-                                  ? AppStyle.primary.withOpacity(0.4)
-                                  : AppStyle.bgGrey,
-                              borderRadius: BorderRadius.circular(8.r),
-                              border: Border.all(
-                                color: selectState.selectedIndex == index
-                                    ? AppStyle.primary
-                                    : AppStyle.transparent,
-                                width: 1.8,
-                              ),
+                                  ? AppStyle.primary
+                                  : AppStyle.transparent,
+                              width: 1.8,
                             ),
-                            child: Padding(
-                              padding: REdgeInsets.all(8),
-                              child: Row(
-                                children: [
-                                  CustomNetworkImage(
-                                    url: state.shops[index].logoImg,
-                                    height: 48,
-                                    width: 48,
-                                    radius: 24,
+                          ),
+                          child: Padding(
+                            padding: REdgeInsets.all(8),
+                            child: Row(
+                              children: [
+                                CustomNetworkImage(
+                                  url: state.shops[index].logoImg,
+                                  height: 48,
+                                  width: 48,
+                                  radius: 24,
+                                ),
+                                8.horizontalSpace,
+                                Expanded(
+                                  child: Text(
+                                    state.shops[index].translation?.title ??
+                                        ' ',
+                                    maxLines: 2,
                                   ),
-                                  8.horizontalSpace,
-                                  Expanded(
-                                    child: Text(
-                                      state.shops[index].translation?.title ??
-                                          ' ',
-                                      maxLines: 2,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ),
-                    );
-                  }),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
           CustomButton(
@@ -137,10 +139,9 @@ class _ReservationShopsState extends ConsumerState<ReservationShops> {
                 enableJavaScript: true,
               );
             },
-          )
+          ),
         ],
       ),
     );
   }
 }
-

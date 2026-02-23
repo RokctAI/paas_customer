@@ -129,11 +129,7 @@ class _WebViewPageState extends State<WebViewPage> {
           ),
           // Loading indicator shows while content is loading
           if (isLoading)
-            Center(
-              child: CircularProgressIndicator(
-                color: AppStyle.primary,
-              ),
-            ),
+            Center(child: CircularProgressIndicator(color: AppStyle.primary)),
         ],
       ),
     );

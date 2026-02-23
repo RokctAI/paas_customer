@@ -63,7 +63,10 @@ class BannerScreen extends StatelessWidget {
             padding: EdgeInsets.all(16.r),
             child: Text(
               desc,
-              style: AppStyle.interRegular(size: 14.sp, color: AppStyle.textGrey),
+              style: AppStyle.interRegular(
+                size: 14.sp,
+                color: AppStyle.textGrey,
+              ),
             ),
           ),
           Padding(
@@ -85,18 +88,20 @@ class BannerScreen extends StatelessWidget {
                   child: CustomButton(
                     title: buttonText ?? "View",
                     onPressed: () {
-                      context.pushRoute(ShopsBannerRoute(
-                        bannerId: bannerId,
-                        title: desc,
-                        isAds: isAds,
-                      ));
+                      context.pushRoute(
+                        ShopsBannerRoute(
+                          bannerId: bannerId,
+                          title: desc,
+                          isAds: isAds,
+                        ),
+                      );
                     },
                   ),
                 ),
               ],
             ),
           ),
-          16.verticalSpace
+          16.verticalSpace,
         ],
       ),
     );

@@ -1,6 +1,5 @@
 import 'translation.dart';
 
-
 // ProductUnit class to handle unit data from API
 class ProductUnit {
   final int? id;
@@ -26,15 +25,14 @@ class ProductUnit {
     DateTime? createdAt,
     DateTime? updatedAt,
     Translation? translation,
-  }) =>
-      ProductUnit(
-        id: id ?? this.id,
-        active: active ?? this.active,
-        position: position ?? this.position,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-        translation: translation ?? this.translation,
-      );
+  }) => ProductUnit(
+    id: id ?? this.id,
+    active: active ?? this.active,
+    position: position ?? this.position,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    translation: translation ?? this.translation,
+  );
 
   factory ProductUnit.fromJson(Map<String, dynamic> json) => ProductUnit(
     id: json["id"],

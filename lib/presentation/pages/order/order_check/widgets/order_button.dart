@@ -153,9 +153,10 @@ class OrderButton extends ConsumerWidget {
                   textColor: AppStyle.white,
                   onPressed: () {
                     AppHelpers.showCustomModalBottomSheet(
-                        context: context,
-                        modal: const RefundScreen(),
-                        isDarkMode: false);
+                      context: context,
+                      modal: const RefundScreen(),
+                      isDarkMode: false,
+                    );
                   },
                 ),
               ],
@@ -167,38 +168,43 @@ class OrderButton extends ConsumerWidget {
       }
     } else {
       // For new orders - the checkout button
-      return Consumer(builder: (context, ref, child) {
-        final orderState = ref.watch(orderProvider);
-        final paymentState = ref.watch(paymentProvider);
-        final shopOrderState = ref.watch(shopOrderProvider);
+      return Consumer(
+        builder: (context, ref, child) {
+          final orderState = ref.watch(orderProvider);
+          final paymentState = ref.watch(paymentProvider);
+          final shopOrderState = ref.watch(shopOrderProvider);
 
-        // Check if cart is not empty
-        final isNotEmptyCart = (shopOrderState.cart?.userCarts?.first.cartDetails?.isNotEmpty ?? false);
+          // Check if cart is not empty
+          final isNotEmptyCart =
+              (shopOrderState.cart?.userCarts?.first.cartDetails?.isNotEmpty ??
+              false);
 
-        // Check if payment methods are available
-        final isNotEmptyPaymentType = ((AppHelpers.getPaymentType() == "admin")
-            ? (paymentState.payments.isNotEmpty)
-            : (orderState.shopData?.shopPayments?.isNotEmpty ?? false));
+          // Check if payment methods are available
+          final isNotEmptyPaymentType =
+              ((AppHelpers.getPaymentType() == "admin")
+              ? (paymentState.payments.isNotEmpty)
+              : (orderState.shopData?.shopPayments?.isNotEmpty ?? false));
 
-        // Check if PayFast is selected
+          // Check if PayFast is selected
 
-        // Get the total price
-        final totalPrice = orderState.calculateData?.totalPrice ?? 0;
+          // Get the total price
+          final totalPrice = orderState.calculateData?.totalPrice ?? 0;
 
-        // Set active status based on delivery type selection and date
-        final bool isActive = isNotEmptyCart || isNotEmptyPaymentType
-            ? (orderState.tabIndex == 0 || (orderState.selectDate != null))
-            : true;
+          // Set active status based on delivery type selection and date
+          final bool isActive = isNotEmptyCart || isNotEmptyPaymentType
+              ? (orderState.tabIndex == 0 || (orderState.selectDate != null))
+              : true;
 
-        return CustomButton(
-          isLoading: isLoading,
-          background: isActive ? AppStyle.primary : AppStyle.bgGrey,
-          textColor: isActive ? AppStyle.black : AppStyle.textGrey,
-          title: "${AppHelpers.getTranslation(TrKeys.continueToPayment)} — ${AppHelpers.numberFormat(number: totalPrice)}",
-          onPressed: isActive ? createOrder : null,
-        );
-      });
+          return CustomButton(
+            isLoading: isLoading,
+            background: isActive ? AppStyle.primary : AppStyle.bgGrey,
+            textColor: isActive ? AppStyle.black : AppStyle.textGrey,
+            title:
+                "${AppHelpers.getTranslation(TrKeys.continueToPayment)} — ${AppHelpers.numberFormat(number: totalPrice)}",
+            onPressed: isActive ? createOrder : null,
+          );
+        },
+      );
     }
   }
-
 }

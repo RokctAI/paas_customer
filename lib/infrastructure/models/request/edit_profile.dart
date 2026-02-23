@@ -11,18 +11,19 @@ class EditProfile {
   String? confirmPassword;
   String? referral;
 
-  EditProfile(
-      {this.firstname,
-      this.lastname,
-      this.birthday,
-      this.gender,
-      this.phone,
-      this.secondPhone,
-      this.password,
-      this.referral,
-      this.email,
-      this.confirmPassword,
-      this.images});
+  EditProfile({
+    this.firstname,
+    this.lastname,
+    this.birthday,
+    this.gender,
+    this.phone,
+    this.secondPhone,
+    this.password,
+    this.referral,
+    this.email,
+    this.confirmPassword,
+    this.images,
+  });
 
   EditProfile.fromJson(Map<String, dynamic> json) {
     firstname = json['firstname'];
@@ -56,4 +57,3 @@ class EditProfile {
     return data;
   }
 }
-

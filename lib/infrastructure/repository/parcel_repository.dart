@@ -87,26 +87,27 @@ class ParcelRepository implements ParcelRepositoryFacade {
   }
 
   @override
-  Future<ApiResult> orderParcel(
-      {required String typeId,
-      required LocationModel from,
-      required String fromTitle,
-      required LocationModel to,
-      required String toTitle,
-      required String time,
-      required String note,
-      required String phoneFrom,
-      required String phoneTo,
-      required String usernameTo,
-      required String floorTo,
-      required String floorFrom,
-      required String houseFrom,
-      required String houseTo,
-      required String value,
-      required String comment,
-      required String instruction,
-      required bool notify,
-      required String usernameFrom}) async {
+  Future<ApiResult> orderParcel({
+    required String typeId,
+    required LocationModel from,
+    required String fromTitle,
+    required LocationModel to,
+    required String toTitle,
+    required String time,
+    required String note,
+    required String phoneFrom,
+    required String phoneTo,
+    required String usernameTo,
+    required String floorTo,
+    required String floorFrom,
+    required String houseFrom,
+    required String houseTo,
+    required String value,
+    required String comment,
+    required String instruction,
+    required bool notify,
+    required String usernameFrom,
+  }) async {
     final data = {
       'lang': LocalStorage.getLanguage()?.locale,
       'type_id': typeId,
@@ -140,7 +141,10 @@ class ParcelRepository implements ParcelRepositoryFacade {
     };
     try {
       final client = dioHttp.client(requireAuth: true);
-      final res = await client.post('/api/method/paas.api.parcel.parcel.create_parcel_order', data: {'order_data': data});
+      final res = await client.post(
+        '/api/method/paas.api.parcel.parcel.create_parcel_order',
+        data: {'order_data': data},
+      );
       return ApiResult.success(data: res.data["data"]["id"]);
     } catch (e) {
       debugPrint('==> get parcel order failure: $e');
@@ -163,14 +167,19 @@ class ParcelRepository implements ParcelRepositoryFacade {
       "statuses[2]": "ready",
       "statuses[3]": "on_a_way",
       "order_statuses": true,
-      "perPage": 10
+      "perPage": 10,
     };
     try {
       final client = dioHttp.client(requireAuth: true);
       // Status filtering logic as implemented in previous session
       if (data['statuses[0]'] != null) {
-          data['status'] = [data['statuses[0]'], data['statuses[1]'], data['statuses[2]'], data['statuses[3]']];
-          data.removeWhere((key, value) => key.startsWith('statuses'));
+        data['status'] = [
+          data['statuses[0]'],
+          data['statuses[1]'],
+          data['statuses[2]'],
+          data['statuses[3]'],
+        ];
+        data.removeWhere((key, value) => key.startsWith('statuses'));
       }
       final response = await client.post(
         '/api/method/paas.api.parcel.parcel.get_parcel_orders',
@@ -198,13 +207,13 @@ class ParcelRepository implements ParcelRepositoryFacade {
       "statuses[1]": "canceled",
       "order_statuses": true,
       "perPage": 10,
-      "page": page
+      "page": page,
     };
     try {
       final client = dioHttp.client(requireAuth: true);
       if (data['statuses[0]'] != null) {
-          data['status'] = [data['statuses[0]'], data['statuses[1]']];
-          data.removeWhere((key, value) => key.startsWith('statuses'));
+        data['status'] = [data['statuses[0]'], data['statuses[1]']];
+        data.removeWhere((key, value) => key.startsWith('statuses'));
       }
       final response = await client.post(
         '/api/method/paas.api.parcel.parcel.get_parcel_orders',
@@ -227,7 +236,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
     final data = {
       if (LocalStorage.getSelectedCurrency() != null)
         'currency_id': LocalStorage.getSelectedCurrency()?.id,
-      'lang': LocalStorage.getLanguage()?.locale
+      'lang': LocalStorage.getLanguage()?.locale,
     };
     try {
       final client = dioHttp.client(requireAuth: true);

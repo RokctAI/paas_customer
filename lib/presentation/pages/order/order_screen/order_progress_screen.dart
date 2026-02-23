@@ -33,10 +33,7 @@ import 'widgets/order_status.dart';
 class OrderProgressPage extends ConsumerStatefulWidget {
   final String? orderId;
 
-  const OrderProgressPage({
-    super.key,
-    this.orderId,
-  });
+  const OrderProgressPage({super.key, this.orderId});
 
   @override
   ConsumerState<OrderProgressPage> createState() => _OrderProgressPageState();
@@ -80,7 +77,7 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
     ref.listen(orderProvider, (previous, next) {
       if (AppHelpers.getOrderStatus(next.orderData?.status ?? "") ==
               OrderStatus.delivered &&
-          !(next.orderData?.review != null||next.orderData?.tips!=null) &&
+          !(next.orderData?.review != null || next.orderData?.tips != null) &&
           previous?.orderData?.status != next.orderData?.status) {
         AppHelpers.showCustomModalBottomSheet(
           context: context,
@@ -117,17 +114,15 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
   Widget _bottom(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
-      child: Row(
-        children: [
-          const PopButton(),
-          16.horizontalSpace,
-        ],
-      ),
+      child: Row(children: [const PopButton(), 16.horizontalSpace]),
     );
   }
 
   Widget _orderScreen(
-      OrderNotifier event, BuildContext context, OrderState state) {
+    OrderNotifier event,
+    BuildContext context,
+    OrderState state,
+  ) {
     return Expanded(
       child: SmartRefresher(
         enablePullDown: true,
@@ -150,22 +145,27 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
                 isLoading: state.isMapLoading,
                 polylineCoordinates: state.polylineCoordinates,
                 markers: Set<Marker>.of(state.markers.values),
-                latLng: LatLng(state.orderData?.shop?.location?.latitude ?? 0,
-                    state.orderData?.shop?.location?.longitude ?? 0),
+                latLng: LatLng(
+                  state.orderData?.shop?.location?.latitude ?? 0,
+                  state.orderData?.shop?.location?.longitude ?? 0,
+                ),
               ),
               24.verticalSpace,
               TitleAndIcon(
                 title: AppHelpers.getTranslation(TrKeys.compositionOrder),
               ),
-              Consumer(builder: (context, ref, child) {
-                return ListView.builder(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+              Consumer(
+                builder: (context, ref, child) {
+                  return ListView.builder(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 14.h,
+                    ),
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemCount:
                         ref.watch(orderProvider).orderData?.details?.length ??
-                            0,
+                        0,
                     itemBuilder: (context, index) {
                       return CartOrderItem(
                         isAddComment: true,
@@ -173,20 +173,25 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
                         isActive: false,
                         add: () {},
                         remove: () {},
-                        cartTwo:
-                            ref.watch(orderProvider).orderData?.details?[index],
+                        cartTwo: ref
+                            .watch(orderProvider)
+                            .orderData
+                            ?.details?[index],
                         cart: null,
                       );
-                    });
-              }),
+                    },
+                  );
+                },
+              ),
               OrderCheck(
-                orderStatus:
-                    AppHelpers.getOrderStatus(state.orderData?.status ?? ""),
+                orderStatus: AppHelpers.getOrderStatus(
+                  state.orderData?.status ?? "",
+                ),
                 isOrder: true,
                 isActive: state.isActive,
                 globalKey: _scaffoldKey,
               ),
-              42.verticalSpace
+              42.verticalSpace,
             ],
           ),
         ),
@@ -242,10 +247,9 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
           ),
           OrderStatusScreen(
             status: AppHelpers.getOrderStatus(state.orderData?.status ?? ""),
-          )
+          ),
         ],
       ),
     );
   }
 }
-

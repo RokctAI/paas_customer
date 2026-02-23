@@ -33,7 +33,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
     this._authRepository,
     this._settingsRepository,
     this._userRepositoryFacade,
-    ) : super(const LoginState());
+  ) : super(const LoginState());
 
   void setPassword(String text) {
     state = state.copyWith(
@@ -92,10 +92,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
           },
           failure: (failure, status) {
             state = state.copyWith(isSelectLanguage: false);
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           },
         );
       } else {
@@ -114,19 +111,14 @@ class LoginNotifier extends StateNotifier<LoginState> {
             final List<LanguageData> languages = data.data ?? [];
             for (int i = 0; i < languages.length; i++) {
               if (languages[i].id == lang.id) {
-                state = state.copyWith(
-                  isSelectLanguage: true,
-                );
+                state = state.copyWith(isSelectLanguage: true);
                 break;
               }
             }
           },
           failure: (failure, status) {
             state = state.copyWith(isSelectLanguage: false);
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           },
         );
       } else {
@@ -137,8 +129,11 @@ class LoginNotifier extends StateNotifier<LoginState> {
     }
   }
 
-// Helper method to get translations
-  Future<void> _getTranslations(BuildContext context, LanguageData language) async {
+  // Helper method to get translations
+  Future<void> _getTranslations(
+    BuildContext context,
+    LanguageData language,
+  ) async {
     final connect = await AppConnectivity.connectivity();
     if (connect) {
       final response = await _settingsRepository.getMobileTranslations();
@@ -183,35 +178,51 @@ class LoginNotifier extends StateNotifier<LoginState> {
       response.when(
         success: (data) async {
           LocalStorage.setToken(data.data?.accessToken ?? '');
-          LocalStorage.setAddressSelected(AddressData(
-              title: data.data?.user?.addresses?.firstWhere(
-                      (element) => element.active ?? false, orElse: () {
-                    return AddressNewModel();
-                  }).title ??
+          LocalStorage.setAddressSelected(
+            AddressData(
+              title:
+                  data.data?.user?.addresses
+                      ?.firstWhere(
+                        (element) => element.active ?? false,
+                        orElse: () {
+                          return AddressNewModel();
+                        },
+                      )
+                      .title ??
                   "",
-              address: data.data?.user?.addresses
-                      ?.firstWhere((element) => element.active ?? false,
-                          orElse: () {
-                        return AddressNewModel();
-                      })
+              address:
+                  data.data?.user?.addresses
+                      ?.firstWhere(
+                        (element) => element.active ?? false,
+                        orElse: () {
+                          return AddressNewModel();
+                        },
+                      )
                       .address
                       ?.address ??
                   "",
               location: LocationModel(
-                  longitude: data.data?.user?.addresses
-                      ?.firstWhere((element) => element.active ?? false,
-                          orElse: () {
+                longitude: data.data?.user?.addresses
+                    ?.firstWhere(
+                      (element) => element.active ?? false,
+                      orElse: () {
                         return AddressNewModel();
-                      })
-                      .location
-                      ?.last,
-                  latitude: data.data?.user?.addresses
-                      ?.firstWhere((element) => element.active ?? false,
-                          orElse: () {
+                      },
+                    )
+                    .location
+                    ?.last,
+                latitude: data.data?.user?.addresses
+                    ?.firstWhere(
+                      (element) => element.active ?? false,
+                      orElse: () {
                         return AddressNewModel();
-                      })
-                      .location
-                      ?.first)));
+                      },
+                    )
+                    .location
+                    ?.first,
+              ),
+            ),
+          );
           if (AppConstants.isDemo) {
             context.replaceRoute(UiTypeRoute());
           } else {
@@ -223,10 +234,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false, isLoginError: true);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -261,35 +269,51 @@ class LoginNotifier extends StateNotifier<LoginState> {
         success: (data) async {
           state = state.copyWith(isLoading: false);
           LocalStorage.setToken(data.data?.accessToken ?? '');
-          LocalStorage.setAddressSelected(AddressData(
-              title: data.data?.user?.addresses?.firstWhere(
-                      (element) => element.active ?? false, orElse: () {
-                return AddressNewModel();
-              }).title ??
+          LocalStorage.setAddressSelected(
+            AddressData(
+              title:
+                  data.data?.user?.addresses
+                      ?.firstWhere(
+                        (element) => element.active ?? false,
+                        orElse: () {
+                          return AddressNewModel();
+                        },
+                      )
+                      .title ??
                   "",
-              address: data.data?.user?.addresses
-                  ?.firstWhere((element) => element.active ?? false,
-                  orElse: () {
-                    return AddressNewModel();
-                  })
-                  .address
-                  ?.address ??
+              address:
+                  data.data?.user?.addresses
+                      ?.firstWhere(
+                        (element) => element.active ?? false,
+                        orElse: () {
+                          return AddressNewModel();
+                        },
+                      )
+                      .address
+                      ?.address ??
                   "",
               location: LocationModel(
-                  longitude: data.data?.user?.addresses
-                      ?.firstWhere((element) => element.active ?? false,
+                longitude: data.data?.user?.addresses
+                    ?.firstWhere(
+                      (element) => element.active ?? false,
                       orElse: () {
                         return AddressNewModel();
-                      })
-                      .location
-                      ?.last,
-                  latitude: data.data?.user?.addresses
-                      ?.firstWhere((element) => element.active ?? false,
+                      },
+                    )
+                    .location
+                    ?.last,
+                latitude: data.data?.user?.addresses
+                    ?.firstWhere(
+                      (element) => element.active ?? false,
                       orElse: () {
                         return AddressNewModel();
-                      })
-                      .location
-                      ?.first)));
+                      },
+                    )
+                    .location
+                    ?.first,
+              ),
+            ),
+          );
           context.router.popUntilRoot();
           if (AppConstants.isDemo) {
             context.replaceRoute(UiTypeRoute());
@@ -301,10 +325,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -335,22 +356,25 @@ class LoginNotifier extends StateNotifier<LoginState> {
           loginBehavior: LoginBehavior.nativeWithFallback,
         );
         debugPrint(
-            '===> login with face token ${user.accessToken?.tokenString}');
+          '===> login with face token ${user.accessToken?.tokenString}',
+        );
         debugPrint('===> login with face authenticationToken ${user.status}');
         final rawNonce = AppHelpers.generateNonce();
         final OAuthCredential credential =
-        user.accessToken?.type == AccessTokenType.limited
+            user.accessToken?.type == AccessTokenType.limited
             ? OAuthCredential(
-          providerId: 'facebook.com',
-          signInMethod: 'oauth',
-          idToken: user.accessToken!.tokenString,
-          rawNonce: rawNonce,
-        )
+                providerId: 'facebook.com',
+                signInMethod: 'oauth',
+                idToken: user.accessToken!.tokenString,
+                rawNonce: rawNonce,
+              )
             : FacebookAuthProvider.credential(
-            user.accessToken?.tokenString ?? "");
+                user.accessToken?.tokenString ?? "",
+              );
 
-        final userObj =
-        await FirebaseAuth.instance.signInWithCredential(credential);
+        final userObj = await FirebaseAuth.instance.signInWithCredential(
+          credential,
+        );
 
         if (user.status == LoginStatus.success) {
           final response = await _authRepository.loginWithGoogle(
@@ -363,50 +387,63 @@ class LoginNotifier extends StateNotifier<LoginState> {
             success: (data) async {
               state = state.copyWith(isLoading: false);
               LocalStorage.setToken(data.data?.accessToken ?? '');
-              LocalStorage.setAddressSelected(AddressData(
-                  title: data.data?.user?.addresses?.firstWhere(
-                          (element) => element.active ?? false, orElse: () {
-                    return AddressNewModel();
-                  }).title ??
+              LocalStorage.setAddressSelected(
+                AddressData(
+                  title:
+                      data.data?.user?.addresses
+                          ?.firstWhere(
+                            (element) => element.active ?? false,
+                            orElse: () {
+                              return AddressNewModel();
+                            },
+                          )
+                          .title ??
                       "",
-                  address: data.data?.user?.addresses
-                      ?.firstWhere((element) => element.active ?? false,
-                      orElse: () {
-                        return AddressNewModel();
-                      })
-                      .address
-                      ?.address ??
+                  address:
+                      data.data?.user?.addresses
+                          ?.firstWhere(
+                            (element) => element.active ?? false,
+                            orElse: () {
+                              return AddressNewModel();
+                            },
+                          )
+                          .address
+                          ?.address ??
                       "",
                   location: LocationModel(
-                      longitude: data.data?.user?.addresses
-                          ?.firstWhere((element) => element.active ?? false,
+                    longitude: data.data?.user?.addresses
+                        ?.firstWhere(
+                          (element) => element.active ?? false,
                           orElse: () {
                             return AddressNewModel();
-                          })
-                          .location
-                          ?.last,
-                      latitude: data.data?.user?.addresses
-                          ?.firstWhere((element) => element.active ?? false,
+                          },
+                        )
+                        .location
+                        ?.last,
+                    latitude: data.data?.user?.addresses
+                        ?.firstWhere(
+                          (element) => element.active ?? false,
                           orElse: () {
                             return AddressNewModel();
-                          })
-                          .location
-                          ?.first)));
+                          },
+                        )
+                        .location
+                        ?.first,
+                  ),
+                ),
+              );
               context.router.popUntilRoot();
               if (AppConstants.isDemo) {
                 context.replaceRoute(UiTypeRoute());
               } else {
-                  AppHelpers.goHome(context);
+                AppHelpers.goHome(context);
               }
               String? fcmToken = await FirebaseMessaging.instance.getToken();
               _userRepositoryFacade.updateFirebaseToken(fcmToken);
             },
             failure: (failure, status) {
               state = state.copyWith(isLoading: false);
-              AppHelpers.showCheckTopSnackBar(
-                context,
-                failure,
-              );
+              AppHelpers.showCheckTopSnackBar(context, failure);
             },
           );
         } else {
@@ -429,8 +466,6 @@ class LoginNotifier extends StateNotifier<LoginState> {
     }
   }
 
-
-
   Future<void> loginWithApple(BuildContext context) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
@@ -450,63 +485,77 @@ class LoginNotifier extends StateNotifier<LoginState> {
           accessToken: credential.authorizationCode,
         );
 
-        final userObj =
-            await FirebaseAuth.instance.signInWithCredential(credentialApple);
+        final userObj = await FirebaseAuth.instance.signInWithCredential(
+          credentialApple,
+        );
 
         final response = await _authRepository.loginWithGoogle(
-            email: credential.email ?? userObj.user?.email ?? "",
-            displayName:
-                credential.givenName ?? userObj.user?.displayName ?? "",
-            id: credential.userIdentifier ?? userObj.user?.uid ?? "",
-            avatar: userObj.user?.displayName ?? "");
+          email: credential.email ?? userObj.user?.email ?? "",
+          displayName: credential.givenName ?? userObj.user?.displayName ?? "",
+          id: credential.userIdentifier ?? userObj.user?.uid ?? "",
+          avatar: userObj.user?.displayName ?? "",
+        );
         response.when(
           success: (data) async {
             state = state.copyWith(isLoading: false);
             LocalStorage.setToken(data.data?.accessToken ?? '');
-            LocalStorage.setAddressSelected(AddressData(
-                title: data.data?.user?.addresses?.firstWhere(
-                        (element) => element.active ?? false, orElse: () {
-                  return AddressNewModel();
-                }).title ??
+            LocalStorage.setAddressSelected(
+              AddressData(
+                title:
+                    data.data?.user?.addresses
+                        ?.firstWhere(
+                          (element) => element.active ?? false,
+                          orElse: () {
+                            return AddressNewModel();
+                          },
+                        )
+                        .title ??
                     "",
-                address: data.data?.user?.addresses
-                    ?.firstWhere((element) => element.active ?? false,
-                    orElse: () {
-                      return AddressNewModel();
-                    })
-                    .address
-                    ?.address ??
+                address:
+                    data.data?.user?.addresses
+                        ?.firstWhere(
+                          (element) => element.active ?? false,
+                          orElse: () {
+                            return AddressNewModel();
+                          },
+                        )
+                        .address
+                        ?.address ??
                     "",
                 location: LocationModel(
-                    longitude: data.data?.user?.addresses
-                        ?.firstWhere((element) => element.active ?? false,
+                  longitude: data.data?.user?.addresses
+                      ?.firstWhere(
+                        (element) => element.active ?? false,
                         orElse: () {
                           return AddressNewModel();
-                        })
-                        .location
-                        ?.last,
-                    latitude: data.data?.user?.addresses
-                        ?.firstWhere((element) => element.active ?? false,
+                        },
+                      )
+                      .location
+                      ?.last,
+                  latitude: data.data?.user?.addresses
+                      ?.firstWhere(
+                        (element) => element.active ?? false,
                         orElse: () {
                           return AddressNewModel();
-                        })
-                        .location
-                        ?.first)));
+                        },
+                      )
+                      .location
+                      ?.first,
+                ),
+              ),
+            );
             context.router.popUntilRoot();
             if (AppConstants.isDemo) {
               context.replaceRoute(UiTypeRoute());
             } else {
-               AppHelpers.goHome(context);
+              AppHelpers.goHome(context);
             }
             String? fcmToken = await FirebaseMessaging.instance.getToken();
             _userRepositoryFacade.updateFirebaseToken(fcmToken);
           },
           failure: (failure, s) {
             state = state.copyWith(isLoading: false);
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           },
         );
       } catch (e) {
@@ -520,4 +569,3 @@ class LoginNotifier extends StateNotifier<LoginState> {
     }
   }
 }
-

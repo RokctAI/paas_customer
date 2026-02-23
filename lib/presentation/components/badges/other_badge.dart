@@ -11,10 +11,7 @@ class AdBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        vertical: 4.h,
-        horizontal: 12.w,
-      ),
+      padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 12.w),
       decoration: BoxDecoration(
         color: AppStyle.bottomNavigationBarColor.withOpacity(0.6),
         borderRadius: BorderRadius.all(Radius.circular(100.r)),

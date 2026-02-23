@@ -18,7 +18,7 @@ import 'package:foodyman/presentation/theme/theme.dart';
 import 'widgets/orders_item.dart';
 import 'package:foodyman/presentation/pages/parcel/parcel_item.dart';
 import 'package:foodyman/presentation/components/badges/empty_badge.dart';
- 
+
 @RoutePage()
 class OrdersMainPage extends ConsumerStatefulWidget {
   const OrdersMainPage({super.key});
@@ -27,7 +27,8 @@ class OrdersMainPage extends ConsumerStatefulWidget {
   ConsumerState<OrdersMainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends ConsumerState<OrdersMainPage> with SingleTickerProviderStateMixin {
+class _MainPageState extends ConsumerState<OrdersMainPage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   final _tabs = [
@@ -58,11 +59,15 @@ class _MainPageState extends ConsumerState<OrdersMainPage> with SingleTickerProv
         body: Column(
           children: [
             CommonAppBar2(
-              bgColor: AppStyle.primary.withOpacity(0.28), // Set the background color here
+              bgColor: AppStyle.primary.withOpacity(
+                0.28,
+              ), // Set the background color here
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 42), // Assuming 40.verticalSpace is a constant or a function that returns a height value
+                  const SizedBox(
+                    height: 42,
+                  ), // Assuming 40.verticalSpace is a constant or a function that returns a height value
                   TabBar(
                     controller: _tabController,
                     tabs: _tabs.map((Tab tab) {
@@ -73,12 +78,16 @@ class _MainPageState extends ConsumerState<OrdersMainPage> with SingleTickerProv
                     }).toList(),
                     isScrollable: true,
                     labelColor: AppStyle.white, // Change the label color
-                    unselectedLabelColor: AppStyle.black, // Change the unselected label color
+                    unselectedLabelColor:
+                        AppStyle.black, // Change the unselected label color
                     indicator: ShapeDecoration(
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16.0), // Adjust the border radius as needed
+                        borderRadius: BorderRadius.circular(
+                          16.0,
+                        ), // Adjust the border radius as needed
                       ),
-                      color: AppStyle.black, // Set the background color of the indicator
+                      color: AppStyle
+                          .black, // Set the background color of the indicator
                     ), // Remove the indicator
                   ),
                 ],
@@ -88,10 +97,7 @@ class _MainPageState extends ConsumerState<OrdersMainPage> with SingleTickerProv
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: const [
-                  OrdersList(),
-                  ParcelListTab(),
-                ],
+                children: const [OrdersList(), ParcelListTab()],
               ),
             ),
           ],
@@ -101,20 +107,17 @@ class _MainPageState extends ConsumerState<OrdersMainPage> with SingleTickerProv
   }
 }
 
-
 class OrdersList extends ConsumerStatefulWidget {
   final bool isBackButton;
 
-  const OrdersList({
-    super.key,
-    this.isBackButton = true,
-  });
+  const OrdersList({super.key, this.isBackButton = true});
 
   @override
   ConsumerState<OrdersList> createState() => _OrderPageState();
 }
 
-class _OrderPageState extends ConsumerState<OrdersList> with SingleTickerProviderStateMixin {
+class _OrderPageState extends ConsumerState<OrdersList>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late RefreshController activeRefreshController;
   late RefreshController historyRefreshController;
@@ -167,7 +170,6 @@ class _OrderPageState extends ConsumerState<OrdersList> with SingleTickerProvide
         backgroundColor: isDarkMode ? AppStyle.mainBackDark : AppStyle.bgGrey,
         body: Column(
           children: [
-
             16.verticalSpace,
             CustomTabBar(
               isScrollable: true,
@@ -175,88 +177,111 @@ class _OrderPageState extends ConsumerState<OrdersList> with SingleTickerProvide
               tabs: _tabs,
             ),
             Expanded(
-              child: TabBarView(controller: _tabController, children: [
-                state.isActiveLoading
-                    ? const Loading()
-                    : SmartRefresher(
-                  controller: activeRefreshController,
-                  enablePullDown: true,
-                  enablePullUp: true,
-                  onRefresh: () {
-                    event.fetchActiveOrdersPage(context, activeRefreshController, isRefresh: true);
-                    activeRefreshController.refreshCompleted();
-                  },
-                  onLoading: () {
-                    event.fetchActiveOrdersPage(context, activeRefreshController);
-                  },
-                  child: state.activeOrders.isNotEmpty
-                      ? ListView.builder(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.only(top: 24.h),
-                    itemCount: state.activeOrders.length,
-                    itemBuilder: (context, index) {
-                      return OrdersItem(
-                        order: state.activeOrders[index],
-                        isActive: true,
-                      );
-                    },
-                  )
-                      : _resultEmpty(),
-                ),
-                state.isHistoryLoading
-                    ? const Loading()
-                    : SmartRefresher(
-                  controller: historyRefreshController,
-                  enablePullDown: true,
-                  enablePullUp: true,
-                  onRefresh: () {
-                    event.fetchHistoryOrdersPage(context, historyRefreshController, isRefresh: true);
-                    historyRefreshController.refreshCompleted();
-                  },
-                  onLoading: () {
-                    event.fetchHistoryOrdersPage(context, historyRefreshController);
-                  },
-                  child: ListView.builder(
-                    padding: EdgeInsets.only(top: 24.h),
-                    itemCount: state.historyOrders.length,
-                    itemBuilder: (context, index) {
-                      return OrdersItem(
-                        order: state.historyOrders[index],
-                        isActive: false,
-                      );
-                    },
-                  ),
-                ),
-                state.isRefundLoading
-                    ? const Loading()
-                    : SmartRefresher(
-                  controller: refundRefreshController,
-                  enablePullDown: true,
-                  enablePullUp: true,
-                  onRefresh: () {
-                    event.fetchRefundOrdersPage(context, refundRefreshController, isRefresh: true);
-                    refundRefreshController.refreshCompleted();
-                  },
-                  onLoading: () {
-                    event.fetchRefundOrdersPage(context, refundRefreshController);
-                  },
-                  child: ListView.builder(
-                    padding: EdgeInsets.only(top: 24.h),
-                    itemCount: state.refundOrders.length,
-                    itemBuilder: (context, index) {
-                      return OrdersItem(
-                        isRefund: true,
-                        isActive: false,
-                        refund: state.refundOrders[index],
-                      );
-                    },
-                  ),
-                ),
-              ]),
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  state.isActiveLoading
+                      ? const Loading()
+                      : SmartRefresher(
+                          controller: activeRefreshController,
+                          enablePullDown: true,
+                          enablePullUp: true,
+                          onRefresh: () {
+                            event.fetchActiveOrdersPage(
+                              context,
+                              activeRefreshController,
+                              isRefresh: true,
+                            );
+                            activeRefreshController.refreshCompleted();
+                          },
+                          onLoading: () {
+                            event.fetchActiveOrdersPage(
+                              context,
+                              activeRefreshController,
+                            );
+                          },
+                          child: state.activeOrders.isNotEmpty
+                              ? ListView.builder(
+                                  shrinkWrap: true,
+                                  padding: EdgeInsets.only(top: 24.h),
+                                  itemCount: state.activeOrders.length,
+                                  itemBuilder: (context, index) {
+                                    return OrdersItem(
+                                      order: state.activeOrders[index],
+                                      isActive: true,
+                                    );
+                                  },
+                                )
+                              : _resultEmpty(),
+                        ),
+                  state.isHistoryLoading
+                      ? const Loading()
+                      : SmartRefresher(
+                          controller: historyRefreshController,
+                          enablePullDown: true,
+                          enablePullUp: true,
+                          onRefresh: () {
+                            event.fetchHistoryOrdersPage(
+                              context,
+                              historyRefreshController,
+                              isRefresh: true,
+                            );
+                            historyRefreshController.refreshCompleted();
+                          },
+                          onLoading: () {
+                            event.fetchHistoryOrdersPage(
+                              context,
+                              historyRefreshController,
+                            );
+                          },
+                          child: ListView.builder(
+                            padding: EdgeInsets.only(top: 24.h),
+                            itemCount: state.historyOrders.length,
+                            itemBuilder: (context, index) {
+                              return OrdersItem(
+                                order: state.historyOrders[index],
+                                isActive: false,
+                              );
+                            },
+                          ),
+                        ),
+                  state.isRefundLoading
+                      ? const Loading()
+                      : SmartRefresher(
+                          controller: refundRefreshController,
+                          enablePullDown: true,
+                          enablePullUp: true,
+                          onRefresh: () {
+                            event.fetchRefundOrdersPage(
+                              context,
+                              refundRefreshController,
+                              isRefresh: true,
+                            );
+                            refundRefreshController.refreshCompleted();
+                          },
+                          onLoading: () {
+                            event.fetchRefundOrdersPage(
+                              context,
+                              refundRefreshController,
+                            );
+                          },
+                          child: ListView.builder(
+                            padding: EdgeInsets.only(top: 24.h),
+                            itemCount: state.refundOrders.length,
+                            itemBuilder: (context, index) {
+                              return OrdersItem(
+                                isRefund: true,
+                                isActive: false,
+                                refund: state.refundOrders[index],
+                              );
+                            },
+                          ),
+                        ),
+                ],
+              ),
             ),
           ],
         ),
-
       ),
     );
   }
@@ -272,7 +297,8 @@ class ParcelListTab extends ConsumerStatefulWidget {
   ConsumerState<ParcelListTab> createState() => _ParcelListTabState();
 }
 
-class _ParcelListTabState extends ConsumerState<ParcelListTab> with SingleTickerProviderStateMixin {
+class _ParcelListTabState extends ConsumerState<ParcelListTab>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   late RefreshController activeRefreshController;
   late RefreshController historyRefreshController;
@@ -320,7 +346,6 @@ class _ParcelListTabState extends ConsumerState<ParcelListTab> with SingleTicker
         backgroundColor: isDarkMode ? AppStyle.mainBackDark : AppStyle.bgGrey,
         body: Column(
           children: [
-
             16.verticalSpace,
             CustomTabBar(
               isScrollable: false,
@@ -328,63 +353,79 @@ class _ParcelListTabState extends ConsumerState<ParcelListTab> with SingleTicker
               tabs: _tabs,
             ),
             Expanded(
-              child: TabBarView(controller: _tabController, children: [
-                state.isActiveLoading
-                    ? const Loading()
-                    : SmartRefresher(
-                  controller: activeRefreshController,
-                  enablePullDown: true,
-                  enablePullUp: true,
-                  onRefresh: () {
-                    event.fetchActiveOrdersPage(context, activeRefreshController, isRefresh: true);
-                    activeRefreshController.refreshCompleted();
-                  },
-                  onLoading: () {
-                    event.fetchActiveOrdersPage(context, activeRefreshController);
-                  },
-                  child: state.activeOrders.isNotEmpty
-                      ? ListView.builder(
-                    shrinkWrap: true,
-                    padding: EdgeInsets.only(top: 24.h),
-                    itemCount: state.activeOrders.length,
-                    itemBuilder: (context, index) {
-                      return ParcelItem(
-                        parcel: state.activeOrders[index],
-                        isActive: true,
-                      );
-                    },
-                  )
-                      : _resultEmpty(),
-                ),
-                state.isHistoryLoading
-                    ? const Loading()
-                    : SmartRefresher(
-                  controller: historyRefreshController,
-                  enablePullDown: true,
-                  enablePullUp: true,
-                  onRefresh: () {
-                    event.fetchHistoryOrdersPage(context, historyRefreshController, isRefresh: true);
-                    historyRefreshController.refreshCompleted();
-                  },
-                  onLoading: () {
-                    event.fetchHistoryOrdersPage(context, historyRefreshController);
-                  },
-                  child: ListView.builder(
-                    padding: EdgeInsets.only(top: 24.h),
-                    itemCount: state.historyOrders.length,
-                    itemBuilder: (context, index) {
-                      return ParcelItem(
-                        parcel: state.historyOrders[index],
-                        isActive: false,
-                      );
-                    },
-                  ),
-                ),
-              ]),
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  state.isActiveLoading
+                      ? const Loading()
+                      : SmartRefresher(
+                          controller: activeRefreshController,
+                          enablePullDown: true,
+                          enablePullUp: true,
+                          onRefresh: () {
+                            event.fetchActiveOrdersPage(
+                              context,
+                              activeRefreshController,
+                              isRefresh: true,
+                            );
+                            activeRefreshController.refreshCompleted();
+                          },
+                          onLoading: () {
+                            event.fetchActiveOrdersPage(
+                              context,
+                              activeRefreshController,
+                            );
+                          },
+                          child: state.activeOrders.isNotEmpty
+                              ? ListView.builder(
+                                  shrinkWrap: true,
+                                  padding: EdgeInsets.only(top: 24.h),
+                                  itemCount: state.activeOrders.length,
+                                  itemBuilder: (context, index) {
+                                    return ParcelItem(
+                                      parcel: state.activeOrders[index],
+                                      isActive: true,
+                                    );
+                                  },
+                                )
+                              : _resultEmpty(),
+                        ),
+                  state.isHistoryLoading
+                      ? const Loading()
+                      : SmartRefresher(
+                          controller: historyRefreshController,
+                          enablePullDown: true,
+                          enablePullUp: true,
+                          onRefresh: () {
+                            event.fetchHistoryOrdersPage(
+                              context,
+                              historyRefreshController,
+                              isRefresh: true,
+                            );
+                            historyRefreshController.refreshCompleted();
+                          },
+                          onLoading: () {
+                            event.fetchHistoryOrdersPage(
+                              context,
+                              historyRefreshController,
+                            );
+                          },
+                          child: ListView.builder(
+                            padding: EdgeInsets.only(top: 24.h),
+                            itemCount: state.historyOrders.length,
+                            itemBuilder: (context, index) {
+                              return ParcelItem(
+                                parcel: state.historyOrders[index],
+                                isActive: false,
+                              );
+                            },
+                          ),
+                        ),
+                ],
+              ),
             ),
           ],
         ),
-
       ),
     );
   }
@@ -395,4 +436,3 @@ class _ParcelListTabState extends ConsumerState<ParcelListTab> with SingleTicker
 Widget _resultEmpty() {
   return EmptyBadge();
 }
-

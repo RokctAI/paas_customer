@@ -7,7 +7,13 @@ class SelectItem extends StatelessWidget {
   final bool isActive;
   final String title;
   final String? desc;
-  const SelectItem({super.key, required this.onTap, required this.isActive, required this.title, this.desc, });
+  const SelectItem({
+    super.key,
+    required this.onTap,
+    required this.isActive,
+    required this.title,
+    this.desc,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +24,9 @@ class SelectItem extends StatelessWidget {
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-              color: AppStyle.white,
-              borderRadius:
-              BorderRadius.circular(10.r)),
+            color: AppStyle.white,
+            borderRadius: BorderRadius.circular(10.r),
+          ),
           child: Padding(
             padding: EdgeInsets.all(18.r),
             child: Row(
@@ -31,16 +37,13 @@ class SelectItem extends StatelessWidget {
                   width: 18.w,
                   height: 18.h,
                   decoration: BoxDecoration(
-                      color: isActive
-                          ? AppStyle.primary
-                          : AppStyle.transparent,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                          color: isActive
-                              ? AppStyle.black
-                              : AppStyle.textGrey,
-                          width:
-                          isActive ? 4.r : 2.r)),
+                    color: isActive ? AppStyle.primary : AppStyle.transparent,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: isActive ? AppStyle.black : AppStyle.textGrey,
+                      width: isActive ? 4.r : 2.r,
+                    ),
+                  ),
                 ),
                 16.horizontalSpace,
                 Column(
@@ -53,16 +56,18 @@ class SelectItem extends StatelessWidget {
                         color: AppStyle.black,
                       ),
                     ),
-                    desc != null  ? SizedBox(
-                      width: MediaQuery.sizeOf(context).width/1.5,
-                      child: Text(
-                        desc ?? "",
-                        style: AppStyle.interNormal(
-                          size: 14,
-                          color: AppStyle.textGrey,
-                        ),
-                      ),
-                    ) : const SizedBox.shrink(),
+                    desc != null
+                        ? SizedBox(
+                            width: MediaQuery.sizeOf(context).width / 1.5,
+                            child: Text(
+                              desc ?? "",
+                              style: AppStyle.interNormal(
+                                size: 14,
+                                color: AppStyle.textGrey,
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink(),
                   ],
                 ),
               ],
@@ -73,4 +78,3 @@ class SelectItem extends StatelessWidget {
     );
   }
 }
-

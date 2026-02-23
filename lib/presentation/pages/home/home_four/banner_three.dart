@@ -85,7 +85,9 @@ class _BannerThreeState extends State<BannerThree> {
               controller: widget.bannerController,
               onLoading: () async {
                 await widget.notifier.fetchBannerPage(
-                    context, widget.bannerController);
+                  context,
+                  widget.bannerController,
+                );
               },
               child: AnimationLimiter(
                 child: PageView.builder(
@@ -104,9 +106,7 @@ class _BannerThreeState extends State<BannerThree> {
                       child: SlideAnimation(
                         verticalOffset: 50.0,
                         child: FadeInAnimation(
-                          child: BannerItemThree(
-                            banner: widget.banners[index],
-                          ),
+                          child: BannerItemThree(banner: widget.banners[index]),
                         ),
                       ),
                     );

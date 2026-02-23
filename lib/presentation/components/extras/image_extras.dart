@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/presentation/components/custom_network_image.dart';
@@ -47,10 +46,11 @@ class ImageExtras extends StatelessWidget {
                   child: Stack(
                     children: [
                       CustomNetworkImage(
-                          url: uiExtra.value,
-                          width: 42.r,
-                          height: 42.r,
-                          radius: 20.r),
+                        url: uiExtra.value,
+                        width: 42.r,
+                        height: 42.r,
+                        radius: 20.r,
+                      ),
                       if (uiExtra.isSelected)
                         Align(
                           alignment: Alignment.center,
@@ -77,4 +77,3 @@ class ImageExtras extends StatelessWidget {
     );
   }
 }
-

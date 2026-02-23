@@ -9,4 +9,3 @@ abstract class DrawRepositoryFacade {
     required LatLng end,
   });
 }
-

@@ -10,10 +10,7 @@ import '../../../theme/theme.dart';
 class LoanContractScreen extends ConsumerStatefulWidget {
   final dynamic loanApplication;
 
-  const LoanContractScreen({
-    super.key,
-    required this.loanApplication,
-  });
+  const LoanContractScreen({super.key, required this.loanApplication});
 
   @override
   ConsumerState<LoanContractScreen> createState() => _LoanContractScreenState();
@@ -56,7 +53,8 @@ class _LoanContractScreenState extends ConsumerState<LoanContractScreen> {
       final newProgress = maxScroll > 0 ? (currentScroll / maxScroll) : 0.0;
 
       // Check if user has scrolled to at least 90% of the content
-      final hasReachedBottom = maxScroll > 0 && currentScroll >= (maxScroll * 0.9);
+      final hasReachedBottom =
+          maxScroll > 0 && currentScroll >= (maxScroll * 0.9);
 
       setState(() {
         _scrollProgress = newProgress;
@@ -72,7 +70,7 @@ class _LoanContractScreenState extends ConsumerState<LoanContractScreen> {
 
     try {
       final result = await _loansRepository.fetchLoanContract(
-          widget.loanApplication['id']
+        widget.loanApplication['id'],
       );
 
       result.when(
@@ -110,7 +108,8 @@ class _LoanContractScreenState extends ConsumerState<LoanContractScreen> {
       // Passing both loanId and contractId parameters
       final result = await _loansRepository.acceptLoanContract(
         loanId: widget.loanApplication['id'],
-        contractId: _contract.id, // Access the id property of the contract object
+        contractId:
+            _contract.id, // Access the id property of the contract object
       );
 
       result.when(
@@ -127,18 +126,12 @@ class _LoanContractScreenState extends ConsumerState<LoanContractScreen> {
           Navigator.of(context).pop();
         },
         failure: (error, statusCode) {
-          AppHelpers.showCheckTopSnackBarInfo(
-            context,
-            error,
-          );
+          AppHelpers.showCheckTopSnackBarInfo(context, error);
         },
       );
     } catch (e) {
       if (!mounted) return;
-      AppHelpers.showCheckTopSnackBarInfo(
-        context,
-        'Failed to accept contract',
-      );
+      AppHelpers.showCheckTopSnackBarInfo(context, 'Failed to accept contract');
     } finally {
       setState(() {
         _isLoading = false;
@@ -158,19 +151,13 @@ class _LoanContractScreenState extends ConsumerState<LoanContractScreen> {
 
       result.when(
         success: (_) {
-          AppHelpers.showCheckTopSnackBarDone(
-            context,
-            'Contract declined',
-          );
+          AppHelpers.showCheckTopSnackBarDone(context, 'Contract declined');
 
           // Use Navigator.pop instead of context.router.pop
           Navigator.of(context).pop();
         },
         failure: (error, statusCode) {
-          AppHelpers.showCheckTopSnackBarInfo(
-            context,
-            error,
-          );
+          AppHelpers.showCheckTopSnackBarInfo(context, error);
         },
       );
     } catch (e) {
@@ -202,10 +189,7 @@ class _LoanContractScreenState extends ConsumerState<LoanContractScreen> {
           );
         },
         failure: (error, statusCode) {
-          AppHelpers.showCheckTopSnackBarInfo(
-            context,
-            error,
-          );
+          AppHelpers.showCheckTopSnackBarInfo(context, error);
         },
       );
     } catch (e) {
@@ -221,9 +205,7 @@ class _LoanContractScreenState extends ConsumerState<LoanContractScreen> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(color: AppStyle.primary),
-        ),
+        body: Center(child: CircularProgressIndicator(color: AppStyle.primary)),
       );
     }
 
@@ -299,7 +281,9 @@ class _LoanContractScreenState extends ConsumerState<LoanContractScreen> {
                     child: LinearProgressIndicator(
                       value: _scrollProgress,
                       backgroundColor: AppStyle.borderColor,
-                      valueColor: AlwaysStoppedAnimation<Color>(AppStyle.primary),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        AppStyle.primary,
+                      ),
                     ),
                   ),
                 ),
@@ -312,7 +296,10 @@ class _LoanContractScreenState extends ConsumerState<LoanContractScreen> {
                     right: 0,
                     child: Center(
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 16.w,
+                          vertical: 8.h,
+                        ),
                         decoration: BoxDecoration(
                           color: AppStyle.primary.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(20.r),
@@ -320,11 +307,18 @@ class _LoanContractScreenState extends ConsumerState<LoanContractScreen> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(Icons.arrow_downward, color: AppStyle.primary, size: 16.r),
+                            Icon(
+                              Icons.arrow_downward,
+                              color: AppStyle.primary,
+                              size: 16.r,
+                            ),
                             8.horizontalSpace,
                             Text(
                               'Please review the entire contract',
-                              style: AppStyle.interNormal(size: 12.sp, color: AppStyle.primary),
+                              style: AppStyle.interNormal(
+                                size: 12.sp,
+                                color: AppStyle.primary,
+                              ),
                             ),
                           ],
                         ),
@@ -361,7 +355,10 @@ class _LoanContractScreenState extends ConsumerState<LoanContractScreen> {
                     padding: EdgeInsets.only(bottom: 12.h),
                     child: Text(
                       'Please read the full contract terms before accepting',
-                      style: AppStyle.interNormal(size: 12.sp, color: AppStyle.textGrey),
+                      style: AppStyle.interNormal(
+                        size: 12.sp,
+                        color: AppStyle.textGrey,
+                      ),
                       textAlign: TextAlign.center,
                     ),
                   ),

@@ -4,14 +4,14 @@ import 'package:foodyman/presentation/app_assets.dart';
 
 import 'infrastructure/services/enums.dart';
 
-
 abstract class AppConstants {
   AppConstants._();
 
   static const bool isDemo = bool.fromEnvironment('IS_DEMO');
   static const bool isPhoneFirebase = true;
   static const int scheduleInterval = 60;
-  static SignUpType get signUpType => SignUpType.values.byName(const String.fromEnvironment('SIGN_UP_TYPE'));
+  static SignUpType get signUpType =>
+      SignUpType.values.byName(const String.fromEnvironment('SIGN_UP_TYPE'));
   static const bool use24Format = true;
   static const double radius = 16;
 
@@ -33,8 +33,12 @@ abstract class AppConstants {
   static const String routingBaseUrl = String.fromEnvironment('ROUTING_API');
   static const String routingKey = String.fromEnvironment('ROUTING_KEY');
   static const String deepLinkHost = String.fromEnvironment('DEEP_LINK_URL');
-  static const String androidPackageName = String.fromEnvironment('CUSTOMER_ANDROID_PACKAGE_NAME');
-  static const String iosPackageName = String.fromEnvironment('CUSTOMER_IOS_PACKAGE_NAME');
+  static const String androidPackageName = String.fromEnvironment(
+    'CUSTOMER_ANDROID_PACKAGE_NAME',
+  );
+  static const String iosPackageName = String.fromEnvironment(
+    'CUSTOMER_IOS_PACKAGE_NAME',
+  );
 
   /// newStores and Recommendation Time
   static int newShopDays = 60;
@@ -63,25 +67,35 @@ abstract class AppConstants {
   );
 
   static const String demoUserLogin = String.fromEnvironment('DEMO_USER_LOGIN');
-  static const String demoUserPassword = String.fromEnvironment('DEMO_USER_PASSWORD');
+  static const String demoUserPassword = String.fromEnvironment(
+    'DEMO_USER_PASSWORD',
+  );
 
   /// locales
   static String localeCodeEn = const String.fromEnvironment('LOCALE_CODE');
 
   /// auth phone fields
-  static bool isNumberLengthAlwaysSame = const bool.fromEnvironment('IS_NUMBER_LENGTH_ALWAYS_SAME');
+  static bool isNumberLengthAlwaysSame = const bool.fromEnvironment(
+    'IS_NUMBER_LENGTH_ALWAYS_SAME',
+  );
   static const String countryCodeISO = String.fromEnvironment('COUNTRY_ISO');
   static bool showFlag = const bool.fromEnvironment('SHOW_FLAG');
   static bool showArrowIcon = const bool.fromEnvironment('SHOW_ARROW_ICON');
 
   /// location
-  static final double demoLatitude = double.parse(const String.fromEnvironment('DEMO_LATITUDE'));
-  static final double demoLongitude = double.parse(const String.fromEnvironment('DEMO_LONGITUDE'));
+  static final double demoLatitude = double.parse(
+    const String.fromEnvironment('DEMO_LATITUDE'),
+  );
+  static final double demoLongitude = double.parse(
+    const String.fromEnvironment('DEMO_LONGITUDE'),
+  );
   static const double pinLoadingMin = 0.116666667;
   static const double pinLoadingMax = 0.611111111;
 
   /// Weather
-  static const String openWeatherApiKey = String.fromEnvironment('OPEN_WEATHER_API_KEY');
+  static const String openWeatherApiKey = String.fromEnvironment(
+    'OPEN_WEATHER_API_KEY',
+  );
   static const bool weatherIcon = true;
   static const int rainPOP = 60;
 
@@ -113,15 +127,8 @@ abstract class AppConstants {
     TrKeys.set,
   ];
 
-  static const payLater = [
-    "progress",
-    "canceled",
-    "rejected",
-  ];
-  static const genderList = [
-    "male",
-    "female",
-  ];
+  static const payLater = ["progress", "canceled", "rejected"];
+  static const genderList = ["male", "female"];
 
   static const bool fixed = true;
 

@@ -28,13 +28,12 @@ class MobileTranslationsResponse {
     bool? status,
     String? message,
     Map<String, dynamic>? data,
-  }) =>
-      MobileTranslationsResponse(
-        timestamp: timestamp ?? _timestamp,
-        status: status ?? _status,
-        message: message ?? _message,
-        data: data ?? _data,
-      );
+  }) => MobileTranslationsResponse(
+    timestamp: timestamp ?? _timestamp,
+    status: status ?? _status,
+    message: message ?? _message,
+    data: data ?? _data,
+  );
 
   String? get timestamp => _timestamp;
 
@@ -44,4 +43,3 @@ class MobileTranslationsResponse {
 
   Map<String, dynamic>? get data => _data;
 }
-

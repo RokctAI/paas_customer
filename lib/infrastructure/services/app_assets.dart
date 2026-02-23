@@ -37,7 +37,7 @@ class AppAssets {
   static const String pngSaleBanner = '$_pngPath/sale_banner.png';
   static const String pngLookMobile = '$_pngPath/look_mobile.png';
 
-///Added by Sinyage
+  ///Added by Sinyage
   static const String pngLogo = '$_pngPath/logo.png';
   static const String pngLogo2 = '$_pngPath/water/logo.png';
   static const String pngMotto = '$_pngPath/motto.png';
@@ -45,4 +45,3 @@ class AppAssets {
   /// lottie
   static const String lottiePin = '$_lottiePath/pin.json';
 }
-

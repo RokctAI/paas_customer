@@ -48,27 +48,31 @@ class _AppUsageBadgeState extends State<AppUsageBadge> {
       ),
       child: isLoading
           ? SizedBox(
-        width: 16.r,
-        height: 16.r,
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          valueColor: AlwaysStoppedAnimation<Color>(AppStyle.primary),
-        ),
-      )
+              width: 16.r,
+              height: 16.r,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color>(AppStyle.primary),
+              ),
+            )
           : Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Remix.calendar_2_line, color: AppStyle.primary, size: 16.r),
-          SizedBox(width: 4.w),
-          Text(
-            '$daysInAppThisYear ${AppHelpers.getTranslation(TrKeys.daysInAppThisYear)}',
-            style: AppStyle.interNormal(
-              size: 12.sp,
-              color: AppStyle.primary,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Remix.calendar_2_line,
+                  color: AppStyle.primary,
+                  size: 16.r,
+                ),
+                SizedBox(width: 4.w),
+                Text(
+                  '$daysInAppThisYear ${AppHelpers.getTranslation(TrKeys.daysInAppThisYear)}',
+                  style: AppStyle.interNormal(
+                    size: 12.sp,
+                    color: AppStyle.primary,
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }

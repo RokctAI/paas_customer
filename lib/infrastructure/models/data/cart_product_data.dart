@@ -48,13 +48,14 @@ class CartProductData {
     Stocks? selectedStock,
   }) {
     return CartProductData(
-        shopId: shopId ?? _shopId,
-        quantity: quantity ?? _quantity,
-        imageUrl: imageUrl ?? _imageUrl,
-        title: title ?? _title,
-        selectedStock: selectedStock ?? _selectedStock,
-        price: price ?? _price,
-        id: id ?? _id);
+      shopId: shopId ?? _shopId,
+      quantity: quantity ?? _quantity,
+      imageUrl: imageUrl ?? _imageUrl,
+      title: title ?? _title,
+      selectedStock: selectedStock ?? _selectedStock,
+      price: price ?? _price,
+      id: id ?? _id,
+    );
   }
 
   num? get price => _price;
@@ -85,4 +86,3 @@ class CartProductData {
     return map;
   }
 }
-

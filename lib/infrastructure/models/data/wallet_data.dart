@@ -45,7 +45,9 @@ class WalletHistoryData {
       updatedAt: json['updated_at'],
       user: json['user'] != null ? UserData.fromJson(json['user']) : null,
       author: json['author'] != null ? UserData.fromJson(json['author']) : null,
-      transaction: json['transaction'] != null ? TransactionData.fromJson(json['transaction']) : null,
+      transaction: json['transaction'] != null
+          ? TransactionData.fromJson(json['transaction'])
+          : null,
     );
   }
 }

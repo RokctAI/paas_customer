@@ -1,4 +1,3 @@
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +22,10 @@ void main() async {
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
 
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: AppStyle.transparent,
@@ -37,11 +38,5 @@ void main() async {
   );
   await LocalStorage.init();
   setUpDependencies();
-  runApp(
-    ProviderScope(
-      child: AppInitializerWidget(
-        child: AppWidget(),
-      ),
-    ),
-  );
+  runApp(ProviderScope(child: AppInitializerWidget(child: AppWidget())));
 }

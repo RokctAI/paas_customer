@@ -28,20 +28,17 @@ class ImageDialog extends StatelessWidget {
               ),
             ),
             GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Padding(
-                  padding: REdgeInsets.all(4),
-                  child: const Icon(FlutterRemix.close_circle_line),
-                )),
+              onTap: () => Navigator.pop(context),
+              child: Padding(
+                padding: REdgeInsets.all(4),
+                child: const Icon(FlutterRemix.close_circle_line),
+              ),
+            ),
           ],
         ),
         12.verticalSpace,
-        CustomNetworkImage(
-          url: img,
-          radius: 16,
-        ),
+        CustomNetworkImage(url: img, radius: 16),
       ],
     );
   }
 }
-

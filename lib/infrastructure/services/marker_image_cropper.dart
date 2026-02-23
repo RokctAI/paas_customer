@@ -24,7 +24,8 @@ class ImageCropperForMarker {
     String tempPath = (await getTemporaryDirectory()).path;
     File file = File('$tempPath/app_logo.png');
     await file.writeAsBytes(
-        bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes));
+      bytes.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes),
+    );
     return file;
   }
 
@@ -48,14 +49,19 @@ class ImageCropperForMarker {
     int width,
   ) async {
     ByteData bytes = await rootBundle.load('assets/images/app_logo.png');
-    final img.Image? baseSizeImage =
-        img.decodeImage(data ?? bytes.buffer.asUint8List());
+    final img.Image? baseSizeImage = img.decodeImage(
+      data ?? bytes.buffer.asUint8List(),
+    );
     final img.Image? newSizeImage = img.decodeImage(bytes.buffer.asUint8List());
 
-    final img.Image resizeImage = img.copyResize(baseSizeImage ?? newSizeImage!,
-        height: height, width: width);
+    final img.Image resizeImage = img.copyResize(
+      baseSizeImage ?? newSizeImage!,
+      height: height,
+      width: width,
+    );
     final Codec codec = await instantiateImageCodec(
-        Uint8List.fromList(img.encodePng(resizeImage)));
+      Uint8List.fromList(img.encodePng(resizeImage)),
+    );
     final FrameInfo frameInfo = await codec.getNextFrame();
     return frameInfo.image;
   }
@@ -95,13 +101,9 @@ class ImageCropperForMarker {
       );
     canvas.drawRRect(
       RRect.fromRectAndRadius(
-          Rect.fromLTRB(
-            drawImageWidth,
-            drawImageHeight,
-            imageW,
-            imageH,
-          ),
-          Radius.circular(imageW / 4)),
+        Rect.fromLTRB(drawImageWidth, drawImageHeight, imageW, imageH),
+        Radius.circular(imageW / 4),
+      ),
       Paint()
         ..color = AppStyle.white.withOpacity(0.75)
         ..imageFilter = ImageFilter.blur(sigmaX: 7, sigmaY: 7),
@@ -111,4 +113,3 @@ class ImageCropperForMarker {
     return canvas;
   }
 }
-

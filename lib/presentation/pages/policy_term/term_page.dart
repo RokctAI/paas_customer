@@ -37,52 +37,44 @@ class _TermPageState extends ConsumerState<TermPage> {
       body: state.isPolicyLoading
           ? const Center(child: Loading())
           : Column(
-        children: [
-          CommonAppBar(
-            child: Row(
               children: [
-                Image.asset(
-                  AppAssets.pngLogo,
-                  width: 40,
-                  height: 40,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(
-                      state.policy?.title ?? "",
-                      style: AppStyle.interSemi(color: AppStyle.primary),
-                    ),
+                CommonAppBar(
+                  child: Row(
+                    children: [
+                      Image.asset(AppAssets.pngLogo, width: 40, height: 40),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(
+                            state.policy?.title ?? "",
+                            style: AppStyle.interSemi(color: AppStyle.primary),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+                state.isTermLoading
+                    ? const Center(child: Loading())
+                    : Expanded(
+                        child: SingleChildScrollView(
+                          padding: EdgeInsets.all(16.r),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Html(
+                                data: state.term?.description ?? "",
+                                style: {"body": Style()},
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
               ],
             ),
-          ),
-          state.isTermLoading
-              ? const Center(child: Loading())
-              : Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.all(16.r),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-
-                  Html(
-                    data: state.term?.description ?? "",
-                    style: {
-                      "body": Style(),
-                    },
-                  )
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: const PopButton(),
     );
   }
 }
-

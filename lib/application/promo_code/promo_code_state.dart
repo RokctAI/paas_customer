@@ -11,4 +11,3 @@ class PromoCodeState with _$PromoCodeState {
 
   const PromoCodeState._();
 }
-

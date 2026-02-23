@@ -53,12 +53,14 @@ class ShopBarItem extends StatelessWidget {
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 4.h, horizontal: 12.w),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 4.h,
+                        horizontal: 12.w,
+                      ),
                       decoration: BoxDecoration(
-                          color: AppStyle.black.withOpacity(0.4),
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(100.r))),
+                        color: AppStyle.black.withOpacity(0.4),
+                        borderRadius: BorderRadius.all(Radius.circular(100.r)),
+                      ),
                       child: Text(
                         story?.productTitle ?? "",
                         style: AppStyle.interNormal(
@@ -105,4 +107,3 @@ class ShopBarItem extends StatelessWidget {
     );
   }
 }
-

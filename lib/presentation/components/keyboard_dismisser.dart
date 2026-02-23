@@ -85,8 +85,7 @@ class KeyboardDismisser extends StatelessWidget {
     onSecondaryTapUp: gestures.contains(GestureType.onSecondaryTapUp)
         ? (_) => _unfocus(context)
         : null,
-    onSecondaryTapCancel:
-    gestures.contains(GestureType.onSecondaryTapCancel)
+    onSecondaryTapCancel: gestures.contains(GestureType.onSecondaryTapCancel)
         ? () => _unfocus(context)
         : null,
     onDoubleTap: gestures.contains(GestureType.onDoubleTap)
@@ -98,8 +97,7 @@ class KeyboardDismisser extends StatelessWidget {
     onLongPressStart: gestures.contains(GestureType.onLongPressStart)
         ? (_) => _unfocus(context)
         : null,
-    onLongPressMoveUpdate:
-    gestures.contains(GestureType.onLongPressMoveUpdate)
+    onLongPressMoveUpdate: gestures.contains(GestureType.onLongPressMoveUpdate)
         ? (_) => _unfocus(context)
         : null,
     onLongPressUp: gestures.contains(GestureType.onLongPressUp)
@@ -120,16 +118,13 @@ class KeyboardDismisser extends StatelessWidget {
     onVerticalDragEnd: gestures.contains(GestureType.onVerticalDragEnd)
         ? (_) => _unfocus(context)
         : null,
-    onVerticalDragCancel:
-    gestures.contains(GestureType.onVerticalDragCancel)
+    onVerticalDragCancel: gestures.contains(GestureType.onVerticalDragCancel)
         ? () => _unfocus(context)
         : null,
-    onHorizontalDragDown:
-    gestures.contains(GestureType.onHorizontalDragDown)
+    onHorizontalDragDown: gestures.contains(GestureType.onHorizontalDragDown)
         ? (_) => _unfocus(context)
         : null,
-    onHorizontalDragStart:
-    gestures.contains(GestureType.onHorizontalDragStart)
+    onHorizontalDragStart: gestures.contains(GestureType.onHorizontalDragStart)
         ? (_) => _unfocus(context)
         : null,
     onHorizontalDragUpdate: _gesturesContainsDirectionalPanUpdate()
@@ -139,7 +134,7 @@ class KeyboardDismisser extends StatelessWidget {
         ? (_) => _unfocus(context)
         : null,
     onHorizontalDragCancel:
-    gestures.contains(GestureType.onHorizontalDragCancel)
+        gestures.contains(GestureType.onHorizontalDragCancel)
         ? () => _unfocus(context)
         : null,
     onForcePressStart: gestures.contains(GestureType.onForcePressStart)
@@ -181,10 +176,7 @@ class KeyboardDismisser extends StatelessWidget {
   void _unfocus(BuildContext context) =>
       WidgetsBinding.instance.focusManager.primaryFocus?.unfocus();
 
-  void _unfocusWithDetails(
-      BuildContext context,
-      DragUpdateDetails details,
-      ) {
+  void _unfocusWithDetails(BuildContext context, DragUpdateDetails details) {
     final dy = details.delta.dy;
     final dx = details.delta.dx;
     final isDragMainlyHorizontal = dx.abs() - dy.abs() > 0;
@@ -209,8 +201,7 @@ class KeyboardDismisser extends StatelessWidget {
 
   bool _gesturesContainsDirectionalPanUpdate() =>
       gestures.contains(GestureType.onPanUpdateDownDirection) ||
-          gestures.contains(GestureType.onPanUpdateUpDirection) ||
-          gestures.contains(GestureType.onPanUpdateRightDirection) ||
-          gestures.contains(GestureType.onPanUpdateLeftDirection);
+      gestures.contains(GestureType.onPanUpdateUpDirection) ||
+      gestures.contains(GestureType.onPanUpdateRightDirection) ||
+      gestures.contains(GestureType.onPanUpdateLeftDirection);
 }
-

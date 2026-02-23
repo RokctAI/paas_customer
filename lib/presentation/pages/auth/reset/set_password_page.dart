@@ -16,7 +16,7 @@ class SetPasswordPage extends ConsumerWidget {
   const SetPasswordPage({super.key});
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(resetPasswordProvider.notifier);
     final state = ref.watch(resetPasswordProvider);
     final bool isLtr = LocalStorage.getLangLtr();
@@ -25,14 +25,15 @@ class SetPasswordPage extends ConsumerWidget {
       child: AbsorbPointer(
         absorbing: state.isLoading,
         child: KeyboardDismisser(
-            child: Container(
-              padding: MediaQuery.of(context).viewInsets,
-              decoration: BoxDecoration(
-                  color: AppStyle.bgGrey.withOpacity(0.96),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16.r),
-                    topRight: Radius.circular(16.r),
-                  )),
+          child: Container(
+            padding: MediaQuery.of(context).viewInsets,
+            decoration: BoxDecoration(
+              color: AppStyle.bgGrey.withOpacity(0.96),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16.r),
+                topRight: Radius.circular(16.r),
+              ),
+            ),
             width: double.infinity,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -43,11 +44,16 @@ class SetPasswordPage extends ConsumerWidget {
                   children: [
                     Column(
                       children: [
-                        AppBarBottomSheet(title: AppHelpers.getTranslation(TrKeys.resetPassword),),
+                        AppBarBottomSheet(
+                          title: AppHelpers.getTranslation(
+                            TrKeys.resetPassword,
+                          ),
+                        ),
                         40.verticalSpace,
                         OutlinedBorderTextField(
-                          label: AppHelpers.getTranslation(TrKeys.password)
-                              .toUpperCase(),
+                          label: AppHelpers.getTranslation(
+                            TrKeys.password,
+                          ).toUpperCase(),
                           obscure: state.showPassword,
                           suffixIcon: IconButton(
                             splashRadius: 25,
@@ -62,14 +68,17 @@ class SetPasswordPage extends ConsumerWidget {
                           onChanged: (name) => notifier.setPassword(name),
                           isError: state.isPasswordInvalid,
                           descriptionText: state.isPasswordInvalid
-                              ? AppHelpers.getTranslation(TrKeys
-                              .passwordShouldContainMinimum8Characters)
+                              ? AppHelpers.getTranslation(
+                                  TrKeys
+                                      .passwordShouldContainMinimum8Characters,
+                                )
                               : null,
                         ),
                         34.verticalSpace,
                         OutlinedBorderTextField(
-                          label: AppHelpers.getTranslation(TrKeys.password)
-                              .toUpperCase(),
+                          label: AppHelpers.getTranslation(
+                            TrKeys.password,
+                          ).toUpperCase(),
                           obscure: state.showConfirmPassword,
                           suffixIcon: IconButton(
                             splashRadius: 25,
@@ -82,17 +91,22 @@ class SetPasswordPage extends ConsumerWidget {
                             onPressed: () =>
                                 notifier.toggleShowConfirmPassword(),
                           ),
-                          onChanged: (name) => notifier.setConfirmPassword(name),
+                          onChanged: (name) =>
+                              notifier.setConfirmPassword(name),
                           isError: state.isConfirmPasswordInvalid,
                           descriptionText: state.isConfirmPasswordInvalid
                               ? AppHelpers.getTranslation(
-                              TrKeys.confirmPasswordIsNotTheSame)
+                                  TrKeys.confirmPasswordIsNotTheSame,
+                                )
                               : null,
                         ),
                       ],
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom,top: 120.h),
+                      padding: EdgeInsets.only(
+                        bottom: MediaQuery.paddingOf(context).bottom,
+                        top: 120.h,
+                      ),
                       child: CustomButton(
                         isLoading: state.isLoading,
                         title: AppHelpers.getTranslation(TrKeys.send),
@@ -108,10 +122,8 @@ class SetPasswordPage extends ConsumerWidget {
               ),
             ),
           ),
-
         ),
       ),
     );
   }
 }
-

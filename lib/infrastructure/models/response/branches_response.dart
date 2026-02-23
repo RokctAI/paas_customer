@@ -1,16 +1,9 @@
-
-
 import 'package:foodyman/infrastructure/models/data/shop_data.dart';
 
 import '../data/translation.dart';
 
-
 class BranchResponse {
-  BranchResponse({
-    this.data,
-    this.links,
-    this.meta,
-  });
+  BranchResponse({this.data, this.links, this.meta});
 
   List<BranchModel>? data;
   Links? links;
@@ -20,21 +13,26 @@ class BranchResponse {
     List<BranchModel>? data,
     Links? links,
     Meta? meta,
-  }) =>
-      BranchResponse(
-        data: data ?? this.data,
-        links: links ?? this.links,
-        meta: meta ?? this.meta,
-      );
+  }) => BranchResponse(
+    data: data ?? this.data,
+    links: links ?? this.links,
+    meta: meta ?? this.meta,
+  );
 
   factory BranchResponse.fromJson(Map<String, dynamic> json) => BranchResponse(
-    data: json["data"] == null ? [] : List<BranchModel>.from(json["data"]!.map((x) => BranchModel.fromJson(x))),
+    data: json["data"] == null
+        ? []
+        : List<BranchModel>.from(
+            json["data"]!.map((x) => BranchModel.fromJson(x)),
+          ),
     links: json["links"] == null ? null : Links.fromJson(json["links"]),
     meta: json["meta"] == null ? null : Meta.fromJson(json["meta"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "data": data == null
+        ? []
+        : List<dynamic>.from(data!.map((x) => x.toJson())),
     "links": links?.toJson(),
     "meta": meta?.toJson(),
   };
@@ -70,26 +68,33 @@ class BranchModel {
     ShopData? shop,
     Translation? translation,
     List<String>? locales,
-  }) =>
-      BranchModel(
-        id: id ?? this.id,
-        address: address ?? this.address,
-        location: location ?? this.location,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-        shop: shop ?? this.shop,
-        translation: translation ?? this.translation,
-        locales: locales ?? this.locales,
-      );
+  }) => BranchModel(
+    id: id ?? this.id,
+    address: address ?? this.address,
+    location: location ?? this.location,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    shop: shop ?? this.shop,
+    translation: translation ?? this.translation,
+    locales: locales ?? this.locales,
+  );
 
   factory BranchModel.fromJson(Map<String, dynamic> json) => BranchModel(
     id: json["id"],
     address: json["address"] == null ? null : Address.fromJson(json["address"]),
-    location: json["location"] == null ? null : Location.fromJson(json["location"]),
-    createdAt: json["created_at"] == null ? null : DateTime.tryParse(json["created_at"])?.toLocal(),
-    updatedAt: json["updated_at"] == null ? null : DateTime.tryParse(json["updated_at"])?.toLocal(),
+    location: json["location"] == null
+        ? null
+        : Location.fromJson(json["location"]),
+    createdAt: json["created_at"] == null
+        ? null
+        : DateTime.tryParse(json["created_at"])?.toLocal(),
+    updatedAt: json["updated_at"] == null
+        ? null
+        : DateTime.tryParse(json["updated_at"])?.toLocal(),
     shop: json["shop"] == null ? null : ShopData.fromJson(json["shop"]),
-    translation: json["translation"] == null ? null : Translation.fromJson(json["translation"]),
+    translation: json["translation"] == null
+        ? null
+        : Translation.fromJson(json["translation"]),
   );
 
   Map<String, dynamic> toJson() => {
@@ -100,17 +105,14 @@ class BranchModel {
     "updated_at": updatedAt?.toIso8601String(),
     "shop": shop?.toJson(),
     "translation": translation?.toJson(),
-    "locales": locales == null ? [] : List<dynamic>.from(locales!.map((x) => x)),
+    "locales": locales == null
+        ? []
+        : List<dynamic>.from(locales!.map((x) => x)),
   };
 }
 
 class Address {
-  Address({
-    this.floor,
-    this.house,
-    this.office,
-    this.address,
-  });
+  Address({this.floor, this.house, this.office, this.address});
 
   dynamic floor;
   dynamic house;
@@ -122,13 +124,12 @@ class Address {
     dynamic house,
     dynamic office,
     String? address,
-  }) =>
-      Address(
-        floor: floor ?? this.floor,
-        house: house ?? this.house,
-        office: office ?? this.office,
-        address: address ?? this.address,
-      );
+  }) => Address(
+    floor: floor ?? this.floor,
+    house: house ?? this.house,
+    office: office ?? this.office,
+    address: address ?? this.address,
+  );
 
   factory Address.fromJson(Map<String, dynamic> json) => Address(
     floor: json["floor"],
@@ -145,26 +146,15 @@ class Address {
   };
 }
 
-
 class Links {
-  Links({
-    this.first,
-    this.last,
-    this.prev,
-    this.next,
-  });
+  Links({this.first, this.last, this.prev, this.next});
 
   String? first;
   String? last;
   dynamic prev;
   dynamic next;
 
-  Links copyWith({
-    String? first,
-    String? last,
-    dynamic prev,
-    dynamic next,
-  }) =>
+  Links copyWith({String? first, String? last, dynamic prev, dynamic next}) =>
       Links(
         first: first ?? this.first,
         last: last ?? this.last,
@@ -217,23 +207,24 @@ class Meta {
     String? perPage,
     int? to,
     int? total,
-  }) =>
-      Meta(
-        currentPage: currentPage ?? this.currentPage,
-        from: from ?? this.from,
-        lastPage: lastPage ?? this.lastPage,
-        links: links ?? this.links,
-        path: path ?? this.path,
-        perPage: perPage ?? this.perPage,
-        to: to ?? this.to,
-        total: total ?? this.total,
-      );
+  }) => Meta(
+    currentPage: currentPage ?? this.currentPage,
+    from: from ?? this.from,
+    lastPage: lastPage ?? this.lastPage,
+    links: links ?? this.links,
+    path: path ?? this.path,
+    perPage: perPage ?? this.perPage,
+    to: to ?? this.to,
+    total: total ?? this.total,
+  );
 
   factory Meta.fromJson(Map<String, dynamic> json) => Meta(
     currentPage: json["current_page"],
     from: json["from"],
     lastPage: json["last_page"],
-    links: json["links"] == null ? [] : List<Link>.from(json["links"]!.map((x) => Link.fromJson(x))),
+    links: json["links"] == null
+        ? []
+        : List<Link>.from(json["links"]!.map((x) => Link.fromJson(x))),
     path: json["path"],
     perPage: json["per_page"],
     to: json["to"],
@@ -244,7 +235,9 @@ class Meta {
     "current_page": currentPage,
     "from": from,
     "last_page": lastPage,
-    "links": links == null ? [] : List<dynamic>.from(links!.map((x) => x.toJson())),
+    "links": links == null
+        ? []
+        : List<dynamic>.from(links!.map((x) => x.toJson())),
     "path": path,
     "per_page": perPage,
     "to": to,
@@ -253,32 +246,20 @@ class Meta {
 }
 
 class Link {
-  Link({
-    this.url,
-    this.label,
-    this.active,
-  });
+  Link({this.url, this.label, this.active});
 
   String? url;
   String? label;
   bool? active;
 
-  Link copyWith({
-    String? url,
-    String? label,
-    bool? active,
-  }) =>
-      Link(
-        url: url ?? this.url,
-        label: label ?? this.label,
-        active: active ?? this.active,
-      );
-
-  factory Link.fromJson(Map<String, dynamic> json) => Link(
-    url: json["url"],
-    label: json["label"],
-    active: json["active"],
+  Link copyWith({String? url, String? label, bool? active}) => Link(
+    url: url ?? this.url,
+    label: label ?? this.label,
+    active: active ?? this.active,
   );
+
+  factory Link.fromJson(Map<String, dynamic> json) =>
+      Link(url: json["url"], label: json["label"], active: json["active"]);
 
   Map<String, dynamic> toJson() => {
     "url": url,
@@ -286,4 +267,3 @@ class Link {
     "active": active,
   };
 }
-

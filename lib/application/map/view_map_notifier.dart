@@ -19,12 +19,11 @@ class ViewMapNotifier extends StateNotifier<ViewMapState> {
   final UserRepositoryFacade _userRepository;
 
   ViewMapNotifier(this._shopsRepository, this._userRepository)
-      : super(const ViewMapState());
+    : super(const ViewMapState());
 
   void scrolling(bool scroll) {
     state = state.copyWith(isScrolling: scroll);
   }
-
 
   void changePlace(AddressNewModel place) {
     state = state.copyWith(place: place, isSetAddress: true);
@@ -47,24 +46,19 @@ class ViewMapNotifier extends StateNotifier<ViewMapState> {
   saveLocation(BuildContext context, {VoidCallback? onSuccess}) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
-      state = state.copyWith(
-        isLoading: true,
-      );
+      state = state.copyWith(isLoading: true);
       final response = await _userRepository.saveLocation(
-        address: state.place
-            ?.copyWith(title: LocalStorage.getAddressSelected()?.title),
+        address: state.place?.copyWith(
+          title: LocalStorage.getAddressSelected()?.title,
+        ),
       );
       response.when(
         success: (data) async {
-          state = state.copyWith(
-            isLoading: false,
-          );
+          state = state.copyWith(isLoading: false);
           onSuccess?.call();
         },
         failure: (failure, status) {
-          state = state.copyWith(
-            isLoading: false,
-          );
+          state = state.copyWith(isLoading: false);
         },
       );
     } else {
@@ -74,29 +68,27 @@ class ViewMapNotifier extends StateNotifier<ViewMapState> {
     }
   }
 
-  updateLocation(BuildContext context, String? id,
-      {VoidCallback? onSuccess}) async {
+  updateLocation(
+    BuildContext context,
+    String? id, {
+    VoidCallback? onSuccess,
+  }) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
-      state = state.copyWith(
-        isLoading: true,
-      );
+      state = state.copyWith(isLoading: true);
       final response = await _userRepository.updateLocation(
-        address: state.place
-            ?.copyWith(title: LocalStorage.getAddressSelected()?.title),
+        address: state.place?.copyWith(
+          title: LocalStorage.getAddressSelected()?.title,
+        ),
         addressId: id,
       );
       response.when(
         success: (data) async {
-          state = state.copyWith(
-            isLoading: false,
-          );
+          state = state.copyWith(isLoading: false);
           onSuccess?.call();
         },
         failure: (failure, status) {
-          state = state.copyWith(
-            isLoading: false,
-          );
+          state = state.copyWith(isLoading: false);
         },
       );
     } else {
@@ -106,15 +98,18 @@ class ViewMapNotifier extends StateNotifier<ViewMapState> {
     }
   }
 
-  Future<void> checkDriverZone(
-      {required BuildContext context,
-      required LatLng location,
-      String? shopId}) async {
+  Future<void> checkDriverZone({
+    required BuildContext context,
+    required LatLng location,
+    String? shopId,
+  }) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isLoading: true, isActive: false);
-      final response =
-          await _shopsRepository.checkDriverZone(location, shopId: shopId);
+      final response = await _shopsRepository.checkDriverZone(
+        location,
+        shopId: shopId,
+      );
       response.when(
         success: (data) async {
           state = state.copyWith(isLoading: false, isActive: data);
@@ -128,10 +123,7 @@ class ViewMapNotifier extends StateNotifier<ViewMapState> {
         failure: (failure, status) {
           state = state.copyWith(isLoading: false);
           if (!(status == 400 || status == 404)) {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           }
         },
       );
@@ -142,4 +134,3 @@ class ViewMapNotifier extends StateNotifier<ViewMapState> {
     }
   }
 }
-

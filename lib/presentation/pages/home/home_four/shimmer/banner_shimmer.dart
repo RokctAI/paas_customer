@@ -31,12 +31,10 @@ class BannerShimmer extends StatelessWidget {
                       width: MediaQuery.of(context).size.width - 46,
                       decoration: BoxDecoration(
                         color: AppStyle.shimmerBase,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8.r),
-                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(8.r)),
                       ),
                     ),
-                  /*  Positioned(
+                    /*  Positioned(
                       bottom: 12.0,
                       left: 20.0,
                       child: OrderBadge(
@@ -55,4 +53,3 @@ class BannerShimmer extends StatelessWidget {
     );
   }
 }
-

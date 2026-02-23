@@ -51,9 +51,7 @@ class _NoConnectionPageState extends ConsumerState<NoConnectionPage> {
       ),
     );
   }
-
 }
-
 
 class NoConnectionDialog extends ConsumerWidget {
   const NoConnectionDialog({super.key});
@@ -63,11 +61,7 @@ class NoConnectionDialog extends ConsumerWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
-          FlutterRemix.wifi_off_fill,
-          size: 80.sp,
-          color: AppStyle.textGrey,
-        ),
+        Icon(FlutterRemix.wifi_off_fill, size: 80.sp, color: AppStyle.textGrey),
         24.verticalSpace,
         Text(
           AppHelpers.getTranslation(TrKeys.noInternetConnection),
@@ -77,10 +71,7 @@ class NoConnectionDialog extends ConsumerWidget {
         12.verticalSpace,
         Text(
           'Please check your internet connection and try again.',
-          style: AppStyle.interNormal(
-            size: 14.sp,
-            color: AppStyle.textGrey,
-          ),
+          style: AppStyle.interNormal(size: 14.sp, color: AppStyle.textGrey),
           textAlign: TextAlign.center,
         ),
         32.verticalSpace,
@@ -107,7 +98,8 @@ class NoConnectionDialog extends ConsumerWidget {
 
     try {
       final connectivityResult = await Connectivity().checkConnectivity();
-      final hasConnection = connectivityResult.contains(ConnectivityResult.mobile) ||
+      final hasConnection =
+          connectivityResult.contains(ConnectivityResult.mobile) ||
           connectivityResult.contains(ConnectivityResult.ethernet) ||
           connectivityResult.contains(ConnectivityResult.wifi);
 

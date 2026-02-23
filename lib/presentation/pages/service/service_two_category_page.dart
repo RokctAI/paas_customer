@@ -1,4 +1,3 @@
-
 // ignore_for_file: deprecated_member_use
 
 import 'package:auto_route/auto_route.dart';
@@ -18,16 +17,19 @@ class ServiceTwoCategoryPage extends ConsumerStatefulWidget {
   const ServiceTwoCategoryPage({super.key, required this.index});
 
   @override
-  ConsumerState<ServiceTwoCategoryPage> createState() => _ServiceTwoCategoryPageState();
+  ConsumerState<ServiceTwoCategoryPage> createState() =>
+      _ServiceTwoCategoryPageState();
 }
 
-class _ServiceTwoCategoryPageState extends ConsumerState<ServiceTwoCategoryPage> {
+class _ServiceTwoCategoryPageState
+    extends ConsumerState<ServiceTwoCategoryPage> {
   final RefreshController _restaurantController = RefreshController();
   @override
   void dispose() {
     _restaurantController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(homeProvider);
@@ -36,7 +38,7 @@ class _ServiceTwoCategoryPageState extends ConsumerState<ServiceTwoCategoryPage>
         ? state.categories[state.selectIndexCategory].translation?.title
         : "";
     return WillPopScope(
-      onWillPop: (){
+      onWillPop: () {
         notifier.setSelectCategory(-1, context);
         // context.maybePop();
         return Future.value(true);
@@ -48,10 +50,7 @@ class _ServiceTwoCategoryPageState extends ConsumerState<ServiceTwoCategoryPage>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    title ?? "",
-                    style: AppStyle.interNormal(size: 18),
-                  ),
+                  Text(title ?? "", style: AppStyle.interNormal(size: 18)),
                 ],
               ),
             ),
@@ -59,7 +58,8 @@ class _ServiceTwoCategoryPageState extends ConsumerState<ServiceTwoCategoryPage>
               child: FilterCategoryService(
                 state: state,
                 event: notifier,
-                categoryIndex: widget.index, restaurantController: _restaurantController,
+                categoryIndex: widget.index,
+                restaurantController: _restaurantController,
               ),
             ),
           ],
@@ -70,4 +70,3 @@ class _ServiceTwoCategoryPageState extends ConsumerState<ServiceTwoCategoryPage>
     );
   }
 }
-

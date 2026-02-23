@@ -20,7 +20,7 @@ class EditProfileNotifier extends StateNotifier<EditProfileState> {
   final GalleryRepositoryFacade _galleryRepository;
 
   EditProfileNotifier(this._userRepository, this._galleryRepository)
-      : super(const EditProfileState());
+    : super(const EditProfileState());
 
   void setUser(ProfileData user) {
     state = state.copyWith(
@@ -99,16 +99,17 @@ class EditProfileNotifier extends StateNotifier<EditProfileState> {
         }
       }
       final response = await _userRepository.editProfile(
-          user: EditProfile(
-        firstname: state.firstName.isEmpty ? user.firstname : state.firstName,
-        lastname: state.lastName.isEmpty ? user.lastname : state.lastName,
-        birthday: state.birth.isEmpty ? user.birthday : state.birth,
-        phone: state.phone.isEmpty ? user.phone : state.phone,
-        email: state.email.isEmpty ? user.email : state.email,
-        secondPhone: state.secondPhone,
-        images: state.url.isEmpty ? user.img ?? "" : state.url,
-        gender: state.gender.isEmpty ? user.gender : state.gender,
-      ));
+        user: EditProfile(
+          firstname: state.firstName.isEmpty ? user.firstname : state.firstName,
+          lastname: state.lastName.isEmpty ? user.lastname : state.lastName,
+          birthday: state.birth.isEmpty ? user.birthday : state.birth,
+          phone: state.phone.isEmpty ? user.phone : state.phone,
+          email: state.email.isEmpty ? user.email : state.email,
+          secondPhone: state.secondPhone,
+          images: state.url.isEmpty ? user.img ?? "" : state.url,
+          gender: state.gender.isEmpty ? user.gender : state.gender,
+        ),
+      );
       response.when(
         success: (data) {
           LocalStorage.setUser(data.data);
@@ -141,8 +142,10 @@ class EditProfileNotifier extends StateNotifier<EditProfileState> {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       String? url;
-      final imageResponse =
-          await _galleryRepository.uploadImage(path, UploadType.users);
+      final imageResponse = await _galleryRepository.uploadImage(
+        path,
+        UploadType.users,
+      );
       imageResponse.when(
         success: (data) {
           url = data.imageData?.title;
@@ -168,4 +171,3 @@ class EditProfileNotifier extends StateNotifier<EditProfileState> {
     }
   }
 }
-

@@ -5,14 +5,14 @@ import 'package:foodyman/infrastructure/services/enums.dart';
 
 import 'package:foodyman/domain/handlers/handlers.dart';
 
-
 abstract class OrdersRepositoryFacade {
-  Future<ApiResult<GetCalculateModel>> getCalculate(
-      {required String cartId,
-      required double lat,
-      required double long,
-      required DeliveryTypeEnum type,
-      String? coupon});
+  Future<ApiResult<GetCalculateModel>> getCalculate({
+    required String cartId,
+    required double lat,
+    required double long,
+    required DeliveryTypeEnum type,
+    String? coupon,
+  });
 
   Future<ApiResult<OrderActiveModel>> createOrder(OrderBodyData orderBody);
 
@@ -65,10 +65,12 @@ abstract class OrdersRepositoryFacade {
   });
 
   Future<ApiResult<String>> process(
-      OrderBodyData orderBody,
-      String name,
-      {BuildContext? context, bool forceCardPayment = false, bool enableTokenization = false}
-      );
+    OrderBodyData orderBody,
+    String name, {
+    BuildContext? context,
+    bool forceCardPayment = false,
+    bool enableTokenization = false,
+  });
 
   Future<ApiResult<String>> tipProcess({
     required String orderId,
@@ -84,8 +86,4 @@ abstract class OrdersRepositoryFacade {
     required String shopId,
     required double amount,
   });
-
-
-
-
 }

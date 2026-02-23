@@ -27,7 +27,8 @@ class MarketOneItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         context.pushRoute(
-            ShopRoute(shopId: (shop.id ?? 0).toString(), shop: shop));
+          ShopRoute(shopId: (shop.id ?? 0).toString(), shop: shop),
+        );
       },
       child: isShop
           ? _shopItem()
@@ -38,8 +39,9 @@ class MarketOneItem extends StatelessWidget {
               width: 268.w,
               height: 250.h,
               decoration: BoxDecoration(
-                  color: AppStyle.transparent,
-                  borderRadius: BorderRadius.all(Radius.circular(24.r))),
+                color: AppStyle.transparent,
+                borderRadius: BorderRadius.all(Radius.circular(24.r)),
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -49,15 +51,17 @@ class MarketOneItem extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: AppStyle.white,
                           borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(24.r),
-                              topRight: Radius.circular(24.r)),
+                            topLeft: Radius.circular(24.r),
+                            topRight: Radius.circular(24.r),
+                          ),
                         ),
                         width: double.infinity,
                         height: 190.h,
                         child: ClipRRect(
                           borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(24.r),
-                              topRight: Radius.circular(24.r)),
+                            topLeft: Radius.circular(24.r),
+                            topRight: Radius.circular(24.r),
+                          ),
                           child: CustomNetworkImage(
                             url: shop.backgroundImg ?? '',
                             height: 190.h,
@@ -71,12 +75,14 @@ class MarketOneItem extends StatelessWidget {
                         child: Padding(
                           padding: EdgeInsets.symmetric(horizontal: 18.w),
                           child: Padding(
-                            padding:
-                                EdgeInsets.only(bottom: isSimpleShop ? 6.h : 0),
+                            padding: EdgeInsets.only(
+                              bottom: isSimpleShop ? 6.h : 0,
+                            ),
                             child: BonusDiscountPopular(
-                                isPopular: shop.isRecommend ?? false,
-                                bonus: shop.bonus,
-                                isDiscount: shop.isDiscount ?? false),
+                              isPopular: shop.isRecommend ?? false,
+                              bonus: shop.bonus,
+                              isDiscount: shop.isDiscount ?? false,
+                            ),
                           ),
                         ),
                       ),
@@ -98,11 +104,11 @@ class MarketOneItem extends StatelessWidget {
                                   color: AppStyle.black,
                                 ),
                               ),
-                              if(shop.verify ?? false)
+                              if (shop.verify ?? false)
                                 Padding(
                                   padding: EdgeInsets.only(left: 4.r),
                                   child: const BadgeItem(),
-                                )
+                                ),
                             ],
                           ),
                           SizedBox(
@@ -123,7 +129,7 @@ class MarketOneItem extends StatelessWidget {
                         size: isSimpleShop ? 50 : 44,
                         padding: 4.r,
                         bgColor: AppStyle.transparent,
-                      )
+                      ),
                     ],
                   ),
                 ],
@@ -154,27 +160,21 @@ class MarketOneItem extends StatelessWidget {
                   (shop.translation?.title?.length ?? 0) > 12
                       ? "${shop.translation?.title?.substring(0, 12) ?? " "}.."
                       : shop.translation?.title ?? "",
-                  style: AppStyle.interSemi(
-                    size: 14,
-                    color: AppStyle.black,
-                  ),
+                  style: AppStyle.interSemi(size: 14, color: AppStyle.black),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                if(shop.verify ?? false)
+                if (shop.verify ?? false)
                   Padding(
                     padding: EdgeInsets.only(left: 4.r),
                     child: const BadgeItem(),
-                  )
+                  ),
               ],
             ),
           ),
           Text(
             "${shop.deliveryTime?.from ?? 0} - ${shop.deliveryTime?.to ?? 0} ${shop.deliveryTime?.type ?? "min"}",
-            style: AppStyle.interSemi(
-              size: 12,
-              color: AppStyle.textGrey,
-            ),
+            style: AppStyle.interSemi(size: 12, color: AppStyle.textGrey),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -183,4 +183,3 @@ class MarketOneItem extends StatelessWidget {
     );
   }
 }
-

@@ -31,43 +31,45 @@ class DistanceBadge extends StatelessWidget {
     final double distance = _calculateDistance();
     final String displayText = _getDisplayText(distance);
 
-    return !(distance == 0) ? Positioned(
-      bottom: bottom ?? 80.h,
-      left: left,
-      right: right ?? 15.w,
-      top: top,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10.r),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
-            decoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(4.r),
-            ),
-            child: Row(
-              children: [
-                const Icon(
-                  Remix.walk_fill,
-                  color: AppStyle.white,
-                  size: 15,
-                ),
-                Text(
-                  displayText,
-                  style: AppStyle.interNormal(
-                    color: AppStyle.white,
-                    size: 12,
+    return !(distance == 0)
+        ? Positioned(
+            bottom: bottom ?? 80.h,
+            left: left,
+            right: right ?? 15.w,
+            top: top,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10.r),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(4.r),
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Remix.walk_fill,
+                        color: AppStyle.white,
+                        size: 15,
+                      ),
+                      Text(
+                        displayText,
+                        style: AppStyle.interNormal(
+                          color: AppStyle.white,
+                          size: 12,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-      ),
-    ) : const SizedBox.shrink();
+          )
+        : const SizedBox.shrink();
   }
 
   double _calculateDistance() {
@@ -96,10 +98,10 @@ class DistanceBadge extends StatelessWidget {
 
   double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
     const double p = 0.017453292519943295; // PI / 180
-    final double a = 0.5 - cos((lat2 - lat1) * p) / 2 +
-        cos(lat1 * p) * cos(lat2 * p) *
-            (1 - cos((lon2 - lon1) * p)) / 2;
+    final double a =
+        0.5 -
+        cos((lat2 - lat1) * p) / 2 +
+        cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
     return 12742 * asin(sqrt(a)); // 2 * R; R = 6371 km
   }
 }
-

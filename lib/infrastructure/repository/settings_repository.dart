@@ -14,7 +14,9 @@ class SettingsRepository implements SettingsRepositoryFacade {
   Future<ApiResult<GlobalSettingsResponse>> getGlobalSettings() async {
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.get('/api/method/paas.api.system.system.get_global_settings');
+      final response = await client.get(
+        '/api/method/paas.api.system.system.get_global_settings',
+      );
       return ApiResult.success(
         data: GlobalSettingsResponse.fromJson(response.data),
       );
@@ -52,10 +54,11 @@ class SettingsRepository implements SettingsRepositoryFacade {
   Future<ApiResult<LanguagesResponse>> getLanguages() async {
     try {
       final client = dioHttp.client(requireAuth: false);
-      final response = await client.get('/api/method/paas.api.system.system.get_languages');
+      final response = await client.get(
+        '/api/method/paas.api.system.system.get_languages',
+      );
       if (LocalStorage.getLanguage() == null ||
-          !(LanguagesResponse.fromJson(response.data)
-                  .data
+          !(LanguagesResponse.fromJson(response.data).data
                   ?.map((e) => e.id)
                   .contains(LocalStorage.getLanguage()?.id) ??
               true)) {
@@ -65,9 +68,7 @@ class SettingsRepository implements SettingsRepositoryFacade {
           }
         });
       }
-      return ApiResult.success(
-        data: LanguagesResponse.fromJson(response.data),
-      );
+      return ApiResult.success(data: LanguagesResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get languages failure: $e');
       return ApiResult.failure(
@@ -81,10 +82,10 @@ class SettingsRepository implements SettingsRepositoryFacade {
   Future<ApiResult<HelpModel>> getFaq() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get('/api/method/paas.api.admin_content.admin_content.get_admin_faqs');
-      return ApiResult.success(
-        data: HelpModel.fromJson(response.data),
+      final response = await client.get(
+        '/api/method/paas.api.admin_content.admin_content.get_admin_faqs',
       );
+      return ApiResult.success(data: HelpModel.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get faq failure: $e');
       return ApiResult.failure(
@@ -104,9 +105,7 @@ class SettingsRepository implements SettingsRepositoryFacade {
       );
       // Response structure adaptation needed. Assuming get_page returns the page doc.
       // Translation.fromJson expects map.
-      return ApiResult.success(
-        data: Translation.fromJson(response.data),
-      );
+      return ApiResult.success(data: Translation.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get term failure: $e');
       return ApiResult.failure(
@@ -124,9 +123,7 @@ class SettingsRepository implements SettingsRepositoryFacade {
         '/api/method/paas.api.page.page.get_page',
         queryParameters: {'slug': 'policy'},
       );
-      return ApiResult.success(
-        data: Translation.fromJson(response.data),
-      );
+      return ApiResult.success(data: Translation.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get policy failure: $e');
       return ApiResult.failure(
@@ -141,9 +138,12 @@ class SettingsRepository implements SettingsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       // Using parities with NotificationRepository or dedicated settings endpoint
-      final response = await client.get('/api/method/paas.api.notification.notification.get_notification_settings');
+      final response = await client.get(
+        '/api/method/paas.api.notification.notification.get_notification_settings',
+      );
       return ApiResult.success(
-        data: notificationsListModelFromJson(response.data) ??
+        data:
+            notificationsListModelFromJson(response.data) ??
             NotificationsListModel(),
       );
     } catch (e) {
@@ -157,17 +157,20 @@ class SettingsRepository implements SettingsRepositoryFacade {
 
   @override
   Future<ApiResult> updateNotification(
-      List<NotificationData>? notifications) async {
+    List<NotificationData>? notifications,
+  ) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       final data = {
-        'notifications': notifications?.map((n) => {'notification_id': n.id, 'active': n.active}).toList(),
+        'notifications': notifications
+            ?.map((n) => {'notification_id': n.id, 'active': n.active})
+            .toList(),
       };
-      await client.post('/api/method/paas.api.notification.notification.update_notification_settings',
-          data: data);
-      return const ApiResult.success(
-        data: null,
+      await client.post(
+        '/api/method/paas.api.notification.notification.update_notification_settings',
+        data: data,
       );
+      return const ApiResult.success(data: null);
     } catch (e) {
       debugPrint('==> get languages failure: $e');
       return ApiResult.failure(
@@ -176,5 +179,4 @@ class SettingsRepository implements SettingsRepositoryFacade {
       );
     }
   }
-
 }

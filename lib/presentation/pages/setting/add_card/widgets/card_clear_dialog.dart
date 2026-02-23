@@ -10,11 +10,12 @@ class CardClearDialog extends StatelessWidget {
   final VoidCallback cancel;
   final VoidCallback clear;
 
-  const CardClearDialog(
-      {super.key,
-      required this.cancel,
-      required this.clear,
-      required this.cardName});
+  const CardClearDialog({
+    super.key,
+    required this.cancel,
+    required this.clear,
+    required this.cardName,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,24 +37,15 @@ class CardClearDialog extends StatelessWidget {
         children: [
           Text(
             AppHelpers.getTranslation(TrKeys.clearCard1),
-            style: AppStyle.interNormal(
-              size: 16,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interNormal(size: 16, color: AppStyle.black),
           ),
           Text(
             cardName,
-            style: AppStyle.interSemi(
-              size: 16,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interSemi(size: 16, color: AppStyle.black),
           ),
           Text(
             AppHelpers.getTranslation(TrKeys.clearCard2),
-            style: AppStyle.interNormal(
-              size: 16,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interNormal(size: 16, color: AppStyle.black),
           ),
           50.verticalSpace,
           Row(
@@ -88,4 +80,3 @@ class CardClearDialog extends StatelessWidget {
     );
   }
 }
-

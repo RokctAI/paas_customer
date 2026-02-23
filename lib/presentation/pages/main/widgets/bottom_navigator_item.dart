@@ -12,15 +12,16 @@ class BottomNavigatorItem extends StatelessWidget {
   final IconData unSelectIcon;
   final String label;
 
-  const BottomNavigatorItem(
-      {super.key,
-        required this.selectItem,
-        required this.index,
-        required this.selectIcon,
-        required this.unSelectIcon,
-        required this.currentIndex,
-        required this.isScrolling,
-        required this.label});
+  const BottomNavigatorItem({
+    super.key,
+    required this.selectItem,
+    required this.index,
+    required this.selectIcon,
+    required this.unSelectIcon,
+    required this.currentIndex,
+    required this.isScrolling,
+    required this.label,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +48,16 @@ class BottomNavigatorItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     index == currentIndex
-                        ? Icon(selectIcon,
-                        size: shouldHide ? 0.r : 24.r,
-                        color: AppStyle.white)
-                        : Icon(unSelectIcon,
-                        size: shouldHide ? 0.r : 24.r,
-                        color: AppStyle.white),
+                        ? Icon(
+                            selectIcon,
+                            size: shouldHide ? 0.r : 24.r,
+                            color: AppStyle.white,
+                          )
+                        : Icon(
+                            unSelectIcon,
+                            size: shouldHide ? 0.r : 24.r,
+                            color: AppStyle.white,
+                          ),
                     if (index == currentIndex)
                       Text(
                         label,

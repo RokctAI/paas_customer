@@ -24,28 +24,26 @@ class NewsShopShimmer extends StatelessWidget {
         ),
         12.verticalSpace,
         SizedBox(
-            height: 246.h,
-            child: AnimationLimiter(
-              child: ListView.builder(
-                shrinkWrap: false,
-                
-                scrollDirection: Axis.horizontal,
-                itemCount: 4,
-                itemBuilder: (context, index) =>
-                    AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 375),
-                  child: const SlideAnimation(
-                    verticalOffset: 50.0,
-                    child: FadeInAnimation(
-                      child: MarketShimmerThree(),
+          height: 246.h,
+          child: AnimationLimiter(
+            child: ListView.builder(
+              shrinkWrap: false,
+
+              scrollDirection: Axis.horizontal,
+              itemCount: 4,
+              itemBuilder: (context, index) =>
+                  AnimationConfiguration.staggeredList(
+                    position: index,
+                    duration: const Duration(milliseconds: 375),
+                    child: const SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(child: MarketShimmerThree()),
                     ),
                   ),
-                ),
-              ),
-            )),
+            ),
+          ),
+        ),
       ],
     );
   }
 }
-

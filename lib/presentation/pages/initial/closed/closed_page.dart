@@ -11,7 +11,6 @@ import 'package:foodyman/application/closed/closed_provider.dart';
 //import 'package:foodyman/presentation/component/components.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
-
 @RoutePage()
 class ClosedPage extends ConsumerStatefulWidget {
   const ClosedPage({super.key});
@@ -50,22 +49,21 @@ class _ClosedPageState extends ConsumerState<ClosedPage>
 
   @override
   void initState() {
-    controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 5),
-    )..addListener(() {
-        setState(() {});
-        if (controller.value > 0.99) {
-          if (ref.watch(closedProvider).currentIndex == 4) {
-            AppHelpers.goHome(context);
-          } else {
-            pageController.nextPage(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeIn,
-            );
-          }
-        }
-      });
+    controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 5))
+          ..addListener(() {
+            setState(() {});
+            if (controller.value > 0.99) {
+              if (ref.watch(closedProvider).currentIndex == 4) {
+                AppHelpers.goHome(context);
+              } else {
+                pageController.nextPage(
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeIn,
+                );
+              }
+            }
+          });
     controller.repeat();
     super.initState();
   }
@@ -106,7 +104,7 @@ class _ClosedPageState extends ConsumerState<ClosedPage>
                           AppStyle.primary.withOpacity(0.26),
                           AppStyle.primary.withOpacity(0),
                           AppStyle.primary.withOpacity(0),
-                          AppStyle.primary.withOpacity(0.26)
+                          AppStyle.primary.withOpacity(0.26),
                         ],
                       ),
                     ),
@@ -119,7 +117,7 @@ class _ClosedPageState extends ConsumerState<ClosedPage>
                           end: Alignment.bottomCenter,
                           colors: [
                             AppStyle.black.withOpacity(0.4),
-                            AppStyle.black.withOpacity(0.4)
+                            AppStyle.black.withOpacity(0.4),
                           ],
                         ),
                       ),
@@ -129,10 +127,7 @@ class _ClosedPageState extends ConsumerState<ClosedPage>
                         height: MediaQuery.of(context).size.height,
                         fit: BoxFit.cover,
                         progressIndicatorBuilder: (context, url, progress) {
-                          return const ImageShimmer(
-                            isCircle: false,
-                            size: 0,
-                          );
+                          return const ImageShimmer(isCircle: false, size: 0);
                         },
                         errorWidget: (context, url, error) {
                           return Container(
@@ -231,24 +226,24 @@ class _ClosedPageState extends ConsumerState<ClosedPage>
                               borderRadius: BorderRadius.circular(122),
                               child: LinearProgressIndicator(
                                 value: controller.value,
-                                valueColor:
-                                    const AlwaysStoppedAnimation<Color>(
-                                        AppStyle.primary),
+                                valueColor: const AlwaysStoppedAnimation<Color>(
+                                  AppStyle.primary,
+                                ),
                                 backgroundColor: AppStyle.white,
                               ),
                             )
                           : state.currentIndex > index
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(122),
-                                  child: const LinearProgressIndicator(
-                                    value: 1,
-                                    valueColor:
-                                        AlwaysStoppedAnimation<Color>(
-                                            AppStyle.primary),
-                                    backgroundColor: AppStyle.white,
-                                  ),
-                                )
-                              : SizedBox.shrink(),
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(122),
+                              child: const LinearProgressIndicator(
+                                value: 1,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppStyle.primary,
+                                ),
+                                backgroundColor: AppStyle.white,
+                              ),
+                            )
+                          : SizedBox.shrink(),
                     );
                   },
                 ),
@@ -260,4 +255,3 @@ class _ClosedPageState extends ConsumerState<ClosedPage>
     );
   }
 }
-

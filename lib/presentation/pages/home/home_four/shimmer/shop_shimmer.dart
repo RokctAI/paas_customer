@@ -31,30 +31,27 @@ class ShopShimmer extends StatelessWidget {
         ),
         12.verticalSpace,
         SizedBox(
-            height: 100.h,
-            child: AnimationLimiter(
-              child: ListView.builder(
-                shrinkWrap: false,
-                scrollDirection: Axis.horizontal,
-                itemCount: 4,
-                itemBuilder: (context, index) =>
-                    AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 375),
-                  child: SlideAnimation(
-                    verticalOffset: 50.0,
-                    child: FadeInAnimation(
-                      child: MarketShimmer(
-                        index: index,
-                        isShop: true,
+          height: 100.h,
+          child: AnimationLimiter(
+            child: ListView.builder(
+              shrinkWrap: false,
+              scrollDirection: Axis.horizontal,
+              itemCount: 4,
+              itemBuilder: (context, index) =>
+                  AnimationConfiguration.staggeredList(
+                    position: index,
+                    duration: const Duration(milliseconds: 375),
+                    child: SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(
+                        child: MarketShimmer(index: index, isShop: true),
                       ),
                     ),
                   ),
-                ),
-              ),
-            )),
+            ),
+          ),
+        ),
       ],
     );
   }
 }
-

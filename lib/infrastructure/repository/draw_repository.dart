@@ -21,12 +21,10 @@ class DrawRepository implements DrawRepositoryFacade {
         queryParameters: {
           "api_key": AppConstants.routingKey,
           "start": (start.longitude, start.latitude),
-          "end": (end.longitude, end.latitude)
+          "end": (end.longitude, end.latitude),
         },
       );
-      return ApiResult.success(
-        data: DrawRouting.fromJson(response.data),
-      );
+      return ApiResult.success(data: DrawRouting.fromJson(response.data));
     } catch (e) {
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
@@ -35,4 +33,3 @@ class DrawRepository implements DrawRepositoryFacade {
     }
   }
 }
-

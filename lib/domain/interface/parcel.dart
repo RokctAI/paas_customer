@@ -12,28 +12,27 @@ abstract class ParcelRepositoryFacade {
     required LocationModel to,
   });
 
-  Future<ApiResult> orderParcel(
-      {required String typeId,
-        required LocationModel from,
-        required String fromTitle,
-        required LocationModel to,
-        required String toTitle,
-        required String time,
-        required String note,
-        required String phoneFrom,
-        required String phoneTo,
-        required String usernameTo,
-        required String usernameFrom,
-        required String floorTo,
-        required String floorFrom,
-        required String houseFrom,
-        required String houseTo,
-        required String comment,
-        required String value,
-        required String instruction,
-        required bool notify,
-      });
-
+  Future<ApiResult> orderParcel({
+    required String typeId,
+    required LocationModel from,
+    required String fromTitle,
+    required LocationModel to,
+    required String toTitle,
+    required String time,
+    required String note,
+    required String phoneFrom,
+    required String phoneTo,
+    required String usernameTo,
+    required String usernameFrom,
+    required String floorTo,
+    required String floorFrom,
+    required String houseFrom,
+    required String houseTo,
+    required String comment,
+    required String value,
+    required String instruction,
+    required bool notify,
+  });
 
   Future<ApiResult<ParcelPaginateResponse>> getActiveParcel(int page);
 
@@ -41,15 +40,13 @@ abstract class ParcelRepositoryFacade {
 
   Future<ApiResult<ParcelOrder>> getSingleParcel(String orderId);
 
-
   Future<ApiResult<void>> addReview(
-      String orderId, {
-        required double rating,
-        required String comment,
-      });
+    String orderId, {
+    required double rating,
+    required String comment,
+  });
 
-  Future<ApiResult<String>> process(
-      String orderId,String name);
+  Future<ApiResult<String>> process(String orderId, String name);
 
   Future<ApiResult<TransactionsResponse>> createTransaction({
     required String orderId,

@@ -8,23 +8,18 @@ abstract class AuthRepositoryFacade {
     required String password,
   });
 
-  Future<ApiResult<LoginResponse>> loginWithGoogle(
-      {required String email,
-      required String displayName,
-      required String id,
-      required String avatar});
-
-  Future<ApiResult<dynamic>> sigUp({
+  Future<ApiResult<LoginResponse>> loginWithGoogle({
     required String email,
+    required String displayName,
+    required String id,
+    required String avatar,
   });
 
-  Future<ApiResult<VerifyData>> sigUpWithData({
-    required UserModel user,
-  });
+  Future<ApiResult<dynamic>> sigUp({required String email});
 
-  Future<ApiResult<VerifyData>> sigUpWithPhone({
-    required UserModel user,
-  });
+  Future<ApiResult<VerifyData>> sigUpWithData({required UserModel user});
+
+  Future<ApiResult<VerifyData>> sigUpWithPhone({required UserModel user});
 
   Future<ApiResult<RegisterResponse>> sendOtp({required String phone});
 
@@ -48,4 +43,3 @@ abstract class AuthRepositoryFacade {
     required String phone,
   });
 }
-

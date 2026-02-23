@@ -34,8 +34,9 @@ class CategoriesRepository implements CategoriesRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<CategoriesPaginateResponse>> searchCategories(
-      {required String text}) async {
+  Future<ApiResult<CategoriesPaginateResponse>> searchCategories({
+    required String text,
+  }) async {
     final params = {'search': text};
     try {
       final client = dioHttp.client(requireAuth: false);
@@ -55,8 +56,9 @@ class CategoriesRepository implements CategoriesRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<CategoriesPaginateResponse>> getCategoriesByShop(
-      {required String shopId}) async {
+  Future<ApiResult<CategoriesPaginateResponse>> getCategoriesByShop({
+    required String shopId,
+  }) async {
     return getAllCategories(page: 1, shopId: shopId);
   }
 }

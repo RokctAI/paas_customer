@@ -86,10 +86,10 @@ abstract class LoansRepositoryFacade {
   /// [financialDetails] contains income and expense information
   /// Returns eligibility status and additional details
   Future<ApiResult<Map<String, dynamic>>> checkFinancialEligibility({
-  required double monthlyIncome,
-  required double groceryExpenses,
-  required double otherExpenses,
-  required double existingCredits,
+    required double monthlyIncome,
+    required double groceryExpenses,
+    required double otherExpenses,
+    required double existingCredits,
   });
 
   /// Save incomplete loan application with financial details
@@ -97,7 +97,7 @@ abstract class LoansRepositoryFacade {
   /// [financialDetails] contains income and expense information
   /// Returns saved application ID or error
   Future<ApiResult<String>> saveIncompleteLoanApplication({
-  required Map<String, dynamic> financialDetails,
+    required Map<String, dynamic> financialDetails,
   });
 
   /// Decline a pending loan contract
@@ -131,9 +131,7 @@ abstract class LoansRepositoryFacade {
   ///   }
   /// );
   /// ```
-  Future<ApiResult<bool>> declineLoanContract({
-    required String loanId,
-  });
+  Future<ApiResult<bool>> declineLoanContract({required String loanId});
 
   /// Generate and email a loan contract PDF
   ///
@@ -151,11 +149,9 @@ abstract class LoansRepositoryFacade {
   /// any additional data such as financial details, or empty if none exists
   Future<ApiResult<Map<String, dynamic>>> fetchSavedApplication();
 
-
   /// Fetches the user's most recent saved loan applications
   ///All Statuses
   /// Returns the saved application data including amount, ID number, and
   /// any additional data such as financial details, or empty if none exists
   Future<ApiResult<List<Map<String, dynamic>>>> fetchSavedApplications();
-
 }

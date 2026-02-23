@@ -52,10 +52,9 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
     _fetchAllLoanData();
   }
 
-
-//  void _checkAndShowBlockedStatusIfNeeded() {
-//    // ...
-//  }
+  //  void _checkAndShowBlockedStatusIfNeeded() {
+  //    // ...
+  //  }
 
   Future<void> _checkConsecutiveCancelledApplications() async {
     try {
@@ -68,17 +67,20 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
       }).toList();
 
       debugPrint(
-          'Found ${cancelledApplications.length} cancelled applications');
+        'Found ${cancelledApplications.length} cancelled applications',
+      );
 
       // Block if 3 or more cancelled applications exist
       if (cancelledApplications.length >= 3) {
         // Sort applications by created_at in descending order
         cancelledApplications.sort((a, b) {
           try {
-            final dateA =
-                DateTime.parse(a['created_at'] ?? DateTime.now().toString());
-            final dateB =
-                DateTime.parse(b['created_at'] ?? DateTime.now().toString());
+            final dateA = DateTime.parse(
+              a['created_at'] ?? DateTime.now().toString(),
+            );
+            final dateB = DateTime.parse(
+              b['created_at'] ?? DateTime.now().toString(),
+            );
             return dateB.compareTo(dateA); // Most recent first
           } catch (e) {
             return 0;
@@ -91,12 +93,14 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
         // Check if these cancellations are within a 30-day timeframe
         if (recentCancellations.length >= 3) {
           final now = DateTime.now();
-          final oldestOfRecent =
-              DateTime.parse(recentCancellations.last['created_at']);
+          final oldestOfRecent = DateTime.parse(
+            recentCancellations.last['created_at'],
+          );
           final daysDifference = now.difference(oldestOfRecent).inDays;
 
           debugPrint(
-              'Most recent 3 cancellations: oldest date is $oldestOfRecent, $daysDifference days ago');
+            'Most recent 3 cancellations: oldest date is $oldestOfRecent, $daysDifference days ago',
+          );
 
           // Block if the 3 most recent cancellations are within 30 days
           if (daysDifference <= 30) {
@@ -141,8 +145,9 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
       final transactionsResult = results[0];
       // final savedApplicationsResult = results[1] as ApiResult<List<Map<String, dynamic>>>;
       // final myApplicationsResult = results[2] as ApiResult<List<dynamic>>;
-      
-      final savedApplicationsResult = results[1]; // Keeping this for now as dynamic cast might be needed if inference fails
+
+      final savedApplicationsResult =
+          results[1]; // Keeping this for now as dynamic cast might be needed if inference fails
       final myApplicationsResult = results[2];
 
       debugPrint("All data fetched");
@@ -178,7 +183,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
             _processSavedApplications(applications);
             _checkConsecutiveCancelledApplications();
           } else {
-             // Reset logic handled below if myApplications also empty
+            // Reset logic handled below if myApplications also empty
           }
         },
         failure: (error, _) {
@@ -200,7 +205,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
         },
         failure: (error, _) {
           debugPrint("Failed to fetch my applications: $error");
-             setState(() {
+          setState(() {
             _myApplications = [];
             _isLoading = false;
           });
@@ -259,14 +264,19 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
     // Log all applications for detailed debugging
     for (var app in applications) {
       debugPrint(
-          "Application ID: ${app['id']}, Status: ${app['status']}, Amount: ${app['amount']}");
+        "Application ID: ${app['id']}, Status: ${app['status']}, Amount: ${app['amount']}",
+      );
     }
 
     // Sort applications by updated_at in descending order to get most recent first
     applications.sort((a, b) {
       try {
-        final dateA = DateTime.parse(a['updated_at'] ?? DateTime.now().toString());
-        final dateB = DateTime.parse(b['updated_at'] ?? DateTime.now().toString());
+        final dateA = DateTime.parse(
+          a['updated_at'] ?? DateTime.now().toString(),
+        );
+        final dateB = DateTime.parse(
+          b['updated_at'] ?? DateTime.now().toString(),
+        );
         return dateB.compareTo(dateA);
       } catch (e) {
         return 0;
@@ -280,7 +290,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
       'pending_review',
       'pending_contract',
       'pending_disbursal',
-      'overdue'
+      'overdue',
     ];
 
     // Find the most recent application with processing statuses
@@ -289,7 +299,9 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
       final status = app['status']?.toString().toLowerCase() ?? '';
       if (processingStatuses.contains(status)) {
         processableApp = app;
-        debugPrint("Found processable application ID: ${app['id']}, Status: $status");
+        debugPrint(
+          "Found processable application ID: ${app['id']}, Status: $status",
+        );
         break;
       }
     }
@@ -314,7 +326,9 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
           Map<String, dynamic> financialDetails = {};
 
           if (processableApp['additional_data'] != null) {
-            debugPrint("Additional data found: ${processableApp['additional_data']}");
+            debugPrint(
+              "Additional data found: ${processableApp['additional_data']}",
+            );
 
             // Check if additional_data is already a Map
             if (processableApp['additional_data'] is Map) {
@@ -322,17 +336,27 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
 
               // Extract financial details
               if (additionalData.containsKey('financial_details')) {
-                financialDetails = Map<String, dynamic>.from(additionalData['financial_details']);
-                debugPrint("Extracted financial details from map: $financialDetails");
+                financialDetails = Map<String, dynamic>.from(
+                  additionalData['financial_details'],
+                );
+                debugPrint(
+                  "Extracted financial details from map: $financialDetails",
+                );
               }
             }
             // If additional_data is a JSON string, parse it
             else if (processableApp['additional_data'] is String) {
               try {
-                Map<String, dynamic> additionalData = jsonDecode(processableApp['additional_data']);
+                Map<String, dynamic> additionalData = jsonDecode(
+                  processableApp['additional_data'],
+                );
                 if (additionalData.containsKey('financial_details')) {
-                  financialDetails = Map<String, dynamic>.from(additionalData['financial_details']);
-                  debugPrint("Extracted financial details from string: $financialDetails");
+                  financialDetails = Map<String, dynamic>.from(
+                    additionalData['financial_details'],
+                  );
+                  debugPrint(
+                    "Extracted financial details from string: $financialDetails",
+                  );
                 }
               } catch (e) {
                 debugPrint("Error parsing additional_data string: $e");
@@ -343,7 +367,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
             if (financialDetails.isNotEmpty) {
               _savedApplication = {
                 ..._savedApplication,
-                'financial_details': financialDetails
+                'financial_details': financialDetails,
               };
             }
           }
@@ -351,7 +375,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
           // If loan amount is present, set it in the provider
           if (processableApp['amount'] != null) {
             try {
-              double amount = double.tryParse(processableApp['amount'].toString()) ?? 200.0;
+              double amount =
+                  double.tryParse(processableApp['amount'].toString()) ?? 200.0;
               debugPrint("Setting loan amount: $amount");
               ref.read(loanAmountProvider.notifier).state = amount;
             } catch (e) {
@@ -393,7 +418,6 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
     debugPrint("Final rejected application: $_rejectedApplication");
   }
 
-
   void _processIncompleteApplication(dynamic application) {
     debugPrint("Processing incomplete application: ${application['id']}");
 
@@ -434,21 +458,25 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
 
         // Extract financial details
         if (additionalData.containsKey('financial_details')) {
-          financialDetails =
-              Map<String, dynamic>.from(additionalData['financial_details']);
+          financialDetails = Map<String, dynamic>.from(
+            additionalData['financial_details'],
+          );
           debugPrint("Extracted financial details from map: $financialDetails");
         }
       }
       // If additional_data is a JSON string, parse it
       else if (application['additional_data'] is String) {
         try {
-          Map<String, dynamic> additionalData =
-              jsonDecode(application['additional_data']);
+          Map<String, dynamic> additionalData = jsonDecode(
+            application['additional_data'],
+          );
           if (additionalData.containsKey('financial_details')) {
-            financialDetails =
-                Map<String, dynamic>.from(additionalData['financial_details']);
+            financialDetails = Map<String, dynamic>.from(
+              additionalData['financial_details'],
+            );
             debugPrint(
-                "Extracted financial details from string: $financialDetails");
+              "Extracted financial details from string: $financialDetails",
+            );
           }
         } catch (e) {
           debugPrint("Error parsing additional_data string: $e");
@@ -463,7 +491,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
       if (financialDetails.isNotEmpty) {
         _savedApplication = {
           ..._savedApplication,
-          'financial_details': financialDetails
+          'financial_details': financialDetails,
         };
       }
     });
@@ -484,21 +512,25 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
 
         // Extract financial details
         if (additionalData.containsKey('financial_details')) {
-          financialDetails =
-              Map<String, dynamic>.from(additionalData['financial_details']);
+          financialDetails = Map<String, dynamic>.from(
+            additionalData['financial_details'],
+          );
           debugPrint("Extracted financial details from map: $financialDetails");
         }
       }
       // If additional_data is a JSON string, parse it
       else if (application['additional_data'] is String) {
         try {
-          Map<String, dynamic> additionalData =
-              jsonDecode(application['additional_data']);
+          Map<String, dynamic> additionalData = jsonDecode(
+            application['additional_data'],
+          );
           if (additionalData.containsKey('financial_details')) {
-            financialDetails =
-                Map<String, dynamic>.from(additionalData['financial_details']);
+            financialDetails = Map<String, dynamic>.from(
+              additionalData['financial_details'],
+            );
             debugPrint(
-                "Extracted financial details from string: $financialDetails");
+              "Extracted financial details from string: $financialDetails",
+            );
           }
         } catch (e) {
           debugPrint("Error parsing additional_data string: $e");
@@ -513,7 +545,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
       if (financialDetails.isNotEmpty) {
         _rejectedApplication = {
           ..._rejectedApplication,
-          'financial_details': financialDetails
+          'financial_details': financialDetails,
         };
       }
     });
@@ -565,8 +597,10 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
     try {
       // Find loans with 'pending_contract' status
       final pendingContractLoans = transactions
-          .where((loan) =>
-              loan['status']?.toString().toLowerCase() == 'pending_contract')
+          .where(
+            (loan) =>
+                loan['status']?.toString().toLowerCase() == 'pending_contract',
+          )
           .toList();
 
       debugPrint("Found ${pendingContractLoans.length} pending contract loans");
@@ -602,7 +636,9 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
         success: (contract) {
           // Instead of showing the modal, navigate to LoanContractScreen
           _navigateToLoanContractScreen(
-              ref.read(pendingContractProvider), contract);
+            ref.read(pendingContractProvider),
+            contract,
+          );
         },
         failure: (error, statusCode) {
           AppHelpers.showCheckTopSnackBarInfo(context, error);
@@ -617,9 +653,9 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
     }
   }
 
-//  Future<void> _acceptLoanContract(dynamic contract) async {
-//
-//  }
+  //  Future<void> _acceptLoanContract(dynamic contract) async {
+  //
+  //  }
 
   void _navigateToLoanEligibilityScreen() {
     // Store the selected loan amount in provider
@@ -640,14 +676,17 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
 
     if (_savedApplication != null) {
       debugPrint(
-          'Preparing to pass saved application data to eligibility screen');
+        'Preparing to pass saved application data to eligibility screen',
+      );
 
       // First try to get financial details from the flattened structure
       if (_savedApplication['financial_details'] != null) {
-        financialDetails =
-            Map<String, dynamic>.from(_savedApplication['financial_details']);
+        financialDetails = Map<String, dynamic>.from(
+          _savedApplication['financial_details'],
+        );
         debugPrint(
-            'Using financial details from flattened structure: $financialDetails');
+          'Using financial details from flattened structure: $financialDetails',
+        );
       }
       // If not found, try to get from additional_data
       else if (_savedApplication['additional_data'] != null) {
@@ -656,15 +695,18 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
           if (_savedApplication['additional_data']['financial_details'] !=
               null) {
             financialDetails = Map<String, dynamic>.from(
-                _savedApplication['additional_data']['financial_details']);
+              _savedApplication['additional_data']['financial_details'],
+            );
           }
         } else if (_savedApplication['additional_data'] is String) {
           try {
-            final additionalData =
-                jsonDecode(_savedApplication['additional_data']);
+            final additionalData = jsonDecode(
+              _savedApplication['additional_data'],
+            );
             if (additionalData['financial_details'] != null) {
               financialDetails = Map<String, dynamic>.from(
-                  additionalData['financial_details']);
+                additionalData['financial_details'],
+              );
             }
           } catch (e) {
             debugPrint('Error parsing additional_data string: $e');
@@ -672,7 +714,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
         }
 
         debugPrint(
-            'Using financial details from additional_data: $financialDetails');
+          'Using financial details from additional_data: $financialDetails',
+        );
       }
     }
 
@@ -685,9 +728,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
       context: context,
       modal: ProviderScope(
         child: Consumer(
-          builder: (context, ref, _) => LoanEligibilityScreen(
-            financialDetails: financialDetails,
-          ),
+          builder: (context, ref, _) =>
+              LoanEligibilityScreen(financialDetails: financialDetails),
         ),
       ),
       isDarkMode: false,
@@ -723,7 +765,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
           ),
           width: double.infinity,
           constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height *
+            maxHeight:
+                MediaQuery.of(context).size.height *
                 0.85, // Increased to 85% for more space
           ),
           child: Padding(
@@ -740,8 +783,9 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
                           width: 48.w,
                           decoration: BoxDecoration(
                             color: AppStyle.dragElement,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(40.r)),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(40.r),
+                            ),
                           ),
                         ),
                       ),
@@ -785,20 +829,20 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
 
                                 // Continue to Eligibility Check Button
                                 CustomButton(
-                                  title: ref
-                                          .watch(hasPendingApplicationProvider)
+                                  title:
+                                      ref.watch(hasPendingApplicationProvider)
                                       ? 'Application Under Review'
                                       : (_savedApplication != null
-                                          ? 'Continue Application'
-                                          : 'Continue to Eligibility Check'),
-                                  onPressed: ref
-                                          .watch(hasPendingApplicationProvider)
+                                            ? 'Continue Application'
+                                            : 'Continue to Eligibility Check'),
+                                  onPressed:
+                                      ref.watch(hasPendingApplicationProvider)
                                       ? null // Disable button if there's a pending application
                                       : _navigateToLoanEligibilityScreen,
                                   background:
                                       ref.watch(hasPendingApplicationProvider)
-                                          ? AppStyle.textGrey
-                                          : AppStyle.primary,
+                                      ? AppStyle.textGrey
+                                      : AppStyle.primary,
                                   textColor: AppStyle.white,
                                 ),
 
@@ -843,10 +887,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
           CommonAppBar(
             child: Text(
               'Loan Contract',
-              style: AppStyle.interNoSemi(
-                size: 18,
-                color: AppStyle.black,
-              ),
+              style: AppStyle.interNoSemi(size: 18, color: AppStyle.black),
             ),
           ),
           Expanded(
@@ -870,11 +911,13 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
                       ),
                     ),
                     16.verticalSpace,
-                    Text('Your loan application requires contract acceptance.',
-                        style: AppStyle.interNormal(
-                          size: 14.sp,
-                          color: AppStyle.black,
-                        )),
+                    Text(
+                      'Your loan application requires contract acceptance.',
+                      style: AppStyle.interNormal(
+                        size: 14.sp,
+                        color: AppStyle.black,
+                      ),
+                    ),
                     16.verticalSpace,
                     Text(
                       'Loan Amount: ${AppHelpers.numberFormat(number: pendingLoan['amount'])}',
@@ -921,19 +964,16 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
 
     // 1.5 Priority: Submitted Applications (My Applications)
     for (var app in _myApplications) {
-        // Map to a displayable format
-        // Status can be: Approved, Rejected, In Progress (Risk Review)
-        // We map them to generic types or create new ones.
-        String status = app['status'] ?? 'Pending';
-        combinedLoans.add({
-           'type': 'my_application',
-           'data': app
-        });
-        
-        if (status != 'Rejected' && status != 'Cancelled' && status != 'Paid') {
-             isUserBlocked = true; // Block new loans if active/pending exists
-             hasHigherPriorityItems = true;
-        }
+      // Map to a displayable format
+      // Status can be: Approved, Rejected, In Progress (Risk Review)
+      // We map them to generic types or create new ones.
+      String status = app['status'] ?? 'Pending';
+      combinedLoans.add({'type': 'my_application', 'data': app});
+
+      if (status != 'Rejected' && status != 'Cancelled' && status != 'Paid') {
+        isUserBlocked = true; // Block new loans if active/pending exists
+        hasHigherPriorityItems = true;
+      }
     }
 
     // 2. Next Priority: Pending Disbursal
@@ -944,15 +984,20 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
 
     if (pendingDisbursalTransactions.isNotEmpty) {
       pendingDisbursalTransactions.sort((a, b) {
-        final dateA = DateTime.parse(a['created_at'] ?? DateTime.now().toString());
-        final dateB = DateTime.parse(b['created_at'] ?? DateTime.now().toString());
+        final dateA = DateTime.parse(
+          a['created_at'] ?? DateTime.now().toString(),
+        );
+        final dateB = DateTime.parse(
+          b['created_at'] ?? DateTime.now().toString(),
+        );
         return dateB.compareTo(dateA);
       });
 
-      combinedLoans.addAll(pendingDisbursalTransactions.take(1).map((loan) => {
-        'type': 'pending_disbursal',
-        'data': loan,
-      }));
+      combinedLoans.addAll(
+        pendingDisbursalTransactions
+            .take(1)
+            .map((loan) => {'type': 'pending_disbursal', 'data': loan}),
+      );
       hasHigherPriorityItems = true;
       isUserBlocked = true;
     }
@@ -965,8 +1010,12 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
 
     if (activeOverdueLoans.isNotEmpty) {
       activeOverdueLoans.sort((a, b) {
-        final dateA = DateTime.parse(a['created_at'] ?? DateTime.now().toString());
-        final dateB = DateTime.parse(b['created_at'] ?? DateTime.now().toString());
+        final dateA = DateTime.parse(
+          a['created_at'] ?? DateTime.now().toString(),
+        );
+        final dateB = DateTime.parse(
+          b['created_at'] ?? DateTime.now().toString(),
+        );
         return dateB.compareTo(dateA);
       });
 
@@ -981,13 +1030,19 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
     // 4. Next Priority: Pending Review Applications
     final pendingReviewApplications = _loanTransactions.where((loan) {
       final status = loan['status']?.toString().toLowerCase() ?? '';
-      return status == 'pending_review' || status == 'pending' || status == 'draft';
+      return status == 'pending_review' ||
+          status == 'pending' ||
+          status == 'draft';
     }).toList();
 
     if (pendingReviewApplications.isNotEmpty) {
       pendingReviewApplications.sort((a, b) {
-        final dateA = DateTime.parse(a['created_at'] ?? DateTime.now().toString());
-        final dateB = DateTime.parse(b['created_at'] ?? DateTime.now().toString());
+        final dateA = DateTime.parse(
+          a['created_at'] ?? DateTime.now().toString(),
+        );
+        final dateB = DateTime.parse(
+          b['created_at'] ?? DateTime.now().toString(),
+        );
         return dateB.compareTo(dateA);
       });
 
@@ -1002,16 +1057,24 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
 
     // 5. Saved/Processable Application
     if (!hasHigherPriorityItems) {
-      final nonClickableStatuses = ['pending_review', 'pending_disbursal', 'pending_contract', 'rejected'];
+      final nonClickableStatuses = [
+        'pending_review',
+        'pending_disbursal',
+        'pending_contract',
+        'rejected',
+      ];
 
       // Check for saved application with non-clickable statuses
       if (_savedApplication != null) {
-        final status = _savedApplication['status']?.toString().toLowerCase() ?? '';
+        final status =
+            _savedApplication['status']?.toString().toLowerCase() ?? '';
 
         // Add application based on status
         if (nonClickableStatuses.contains(status) || status == 'incomplete') {
           combinedLoans.add({
-            'type': status == 'incomplete' ? 'saved_application' : 'non_clickable_application',
+            'type': status == 'incomplete'
+                ? 'saved_application'
+                : 'non_clickable_application',
             'data': _savedApplication,
           });
 
@@ -1025,19 +1088,18 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
 
     // 6. Rejected Application
     if (!hasHigherPriorityItems && _rejectedApplication != null) {
-      combinedLoans.add({
-        'type': 'rejected',
-        'data': _rejectedApplication,
-      });
+      combinedLoans.add({'type': 'rejected', 'data': _rejectedApplication});
     }
 
     // 7. Add remaining transactions
     final addedTransactionIds = combinedLoans
-        .where((loan) =>
-    loan['type'] == 'transaction' ||
-        loan['type'] == 'pending_review' ||
-        loan['type'] == 'active_overdue' ||
-        loan['type'] == 'pending_disbursal')
+        .where(
+          (loan) =>
+              loan['type'] == 'transaction' ||
+              loan['type'] == 'pending_review' ||
+              loan['type'] == 'active_overdue' ||
+              loan['type'] == 'pending_disbursal',
+        )
         .map((loan) => loan['data']['id'])
         .toSet();
 
@@ -1045,10 +1107,11 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
         .where((loan) => !addedTransactionIds.contains(loan['id']))
         .toList();
 
-    combinedLoans.addAll(remainingTransactions.map((loan) => {
-      'type': 'transaction',
-      'data': loan,
-    }));
+    combinedLoans.addAll(
+      remainingTransactions.map(
+        (loan) => {'type': 'transaction', 'data': loan},
+      ),
+    );
 
     // Debug print
     debugPrint('Combined loans list length: ${combinedLoans.length}');
@@ -1069,18 +1132,12 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
           16.verticalSpace,
           Text(
             'No Loan Applications',
-            style: AppStyle.interSemi(
-              size: 16.sp,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interSemi(size: 16.sp, color: AppStyle.black),
           ),
           8.verticalSpace,
           Text(
             'Your active, pending, and previous loans will appear here',
-            style: AppStyle.interNormal(
-              size: 14.sp,
-              color: AppStyle.textGrey,
-            ),
+            style: AppStyle.interNormal(size: 14.sp, color: AppStyle.textGrey),
             textAlign: TextAlign.center,
           ),
         ],
@@ -1091,7 +1148,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: combinedLoans.length,
-      separatorBuilder: (context, index) => const Divider(color: AppStyle.borderColor),
+      separatorBuilder: (context, index) =>
+          const Divider(color: AppStyle.borderColor),
       itemBuilder: (context, index) {
         final loan = combinedLoans[index];
 
@@ -1113,10 +1171,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
             ),
             trailing: Text(
               'In Review',
-              style: AppStyle.interSemi(
-                size: 12.sp,
-                color: AppStyle.primary,
-              ),
+              style: AppStyle.interSemi(size: 12.sp, color: AppStyle.primary),
             ),
           );
         }
@@ -1139,10 +1194,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
             ),
             trailing: Text(
               'Processing',
-              style: AppStyle.interSemi(
-                size: 12.sp,
-                color: AppStyle.primary,
-              ),
+              style: AppStyle.interSemi(size: 12.sp, color: AppStyle.primary),
             ),
           );
         }
@@ -1152,23 +1204,24 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
           final activeLoan = loan['data'];
           return ListTile(
             leading: Icon(
-                activeLoan['status']?.toString().toLowerCase() == 'overdue'
-                    ? Icons.warning
-                    : Icons.check_circle,
-                color: activeLoan['status']?.toString().toLowerCase() == 'overdue'
-                    ? AppStyle.red
-                    : Colors.green,
-                size: 32.r
+              activeLoan['status']?.toString().toLowerCase() == 'overdue'
+                  ? Icons.warning
+                  : Icons.check_circle,
+              color: activeLoan['status']?.toString().toLowerCase() == 'overdue'
+                  ? AppStyle.red
+                  : Colors.green,
+              size: 32.r,
             ),
             title: Text(
               activeLoan['status']?.toString().toLowerCase() == 'overdue'
                   ? 'Overdue Loan'
                   : 'Active Loan',
               style: AppStyle.interSemi(
-                  size: 14.sp,
-                  color: activeLoan['status']?.toString().toLowerCase() == 'overdue'
-                      ? AppStyle.red
-                      : Colors.green
+                size: 14.sp,
+                color:
+                    activeLoan['status']?.toString().toLowerCase() == 'overdue'
+                    ? AppStyle.red
+                    : Colors.green,
               ),
             ),
             subtitle: Text(
@@ -1182,7 +1235,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
               activeLoan['status']?.toString().toUpperCase() ?? '',
               style: AppStyle.interSemi(
                 size: 12.sp,
-                color: activeLoan['status']?.toString().toLowerCase() == 'overdue'
+                color:
+                    activeLoan['status']?.toString().toLowerCase() == 'overdue'
                     ? AppStyle.red
                     : Colors.green,
               ),
@@ -1193,17 +1247,18 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
         // Handle non-clickable applications (pending_review, pending, draft)
         if (loan['type'] == 'non_clickable_application') {
           final nonClickableLoan = loan['data'];
-          final status = nonClickableLoan['status']?.toString().toLowerCase() ?? '';
+          final status =
+              nonClickableLoan['status']?.toString().toLowerCase() ?? '';
 
           return ListTile(
             leading: Icon(
-                status == 'pending_review'
-                    ? Icons.hourglass_top
-                    : status == 'pending'
-                    ? Icons.pending_outlined
-                    : Icons.drafts_outlined,
-                color: Colors.orange,
-                size: 32.r
+              status == 'pending_review'
+                  ? Icons.hourglass_top
+                  : status == 'pending'
+                  ? Icons.pending_outlined
+                  : Icons.drafts_outlined,
+              color: Colors.orange,
+              size: 32.r,
             ),
             title: Text(
               status == 'pending_review'
@@ -1211,10 +1266,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
                   : status == 'pending'
                   ? 'Pending Application'
                   : 'Draft Application',
-              style: AppStyle.interSemi(
-                  size: 14.sp,
-                  color: Colors.orange
-              ),
+              style: AppStyle.interSemi(size: 14.sp, color: Colors.orange),
             ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1247,10 +1299,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
                     : status == 'pending'
                     ? 'Pending'
                     : 'Draft',
-                style: AppStyle.interSemi(
-                  size: 12.sp,
-                  color: Colors.orange,
-                ),
+                style: AppStyle.interSemi(size: 12.sp, color: Colors.orange),
               ),
             ),
           );
@@ -1292,10 +1341,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
               },
               child: Text(
                 'Continue',
-                style: AppStyle.interSemi(
-                  size: 12.sp,
-                  color: AppStyle.primary,
-                ),
+                style: AppStyle.interSemi(size: 12.sp, color: AppStyle.primary),
               ),
             ),
           );
@@ -1320,7 +1366,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
                     color: AppStyle.textGrey,
                   ),
                 ),
-                if (rejectedLoan['additional_data']?['rejection_reason'] != null)
+                if (rejectedLoan['additional_data']?['rejection_reason'] !=
+                    null)
                   Text(
                     'Reason: ${rejectedLoan['additional_data']['rejection_reason']}',
                     style: AppStyle.interNormal(
@@ -1332,10 +1379,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
             ),
             trailing: Text(
               'Not Eligible',
-              style: AppStyle.interSemi(
-                size: 12.sp,
-                color: AppStyle.red,
-              ),
+              style: AppStyle.interSemi(size: 12.sp, color: AppStyle.red),
             ),
           );
         }
@@ -1344,67 +1388,88 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
         final transaction = loan['data'];
         // Handle My Applications
         if (loan['type'] == 'my_application') {
-             final app = loan['data'];
-             final bool isApproved = app['status'] == 'Approved';
-             final bool isDisbursed = app['status'] == 'Disbursed';
-             final bool isRingFenced = app['is_ring_fenced'] == 1 || app['is_ring_fenced'] == true;
-             final bool isWithdrawable = app['is_withdrawable'] == 1 || app['is_withdrawable'] == true;
+          final app = loan['data'];
+          final bool isApproved = app['status'] == 'Approved';
+          final bool isDisbursed = app['status'] == 'Disbursed';
+          final bool isRingFenced =
+              app['is_ring_fenced'] == 1 || app['is_ring_fenced'] == true;
+          final bool isWithdrawable =
+              app['is_withdrawable'] == 1 || app['is_withdrawable'] == true;
 
-             return ListTile(
-                leading: Icon(Icons.assignment, color: AppStyle.primary, size: 32.r),
-                title: Text(
-                   'Loan Application',
-                   style: AppStyle.interSemi(size: 14.sp),
-                ),
-                subtitle: Text(
-                  'Amount: ${_formatLoanAmount(app['loan_amount'])} \nDate: ${_formatDate(app['posting_date'])}',
-                  style: AppStyle.interNormal(size: 12.sp, color: AppStyle.textGrey),
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (isRingFenced && (isApproved || isDisbursed))
-                      Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                        margin: EdgeInsets.only(right: 8.w),
-                        decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                        child: Text(
-                          'Ringfenced',
-                          style: AppStyle.interSemi(size: 10.sp, color: Colors.blue),
-                        ),
-                      ),
-                    if (isWithdrawable && (isApproved || isDisbursed))
-                      Padding(
-                        padding: EdgeInsets.only(right: 8.w),
-                        child: TextButton(
-                          onPressed: () => _requestPayout(app['name']),
-                          style: TextButton.styleFrom(
-                            backgroundColor: AppStyle.primary.withOpacity(0.1),
-                            padding: EdgeInsets.symmetric(horizontal: 12.w),
-                          ),
-                          child: Text(
-                            'Withdraw',
-                            style: AppStyle.interSemi(size: 12.sp, color: AppStyle.primary),
-                          ),
-                        ),
-                      ),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-                      decoration: BoxDecoration(
-                        color: _getStatusColor(app['status']).withOpacity(0.1),
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                      child: Text(
-                         app['status'] ?? 'Unknown',
-                         style: AppStyle.interSemi(size: 12.sp, color: _getStatusColor(app['status'])),
+          return ListTile(
+            leading: Icon(
+              Icons.assignment,
+              color: AppStyle.primary,
+              size: 32.r,
+            ),
+            title: Text(
+              'Loan Application',
+              style: AppStyle.interSemi(size: 14.sp),
+            ),
+            subtitle: Text(
+              'Amount: ${_formatLoanAmount(app['loan_amount'])} \nDate: ${_formatDate(app['posting_date'])}',
+              style: AppStyle.interNormal(
+                size: 12.sp,
+                color: AppStyle.textGrey,
+              ),
+            ),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (isRingFenced && (isApproved || isDisbursed))
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 8.w,
+                      vertical: 4.h,
+                    ),
+                    margin: EdgeInsets.only(right: 8.w),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                    child: Text(
+                      'Ringfenced',
+                      style: AppStyle.interSemi(
+                        size: 10.sp,
+                        color: Colors.blue,
                       ),
                     ),
-                  ],
+                  ),
+                if (isWithdrawable && (isApproved || isDisbursed))
+                  Padding(
+                    padding: EdgeInsets.only(right: 8.w),
+                    child: TextButton(
+                      onPressed: () => _requestPayout(app['name']),
+                      style: TextButton.styleFrom(
+                        backgroundColor: AppStyle.primary.withOpacity(0.1),
+                        padding: EdgeInsets.symmetric(horizontal: 12.w),
+                      ),
+                      child: Text(
+                        'Withdraw',
+                        style: AppStyle.interSemi(
+                          size: 12.sp,
+                          color: AppStyle.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                  decoration: BoxDecoration(
+                    color: _getStatusColor(app['status']).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  child: Text(
+                    app['status'] ?? 'Unknown',
+                    style: AppStyle.interSemi(
+                      size: 12.sp,
+                      color: _getStatusColor(app['status']),
+                    ),
+                  ),
                 ),
-             );
+              ],
+            ),
+          );
         }
 
         return ListTile(
@@ -1414,10 +1479,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
           ),
           subtitle: Text(
             'Date: ${_formatDate(transaction['created_at'])}',
-            style: AppStyle.interNormal(
-              size: 12.sp,
-              color: AppStyle.textGrey,
-            ),
+            style: AppStyle.interNormal(size: 12.sp, color: AppStyle.textGrey),
           ),
           trailing: Text(
             transaction['status'] ?? '',
@@ -1430,6 +1492,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
       },
     );
   }
+
   // Helper method to format loan amounts consistently
   String _formatLoanAmount(dynamic amount) {
     if (amount == null) return 'R 0.00';
@@ -1485,8 +1548,9 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
                 : 'R ${intl.NumberFormat('#,##0').format(ref.watch(loanAmountProvider))}',
             style: AppStyle.interBold(
               size: 18.sp,
-              color:
-                  hasPendingApplication ? AppStyle.textGrey : AppStyle.primary,
+              color: hasPendingApplication
+                  ? AppStyle.textGrey
+                  : AppStyle.primary,
             ),
           ),
           16.verticalSpace,
@@ -1500,8 +1564,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
               label:
                   'R ${intl.NumberFormat('#,##0').format(ref.watch(loanAmountProvider))}',
               onChanged: (double value) {
-                ref.read(loanAmountProvider.notifier).state =
-                    value.roundToDouble();
+                ref.read(loanAmountProvider.notifier).state = value
+                    .roundToDouble();
               },
               // Make it look disabled visually
               activeColor: (_sliderDisabled || hasPendingApplication)
@@ -1551,14 +1615,15 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
   }
 
   void _navigateToLoanContractScreen(
-      dynamic loanApplication, dynamic contract) {
+    dynamic loanApplication,
+    dynamic contract,
+  ) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => ProviderScope(
           child: Consumer(
-            builder: (context, ref, _) => LoanContractScreen(
-              loanApplication: loanApplication,
-            ),
+            builder: (context, ref, _) =>
+                LoanContractScreen(loanApplication: loanApplication),
           ),
         ),
       ),
@@ -1569,8 +1634,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
     final hasPendingApplication = ref.watch(hasPendingApplicationProvider);
 
     if (!hasPendingApplication) {
-      return const SizedBox
-          .shrink(); // Return empty widget if no pending application
+      return const SizedBox.shrink(); // Return empty widget if no pending application
     }
 
     return Container(
@@ -1586,19 +1650,12 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.info_outline,
-                color: Colors.orange,
-                size: 24.r,
-              ),
+              Icon(Icons.info_outline, color: Colors.orange, size: 24.r),
               12.horizontalSpace,
               Expanded(
                 child: Text(
                   'Application Under Review',
-                  style: AppStyle.interSemi(
-                    size: 16.sp,
-                    color: Colors.orange,
-                  ),
+                  style: AppStyle.interSemi(size: 16.sp, color: Colors.orange),
                 ),
               ),
             ],
@@ -1606,18 +1663,12 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
           12.verticalSpace,
           Text(
             'Your loan application is currently being reviewed by our team. You cannot apply for another loan until this application is processed.',
-            style: AppStyle.interNormal(
-              size: 14.sp,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interNormal(size: 14.sp, color: AppStyle.black),
           ),
           16.verticalSpace,
           Text(
             'Please check back later for updates on your application status.',
-            style: AppStyle.interNormal(
-              size: 14.sp,
-              color: AppStyle.textGrey,
-            ),
+            style: AppStyle.interNormal(size: 14.sp, color: AppStyle.textGrey),
           ),
         ],
       ),
@@ -1632,10 +1683,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
           CommonAppBar(
             child: Text(
               'Loan Application Blocked',
-              style: AppStyle.interNoSemi(
-                size: 18,
-                color: AppStyle.black,
-              ),
+              style: AppStyle.interNoSemi(size: 18, color: AppStyle.black),
             ),
           ),
           Expanded(
@@ -1645,11 +1693,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.block,
-                      size: 64.r,
-                      color: AppStyle.red,
-                    ),
+                    Icon(Icons.block, size: 64.r, color: AppStyle.red),
                     16.verticalSpace,
                     Text(
                       'Loan Application Temporarily Blocked',
@@ -1684,8 +1728,9 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
                           modal: ProviderScope(
                             child: Consumer(
                               builder: (context, ref, _) => ChatPage(
-                                  roleId: "admin",
-                                  name: "Admin"), // Use the ChatRoute component
+                                roleId: "admin",
+                                name: "Admin",
+                              ), // Use the ChatRoute component
                             ),
                           ),
                           isDarkMode: false,
@@ -1704,31 +1749,33 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
 
   void _checkActiveOrOverdueLoans(ApiResult<List<dynamic>> transactionsResult) {
     transactionsResult.when(
-        success: (transactions) {
-          // Check for active or overdue loans
-          final activeOverdueLoans = transactions.where((loan) {
-            final status = loan['status']?.toString().toLowerCase() ?? '';
-            return status == 'active' || status == 'overdue';
-          }).toList();
+      success: (transactions) {
+        // Check for active or overdue loans
+        final activeOverdueLoans = transactions.where((loan) {
+          final status = loan['status']?.toString().toLowerCase() ?? '';
+          return status == 'active' || status == 'overdue';
+        }).toList();
 
-          if (activeOverdueLoans.isNotEmpty) {
-            // Sort to get the most recent active/overdue loan
-            activeOverdueLoans.sort((a, b) {
-              final dateA = DateTime.parse(a['created_at'] ?? DateTime.now().toString());
-              final dateB = DateTime.parse(b['created_at'] ?? DateTime.now().toString());
-              return dateB.compareTo(dateA);
-            });
+        if (activeOverdueLoans.isNotEmpty) {
+          // Sort to get the most recent active/overdue loan
+          activeOverdueLoans.sort((a, b) {
+            final dateA = DateTime.parse(
+              a['created_at'] ?? DateTime.now().toString(),
+            );
+            final dateB = DateTime.parse(
+              b['created_at'] ?? DateTime.now().toString(),
+            );
+            return dateB.compareTo(dateA);
+          });
 
-
-            setState(() {
-              ref.read(hasPendingApplicationProvider.notifier).state = true;
-            });
-          }
-        },
-        failure: (error, _) {
-          debugPrint("Failed to check active/overdue loans: $error");
+          setState(() {
+            ref.read(hasPendingApplicationProvider.notifier).state = true;
+          });
         }
+      },
+      failure: (error, _) {
+        debugPrint("Failed to check active/overdue loans: $error");
+      },
     );
   }
 }
-

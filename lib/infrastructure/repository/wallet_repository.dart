@@ -13,7 +13,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 import 'package:flutter/material.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
 import 'package:foodyman/domain/interface/wallet.dart';
@@ -26,7 +25,9 @@ import '../models/models.dart';
 
 class WalletRepository implements WalletRepositoryFacade {
   @override
-  Future<ApiResult<List<UserModel>>> searchSending(Map<String, dynamic> params) async {
+  Future<ApiResult<List<UserModel>>> searchSending(
+    Map<String, dynamic> params,
+  ) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
@@ -53,17 +54,14 @@ class WalletRepository implements WalletRepositoryFacade {
 
   @override
   Future<ApiResult<WalletHistoryData>> sendWalletBalance(
-      String userUuid,
-      double amount,
-      ) async {
+    String userUuid,
+    double amount,
+  ) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
         '/api/method/paas.api.user.user.send_wallet_balance',
-        data: {
-          'receiver': userUuid,
-          'amount': amount,
-        },
+        data: {'receiver': userUuid, 'amount': amount},
       );
 
       return ApiResult.success(
@@ -82,7 +80,9 @@ class WalletRepository implements WalletRepositoryFacade {
   Future<ApiResult<List<WalletHistoryData>>> getWalletHistory() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get('/api/method/paas.api.user.user.get_wallet_history');
+      final response = await client.get(
+        '/api/method/paas.api.user.user.get_wallet_history',
+      );
 
       return ApiResult.success(
         data: (response.data['data'] as List)
@@ -107,19 +107,16 @@ class WalletRepository implements WalletRepositoryFacade {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
         '/api/method/paas.api.payment.payment.process_wallet_top_up',
-        data: {
-             'amount': amount,
-             'token': token
-        },
+        data: {'amount': amount, 'token': token},
       );
       // Return message (URL) or data (Transaction) depending on backend response.
       // Assuming backend returns 'message' string for URL and 'data' obj for transaction.
       if (response.data['message'] is String) {
-          return ApiResult.success(data: response.data['message']);
+        return ApiResult.success(data: response.data['message']);
       } else {
-          return ApiResult.success(
-            data: TransactionsResponse.fromJson(response.data),
-          );
+        return ApiResult.success(
+          data: TransactionsResponse.fromJson(response.data),
+        );
       }
     } catch (e) {
       debugPrint('==> wallet top up failure: $e');

@@ -28,7 +28,8 @@ class MarketThreeItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         context.pushRoute(
-            ShopRoute(shopId: (shop.id ?? 0).toString(), shop: shop));
+          ShopRoute(shopId: (shop.id ?? 0).toString(), shop: shop),
+        );
       },
       child: isShop
           ? _shopItem()
@@ -42,8 +43,9 @@ class MarketThreeItem extends StatelessWidget {
               //   color: !(shop.open ?? true) ? Style.white.withOpacity(0.5) : Style.transparent
               // ),
               decoration: BoxDecoration(
-                  color: AppStyle.bgGrey,
-                  borderRadius: BorderRadius.circular(10.r)),
+                color: AppStyle.bgGrey,
+                borderRadius: BorderRadius.circular(10.r),
+              ),
               child: Stack(
                 children: [
                   Column(
@@ -54,8 +56,9 @@ class MarketThreeItem extends StatelessWidget {
                         height: 180.h,
                         child: ClipRRect(
                           borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10.r),
-                              topRight: Radius.circular(10.r)),
+                            topLeft: Radius.circular(10.r),
+                            topRight: Radius.circular(10.r),
+                          ),
                           child: CustomNetworkImage(
                             url: shop.backgroundImg ?? '',
                             height: 180.h,
@@ -75,7 +78,8 @@ class MarketThreeItem extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      (shop.translation?.title?.length ?? 0) > 28
+                                      (shop.translation?.title?.length ?? 0) >
+                                              28
                                           ? "${shop.translation?.title?.substring(0, 28) ?? " "}.."
                                           : shop.translation?.title ?? "",
                                       style: AppStyle.interSemi(
@@ -83,7 +87,7 @@ class MarketThreeItem extends StatelessWidget {
                                         color: AppStyle.black,
                                       ),
                                     ),
-                                    if(shop.verify ?? false)
+                                    if (shop.verify ?? false)
                                       Padding(
                                         padding: EdgeInsets.only(left: 4.r),
                                         child: const BadgeItem(),
@@ -104,7 +108,7 @@ class MarketThreeItem extends StatelessWidget {
                                       color: AppStyle.black,
                                     ),
                                   ),
-                                )
+                                ),
                               ],
                             ),
                             4.verticalSpace,
@@ -114,10 +118,8 @@ class MarketThreeItem extends StatelessWidget {
                                   child: Text(
                                     shop.bonus != null
                                         ? ((shop.bonus?.type ?? "sum") == "sum")
-                                            ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(
-                                                number: shop.bonus?.value,
-                                              )} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
-                                            : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                                              ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(number: shop.bonus?.value)} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                                              : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
                                         : shop.translation?.description ?? "",
                                     style: AppStyle.interNormal(
                                       size: 12,
@@ -131,8 +133,9 @@ class MarketThreeItem extends StatelessWidget {
                                   width: 5.w,
                                   height: 5.h,
                                   decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: AppStyle.separatorDot),
+                                    shape: BoxShape.circle,
+                                    color: AppStyle.separatorDot,
+                                  ),
                                 ),
                                 8.horizontalSpace,
                                 Text(
@@ -157,12 +160,14 @@ class MarketThreeItem extends StatelessWidget {
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 18.w),
                       child: Padding(
-                        padding:
-                            EdgeInsets.only(bottom: isSimpleShop ? 6.h : 0),
+                        padding: EdgeInsets.only(
+                          bottom: isSimpleShop ? 6.h : 0,
+                        ),
                         child: BonusDiscountPopular(
-                            isPopular: shop.isRecommend ?? false,
-                            bonus: shop.bonus,
-                            isDiscount: shop.isDiscount ?? false),
+                          isPopular: shop.isRecommend ?? false,
+                          bonus: shop.bonus,
+                          isDiscount: shop.isDiscount ?? false,
+                        ),
                       ),
                     ),
                   ),
@@ -176,7 +181,7 @@ class MarketThreeItem extends StatelessWidget {
     return Container(
       padding: REdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        border: Border.all(color: AppStyle.borderColor,width: 1.2),
+        border: Border.all(color: AppStyle.borderColor, width: 1.2),
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Column(
@@ -196,29 +201,23 @@ class MarketThreeItem extends StatelessWidget {
               Expanded(
                 child: Text(
                   shop.translation?.title ?? "",
-                  style: AppStyle.interSemi(
-                    size: 14,
-                    color: AppStyle.black,
-                  ),
+                  style: AppStyle.interSemi(size: 14, color: AppStyle.black),
                   maxLines: 1,
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              if(shop.verify ?? false)
+              if (shop.verify ?? false)
                 Padding(
                   padding: EdgeInsets.only(left: 4.r),
                   child: const BadgeItem(),
-                )
+                ),
             ],
           ),
           6.verticalSpace,
           Text(
             "${shop.deliveryTime?.from ?? 0} - ${shop.deliveryTime?.to ?? 0} ${shop.deliveryTime?.type ?? "min"}",
-            style: AppStyle.interSemi(
-              size: 12,
-              color: AppStyle.textGrey,
-            ),
+            style: AppStyle.interSemi(size: 12, color: AppStyle.textGrey),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -228,4 +227,3 @@ class MarketThreeItem extends StatelessWidget {
     );
   }
 }
-

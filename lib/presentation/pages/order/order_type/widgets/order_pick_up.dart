@@ -26,109 +26,123 @@ class _OrderPickUpState extends ConsumerState<OrderPickUp> {
       padding: EdgeInsets.only(top: 24.h),
       child: Column(
         children: [
-          Consumer(builder: (context, ref, child) {
-            return OrderContainer(
-              onTap: () {
-                if (ref.watch(orderProvider).branches?.isNotEmpty ?? false) {
-                  AppHelpers.showCustomModalBottomSheet(
-                    context: context,
-                    modal: Container(
-                      decoration: BoxDecoration(
-                        color: AppStyle.white,
-                        borderRadius: BorderRadius.only(
+          Consumer(
+            builder: (context, ref, child) {
+              return OrderContainer(
+                onTap: () {
+                  if (ref.watch(orderProvider).branches?.isNotEmpty ?? false) {
+                    AppHelpers.showCustomModalBottomSheet(
+                      context: context,
+                      modal: Container(
+                        decoration: BoxDecoration(
+                          color: AppStyle.white,
+                          borderRadius: BorderRadius.only(
                             topRight: Radius.circular(24.r),
-                            topLeft: Radius.circular(24.r)),
-                      ),
-                      child: Column(
-                        children: [
-                          24.verticalSpace,
-                          TitleAndIcon(
-                              title:
-                                  AppHelpers.getTranslation(TrKeys.branches)),
-                          16.verticalSpace,
-                          Expanded(
-                            child: Consumer(builder: (context, ref, child) {
-                              return ListView.builder(
-                                itemBuilder: (context, index) {
-                                  return SelectItem(
-                                      onTap: () {
-                                        ref
-                                            .read(orderProvider.notifier)
-                                            .changeBranch(index);
-                                      },
-                                      isActive: ref
-                                              .watch(orderProvider)
-                                              .branchIndex ==
-                                          index,
-                                      desc: ref
-                                              .watch(orderProvider)
-                                              .branches?[index]
-                                              .address
-                                              ?.address ??
-                                          "",
-                                      title: ref
-                                              .watch(orderProvider)
-                                              .branches?[index]
-                                              .translation
-                                              ?.title ??
-                                          "");
-                                },
-                                itemCount:
-                                    ref.watch(orderProvider).branches?.length ??
-                                        0,
-                                shrinkWrap: true,
-                              );
-                            }),
+                            topLeft: Radius.circular(24.r),
                           ),
-                        ],
+                        ),
+                        child: Column(
+                          children: [
+                            24.verticalSpace,
+                            TitleAndIcon(
+                              title: AppHelpers.getTranslation(TrKeys.branches),
+                            ),
+                            16.verticalSpace,
+                            Expanded(
+                              child: Consumer(
+                                builder: (context, ref, child) {
+                                  return ListView.builder(
+                                    itemBuilder: (context, index) {
+                                      return SelectItem(
+                                        onTap: () {
+                                          ref
+                                              .read(orderProvider.notifier)
+                                              .changeBranch(index);
+                                        },
+                                        isActive:
+                                            ref
+                                                .watch(orderProvider)
+                                                .branchIndex ==
+                                            index,
+                                        desc:
+                                            ref
+                                                .watch(orderProvider)
+                                                .branches?[index]
+                                                .address
+                                                ?.address ??
+                                            "",
+                                        title:
+                                            ref
+                                                .watch(orderProvider)
+                                                .branches?[index]
+                                                .translation
+                                                ?.title ??
+                                            "",
+                                      );
+                                    },
+                                    itemCount:
+                                        ref
+                                            .watch(orderProvider)
+                                            .branches
+                                            ?.length ??
+                                        0,
+                                    shrinkWrap: true,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    isDarkMode: false,
-                  );
-                }
-              },
-              icon: Padding(
-                padding: EdgeInsets.only(left: 4.w),
-                child: SvgPicture.asset(
-                  "assets/svgs/adress.svg",
-                  width: 20.w,
-                  height: 20.h,
-                ),
-              ),
-              title: AppHelpers.getTranslation(TrKeys.deliveryAddress),
-              description:
-                  ref.watch(orderProvider).shopData?.translation?.address ?? '',
-            );
-          }),
-          10.verticalSpace,
-          Consumer(builder: (context, ref, child) {
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(10.r),
-              child: SizedBox(
-                height: 300.r,
-                width: double.infinity,
-                child: GoogleMap(
-                  padding: REdgeInsets.only(bottom: 12,left: 4),
-                  myLocationButtonEnabled: false,
-                  markers: ref.watch(orderProvider).shopMarkers,
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(
-                      ref.read(orderProvider).shopData?.location?.latitude ??
-                          AppConstants.demoLatitude,
-                      ref.read(orderProvider).shopData?.location?.longitude ??
-                          AppConstants.demoLongitude,
-                    ),
-                    zoom: 14,
+                      isDarkMode: false,
+                    );
+                  }
+                },
+                icon: Padding(
+                  padding: EdgeInsets.only(left: 4.w),
+                  child: SvgPicture.asset(
+                    "assets/svgs/adress.svg",
+                    width: 20.w,
+                    height: 20.h,
                   ),
-                  mapToolbarEnabled: false,
-                  zoomControlsEnabled: false,
                 ),
-              ),
-            );
-          })
+                title: AppHelpers.getTranslation(TrKeys.deliveryAddress),
+                description:
+                    ref.watch(orderProvider).shopData?.translation?.address ??
+                    '',
+              );
+            },
+          ),
+          10.verticalSpace,
+          Consumer(
+            builder: (context, ref, child) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(10.r),
+                child: SizedBox(
+                  height: 300.r,
+                  width: double.infinity,
+                  child: GoogleMap(
+                    padding: REdgeInsets.only(bottom: 12, left: 4),
+                    myLocationButtonEnabled: false,
+                    markers: ref.watch(orderProvider).shopMarkers,
+                    initialCameraPosition: CameraPosition(
+                      target: LatLng(
+                        ref.read(orderProvider).shopData?.location?.latitude ??
+                            AppConstants.demoLatitude,
+                        ref.read(orderProvider).shopData?.location?.longitude ??
+                            AppConstants.demoLongitude,
+                      ),
+                      zoom: 14,
+                    ),
+                    mapToolbarEnabled: false,
+                    zoomControlsEnabled: false,
+                  ),
+                ),
+              );
+            },
+          ),
         ],
       ),
     );
   }
 }
-

@@ -18,9 +18,7 @@ class CartRepository implements CartRepositoryFacade {
         '/api/method/paas.api.cart.cart.get_cart',
         queryParameters: {'shop_id': shopId},
       );
-      return ApiResult.success(
-        data: CartModel.fromJson(response.data),
-      );
+      return ApiResult.success(data: CartModel.fromJson(response.data));
     } catch (e) {
       debugPrint('==> getCart failure: $e');
       return ApiResult.failure(
@@ -36,17 +34,16 @@ class CartRepository implements CartRepositoryFacade {
     required String shopId,
   }) async {
     return insertCart(
-      cart: CartRequest(
-        productId: itemCode,
-        quantity: qty,
-        shopId: shopId,
-      ),
+      cart: CartRequest(productId: itemCode, quantity: qty, shopId: shopId),
     );
   }
 
   @override
   Future<ApiResult<CartModel>> getCartInGroup(
-      String? cartId, String? shopId, String? cartUuid) async {
+    String? cartId,
+    String? shopId,
+    String? cartUuid,
+  ) async {
     final params = {
       if (cartId != null) 'cart_id': cartId,
       if (shopId != null) 'shop_id': shopId,
@@ -58,9 +55,7 @@ class CartRepository implements CartRepositoryFacade {
         '/api/method/paas.api.get_cart_in_group',
         queryParameters: params,
       );
-      return ApiResult.success(
-        data: CartModel.fromJson(response.data),
-      );
+      return ApiResult.success(data: CartModel.fromJson(response.data));
     } catch (e) {
       debugPrint('==> getCartInGroup failure: $e');
       return ApiResult.failure(
@@ -89,8 +84,10 @@ class CartRepository implements CartRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<dynamic>> changeStatus(
-      {required String? userUuid, required String? cartId}) async {
+  Future<ApiResult<dynamic>> changeStatus({
+    required String? userUuid,
+    required String? cartId,
+  }) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
@@ -115,9 +112,7 @@ class CartRepository implements CartRepositoryFacade {
         '/api/method/paas.api.delete_cart',
         data: {'cart_id': cartId},
       );
-      return ApiResult.success(
-        data: CartModel.fromJson(response.data),
-      );
+      return ApiResult.success(data: CartModel.fromJson(response.data));
     } catch (e) {
       debugPrint('==> deleteCart failure: $e');
       return ApiResult.failure(
@@ -128,8 +123,10 @@ class CartRepository implements CartRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<dynamic>> deleteUser(
-      {required String cartId, required String userId}) async {
+  Future<ApiResult<dynamic>> deleteUser({
+    required String cartId,
+    required String userId,
+  }) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
@@ -147,17 +144,17 @@ class CartRepository implements CartRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<CartModel>> removeProductCart(
-      {required String cartDetailId, List<String>? listOfId}) async {
+  Future<ApiResult<CartModel>> removeProductCart({
+    required String cartDetailId,
+    List<String>? listOfId,
+  }) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
         '/api/method/paas.api.cart.cart.remove_product_cart',
         data: {'cart_detail_id': cartDetailId},
       );
-      return ApiResult.success(
-        data: CartModel.fromJson(response.data),
-      );
+      return ApiResult.success(data: CartModel.fromJson(response.data));
     } catch (e) {
       debugPrint('==> removeProductCart failure: $e');
       return ApiResult.failure(
@@ -168,7 +165,9 @@ class CartRepository implements CartRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<CartModel>> createAndCart({required CartRequest cart}) async {
+  Future<ApiResult<CartModel>> createAndCart({
+    required CartRequest cart,
+  }) async {
     return insertCart(cart: cart);
   }
 
@@ -188,9 +187,7 @@ class CartRepository implements CartRepositoryFacade {
         '/api/method/paas.api.cart.cart.add_to_cart',
         data: params,
       );
-      return ApiResult.success(
-        data: CartModel.fromJson(response.data),
-      );
+      return ApiResult.success(data: CartModel.fromJson(response.data));
     } catch (e) {
       debugPrint('==> insertCart failure: $e');
       return ApiResult.failure(
@@ -201,17 +198,16 @@ class CartRepository implements CartRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<CartModel>> insertCartWithGroup(
-      {required CartRequest cart}) async {
+  Future<ApiResult<CartModel>> insertCartWithGroup({
+    required CartRequest cart,
+  }) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
         '/api/method/paas.api.add_to_cart_group',
         data: cart.toJson(),
       );
-      return ApiResult.success(
-        data: CartModel.fromJson(response.data),
-      );
+      return ApiResult.success(data: CartModel.fromJson(response.data));
     } catch (e) {
       debugPrint('==> insertCartWithGroup failure: $e');
       return ApiResult.failure(
@@ -226,9 +222,6 @@ class CartRepository implements CartRepositoryFacade {
     if (cart.shopId != null) {
       return getCart(cart.shopId!);
     }
-    return ApiResult.failure(
-      error: "Shop ID is required",
-      statusCode: 400,
-    );
+    return ApiResult.failure(error: "Shop ID is required", statusCode: 400);
   }
 }

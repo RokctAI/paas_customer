@@ -10,22 +10,23 @@ import 'parcel_list_state.dart';
 class ParcelListNotifier extends StateNotifier<ParcelListState> {
   final ParcelRepositoryFacade _parcelRepo;
 
-  ParcelListNotifier(
-    this._parcelRepo,
-  ) : super(const ParcelListState());
+  ParcelListNotifier(this._parcelRepo) : super(const ParcelListState());
   int activeOrder = 1;
   int historyOrder = 1;
 
   Future<void> fetchActiveOrdersPage(
-      BuildContext context, RefreshController controller,
-      {bool isRefresh = false}) async {
+    BuildContext context,
+    RefreshController controller, {
+    bool isRefresh = false,
+  }) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       if (isRefresh) {
         activeOrder = 1;
       }
-      final response =
-          await _parcelRepo.getActiveParcel(isRefresh ? 1 : ++activeOrder);
+      final response = await _parcelRepo.getActiveParcel(
+        isRefresh ? 1 : ++activeOrder,
+      );
       response.when(
         success: (data) {
           if (isRefresh) {
@@ -70,29 +71,28 @@ class ParcelListNotifier extends StateNotifier<ParcelListState> {
   }
 
   Future<void> fetchHistoryOrdersPage(
-      BuildContext context, RefreshController controller,
-      {bool isRefresh = false}) async {
+    BuildContext context,
+    RefreshController controller, {
+    bool isRefresh = false,
+  }) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       if (isRefresh) {
         historyOrder = 1;
       }
-      final response =
-          await _parcelRepo.getHistoryParcel(isRefresh ? 1 : ++historyOrder);
+      final response = await _parcelRepo.getHistoryParcel(
+        isRefresh ? 1 : ++historyOrder,
+      );
       response.when(
         success: (data) {
           if (isRefresh) {
-            state = state.copyWith(
-              historyOrders: data.data ?? [],
-            );
+            state = state.copyWith(historyOrders: data.data ?? []);
             controller.refreshCompleted();
           } else {
             if (data.data?.isNotEmpty ?? false) {
               List<ParcelOrder> list = List.from(state.historyOrders);
               list.addAll(data.data!);
-              state = state.copyWith(
-                historyOrders: list,
-              );
+              state = state.copyWith(historyOrders: list);
               controller.loadComplete();
             } else {
               historyOrder--;
@@ -123,10 +123,7 @@ class ParcelListNotifier extends StateNotifier<ParcelListState> {
   Future<void> fetchActiveOrders(BuildContext context) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
-      state = state.copyWith(
-        isActiveLoading: true,
-        activeOrders: [],
-      );
+      state = state.copyWith(isActiveLoading: true, activeOrders: []);
       final response = await _parcelRepo.getActiveParcel(1);
       response.when(
         success: (data) {
@@ -137,9 +134,7 @@ class ParcelListNotifier extends StateNotifier<ParcelListState> {
           );
         },
         failure: (failure, status) {
-          state = state.copyWith(
-            isActiveLoading: false,
-          );
+          state = state.copyWith(isActiveLoading: false);
           AppHelpers.showCheckTopSnackBar(
             context,
             AppHelpers.getTranslation(status.toString()),
@@ -157,10 +152,7 @@ class ParcelListNotifier extends StateNotifier<ParcelListState> {
   Future<void> fetchHistoryOrders(BuildContext context) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
-      state = state.copyWith(
-        historyOrders: [],
-        isHistoryLoading: true,
-      );
+      state = state.copyWith(historyOrders: [], isHistoryLoading: true);
       final response = await _parcelRepo.getHistoryParcel(1);
       response.when(
         success: (data) {
@@ -185,4 +177,3 @@ class ParcelListNotifier extends StateNotifier<ParcelListState> {
     }
   }
 }
-

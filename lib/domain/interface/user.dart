@@ -2,7 +2,6 @@ import 'package:foodyman/infrastructure/models/request/edit_profile.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 
-
 abstract class UserRepositoryFacade {
   Future<ApiResult<ProfileResponse>> getProfileDetails();
 
@@ -10,8 +9,10 @@ abstract class UserRepositoryFacade {
 
   Future<ApiResult<dynamic>> saveLocation({required AddressNewModel? address});
 
-  Future<ApiResult<dynamic>> updateLocation(
-      {required AddressNewModel? address, required String? addressId});
+  Future<ApiResult<dynamic>> updateLocation({
+    required AddressNewModel? address,
+    required String? addressId,
+  });
 
   Future<ApiResult<dynamic>> setActiveAddress({required String id});
 
@@ -37,8 +38,5 @@ abstract class UserRepositoryFacade {
 
   Future<ApiResult<void>> updateFirebaseToken(String? token);
 
-  Future<dynamic> searchUser({
-    required String name,
-    required int page
-  });
+  Future<dynamic> searchUser({required String name, required int page});
 }

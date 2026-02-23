@@ -21,29 +21,47 @@ class MockCategoriesRepository implements CategoriesRepositoryFacade {
   );
 
   @override
-  Future<ApiResult<CategoriesPaginateResponse>> getAllCategories({required int page}) async {
+  Future<ApiResult<CategoriesPaginateResponse>> getAllCategories({
+    required int page,
+  }) async {
     return ApiResult.success(
       data: CategoriesPaginateResponse(
-        data: [_demoCategory, _demoCategory.copyWith(id: "2", uuid: "demo_cat_2", translation: Translation(title: "Pizza"))],
+        data: [
+          _demoCategory,
+          _demoCategory.copyWith(
+            id: "2",
+            uuid: "demo_cat_2",
+            translation: Translation(title: "Pizza"),
+          ),
+        ],
       ),
     );
   }
 
   @override
-  Future<ApiResult<CategoriesPaginateResponse>> getCategoriesByShop({required String shopId}) async {
+  Future<ApiResult<CategoriesPaginateResponse>> getCategoriesByShop({
+    required String shopId,
+  }) async {
     return ApiResult.success(
       data: CategoriesPaginateResponse(
-        data: [_demoCategory, _demoCategory.copyWith(id: "2", uuid: "demo_cat_2", translation: Translation(title: "Drinks"))],
+        data: [
+          _demoCategory,
+          _demoCategory.copyWith(
+            id: "2",
+            uuid: "demo_cat_2",
+            translation: Translation(title: "Drinks"),
+          ),
+        ],
       ),
     );
   }
 
   @override
-  Future<ApiResult<CategoriesPaginateResponse>> searchCategories({required String text}) async {
+  Future<ApiResult<CategoriesPaginateResponse>> searchCategories({
+    required String text,
+  }) async {
     return ApiResult.success(
-      data: CategoriesPaginateResponse(
-        data: [_demoCategory],
-      ),
+      data: CategoriesPaginateResponse(data: [_demoCategory]),
     );
   }
 }

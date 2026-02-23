@@ -37,13 +37,17 @@ class FailurePage extends StatelessWidget {
                     Text(
                       AppHelpers.getTranslation(TrKeys.paymentRejected),
                       style: AppStyle.interBold(
-                          color: AppStyle.textGrey, size: 20),
+                        color: AppStyle.textGrey,
+                        size: 20,
+                      ),
                     ),
                     6.verticalSpace,
                     Text(
                       AppHelpers.getTranslation(TrKeys.tryAgain),
                       style: AppStyle.interNormal(
-                          color: AppStyle.textGrey, size: 14),
+                        color: AppStyle.textGrey,
+                        size: 14,
+                      ),
                     ),
                   ],
                 ),

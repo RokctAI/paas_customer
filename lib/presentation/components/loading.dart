@@ -13,14 +13,8 @@ class Loading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Platform.isAndroid
-          ? const CircularProgressIndicator(
-              color: AppStyle.primary,
-            )
-          : CupertinoActivityIndicator(
-              color: bgColor,
-              radius: 12,
-            ),
+          ? const CircularProgressIndicator(color: AppStyle.primary)
+          : CupertinoActivityIndicator(color: bgColor, radius: 12),
     );
   }
 }
-

@@ -20,21 +20,25 @@ class CustomNetworkImage extends StatelessWidget {
   const CustomNetworkImage({
     super.key,
     required this.url,
-     this.height,
-     this.width,
+    this.height,
+    this.width,
     required this.radius,
     this.fit = BoxFit.cover,
     this.color, // New color parameter
     this.bgColor = AppStyle.mainBack,
-    this.profile = false, this.name,
+    this.profile = false,
+    this.name,
   });
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius),
-      child: color != null // Check if color is provided
-          ? ColorFiltered( // Apply color filter if color is provided
+      child:
+          color !=
+              null // Check if color is provided
+          ? ColorFiltered(
+              // Apply color filter if color is provided
               colorFilter: ColorFilter.mode(color!, BlendMode.srcIn),
               child: _buildImage(),
             )
@@ -45,7 +49,7 @@ class CustomNetworkImage extends StatelessWidget {
   Widget _buildImage() {
     return AppHelpers.checkIsSvg(url)
         ? SvgPicture.network(
-           url ?? "",
+            url ?? "",
             width: width,
             height: height,
             fit: BoxFit.cover,
@@ -65,9 +69,7 @@ class CustomNetworkImage extends StatelessWidget {
               return Container(
                 height: height,
                 width: width,
-                decoration: BoxDecoration(
-                  color: AppStyle.shimmerBase,
-                ),
+                decoration: BoxDecoration(color: AppStyle.shimmerBase),
               );
             },
             errorWidget: (context, url, error) {
@@ -75,7 +77,7 @@ class CustomNetworkImage extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(radius),
                   color: bgColor,
-                 image: profile
+                  image: profile
                       ? const DecorationImage(
                           image: AssetImage("assets/images/app_logo.png"),
                         )
@@ -93,4 +95,3 @@ class CustomNetworkImage extends StatelessWidget {
           );
   }
 }
-

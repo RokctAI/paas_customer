@@ -1,7 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 
-
 part 'home_state.freezed.dart';
 
 @freezed

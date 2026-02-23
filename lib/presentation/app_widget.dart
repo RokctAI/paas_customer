@@ -32,45 +32,42 @@ class AppWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.refresh(appProvider);
     return FutureBuilder(
-        future: Future.wait([
-          FlutterDisplayMode.setHighRefreshRate(),
-          if (LocalStorage.getTranslations().isEmpty) fetchSetting()
-        ]),
-        builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
-          return ScreenUtilInit(
-            useInheritedMediaQuery: false,
-            designSize: const Size(375, 812),
-            builder: (context, child) {
-              return RefreshConfiguration(
-                footerBuilder: () => const ClassicFooter(
-                  idleIcon: SizedBox(),
-                  idleText: "",
-                ),
-                headerBuilder: () => const WaterDropMaterialHeader(
-                  backgroundColor: AppStyle.white,
-                  color: AppStyle.textGrey,
-                ),
-                child: MaterialApp.router(
-                  debugShowCheckedModeBanner: false,
-                  routerDelegate: appRouter.delegate(),
-                  routeInformationParser: appRouter.defaultRouteParser(),
-                  locale: Locale(state.activeLanguage?.locale ?? 'en'),
-                  theme: ThemeData(
-                    useMaterial3: false,
-                    sliderTheme: SliderThemeData(
-                      overlayShape: SliderComponentShape.noOverlay,
-                      rangeThumbShape: CustomRoundRangeSliderThumbShape(
-                        enabledThumbRadius: 12.r,
-                      ),
+      future: Future.wait([
+        FlutterDisplayMode.setHighRefreshRate(),
+        if (LocalStorage.getTranslations().isEmpty) fetchSetting(),
+      ]),
+      builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
+        return ScreenUtilInit(
+          useInheritedMediaQuery: false,
+          designSize: const Size(375, 812),
+          builder: (context, child) {
+            return RefreshConfiguration(
+              footerBuilder: () =>
+                  const ClassicFooter(idleIcon: SizedBox(), idleText: ""),
+              headerBuilder: () => const WaterDropMaterialHeader(
+                backgroundColor: AppStyle.white,
+                color: AppStyle.textGrey,
+              ),
+              child: MaterialApp.router(
+                debugShowCheckedModeBanner: false,
+                routerDelegate: appRouter.delegate(),
+                routeInformationParser: appRouter.defaultRouteParser(),
+                locale: Locale(state.activeLanguage?.locale ?? 'en'),
+                theme: ThemeData(
+                  useMaterial3: false,
+                  sliderTheme: SliderThemeData(
+                    overlayShape: SliderComponentShape.noOverlay,
+                    rangeThumbShape: CustomRoundRangeSliderThumbShape(
+                      enabledThumbRadius: 12.r,
                     ),
                   ),
-                  themeMode:
-                      state.isDarkMode ? ThemeMode.dark : ThemeMode.light,
                 ),
-              );
-            },
-          );
-        });
+                themeMode: state.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }
-

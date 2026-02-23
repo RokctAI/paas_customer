@@ -27,14 +27,13 @@ class PaymentNotifier extends StateNotifier<PaymentState> {
         success: (data) {
           List payments = [];
           if (withOutCash || !shopEnableCod) {
-            payments = data?.data?.reversed.where((e) => e.tag != "cash").toList() ?? [];
+            payments =
+                data?.data?.reversed.where((e) => e.tag != "cash").toList() ??
+                [];
           } else {
             payments = data?.data?.reversed.toList() ?? [];
           }
-          state = state.copyWith(
-            payments: payments,
-            isPaymentsLoading: false,
-          );
+          state = state.copyWith(payments: payments, isPaymentsLoading: false);
         },
         failure: (failure, status) {
           state = state.copyWith(isPaymentsLoading: false);
@@ -51,4 +50,3 @@ class PaymentNotifier extends StateNotifier<PaymentState> {
     }
   }
 }
-

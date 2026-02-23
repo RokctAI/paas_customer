@@ -10,7 +10,6 @@ import 'package:foodyman/presentation/components/buttons/animation_button_effect
 import 'package:foodyman/presentation/components/buttons/pop_button.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
-
 @RoutePage()
 class UiTypePage extends StatelessWidget {
   final bool isBack;
@@ -52,17 +51,16 @@ class UiTypePage extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       border: Border.all(
-                          color: AppHelpers.getType() == index
-                              ? AppStyle.primary
-                              : AppStyle.transparent,
-                          width: 3),
+                        color: AppHelpers.getType() == index
+                            ? AppStyle.primary
+                            : AppStyle.transparent,
+                        width: 3,
+                      ),
                       borderRadius: BorderRadius.circular(12.r),
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12.r),
-                      child: Image.asset(
-                        "assets/images/ui$index.png",
-                      ),
+                      child: Image.asset("assets/images/ui$index.png"),
                     ),
                   ),
                 );
@@ -81,4 +79,3 @@ class UiTypePage extends StatelessWidget {
     );
   }
 }
-

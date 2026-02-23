@@ -12,8 +12,12 @@ class NoteProduct extends StatefulWidget {
   final bool isSave;
   final ValueChanged<String> onTap;
 
-  const NoteProduct(
-      {super.key, required this.onTap, this.comment, this.isSave = true});
+  const NoteProduct({
+    super.key,
+    required this.onTap,
+    this.comment,
+    this.isSave = true,
+  });
 
   @override
   State<NoteProduct> createState() => _NoteProductState();
@@ -24,8 +28,7 @@ class _NoteProductState extends State<NoteProduct> {
 
   @override
   void initState() {
-    controller =
-        TextEditingController(text: widget.comment);
+    controller = TextEditingController(text: widget.comment);
     super.initState();
   }
 
@@ -47,15 +50,15 @@ class _NoteProductState extends State<NoteProduct> {
         32.verticalSpace,
         if (widget.isSave)
           CustomButton(
-              title: AppHelpers.getTranslation(TrKeys.save),
-              onPressed: () {
-                if (controller.text.trim().isNotEmpty) {
-                  widget.onTap(controller.text);
-                  Navigator.pop(context);
-                }
-              }),
+            title: AppHelpers.getTranslation(TrKeys.save),
+            onPressed: () {
+              if (controller.text.trim().isNotEmpty) {
+                widget.onTap(controller.text);
+                Navigator.pop(context);
+              }
+            },
+          ),
       ],
     );
   }
 }
-

@@ -6,7 +6,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../presentation/theme/theme.dart';
 import '../../infrastructure/services/app_helpers.dart';
 
-final preloadedWebViewProvider = StateProvider<PreloadedWebViewState?>((ref) => null);
+final preloadedWebViewProvider = StateProvider<PreloadedWebViewState?>(
+  (ref) => null,
+);
 
 class PreloadedWebViewState {
   final WebViewController controller;
@@ -40,8 +42,9 @@ class PreloadedWebViewService {
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageFinished: (String url) {
-            ref.read(preloadedWebViewProvider.notifier).state =
-                ref.read(preloadedWebViewProvider)?.copyWith(isReady: true);
+            ref.read(preloadedWebViewProvider.notifier).state = ref
+                .read(preloadedWebViewProvider)
+                ?.copyWith(isReady: true);
           },
           onNavigationRequest: (NavigationRequest request) {
             if (request.url.startsWith(AppConstants.baseUrl)) {
@@ -124,11 +127,7 @@ class _WebViewPageState extends ConsumerState<WebViewPage> {
           ),
           // Loading indicator shows while content is loading
           if (isLoading)
-            Center(
-              child: CircularProgressIndicator(
-                color: AppStyle.primary,
-              ),
-            ),
+            Center(child: CircularProgressIndicator(color: AppStyle.primary)),
         ],
       ),
     );

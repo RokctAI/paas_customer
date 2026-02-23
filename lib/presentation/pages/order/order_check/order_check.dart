@@ -43,7 +43,9 @@ import 'widgets/order_button.dart';
 import 'widgets/order_info.dart';
 
 // Import the PreloadedWebView provider
-final preloadedWebViewProvider = StateProvider<PreloadedWebViewState?>((ref) => null);
+final preloadedWebViewProvider = StateProvider<PreloadedWebViewState?>(
+  (ref) => null,
+);
 
 // State class for tracking preloaded WebView
 class PreloadedWebViewState {
@@ -95,29 +97,39 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
   // Check if PayFast is selected
   bool _isPayFastSelected(PaymentState paymentState, OrderState state) {
     if (AppHelpers.getPaymentType() == "admin") {
-      if (paymentState.payments.isEmpty || paymentState.currentIndex >= paymentState.payments.length) {
+      if (paymentState.payments.isEmpty ||
+          paymentState.currentIndex >= paymentState.payments.length) {
         return false;
       }
-      return paymentState.payments[paymentState.currentIndex].tag?.toLowerCase() == "pay-fast";
+      return paymentState.payments[paymentState.currentIndex].tag
+              ?.toLowerCase() ==
+          "pay-fast";
     } else {
       if (state.shopData?.shopPayments == null ||
-          paymentState.currentIndex >= (state.shopData?.shopPayments?.length ?? 0)) {
+          paymentState.currentIndex >=
+              (state.shopData?.shopPayments?.length ?? 0)) {
         return false;
       }
-      return state.shopData?.shopPayments?[paymentState.currentIndex]?.payment?.tag?.toLowerCase() == "pay-fast";
+      return state
+              .shopData
+              ?.shopPayments?[paymentState.currentIndex]
+              ?.payment
+              ?.tag
+              ?.toLowerCase() ==
+          "pay-fast";
     }
   }
 
-  void _createOrder(
-      {required OrderState state,
-        required OrderNotifier event,
-        required ShopOrderState stateOrderShop,
-        required ShopOrderNotifier eventShopOrder,
-        required ViewMapState stateMap,
-        required PaymentState paymentState,
-        required ProfileState stateProfile,
-        required OrdersListNotifier eventOrderList}) {
-
+  void _createOrder({
+    required OrderState state,
+    required OrderNotifier event,
+    required ShopOrderState stateOrderShop,
+    required ShopOrderNotifier eventShopOrder,
+    required ViewMapState stateMap,
+    required PaymentState paymentState,
+    required ProfileState stateProfile,
+    required OrdersListNotifier eventOrderList,
+  }) {
     // Validation checks
     if ((state.shopData?.minAmount ?? 0) > (state.calculateData?.price ?? 0)) {
       AppHelpers.showCheckTopSnackBarInfo(
@@ -157,54 +169,63 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
     }
 
     if ((LocalStorage.getUser()?.phone == null ||
-        (LocalStorage.getUser()?.phone?.isEmpty ?? true)) &&
+            (LocalStorage.getUser()?.phone?.isEmpty ?? true)) &&
         AppHelpers.getPhoneRequired()) {
       AppHelpers.showCustomModalBottomSheet(
-          context: context,
-          modal: const PhoneVerify(),
-          isDarkMode: false,
-          paddingTop: MediaQuery.paddingOf(context).top);
+        context: context,
+        modal: const PhoneVerify(),
+        isDarkMode: false,
+        paddingTop: MediaQuery.paddingOf(context).top,
+      );
       return;
     }
 
     // Create order data
     OrderBodyData orderBodyData = OrderBodyData(
-        paymentId: ((AppHelpers.getPaymentType() == "admin")
-            ? (paymentState.payments[paymentState.currentIndex].id)
-            : state.shopData?.shopPayments?[paymentState.currentIndex]?.payment?.id),
-        username: state.username,
-        phone: state.phoneNumber ?? LocalStorage.getUser()?.phone,
-        email: LocalStorage.getUser()?.email,
-        notes: state.notes,
-        cartId: stateOrderShop.cart?.id ?? "",
-        shopId: state.shopData?.id ?? "",
-        coupon: state.promoCode,
-        deliveryFee: state.calculateData?.deliveryFee ?? 0,
-        deliveryPointId: state.selectedDeliveryPoint?.id?.toString() ?? "",
-        deliveryType: state.tabIndex == 0
-            ? DeliveryTypeEnum.delivery
-            : (state.tabIndex == 1
+      paymentId: ((AppHelpers.getPaymentType() == "admin")
+          ? (paymentState.payments[paymentState.currentIndex].id)
+          : state
+                .shopData
+                ?.shopPayments?[paymentState.currentIndex]
+                ?.payment
+                ?.id),
+      username: state.username,
+      phone: state.phoneNumber ?? LocalStorage.getUser()?.phone,
+      email: LocalStorage.getUser()?.email,
+      notes: state.notes,
+      cartId: stateOrderShop.cart?.id ?? "",
+      shopId: state.shopData?.id ?? "",
+      coupon: state.promoCode,
+      deliveryFee: state.calculateData?.deliveryFee ?? 0,
+      deliveryPointId: state.selectedDeliveryPoint?.id?.toString() ?? "",
+      deliveryType: state.tabIndex == 0
+          ? DeliveryTypeEnum.delivery
+          : (state.tabIndex == 1
                 ? DeliveryTypeEnum.pickup
                 : DeliveryTypeEnum.pickupPoint),
-        location: Location(
-            longitude: stateMap.place?.location?.last ??
-                LocalStorage.getAddressSelected()?.location?.longitude ??
-                AppConstants.demoLongitude,
-            latitude: stateMap.place?.location?.first ??
-                LocalStorage.getAddressSelected()?.location?.latitude ??
-                AppConstants.demoLatitude),
-        address: AddressModel(
-          address: LocalStorage.getAddressSelected()?.address ?? "",
-          house: state.house,
-          floor: state.floor,
-          office: state.office,
-        ),
-        note: state.note,
-        deliveryDate:
-        "${state.selectDate?.year ?? 0}-${(state.selectDate?.month ?? 0).toString().padLeft(2, '0')}-${(state.selectDate?.day ?? 0).toString().padLeft(2, '0')}",
-        deliveryTime: state.selectTime.hour.toString().length == 2
-            ? "${state.selectTime.hour}:${state.selectTime.minute.toString().padLeft(2, '0')}"
-            : "0${state.selectTime.hour}:${state.selectTime.minute.toString().padLeft(2, '0')}");
+      location: Location(
+        longitude:
+            stateMap.place?.location?.last ??
+            LocalStorage.getAddressSelected()?.location?.longitude ??
+            AppConstants.demoLongitude,
+        latitude:
+            stateMap.place?.location?.first ??
+            LocalStorage.getAddressSelected()?.location?.latitude ??
+            AppConstants.demoLatitude,
+      ),
+      address: AddressModel(
+        address: LocalStorage.getAddressSelected()?.address ?? "",
+        house: state.house,
+        floor: state.floor,
+        office: state.office,
+      ),
+      note: state.note,
+      deliveryDate:
+          "${state.selectDate?.year ?? 0}-${(state.selectDate?.month ?? 0).toString().padLeft(2, '0')}-${(state.selectDate?.day ?? 0).toString().padLeft(2, '0')}",
+      deliveryTime: state.selectTime.hour.toString().length == 2
+          ? "${state.selectTime.hour}:${state.selectTime.minute.toString().padLeft(2, '0')}"
+          : "0${state.selectTime.hour}:${state.selectTime.minute.toString().padLeft(2, '0')}",
+    );
 
     // Check if PayFast is the selected payment method
     final bool isPayFast = _isPayFastSelected(paymentState, state);
@@ -215,32 +236,31 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
       AppHelpers.showCustomModalBottomSheet(
         isDismissible: true,
         context: context,
-        modal:
-        PaymentScreen(
-                    orderData: orderBodyData,
-                    onPaymentComplete: (success) {
-                      // Close the bottom sheet
-                      Navigator.pop(context);
+        modal: PaymentScreen(
+          orderData: orderBodyData,
+          onPaymentComplete: (success) {
+            // Close the bottom sheet
+            Navigator.pop(context);
 
-                      if (success) {
-                        // Handle successful payment
-                        widget.controllerCenter?.play();
-                        eventShopOrder.getCart(context, () {});
-                        eventOrderList.fetchActiveOrders(context);
+            if (success) {
+              // Handle successful payment
+              widget.controllerCenter?.play();
+              eventShopOrder.getCart(context, () {});
+              eventOrderList.fetchActiveOrders(context);
 
-                        // Navigate back to main screen if needed
-                        AppHelpers.goHome(context);
-                      } else {
-                        // Handle payment failure
-                        AppHelpers.showCheckTopSnackBarInfo(
-                          context,
-                          AppHelpers.getTranslation(TrKeys.paymentRejected),
-                        );
-                      }
-                    },
-                  ),
-              isDarkMode: false,
-            );
+              // Navigate back to main screen if needed
+              AppHelpers.goHome(context);
+            } else {
+              // Handle payment failure
+              AppHelpers.showCheckTopSnackBarInfo(
+                context,
+                AppHelpers.getTranslation(TrKeys.paymentRejected),
+              );
+            }
+          },
+        ),
+        isDarkMode: false,
+      );
     } else {
       // Use the standard flow
       event.createOrder(
@@ -248,7 +268,10 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
         data: orderBodyData,
         payment: ((AppHelpers.getPaymentType() == "admin")
             ? (paymentState.payments[paymentState.currentIndex])
-            : state.shopData?.shopPayments?[paymentState.currentIndex]?.payment),
+            : state
+                  .shopData
+                  ?.shopPayments?[paymentState.currentIndex]
+                  ?.payment),
         onSuccess: () {
           widget.controllerCenter?.play();
           eventShopOrder.getCart(context, () {});
@@ -259,16 +282,18 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
             // For PayFast, use our preloaded WebView if available
             final preloadedState = ref.read(preloadedWebViewProvider);
 
-            if (preloadedState != null && preloadedState.url == paymentUrl && preloadedState.isReady) {
+            if (preloadedState != null &&
+                preloadedState.url == paymentUrl &&
+                preloadedState.isReady) {
               if (!mounted) return;
               // If we have a preloaded and ready WebView for this URL, use it
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) =>
-                    WebViewPage(
-                      url: paymentUrl,
-                      preloadedController: preloadedState.controller,
-                    )
+                MaterialPageRoute(
+                  builder: (_) => WebViewPage(
+                    url: paymentUrl,
+                    preloadedController: preloadedState.controller,
+                  ),
                 ),
               );
             } else {
@@ -292,57 +317,67 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
 
   _checkShopOrder() {
     AppHelpers.showAlertDialog(
-        context: context,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              AppHelpers.getTranslation(TrKeys.allPreviouslyAdded),
-              style: AppStyle.interNormal(),
-              textAlign: TextAlign.center,
-            ),
-            16.verticalSpace,
-            Row(
-              children: [
-                Expanded(
-                  child: CustomButton(
-                      title: AppHelpers.getTranslation(TrKeys.cancel),
-                      background: AppStyle.transparent,
-                      borderColor: AppStyle.borderColor,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
+      context: context,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            AppHelpers.getTranslation(TrKeys.allPreviouslyAdded),
+            style: AppStyle.interNormal(),
+            textAlign: TextAlign.center,
+          ),
+          16.verticalSpace,
+          Row(
+            children: [
+              Expanded(
+                child: CustomButton(
+                  title: AppHelpers.getTranslation(TrKeys.cancel),
+                  background: AppStyle.transparent,
+                  borderColor: AppStyle.borderColor,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                10.horizontalSpace,
-                Expanded(child: Consumer(builder: (contextTwo, ref, child) {
-                  return CustomButton(
+              ),
+              10.horizontalSpace,
+              Expanded(
+                child: Consumer(
+                  builder: (contextTwo, ref, child) {
+                    return CustomButton(
                       isLoading: ref.watch(shopOrderProvider).isDeleteLoading,
                       title: AppHelpers.getTranslation(TrKeys.clearAll),
                       onPressed: () {
                         ref
                             .read(shopOrderProvider.notifier)
                             .deleteCart(context);
-                        ref.read(orderProvider.notifier).repeatOrder(
-                          context: context,
-                          shopId: "",
-                          listOfProduct:
-                          ref.watch(orderProvider).orderData?.details ??
-                              [],
-                          onSuccess: () {
-                            ref
-                                .read(shopOrderProvider.notifier)
-                                .getCart(context, () {
-                              context.maybePop();
-                              context.pushRoute(const OrderRoute());
-                            });
-                          },
-                        );
-                      });
-                })),
-              ],
-            )
-          ],
-        ));
+                        ref
+                            .read(orderProvider.notifier)
+                            .repeatOrder(
+                              context: context,
+                              shopId: "",
+                              listOfProduct:
+                                  ref.watch(orderProvider).orderData?.details ??
+                                  [],
+                              onSuccess: () {
+                                ref.read(shopOrderProvider.notifier).getCart(
+                                  context,
+                                  () {
+                                    context.maybePop();
+                                    context.pushRoute(const OrderRoute());
+                                  },
+                                );
+                              },
+                            );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -357,154 +392,164 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
         ),
       ),
       padding: EdgeInsets.symmetric(vertical: 16.h),
-      child: Consumer(builder: (context, ref, child) {
-        final state = ref.watch(orderProvider);
-        final event = ref.read(orderProvider.notifier);
-        final paymentState = ref.watch(paymentProvider);
+      child: Consumer(
+        builder: (context, ref, child) {
+          final state = ref.watch(orderProvider);
+          final event = ref.read(orderProvider.notifier);
+          final paymentState = ref.watch(paymentProvider);
 
-        // Listen for changes in payment selection to potentially preload WebView
-        ref.listen(paymentProvider, (previous, next) {
-          if (previous?.currentIndex != next.currentIndex) {
-            // If PayFast is selected, we could potentially start preloading
-            final isPayFast = _isPayFastSelected(next, state);
-            if (isPayFast) {
-              // This will occur after we have the URL from the process method
+          // Listen for changes in payment selection to potentially preload WebView
+          ref.listen(paymentProvider, (previous, next) {
+            if (previous?.currentIndex != next.currentIndex) {
+              // If PayFast is selected, we could potentially start preloading
+              final isPayFast = _isPayFastSelected(next, state);
+              if (isPayFast) {
+                // This will occur after we have the URL from the process method
+              }
             }
-          }
-        });
+          });
 
-        ref.listen(orderProvider, (previous, next) {
-          if (next.isCheckShopOrder &&
-              (next.isCheckShopOrder !=
-                  (previous?.isCheckShopOrder ?? false))) {
-            _checkShopOrder();
-          }
-        });
-        num subTotal = 0;
-        state.orderData?.details?.forEach((element) {
-          subTotal = subTotal + (element.totalPrice ?? 0);
-        });
-        return Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            widget.isOrder ? const OrderInfo() : const CardAndPromo(),
-            PriceInformation(isOrder: widget.isOrder, state: state),
-            const DeliveryInfo(),
-            26.verticalSpace,
-            Padding(
-              padding: EdgeInsets.only(
+          ref.listen(orderProvider, (previous, next) {
+            if (next.isCheckShopOrder &&
+                (next.isCheckShopOrder !=
+                    (previous?.isCheckShopOrder ?? false))) {
+              _checkShopOrder();
+            }
+          });
+          num subTotal = 0;
+          state.orderData?.details?.forEach((element) {
+            subTotal = subTotal + (element.totalPrice ?? 0);
+          });
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              widget.isOrder ? const OrderInfo() : const CardAndPromo(),
+              PriceInformation(isOrder: widget.isOrder, state: state),
+              const DeliveryInfo(),
+              26.verticalSpace,
+              Padding(
+                padding: EdgeInsets.only(
                   bottom: MediaQuery.paddingOf(context).bottom,
                   right: 16.w,
-                  left: 16.w),
-              child: OrderButton(
-                autoOrder: () {
-                  if (!mounted) return;
-                  AppHelpers.showCustomModalBottomSheet(
+                  left: 16.w,
+                ),
+                child: OrderButton(
+                  autoOrder: () {
+                    if (!mounted) return;
+                    AppHelpers.showCustomModalBottomSheet(
                       context: context,
                       modal: AutoOrderModal(
                         repeatData: state.orderData?.repeat,
                         orderId: state.orderData?.id ?? "",
                         time: TimeService.timeFormat(
-                            state.orderData?.createdAt ?? DateTime.now()),
+                          state.orderData?.createdAt ?? DateTime.now(),
+                        ),
                       ),
-                      isDarkMode: false);
-                },
-                isRepeatLoading: state.isAddLoading,
-                isLoading: ref.watch(shopOrderProvider).isAddAndRemoveLoading ||
-                    state.isButtonLoading,
-                isOrder: widget.isOrder,
-                isAutoLoading: state.isButtonLoading,
-                orderStatus: widget.orderStatus,
-                createOrder: () {
-                  _createOrder(
-                    state: state,
-                    stateMap: ref.watch(viewMapProvider),
-                    stateOrderShop: ref.watch(shopOrderProvider),
-                    event: event,
-                    eventShopOrder: ref.read(shopOrderProvider.notifier),
-                    paymentState: paymentState,
-                    stateProfile: ref.watch(profileProvider),
-                    eventOrderList: ref.read(ordersListProvider.notifier),
-                  );
-                },
-                cancelOrder: () {
-                  event.cancelOrder(context, state.orderData?.id ?? "", () {
-                    ref
-                        .read(ordersListProvider.notifier)
-                        .fetchActiveOrders(context);
-                    ref
-                        .read(ordersListProvider.notifier)
-                        .fetchHistoryOrders(context);
-                    ref
-                        .read(ordersListProvider.notifier)
-                        .fetchRefundOrders(context);
-                  });
-                },
-                callShop: () async {
-                  final Uri launchUri = Uri(
-                    scheme: 'tel',
-                    path: state.orderData?.shop?.phone ?? "",
-                  );
-                  await launchUrl(launchUri);
-                },
-                callDriver: () async {
-                  if (state.orderData?.deliveryMan != null) {
+                      isDarkMode: false,
+                    );
+                  },
+                  isRepeatLoading: state.isAddLoading,
+                  isLoading:
+                      ref.watch(shopOrderProvider).isAddAndRemoveLoading ||
+                      state.isButtonLoading,
+                  isOrder: widget.isOrder,
+                  isAutoLoading: state.isButtonLoading,
+                  orderStatus: widget.orderStatus,
+                  createOrder: () {
+                    _createOrder(
+                      state: state,
+                      stateMap: ref.watch(viewMapProvider),
+                      stateOrderShop: ref.watch(shopOrderProvider),
+                      event: event,
+                      eventShopOrder: ref.read(shopOrderProvider.notifier),
+                      paymentState: paymentState,
+                      stateProfile: ref.watch(profileProvider),
+                      eventOrderList: ref.read(ordersListProvider.notifier),
+                    );
+                  },
+                  cancelOrder: () {
+                    event.cancelOrder(context, state.orderData?.id ?? "", () {
+                      ref
+                          .read(ordersListProvider.notifier)
+                          .fetchActiveOrders(context);
+                      ref
+                          .read(ordersListProvider.notifier)
+                          .fetchHistoryOrders(context);
+                      ref
+                          .read(ordersListProvider.notifier)
+                          .fetchRefundOrders(context);
+                    });
+                  },
+                  callShop: () async {
                     final Uri launchUri = Uri(
                       scheme: 'tel',
-                      path: state.orderData?.deliveryMan?.phone ?? "",
+                      path: state.orderData?.shop?.phone ?? "",
                     );
                     await launchUrl(launchUri);
-                  } else {
-                    AppHelpers.showCheckTopSnackBarInfo(
-                      context,
-                      AppHelpers.getTranslation(TrKeys.noDriver),
+                  },
+                  callDriver: () async {
+                    if (state.orderData?.deliveryMan != null) {
+                      final Uri launchUri = Uri(
+                        scheme: 'tel',
+                        path: state.orderData?.deliveryMan?.phone ?? "",
+                      );
+                      await launchUrl(launchUri);
+                    } else {
+                      AppHelpers.showCheckTopSnackBarInfo(
+                        context,
+                        AppHelpers.getTranslation(TrKeys.noDriver),
+                      );
+                    }
+                  },
+                  sendSmsDriver: () async {
+                    if (state.orderData?.deliveryMan != null) {
+                      final Uri launchUri = Uri(
+                        scheme: 'sms',
+                        path: state.orderData?.deliveryMan?.phone ?? "",
+                      );
+                      await launchUrl(launchUri);
+                    } else {
+                      AppHelpers.showCheckTopSnackBarInfo(
+                        context,
+                        AppHelpers.getTranslation(TrKeys.noDriver),
+                      );
+                    }
+                  },
+                  isRefund:
+                      (state.orderData?.refunds?.isEmpty ?? true) ||
+                      state.orderData?.refunds?.last.status == "canceled",
+                  repeatOrder: () {
+                    event.repeatOrder(
+                      context: context,
+                      shopId: ref.watch(shopOrderProvider).cart?.shopId ?? "",
+                      listOfProduct: state.orderData?.details ?? [],
+                      onSuccess: () {
+                        ref.read(shopOrderProvider.notifier).getCart(
+                          context,
+                          () {
+                            context.maybePop();
+                            context.pushRoute(const OrderRoute());
+                          },
+                        );
+                      },
                     );
-                  }
-                },
-                sendSmsDriver: () async {
-                  if (state.orderData?.deliveryMan != null) {
-                    final Uri launchUri = Uri(
-                      scheme: 'sms',
-                      path: state.orderData?.deliveryMan?.phone ?? "",
-                    );
-                    await launchUrl(launchUri);
-                  } else {
-                    AppHelpers.showCheckTopSnackBarInfo(
-                      context,
-                      AppHelpers.getTranslation(TrKeys.noDriver),
-                    );
-                  }
-                },
-                isRefund: (state.orderData?.refunds?.isEmpty ?? true) ||
-                    state.orderData?.refunds?.last.status == "canceled",
-                repeatOrder: () {
-                  event.repeatOrder(
-                    context: context,
-                    shopId: ref.watch(shopOrderProvider).cart?.shopId ?? "",
-                    listOfProduct: state.orderData?.details ?? [],
-                    onSuccess: () {
-                      ref.read(shopOrderProvider.notifier).getCart(context, () {
-                        context.maybePop();
-                        context.pushRoute(const OrderRoute());
-                      });
-                    },
-                  );
-                },
-                showImage: state.orderData?.afterDeliveredImage != null
-                    ? () {
-                  AppHelpers.showAlertDialog(
-                    context: context,
-                    child: ImageDialog(
-                      img: state.orderData?.afterDeliveredImage,
-                    ),
-                  );
-                }
-                    : null,
+                  },
+                  showImage: state.orderData?.afterDeliveredImage != null
+                      ? () {
+                          AppHelpers.showAlertDialog(
+                            context: context,
+                            child: ImageDialog(
+                              img: state.orderData?.afterDeliveredImage,
+                            ),
+                          );
+                        }
+                      : null,
+                ),
               ),
-            ),
-          ],
-        );
-      }),
+            ],
+          );
+        },
+      ),
     );
   }
 }
@@ -628,12 +673,14 @@ class _WebViewPageState extends State<WebViewPage> {
     // Don't process if already detected payment completion
     if (isPaymentComplete) return false;
 
-    final isSuccess = url.contains('order-stripe-success') ||
+    final isSuccess =
+        url.contains('order-stripe-success') ||
         url.contains('payment-success') ||
         url.contains('redirect-success') ||
         url.contains(AppConstants.baseUrl);
-    
-    final isFailure = url.contains('payment-cancel') ||
+
+    final isFailure =
+        url.contains('payment-cancel') ||
         url.contains('payment-failed') ||
         url.contains('redirect-cancel');
 
@@ -658,7 +705,6 @@ class _WebViewPageState extends State<WebViewPage> {
     }
     // Check if the URL contains cancel/failure indicators
     else if (isFailure) {
-
       isPaymentComplete = true;
 
       // Show error message
@@ -715,11 +761,7 @@ class _WebViewPageState extends State<WebViewPage> {
 
           // Loading indicator shows while content is loading
           if (isLoading)
-            Center(
-              child: CircularProgressIndicator(
-                color: AppStyle.primary,
-              ),
-            ),
+            Center(child: CircularProgressIndicator(color: AppStyle.primary)),
         ],
       ),
     );
@@ -738,7 +780,8 @@ class PayFastPaymentScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  ConsumerState<PayFastPaymentScreen> createState() => _PayFastPaymentScreenState();
+  ConsumerState<PayFastPaymentScreen> createState() =>
+      _PayFastPaymentScreenState();
 }
 
 class _PayFastPaymentScreenState extends ConsumerState<PayFastPaymentScreen> {
@@ -823,10 +866,7 @@ class _PayFastPaymentScreenState extends ConsumerState<PayFastPaymentScreen> {
             _isLoading = false;
           });
 
-          AppHelpers.showCheckTopSnackBarInfo(
-            context,
-            error,
-          );
+          AppHelpers.showCheckTopSnackBarInfo(context, error);
         },
       );
     } catch (e) {
@@ -876,10 +916,7 @@ class _PayFastPaymentScreenState extends ConsumerState<PayFastPaymentScreen> {
           );
         },
         failure: (error, statusCode) {
-          AppHelpers.showCheckTopSnackBarInfo(
-            context,
-            error,
-          );
+          AppHelpers.showCheckTopSnackBarInfo(context, error);
         },
       );
     } catch (e) {
@@ -900,118 +937,116 @@ class _PayFastPaymentScreenState extends ConsumerState<PayFastPaymentScreen> {
     return _loadingCards
         ? Center(child: CircularProgressIndicator(color: AppStyle.primary))
         : Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          AppHelpers.getTranslation(TrKeys.payment),
-          style: TextStyle(
-            fontSize: 18.sp,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        20.verticalSpace,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                AppHelpers.getTranslation(TrKeys.payment),
+                style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
+              ),
+              20.verticalSpace,
 
-        // Show saved cards section if available
-        if (_savedCards.isNotEmpty) ...[
-          Text(
-            AppHelpers.getTranslation(TrKeys.selectSavedCard),
-            style: AppStyle.interSemi(size: 16.sp),
-          ),
-          12.verticalSpace,
-          SizedBox(
-            height: 80.h,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: _savedCards.length,
-              itemBuilder: (context, index) {
-                final card = _savedCards[index];
-                final isSelected = _selectedCard?.id == card.id;
+              // Show saved cards section if available
+              if (_savedCards.isNotEmpty) ...[
+                Text(
+                  AppHelpers.getTranslation(TrKeys.selectSavedCard),
+                  style: AppStyle.interSemi(size: 16.sp),
+                ),
+                12.verticalSpace,
+                SizedBox(
+                  height: 80.h,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _savedCards.length,
+                    itemBuilder: (context, index) {
+                      final card = _savedCards[index];
+                      final isSelected = _selectedCard?.id == card.id;
 
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _selectedCard = isSelected ? null : card;
-                    });
-                  },
-                  child: Container(
-                    width: 160.w,
-                    margin: EdgeInsets.only(right: 12.w),
-                    padding: EdgeInsets.all(12.r),
-                    decoration: BoxDecoration(
-                      color: isSelected
-                          ? AppStyle.primary
-                          : AppStyle.white,
-                      borderRadius: BorderRadius.circular(12.r),
-                      border: Border.all(
-                        color: isSelected
-                            ? AppStyle.primary
-                            : AppStyle.borderColor,
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              card.cardType,
-                              style: AppStyle.interSemi(size: 14.sp),
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedCard = isSelected ? null : card;
+                          });
+                        },
+                        child: Container(
+                          width: 160.w,
+                          margin: EdgeInsets.only(right: 12.w),
+                          padding: EdgeInsets.all(12.r),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? AppStyle.primary
+                                : AppStyle.white,
+                            borderRadius: BorderRadius.circular(12.r),
+                            border: Border.all(
+                              color: isSelected
+                                  ? AppStyle.primary
+                                  : AppStyle.borderColor,
                             ),
-                            Text(
-                              '${AppHelpers.getTranslation(TrKeys.expires)} ${card.expiryDate}',
-                              style: AppStyle.interNormal(size: 12.sp),
-                            ),
-                          ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    card.cardType,
+                                    style: AppStyle.interSemi(size: 14.sp),
+                                  ),
+                                  Text(
+                                    '${AppHelpers.getTranslation(TrKeys.expires)} ${card.expiryDate}',
+                                    style: AppStyle.interNormal(size: 12.sp),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                '•••• ${card.lastFour}',
+                                style: AppStyle.interSemi(size: 14.sp),
+                              ),
+                            ],
+                          ),
                         ),
-                        Text(
-                          '•••• ${card.lastFour}',
-                          style: AppStyle.interSemi(size: 14.sp),
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-          ),
-          24.verticalSpace,
+                ),
+                24.verticalSpace,
 
-          // Pay with selected card button
-          if (_selectedCard != null)
-            CustomButton(
-              isLoading: _isLoading,
-              title: AppHelpers.getTranslation(TrKeys.payWithSavedCard),
-              onPressed: _processTokenPayment,
-            ),
+                // Pay with selected card button
+                if (_selectedCard != null)
+                  CustomButton(
+                    isLoading: _isLoading,
+                    title: AppHelpers.getTranslation(TrKeys.payWithSavedCard),
+                    onPressed: _processTokenPayment,
+                  ),
 
-          24.verticalSpace,
-        ],
+                24.verticalSpace,
+              ],
 
-        // Button to use PayFast WebView for new card
-        CustomButton(
-          isLoading: _isLoading,
-          title: _savedCards.isEmpty
-              ? AppHelpers.getTranslation(TrKeys.payNow)
-              : AppHelpers.getTranslation(TrKeys.payWithCard),
-          onPressed: _redirectToPayFastWebView,
-        ),
+              // Button to use PayFast WebView for new card
+              CustomButton(
+                isLoading: _isLoading,
+                title: _savedCards.isEmpty
+                    ? AppHelpers.getTranslation(TrKeys.payNow)
+                    : AppHelpers.getTranslation(TrKeys.payWithCard),
+                onPressed: _redirectToPayFastWebView,
+              ),
 
-        12.verticalSpace,
+              12.verticalSpace,
 
-        Center(
-          child: Text(
-            _savedCards.isEmpty
-                ? AppHelpers.getTranslation(TrKeys.completeCardDetails)
-                : AppHelpers.getTranslation(TrKeys.enterCardDirectly),
-            style: AppStyle.interNormal(
-              size: 13.sp,
-              color: AppStyle.textGrey,
-            ),
-          ),
-        ),
-      ],
-    );
+              Center(
+                child: Text(
+                  _savedCards.isEmpty
+                      ? AppHelpers.getTranslation(TrKeys.completeCardDetails)
+                      : AppHelpers.getTranslation(TrKeys.enterCardDirectly),
+                  style: AppStyle.interNormal(
+                    size: 13.sp,
+                    color: AppStyle.textGrey,
+                  ),
+                ),
+              ),
+            ],
+          );
   }
 }

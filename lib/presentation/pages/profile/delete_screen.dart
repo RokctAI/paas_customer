@@ -17,7 +17,11 @@ class DeleteScreen extends StatelessWidget {
   final bool isDeleteAccount;
   final VoidCallback onDelete;
 
-  const DeleteScreen({super.key, this.isDeleteAccount = false, required this.onDelete});
+  const DeleteScreen({
+    super.key,
+    this.isDeleteAccount = false,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +37,9 @@ class DeleteScreen extends StatelessWidget {
             ? Column(
                 children: [
                   16.verticalSpace,
-                  Consumer(builder: (context, ref, child) {
-                    return CustomButton(
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return CustomButton(
                         background: AppStyle.red,
                         textColor: AppStyle.white,
                         title: AppHelpers.getTranslation(TrKeys.deleteAccount),
@@ -44,15 +49,18 @@ class DeleteScreen extends StatelessWidget {
                           ref
                               .read(profileProvider.notifier)
                               .deleteAccount(context);
-                        });
-                  }),
+                        },
+                      );
+                    },
+                  ),
                 ],
               )
             : Column(
                 children: [
                   24.verticalSpace,
-                  Consumer(builder: (context, ref, child) {
-                    return CustomButton(
+                  Consumer(
+                    builder: (context, ref, child) {
+                      return CustomButton(
                         title: AppHelpers.getTranslation(TrKeys.logout),
                         onPressed: () {
                           onDelete.call();
@@ -61,20 +69,22 @@ class DeleteScreen extends StatelessWidget {
                           ref.refresh(profileProvider);
                           context.router.popUntilRoot();
                           context.replaceRoute(const LoginRoute());
-                        });
-                  }),
+                        },
+                      );
+                    },
+                  ),
                 ],
               ),
         16.verticalSpace,
         CustomButton(
-            borderColor: AppStyle.black,
-            background: AppStyle.transparent,
-            title: AppHelpers.getTranslation(TrKeys.cancel),
-            onPressed: () {
-              Navigator.pop(context);
-            })
+          borderColor: AppStyle.black,
+          background: AppStyle.transparent,
+          title: AppHelpers.getTranslation(TrKeys.cancel),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ],
     );
   }
 }
-

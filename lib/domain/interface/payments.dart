@@ -1,7 +1,6 @@
 import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
 
-
 import '../../infrastructure/models/data/saved_card.dart';
 
 abstract class PaymentsRepositoryFacade {
@@ -12,15 +11,14 @@ abstract class PaymentsRepositoryFacade {
     required String paymentId,
   });
 
-
   Future<ApiResult<List<SavedCardModel>>> getSavedCards();
 
   Future<ApiResult<String>> processDirectCardPayment(
-      OrderBodyData orderBody,
-      String cardNumber,
-      String cardName,
-      String expiryDate,
-      String cvc,
+    OrderBodyData orderBody,
+    String cardNumber,
+    String cardName,
+    String expiryDate,
+    String cvc,
   );
 
   Future<ApiResult<String>> tokenizeCard({
@@ -31,16 +29,18 @@ abstract class PaymentsRepositoryFacade {
   });
 
   Future<ApiResult<String>> tokenizeAfterPayment(
-      String cardNumber,
-      String cardName,
-      String expiryDate,
-      String cvc,
-      [String? token, String? lastFour, String? cardType]
-  );
+    String cardNumber,
+    String cardName,
+    String expiryDate,
+    String cvc, [
+    String? token,
+    String? lastFour,
+    String? cardType,
+  ]);
 
   Future<ApiResult<String>> processTokenPayment(
-      OrderBodyData orderBody,
-      String token,
+    OrderBodyData orderBody,
+    String token,
   );
 
   Future<ApiResult<bool>> deleteCard(String cardId);

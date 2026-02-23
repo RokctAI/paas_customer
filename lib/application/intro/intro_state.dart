@@ -8,4 +8,3 @@ class IntroState with _$IntroState {
 
   const IntroState._();
 }
-

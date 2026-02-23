@@ -24,8 +24,10 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
   final GalleryRepositoryFacade _galleryRepository;
 
   ProfileNotifier(
-      this._userRepository, this._shopsRepository, this._galleryRepository)
-      : super(const ProfileState());
+    this._userRepository,
+    this._shopsRepository,
+    this._galleryRepository,
+  ) : super(const ProfileState());
   int page = 1;
 
   getTerm({required BuildContext context}) async {
@@ -58,7 +60,11 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
 
   resetShopData() {
     state = state.copyWith(
-        bgImage: "", logoImage: "", addressModel: null, isSaveLoading: false);
+      bgImage: "",
+      logoImage: "",
+      addressModel: null,
+      isSaveLoading: false,
+    );
   }
 
   findSelectIndex() {
@@ -117,8 +123,11 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     state = state.copyWith(logoImage: logoImage);
   }
 
-  Future<void> fetchUser(BuildContext context,
-      {RefreshController? refreshController, VoidCallback? onSuccess}) async {
+  Future<void> fetchUser(
+    BuildContext context, {
+    RefreshController? refreshController,
+    VoidCallback? onSuccess,
+  }) async {
     if (LocalStorage.getToken().isNotEmpty) {
       final connected = await AppConnectivity.connectivity();
       if (connected) {
@@ -130,35 +139,51 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
           success: (data) async {
             LocalStorage.setWalletData(data.data?.wallet);
             LocalStorage.setUser(data.data);
-            LocalStorage.setAddressSelected(AddressData(
-                title: data.data?.addresses?.firstWhere(
-                        (element) => element.active ?? false, orElse: () {
-                      return AddressNewModel();
-                    }).title ??
+            LocalStorage.setAddressSelected(
+              AddressData(
+                title:
+                    data.data?.addresses
+                        ?.firstWhere(
+                          (element) => element.active ?? false,
+                          orElse: () {
+                            return AddressNewModel();
+                          },
+                        )
+                        .title ??
                     "",
-                address: data.data?.addresses
-                        ?.firstWhere((element) => element.active ?? false,
-                            orElse: () {
-                          return AddressNewModel();
-                        })
+                address:
+                    data.data?.addresses
+                        ?.firstWhere(
+                          (element) => element.active ?? false,
+                          orElse: () {
+                            return AddressNewModel();
+                          },
+                        )
                         .address
                         ?.address ??
                     "",
                 location: LocationModel(
-                    longitude: data.data?.addresses
-                        ?.firstWhere((element) => element.active ?? false,
-                            orElse: () {
+                  longitude: data.data?.addresses
+                      ?.firstWhere(
+                        (element) => element.active ?? false,
+                        orElse: () {
                           return AddressNewModel();
-                        })
-                        .location
-                        ?.last,
-                    latitude: data.data?.addresses
-                        ?.firstWhere((element) => element.active ?? false,
-                            orElse: () {
+                        },
+                      )
+                      .location
+                      ?.last,
+                  latitude: data.data?.addresses
+                      ?.firstWhere(
+                        (element) => element.active ?? false,
+                        orElse: () {
                           return AddressNewModel();
-                        })
-                        .location
-                        ?.first)));
+                        },
+                      )
+                      .location
+                      ?.first,
+                ),
+              ),
+            );
             if (refreshController == null) {
               state = state.copyWith(isLoading: false, userData: data.data);
             } else {
@@ -176,10 +201,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
               context.router.popUntilRoot();
               context.replaceRoute(const LoginRoute());
             }
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           },
         );
       } else {
@@ -190,8 +212,10 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     }
   }
 
-  Future<void> fetchReferral(BuildContext context,
-      {RefreshController? refreshController}) async {
+  Future<void> fetchReferral(
+    BuildContext context, {
+    RefreshController? refreshController,
+  }) async {
     if (LocalStorage.getToken().isNotEmpty) {
       final connected = await AppConnectivity.connectivity();
       if (connected) {
@@ -202,8 +226,10 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
         response.when(
           success: (data) async {
             if (refreshController == null) {
-              state =
-                  state.copyWith(isReferralLoading: false, referralData: data);
+              state = state.copyWith(
+                isReferralLoading: false,
+                referralData: data,
+              );
             } else {
               state = state.copyWith(referralData: data);
             }
@@ -213,10 +239,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
             if (refreshController == null) {
               state = state.copyWith(isReferralLoading: false);
             }
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           },
         );
       } else {
@@ -244,10 +267,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -261,8 +281,10 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     state = state.copyWith(userData: user);
   }
 
-  void getWallet(BuildContext context,
-      {RefreshController? refreshController}) async {
+  void getWallet(
+    BuildContext context, {
+    RefreshController? refreshController,
+  }) async {
     page = 1;
     if (LocalStorage.getToken().isNotEmpty) {
       final connected = await AppConnectivity.connectivity();
@@ -275,7 +297,9 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
           success: (data) async {
             if (refreshController == null) {
               state = state.copyWith(
-                  isLoadingHistory: false, walletHistory: data.data);
+                isLoadingHistory: false,
+                walletHistory: data.data,
+              );
             } else {
               state = state.copyWith(walletHistory: data.data);
             }
@@ -285,10 +309,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
             if (refreshController == null) {
               state = state.copyWith(isLoadingHistory: false);
             }
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           },
         );
       } else {
@@ -300,7 +321,9 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
   }
 
   void getWalletPage(
-      BuildContext context, RefreshController refreshController) async {
+    BuildContext context,
+    RefreshController refreshController,
+  ) async {
     if (LocalStorage.getToken().isNotEmpty) {
       final connected = await AppConnectivity.connectivity();
       if (connected) {
@@ -320,10 +343,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
           failure: (failure, status) {
             refreshController.loadNoData();
             --page;
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           },
         );
       } else {
@@ -422,10 +442,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
         },
         failure: (failure, s) {
           state = state.copyWith(isSaveLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
           debugPrint('==> create shop failure: $failure');
         },
       );
@@ -439,4 +456,3 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     }
   }
 }
-

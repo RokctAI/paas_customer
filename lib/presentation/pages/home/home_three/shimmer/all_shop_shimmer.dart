@@ -25,27 +25,24 @@ class AllShopShimmer extends StatelessWidget {
           child: ListView.builder(
             padding: EdgeInsets.only(top: 6.h),
             shrinkWrap: true,
-            
+
             physics: const NeverScrollableScrollPhysics(),
             scrollDirection: Axis.vertical,
             itemCount: 2,
             itemBuilder: (context, index) =>
                 AnimationConfiguration.staggeredList(
-              position: index,
-              duration: const Duration(milliseconds: 375),
-              child: const SlideAnimation(
-                verticalOffset: 50.0,
-                child: FadeInAnimation(
-                  child: MarketShimmerThree(
-                    isSimpleShop: true,
+                  position: index,
+                  duration: const Duration(milliseconds: 375),
+                  child: const SlideAnimation(
+                    verticalOffset: 50.0,
+                    child: FadeInAnimation(
+                      child: MarketShimmerThree(isSimpleShop: true),
+                    ),
                   ),
                 ),
-              ),
-            ),
           ),
-        )
+        ),
       ],
     );
   }
 }
-

@@ -12,7 +12,6 @@ import 'package:foodyman/presentation/theme/theme.dart';
 
 import 'notification_page.dart';
 
-
 @RoutePage()
 class SettingPage extends ConsumerStatefulWidget {
   const SettingPage({super.key});
@@ -68,41 +67,38 @@ class _SettingPageState extends ConsumerState<SettingPage>
               CommonAppBar(
                 child: Text(
                   AppHelpers.getTranslation(TrKeys.notification),
-                  style: AppStyle.interNoSemi(
-                    size: 18,
-                    color: AppStyle.black,
-                  ),
+                  style: AppStyle.interNoSemi(size: 18, color: AppStyle.black),
                 ),
               ),
               16.verticalSpace,
               Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.w),
-                  child: const NotificationPage()
-                  // Column(
-                  //   children: [
-                  //     CustomTabBar(
-                  //       tabController: _tabController,
-                  //       tabs: _tabs,
-                  //     ),
-                  //     SizedBox(
-                  //       height: MediaQuery.sizeOf(context).height - 180.h,
-                  //       child: TabBarView(controller: _tabController, children: [
-                  //         Column(
-                  //           children: [
-                  //             24.verticalSpace,
-                  //             const CardWidget(
-                  //               number: "8278 3100 2002 6576",
-                  //               startDate: "09 / 25",
-                  //               name: "ANTONIO BANDERO",
-                  //             ),
-                  //           ],
-                  //         ),
-                  //         const NotificationPage()
-                  //       ]),
-                  //     )
-                  //   ],
-                  // ),
-                  )
+                padding: EdgeInsets.symmetric(horizontal: 16.w),
+                child: const NotificationPage(),
+                // Column(
+                //   children: [
+                //     CustomTabBar(
+                //       tabController: _tabController,
+                //       tabs: _tabs,
+                //     ),
+                //     SizedBox(
+                //       height: MediaQuery.sizeOf(context).height - 180.h,
+                //       child: TabBarView(controller: _tabController, children: [
+                //         Column(
+                //           children: [
+                //             24.verticalSpace,
+                //             const CardWidget(
+                //               number: "8278 3100 2002 6576",
+                //               startDate: "09 / 25",
+                //               name: "ANTONIO BANDERO",
+                //             ),
+                //           ],
+                //         ),
+                //         const NotificationPage()
+                //       ]),
+                //     )
+                //   ],
+                // ),
+              ),
             ],
           ),
           floatingActionButtonLocation:
@@ -142,4 +138,3 @@ class _SettingPageState extends ConsumerState<SettingPage>
     );
   }
 }
-

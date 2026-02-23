@@ -1,10 +1,9 @@
-
 import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
 
 abstract class BannersRepositoryFacade {
   Future<ApiResult<BannersPaginateResponse>> getBannersPaginate({
-   required int page,
+    required int page,
   });
 
   Future<ApiResult<BannersPaginateResponse>> getAdsPaginate({
@@ -17,4 +16,3 @@ abstract class BannersRepositoryFacade {
 
   Future<ApiResult<void>> likeBanner(int? bannerId);
 }
-

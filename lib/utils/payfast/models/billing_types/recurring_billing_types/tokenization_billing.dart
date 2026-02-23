@@ -6,4 +6,3 @@ class TokenizationBilling {
     subscriptionType = '2';
   }
 }
-

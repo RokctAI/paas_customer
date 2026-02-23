@@ -5,11 +5,11 @@ import 'home_notifier.dart';
 import 'home_state.dart';
 
 final homeProvider = StateNotifierProvider.autoDispose<HomeNotifier, HomeState>(
-      (ref) => HomeNotifier(
+  (ref) => HomeNotifier(
     categoriesRepository,
     bannersRepository,
     shopsRepository,
     productsRepository,
-        brandsRepository,
+    brandsRepository,
   ),
 );

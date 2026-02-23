@@ -55,25 +55,20 @@ class _TimeDeliveryState extends ConsumerState<TimeDelivery>
         Tab(
           text: AppHelpers.getTranslation(
             TimeService.dateFormatEMD(
-                DateTime.now().add(Duration(days: i + 2))),
+              DateTime.now().add(Duration(days: i + 2)),
+            ),
           ),
         ),
       );
     }
     _tabController = TabController(
-        length: 7,
-        vsync: this,
-        initialIndex: ref
-            .read(orderProvider)
-            .todayTimes
-            .isNotEmpty ? 0 : 1);
+      length: 7,
+      vsync: this,
+      initialIndex: ref.read(orderProvider).todayTimes.isNotEmpty ? 0 : 1,
+    );
     list = [
-      "${AppHelpers.getTranslation(TrKeys.today)} — ${ref
-          .read(orderProvider)
-          .shopData
-          ?.deliveryTime
-          ?.to ?? 40} ${AppHelpers.getTranslation(TrKeys.min)}",
-      AppHelpers.getTranslation(TrKeys.other)
+      "${AppHelpers.getTranslation(TrKeys.today)} — ${ref.read(orderProvider).shopData?.deliveryTime?.to ?? 40} ${AppHelpers.getTranslation(TrKeys.min)}",
+      AppHelpers.getTranslation(TrKeys.other),
     ];
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(timeProvider.notifier).reset();
@@ -100,11 +95,12 @@ class _TimeDeliveryState extends ConsumerState<TimeDelivery>
     state = ref.watch(timeProvider);
     return Container(
       decoration: BoxDecoration(
-          color: AppStyle.bgGrey.withOpacity(0.96),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(12.r),
-            topRight: Radius.circular(12.r),
-          )),
+        color: AppStyle.bgGrey.withOpacity(0.96),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12.r),
+          topRight: Radius.circular(12.r),
+        ),
+      ),
       width: double.infinity,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -119,9 +115,7 @@ class _TimeDeliveryState extends ConsumerState<TimeDelivery>
                 width: 48.w,
                 decoration: BoxDecoration(
                   color: AppStyle.dragElement,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(40.r),
-                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(40.r)),
                 ),
               ),
             ),
@@ -135,121 +129,141 @@ class _TimeDeliveryState extends ConsumerState<TimeDelivery>
                   ? ""
                   : AppHelpers.getTranslation(TrKeys.clear),
               rightTitleColor: AppStyle.red,
-              onRightTap:
-              state.currentIndexOne == 0 ? () {} : () => event.changeOne(0),
+              onRightTap: state.currentIndexOne == 0
+                  ? () {}
+                  : () => event.changeOne(0),
             ),
             24.verticalSpace,
             state.currentIndexOne == 0 && stateOrder.todayTimes.isNotEmpty
                 ? ListView.builder(
-                shrinkWrap: true,
-                itemCount: 2,
-                itemBuilder: (context, index) {
-                  return SelectItem(
-                    onTap: () => event.changeOne(index),
-                    isActive: state.currentIndexOne == index,
-                    title: list.elementAt(index),
-                  );
-                })
-                : Expanded(
-              child: Column(
-                children: [
-                  CustomTabBar(
-                    isScrollable: true,
-                    tabController: _tabController,
-                    tabs: _tabs,
-                  ),
-                  Expanded(
-                    child:
-                    TabBarView(controller: _tabController, children: [
-                      stateOrder.todayTimes.isNotEmpty
-                          ? ListView.builder(
-                        padding: EdgeInsets.only(
-                            top: 24.h, bottom: 16.h),
-                        itemCount: stateOrder.todayTimes.length,
-                        itemBuilder: (context, index) {
-                          return SelectItem(
-                            onTap: () {
-                              event.selectIndex(index);
-                              ref
-                                  .read(orderProvider.notifier)
-                                  .setTimeAndDay(
-                                  stateOrder.todayTimes[index]
-                                      .toNextTime,
-                                  DateTime.now());
-                            },
-                            isActive: state.selectIndex == index,
-                            title: stateOrder.todayTimes
-                                .elementAt(index)
-                                .toTime,
-                          );
-                        },
-                      )
-                          : Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 32.r, vertical: 48.r),
-                        child: Text(
-                          AppHelpers.getTranslation(
-                              TrKeys.notWorkToday),
-                          style: AppStyle.interNormal(size: 20),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      ...List.generate(stateOrder.dailyTimes.length,
-                              (indexTab) {
-                            return stateOrder.dailyTimes[indexTab].isEmpty
-                                ? Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 32.r, vertical: 48.r),
-                              child: Text(
-                                "${AppHelpers.getTranslation(
-                                    TrKeys.notWork)} ${_tabs[indexTab + 1]
-                                    .text}",
-                                style: AppStyle.interNormal(size: 20),
-                                textAlign: TextAlign.center,
-                              ),
-                            )
-                                : ListView.builder(
-                              padding: EdgeInsets.only(
-                                  top: 24.h, bottom: 16.h),
-                              itemCount: stateOrder
-                                  .dailyTimes[indexTab].length,
-                              itemBuilder: (context, index) {
-                                return SelectItem(
-                                  onTap: () {
-                                    DateTime day = indexTab == 0
-                                        ? DateTime.now()
-                                        .add(Duration(days: 1))
-                                        : DateFormat("EEEE, MMM dd")
-                                        .parse(_tabs[indexTab + 1]
-                                        .text ??
-                                        "");
-                                    event.selectIndex(index);
-                                    ref
-                                        .read(orderProvider.notifier)
-                                        .setTimeAndDay(
-                                        stateOrder
-                                            .dailyTimes[indexTab]
-                                        [index]
-                                            .toNextTime,
-                                        day);
-                                  },
-                                  isActive: state.selectIndex == index,
-                                  title: stateOrder.dailyTimes[indexTab]
-                                      .elementAt(index)
-                                      .toTime,
-                                );
-                              },
-                            );
-                          }),
-                    ]),
+                    shrinkWrap: true,
+                    itemCount: 2,
+                    itemBuilder: (context, index) {
+                      return SelectItem(
+                        onTap: () => event.changeOne(index),
+                        isActive: state.currentIndexOne == index,
+                        title: list.elementAt(index),
+                      );
+                    },
                   )
-                ],
-              ),
-            )
+                : Expanded(
+                    child: Column(
+                      children: [
+                        CustomTabBar(
+                          isScrollable: true,
+                          tabController: _tabController,
+                          tabs: _tabs,
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: [
+                              stateOrder.todayTimes.isNotEmpty
+                                  ? ListView.builder(
+                                      padding: EdgeInsets.only(
+                                        top: 24.h,
+                                        bottom: 16.h,
+                                      ),
+                                      itemCount: stateOrder.todayTimes.length,
+                                      itemBuilder: (context, index) {
+                                        return SelectItem(
+                                          onTap: () {
+                                            event.selectIndex(index);
+                                            ref
+                                                .read(orderProvider.notifier)
+                                                .setTimeAndDay(
+                                                  stateOrder
+                                                      .todayTimes[index]
+                                                      .toNextTime,
+                                                  DateTime.now(),
+                                                );
+                                          },
+                                          isActive: state.selectIndex == index,
+                                          title: stateOrder.todayTimes
+                                              .elementAt(index)
+                                              .toTime,
+                                        );
+                                      },
+                                    )
+                                  : Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 32.r,
+                                        vertical: 48.r,
+                                      ),
+                                      child: Text(
+                                        AppHelpers.getTranslation(
+                                          TrKeys.notWorkToday,
+                                        ),
+                                        style: AppStyle.interNormal(size: 20),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                              ...List.generate(stateOrder.dailyTimes.length, (
+                                indexTab,
+                              ) {
+                                return stateOrder.dailyTimes[indexTab].isEmpty
+                                    ? Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 32.r,
+                                          vertical: 48.r,
+                                        ),
+                                        child: Text(
+                                          "${AppHelpers.getTranslation(TrKeys.notWork)} ${_tabs[indexTab + 1].text}",
+                                          style: AppStyle.interNormal(size: 20),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      )
+                                    : ListView.builder(
+                                        padding: EdgeInsets.only(
+                                          top: 24.h,
+                                          bottom: 16.h,
+                                        ),
+                                        itemCount: stateOrder
+                                            .dailyTimes[indexTab]
+                                            .length,
+                                        itemBuilder: (context, index) {
+                                          return SelectItem(
+                                            onTap: () {
+                                              DateTime day = indexTab == 0
+                                                  ? DateTime.now().add(
+                                                      Duration(days: 1),
+                                                    )
+                                                  : DateFormat(
+                                                      "EEEE, MMM dd",
+                                                    ).parse(
+                                                      _tabs[indexTab + 1]
+                                                              .text ??
+                                                          "",
+                                                    );
+                                              event.selectIndex(index);
+                                              ref
+                                                  .read(orderProvider.notifier)
+                                                  .setTimeAndDay(
+                                                    stateOrder
+                                                        .dailyTimes[indexTab][index]
+                                                        .toNextTime,
+                                                    day,
+                                                  );
+                                            },
+                                            isActive:
+                                                state.selectIndex == index,
+                                            title: stateOrder
+                                                .dailyTimes[indexTab]
+                                                .elementAt(index)
+                                                .toTime,
+                                          );
+                                        },
+                                      );
+                              }),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
           ],
         ),
       ),
     );
   }
 }
-

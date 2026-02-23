@@ -64,21 +64,16 @@ class GalleryRepository implements GalleryRepositoryFacade {
         docName = 'Profile';
         break;
     }
-    final data = FormData.fromMap(
-      {
-        'file': await MultipartFile.fromFile(file),
-        'doctype': docType,
-        'docname': docName,
-        'is_private': 0,
-      },
-    );
+    final data = FormData.fromMap({
+      'file': await MultipartFile.fromFile(file),
+      'doctype': docType,
+      'docname': docName,
+      'is_private': 0,
+    });
     try {
       final client = dioHttp.client(requireAuth: true);
       // NOTE: Using Frappe's standard file upload method
-      final response = await client.post(
-        '/api/method/upload_file',
-        data: data,
-      );
+      final response = await client.post('/api/method/upload_file', data: data);
       // The response will contain the file URL, which needs to be saved
       // to the appropriate document in a separate API call.
       return ApiResult.success(

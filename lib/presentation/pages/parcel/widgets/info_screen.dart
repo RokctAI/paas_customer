@@ -9,15 +9,11 @@ import 'package:foodyman/presentation/components/buttons/custom_button.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
-
 @RoutePage()
 class InfoPage extends StatelessWidget {
   final int index;
 
-  const InfoPage({
-    super.key,
-    required this.index,
-  });
+  const InfoPage({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +23,9 @@ class InfoPage extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage(AppConstants.infoImage[index]),
-                  fit: BoxFit.cover),
+                image: AssetImage(AppConstants.infoImage[index]),
+                fit: BoxFit.cover,
+              ),
             ),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.r),
@@ -38,23 +35,25 @@ class InfoPage extends StatelessWidget {
                 children: [
                   Text(
                     AppHelpers.getTranslation(AppConstants.infoTitle[index]),
-                    style: AppStyle.interNoSemi(size: 40, color: AppStyle.white),
+                    style: AppStyle.interNoSemi(
+                      size: 40,
+                      color: AppStyle.white,
+                    ),
                   ),
                   40.verticalSpace,
                   CustomButton(
-                      title: index == 3
-                          ? AppHelpers.getTranslation(TrKeys.back)
-                          : AppHelpers.getTranslation(TrKeys.next),
-                      onPressed: () {
-                        if (index == 3) {
-                          context.maybePop();
-                          return;
-                        }
-                        context.replaceRoute(InfoRoute(
-                          index: index + 1,
-                        ));
-                      }),
-                  32.verticalSpace
+                    title: index == 3
+                        ? AppHelpers.getTranslation(TrKeys.back)
+                        : AppHelpers.getTranslation(TrKeys.next),
+                    onPressed: () {
+                      if (index == 3) {
+                        context.maybePop();
+                        return;
+                      }
+                      context.replaceRoute(InfoRoute(index: index + 1));
+                    },
+                  ),
+                  32.verticalSpace,
                 ],
               ),
             ),
@@ -63,18 +62,18 @@ class InfoPage extends StatelessWidget {
             top: 32.r,
             right: 8.r,
             child: IconButton(
-                onPressed: () {
-                  context.maybePop();
-                },
-                icon:  Icon(
-                  FlutterRemix.close_line,
-                  color: AppStyle.white,
-                  size: 32.r,
-                )),
-          )
+              onPressed: () {
+                context.maybePop();
+              },
+              icon: Icon(
+                FlutterRemix.close_line,
+                color: AppStyle.white,
+                size: 32.r,
+              ),
+            ),
+          ),
         ],
       ),
     );
   }
 }
-

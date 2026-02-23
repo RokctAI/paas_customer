@@ -34,9 +34,11 @@ class CustomButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           side: BorderSide(
-              color:
-                  borderColor == AppStyle.transparent ? background : borderColor,
-              width: 2.r),
+            color: borderColor == AppStyle.transparent
+                ? background
+                : borderColor,
+            width: 2.r,
+          ),
           elevation: 0,
           shadowColor: AppStyle.transparent,
           shape: RoundedRectangleBorder(
@@ -60,12 +62,7 @@ class CustomButton extends StatelessWidget {
                 children: [
                   icon == null
                       ? const SizedBox()
-                      : Row(
-                          children: [
-                            icon!,
-                            10.horizontalSpace,
-                          ],
-                        ),
+                      : Row(children: [icon!, 10.horizontalSpace]),
                   Text(
                     title,
                     style: AppStyle.interNormal(
@@ -80,4 +77,3 @@ class CustomButton extends StatelessWidget {
     );
   }
 }
-

@@ -67,9 +67,7 @@ class _RegisterConfirmationPageState
         Navigator.pop(context);
         AppHelpers.showCustomModalBottomSheet(
           context: context,
-          modal: RegisterPage(
-            isOnlyEmail: false,
-          ),
+          modal: RegisterPage(isOnlyEmail: false),
           isDarkMode: isDarkMode,
         );
       }
@@ -94,180 +92,208 @@ class _RegisterConfirmationPageState
               margin: MediaQuery.of(context).viewInsets,
               decoration: BoxDecoration(
                 color: AppStyle.bgGrey.withOpacity(0.96),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(40.r),
-                ),
+                borderRadius: BorderRadius.all(Radius.circular(40.r)),
               ),
-            width: double.infinity,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Column(
-                      children: [
-                        AppBarBottomSheet(
-                          title: AppHelpers.getTranslation(TrKeys.enterOtp),
-                        ),
-                        Text(
-                          AppHelpers.getTranslation(TrKeys.sendOtp),
-                          style: AppStyle.interRegular(
-                            size: 14,
-                            color: AppStyle.black,
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Column(
+                        children: [
+                          AppBarBottomSheet(
+                            title: AppHelpers.getTranslation(TrKeys.enterOtp),
                           ),
-                        ),
-                        Text(
-                          widget.userModel.email ?? "",
-                          style: AppStyle.interRegular(
-                            size: 14,
-                            color: AppStyle.black,
-                          ),
-                        ),
-                        40.verticalSpace,
-                        SizedBox(
-                          height: 64,
-                          child: PinFieldAutoFill(
-                            codeLength: 6,
-                            currentCode: state.confirmCode,
-                            onCodeChanged: notifier.setCode,
-                            cursor: Cursor(
-                              width: 1,
-                              height: 24,
-                              color:
-                                  isDarkMode ? AppStyle.white : AppStyle.black,
-                              enabled: true,
+                          Text(
+                            AppHelpers.getTranslation(TrKeys.sendOtp),
+                            style: AppStyle.interRegular(
+                              size: 14,
+                              color: AppStyle.black,
                             ),
-                            decoration: BoxLooseDecoration(
-                              gapSpace: 10.r,
-                              textStyle: AppStyle.interNormal(
-                                size: 15.sp,
+                          ),
+                          Text(
+                            widget.userModel.email ?? "",
+                            style: AppStyle.interRegular(
+                              size: 14,
+                              color: AppStyle.black,
+                            ),
+                          ),
+                          40.verticalSpace,
+                          SizedBox(
+                            height: 64,
+                            child: PinFieldAutoFill(
+                              codeLength: 6,
+                              currentCode: state.confirmCode,
+                              onCodeChanged: notifier.setCode,
+                              cursor: Cursor(
+                                width: 1,
+                                height: 24,
                                 color: isDarkMode
                                     ? AppStyle.white
                                     : AppStyle.black,
+                                enabled: true,
                               ),
-                              bgColorBuilder: FixedColorBuilder(
-                                isDarkMode
-                                    ? AppStyle.mainBackDark
-                                    : AppStyle.transparent,
-                              ),
-                              strokeColorBuilder: FixedColorBuilder(
-                                state.isCodeError
-                                    ? AppStyle.red
-                                    : isDarkMode
-                                        ? AppStyle.borderDark
-                                        : AppStyle.outlineButtonBorder,
+                              decoration: BoxLooseDecoration(
+                                gapSpace: 10.r,
+                                textStyle: AppStyle.interNormal(
+                                  size: 15.sp,
+                                  color: isDarkMode
+                                      ? AppStyle.white
+                                      : AppStyle.black,
+                                ),
+                                bgColorBuilder: FixedColorBuilder(
+                                  isDarkMode
+                                      ? AppStyle.mainBackDark
+                                      : AppStyle.transparent,
+                                ),
+                                strokeColorBuilder: FixedColorBuilder(
+                                  state.isCodeError
+                                      ? AppStyle.red
+                                      : isDarkMode
+                                      ? AppStyle.borderDark
+                                      : AppStyle.outlineButtonBorder,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.paddingOf(context).bottom,
-                          top: 120.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CustomButton(
-                            isLoading: state.isResending,
-                            title: state.isTimeExpired
-                                ? AppHelpers.getTranslation(TrKeys.resendOtp)
-                                : state.timerText,
-                            onPressed: () {
-                              if (state.isTimeExpired) {
-                                if (widget.isResetPassword) {
-                                  widget.verificationId.isEmpty
-                                      ? notifier.resendConfirmation(
-                                          context, widget.userModel.email ?? "",
-                                          isResetPassword:
-                                              widget.isResetPassword)
-                                      : notifier.resendResetConfirmation(
-                                          context,
-                                          widget.userModel.email ?? "",
-                                        );
-                                  return;
-                                } else {
-                                  widget.verificationId.isEmpty
-                                      ? notifier.resendConfirmation(
-                                          context, widget.userModel.email ?? "",
-                                          isResetPassword:
-                                              widget.isResetPassword)
-                                      : notifier.sendCodeToNumber(
-                                          context,
-                                          widget.userModel.email ?? "",
-                                        );
-                                }
-                                notifier.startTimer();
-                              }
-                            },
-                            weight: (MediaQuery.sizeOf(context).width - 40) / 3,
-                            background: AppStyle.primary,
-                            textColor: AppStyle.white,
-                          ),
-                          CustomButton(
-                            isLoading: state.isLoading,
-                            title: AppHelpers.getTranslation(TrKeys.confirmation),
-                            onPressed: () {
-                              if (state.confirmCode.length == 6) {
-                                if (widget.isResetPassword) {
-                                  widget.verificationId.isEmpty
-                                      ? notifier.confirmCodeResetPassword(
-                                      context, widget.userModel.email ?? "")
-                                      : notifier.confirmCodeResetPasswordWithPhone(
-                                      context,
-                                      widget.userModel.email ?? "",
-                                      widget.verificationId);
-                                } else {
-                                  widget.verificationId.isEmpty
-                                      ? notifier.confirmCode(context, ref)  // Pass ref here
-                                      : notifier.confirmCodeWithPhone(
-                                      context: context,
-                                      verificationId: widget.verificationId,
-                                      ref: ref,  // Pass ref here
-                                      onSuccess: widget.editPhone
-                                          ? () {
-                                        if (widget.editPhone) {
-                                          ref
-                                              .read(editProfileProvider.notifier)
-                                              .editProfile(
-                                              context,
-                                              ProfileData(
-                                                  phone: widget.userModel.email,
-                                                  firstname: ref
-                                                      .watch(profileProvider)
-                                                      .userData
-                                                      ?.firstname ??
-                                                      ""));
-                                          return;
-                                        }
-                                      }
-                                          : null);
-                                }
-                              }
-                            },
-                            weight: 2 * (MediaQuery.sizeOf(context).width - 40) / 3,
-                            background: state.isConfirm
-                                ? AppStyle.primary
-                                : AppStyle.white,
-                            textColor: state.isConfirm
-                                ? AppStyle.black
-                                : AppStyle.textGrey,
-                          ),
                         ],
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.paddingOf(context).bottom,
+                          top: 120.h,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            CustomButton(
+                              isLoading: state.isResending,
+                              title: state.isTimeExpired
+                                  ? AppHelpers.getTranslation(TrKeys.resendOtp)
+                                  : state.timerText,
+                              onPressed: () {
+                                if (state.isTimeExpired) {
+                                  if (widget.isResetPassword) {
+                                    widget.verificationId.isEmpty
+                                        ? notifier.resendConfirmation(
+                                            context,
+                                            widget.userModel.email ?? "",
+                                            isResetPassword:
+                                                widget.isResetPassword,
+                                          )
+                                        : notifier.resendResetConfirmation(
+                                            context,
+                                            widget.userModel.email ?? "",
+                                          );
+                                    return;
+                                  } else {
+                                    widget.verificationId.isEmpty
+                                        ? notifier.resendConfirmation(
+                                            context,
+                                            widget.userModel.email ?? "",
+                                            isResetPassword:
+                                                widget.isResetPassword,
+                                          )
+                                        : notifier.sendCodeToNumber(
+                                            context,
+                                            widget.userModel.email ?? "",
+                                          );
+                                  }
+                                  notifier.startTimer();
+                                }
+                              },
+                              weight:
+                                  (MediaQuery.sizeOf(context).width - 40) / 3,
+                              background: AppStyle.primary,
+                              textColor: AppStyle.white,
+                            ),
+                            CustomButton(
+                              isLoading: state.isLoading,
+                              title: AppHelpers.getTranslation(
+                                TrKeys.confirmation,
+                              ),
+                              onPressed: () {
+                                if (state.confirmCode.length == 6) {
+                                  if (widget.isResetPassword) {
+                                    widget.verificationId.isEmpty
+                                        ? notifier.confirmCodeResetPassword(
+                                            context,
+                                            widget.userModel.email ?? "",
+                                          )
+                                        : notifier
+                                              .confirmCodeResetPasswordWithPhone(
+                                                context,
+                                                widget.userModel.email ?? "",
+                                                widget.verificationId,
+                                              );
+                                  } else {
+                                    widget.verificationId.isEmpty
+                                        ? notifier.confirmCode(
+                                            context,
+                                            ref,
+                                          ) // Pass ref here
+                                        : notifier.confirmCodeWithPhone(
+                                            context: context,
+                                            verificationId:
+                                                widget.verificationId,
+                                            ref: ref, // Pass ref here
+                                            onSuccess: widget.editPhone
+                                                ? () {
+                                                    if (widget.editPhone) {
+                                                      ref
+                                                          .read(
+                                                            editProfileProvider
+                                                                .notifier,
+                                                          )
+                                                          .editProfile(
+                                                            context,
+                                                            ProfileData(
+                                                              phone: widget
+                                                                  .userModel
+                                                                  .email,
+                                                              firstname:
+                                                                  ref
+                                                                      .watch(
+                                                                        profileProvider,
+                                                                      )
+                                                                      .userData
+                                                                      ?.firstname ??
+                                                                  "",
+                                                            ),
+                                                          );
+                                                      return;
+                                                    }
+                                                  }
+                                                : null,
+                                          );
+                                  }
+                                }
+                              },
+                              weight:
+                                  2 *
+                                  (MediaQuery.sizeOf(context).width - 40) /
+                                  3,
+                              background: state.isConfirm
+                                  ? AppStyle.primary
+                                  : AppStyle.white,
+                              textColor: state.isConfirm
+                                  ? AppStyle.black
+                                  : AppStyle.textGrey,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
           ),
         ),
-        ),
       ),
     );
   }
 }
-

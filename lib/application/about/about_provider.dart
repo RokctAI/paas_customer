@@ -6,14 +6,15 @@ import '../../app_constants.dart';
 
 final aboutProvider = FutureProvider<Map<String, dynamic>?>((ref) async {
   try {
-    final response = await http.get(Uri.parse('${AppConstants.baseUrl}/api/v1/rest/pages/about'));
+    final response = await http.get(
+      Uri.parse('${AppConstants.baseUrl}/api/v1/rest/pages/about'),
+    );
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final translation = data['data']['translation'];
 
       final imgUrl = data['data']['img'];
-
 
       return {
         'title': translation['title'],

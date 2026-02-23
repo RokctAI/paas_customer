@@ -6,7 +6,12 @@ class CurrencyItem extends StatelessWidget {
   final VoidCallback onTap;
   final bool isActive;
   final String title;
-  const CurrencyItem({super.key, required this.onTap, required this.isActive, required this.title, });
+  const CurrencyItem({
+    super.key,
+    required this.onTap,
+    required this.isActive,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +22,9 @@ class CurrencyItem extends StatelessWidget {
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-              color: AppStyle.white,
-              borderRadius:
-              BorderRadius.circular(10.r)),
+            color: AppStyle.white,
+            borderRadius: BorderRadius.circular(10.r),
+          ),
           child: Padding(
             padding: EdgeInsets.all(18.r),
             child: Row(
@@ -30,16 +35,13 @@ class CurrencyItem extends StatelessWidget {
                   width: 18.w,
                   height: 18.h,
                   decoration: BoxDecoration(
-                      color: isActive
-                          ? AppStyle.primary
-                          : AppStyle.transparent,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                          color: isActive
-                              ? AppStyle.black
-                              : AppStyle.textGrey,
-                          width:
-                          isActive ? 4.r : 2.r)),
+                    color: isActive ? AppStyle.primary : AppStyle.transparent,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: isActive ? AppStyle.black : AppStyle.textGrey,
+                      width: isActive ? 4.r : 2.r,
+                    ),
+                  ),
                 ),
                 16.horizontalSpace,
                 Expanded(
@@ -59,4 +61,3 @@ class CurrencyItem extends StatelessWidget {
     );
   }
 }
-

@@ -27,11 +27,7 @@ class ShopOrderDescription extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SvgPicture.asset(
-          svgName,
-          width: iconSize.r,
-          height: iconSize.r,
-        ),
+        SvgPicture.asset(svgName, width: iconSize.r, height: iconSize.r),
         12.horizontalSpace,
         Expanded(
           child: Column(
@@ -39,19 +35,13 @@ class ShopOrderDescription extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: AppStyle.interNormal(
-                  size: 16,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interNormal(size: 16, color: AppStyle.black),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
                 description,
-                style: AppStyle.interNormal(
-                  size: 12,
-                  color: AppStyle.textGrey,
-                ),
+                style: AppStyle.interNormal(size: 12, color: AppStyle.textGrey),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -72,4 +62,3 @@ class ShopOrderDescription extends StatelessWidget {
     );
   }
 }
-

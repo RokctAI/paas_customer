@@ -51,12 +51,18 @@ class AppUsageService {
           final responseData = jsonDecode(response.body);
 
           // Cache the stats
-          await _cacheStats(responseData['data'] ?? {'days_in_app_this_year': 0});
+          await _cacheStats(
+            responseData['data'] ?? {'days_in_app_this_year': 0},
+          );
 
-          debugPrint('AppUsageService: Successfully recorded - days in app: ${responseData['data']?['days_in_app_this_year']}');
+          debugPrint(
+            'AppUsageService: Successfully recorded - days in app: ${responseData['data']?['days_in_app_this_year']}',
+          );
           return responseData['data'] ?? {'days_in_app_this_year': 0};
         } else {
-          debugPrint('AppUsageService: Failed to record - status code: ${response.statusCode}');
+          debugPrint(
+            'AppUsageService: Failed to record - status code: ${response.statusCode}',
+          );
           // Try to get cached stats if the request fails
           return await _getCachedStats();
         }

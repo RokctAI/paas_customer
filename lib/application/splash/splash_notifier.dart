@@ -9,16 +9,14 @@ import 'splash_state.dart';
 class SplashNotifier extends StateNotifier<SplashState> {
   final SettingsRepositoryFacade _settingsRepository;
 
-  SplashNotifier(
-      this._settingsRepository,
-      ) : super(const SplashState());
+  SplashNotifier(this._settingsRepository) : super(const SplashState());
 
   Future<void> getToken(
-      BuildContext context, {
-        VoidCallback? goMain,
-        VoidCallback? goLogin,
-        VoidCallback? goNoInternet,
-      }) async {
+    BuildContext context, {
+    VoidCallback? goMain,
+    VoidCallback? goLogin,
+    VoidCallback? goNoInternet,
+  }) async {
     // This will automatically show dialog if no connection
     final connect = await AppConnectivity.connectivityWithDialog(context);
 

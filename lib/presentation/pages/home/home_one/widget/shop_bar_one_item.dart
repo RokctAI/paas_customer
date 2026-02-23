@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
@@ -29,9 +28,7 @@ class ShopBarOneItem extends StatelessWidget {
       onTap: () {
         context.pushRoute(StoryListRoute(controller: controller, index: index));
       },
-      child:
-
-      Container(
+      child: Container(
         margin: EdgeInsets.only(right: 9.r),
         width: 110.w,
         color: AppStyle.transparent,
@@ -50,18 +47,20 @@ class ShopBarOneItem extends StatelessWidget {
             Align(
               alignment: Alignment.topCenter,
               child: Padding(
-                padding: EdgeInsets.only(top: 12.h,right: 8.w,left: 8.w),
+                padding: EdgeInsets.only(top: 12.h, right: 8.w, left: 8.w),
                 child: ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(100.r)),
                   child: BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 4.h, horizontal: 12.w),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 4.h,
+                        horizontal: 12.w,
+                      ),
                       decoration: BoxDecoration(
-                          color: AppStyle.black.withOpacity(0.4),
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(100.r))),
+                        color: AppStyle.black.withOpacity(0.4),
+                        borderRadius: BorderRadius.all(Radius.circular(100.r)),
+                      ),
                       child: Text(
                         story?.productTitle ?? "",
                         style: AppStyle.interNormal(
@@ -108,4 +107,3 @@ class ShopBarOneItem extends StatelessWidget {
     );
   }
 }
-

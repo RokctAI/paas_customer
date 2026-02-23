@@ -7,7 +7,6 @@ class ChatMessageData {
   final DateTime date;
   final String messageId;
 
-
   ChatMessageData({
     required this.messageOwner,
     required this.message,
@@ -16,4 +15,3 @@ class ChatMessageData {
     required this.messageId,
   });
 }
-

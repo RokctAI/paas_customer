@@ -38,24 +38,25 @@ class ShopBarItemThree extends StatelessWidget {
               radius: 12.r,
             ),
             Positioned(
-                child: Container(
-              decoration: ShapeDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    AppStyle.black.withOpacity(0.2),
-                    AppStyle.black.withOpacity(0.2),
-                    AppStyle.black.withOpacity(0.2),
-                    AppStyle.black.withOpacity(0.5),
-                    AppStyle.black.withOpacity(0.7),
-                  ],
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r),
+              child: Container(
+                decoration: ShapeDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      AppStyle.black.withOpacity(0.2),
+                      AppStyle.black.withOpacity(0.2),
+                      AppStyle.black.withOpacity(0.2),
+                      AppStyle.black.withOpacity(0.5),
+                      AppStyle.black.withOpacity(0.7),
+                    ],
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
                 ),
               ),
-            )),
+            ),
             Positioned(
               left: 12,
               right: 12,
@@ -63,10 +64,7 @@ class ShopBarItemThree extends StatelessWidget {
               child: Center(
                 child: Text(
                   story?.title ?? "",
-                  style: AppStyle.interNoSemi(
-                    size: 14,
-                    color: AppStyle.white,
-                  ),
+                  style: AppStyle.interNoSemi(size: 14, color: AppStyle.white),
                   maxLines: 2,
                 ),
               ),
@@ -77,4 +75,3 @@ class ShopBarItemThree extends StatelessWidget {
     );
   }
 }
-

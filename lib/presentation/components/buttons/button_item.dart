@@ -24,7 +24,7 @@ class ButtonItem extends StatelessWidget {
     this.value,
     this.onTitle,
     this.offTitle,
-    required this.isLtr
+    required this.isLtr,
   });
 
   @override
@@ -48,15 +48,25 @@ class ButtonItem extends StatelessWidget {
             SizedBox(width: 12.r), // Replace 12.horizontalSpace with SizedBox
             Text(
               title,
-              style: AppStyle.interNormal(color: AppStyle.black, size: 16), // Use the imported AppStyle class
+              style: AppStyle.interNormal(
+                color: AppStyle.black,
+                size: 16,
+              ), // Use the imported AppStyle class
             ),
             const Spacer(),
             Text(
               selectValue ?? "",
-              style: AppStyle.interNormal(color: AppStyle.black, size: 12), // Use the imported AppStyle class
+              style: AppStyle.interNormal(
+                color: AppStyle.black,
+                size: 12,
+              ), // Use the imported AppStyle class
             ),
             if (value == null)
-              Icon( isLtr  ?  FlutterRemix.arrow_right_line : FlutterRemix.arrow_left_line, // Use the correct IconData from flutter_remix
+              Icon(
+                isLtr
+                    ? FlutterRemix.arrow_right_line
+                    : FlutterRemix
+                          .arrow_left_line, // Use the correct IconData from flutter_remix
                 color: AppStyle.black, // Use the imported AppStyle class
               ),
             if (value != null)
@@ -67,11 +77,13 @@ class ButtonItem extends StatelessWidget {
                 onChange: (s) {
                   onTap();
                 },
-                backgroundColor: AppStyle.red, // Provide a color for backgroundColor
+                backgroundColor:
+                    AppStyle.red, // Provide a color for backgroundColor
                 newBoxColor: AppStyle.white, // Provide a color for newBoxColor
-                socialButtonColor: AppStyle.blue, // Provide a color for socialButtonColor
+                socialButtonColor:
+                    AppStyle.blue, // Provide a color for socialButtonColor
                 textColor: AppStyle.black, // Provide a color for textColor
-              )
+              ),
           ],
         ),
       ),

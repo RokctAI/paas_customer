@@ -7,7 +7,12 @@ import 'package:foodyman/infrastructure/models/response/banners_paginate_respons
 class MockBannersRepository implements BannersRepositoryFacade {
   final BannerData _demoBanner = BannerData(
     id: 1,
-    shops: [ShopData(id: "demo_shop_1", translation: Translation(title: "Demo Pizza Shop"))],
+    shops: [
+      ShopData(
+        id: "demo_shop_1",
+        translation: Translation(title: "Demo Pizza Shop"),
+      ),
+    ],
     img: "https://via.placeholder.com/800x400",
     active: true,
     translation: Translation(
@@ -25,11 +30,11 @@ class MockBannersRepository implements BannersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<BannersPaginateResponse>> getAdsPaginate({required int page}) async {
+  Future<ApiResult<BannersPaginateResponse>> getAdsPaginate({
+    required int page,
+  }) async {
     return ApiResult.success(
-      data: BannersPaginateResponse(
-        data: [_demoBanner],
-      ),
+      data: BannersPaginateResponse(data: [_demoBanner]),
     );
   }
 
@@ -39,10 +44,18 @@ class MockBannersRepository implements BannersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<BannersPaginateResponse>> getBannersPaginate({required int page}) async {
+  Future<ApiResult<BannersPaginateResponse>> getBannersPaginate({
+    required int page,
+  }) async {
     return ApiResult.success(
       data: BannersPaginateResponse(
-        data: [_demoBanner, _demoBanner.copyWith(id: 2, translation: Translation(title: "New Arrivals"))],
+        data: [
+          _demoBanner,
+          _demoBanner.copyWith(
+            id: 2,
+            translation: Translation(title: "New Arrivals"),
+          ),
+        ],
       ),
     );
   }

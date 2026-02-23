@@ -61,24 +61,26 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Future<void> initDynamicLinks() async {
-    dynamicLinks.onLink.listen((dynamicLinkData) {
-      String link = dynamicLinkData.link
-          .toString()
-          .substring(dynamicLinkData.link.toString().indexOf("shop") + 4);
-      if (link.toString().contains("product") ||
-          link.toString().contains("shop")) {
-        if (AppConstants.isDemo) {
-          context.replaceRoute(UiTypeRoute());
-          return;
-        }
-        AppHelpers.goHome(context);
-      }
-    }).onError((error) {
-      debugPrint(error.message);
-    });
+    dynamicLinks.onLink
+        .listen((dynamicLinkData) {
+          String link = dynamicLinkData.link.toString().substring(
+            dynamicLinkData.link.toString().indexOf("shop") + 4,
+          );
+          if (link.toString().contains("product") ||
+              link.toString().contains("shop")) {
+            if (AppConstants.isDemo) {
+              context.replaceRoute(UiTypeRoute());
+              return;
+            }
+            AppHelpers.goHome(context);
+          }
+        })
+        .onError((error) {
+          debugPrint(error.message);
+        });
 
-    final PendingDynamicLinkData? data =
-    await FirebaseDynamicLinks.instance.getInitialLink();
+    final PendingDynamicLinkData? data = await FirebaseDynamicLinks.instance
+        .getInitialLink();
     final Uri? deepLink = data?.link;
 
     if (deepLink.toString().contains("product") ||
@@ -93,15 +95,16 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   void selectLanguage() {
     AppHelpers.showCustomModalBottomSheet(
-        isDismissible: false,
-        isDrag: false,
-        context: context,
-        modal: LanguageScreen(
-          onSave: () {
-            Navigator.pop(context);
-          },
-        ),
-        isDarkMode: false);
+      isDismissible: false,
+      isDrag: false,
+      context: context,
+      modal: LanguageScreen(
+        onSave: () {
+          Navigator.pop(context);
+        },
+      ),
+      isDarkMode: false,
+    );
   }
 
   void _showIntroPage() {
@@ -116,7 +119,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       _showIntro = false;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -141,154 +143,179 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor:
-        isDarkMode ? AppStyle.dontHaveAnAccBackDark : AppStyle.white,
+        backgroundColor: isDarkMode
+            ? AppStyle.dontHaveAnAccBackDark
+            : AppStyle.white,
         body: _showIntro
             ? _introPage // Show preloaded IntroPage if _showIntro is true
             : Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                  splashImage,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(splashImage),
+                    fit: BoxFit.fill,
+                  ),
                 ),
-                fit: BoxFit.fill,
-              )),
-          child: SafeArea(
-            child: Padding(
-              padding: REdgeInsets.symmetric(horizontal: 16.w),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                     /* Image.asset(
+                child: SafeArea(
+                  child: Padding(
+                    padding: REdgeInsets.symmetric(horizontal: 16.w),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            /* Image.asset(
                         AppAssets.pngLogo,
                         width: 50.r,
                         height: 50.r,
                       ),*/
-                      AppHelpers.getAppName() != null
-                          ? RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: AppHelpers.getAppName(),
-                              style: AppStyle.logoFontBoldItalic(color: AppStyle.white, size: 35.sp),
-                            ),
-                            WidgetSpan(
-                              child: Transform.translate(
-                                offset: Offset(0, -15), // Move up by 15 pixels, adjust as needed
-                                child: Text(
-                                  "®",
-                                  style: AppStyle.logoFontBoldItalic(color: AppStyle.white, size: 12.sp),
-                                ),
-                              ),
+                            AppHelpers.getAppName() != null
+                                ? RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: AppHelpers.getAppName(),
+                                          style: AppStyle.logoFontBoldItalic(
+                                            color: AppStyle.white,
+                                            size: 35.sp,
+                                          ),
+                                        ),
+                                        WidgetSpan(
+                                          child: Transform.translate(
+                                            offset: Offset(
+                                              0,
+                                              -15,
+                                            ), // Move up by 15 pixels, adjust as needed
+                                            child: Text(
+                                              "®",
+                                              style:
+                                                  AppStyle.logoFontBoldItalic(
+                                                    color: AppStyle.white,
+                                                    size: 12.sp,
+                                                  ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                : SizedBox.shrink(),
+                            8.horizontalSpace,
+                            const Spacer(),
+                            const Spacer(),
+                            SecondButton(
+                              onTap:
+                                  _showIntroPage, // Show IntroPage when Skip is tapped
+                              title: AppHelpers.getTranslation(TrKeys.skip),
+                              bgColor: AppStyle.primary,
+                              titleColor: AppStyle.white,
                             ),
                           ],
                         ),
-                      )
-                          : SizedBox.shrink(),
-                      8.horizontalSpace,
-                      const Spacer(),
-                      const Spacer(),
-                      SecondButton(
-                        onTap: _showIntroPage, // Show IntroPage when Skip is tapped
-                        title: AppHelpers.getTranslation(TrKeys.skip),
-                        bgColor: AppStyle.primary,
-                        titleColor: AppStyle.white,
-                      ),
-                    ],
+                        Column(
+                          children: [
+                            CustomButton(
+                              title: AppHelpers.getTranslation(TrKeys.login),
+                              onPressed: () {
+                                AppHelpers.showCustomModalBottomSheet(
+                                  context: context,
+                                  modal: const LoginScreen(),
+                                  isDarkMode: isDarkMode,
+                                );
+                              },
+                            ),
+                            10.verticalSpace,
+                            CustomButton(
+                              title: AppHelpers.getTranslation(TrKeys.register),
+                              onPressed: () {
+                                AppHelpers.showCustomModalBottomSheet(
+                                  context: context,
+                                  modal: RegisterPage(isOnlyEmail: true),
+                                  isDarkMode: isDarkMode,
+                                  paddingTop: MediaQuery.paddingOf(context).top,
+                                );
+                              },
+                              background: AppStyle.transparent,
+                              textColor: AppStyle.white,
+                              borderColor: AppStyle.white,
+                            ),
+                            5.verticalSpace,
+                            Container(
+                              decoration: BoxDecoration(
+                                color: AppStyle.white.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(
+                                  10,
+                                ), // Adjust the radius as needed
+                              ),
+                              padding: const EdgeInsets.all(
+                                16,
+                              ), // Adjust the padding as needed
+                              child: Wrap(
+                                alignment: WrapAlignment.center,
+                                children: [
+                                  Text(
+                                    "By using ${AppHelpers.getAppName() ?? ""}'s services, you acknowledge that you have read and accepted the",
+                                    style: const TextStyle(
+                                      color: AppStyle.black,
+                                    ), // Make text color white for visibility
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const TermPage(),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      AppHelpers.getTranslation(TrKeys.terms),
+                                      style: const TextStyle(
+                                        decoration: TextDecoration.underline,
+                                        color: AppStyle
+                                            .black, // Optional: Different color for links
+                                      ),
+                                    ),
+                                  ),
+                                  const Text(
+                                    " & ",
+                                    style: TextStyle(
+                                      color: AppStyle.black,
+                                    ), // Make text color white for visibility
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const PolicyPage(),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      AppHelpers.getTranslation(
+                                        TrKeys.privacyPolicy,
+                                      ),
+                                      style: const TextStyle(
+                                        decoration: TextDecoration.underline,
+                                        color: AppStyle
+                                            .black, // Optional: Different color for links
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            20.verticalSpace,
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  Column(
-                    children: [
-                      CustomButton(
-                        title: AppHelpers.getTranslation(TrKeys.login),
-                        onPressed: () {
-                          AppHelpers.showCustomModalBottomSheet(
-                            context: context,
-                            modal: const LoginScreen(),
-                            isDarkMode: isDarkMode,
-                          );
-                        },
-                      ),
-                      10.verticalSpace,
-                      CustomButton(
-                        title: AppHelpers.getTranslation(TrKeys.register),
-                        onPressed: () {
-                          AppHelpers.showCustomModalBottomSheet(
-                            context: context,
-                            modal: RegisterPage(isOnlyEmail: true),
-                            isDarkMode: isDarkMode,
-                              paddingTop: MediaQuery.paddingOf(context).top);
-                        },
-                        background: AppStyle.transparent,
-                        textColor: AppStyle.white,
-                        borderColor: AppStyle.white,
-                      ),
-                      5.verticalSpace,
-                      Container(
-                        decoration: BoxDecoration(
-                          color: AppStyle.white.withOpacity(0.5),
-                          borderRadius: BorderRadius.circular(10), // Adjust the radius as needed
-                        ),
-                        padding: const EdgeInsets.all(16), // Adjust the padding as needed
-                        child: Wrap(
-                          alignment: WrapAlignment.center,
-                          children: [
-                            Text(
-                              "By using ${AppHelpers.getAppName() ?? ""}'s services, you acknowledge that you have read and accepted the",
-                              style: const TextStyle(color: AppStyle.black), // Make text color white for visibility
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const TermPage(),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                AppHelpers.getTranslation(TrKeys.terms),
-                                style: const TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  color: AppStyle.black, // Optional: Different color for links
-                                ),
-                              ),
-                            ),
-                            const Text(
-                              " & ",
-                              style: TextStyle(color: AppStyle.black), // Make text color white for visibility
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const PolicyPage(),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                AppHelpers.getTranslation(TrKeys.privacyPolicy),
-                                style: const TextStyle(
-                                  decoration: TextDecoration.underline,
-                                  color: AppStyle.black, // Optional: Different color for links
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      20.verticalSpace,
-                    ],
-                  )
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
       ),
     );
   }
 }
-

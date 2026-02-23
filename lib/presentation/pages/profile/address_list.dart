@@ -18,7 +18,6 @@ import 'package:foodyman/presentation/routes/app_router.dart';
 
 import 'package:foodyman/presentation/theme/app_style.dart';
 
-
 @RoutePage()
 class AddressListPage extends StatefulWidget {
   const AddressListPage({super.key});
@@ -57,38 +56,47 @@ class _AddressListPageState extends State<AddressListPage> {
                   ),
                 ),
                 ListView.builder(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.r, vertical: 24.r),
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: state.length,
-                    itemBuilder: (context, index) {
-                      return SelectAddressItem(
-                        onTap: () {
-                          event.change(index);
-                        },
-                        isActive:
-                            ref.watch(profileProvider).selectAddress == index,
-                        address: state[index],
-                        update: () async {
-                          await context.pushRoute(ViewMapRoute(
-                              address: ref
-                                  .watch(profileProvider)
-                                  .userData
-                                  ?.addresses?[index],
-                              indexAddress: index));
-                          if (context.mounted) {
-                            ref
-                                .read(profileProvider.notifier)
-                                .fetchUser(context, onSuccess: () {
-                              ref
-                                  .read(profileProvider.notifier)
-                                  .findSelectIndex();
-                            });
-                          }
-                        },
-                      );
-                    }),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.r,
+                    vertical: 24.r,
+                  ),
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: state.length,
+                  itemBuilder: (context, index) {
+                    return SelectAddressItem(
+                      onTap: () {
+                        event.change(index);
+                      },
+                      isActive:
+                          ref.watch(profileProvider).selectAddress == index,
+                      address: state[index],
+                      update: () async {
+                        await context.pushRoute(
+                          ViewMapRoute(
+                            address: ref
+                                .watch(profileProvider)
+                                .userData
+                                ?.addresses?[index],
+                            indexAddress: index,
+                          ),
+                        );
+                        if (context.mounted) {
+                          ref
+                              .read(profileProvider.notifier)
+                              .fetchUser(
+                                context,
+                                onSuccess: () {
+                                  ref
+                                      .read(profileProvider.notifier)
+                                      .findSelectIndex();
+                                },
+                              );
+                        }
+                      },
+                    );
+                  },
+                ),
               ],
             ),
             floatingActionButtonLocation:
@@ -104,82 +112,112 @@ class _AddressListPageState extends State<AddressListPage> {
                   ),
                   24.horizontalSpace,
                   Expanded(
-                      child: CustomButton(
-                          title: AppHelpers.getTranslation(TrKeys.addAddress),
-                          onPressed: () {
-                            context.pushRoute(ViewMapRoute());
-                          })),
+                    child: CustomButton(
+                      title: AppHelpers.getTranslation(TrKeys.addAddress),
+                      onPressed: () {
+                        context.pushRoute(ViewMapRoute());
+                      },
+                    ),
+                  ),
                   24.horizontalSpace,
                   Expanded(
-                      child: CustomButton(
-                          title: AppHelpers.getTranslation(TrKeys.save),
-                          onPressed: () {
-                            ref.read(profileProvider.notifier).setActiveAddress(
-                                index: ref.watch(profileProvider).selectAddress,
-                                id: ref
+                    child: CustomButton(
+                      title: AppHelpers.getTranslation(TrKeys.save),
+                      onPressed: () {
+                        ref
+                            .read(profileProvider.notifier)
+                            .setActiveAddress(
+                              index: ref.watch(profileProvider).selectAddress,
+                              id: ref
+                                  .watch(profileProvider)
+                                  .userData
+                                  ?.addresses?[ref
+                                      .watch(profileProvider)
+                                      .selectAddress]
+                                  .id,
+                            );
+                        LocalStorage.setAddressSelected(
+                          AddressData(
+                            title:
+                                ref
                                     .watch(profileProvider)
                                     .userData
                                     ?.addresses?[ref
                                         .watch(profileProvider)
                                         .selectAddress]
-                                    .id);
-                            LocalStorage.setAddressSelected(AddressData(
-                                title: ref
+                                    .title ??
+                                "",
+                            address:
+                                ref
+                                    .watch(profileProvider)
+                                    .userData
+                                    ?.addresses?[ref
                                         .watch(profileProvider)
-                                        .userData
-                                        ?.addresses?[ref
-                                            .watch(profileProvider)
-                                            .selectAddress]
-                                        .title ??
-                                    "",
-                                address: ref
-                                        .watch(profileProvider)
-                                        .userData
-                                        ?.addresses?[ref
-                                            .watch(profileProvider)
-                                            .selectAddress]
-                                        .address
-                                        ?.address ??
-                                    "",
-                                location: LocationModel(
-                                    longitude: ref
-                                        .watch(profileProvider)
-                                        .userData
-                                        ?.addresses?[ref
-                                            .watch(profileProvider)
-                                            .selectAddress]
-                                        .location
-                                        ?.last,
-                                    latitude: ref
-                                        .watch(profileProvider)
-                                        .userData
-                                        ?.addresses?[ref
-                                            .watch(profileProvider)
-                                            .selectAddress]
-                                        .location
-                                        ?.first)));
-                            ref.read(homeProvider.notifier)
-                              ..fetchBannerPage(context, RefreshController(),
-                                  isRefresh: true)
-                              ..fetchAllShopsPage(
-                                  context, RefreshController(),
-                                  isRefresh: true)
-                              ..fetchShopPageRecommend(
-                                  context, RefreshController(),
-                                  isRefresh: true)
-                              ..fetchShopPage(context, RefreshController(),
-                                  isRefresh: true)
-                              ..fetchStoriesPage(context, RefreshController(),
-                                  isRefresh: true)
-                              ..fetchNewShopsPage(
-                                  context, RefreshController(),
-                                  isRefresh: true)
-                              ..fetchCategoriesPage(
-                                  context, RefreshController(),
-                                  isRefresh: true)
-                              ..setAddress();
-                            Navigator.pop(context);
-                          }))
+                                        .selectAddress]
+                                    .address
+                                    ?.address ??
+                                "",
+                            location: LocationModel(
+                              longitude: ref
+                                  .watch(profileProvider)
+                                  .userData
+                                  ?.addresses?[ref
+                                      .watch(profileProvider)
+                                      .selectAddress]
+                                  .location
+                                  ?.last,
+                              latitude: ref
+                                  .watch(profileProvider)
+                                  .userData
+                                  ?.addresses?[ref
+                                      .watch(profileProvider)
+                                      .selectAddress]
+                                  .location
+                                  ?.first,
+                            ),
+                          ),
+                        );
+                        ref.read(homeProvider.notifier)
+                          ..fetchBannerPage(
+                            context,
+                            RefreshController(),
+                            isRefresh: true,
+                          )
+                          ..fetchAllShopsPage(
+                            context,
+                            RefreshController(),
+                            isRefresh: true,
+                          )
+                          ..fetchShopPageRecommend(
+                            context,
+                            RefreshController(),
+                            isRefresh: true,
+                          )
+                          ..fetchShopPage(
+                            context,
+                            RefreshController(),
+                            isRefresh: true,
+                          )
+                          ..fetchStoriesPage(
+                            context,
+                            RefreshController(),
+                            isRefresh: true,
+                          )
+                          ..fetchNewShopsPage(
+                            context,
+                            RefreshController(),
+                            isRefresh: true,
+                          )
+                          ..fetchCategoriesPage(
+                            context,
+                            RefreshController(),
+                            isRefresh: true,
+                          )
+                          ..setAddress();
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -189,4 +227,3 @@ class _AddressListPageState extends State<AddressListPage> {
     );
   }
 }
-

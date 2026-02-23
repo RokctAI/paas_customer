@@ -8,13 +8,13 @@ class DeliveryPointsNotifier extends StateNotifier<DeliveryPointsState> {
   final DeliveryPointsRepositoryFacade _deliveryPointsRepository;
 
   DeliveryPointsNotifier(this._deliveryPointsRepository)
-      : super(const DeliveryPointsState());
+    : super(const DeliveryPointsState());
 
   Future<void> fetchDeliveryPoints(
-      BuildContext context, {
-        required double latitude,
-        required double longitude,
-      }) async {
+    BuildContext context, {
+    required double latitude,
+    required double longitude,
+  }) async {
     state = state.copyWith(isLoading: true);
     final response = await _deliveryPointsRepository.getDeliveryPoints(
       latitude: latitude,
@@ -26,10 +26,7 @@ class DeliveryPointsNotifier extends StateNotifier<DeliveryPointsState> {
       },
       failure: (failure, status) {
         state = state.copyWith(isLoading: false);
-        AppHelpers.showCheckTopSnackBar(
-          context,
-          failure.toString(),
-        );
+        AppHelpers.showCheckTopSnackBar(context, failure.toString());
       },
     );
   }

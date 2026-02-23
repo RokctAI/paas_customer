@@ -9,11 +9,16 @@ class SignatureService {
   /// 2. Concatenate all parameter key-value pairs with & between each pair
   /// 3. Append the passphrase with a leading &
   /// 4. Generate an MD5 hash of the resulting string
-  static String createSignature(Map<String, dynamic> queryParameters, String passphrase) {
+  static String createSignature(
+    Map<String, dynamic> queryParameters,
+    String passphrase,
+  ) {
     // Create a copy of the parameters to avoid modifying the original
-    final params = Map<String, String>.from(queryParameters.map(
-            (key, value) => MapEntry(key, value?.toString() ?? '')
-    ));
+    final params = Map<String, String>.from(
+      queryParameters.map(
+        (key, value) => MapEntry(key, value?.toString() ?? ''),
+      ),
+    );
 
     // Filter out empty strings
     params.removeWhere((key, value) => value.isEmpty);
@@ -22,10 +27,12 @@ class SignatureService {
     final sortedKeys = params.keys.toList()..sort();
 
     // Build parameter string
-    final parameterString = sortedKeys.map((key) {
-      final value = params[key]!;
-      return '$key=$value';
-    }).join('&');
+    final parameterString = sortedKeys
+        .map((key) {
+          final value = params[key]!;
+          return '$key=$value';
+        })
+        .join('&');
 
     // Add passphrase
     final signatureString = passphrase.isNotEmpty

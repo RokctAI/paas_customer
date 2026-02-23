@@ -11,7 +11,9 @@ import '../../presentation/components/buttons/custom_button.dart';
 import '../../presentation/theme/theme.dart';
 
 // Provider for preloaded WebView state
-final payFastWebViewProvider = StateProvider<PayFastWebViewState?>((ref) => null);
+final payFastWebViewProvider = StateProvider<PayFastWebViewState?>(
+  (ref) => null,
+);
 
 // State class for tracking preloaded WebView
 class PayFastWebViewState {
@@ -86,7 +88,6 @@ class _PayFastWebViewState extends State<PayFastWebView> {
 
       // Setup navigation delegate
       _setupNavigationDelegate();
-
     } else {
       // Initialize with non-theme dependent settings
       controller = WebViewController()
@@ -184,13 +185,15 @@ class _PayFastWebViewState extends State<PayFastWebView> {
     debugPrint('PayFast token value: ${params['token']}');
 
     // Match patterns for success
-    bool isSuccess = url.contains('order-stripe-success') ||
+    bool isSuccess =
+        url.contains('order-stripe-success') ||
         url.contains('payment-success') ||
         url.contains('redirect-success') ||
         url.contains(AppConstants.baseUrl);
 
     // Match patterns for cancellation or failure
-    bool isFailure = url.contains('payment-cancel') ||
+    bool isFailure =
+        url.contains('payment-cancel') ||
         url.contains('payment-failed') ||
         url.contains('redirect-cancel');
 
@@ -199,11 +202,16 @@ class _PayFastWebViewState extends State<PayFastWebView> {
       isPaymentComplete = true;
 
       // Check for token in various potential places
-      final token = params['token'] ?? params['pf_token'] ?? params['payfast_token'];
+      final token =
+          params['token'] ?? params['pf_token'] ?? params['payfast_token'];
 
       // Extract card details
       final cardData = {
-        'last_four': params['card_last_digits'] ?? params['last_four'] ?? params['cardlastfour'] ??  '••••',
+        'last_four':
+            params['card_last_digits'] ??
+            params['last_four'] ??
+            params['cardlastfour'] ??
+            '••••',
         'card_type': params['card_brand'] ?? params['card_type'] ?? 'Card',
         'expiry_date': params['card_expiry'] ?? params['expiry'] ?? '',
         'card_holder_name': params['card_holder'] ?? '',
@@ -273,18 +281,19 @@ class _PayFastWebViewState extends State<PayFastWebView> {
     // Not a completion URL
     return false;
   }
+
   // Method to save token
   void _saveToken(String token, Map<String, String> cardData) async {
     try {
       // Use PaymentRepository to save the token with card details
       await paymentsRepository.tokenizeAfterPayment(
-          '', // Empty card number since we're using token
-          cardData['card_holder_name'] ?? '',
-          cardData['expiry_date'] ?? '',
-          '', // Empty CVC since we're using token
-          token, // Pass the token
-          cardData['last_four'] ?? '••••',
-          cardData['card_type'] ?? 'Card'
+        '', // Empty card number since we're using token
+        cardData['card_holder_name'] ?? '',
+        cardData['expiry_date'] ?? '',
+        '', // Empty CVC since we're using token
+        token, // Pass the token
+        cardData['last_four'] ?? '••••',
+        cardData['card_type'] ?? 'Card',
       );
 
       debugPrint('PayFast token and card details saved successfully');
@@ -364,9 +373,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  CircularProgressIndicator(
-                    color: AppStyle.primary,
-                  ),
+                  CircularProgressIndicator(color: AppStyle.primary),
                   16.verticalSpace,
                   Text(
                     AppHelpers.getTranslation(TrKeys.loading),
@@ -391,12 +398,13 @@ class PayFastWebViewPreloader {
         ..setJavaScriptMode(JavaScriptMode.unrestricted);
 
       // Set initial state
-      ProviderScope.containerOf(context).read(payFastWebViewProvider.notifier).state =
-          PayFastWebViewState(
-            controller: controller,
-            url: url,
-            isReady: false,
-          );
+      ProviderScope.containerOf(
+        context,
+      ).read(payFastWebViewProvider.notifier).state = PayFastWebViewState(
+        controller: controller,
+        url: url,
+        isReady: false,
+      );
 
       // Now set theme-dependent properties
       controller.setBackgroundColor(Theme.of(context).scaffoldBackgroundColor);
@@ -405,12 +413,13 @@ class PayFastWebViewPreloader {
         NavigationDelegate(
           onPageFinished: (String loadedUrl) {
             // Update provider state when load is complete
-            ProviderScope.containerOf(context).read(payFastWebViewProvider.notifier).state =
-                PayFastWebViewState(
-                  controller: controller,
-                  url: url,
-                  isReady: true,
-                );
+            ProviderScope.containerOf(
+              context,
+            ).read(payFastWebViewProvider.notifier).state = PayFastWebViewState(
+              controller: controller,
+              url: url,
+              isReady: true,
+            );
             debugPrint('PayFast WebView preloaded: $url');
           },
           onNavigationRequest: (NavigationRequest request) {
@@ -431,7 +440,9 @@ class PayFastWebViewPreloader {
   /// Get the preloaded WebView controller if available and matching the URL
   static WebViewController? getPreloadedController(WidgetRef ref, String url) {
     final preloadedState = ref.read(payFastWebViewProvider);
-    if (preloadedState != null && preloadedState.url == url && preloadedState.isReady) {
+    if (preloadedState != null &&
+        preloadedState.url == url &&
+        preloadedState.isReady) {
       return preloadedState.controller;
     }
     return null;

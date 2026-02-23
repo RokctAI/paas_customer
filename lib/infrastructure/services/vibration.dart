@@ -10,17 +10,16 @@ enum FeedbackType {
   impact,
   heavy,
   medium,
-  light
+  light,
 }
 
 class Vibrate {
   static const MethodChannel _channel = MethodChannel('vibrate');
   static const Duration defaultVibrationDuration = Duration(milliseconds: 500);
 
-  static Future vibrate() => _channel.invokeMethod(
-    'vibrate',
-    {'duration': defaultVibrationDuration.inMilliseconds},
-  );
+  static Future vibrate() => _channel.invokeMethod('vibrate', {
+    'duration': defaultVibrationDuration.inMilliseconds,
+  });
 
   static Future<bool> get canVibrate async {
     final bool isOn = await _channel.invokeMethod('canVibrate');

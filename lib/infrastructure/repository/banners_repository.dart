@@ -8,8 +8,10 @@ import 'package:foodyman/infrastructure/services/local_storage.dart';
 
 class BannersRepository implements BannersRepositoryFacade {
   @override
-  Future<ApiResult<BannersPaginateResponse>> getBannersPaginate(
-      {required int page, int? pageSize}) async {
+  Future<ApiResult<BannersPaginateResponse>> getBannersPaginate({
+    required int page,
+    int? pageSize,
+  }) async {
     final params = {
       'page': page,
       'limit_page_length': pageSize ?? 10,
@@ -34,9 +36,7 @@ class BannersRepository implements BannersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<BannerData>> getBannerById(
-    int? bannerId,
-  ) async {
+  Future<ApiResult<BannerData>> getBannerById(int? bannerId) async {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
@@ -46,9 +46,7 @@ class BannersRepository implements BannersRepositoryFacade {
           'lang': LocalStorage.getLanguage()?.locale,
         },
       );
-      return ApiResult.success(
-        data: BannerData.fromJson(response.data),
-      );
+      return ApiResult.success(data: BannerData.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get banner by id failure: $e');
       return ApiResult.failure(
@@ -64,7 +62,10 @@ class BannersRepository implements BannersRepositoryFacade {
   // - likeBanner
 
   @override
-  Future<ApiResult<BannersPaginateResponse>> getAdsPaginate({required int page, int? pageSize}) async {
+  Future<ApiResult<BannersPaginateResponse>> getAdsPaginate({
+    required int page,
+    int? pageSize,
+  }) async {
     final params = {
       'page': page,
       'limit_page_length': pageSize ?? 10,
@@ -99,9 +100,7 @@ class BannersRepository implements BannersRepositoryFacade {
           'lang': LocalStorage.getLanguage()?.locale,
         },
       );
-      return ApiResult.success(
-        data: BannerData.fromJson(response.data),
-      );
+      return ApiResult.success(data: BannerData.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get ad by id failure: $e');
       return ApiResult.failure(
@@ -117,10 +116,7 @@ class BannersRepository implements BannersRepositoryFacade {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
         '/api/method/paas.api.like_banner',
-        data: {
-          'id': bannerId,
-          'lang': LocalStorage.getLanguage()?.locale,
-        },
+        data: {'id': bannerId, 'lang': LocalStorage.getLanguage()?.locale},
       );
       return const ApiResult.success(data: null);
     } catch (e) {

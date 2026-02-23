@@ -5,7 +5,8 @@ import 'package:foodyman/infrastructure/models/data/translation.dart';
 import 'package:foodyman/infrastructure/models/response/shops_paginate_response.dart';
 import 'package:foodyman/infrastructure/models/response/single_shop_response.dart';
 import 'package:foodyman/infrastructure/models/data/filter_model.dart';
-import 'package:foodyman/infrastructure/models/response/branches_response.dart';import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
+import 'package:foodyman/infrastructure/models/response/branches_response.dart';
+import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
 import 'package:foodyman/infrastructure/models/data/story_data.dart';
 import 'package:foodyman/infrastructure/models/response/tag_response.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -34,63 +35,63 @@ class MockShopsRepository implements ShopsRepositoryFacade {
     updatedAt: DateTime.now(),
     location: Location(latitude: 37.7749, longitude: -122.4194),
     productsCount: 100,
-    translation: Translation(title: "Demo Shop", description: "Best demo food in town", address: "123 Demo St"),
+    translation: Translation(
+      title: "Demo Shop",
+      description: "Best demo food in town",
+      address: "123 Demo St",
+    ),
     locales: ["en"],
-    seller: Seller(id: "1", firstname: "John", lastname: "Doe", active: true, role: "seller"),
+    seller: Seller(
+      id: "1",
+      firstname: "John",
+      lastname: "Doe",
+      active: true,
+      role: "seller",
+    ),
     avgRate: "4.5",
     rateCount: "120",
     enableCod: true,
   );
 
   @override
-  Future<ApiResult<ShopsPaginateResponse>> getAllShops(int page, {
+  Future<ApiResult<ShopsPaginateResponse>> getAllShops(
+    int page, {
     String? categoryId,
     FilterModel? filterModel,
     required bool isOpen,
     bool? verify,
   }) async {
     return ApiResult.success(
-      data: ShopsPaginateResponse(
-        data: [_demoShop, _demoShop],
-      ),
+      data: ShopsPaginateResponse(data: [_demoShop, _demoShop]),
     );
   }
 
   @override
-  Future<ApiResult<ShopsPaginateResponse>> getNearbyShops(double latitude, double longitude) async {
-      return ApiResult.success(
-      data: ShopsPaginateResponse(
-        data: [_demoShop],
-      ),
-    );
+  Future<ApiResult<ShopsPaginateResponse>> getNearbyShops(
+    double latitude,
+    double longitude,
+  ) async {
+    return ApiResult.success(data: ShopsPaginateResponse(data: [_demoShop]));
   }
 
   @override
   Future<ApiResult<ShopsPaginateResponse>> getShopsRecommend(int page) async {
-      return ApiResult.success(
-      data: ShopsPaginateResponse(
-        data: [_demoShop],
-      ),
-    );
+    return ApiResult.success(data: ShopsPaginateResponse(data: [_demoShop]));
   }
 
   @override
-  Future<ApiResult<SingleShopResponse>> getSingleShop({required String uuid}) async {
-    return ApiResult.success(
-      data: SingleShopResponse(
-        data: _demoShop,
-      ),
-    );
+  Future<ApiResult<SingleShopResponse>> getSingleShop({
+    required String uuid,
+  }) async {
+    return ApiResult.success(data: SingleShopResponse(data: _demoShop));
   }
 
-  
   @override
-  Future<ApiResult<ShopsPaginateResponse>> searchShops({required String text, String? categoryId}) async {
-       return ApiResult.success(
-      data: ShopsPaginateResponse(
-        data: [_demoShop],
-      ),
-    );
+  Future<ApiResult<ShopsPaginateResponse>> searchShops({
+    required String text,
+    String? categoryId,
+  }) async {
+    return ApiResult.success(data: ShopsPaginateResponse(data: [_demoShop]));
   }
 
   @override
@@ -110,44 +111,43 @@ class MockShopsRepository implements ShopsRepositoryFacade {
     String? logoImage,
     String? backgroundImage,
   }) async {
-      return ApiResult.success(data: null);
+    return ApiResult.success(data: null);
   }
 
   @override
-  Future<ApiResult<ShopsPaginateResponse>> getPickupShops() async{
-      return ApiResult.success(
-      data: ShopsPaginateResponse(
-        data: [_demoShop],
-      ),
-    );
+  Future<ApiResult<ShopsPaginateResponse>> getPickupShops() async {
+    return ApiResult.success(data: ShopsPaginateResponse(data: [_demoShop]));
   }
 
   @override
-  Future<ApiResult<bool>> checkDriverZone(LatLng location, {String? shopId}) async {
+  Future<ApiResult<bool>> checkDriverZone(
+    LatLng location, {
+    String? shopId,
+  }) async {
     return ApiResult.success(data: true);
   }
 
   @override
-  Future<ApiResult<BranchResponse>> getShopBranch({required String uuid}) async {
+  Future<ApiResult<BranchResponse>> getShopBranch({
+    required String uuid,
+  }) async {
     return ApiResult.success(data: BranchResponse(data: []));
   }
 
   @override
-  Future<ApiResult<ShopsPaginateResponse>> getShopFilter({String? categoryId, required int page, String? subCategoryId}) async {
-     return ApiResult.success(
-      data: ShopsPaginateResponse(
-        data: [_demoShop],
-      ),
-    );
+  Future<ApiResult<ShopsPaginateResponse>> getShopFilter({
+    String? categoryId,
+    required int page,
+    String? subCategoryId,
+  }) async {
+    return ApiResult.success(data: ShopsPaginateResponse(data: [_demoShop]));
   }
 
   @override
-  Future<ApiResult<ShopsPaginateResponse>> getShopsByIds(List<String> shopIds) async {
-     return ApiResult.success(
-      data: ShopsPaginateResponse(
-        data: [_demoShop],
-      ),
-    );
+  Future<ApiResult<ShopsPaginateResponse>> getShopsByIds(
+    List<String> shopIds,
+  ) async {
+    return ApiResult.success(data: ShopsPaginateResponse(data: [_demoShop]));
   }
 
   @override
@@ -158,22 +158,26 @@ class MockShopsRepository implements ShopsRepositoryFacade {
   @override
   Future<ApiResult<PriceModel>> getSuggestPrice() async {
     return ApiResult.success(
-        data: PriceModel(
-            timestamp: DateTime.now(),
-            status: true,
-            message: "Success",
-            data: Data(min: 10, max: 100)
-        )
+      data: PriceModel(
+        timestamp: DateTime.now(),
+        status: true,
+        message: "Success",
+        data: Data(min: 10, max: 100),
+      ),
     );
   }
 
   @override
   Future<ApiResult<TagResponse>> getTags(String categoryId) async {
-     return ApiResult.success(data: TagResponse(data: []));
+    return ApiResult.success(data: TagResponse(data: []));
   }
 
   @override
-  Future<ApiResult> joinOrder({required String shopId, required String name, required String cartId}) async {
+  Future<ApiResult> joinOrder({
+    required String shopId,
+    required String name,
+    required String cartId,
+  }) async {
     return ApiResult.success(data: null);
   }
 }

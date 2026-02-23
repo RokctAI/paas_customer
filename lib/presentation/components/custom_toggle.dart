@@ -10,12 +10,13 @@ class CustomToggle extends StatefulWidget {
   final ValueNotifier<bool>? controller;
   final bool isChecked;
 
-  const CustomToggle(
-      {super.key,
-      required this.title,
-      required this.isChecked,
-      required this.onChange,
-      this.controller});
+  const CustomToggle({
+    super.key,
+    required this.title,
+    required this.isChecked,
+    required this.onChange,
+    this.controller,
+  });
 
   @override
   State<CustomToggle> createState() => _CustomToggleState();
@@ -36,17 +37,15 @@ class _CustomToggleState extends State<CustomToggle> {
       width: double.infinity,
       padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 18.w),
       decoration: BoxDecoration(
-          color: AppStyle.white.withOpacity(0.9),
-          borderRadius: BorderRadius.circular(10.r)),
+        color: AppStyle.white.withOpacity(0.9),
+        borderRadius: BorderRadius.circular(10.r),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             widget.title,
-            style: AppStyle.interNoSemi(
-              size: 16,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interNoSemi(size: 16, color: AppStyle.black),
           ),
           Row(
             children: [
@@ -64,8 +63,9 @@ class _CustomToggleState extends State<CustomToggle> {
                   margin: EdgeInsets.all(3.r),
                   padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 9.w),
                   decoration: BoxDecoration(
-                      color: AppStyle.white,
-                      borderRadius: BorderRadius.all(Radius.circular(7.r))),
+                    color: AppStyle.white,
+                    borderRadius: BorderRadius.all(Radius.circular(7.r)),
+                  ),
                   child: Container(
                     decoration: BoxDecoration(
                       color: AppStyle.switchBg,
@@ -74,8 +74,10 @@ class _CustomToggleState extends State<CustomToggle> {
                           color: AppStyle.white.withOpacity(0.07),
                           spreadRadius: 0,
                           blurRadius: 2,
-                          offset:
-                              const Offset(0, 2), // changes position of shadow
+                          offset: const Offset(
+                            0,
+                            2,
+                          ), // changes position of shadow
                         ),
                       ],
                     ),
@@ -100,4 +102,3 @@ class _CustomToggleState extends State<CustomToggle> {
     );
   }
 }
-

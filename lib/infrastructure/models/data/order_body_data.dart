@@ -18,7 +18,7 @@ class OrderBodyData {
   final String deliveryTime;
   final String? username;
   final String? phone;
-  final String? email;  // Add this field
+  final String? email; // Add this field
   final List<ProductNote> notes;
 
   OrderBodyData({
@@ -37,7 +37,7 @@ class OrderBodyData {
     this.note,
     this.username,
     this.phone,
-    this.email,  // Add this parameter
+    this.email, // Add this parameter
   });
 
   Map toJson() {
@@ -49,12 +49,13 @@ class OrderBodyData {
       if (deliveryPointId != null) "delivery_point_id": deliveryPointId,
       if (username != null) "username": username,
       if (phone?.isNotEmpty ?? false) "phone": phone,
-      if (email?.isNotEmpty ?? false) "email": email,  // Include email in JSON
+      if (email?.isNotEmpty ?? false) "email": email, // Include email in JSON
       if (paymentId != null) "payment_id": paymentId,
       "delivery_fee": deliveryFee,
-      "delivery_type":
-      deliveryType == DeliveryTypeEnum.delivery ? "delivery" : "pickup",
-      if(coupon != null && (coupon?.trim().isNotEmpty ?? false))
+      "delivery_type": deliveryType == DeliveryTypeEnum.delivery
+          ? "delivery"
+          : "pickup",
+      if (coupon != null && (coupon?.trim().isNotEmpty ?? false))
         "coupon": coupon,
       "location": location.toJson(),
       "address": address.toJson(),
@@ -66,8 +67,8 @@ class OrderBodyData {
       if (notes.isNotEmpty)
         "notes": {
           for (int i = 0; i < notes.length; i++)
-            notes[i].stockId: notes[i].comment
-        }
+            notes[i].stockId: notes[i].comment,
+        },
     };
   }
 }
@@ -78,19 +79,14 @@ class AddressModel {
   final String? house;
   final String? floor;
 
-  AddressModel({
-    this.address,
-    this.office,
-    this.house,
-    this.floor,
-  });
+  AddressModel({this.address, this.office, this.house, this.floor});
 
   Map toJson() {
     return {
       "address": address,
       "office": office,
       "house": house,
-      "floor": floor
+      "floor": floor,
     };
   }
 
@@ -155,4 +151,3 @@ class ProductOrder {
     return "{\"stock_id\":$stockId, \"price\":$price, \"qty\":$quantity, \"tax\":$tax, \"discount\":$discount, \"total_price\":$totalPrice}";
   }
 }
-

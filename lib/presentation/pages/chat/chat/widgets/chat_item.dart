@@ -34,13 +34,8 @@ class ChatItem extends StatelessWidget {
                 ? AppStyle.primary
                 : AppStyle.bgGrey,
           ),
-          constraints: BoxConstraints(
-            maxWidth: 256.r,
-          ),
-          padding: REdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 15,
-          ),
+          constraints: BoxConstraints(maxWidth: 256.r),
+          padding: REdgeInsets.symmetric(horizontal: 20, vertical: 15),
           child: Text(
             chatData.message,
             style: GoogleFonts.k2d(
@@ -66,4 +61,3 @@ class ChatItem extends StatelessWidget {
     );
   }
 }
-

@@ -1,14 +1,9 @@
-
-
 import 'package:foodyman/infrastructure/services/local_storage.dart';
 
 class SearchProductModel {
   final String text;
   final int page;
-  SearchProductModel({
-    required this.text,
-    required this.page,
-  });
+  SearchProductModel({required this.text, required this.page});
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -20,4 +15,3 @@ class SearchProductModel {
     return map;
   }
 }
-

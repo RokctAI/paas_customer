@@ -8,7 +8,6 @@ import 'package:foodyman/infrastructure/services/time_service.dart';
 import 'package:foodyman/infrastructure/services/tr_keys.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
-
 class RefundInfoScreen extends StatelessWidget {
   final RefundModel? refundModel;
 
@@ -40,29 +39,27 @@ class RefundInfoScreen extends StatelessWidget {
                       color: (refundModel?.status == "pending"
                           ? AppStyle.primary
                           : AppStyle.bgGrey),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(8),
-                      ),
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
                     ),
                     child: Center(
                       child: refundModel?.status == "pending"
                           ? Stack(
                               children: [
                                 Center(
-                                    child: SvgPicture.asset(
-                                        "assets/svgs/orderTime.svg")),
+                                  child: SvgPicture.asset(
+                                    "assets/svgs/orderTime.svg",
+                                  ),
+                                ),
                                 Center(
                                   child: Text(
                                     "15",
-                                    style: AppStyle.interNoSemi(
-                                      size: 10,
-                                    ),
+                                    style: AppStyle.interNoSemi(size: 10),
                                   ),
                                 ),
                               ],
                             )
                           : Icon(
-                        refundModel?.status == "accepted"
+                              refundModel?.status == "accepted"
                                   ? Icons.done_all
                                   : Icons.cancel_outlined,
                               size: 16.r,
@@ -102,7 +99,9 @@ class RefundInfoScreen extends StatelessWidget {
                     width: 6.w,
                     height: 6.h,
                     decoration: const BoxDecoration(
-                        color: AppStyle.textGrey, shape: BoxShape.circle),
+                      color: AppStyle.textGrey,
+                      shape: BoxShape.circle,
+                    ),
                   ),
                   Text(
                     TimeService.dateFormatMDHm(refundModel?.createdAt),
@@ -114,9 +113,7 @@ class RefundInfoScreen extends StatelessWidget {
                 ],
               ),
               16.verticalSpace,
-              const Divider(
-                color: AppStyle.textGrey,
-              ),
+              const Divider(color: AppStyle.textGrey),
               16.verticalSpace,
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -138,9 +135,7 @@ class RefundInfoScreen extends StatelessWidget {
                 ],
               ),
               16.verticalSpace,
-              const Divider(
-                color: AppStyle.textGrey,
-              ),
+              const Divider(color: AppStyle.textGrey),
               16.verticalSpace,
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -169,4 +164,3 @@ class RefundInfoScreen extends StatelessWidget {
     );
   }
 }
-

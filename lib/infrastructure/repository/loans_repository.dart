@@ -28,7 +28,6 @@ import '../../utils/payfast/payfast_webview.dart';
 import '../models/data/loans/loan_application.dart';
 
 class LoansRepository implements LoansRepositoryFacade {
-
   @override
   Future<ApiResult<dynamic>> submitLoanApplication({
     required LoanApplicationModel applicationData,
@@ -36,19 +35,23 @@ class LoansRepository implements LoansRepositoryFacade {
     try {
       final user = LocalStorage.getUser();
       final financials = applicationData.financialDetails ?? {};
-      
-      final double income = (financials['monthly_income'] as num?)?.toDouble() ?? 0.0;
-      final double expenses = ((financials['grocery_expenses'] as num?)?.toDouble() ?? 0.0) + 
-                              ((financials['other_expenses'] as num?)?.toDouble() ?? 0.0) +
-                              ((financials['existing_credits'] as num?)?.toDouble() ?? 0.0);
+
+      final double income =
+          (financials['monthly_income'] as num?)?.toDouble() ?? 0.0;
+      final double expenses =
+          ((financials['grocery_expenses'] as num?)?.toDouble() ?? 0.0) +
+          ((financials['other_expenses'] as num?)?.toDouble() ?? 0.0) +
+          ((financials['existing_credits'] as num?)?.toDouble() ?? 0.0);
 
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
         '/api/method/paas.api.create_loan_application',
         data: {
           'applicant_type': 'Customer',
-          'applicant': user?.firstname != null ? "${user?.firstname} ${user?.lastname}" : user?.email, // Best guess for Name, backend should key off User though.
-          'loan_product': 'Personal Loan', 
+          'applicant': user?.firstname != null
+              ? "${user?.firstname} ${user?.lastname}"
+              : user?.email, // Best guess for Name, backend should key off User though.
+          'loan_product': 'Personal Loan',
           'loan_amount': applicationData.amount,
           'income': income,
           'total_expenses': expenses,
@@ -76,17 +79,16 @@ class LoansRepository implements LoansRepositoryFacade {
     final start = (page - 1) * 20;
     final limit = 20;
 
-    final data = {
-      'start': start,
-      'limit': limit,
-    };
+    final data = {'start': start, 'limit': limit};
     debugPrint('==> Query parameters: ${jsonEncode(data)}');
 
     try {
       final client = dioHttp.client(requireAuth: true);
       debugPrint('==> Created authenticated client');
 
-      debugPrint('==> Sending GET request to /api/method/paas.api.user.user.get_wallet_history');
+      debugPrint(
+        '==> Sending GET request to /api/method/paas.api.user.user.get_wallet_history',
+      );
       final response = await client.get(
         '/api/method/paas.api.user.user.get_wallet_history',
         queryParameters: data,
@@ -96,12 +98,11 @@ class LoansRepository implements LoansRepositoryFacade {
       // Frappe returns {"message": [...]} or just [...] depending on endpoint
       if (response.data != null &&
           (response.data['message'] != null || response.data is List)) {
-
         final transactions = response.data['message'] ?? response.data;
         if (transactions is List) {
-           debugPrint('==> Found ${transactions.length} transactions');
-           // Filter for loan transactions if possible, or return all wallet history
-           return ApiResult.success(data: transactions);
+          debugPrint('==> Found ${transactions.length} transactions');
+          // Filter for loan transactions if possible, or return all wallet history
+          return ApiResult.success(data: transactions);
         }
       }
 
@@ -117,13 +118,14 @@ class LoansRepository implements LoansRepositoryFacade {
     }
   }
 
-
   @override
   Future<ApiResult<bool>> checkLoanEligibility({
     required String idNumber,
     required double amount,
   }) async {
-    debugPrint('==> Checking loan eligibility for ID: $idNumber, amount: $amount');
+    debugPrint(
+      '==> Checking loan eligibility for ID: $idNumber, amount: $amount',
+    );
     try {
       final client = dioHttp.client(requireAuth: true);
       debugPrint('==> Created authenticated client');
@@ -135,7 +137,9 @@ class LoansRepository implements LoansRepositoryFacade {
       };
       debugPrint('==> Request data: ${jsonEncode(data)}');
 
-      debugPrint('==> Sending POST request to /api/method/paas.api.check_loan_eligibility');
+      debugPrint(
+        '==> Sending POST request to /api/method/paas.api.check_loan_eligibility',
+      );
       final response = await client.post(
         '/api/method/paas.api.check_loan_eligibility',
         data: data,
@@ -147,9 +151,7 @@ class LoansRepository implements LoansRepositoryFacade {
       final isEligible = message['is_eligible'] ?? false;
       debugPrint('==> Eligibility result: $isEligible');
 
-      return ApiResult.success(
-        data: isEligible,
-      );
+      return ApiResult.success(data: isEligible);
     } catch (e) {
       debugPrint('==> loan eligibility check failure: $e');
       return ApiResult.failure(
@@ -167,7 +169,9 @@ class LoansRepository implements LoansRepositoryFacade {
       debugPrint('==> Created authenticated client');
 
       // Using standard Frappe REST API to get Loan Application
-      debugPrint('==> Sending GET request to /api/resource/Loan Application/$loanId');
+      debugPrint(
+        '==> Sending GET request to /api/resource/Loan Application/$loanId',
+      );
       final response = await client.get(
         '/api/resource/Loan Application/$loanId',
       );
@@ -197,10 +201,12 @@ class LoansRepository implements LoansRepositoryFacade {
 
       // Using update to change status if allowed, or specific endpoint if exists.
       // Backend doesn't expose a cancel endpoint. Trying to update status via REST API.
-      debugPrint('==> Sending PUT request to /api/resource/Loan Application/$loanId');
+      debugPrint(
+        '==> Sending PUT request to /api/resource/Loan Application/$loanId',
+      );
       await client.put(
         '/api/resource/Loan Application/$loanId',
-        data: {'status': 'Cancelled'}
+        data: {'status': 'Cancelled'},
       );
       debugPrint('==> Loan cancellation successful');
 
@@ -226,7 +232,9 @@ class LoansRepository implements LoansRepositoryFacade {
       debugPrint('==> Created authenticated client');
 
       // Use get_payfast_settings from backend
-      debugPrint('==> Sending GET request to /api/method/paas.api.payment.payment.get_payfast_settings');
+      debugPrint(
+        '==> Sending GET request to /api/method/paas.api.payment.payment.get_payfast_settings',
+      );
       var res = await client.get(
         '/api/method/paas.api.payment.payment.get_payfast_settings',
       );
@@ -242,12 +250,17 @@ class LoansRepository implements LoansRepositoryFacade {
       final phone = user?.phone;
       final firstName = user?.firstname;
       final lastName = user?.lastname;
-      debugPrint('==> User info - Email: $email, Phone: $phone, Name: $firstName $lastName');
+      debugPrint(
+        '==> User info - Email: $email, Phone: $phone, Name: $firstName $lastName',
+      );
 
       // Override PayFast settings locally for the enhancedPayment call
-      final String passphrase = settings["pass_phrase"] ?? AppConstants.passphrase;
-      final String merchantId = settings["merchant_id"] ?? AppConstants.merchantId;
-      final String merchantKey = settings["merchant_key"] ?? AppConstants.merchantKey;
+      final String passphrase =
+          settings["pass_phrase"] ?? AppConstants.passphrase;
+      final String merchantId =
+          settings["merchant_id"] ?? AppConstants.merchantId;
+      final String merchantKey =
+          settings["merchant_key"] ?? AppConstants.merchantKey;
 
       // Use PayFastService for payment
       debugPrint('==> Generating PayFast payment URL');
@@ -258,7 +271,9 @@ class LoansRepository implements LoansRepositoryFacade {
         production: !(settings["is_sandbox"] ?? true),
         amount: '5.00',
         itemName: 'Loan Tokenization',
-        notifyUrl: settings["success_redirect_url"] ?? "", // Map success to notify/return as fallback
+        notifyUrl:
+            settings["success_redirect_url"] ??
+            "", // Map success to notify/return as fallback
         cancelUrl: settings["failure_redirect_url"] ?? "",
         returnUrl: settings["success_redirect_url"] ?? "",
         paymentId: DateTime.now().millisecondsSinceEpoch.toString(),
@@ -301,9 +316,11 @@ class LoansRepository implements LoansRepositoryFacade {
 
       // Using standard REST API to query Loan Contract by loan_application
       final queryParams = {
-        'filters': jsonEncode([["loan_application", "=", loanId]]),
+        'filters': jsonEncode([
+          ["loan_application", "=", loanId],
+        ]),
         'fields': jsonEncode(["*"]),
-        'limit': 1
+        'limit': 1,
       };
       debugPrint('==> Query parameters: ${jsonEncode(queryParams)}');
 
@@ -317,16 +334,21 @@ class LoansRepository implements LoansRepositoryFacade {
       if (response.data != null && response.data['data'] != null) {
         final List dataList = response.data['data'];
         if (dataList.isNotEmpty) {
-           final contractData = dataList[0];
-           debugPrint('==> Contract data extracted: ${jsonEncode(contractData)}');
-           debugPrint('==> Converting to LoanContractModel');
-           final contract = LoanContractModel.fromJson(contractData);
-           debugPrint('==> Contract model created successfully');
-           return ApiResult.success(data: contract);
+          final contractData = dataList[0];
+          debugPrint(
+            '==> Contract data extracted: ${jsonEncode(contractData)}',
+          );
+          debugPrint('==> Converting to LoanContractModel');
+          final contract = LoanContractModel.fromJson(contractData);
+          debugPrint('==> Contract model created successfully');
+          return ApiResult.success(data: contract);
         }
       }
 
-      return const ApiResult.failure(error: "Contract not found", statusCode: 404);
+      return const ApiResult.failure(
+        error: "Contract not found",
+        statusCode: 404,
+      );
     } catch (e) {
       debugPrint('==> fetch loan contract failure: $e');
       return ApiResult.failure(
@@ -341,16 +363,23 @@ class LoansRepository implements LoansRepositoryFacade {
     required String loanId,
     required String contractId,
   }) async {
-    debugPrint('==> Accepting loan contract - Loan ID: $loanId, Contract ID: $contractId');
+    debugPrint(
+      '==> Accepting loan contract - Loan ID: $loanId, Contract ID: $contractId',
+    );
     try {
       final client = dioHttp.client(requireAuth: true);
       debugPrint('==> Created authenticated client');
 
       // Try to update the contract status via REST API
-      debugPrint('==> Sending PUT request to /api/resource/Loan Contract/$contractId');
+      debugPrint(
+        '==> Sending PUT request to /api/resource/Loan Contract/$contractId',
+      );
       await client.put(
         '/api/resource/Loan Contract/$contractId',
-        data: {'status': 'Accepted', 'accepted_date': DateTime.now().toIso8601String()},
+        data: {
+          'status': 'Accepted',
+          'accepted_date': DateTime.now().toIso8601String(),
+        },
       );
       debugPrint('==> Contract acceptance successful');
 
@@ -371,7 +400,9 @@ class LoansRepository implements LoansRepositoryFacade {
       final client = dioHttp.client(requireAuth: true);
       debugPrint('==> Created authenticated client');
 
-      debugPrint('==> Sending GET request to /api/method/paas.api.check_loan_history_eligibility');
+      debugPrint(
+        '==> Sending GET request to /api/method/paas.api.check_loan_history_eligibility',
+      );
       final response = await client.get(
         '/api/method/paas.api.check_loan_history_eligibility',
       );
@@ -380,9 +411,7 @@ class LoansRepository implements LoansRepositoryFacade {
       final eligibilityData = response.data['message'] ?? response.data ?? {};
       debugPrint('==> Eligibility data: ${jsonEncode(eligibilityData)}');
 
-      return ApiResult.success(
-        data: eligibilityData,
-      );
+      return ApiResult.success(data: eligibilityData);
     } catch (e) {
       debugPrint('==> check loan history eligibility failure: $e');
       return ApiResult.failure(
@@ -401,9 +430,7 @@ class LoansRepository implements LoansRepositoryFacade {
       debugPrint('==> Marking application as rejected');
 
       // The backend expects financial_details as a dict.
-      final data = {
-        'financial_details': financialDetails
-      };
+      final data = {'financial_details': financialDetails};
 
       debugPrint('==> Request data: ${jsonEncode(data)}');
 
@@ -444,7 +471,9 @@ class LoansRepository implements LoansRepositoryFacade {
       };
       debugPrint('==> Request data: ${jsonEncode(data)}');
 
-      debugPrint('==> Sending POST request to /api/method/paas.api.check_financial_eligibility');
+      debugPrint(
+        '==> Sending POST request to /api/method/paas.api.check_financial_eligibility',
+      );
       final response = await client.post(
         '/api/method/paas.api.check_financial_eligibility',
         data: data,
@@ -452,11 +481,11 @@ class LoansRepository implements LoansRepositoryFacade {
       debugPrint('==> Got response: ${jsonEncode(response.data)}');
 
       final eligibilityData = response.data['message'] ?? response.data ?? {};
-      debugPrint('==> Financial eligibility data: ${jsonEncode(eligibilityData)}');
-
-      return ApiResult.success(
-        data: eligibilityData,
+      debugPrint(
+        '==> Financial eligibility data: ${jsonEncode(eligibilityData)}',
       );
+
+      return ApiResult.success(data: eligibilityData);
     } catch (e) {
       debugPrint('==> check financial eligibility failure: $e');
       return ApiResult.failure(
@@ -479,13 +508,13 @@ class LoansRepository implements LoansRepositoryFacade {
 
       // Structure the data properly for backend
       // Backend expects 'financial_details' as a dict parameter
-      final data = {
-        'financial_details': financialDetails
-      };
+      final data = {'financial_details': financialDetails};
 
       debugPrint('==> Request data: ${jsonEncode(data)}');
 
-      debugPrint('==> Sending POST request to /api/method/paas.api.save_incomplete_loan_application');
+      debugPrint(
+        '==> Sending POST request to /api/method/paas.api.save_incomplete_loan_application',
+      );
       final response = await client.post(
         '/api/method/paas.api.save_incomplete_loan_application',
         data: data,
@@ -496,9 +525,7 @@ class LoansRepository implements LoansRepositoryFacade {
       final applicationId = message['name']?.toString() ?? '';
       debugPrint('==> Application ID received: $applicationId');
 
-      return ApiResult.success(
-        data: applicationId,
-      );
+      return ApiResult.success(data: applicationId);
     } catch (e) {
       debugPrint('==> save incomplete loan application failure: $e');
       return ApiResult.failure(
@@ -509,9 +536,7 @@ class LoansRepository implements LoansRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<bool>> declineLoanContract({
-    required String loanId,
-  }) async {
+  Future<ApiResult<bool>> declineLoanContract({required String loanId}) async {
     debugPrint('==> Declining loan contract for loan ID: $loanId');
     try {
       // Trying to find contract and update status to Declined
@@ -519,8 +544,10 @@ class LoansRepository implements LoansRepositoryFacade {
 
       // Find contract first
       final queryParams = {
-        'filters': jsonEncode([["loan_application", "=", loanId]]),
-        'limit': 1
+        'filters': jsonEncode([
+          ["loan_application", "=", loanId],
+        ]),
+        'limit': 1,
       };
 
       final response = await client.get(
@@ -531,18 +558,20 @@ class LoansRepository implements LoansRepositoryFacade {
       if (response.data != null && response.data['data'] != null) {
         final List dataList = response.data['data'];
         if (dataList.isNotEmpty) {
-           final contractId = dataList[0]['name'];
+          final contractId = dataList[0]['name'];
 
-           // Update status
-           await client.put(
+          // Update status
+          await client.put(
             '/api/resource/Loan Contract/$contractId',
             data: {'status': 'Declined'},
-           );
-           return const ApiResult.success(data: true);
+          );
+          return const ApiResult.success(data: true);
         }
       }
 
-      return const ApiResult.success(data: true); // Assume success even if not found
+      return const ApiResult.success(
+        data: true,
+      ); // Assume success even if not found
     } catch (e) {
       debugPrint('==> decline loan contract failure: $e');
       return ApiResult.failure(
@@ -552,21 +581,26 @@ class LoansRepository implements LoansRepositoryFacade {
     }
   }
 
-
   @override
   Future<ApiResult<Map<String, dynamic>>> fetchSavedApplication() async {
     try {
       final client = dioHttp.client(requireAuth: true);
       debugPrint('==> Fetching saved loan application');
 
-      final response = await client.get('/api/method/paas.api.fetch_saved_application');
-      debugPrint('==> Saved application response: ${jsonEncode(response.data)}');
+      final response = await client.get(
+        '/api/method/paas.api.fetch_saved_application',
+      );
+      debugPrint(
+        '==> Saved application response: ${jsonEncode(response.data)}',
+      );
 
       final message = response.data['message'] ?? response.data;
 
       if (message != null && message is Map) {
         final applicationData = Map<String, dynamic>.from(message);
-        debugPrint('==> Application data found: ${jsonEncode(applicationData)}');
+        debugPrint(
+          '==> Application data found: ${jsonEncode(applicationData)}',
+        );
 
         return ApiResult.success(data: applicationData);
       }
@@ -591,16 +625,18 @@ class LoansRepository implements LoansRepositoryFacade {
       final response = await client.get(
         '/api/method/paas.api.fetch_saved_applications',
       );
-      debugPrint('==> Saved applications response: ${jsonEncode(response.data)}');
+      debugPrint(
+        '==> Saved applications response: ${jsonEncode(response.data)}',
+      );
 
       final message = response.data['message'] ?? response.data;
 
       if (message != null && message is List) {
         List<Map<String, dynamic>> processedApplications = [];
         for (var item in message) {
-            if (item is Map) {
-                processedApplications.add(Map<String, dynamic>.from(item));
-            }
+          if (item is Map) {
+            processedApplications.add(Map<String, dynamic>.from(item));
+          }
         }
         return ApiResult.success(data: processedApplications);
       }
@@ -639,7 +675,9 @@ class LoansRepository implements LoansRepositoryFacade {
         '/api/method/paas.api.request_payout',
         data: {'loan_application': loanApplicationName},
       );
-      return const ApiResult.success(data: "Payout request submitted successfully!");
+      return const ApiResult.success(
+        data: "Payout request submitted successfully!",
+      );
     } catch (e) {
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
@@ -689,10 +727,13 @@ class LoansRepository implements LoansRepositoryFacade {
       return result.when(
         success: (transactions) {
           // Filter for successfully repaid loans
-          final completedLoans = transactions.where((loan) =>
-          loan['status']?.toString().toLowerCase() == 'paid' ||
-              loan['status']?.toString().toLowerCase() == 'completed'
-          ).toList();
+          final completedLoans = transactions
+              .where(
+                (loan) =>
+                    loan['status']?.toString().toLowerCase() == 'paid' ||
+                    loan['status']?.toString().toLowerCase() == 'completed',
+              )
+              .toList();
 
           return ApiResult.success(data: completedLoans.length);
         },
@@ -720,19 +761,21 @@ class LoansRepository implements LoansRepositoryFacade {
     }
   }
 
-  Future<ApiResult<double>> calculatePreApprovalAmount(Map<String, dynamic> financialDetails) async {
+  Future<ApiResult<double>> calculatePreApprovalAmount(
+    Map<String, dynamic> financialDetails,
+  ) async {
     try {
       // First, get the loan history tier
       final countResult = await getCompletedLoanCount();
       int loanCount = 0;
 
       countResult.when(
-          success: (count) {
-            loanCount = count;
-          },
-          failure: (_, __) {
-            loanCount = 0;
-          }
+        success: (count) {
+          loanCount = count;
+        },
+        failure: (_, __) {
+          loanCount = 0;
+        },
       );
 
       // Get tier-based maximum
@@ -760,9 +803,11 @@ class LoansRepository implements LoansRepositoryFacade {
   }) {
     // Extract financial metrics
     final monthlyIncome = financialDetails['monthly_income'] as double? ?? 0.0;
-    final groceryExpenses = financialDetails['grocery_expenses'] as double? ?? 0.0;
+    final groceryExpenses =
+        financialDetails['grocery_expenses'] as double? ?? 0.0;
     final otherExpenses = financialDetails['other_expenses'] as double? ?? 0.0;
-    final existingCredits = financialDetails['existing_credits'] as double? ?? 0.0;
+    final existingCredits =
+        financialDetails['existing_credits'] as double? ?? 0.0;
 
     // Calculate total expenses
     final totalExpenses = groceryExpenses + otherExpenses + existingCredits;

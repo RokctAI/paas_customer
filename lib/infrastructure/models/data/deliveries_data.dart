@@ -6,4 +6,3 @@ class DeliveriesData {
 
   DeliveriesData(this.shopId, this.shopDeliveries);
 }
-

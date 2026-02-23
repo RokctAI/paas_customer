@@ -6,4 +6,3 @@ import 'help_state.dart';
 final helpProvider = StateNotifierProvider<HelpNotifier, HelpState>(
   (ref) => HelpNotifier(settingsRepository),
 );
-

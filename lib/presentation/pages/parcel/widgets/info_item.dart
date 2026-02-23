@@ -24,10 +24,12 @@ class InfoItem extends StatelessWidget {
         width: MediaQuery.sizeOf(context).width / 2 - 24.r,
         height: isLarge ? 230.r : 168.r,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.r),
-            image: DecorationImage(
-                image: AssetImage(AppConstants.infoImage[index]),
-                fit: BoxFit.cover)),
+          borderRadius: BorderRadius.circular(10.r),
+          image: DecorationImage(
+            image: AssetImage(AppConstants.infoImage[index]),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Align(
           alignment: Alignment.bottomLeft,
           child: Padding(
@@ -42,4 +44,3 @@ class InfoItem extends StatelessWidget {
     );
   }
 }
-

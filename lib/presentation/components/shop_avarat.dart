@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/presentation/components/custom_network_image.dart';
@@ -28,7 +27,9 @@ class ShopAvatar extends StatelessWidget {
       height: size.r,
       padding: EdgeInsets.all(padding.r),
       decoration: BoxDecoration(
-          color: bgColor, borderRadius: BorderRadius.circular(radius)),
+        color: bgColor,
+        borderRadius: BorderRadius.circular(radius),
+      ),
       child: CustomNetworkImage(
         url: shopImage,
         height: size.r,
@@ -38,4 +39,3 @@ class ShopAvatar extends StatelessWidget {
     );
   }
 }
-

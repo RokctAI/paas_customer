@@ -47,14 +47,17 @@ class _OrderDeliveryState extends State<OrderDelivery> {
   @override
   void initState() {
     houseController = TextEditingController(
-        text: LocalStorage.getAddressInformation()?.house);
+      text: LocalStorage.getAddressInformation()?.house,
+    );
     floorController = TextEditingController(
-        text: LocalStorage.getAddressInformation()?.floor);
+      text: LocalStorage.getAddressInformation()?.floor,
+    );
     commentController = TextEditingController();
     nameController = TextEditingController();
     phoneController = TextEditingController();
-    userPhoneNumber =
-        TextEditingController(text: LocalStorage.getUser()?.phone);
+    userPhoneNumber = TextEditingController(
+      text: LocalStorage.getUser()?.phone,
+    );
     super.initState();
   }
 
@@ -75,160 +78,172 @@ class _OrderDeliveryState extends State<OrderDelivery> {
       padding: EdgeInsets.only(top: 24.h),
       child: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
-        child: Consumer(builder: (context, ref, child) {
-          ref.listen(editProfileProvider, (previous, next) {
-            if (next.isSuccess &&
-                (next.isSuccess != (previous?.isSuccess ?? false))) {
-              userPhoneNumber.text = next.userData?.phone ?? "";
-            }
-          });
-          return Column(
-            children: [
-              // Add the address tooltip with triangle pointer
-              _buildAddressTooltip(context),
-              10.verticalSpace,
-              OrderContainer(
-                onTap: () async {
-                  AppHelpers.showCustomModalBottomSheet(
+        child: Consumer(
+          builder: (context, ref, child) {
+            ref.listen(editProfileProvider, (previous, next) {
+              if (next.isSuccess &&
+                  (next.isSuccess != (previous?.isSuccess ?? false))) {
+                userPhoneNumber.text = next.userData?.phone ?? "";
+              }
+            });
+            return Column(
+              children: [
+                // Add the address tooltip with triangle pointer
+                _buildAddressTooltip(context),
+                10.verticalSpace,
+                OrderContainer(
+                  onTap: () async {
+                    AppHelpers.showCustomModalBottomSheet(
                       context: context,
                       modal: SelectAddressScreen(
                         addAddress: () async {
-                          await context
-                              .pushRoute(ViewMapRoute(shopId: widget.shopId));
+                          await context.pushRoute(
+                            ViewMapRoute(shopId: widget.shopId),
+                          );
                           widget.getLocation();
                         },
                       ),
-                      isDarkMode: false);
-                },
-                icon: Padding(
-                  padding: EdgeInsets.only(left: 4.w),
-                  child: SvgPicture.asset(
-                    "assets/svgs/adress.svg",
-                    width: 20.r,
-                    height: 20.r,
+                      isDarkMode: false,
+                    );
+                  },
+                  icon: Padding(
+                    padding: EdgeInsets.only(left: 4.w),
+                    child: SvgPicture.asset(
+                      "assets/svgs/adress.svg",
+                      width: 20.r,
+                      height: 20.r,
+                    ),
                   ),
+                  title: AppHelpers.getTranslation(TrKeys.deliveryAddress),
+                  description:
+                      (LocalStorage.getAddressSelected()?.title?.isEmpty ??
+                          true)
+                      ? LocalStorage.getAddressSelected()?.address ?? ''
+                      : LocalStorage.getAddressSelected()?.title ?? "",
                 ),
-                title: AppHelpers.getTranslation(TrKeys.deliveryAddress),
-                description:
-                (LocalStorage.getAddressSelected()?.title?.isEmpty ?? true)
-                    ? LocalStorage.getAddressSelected()?.address ?? ''
-                    : LocalStorage.getAddressSelected()?.title ?? "",
-              ),
-              10.verticalSpace,
-              OrderContainer(
-                onTap: () {
-                  AppHelpers.showCustomModalBottomSheet(
-                    paddingTop: MediaQuery.paddingOf(context).top + 150.h,
-                    context: context,
-                    modal: const TimeDelivery(),
-                    isDarkMode: false,
-                    isDrag: true,
-                    radius: 12,
-                  );
-                },
-                icon: Icon(
-                  FlutterRemix.calendar_check_line,
-                  size: 24.r,
+                10.verticalSpace,
+                OrderContainer(
+                  onTap: () {
+                    AppHelpers.showCustomModalBottomSheet(
+                      paddingTop: MediaQuery.paddingOf(context).top + 150.h,
+                      context: context,
+                      modal: const TimeDelivery(),
+                      isDarkMode: false,
+                      isDrag: true,
+                      radius: 12,
+                    );
+                  },
+                  icon: Icon(FlutterRemix.calendar_check_line, size: 24.r),
+                  title: AppHelpers.getTranslation(TrKeys.timeDelivery),
+                  description: ref.watch(orderProvider).selectDate == null
+                      ? AppHelpers.getTranslation(
+                          TrKeys.notWorkTodayAndTomorrow,
+                        )
+                      : "${TimeService.dateFormatMD(ref.watch(orderProvider).selectDate!)}  ${TimeService.timeFormatTime(ref.watch(orderProvider).selectTime.format(context))}",
                 ),
-                title: AppHelpers.getTranslation(TrKeys.timeDelivery),
-                description: ref.watch(orderProvider).selectDate == null
-                    ? AppHelpers.getTranslation(TrKeys.notWorkTodayAndTomorrow)
-                    : "${TimeService.dateFormatMD(ref.watch(orderProvider).selectDate!)}  ${TimeService.timeFormatTime(ref.watch(orderProvider).selectTime.format(context))}",
-              ),
-              16.verticalSpace,
-              OutlinedBorderTextField(
-                label: AppHelpers.getTranslation(TrKeys.house).toUpperCase(),
-                textController: houseController,
-                onChanged: (s) {
-                  ref.read(orderProvider.notifier).setAddressInfo(house: s);
-                },
-              ),
-              12.verticalSpace,
-              OutlinedBorderTextField(
-                label: AppHelpers.getTranslation(TrKeys.floor).toUpperCase(),
-                textController: floorController,
-                onChanged: (s) {
-                  ref.read(orderProvider.notifier).setAddressInfo(floor: s);
-                },
-              ),
-              12.verticalSpace,
-              OutlinedBorderTextField(
-                label: AppHelpers.getTranslation(TrKeys.comment).toUpperCase(),
-                textController: commentController,
-                onChanged: (s) {
-                  ref.read(orderProvider.notifier).setAddressInfo(note: s);
-                },
-              ),
-              12.verticalSpace,
-              OutlinedBorderTextField(
-                label:
-                AppHelpers.getTranslation(TrKeys.phoneNumber).toUpperCase(),
-                textController: userPhoneNumber,
-                readOnly: true,
-                onTap: () {
-                  AppHelpers.showCustomModalBottomSheet(
+                16.verticalSpace,
+                OutlinedBorderTextField(
+                  label: AppHelpers.getTranslation(TrKeys.house).toUpperCase(),
+                  textController: houseController,
+                  onChanged: (s) {
+                    ref.read(orderProvider.notifier).setAddressInfo(house: s);
+                  },
+                ),
+                12.verticalSpace,
+                OutlinedBorderTextField(
+                  label: AppHelpers.getTranslation(TrKeys.floor).toUpperCase(),
+                  textController: floorController,
+                  onChanged: (s) {
+                    ref.read(orderProvider.notifier).setAddressInfo(floor: s);
+                  },
+                ),
+                12.verticalSpace,
+                OutlinedBorderTextField(
+                  label: AppHelpers.getTranslation(
+                    TrKeys.comment,
+                  ).toUpperCase(),
+                  textController: commentController,
+                  onChanged: (s) {
+                    ref.read(orderProvider.notifier).setAddressInfo(note: s);
+                  },
+                ),
+                12.verticalSpace,
+                OutlinedBorderTextField(
+                  label: AppHelpers.getTranslation(
+                    TrKeys.phoneNumber,
+                  ).toUpperCase(),
+                  textController: userPhoneNumber,
+                  readOnly: true,
+                  onTap: () {
+                    AppHelpers.showCustomModalBottomSheet(
                       context: context,
                       modal: const PhoneVerify(),
                       isDarkMode: false,
-                      paddingTop: MediaQuery.paddingOf(context).top);
-                },
-              ),
-              12.verticalSpace,
-              Row(
-                children: [
-                  CustomCheckbox(
+                      paddingTop: MediaQuery.paddingOf(context).top,
+                    );
+                  },
+                ),
+                12.verticalSpace,
+                Row(
+                  children: [
+                    CustomCheckbox(
                       isActive: ref.watch(orderProvider).sendOtherUser,
                       onTap: () {
                         ref
                             .read(orderProvider.notifier)
                             .checkBox(!ref.watch(orderProvider).sendOtherUser);
-                      }),
-                  12.horizontalSpace,
-                  Text(
-                      AppHelpers.getTranslation(TrKeys.iWantToOrderForSomeone)),
-                ],
-              ),
-              if (ref.watch(orderProvider).sendOtherUser)
-                Column(
-                  children: [
-                    16.verticalSpace,
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedBorderTextField(
-                            label: AppHelpers.getTranslation(TrKeys.firstname)
-                                .toUpperCase(),
-                            textController: nameController,
-                            validation: AppValidators.isNotEmptyValidator,
-                            onChanged: (s) {
-                              ref
-                                  .read(orderProvider.notifier)
-                                  .setUser(username: s);
-                            },
-                          ),
-                        ),
-                        16.horizontalSpace,
-                        Expanded(
-                          child: OutlinedBorderTextField(
-                            label: AppHelpers.getTranslation(TrKeys.phoneNumber)
-                                .toUpperCase(),
-                            textController: phoneController,
-                            inputType: TextInputType.phone,
-                            validation: AppValidators.isNotEmptyValidator,
-                            onChanged: (s) {
-                              ref
-                                  .read(orderProvider.notifier)
-                                  .setUser(phone: s);
-                            },
-                          ),
-                        ),
-                      ],
+                      },
+                    ),
+                    12.horizontalSpace,
+                    Text(
+                      AppHelpers.getTranslation(TrKeys.iWantToOrderForSomeone),
                     ),
                   ],
-                )
-            ],
-          );
-        }),
+                ),
+                if (ref.watch(orderProvider).sendOtherUser)
+                  Column(
+                    children: [
+                      16.verticalSpace,
+                      Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedBorderTextField(
+                              label: AppHelpers.getTranslation(
+                                TrKeys.firstname,
+                              ).toUpperCase(),
+                              textController: nameController,
+                              validation: AppValidators.isNotEmptyValidator,
+                              onChanged: (s) {
+                                ref
+                                    .read(orderProvider.notifier)
+                                    .setUser(username: s);
+                              },
+                            ),
+                          ),
+                          16.horizontalSpace,
+                          Expanded(
+                            child: OutlinedBorderTextField(
+                              label: AppHelpers.getTranslation(
+                                TrKeys.phoneNumber,
+                              ).toUpperCase(),
+                              textController: phoneController,
+                              inputType: TextInputType.phone,
+                              validation: AppValidators.isNotEmptyValidator,
+                              onChanged: (s) {
+                                ref
+                                    .read(orderProvider.notifier)
+                                    .setUser(phone: s);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -240,7 +255,9 @@ class _OrderDeliveryState extends State<OrderDelivery> {
         // Main container
         Container(
           width: MediaQuery.of(context).size.width * 0.9,
-          margin: EdgeInsets.only(bottom: 16.h), // Extra margin for the triangle pointer
+          margin: EdgeInsets.only(
+            bottom: 16.h,
+          ), // Extra margin for the triangle pointer
           padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
           decoration: BoxDecoration(
             color: AppStyle.primary,
@@ -248,10 +265,7 @@ class _OrderDeliveryState extends State<OrderDelivery> {
           ),
           child: Text(
             AppHelpers.getTranslation(TrKeys.weAreDelivering),
-            style: AppStyle.interRegular(
-              size: 14,
-              color: AppStyle.white,
-            ),
+            style: AppStyle.interRegular(size: 14, color: AppStyle.white),
             textAlign: TextAlign.center,
           ),
         ),

@@ -53,7 +53,8 @@ class DiscountedProductsSection extends ConsumerWidget {
           itemBuilder: (context, index) {
             final product = filteredProducts[index];
             final String imageUrl = product.img ?? "";
-            final bool isTransparentFormat = ProductUtils.hasTransparentBackground(imageUrl);
+            final bool isTransparentFormat =
+                ProductUtils.hasTransparentBackground(imageUrl);
 
             // Get cart quantity
             int cartQuantity = 0;
@@ -62,7 +63,8 @@ class DiscountedProductsSection extends ConsumerWidget {
                 if (userCart.cartDetails != null) {
                   for (var cartDetail in userCart.cartDetails!) {
                     if (cartDetail.stock?.id == product.stock?.id) {
-                      final qtyInt = int.tryParse(cartDetail.quantity.toString()) ?? 0;
+                      final qtyInt =
+                          int.tryParse(cartDetail.quantity.toString()) ?? 0;
                       cartQuantity += qtyInt;
                     }
                   }

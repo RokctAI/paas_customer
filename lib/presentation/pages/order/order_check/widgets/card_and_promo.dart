@@ -22,90 +22,100 @@ class CardAndPromo extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Consumer(builder: (context, ref, child) {
-            return OrderPaymentContainer(
-              onTap: () {
-                AppHelpers.showCustomModalBottomSheet(
-                  paddingTop: MediaQuery.paddingOf(context).top,
-                  context: context,
-                  modal:  PaymentMethods(
-                      shopEnableCod: ref.watch(orderProvider).shopData?.enableCod ?? true
-                  ),
-                  isDarkMode: false,
-                  isDrag: true,
-                  radius: 12,
-                );
-              },
-              icon: Icon(
-                FlutterRemix.bank_card_fill,
-                color: ((AppHelpers.getPaymentType() == "admin")
+          Consumer(
+            builder: (context, ref, child) {
+              return OrderPaymentContainer(
+                onTap: () {
+                  AppHelpers.showCustomModalBottomSheet(
+                    paddingTop: MediaQuery.paddingOf(context).top,
+                    context: context,
+                    modal: PaymentMethods(
+                      shopEnableCod:
+                          ref.watch(orderProvider).shopData?.enableCod ?? true,
+                    ),
+                    isDarkMode: false,
+                    isDrag: true,
+                    radius: 12,
+                  );
+                },
+                icon: Icon(
+                  FlutterRemix.bank_card_fill,
+                  color:
+                      ((AppHelpers.getPaymentType() == "admin")
+                          ? (ref.watch(paymentProvider).payments.isNotEmpty)
+                          : (ref
+                                    .watch(orderProvider)
+                                    .shopData
+                                    ?.shopPayments
+                                    ?.isNotEmpty ??
+                                false))
+                      ? AppStyle.primary
+                      : AppStyle.black,
+                ),
+                title:
+                    ((AppHelpers.getPaymentType() == "admin")
                         ? (ref.watch(paymentProvider).payments.isNotEmpty)
                         : (ref
-                                .watch(orderProvider)
-                                .shopData
-                                ?.shopPayments
-                                ?.isNotEmpty ??
-                            false))
-                    ? AppStyle.primary
-                    : AppStyle.black,
-              ),
-              title: ((AppHelpers.getPaymentType() == "admin")
-                      ? (ref.watch(paymentProvider).payments.isNotEmpty)
-                      : (ref
+                                  .watch(orderProvider)
+                                  .shopData
+                                  ?.shopPayments
+                                  ?.isNotEmpty ??
+                              false))
+                    ? ((AppHelpers.getPaymentType() == "admin")
+                          ? (ref
+                                .watch(paymentProvider)
+                                .payments[ref
+                                    .watch(paymentProvider)
+                                    .currentIndex]
+                                .tag)
+                          : (ref
+                                    .watch(orderProvider)
+                                    .shopData
+                                    ?.shopPayments?[ref
+                                        .watch(paymentProvider)
+                                        .currentIndex]
+                                    ?.payment
+                                    ?.tag ??
+                                ""))
+                    : AppHelpers.getTranslation(TrKeys.noPaymentType),
+                isActive: ((AppHelpers.getPaymentType() == "admin")
+                    ? (ref.watch(paymentProvider).payments.isNotEmpty)
+                    : (ref
                               .watch(orderProvider)
                               .shopData
                               ?.shopPayments
                               ?.isNotEmpty ??
-                          false))
-                  ? ((AppHelpers.getPaymentType() == "admin")
-                      ? (ref
-                          .watch(paymentProvider)
-                          .payments[ref.watch(paymentProvider).currentIndex]
-                          .tag)
-                      : (ref
-                              .watch(orderProvider)
-                              .shopData
-                              ?.shopPayments?[
-                                  ref.watch(paymentProvider).currentIndex]
-                              ?.payment
-                              ?.tag ??
-                          ""))
-                  : AppHelpers.getTranslation(TrKeys.noPaymentType),
-              isActive: ((AppHelpers.getPaymentType() == "admin")
-                  ? (ref.watch(paymentProvider).payments.isNotEmpty)
-                  : (ref
-                          .watch(orderProvider)
-                          .shopData
-                          ?.shopPayments
-                          ?.isNotEmpty ??
-                      false)),
-            );
-          }),
-          Consumer(builder: (context, ref, child) {
-            return OrderPaymentContainer(
-              onTap: () {
-                AppHelpers.showCustomModalBottomSheet(
-                  context: context,
-                  modal: const PromoCodeScreen(),
-                  isDarkMode: false,
-                  isDrag: true,
-                  radius: 12,
-                );
-              },
-              isActive: ref.watch(orderProvider).promoCode != null,
-              icon: Icon(
-                FlutterRemix.ticket_line,
-                color: ref.watch(orderProvider).promoCode == null
-                    ? AppStyle.black
-                    : AppStyle.primary,
-              ),
-              title: ref.watch(orderProvider).promoCode ??
-                  AppHelpers.getTranslation(TrKeys.youHavePromoCode),
-            );
-          }),
+                          false)),
+              );
+            },
+          ),
+          Consumer(
+            builder: (context, ref, child) {
+              return OrderPaymentContainer(
+                onTap: () {
+                  AppHelpers.showCustomModalBottomSheet(
+                    context: context,
+                    modal: const PromoCodeScreen(),
+                    isDarkMode: false,
+                    isDrag: true,
+                    radius: 12,
+                  );
+                },
+                isActive: ref.watch(orderProvider).promoCode != null,
+                icon: Icon(
+                  FlutterRemix.ticket_line,
+                  color: ref.watch(orderProvider).promoCode == null
+                      ? AppStyle.black
+                      : AppStyle.primary,
+                ),
+                title:
+                    ref.watch(orderProvider).promoCode ??
+                    AppHelpers.getTranslation(TrKeys.youHavePromoCode),
+              );
+            },
+          ),
         ],
       ),
     );
   }
 }
-

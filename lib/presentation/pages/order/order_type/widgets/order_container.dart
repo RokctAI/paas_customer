@@ -8,12 +8,13 @@ class OrderContainer extends StatelessWidget {
   final String description;
   final VoidCallback onTap;
 
-  const OrderContainer(
-      {super.key,
-      required this.icon,
-      required this.title,
-      required this.description,
-      required this.onTap});
+  const OrderContainer({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.description,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +44,7 @@ class OrderContainer extends StatelessWidget {
                   width: MediaQuery.sizeOf(context).width - 164.w,
                   child: Text(
                     description,
-                    style: AppStyle.interBold(
-                      size: 14,
-                      color: AppStyle.black,
-                    ),
+                    style: AppStyle.interBold(size: 14, color: AppStyle.black),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -54,14 +52,10 @@ class OrderContainer extends StatelessWidget {
               ],
             ),
             const Spacer(),
-            Icon(
-              Icons.keyboard_arrow_right,
-              size: 21.r,
-            )
+            Icon(Icons.keyboard_arrow_right, size: 21.r),
           ],
         ),
       ),
     );
   }
 }
-

@@ -11,10 +11,7 @@ import 'package:foodyman/presentation/theme/theme.dart';
 class RestaurantItem extends StatelessWidget {
   final ShopData shop;
 
-  const RestaurantItem({
-    super.key,
-    required this.shop,
-  });
+  const RestaurantItem({super.key, required this.shop});
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +19,7 @@ class RestaurantItem extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 8.h),
       child: GestureDetector(
         onTap: () {
-          context.pushRoute(
-            ShopRoute(
-              shopId: (shop.id ?? 0).toString(),
-            ),
-          );
+          context.pushRoute(ShopRoute(shopId: (shop.id ?? 0).toString()));
         },
         child: Container(
           decoration: BoxDecoration(
@@ -68,8 +61,8 @@ class RestaurantItem extends StatelessWidget {
                       child: Text(
                         shop.bonus != null
                             ? ((shop.bonus?.type ?? "sum") == "sum")
-                                ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(number: shop.bonus?.value)} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
-                                : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                                  ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(number: shop.bonus?.value)} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                                  : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
                             : shop.translation?.description ?? "",
                         style: AppStyle.interNormal(
                           size: 12,
@@ -88,4 +81,3 @@ class RestaurantItem extends StatelessWidget {
     );
   }
 }
-

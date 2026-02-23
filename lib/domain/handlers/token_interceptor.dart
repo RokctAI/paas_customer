@@ -8,9 +8,9 @@ class TokenInterceptor extends Interceptor {
 
   @override
   void onRequest(
-      RequestOptions options,
-      RequestInterceptorHandler handler,
-      ) async {
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     // Always add the mobile client header
     options.headers.addAll({'X-Client-Type': 'mobile'});
 

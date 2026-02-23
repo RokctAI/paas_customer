@@ -11,14 +11,15 @@ class SecondButton extends StatelessWidget {
   final double titleSize;
   final VoidCallback onTap;
 
-  const SecondButton(
-      {super.key,
-      required this.title,
-      this.radius = 36,
-      required this.bgColor,
-      required this.titleColor,
-      required this.onTap,
-      this.titleSize = 14});
+  const SecondButton({
+    super.key,
+    required this.title,
+    this.radius = 36,
+    required this.bgColor,
+    required this.titleColor,
+    required this.onTap,
+    this.titleSize = 14,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -38,4 +39,3 @@ class SecondButton extends StatelessWidget {
     );
   }
 }
-

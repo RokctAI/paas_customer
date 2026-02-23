@@ -10,13 +10,13 @@ class CategoryShimmerThree extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 40.h,
-      margin: EdgeInsets.only(bottom:  26.h),
+      margin: EdgeInsets.only(bottom: 26.h),
       child: AnimationLimiter(
         child: ListView.builder(
           shrinkWrap: true,
-          
+
           scrollDirection: Axis.horizontal,
-          itemCount:  5,
+          itemCount: 5,
           itemBuilder: (context, index) {
             return AnimationConfiguration.staggeredList(
               position: index,
@@ -27,7 +27,7 @@ class CategoryShimmerThree extends StatelessWidget {
                   child: Container(
                     width: 84.w,
                     height: 40.h,
-                    margin: EdgeInsets.only(left: 8.w,),
+                    margin: EdgeInsets.only(left: 8.w),
                     decoration: BoxDecoration(
                       color: AppStyle.shimmerBase,
                       borderRadius: BorderRadius.circular(10.r),
@@ -42,4 +42,3 @@ class CategoryShimmerThree extends StatelessWidget {
     );
   }
 }
-

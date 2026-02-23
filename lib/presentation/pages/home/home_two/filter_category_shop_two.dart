@@ -20,11 +20,12 @@ class FilterCategoryShopTwo extends StatelessWidget {
   final HomeNotifier event;
   final RefreshController shopController;
 
-  const FilterCategoryShopTwo(
-      {super.key,
-      required this.state,
-      required this.event,
-      required this.shopController});
+  const FilterCategoryShopTwo({
+    super.key,
+    required this.state,
+    required this.event,
+    required this.shopController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +40,8 @@ class FilterCategoryShopTwo extends StatelessWidget {
             shrinkWrap: true,
             itemCount:
                 (state.categories[state.selectIndexCategory].children?.length ??
-                        0) +
-                    1,
+                    0) +
+                1,
             itemBuilder: (BuildContext context, int index) {
               final category = state.categories[state.selectIndexCategory];
               return index == 0
@@ -49,20 +50,22 @@ class FilterCategoryShopTwo extends StatelessWidget {
                         onTap: () {
                           AppHelpers.showCustomModalBottomDragSheet(
                             context: context,
-                            modal: (c) => FilterPage(controller: c,categoryId: (state
-                                .selectIndexSubCategory !=
-                                -1
-                                ? (state
-                                .categories[state
-                                .selectIndexCategory]
-                                .children?[state
-                                .selectIndexSubCategory]
-                                .id)
-                                : state
-                                .categories[state
-                                .selectIndexCategory]
-                                .id) ??
-                                "",),
+                            modal: (c) => FilterPage(
+                              controller: c,
+                              categoryId:
+                                  (state.selectIndexSubCategory != -1
+                                      ? (state
+                                            .categories[state
+                                                .selectIndexCategory]
+                                            .children?[state
+                                                .selectIndexSubCategory]
+                                            .id)
+                                      : state
+                                            .categories[state
+                                                .selectIndexCategory]
+                                            .id) ??
+                                  "",
+                            ),
                             isDarkMode: false,
                             isDrag: false,
                             radius: 12,
@@ -71,7 +74,9 @@ class FilterCategoryShopTwo extends StatelessWidget {
                         child: Container(
                           margin: EdgeInsets.only(right: 8.r),
                           padding: EdgeInsets.symmetric(
-                              horizontal: 16.r, vertical: 6.r),
+                            horizontal: 16.r,
+                            vertical: 6.r,
+                          ),
                           decoration: BoxDecoration(
                             color: AppStyle.white,
                             borderRadius: BorderRadius.circular(16.r),
@@ -86,7 +91,7 @@ class FilterCategoryShopTwo extends StatelessWidget {
                                   size: 13,
                                   color: AppStyle.black,
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ),
@@ -94,7 +99,8 @@ class FilterCategoryShopTwo extends StatelessWidget {
                     )
                   : TabBarItem(
                       isShopTabBar: index - 1 == state.selectIndexSubCategory,
-                      title: category.children?[index - 1].translation?.title ??
+                      title:
+                          category.children?[index - 1].translation?.title ??
                           "",
                       index: index - 1,
                       currentIndex: state.selectIndexSubCategory,
@@ -116,7 +122,7 @@ class FilterCategoryShopTwo extends StatelessWidget {
             ? ListView.builder(
                 padding: REdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 shrinkWrap: true,
-                
+
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 itemCount: state.filterShops.length,
@@ -146,9 +152,7 @@ Widget _resultEmpty() {
         style: AppStyle.interSemi(size: 18.sp),
       ),
       Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 32.w,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 32.w),
         child: Text(
           AppHelpers.getTranslation(TrKeys.trySearchingAgain),
           style: AppStyle.interRegular(size: 14.sp),
@@ -158,4 +162,3 @@ Widget _resultEmpty() {
     ],
   );
 }
-

@@ -6,9 +6,7 @@ import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
 import '../models/data/saved_card.dart';
 
-
 class PaymentsRepository implements PaymentsRepositoryFacade {
-
   @override
   Future<ApiResult<PaymentsResponse>> getPayments() async {
     try {
@@ -18,9 +16,7 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
         '/api/method/paas.api.payment.payment.get_payment_gateways',
       );
       debugPrint('==> Payments response: ${response.data}');
-      return ApiResult.success(
-        data: PaymentsResponse.fromJson(response.data),
-      );
+      return ApiResult.success(data: PaymentsResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get payments failure: $e');
       return ApiResult.failure(
@@ -53,14 +49,14 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
     }
   }
 
-
-
   @override
   Future<ApiResult<List<SavedCardModel>>> getSavedCards() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get('/api/method/paas.api.payment.payment.get_saved_cards');
-      
+      final response = await client.get(
+        '/api/method/paas.api.payment.payment.get_saved_cards',
+      );
+
       return ApiResult.success(
         data: (response.data['data'] as List)
             .map((e) => SavedCardModel.fromJson(e))
@@ -74,8 +70,6 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
       );
     }
   }
-
-
 
   // Implementing Card specific methods first
   @override
@@ -108,16 +102,23 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
 
   @override
   Future<ApiResult<String>> tokenizeAfterPayment(
-      String cardNumber,
-      String cardName,
-      String expiryDate,
-      String cvc,
-      [String? token, String? lastFour, String? cardType]
-  ) async {
-       // Backend actually handles saving if save_card=True.
-       // But we have a specific endpoint save_payfast_card (or generic)
-       // Let's use the tokenize_card endpoint which returns a token and saves it.
-       return tokenizeCard(cardNumber: cardNumber, cardName: cardName, expiryDate: expiryDate, cvc: cvc);
+    String cardNumber,
+    String cardName,
+    String expiryDate,
+    String cvc, [
+    String? token,
+    String? lastFour,
+    String? cardType,
+  ]) async {
+    // Backend actually handles saving if save_card=True.
+    // But we have a specific endpoint save_payfast_card (or generic)
+    // Let's use the tokenize_card endpoint which returns a token and saves it.
+    return tokenizeCard(
+      cardNumber: cardNumber,
+      cardName: cardName,
+      expiryDate: expiryDate,
+      cvc: cvc,
+    );
   }
 
   @override
@@ -130,23 +131,26 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
       );
       return const ApiResult.success(data: true);
     } catch (e) {
-        debugPrint('==> delete card failure: $e');
-        return ApiResult.failure(
-          error: AppHelpers.errorHandler(e),
-          statusCode: NetworkExceptions.getDioStatus(e),
-        );
+      debugPrint('==> delete card failure: $e');
+      return ApiResult.failure(
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
     }
   }
 
   @override
   Future<ApiResult<bool>> setDefaultCard(String cardId) async {
-      // Logic typically involves local storage or backend flag?
-      // Assuming backend for now or simple return if not needed.
-      return const ApiResult.success(data: true);
+    // Logic typically involves local storage or backend flag?
+    // Assuming backend for now or simple return if not needed.
+    return const ApiResult.success(data: true);
   }
-  
+
   @override
-  Future<ApiResult<String>> processTokenPayment(OrderBodyData orderData, String token) async {
+  Future<ApiResult<String>> processTokenPayment(
+    OrderBodyData orderData,
+    String token,
+  ) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
@@ -161,14 +165,14 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
       );
     }
   }
-  
+
   @override
   Future<ApiResult<String>> processDirectCardPayment(
-      OrderBodyData orderBody,
-      String cardNumber,
-      String cardName,
-      String expiryDate,
-      String cvc,
+    OrderBodyData orderBody,
+    String cardNumber,
+    String cardName,
+    String expiryDate,
+    String cvc,
   ) async {
     try {
       final client = dioHttp.client(requireAuth: true);
@@ -190,5 +194,4 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
       );
     }
   }
-
 }

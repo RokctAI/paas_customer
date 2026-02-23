@@ -12,10 +12,10 @@ class UserRepository implements UserRepositoryFacade {
   Future<ApiResult<ProfileResponse>> getProfileDetails() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.post('/api/method/paas.api.user.user.get_user_profile');
-      return ApiResult.success(
-        data: ProfileResponse.fromJson(response.data),
+      final response = await client.post(
+        '/api/method/paas.api.user.user.get_user_profile',
       );
+      return ApiResult.success(data: ProfileResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get user details failure: $e');
       return ApiResult.failure(
@@ -26,11 +26,15 @@ class UserRepository implements UserRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<dynamic>> saveLocation({required AddressNewModel? address}) async {
+  Future<ApiResult<dynamic>> saveLocation({
+    required AddressNewModel? address,
+  }) async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      await client.post('/api/method/paas.api.user.user.add_user_address',
-          data: address?.toJson());
+      await client.post(
+        '/api/method/paas.api.user.user.add_user_address',
+        data: address?.toJson(),
+      );
       return const ApiResult.success(data: null);
     } catch (e) {
       return ApiResult.failure(
@@ -49,10 +53,7 @@ class UserRepository implements UserRepositoryFacade {
       final client = dioHttp.client(requireAuth: true);
       await client.put(
         '/api/method/paas.api.user.user.update_user_address',
-        data: {
-          'name': addressId,
-          'address_data': address?.toJson(),
-        },
+        data: {'name': addressId, 'address_data': address?.toJson()},
       );
       return const ApiResult.success(data: null);
     } catch (e) {
@@ -96,7 +97,9 @@ class UserRepository implements UserRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<ProfileResponse>> editProfile({required EditProfile? user}) async {
+  Future<ApiResult<ProfileResponse>> editProfile({
+    required EditProfile? user,
+  }) async {
     final data = user?.toJson();
     try {
       final client = dioHttp.client(requireAuth: true);
@@ -104,9 +107,7 @@ class UserRepository implements UserRepositoryFacade {
         '/api/method/paas.api.user.user.update_user_profile',
         data: {'profile_data': data},
       );
-      return ApiResult.success(
-        data: ProfileResponse.fromJson(response.data),
-      );
+      return ApiResult.success(data: ProfileResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> update profile details failure: $e');
       return ApiResult.failure(
@@ -117,11 +118,10 @@ class UserRepository implements UserRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<WalletHistoriesResponse>> getWalletHistories(int page) async {
-    final data = {
-      'limit_start': (page - 1) * 10,
-      'limit_page_length': 10,
-    };
+  Future<ApiResult<WalletHistoriesResponse>> getWalletHistories(
+    int page,
+  ) async {
+    final data = {'limit_start': (page - 1) * 10, 'limit_page_length': 10};
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
@@ -174,7 +174,9 @@ class UserRepository implements UserRepositoryFacade {
   Future<ApiResult<ReferralModel>> getReferralDetails() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.post('/api/method/paas.api.user.user.get_referral_details');
+      final response = await client.post(
+        '/api/method/paas.api.user.user.get_referral_details',
+      );
       return ApiResult.success(
         data: ReferralModel.fromJson(response.data['message']),
       );
@@ -228,13 +230,9 @@ class UserRepository implements UserRepositoryFacade {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.put(
         '/api/method/paas.api.user.user.update_profile_image',
-        data: {
-          'image_url': imageUrl,
-        },
+        data: {'image_url': imageUrl},
       );
-      return ApiResult.success(
-        data: ProfileResponse.fromJson(response.data),
-      );
+      return ApiResult.success(data: ProfileResponse.fromJson(response.data));
     } catch (e) {
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
@@ -252,13 +250,9 @@ class UserRepository implements UserRepositoryFacade {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
         '/api/method/paas.api.user.user.update_password',
-        data: {
-          'password': password,
-        },
+        data: {'password': password},
       );
-      return ApiResult.success(
-        data: ProfileResponse.fromJson(response.data),
-      );
+      return ApiResult.success(data: ProfileResponse.fromJson(response.data));
     } catch (e) {
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
@@ -273,10 +267,7 @@ class UserRepository implements UserRepositoryFacade {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
         '/api/method/paas.api.user.user.search_user',
-        data: {
-          'name': name,
-          'page': page,
-        },
+        data: {'name': name, 'page': page},
       );
       // This is used for wallet transfers, return data as expected by UI
       return response.data['message'];

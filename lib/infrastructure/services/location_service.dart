@@ -12,7 +12,9 @@ class LocationService {
     if (!serviceEnabled) {
       if (context.mounted) {
         AppHelpers.showCheckTopSnackBar(
-            context, AppHelpers.getTranslation(TrKeys.agreeLocation));
+          context,
+          AppHelpers.getTranslation(TrKeys.agreeLocation),
+        );
       }
       return null;
     }
@@ -23,7 +25,9 @@ class LocationService {
       if (permission == LocationPermission.denied) {
         if (context.mounted) {
           AppHelpers.showCheckTopSnackBar(
-              context, AppHelpers.getTranslation(TrKeys.agreeLocation));
+            context,
+            AppHelpers.getTranslation(TrKeys.agreeLocation),
+          );
         }
         return null;
       }
@@ -32,7 +36,9 @@ class LocationService {
     if (permission == LocationPermission.deniedForever) {
       if (context.mounted) {
         AppHelpers.showCheckTopSnackBar(
-            context, AppHelpers.getTranslation(TrKeys.agreeLocation));
+          context,
+          AppHelpers.getTranslation(TrKeys.agreeLocation),
+        );
       }
       return null;
     }

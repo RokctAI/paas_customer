@@ -14,28 +14,21 @@ class ParcelItem extends StatelessWidget {
   final ParcelOrder? parcel;
   final bool isActive;
 
-  const ParcelItem({
-    super.key,
-    required this.isActive,
-    this.parcel,
-  });
+  const ParcelItem({super.key, required this.isActive, this.parcel});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.pushRoute(
-          ParcelProgressRoute(
-            parcelId: (parcel?.id ?? ""),
-          ),
-        );
+        context.pushRoute(ParcelProgressRoute(parcelId: (parcel?.id ?? "")));
       },
       child: Container(
         margin: EdgeInsets.only(bottom: 10.h),
         padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
-            color: AppStyle.white,
-            borderRadius: BorderRadius.circular(10.r)),
+          color: AppStyle.white,
+          borderRadius: BorderRadius.circular(10.r),
+        ),
         child: Column(
           children: [
             Row(
@@ -45,23 +38,21 @@ class ParcelItem extends StatelessWidget {
                   width: 36.w,
                   decoration: BoxDecoration(
                     color: (isActive ? AppStyle.primary : AppStyle.bgGrey),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(8),
-                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
                   ),
                   child: Center(
                     child: isActive
                         ? Stack(
                             children: [
                               Center(
-                                  child: SvgPicture.asset(
-                                      "assets/svgs/orderTime.svg")),
+                                child: SvgPicture.asset(
+                                  "assets/svgs/orderTime.svg",
+                                ),
+                              ),
                               Center(
                                 child: Text(
                                   "15",
-                                  style: AppStyle.interNoSemi(
-                                    size: 10,
-                                  ),
+                                  style: AppStyle.interNoSemi(size: 10),
                                 ),
                               ),
                             ],
@@ -78,10 +69,8 @@ class ParcelItem extends StatelessWidget {
                 10.horizontalSpace,
                 Text(
                   "#${AppHelpers.getTranslation(TrKeys.id)}${parcel?.id}",
-                  style: AppStyle.interNoSemi(
-                    size: 16,
-                  ),
-                )
+                  style: AppStyle.interNoSemi(size: 16),
+                ),
               ],
             ),
             22.verticalSpace,
@@ -93,32 +82,29 @@ class ParcelItem extends StatelessWidget {
                   children: [
                     Text(
                       AppHelpers.numberFormat(
-                          isOrder: parcel?.currency?.symbol != null,
-                          symbol: parcel?.currency?.symbol,
-                          number: (parcel?.totalPrice?.isNegative ?? true)
-                              ? 0
-                              : (parcel?.totalPrice ?? 0)),
-                      style: AppStyle.interNoSemi(
-                        size: 16,
+                        isOrder: parcel?.currency?.symbol != null,
+                        symbol: parcel?.currency?.symbol,
+                        number: (parcel?.totalPrice?.isNegative ?? true)
+                            ? 0
+                            : (parcel?.totalPrice ?? 0),
                       ),
+                      style: AppStyle.interNoSemi(size: 16),
                     ),
                     Text(
                       TimeService.dateFormatMDHm(parcel?.createdAt),
-                      style: AppStyle.interRegular(
-                        size: 12,
-                      ),
-                    )
+                      style: AppStyle.interRegular(size: 12),
+                    ),
                   ],
                 ),
                 Container(
                   width: 40.w,
                   height: 40.h,
                   decoration: const BoxDecoration(
-                      color: AppStyle.enterOrderButton, shape: BoxShape.circle),
-                  child: const Icon(
-                    Icons.keyboard_arrow_right,
+                    color: AppStyle.enterOrderButton,
+                    shape: BoxShape.circle,
                   ),
-                )
+                  child: const Icon(Icons.keyboard_arrow_right),
+                ),
               ],
             ),
           ],
@@ -127,4 +113,3 @@ class ParcelItem extends StatelessWidget {
     );
   }
 }
-

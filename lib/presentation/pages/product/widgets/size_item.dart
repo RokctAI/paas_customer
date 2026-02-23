@@ -27,8 +27,9 @@ class SizeItem extends StatelessWidget {
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-              color: AppStyle.white,
-              borderRadius: BorderRadius.circular(10.r)),
+            color: AppStyle.white,
+            borderRadius: BorderRadius.circular(10.r),
+          ),
           child: Column(
             children: [
               Row(
@@ -39,11 +40,13 @@ class SizeItem extends StatelessWidget {
                     width: 18.r,
                     height: 18.r,
                     decoration: BoxDecoration(
-                        color: isActive ? AppStyle.primary : AppStyle.transparent,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                            color: isActive ? AppStyle.black : AppStyle.textGrey,
-                            width: isActive ? 4.r : 2.r)),
+                      color: isActive ? AppStyle.primary : AppStyle.transparent,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isActive ? AppStyle.black : AppStyle.textGrey,
+                        width: isActive ? 4.r : 2.r,
+                      ),
+                    ),
                   ),
                   16.horizontalSpace,
                   Text(
@@ -56,9 +59,7 @@ class SizeItem extends StatelessWidget {
                 ],
               ),
               16.verticalSpace,
-              Divider(
-                color: AppStyle.textGrey.withOpacity(0.2),
-              )
+              Divider(color: AppStyle.textGrey.withOpacity(0.2)),
             ],
           ),
         ),
@@ -66,4 +67,3 @@ class SizeItem extends StatelessWidget {
     );
   }
 }
-

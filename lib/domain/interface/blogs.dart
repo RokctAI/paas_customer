@@ -6,4 +6,3 @@ abstract class BlogsRepositoryFacade {
 
   Future<ApiResult<BlogDetailsResponse>> getBlogDetails(String uuid);
 }
-

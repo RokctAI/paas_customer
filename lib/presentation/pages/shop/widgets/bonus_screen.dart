@@ -21,11 +21,12 @@ class BonusScreen extends StatelessWidget {
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Container(
         decoration: BoxDecoration(
-            color: AppStyle.bgGrey.withOpacity(0.96),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(16.r),
-              topRight: Radius.circular(16.r),
-            )),
+          color: AppStyle.bgGrey.withOpacity(0.96),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16.r),
+            topRight: Radius.circular(16.r),
+          ),
+        ),
         width: double.infinity,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -39,8 +40,9 @@ class BonusScreen extends StatelessWidget {
                   height: 4.h,
                   width: 48.w,
                   decoration: BoxDecoration(
-                      color: AppStyle.dragElement,
-                      borderRadius: BorderRadius.all(Radius.circular(40.r))),
+                    color: AppStyle.dragElement,
+                    borderRadius: BorderRadius.all(Radius.circular(40.r)),
+                  ),
                 ),
               ),
               14.verticalSpace,
@@ -52,15 +54,10 @@ class BonusScreen extends StatelessWidget {
               Text(
                 bonus != null
                     ? ((bonus?.type ?? "sum") == "sum")
-                    ?  "${bonus?.bonusStock?.product?.translation?.title ?? ""} ${AppHelpers.getTranslation(TrKeys.giftBuy)} ${AppHelpers.numberFormat(
-                 number: bonus?.value,
-                )}"
-                    : "${bonus?.bonusStock?.product?.translation?.title ?? ""} ${AppHelpers.getTranslation(TrKeys.giftBuy)} ${bonus?.value ?? 0} ${AppHelpers.getTranslation(TrKeys.count)} "
+                          ? "${bonus?.bonusStock?.product?.translation?.title ?? ""} ${AppHelpers.getTranslation(TrKeys.giftBuy)} ${AppHelpers.numberFormat(number: bonus?.value)}"
+                          : "${bonus?.bonusStock?.product?.translation?.title ?? ""} ${AppHelpers.getTranslation(TrKeys.giftBuy)} ${bonus?.value ?? 0} ${AppHelpers.getTranslation(TrKeys.count)} "
                     : AppHelpers.getTranslation(TrKeys.bonus),
-                style: AppStyle.interRegular(
-                  size: 14,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interRegular(size: 14, color: AppStyle.black),
               ),
               30.verticalSpace,
               Padding(
@@ -81,4 +78,3 @@ class BonusScreen extends StatelessWidget {
     );
   }
 }
-

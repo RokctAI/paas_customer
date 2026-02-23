@@ -23,4 +23,3 @@ class AutoOrderState with _$AutoOrderState {
 
   const AutoOrderState._();
 }
-

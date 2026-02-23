@@ -9,10 +9,7 @@ import 'package:foodyman/presentation/components/blur_wrap.dart';
 class PopButton extends StatelessWidget {
   final VoidCallback? onTap;
 
-  const PopButton({
-    super.key,
-    this.onTap,
-  });
+  const PopButton({super.key, this.onTap});
 
   @override
   Widget build(BuildContext context) {

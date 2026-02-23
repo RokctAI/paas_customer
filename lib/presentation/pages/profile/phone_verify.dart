@@ -32,11 +32,12 @@ class PhoneVerify extends ConsumerWidget {
         child: Container(
           margin: MediaQuery.of(context).viewInsets,
           decoration: BoxDecoration(
-              color: AppStyle.bgGrey.withOpacity(0.96),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16.r),
-                topRight: Radius.circular(16.r),
-              )),
+            color: AppStyle.bgGrey.withOpacity(0.96),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16.r),
+              topRight: Radius.circular(16.r),
+            ),
+          ),
           width: double.infinity,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -50,74 +51,92 @@ class PhoneVerify extends ConsumerWidget {
                       AppBarBottomSheet(
                         title: AppHelpers.getTranslation(TrKeys.phoneNumber),
                       ),
-                      if (AppConstants.signUpType== SignUpType.phone)
+                      if (AppConstants.signUpType == SignUpType.phone)
                         Directionality(
-                          textDirection:
-                              isLtr ? TextDirection.ltr : TextDirection.rtl,
+                          textDirection: isLtr
+                              ? TextDirection.ltr
+                              : TextDirection.rtl,
                           child: IntlPhoneField(
                             onChanged: (phoneNum) {
                               event.setEmail(phoneNum.completeNumber);
                             },
-                            disableLengthCheck: !AppConstants.isNumberLengthAlwaysSame,
+                            disableLengthCheck:
+                                !AppConstants.isNumberLengthAlwaysSame,
                             validator: (s) {
                               if (AppConstants.isNumberLengthAlwaysSame &&
                                   (s?.isValidNumber() ?? true)) {
                                 return AppHelpers.getTranslation(
-                                    TrKeys.phoneNumberIsNotValid);
+                                  TrKeys.phoneNumberIsNotValid,
+                                );
                               }
                               return null;
                             },
                             keyboardType: TextInputType.phone,
                             initialCountryCode: AppConstants.countryCodeISO,
                             invalidNumberMessage: AppHelpers.getTranslation(
-                                TrKeys.phoneNumberIsNotValid),
+                              TrKeys.phoneNumberIsNotValid,
+                            ),
                             inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly
+                              FilteringTextInputFormatter.digitsOnly,
                             ],
                             showCountryFlag: AppConstants.showFlag,
                             showDropdownIcon: AppConstants.showArrowIcon,
                             autovalidateMode:
                                 AppConstants.isNumberLengthAlwaysSame
-                                    ? AutovalidateMode.onUserInteraction
-                                    : AutovalidateMode.disabled,
+                                ? AutovalidateMode.onUserInteraction
+                                : AutovalidateMode.disabled,
                             textAlignVertical: TextAlignVertical.center,
                             decoration: InputDecoration(
                               counterText: '',
                               enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide.merge(
-                                      const BorderSide(
-                                          color: AppStyle.differBorderColor),
-                                      const BorderSide(
-                                          color: AppStyle.differBorderColor))),
+                                borderSide: BorderSide.merge(
+                                  const BorderSide(
+                                    color: AppStyle.differBorderColor,
+                                  ),
+                                  const BorderSide(
+                                    color: AppStyle.differBorderColor,
+                                  ),
+                                ),
+                              ),
                               errorBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide.merge(
-                                      const BorderSide(
-                                          color: AppStyle.differBorderColor),
-                                      const BorderSide(
-                                          color: AppStyle.differBorderColor))),
+                                borderSide: BorderSide.merge(
+                                  const BorderSide(
+                                    color: AppStyle.differBorderColor,
+                                  ),
+                                  const BorderSide(
+                                    color: AppStyle.differBorderColor,
+                                  ),
+                                ),
+                              ),
                               border: const UnderlineInputBorder(),
                               focusedErrorBorder: const UnderlineInputBorder(),
                               disabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide.merge(
-                                      const BorderSide(
-                                          color: AppStyle.differBorderColor),
-                                      const BorderSide(
-                                          color: AppStyle.differBorderColor))),
+                                borderSide: BorderSide.merge(
+                                  const BorderSide(
+                                    color: AppStyle.differBorderColor,
+                                  ),
+                                  const BorderSide(
+                                    color: AppStyle.differBorderColor,
+                                  ),
+                                ),
+                              ),
                               focusedBorder: const UnderlineInputBorder(),
                             ),
                           ),
                         ),
-                      if (AppConstants.signUpType== SignUpType.both)
+                      if (AppConstants.signUpType == SignUpType.both)
                         OutlinedBorderTextField(
-                          label: AppHelpers.getTranslation(TrKeys.emailOrPhoneNumber)
-                              .toUpperCase(),
+                          label: AppHelpers.getTranslation(
+                            TrKeys.emailOrPhoneNumber,
+                          ).toUpperCase(),
                           onChanged: event.setEmail,
                           isError: state.isEmailInvalid,
                           descriptionText: state.isEmailInvalid
                               ? AppHelpers.getTranslation(
-                                  TrKeys.emailIsNotValid)
+                                  TrKeys.emailIsNotValid,
+                                )
                               : null,
-                        )
+                        ),
                     ],
                   ),
                   Padding(
@@ -135,15 +154,17 @@ class PhoneVerify extends ConsumerWidget {
                             AppHelpers.showCustomModalBottomSheet(
                               context: context,
                               modal: RegisterConfirmationPage(
-                                  verificationId: s,
-                                  editPhone: true,
-                                  userModel: UserModel(
-                                      firstname: state.firstName,
-                                      lastname: state.lastName,
-                                      phone: state.phone,
-                                      email: state.email,
-                                      password: state.password,
-                                      confirmPassword: state.confirmPassword)),
+                                verificationId: s,
+                                editPhone: true,
+                                userModel: UserModel(
+                                  firstname: state.firstName,
+                                  lastname: state.lastName,
+                                  phone: state.phone,
+                                  email: state.email,
+                                  password: state.password,
+                                  confirmPassword: state.confirmPassword,
+                                ),
+                              ),
                               isDarkMode: isDarkMode,
                             );
                           });
@@ -151,7 +172,7 @@ class PhoneVerify extends ConsumerWidget {
                       },
                     ),
                   ),
-                  32.verticalSpace
+                  32.verticalSpace,
                 ],
               ),
             ),
@@ -161,4 +182,3 @@ class PhoneVerify extends ConsumerWidget {
     );
   }
 }
-

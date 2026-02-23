@@ -50,20 +50,21 @@ class DeliveryFeeBadge extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
             decoration: BoxDecoration(
               color: color,
-            borderRadius: BorderRadius.circular(10.r),
+              borderRadius: BorderRadius.circular(10.r),
             ),
-            child: shop.open == false //&& AppHelpers.getTranslation(TrKeys.close) == workTime
+            child:
+                shop.open ==
+                    false //&& AppHelpers.getTranslation(TrKeys.close) == workTime
                 ? Row(
-                  children: [
-                    const Icon(
-                      Remix.time_fill,
-                      color: AppStyle.white,
-                      size:15,
-                    ),
-                    8.horizontalSpace,
-                    Text(
-                        AppHelpers.getTranslation(
-                            TrKeys.close),
+                    children: [
+                      const Icon(
+                        Remix.time_fill,
+                        color: AppStyle.white,
+                        size: 15,
+                      ),
+                      8.horizontalSpace,
+                      Text(
+                        AppHelpers.getTranslation(TrKeys.close),
                         style: AppStyle.interNormal(
                           size: 12,
                           color: AppStyle.white,
@@ -72,64 +73,66 @@ class DeliveryFeeBadge extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-
-                  ],
-                )
-                :
-            Row(
-              children: [
-                (shop.pricePerKm! > 0 || shop.minPrice! > 0)
-                    ?  Row(
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                               const Icon(Remix.truck_fill,
-                                  color: AppStyle.white, size: 12),
-                              5.horizontalSpace,
-                              Text(
-                                "from ${AppHelpers.numberFormat(number: shop.minPrice)}",
-                                style: AppStyle.interNormal(
-                                  size: 13,
-                                  color: AppStyle.white,
+                    ],
+                  )
+                : Row(
+                    children: [
+                      (shop.pricePerKm! > 0 || shop.minPrice! > 0)
+                          ? Row(
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Remix.truck_fill,
+                                      color: AppStyle.white,
+                                      size: 12,
+                                    ),
+                                    5.horizontalSpace,
+                                    Text(
+                                      "from ${AppHelpers.numberFormat(number: shop.minPrice)}",
+                                      style: AppStyle.interNormal(
+                                        size: 13,
+                                        color: AppStyle.white,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    // const SizedBox(width: 10),
+                                  ],
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              // const SizedBox(width: 10),
-                            ],
-                          )
-                        ],
-                      ) :
-                Row(
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Remix.price_tag_3_line,
-                            color: AppStyle.white, size: 15),
-                        5.horizontalSpace,
-                        Text(
-                          "Free Delivery",
-                          style: AppStyle.interNormal(
-                            size: 13,
-                            color: AppStyle.white,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        // const SizedBox(width: 10),
-                      ],
-                    )
-                  ],
-                ),
-              ],
-            ),
-            ),
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(
+                                      Remix.price_tag_3_line,
+                                      color: AppStyle.white,
+                                      size: 15,
+                                    ),
+                                    5.horizontalSpace,
+                                    Text(
+                                      "Free Delivery",
+                                      style: AppStyle.interNormal(
+                                        size: 13,
+                                        color: AppStyle.white,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    // const SizedBox(width: 10),
+                                  ],
+                                ),
+                              ],
+                            ),
+                    ],
+                  ),
           ),
         ),
-
+      ),
     );
   }
 }
-

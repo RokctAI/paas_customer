@@ -5,4 +5,3 @@ import 'main_state.dart';
 final mainProvider = StateNotifierProvider<MainNotifier, MainState>(
   (ref) => MainNotifier(),
 );
-

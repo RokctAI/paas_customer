@@ -7,13 +7,13 @@ class FilterModel {
   bool? isDeal;
   bool? isOpen;
 
-  FilterModel(
-      {this.price,
-      this.rating = "",
-      this.offer,
-      this.sort = "",
-      this.isFreeDelivery = false,
-      this.isDeal = false,
-      this.isOpen = true});
+  FilterModel({
+    this.price,
+    this.rating = "",
+    this.offer,
+    this.sort = "",
+    this.isFreeDelivery = false,
+    this.isDeal = false,
+    this.isOpen = true,
+  });
 }
-

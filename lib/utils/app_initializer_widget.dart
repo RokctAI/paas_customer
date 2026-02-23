@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,7 +24,9 @@ class _AppInitializerWidgetState extends State<AppInitializerWidget> {
   }
 
   Future<void> _initializeApp() async {
-    final appInitializer = AppInitializer(providerContainer: _providerContainer);
+    final appInitializer = AppInitializer(
+      providerContainer: _providerContainer,
+    );
     await appInitializer.initializeRemoteConfigWithoutAPICall();
     setState(() {
       _isInitialized = true;
@@ -46,13 +47,11 @@ class _AppInitializerWidgetState extends State<AppInitializerWidget> {
   @override
   Widget build(BuildContext context) {
     if (!_isInitialized) {
-      return MaterialApp(  // Wrap in MaterialApp to ensure proper context
+      return MaterialApp(
+        // Wrap in MaterialApp to ensure proper context
         home: Scaffold(
           body: Center(
-            child: Image.asset(
-              'assets/images/splash.png',
-              fit: BoxFit.fill,
-            ),
+            child: Image.asset('assets/images/splash.png', fit: BoxFit.fill),
           ),
         ),
       );
@@ -64,4 +63,3 @@ class _AppInitializerWidgetState extends State<AppInitializerWidget> {
     );
   }
 }
-

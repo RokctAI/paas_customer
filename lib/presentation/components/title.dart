@@ -13,13 +13,14 @@ class TitleWidget extends StatelessWidget {
   final Color titleColor;
   final bool isSale;
 
-  const TitleWidget(
-      {super.key,
-        required this.title,
-        this.subTitle,
-        this.onTap,
-        required this.titleColor,
-        this.isSale = false});
+  const TitleWidget({
+    super.key,
+    required this.title,
+    this.subTitle,
+    this.onTap,
+    required this.titleColor,
+    this.isSale = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +30,7 @@ class TitleWidget extends StatelessWidget {
           padding: EdgeInsets.only(left: 16.r),
           child: Text(
             title,
-            style: AppStyle.interNoSemi(
-                color: titleColor, size: 22),
+            style: AppStyle.interNoSemi(color: titleColor, size: 22),
           ),
         ),
         if (isSale && AppHelpers.getType() != 3)
@@ -38,8 +38,9 @@ class TitleWidget extends StatelessWidget {
             margin: EdgeInsets.only(left: 8.r),
             padding: EdgeInsets.symmetric(vertical: 4.r, horizontal: 8.r),
             decoration: BoxDecoration(
-                color: AppStyle.red,
-                borderRadius: BorderRadius.circular(100.r)),
+              color: AppStyle.red,
+              borderRadius: BorderRadius.circular(100.r),
+            ),
             child: Row(
               children: [
                 Icon(
@@ -50,9 +51,8 @@ class TitleWidget extends StatelessWidget {
                 4.horizontalSpace,
                 Text(
                   AppHelpers.getTranslation(TrKeys.sale.toUpperCase()),
-                  style: AppStyle.interNoSemi(
-                      color: AppStyle.white, size: 10),
-                )
+                  style: AppStyle.interNoSemi(color: AppStyle.white, size: 10),
+                ),
               ],
             ),
           ),
@@ -66,8 +66,7 @@ class TitleWidget extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 4.r, horizontal: 16.r),
               child: Text(
                 subTitle ?? "",
-                style: AppStyle.interNormal(
-                    color: AppStyle.red, size: 14),
+                style: AppStyle.interNormal(color: AppStyle.red, size: 14),
               ),
             ),
           ),
@@ -75,4 +74,3 @@ class TitleWidget extends StatelessWidget {
     );
   }
 }
-

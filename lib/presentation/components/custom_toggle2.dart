@@ -62,9 +62,7 @@ class _CustomToggleState extends State<CustomToggle> {
       disabledOpacity: 0.5,
       thumb: Container(
         margin: EdgeInsets.all(4.r),
-        padding: EdgeInsets.symmetric(
-          vertical: 6.h,
-        ),
+        padding: EdgeInsets.symmetric(vertical: 6.h),
         decoration: BoxDecoration(
           color: widget.newBoxColor,
           shape: BoxShape.circle,
@@ -90,7 +88,7 @@ class _CustomToggleState extends State<CustomToggle> {
               height: double.infinity,
               width: 3.r,
               color: widget.backgroundColor,
-            )
+            ),
           ],
         ),
       ),

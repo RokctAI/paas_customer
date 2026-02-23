@@ -1,4 +1,3 @@
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:foodyman/infrastructure/services/local_storage.dart';
 
@@ -18,7 +17,7 @@ class MainNotifier extends StateNotifier<MainState> {
     state = state.copyWith(selectIndex: 0);
   }
 
-  bool checkGuest(){
+  bool checkGuest() {
     return LocalStorage.getToken().isEmpty;
   }
 
@@ -30,4 +29,3 @@ class MainNotifier extends StateNotifier<MainState> {
     }
   }
 }
-

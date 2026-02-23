@@ -6,18 +6,17 @@ import 'package:foodyman/presentation/theme/app_style.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:foodyman/application/shop_order/shop_order_provider.dart';
 
-
 import 'product_utils.dart';
 
 class ProductUIComponents {
   /// Build quantity control widget for product in cart
   static Widget buildQuantityControl(
-      BuildContext context,
-      WidgetRef ref,
-      dynamic product, // Can be ProductData or Product depending on use
-      int cartQuantity,
-      {bool canAddDirectly = true}) {
-
+    BuildContext context,
+    WidgetRef ref,
+    dynamic product, // Can be ProductData or Product depending on use
+    int cartQuantity, {
+    bool canAddDirectly = true,
+  }) {
     final shopOrderNotifier = ref.read(shopOrderProvider.notifier);
 
     // Get the stock ID - works for both ProductData and Product
@@ -47,7 +46,11 @@ class ProductUIComponents {
 
                   if (shopOrderState.cart != null && cartQuantity > 0) {
                     for (var userCart in shopOrderState.cart!.userCarts ?? []) {
-                      for (int i = 0; i < (userCart.cartDetails?.length ?? 0); i++) {
+                      for (
+                        int i = 0;
+                        i < (userCart.cartDetails?.length ?? 0);
+                        i++
+                      ) {
                         final cartDetail = userCart.cartDetails?[i];
                         if (cartDetail?.stock?.id == stockId) {
                           shopOrderNotifier.removeCount(context, i);
@@ -66,11 +69,7 @@ class ProductUIComponents {
                   color: AppStyle.white,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  Icons.remove,
-                  size: 20.r,
-                  color: AppStyle.black,
-                ),
+                child: Icon(Icons.remove, size: 20.r, color: AppStyle.black),
               ),
             ),
 
@@ -79,10 +78,7 @@ class ProductUIComponents {
               margin: EdgeInsets.symmetric(horizontal: 8.r),
               child: Text(
                 cartQuantity.toString(),
-                style: AppStyle.interNoSemi(
-                  size: 16,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interNoSemi(size: 16, color: AppStyle.black),
               ),
             ),
 
@@ -94,7 +90,11 @@ class ProductUIComponents {
 
                   if (shopOrderState.cart != null) {
                     for (var userCart in shopOrderState.cart!.userCarts ?? []) {
-                      for (int i = 0; i < (userCart.cartDetails?.length ?? 0); i++) {
+                      for (
+                        int i = 0;
+                        i < (userCart.cartDetails?.length ?? 0);
+                        i++
+                      ) {
                         final cartDetail = userCart.cartDetails?[i];
                         if (cartDetail?.stock?.id == stockId) {
                           shopOrderNotifier.addCount(context, i);
@@ -113,11 +113,7 @@ class ProductUIComponents {
                   color: AppStyle.white,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  Icons.add,
-                  size: 20.r,
-                  color: AppStyle.black,
-                ),
+                child: Icon(Icons.add, size: 20.r, color: AppStyle.black),
               ),
             ),
           ],
@@ -129,16 +125,17 @@ class ProductUIComponents {
   }
 
   /// Build cold/frozen badge with snowflake icon and text
-  static Widget buildColdFrozenBadge(String text, Color backgroundColor, Color textColor) {
+  static Widget buildColdFrozenBadge(
+    String text,
+    Color backgroundColor,
+    Color textColor,
+  ) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 6.r, vertical: 4.r),
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(
-          color: Colors.white,
-          width: 1.5,
-        ),
+        border: Border.all(color: Colors.white, width: 1.5),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -150,26 +147,19 @@ class ProductUIComponents {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            Remix.snowflake_fill,
-            color: textColor,
-            size: 12.r,
-          ),
+          Icon(Remix.snowflake_fill, color: textColor, size: 12.r),
           SizedBox(width: 2.r),
-          Text(
-            text,
-            style: AppStyle.interNoSemi(
-              size: 10,
-              color: textColor,
-            ),
-          ),
+          Text(text, style: AppStyle.interNoSemi(size: 10, color: textColor)),
         ],
       ),
     );
   }
 
   /// Build discount badge ("SAVE X%")
-  static Widget buildDiscountBadge(double originalPrice, double discountedPrice) {
+  static Widget buildDiscountBadge(
+    double originalPrice,
+    double discountedPrice,
+  ) {
     if (discountedPrice >= originalPrice || originalPrice <= 0) {
       return const SizedBox.shrink();
     }
@@ -181,10 +171,7 @@ class ProductUIComponents {
       child: Center(
         child: Text(
           ProductUtils.calculateSavingsText(originalPrice, discountedPrice),
-          style: AppStyle.interNoSemi(
-            size: 12,
-            color: AppStyle.white,
-          ),
+          style: AppStyle.interNoSemi(size: 12, color: AppStyle.white),
         ),
       ),
     );
@@ -204,20 +191,17 @@ class ProductUIComponents {
       ),
       child: Text(
         size,
-        style: AppStyle.interRegular(
-          size: 10,
-          color: AppStyle.black,
-        ),
+        style: AppStyle.interRegular(size: 10, color: AppStyle.black),
       ),
     );
   }
 
   /// Calculate per unit price label (e.g. "R25.00/liter")
   static String? calculatePerUnitPrice(
-      double price,
-      SizeInfo? sizeInfo,
-      {bool shouldShow = true}) {
-
+    double price,
+    SizeInfo? sizeInfo, {
+    bool shouldShow = true,
+  }) {
     if (!shouldShow || sizeInfo?.size == null) {
       return null;
     }

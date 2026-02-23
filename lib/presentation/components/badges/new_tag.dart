@@ -10,21 +10,22 @@ class NewTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: top, left: left, right: right,
+      top: top,
+      left: left,
+      right: right,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 7),
         decoration: BoxDecoration(
-         // borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
+          // borderRadius: BorderRadius.circular(Dimensions.radiusLarge),
           color: AppStyle.starColor,
         ),
-        child:  Text(
-                AppHelpers.getTranslation(TrKeys.isAd), // Make sure AppHelpers is imported and accessible
-                style: AppStyle.interNoSemi(
-                  size: 12,
-                  color: AppStyle.white,
-                ),
-              ), ),
+        child: Text(
+          AppHelpers.getTranslation(
+            TrKeys.isAd,
+          ), // Make sure AppHelpers is imported and accessible
+          style: AppStyle.interNoSemi(size: 12, color: AppStyle.white),
+        ),
+      ),
     );
   }
 }
-

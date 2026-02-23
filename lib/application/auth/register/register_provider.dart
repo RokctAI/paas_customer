@@ -4,9 +4,5 @@ import 'register_notifier.dart';
 import 'register_state.dart';
 
 final registerProvider = StateNotifierProvider<RegisterNotifier, RegisterState>(
-  (ref) => RegisterNotifier(
-    authRepository,
-    userRepository
-  ),
+  (ref) => RegisterNotifier(authRepository, userRepository),
 );
-

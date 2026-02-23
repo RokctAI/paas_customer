@@ -56,7 +56,9 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
     controller = PageController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.productId != null) {
-        ref.read(productProvider.notifier).getProductDetailsById(
+        ref
+            .read(productProvider.notifier)
+            .getProductDetailsById(
               context,
               widget.productId ?? "",
               ref.watch(shopProvider).shopData?.type,
@@ -64,11 +66,14 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
               isLoading: true,
             );
       } else {
-        ref.read(productProvider.notifier).getProductDetails(
-            context,
-            widget.data!,
-            ref.watch(shopProvider).shopData?.type,
-            ref.watch(shopProvider).shopData?.id);
+        ref
+            .read(productProvider.notifier)
+            .getProductDetails(
+              context,
+              widget.data!,
+              ref.watch(shopProvider).shopData?.type,
+              ref.watch(shopProvider).shopData?.id,
+            );
       }
     });
     super.initState();
@@ -88,68 +93,78 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
     super.deactivate();
   }
 
-  void checkShopOrder(
-      {required ProductNotifier event,
-      required ProductState state,
-      required ShopOrderNotifier eventOrderShop,
-      required ShopState shopState}) {
+  void checkShopOrder({
+    required ProductNotifier event,
+    required ProductState state,
+    required ShopOrderNotifier eventOrderShop,
+    required ShopState shopState,
+  }) {
     AppHelpers.showAlertDialog(
-        context: context,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              AppHelpers.getTranslation(TrKeys.allPreviouslyAdded),
-              style: AppStyle.interNormal(),
-              textAlign: TextAlign.center,
-            ),
-            16.verticalSpace,
-            Row(
-              children: [
-                Expanded(
-                  child: CustomButton(
-                      title: AppHelpers.getTranslation(TrKeys.cancel),
-                      background: AppStyle.transparent,
-                      borderColor: AppStyle.borderColor,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
+      context: context,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            AppHelpers.getTranslation(TrKeys.allPreviouslyAdded),
+            style: AppStyle.interNormal(),
+            textAlign: TextAlign.center,
+          ),
+          16.verticalSpace,
+          Row(
+            children: [
+              Expanded(
+                child: CustomButton(
+                  title: AppHelpers.getTranslation(TrKeys.cancel),
+                  background: AppStyle.transparent,
+                  borderColor: AppStyle.borderColor,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                10.horizontalSpace,
-                Expanded(child: Consumer(builder: (contextTwo, ref, child) {
-                  return CustomButton(
+              ),
+              10.horizontalSpace,
+              Expanded(
+                child: Consumer(
+                  builder: (contextTwo, ref, child) {
+                    return CustomButton(
                       isLoading: ref.watch(shopOrderProvider).isDeleteLoading,
                       title: AppHelpers.getTranslation(TrKeys.continueText),
                       onPressed: () {
                         eventOrderShop.deleteCart(context).then((value) async {
                           event.createCart(
-                              // ignore: use_build_context_synchronously
-                              context,
-                              ref.watch(shopOrderProvider).cart?.shopId ??
-                                  (state.productData!.shopId ?? ""), () {
-                            eventOrderShop.getCart(
-                              context,
-                              () {},
-                              cartId: widget.cartId,
-                              shopId: shopState.shopData?.id.toString(),
-                              userUuid: shopState.userUuid,
-                            );
-                            Navigator.pop(context);
-                          },
-                              isGroupOrder: shopState.userUuid.isNotEmpty,
-                              cartId: ref
-                                  .watch(shopOrderProvider)
-                                  .cart
-                                  ?.id
-                                  .toString(),
-                              userUuid: shopState.userUuid);
+                            // ignore: use_build_context_synchronously
+                            context,
+                            ref.watch(shopOrderProvider).cart?.shopId ??
+                                (state.productData!.shopId ?? ""),
+                            () {
+                              eventOrderShop.getCart(
+                                context,
+                                () {},
+                                cartId: widget.cartId,
+                                shopId: shopState.shopData?.id.toString(),
+                                userUuid: shopState.userUuid,
+                              );
+                              Navigator.pop(context);
+                            },
+                            isGroupOrder: shopState.userUuid.isNotEmpty,
+                            cartId: ref
+                                .watch(shopOrderProvider)
+                                .cart
+                                ?.id
+                                .toString(),
+                            userUuid: shopState.userUuid,
+                          );
                         });
-                      });
-                })),
-              ],
-            )
-          ],
-        ));
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -161,21 +176,23 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
       if (next.isCheckShopOrder &&
           (next.isCheckShopOrder != (previous?.isCheckShopOrder ?? false))) {
         checkShopOrder(
-            event: event,
-            state: state,
-            eventOrderShop: eventOrderShop,
-            shopState: stateShop);
+          event: event,
+          state: state,
+          eventOrderShop: eventOrderShop,
+          shopState: stateShop,
+        );
       }
     });
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Container(
         decoration: BoxDecoration(
-            color: AppStyle.bgGrey.withOpacity(0.96),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(16.r),
-              topRight: Radius.circular(16.r),
-            )),
+          color: AppStyle.bgGrey.withOpacity(0.96),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(16.r),
+            topRight: Radius.circular(16.r),
+          ),
+        ),
         width: double.infinity,
         child: state.isLoading
             ? const Loading()
@@ -195,9 +212,11 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                               height: 4.h,
                               width: 48.w,
                               decoration: BoxDecoration(
-                                  color: AppStyle.dragElement,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(40.r))),
+                                color: AppStyle.dragElement,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(40.r),
+                                ),
+                              ),
                             ),
                           ),
                           14.verticalSpace,
@@ -207,7 +226,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                                 child: TitleAndIcon(
                                   title:
                                       state.productData?.translation?.title ??
-                                          "",
+                                      "",
                                   paddingHorizontalSize: 0,
                                 ),
                               ),
@@ -217,13 +236,15 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                                   width: 40.w,
                                   height: 40.w,
                                   decoration: BoxDecoration(
-                                      color: AppStyle.transparent,
-                                      border: Border.all(color: AppStyle.black),
-                                      borderRadius: BorderRadius.circular(8.r)),
+                                    color: AppStyle.transparent,
+                                    border: Border.all(color: AppStyle.black),
+                                    borderRadius: BorderRadius.circular(8.r),
+                                  ),
                                   child: const Center(
-                                      child: Icon(FlutterRemix.share_line)),
+                                    child: Icon(FlutterRemix.share_line),
+                                  ),
                                 ),
-                              )
+                              ),
                             ],
                           ),
                           20.verticalSpace,
@@ -232,34 +253,37 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                               SizedBox(
                                 height: 200.r,
                                 child: PageView.builder(
-                                    itemCount:
-                                        state.productData?.galleries?.length ??
-                                            0,
-                                    controller: controller,
-                                    onPageChanged: (index) {
-                                      event.changeImage(state
-                                              .productData?.galleries?[index] ??
-                                          Galleries());
-                                    },
-                                    itemBuilder: (context, index) {
-                                      return CustomNetworkImage(
-                                          url: state.selectImage?.path ??
-                                              state.activeImageUrl,
-                                          height: 200,
-                                          fit: BoxFit.contain,
-                                          width: double.infinity,
-                                          radius: 10);
-                                    }),
-
-                              ),
-                              if((state.productData?.galleries?.length ?? 0) > 1)
-                              Positioned(
-                                bottom: 8.r,
-                                child: ImagesOneList(
-                                  list: state.productData?.galleries,
-                                  selectImageId: state.selectImage?.id,
+                                  itemCount:
+                                      state.productData?.galleries?.length ?? 0,
+                                  controller: controller,
+                                  onPageChanged: (index) {
+                                    event.changeImage(
+                                      state.productData?.galleries?[index] ??
+                                          Galleries(),
+                                    );
+                                  },
+                                  itemBuilder: (context, index) {
+                                    return CustomNetworkImage(
+                                      url:
+                                          state.selectImage?.path ??
+                                          state.activeImageUrl,
+                                      height: 200,
+                                      fit: BoxFit.contain,
+                                      width: double.infinity,
+                                      radius: 10,
+                                    );
+                                  },
                                 ),
-                              )
+                              ),
+                              if ((state.productData?.galleries?.length ?? 0) >
+                                  1)
+                                Positioned(
+                                  bottom: 8.r,
+                                  child: ImagesOneList(
+                                    list: state.productData?.galleries,
+                                    selectImageId: state.selectImage?.id,
+                                  ),
+                                ),
                             ],
                           ),
                           state.selectedStock?.bonus != null
@@ -270,8 +294,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                                       AnimationButtonEffect(
                                         child: InkWell(
                                           onTap: () {
-                                            AppHelpers
-                                                .showCustomModalBottomSheet(
+                                            AppHelpers.showCustomModalBottomSheet(
                                               context: context,
                                               modal: BonusScreen(
                                                 bonus:
@@ -287,8 +310,9 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                                             height: 22.h,
                                             margin: EdgeInsets.all(8.r),
                                             decoration: const BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: AppStyle.blueBonus),
+                                              shape: BoxShape.circle,
+                                              color: AppStyle.blueBonus,
+                                            ),
                                             child: Icon(
                                               FlutterRemix.gift_2_fill,
                                               size: 16.r,
@@ -321,7 +345,9 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    state.productData?.translation
+                                    state
+                                            .productData
+                                            ?.translation
                                             ?.description ??
                                         "",
                                     style: AppStyle.interRegular(
@@ -332,45 +358,49 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                                 ),
                                 Column(
                                   children: [
-
                                     Text(
                                       AppHelpers.numberFormat(
-                                          number: (state.selectedStock?.price ??
-                                                  0) +
-                                              (state.selectedStock?.tax ?? 0)),
+                                        number:
+                                            (state.selectedStock?.price ?? 0) +
+                                            (state.selectedStock?.tax ?? 0),
+                                      ),
                                       style: AppStyle.interRegular(
-                                          size: 14.sp,
-                                          color: AppStyle.black,
-                                          textDecoration:
-                                              state.selectedStock?.discount ==
-                                                      null
-                                                  ? TextDecoration.none
-                                                  : TextDecoration.lineThrough),
+                                        size: 14.sp,
+                                        color: AppStyle.black,
+                                        textDecoration:
+                                            state.selectedStock?.discount ==
+                                                null
+                                            ? TextDecoration.none
+                                            : TextDecoration.lineThrough,
+                                      ),
                                     ),
                                     state.selectedStock?.discount == null
                                         ? const SizedBox.shrink()
                                         : Container(
                                             margin: EdgeInsets.only(top: 8.r),
                                             decoration: BoxDecoration(
-                                                color: AppStyle.redBg,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        30.r)),
+                                              color: AppStyle.redBg,
+                                              borderRadius:
+                                                  BorderRadius.circular(30.r),
+                                            ),
                                             padding: EdgeInsets.all(4.r),
                                             child: Row(
                                               children: [
                                                 SvgPicture.asset(
-                                                    "assets/svgs/discount.svg"),
+                                                  "assets/svgs/discount.svg",
+                                                ),
                                                 8.horizontalSpace,
                                                 Text(
                                                   AppHelpers.numberFormat(
-                                                      number: state
-                                                          .selectedStock
-                                                          ?.totalPrice),
+                                                    number: state
+                                                        .selectedStock
+                                                        ?.totalPrice,
+                                                  ),
                                                   style: AppStyle.interNoSemi(
-                                                      size: 12,
-                                                      color: AppStyle.red),
-                                                )
+                                                    size: 12,
+                                                    color: AppStyle.red,
+                                                  ),
+                                                ),
                                               ],
                                             ),
                                           ),
@@ -406,7 +436,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                       cartId: stateOrderShop.cart?.id.toString(),
                       shopId: ref.watch(shopProvider).shopData?.id,
                       userUuid: ref.watch(shopProvider).userUuid,
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -414,4 +444,3 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
     );
   }
 }
-

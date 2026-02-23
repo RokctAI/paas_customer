@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
-
 // ignore: must_be_immutable
 class TitleAndPrice extends StatelessWidget {
   final String title;
@@ -27,25 +26,14 @@ class TitleAndPrice extends StatelessWidget {
         children: [
           Text(
             title,
-            style: AppStyle.interRegular(
-              size: 16,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interRegular(size: 16, color: AppStyle.black),
           ),
           GestureDetector(
-            onTap: onRightTap ?? (){},
-            child: Row(
-              children: [
-                Text(
-                  rightTitle ?? "",
-                  style: textStyle,
-                ),
-              ],
-            ),
+            onTap: onRightTap ?? () {},
+            child: Row(children: [Text(rightTitle ?? "", style: textStyle)]),
           ),
         ],
       ),
     );
   }
 }
-

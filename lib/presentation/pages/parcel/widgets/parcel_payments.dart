@@ -18,10 +18,7 @@ import 'package:foodyman/infrastructure/services/local_storage.dart';
 class ParcelPayments extends ConsumerStatefulWidget {
   final ValueChanged<PaymentData>? payLater;
 
-  const ParcelPayments({
-    this.payLater,
-    super.key,
-  });
+  const ParcelPayments({this.payLater, super.key});
 
   @override
   ConsumerState<ParcelPayments> createState() => _PaymentMethodsState();
@@ -46,11 +43,12 @@ class _PaymentMethodsState extends ConsumerState<ParcelPayments> {
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Container(
         decoration: BoxDecoration(
-            color: AppStyle.bgGrey.withOpacity(0.96),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12.r),
-              topRight: Radius.circular(12.r),
-            )),
+          color: AppStyle.bgGrey.withOpacity(0.96),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12.r),
+            topRight: Radius.circular(12.r),
+          ),
+        ),
         width: double.infinity,
         child: state.isPaymentsLoading
             ? const Loading()
@@ -66,8 +64,9 @@ class _PaymentMethodsState extends ConsumerState<ParcelPayments> {
                         height: 4.h,
                         width: 48.w,
                         decoration: BoxDecoration(
-                            color: AppStyle.dragElement,
-                            borderRadius: BorderRadius.circular(40.r)),
+                          color: AppStyle.dragElement,
+                          borderRadius: BorderRadius.circular(40.r),
+                        ),
                       ),
                     ),
                     14.verticalSpace,
@@ -86,14 +85,19 @@ class _PaymentMethodsState extends ConsumerState<ParcelPayments> {
                                 isActive: state.currentIndex == index,
                                 title: (state.payments[index].tag ?? ""),
                               );
-                            })
+                            },
+                          )
                         : Center(
                             child: Padding(
                               padding: EdgeInsets.only(
-                                  bottom: 32.h, left: 24.w, right: 24.w),
+                                bottom: 32.h,
+                                left: 24.w,
+                                right: 24.w,
+                              ),
                               child: Text(
                                 AppHelpers.getTranslation(
-                                    TrKeys.paymentTypeIsNotAdded),
+                                  TrKeys.paymentTypeIsNotAdded,
+                                ),
                                 style: AppStyle.interSemi(
                                   size: 16,
                                   color: AppStyle.textGrey,
@@ -106,14 +110,15 @@ class _PaymentMethodsState extends ConsumerState<ParcelPayments> {
                       Padding(
                         padding: EdgeInsets.only(bottom: 32.r),
                         child: CustomButton(
-                            title: AppHelpers.getTranslation(TrKeys.pay),
-                            onPressed: () {
-                              context.maybePop();
-                              widget.payLater?.call(
-                                state.payments[state.currentIndex],
-                              );
-                            }),
-                      )
+                          title: AppHelpers.getTranslation(TrKeys.pay),
+                          onPressed: () {
+                            context.maybePop();
+                            widget.payLater?.call(
+                              state.payments[state.currentIndex],
+                            );
+                          },
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -121,4 +126,3 @@ class _PaymentMethodsState extends ConsumerState<ParcelPayments> {
     );
   }
 }
-

@@ -13,8 +13,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
-
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -66,9 +64,7 @@ import 'package:foodyman/presentation/pages/profile/wallet_history.dart';
 
 @RoutePage()
 class MainPage extends StatefulWidget {
-  const MainPage({
-    super.key,
-  });
+  const MainPage({super.key});
 
   @override
   State<MainPage> createState() => _MainPageState();
@@ -82,30 +78,14 @@ class _MainPageState extends State<MainPage> {
       IndexedStackChild(child: HomePage(), preload: true),
       (AppHelpers.getParcel())
           ? IndexedStackChild(
-          child: ParcelPage(
-            isBackButton: false,
-          ),
-          preload: true)
-          : IndexedStackChild(
-        child: SearchPage(
-          isBackButton: false,
-        ),
-      ),
+              child: ParcelPage(isBackButton: false),
+              preload: true,
+            )
+          : IndexedStackChild(child: SearchPage(isBackButton: false)),
       LocalStorage.getToken().isNotEmpty
-          ? IndexedStackChild(
-        child: WalletHistoryPage(
-          isBackButton: false,
-        ),
-      )
-          : IndexedStackChild(
-          child: LikePage(
-            isBackButton: false,
-          )),
-      IndexedStackChild(
-          child: ProfilePage(
-            isBackButton: false,
-          ),
-          preload: true),
+          ? IndexedStackChild(child: WalletHistoryPage(isBackButton: false))
+          : IndexedStackChild(child: LikePage(isBackButton: false)),
+      IndexedStackChild(child: ProfilePage(isBackButton: false), preload: true),
     ],
     [
       IndexedStackChild(child: HomeOnePage(), preload: true),
@@ -123,31 +103,15 @@ class _MainPageState extends State<MainPage> {
       IndexedStackChild(child: HomePageFour(), preload: true),
       (AppHelpers.getParcel())
           ? IndexedStackChild(
-          child: ParcelPage(
-            isBackButton: false,
-          ),
-          preload: true)
-          : IndexedStackChild(
-        child: SearchPage(
-          isBackButton: false,
-        ),
-      ),
+              child: ParcelPage(isBackButton: false),
+              preload: true,
+            )
+          : IndexedStackChild(child: SearchPage(isBackButton: false)),
       LocalStorage.getToken().isNotEmpty
-          ? IndexedStackChild(
-        child: WalletHistoryPage(
-          isBackButton: false,
-        ),
-      )
-          : IndexedStackChild(
-          child: LikePage(
-            isBackButton: false,
-          )),
-      IndexedStackChild(
-          child: ProfilePage(
-            isBackButton: false,
-          ),
-          preload: true),
-    ]
+          ? IndexedStackChild(child: WalletHistoryPage(isBackButton: false))
+          : IndexedStackChild(child: LikePage(isBackButton: false)),
+      IndexedStackChild(child: ProfilePage(isBackButton: false), preload: true),
+    ],
   ];
 
   @override
@@ -182,9 +146,7 @@ class _MainPageState extends State<MainPage> {
       } else {
         if (!mounted) return;
         context.router.popUntilRoot();
-        context.pushRoute(
-          OrderProgressRoute(orderId: data.id?.toString()),
-        );
+        context.pushRoute(OrderProgressRoute(orderId: data.id?.toString()));
       }
     });
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -192,73 +154,74 @@ class _MainPageState extends State<MainPage> {
       if (data.type == "news_publish") {
         if (!mounted) return;
         AppHelpers.showCheckTopSnackBarInfoCustom(
-            context, "${message.notification?.body}", onTap: () async {
-          if (!context.mounted) return;
-          context.router.popUntilRoot();
-          await launch(
-            "${AppConstants.webUrl}/blog/${message.data["uuid"]}",
-            forceSafariVC: true,
-            forceWebView: true,
-            enableJavaScript: true,
-          );
-        });
+          context,
+          "${message.notification?.body}",
+          onTap: () async {
+            if (!context.mounted) return;
+            context.router.popUntilRoot();
+            await launch(
+              "${AppConstants.webUrl}/blog/${message.data["uuid"]}",
+              forceSafariVC: true,
+              forceWebView: true,
+              enableJavaScript: true,
+            );
+          },
+        );
       } else {
         if (!mounted) return;
-        AppHelpers.showCheckTopSnackBarInfo(context,
-            "${AppHelpers.getTranslation(TrKeys.id)} #${message.notification?.title} ${message.notification?.body}",
-            onTap: () async {
-              if (!mounted) return;
-              context.router.popUntilRoot();
-              if (!mounted) return;
-              context.pushRoute(
-                OrderProgressRoute(
-                  orderId: data.id?.toString(),
-                ),
-              );
-            });
+        AppHelpers.showCheckTopSnackBarInfo(
+          context,
+          "${AppHelpers.getTranslation(TrKeys.id)} #${message.notification?.title} ${message.notification?.body}",
+          onTap: () async {
+            if (!mounted) return;
+            context.router.popUntilRoot();
+            if (!mounted) return;
+            context.pushRoute(OrderProgressRoute(orderId: data.id?.toString()));
+          },
+        );
       }
     });
     super.initState();
   }
 
   Future<void> initDynamicLinks() async {
-    dynamicLinks.onLink.listen((dynamicLinkData) {
-      Uri link = dynamicLinkData.link;
-      if (link.queryParameters.keys.contains('group')) {
-        if (!mounted) return;
-        context.router.popUntilRoot();
-        if (!mounted) return;
-        context.pushRoute(
-          ShopRoute(
-           shopId: link.pathSegments.last,
-            cartId: link.queryParameters['group'],
-            ownerId: link.queryParameters['owner_id'] ?? '',
-          ),
-        );
-      } else if (!link.queryParameters.keys.contains("product") &&
-          link.pathSegments.contains("shop")) {
-        if (!mounted) return;
-        context.router.popUntilRoot();
-        context.pushRoute(
-          ShopRoute(
-           shopId: link.pathSegments.last,
-          ),
-        );
-      } else if (link.pathSegments.contains("shop")) {
-        if (!mounted) return;
-        context.router.popUntilRoot();
-        if (!mounted) return;
-        context.pushRoute(ShopRoute(
-         shopId: link.pathSegments.last,
-          productId: link.queryParameters['product'],
-        ));
-      }
-    }).onError((error) {
-      debugPrint(error.message);
-    });
+    dynamicLinks.onLink
+        .listen((dynamicLinkData) {
+          Uri link = dynamicLinkData.link;
+          if (link.queryParameters.keys.contains('group')) {
+            if (!mounted) return;
+            context.router.popUntilRoot();
+            if (!mounted) return;
+            context.pushRoute(
+              ShopRoute(
+                shopId: link.pathSegments.last,
+                cartId: link.queryParameters['group'],
+                ownerId: link.queryParameters['owner_id'] ?? '',
+              ),
+            );
+          } else if (!link.queryParameters.keys.contains("product") &&
+              link.pathSegments.contains("shop")) {
+            if (!mounted) return;
+            context.router.popUntilRoot();
+            context.pushRoute(ShopRoute(shopId: link.pathSegments.last));
+          } else if (link.pathSegments.contains("shop")) {
+            if (!mounted) return;
+            context.router.popUntilRoot();
+            if (!mounted) return;
+            context.pushRoute(
+              ShopRoute(
+                shopId: link.pathSegments.last,
+                productId: link.queryParameters['product'],
+              ),
+            );
+          }
+        })
+        .onError((error) {
+          debugPrint(error.message);
+        });
 
-    final PendingDynamicLinkData? data =
-    await FirebaseDynamicLinks.instance.getInitialLink();
+    final PendingDynamicLinkData? data = await FirebaseDynamicLinks.instance
+        .getInitialLink();
     if (!mounted) return;
     final Uri? deepLink = data?.link;
     if (deepLink?.queryParameters.keys.contains("group") ?? false) {
@@ -267,7 +230,7 @@ class _MainPageState extends State<MainPage> {
       if (!mounted) return;
       context.pushRoute(
         ShopRoute(
-         shopId: deepLink?.pathSegments.last ?? '',
+          shopId: deepLink?.pathSegments.last ?? '',
           cartId: deepLink?.queryParameters['group'],
           ownerId: deepLink?.queryParameters['owner_id'] ?? "",
         ),
@@ -275,16 +238,13 @@ class _MainPageState extends State<MainPage> {
     } else if (!(deepLink?.queryParameters.keys.contains("product") ?? false) &&
         (deepLink?.pathSegments.contains("shop") ?? false)) {
       if (!context.mounted) return;
-      context.pushRoute(
-        ShopRoute(
-          shopId: deepLink?.pathSegments.last ?? "",
-        ),
-      );
+      context.pushRoute(ShopRoute(shopId: deepLink?.pathSegments.last ?? ""));
     } else if (deepLink?.pathSegments.contains("shop") ?? false) {
       context.pushRoute(
         ShopRoute(
-            shopId: deepLink?.pathSegments.last ?? "",
-            productId: deepLink?.queryParameters['product']),
+          shopId: deepLink?.pathSegments.last ?? "",
+          productId: deepLink?.queryParameters['product'],
+        ),
       );
     }
   }
@@ -292,122 +252,136 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return KeyboardDismisser(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          // extendBody: true,
-          body: Consumer(
-            builder: (BuildContext context, WidgetRef ref, Widget? child) {
-              final index = ref.watch(mainProvider).selectIndex;
-              // If fixed is true, manually create ProsteIndexedStack with isScrolling always false
-              return ProsteIndexedStack(
-                index: index,
-                children: listPages[AppHelpers.getType()],
-              );
-            },
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-          floatingActionButton: AppHelpers.getType() == 0
-              ? Consumer(builder: (context, ref, child) {
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        // extendBody: true,
+        body: Consumer(
+          builder: (BuildContext context, WidgetRef ref, Widget? child) {
             final index = ref.watch(mainProvider).selectIndex;
-            final user = ref.watch(profileProvider).userData;
-            final orders = ref.watch(shopOrderProvider).cart;
-            final event = ref.read(mainProvider.notifier);
-            return _bottom(index, ref, event, context, user, orders);
-          })
-              : AppHelpers.getType() == 3
-              ? Consumer(builder: (context, ref, child) {
-            return BottomNavigatorThree(
-              currentIndex: ref.watch(mainProvider).selectIndex,
-              onTap: (int value) {
-                if (value == 3) {
-                  if (LocalStorage.getToken().isEmpty) {
-                    context.pushRoute(LoginRoute());
-                    return;
-                  }
-                  context.pushRoute(OrderRoute());
-                  return;
-                }
-                if (value == 2) {
-                  if (LocalStorage.getToken().isEmpty) {
-                    context.pushRoute(LoginRoute());
-                    return;
-                  }
-                  context.pushRoute(ParcelRoute());
-                  return;
-                }
-                ref.read(mainProvider.notifier).selectIndex(value);
-              },
+            // If fixed is true, manually create ProsteIndexedStack with isScrolling always false
+            return ProsteIndexedStack(
+              index: index,
+              children: listPages[AppHelpers.getType()],
             );
-          })
-              : AppHelpers.getType() == 4
-              ? Consumer(builder: (context, ref, child) {
+          },
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: AppHelpers.getType() == 0
+            ? Consumer(
+                builder: (context, ref, child) {
+                  final index = ref.watch(mainProvider).selectIndex;
+                  final user = ref.watch(profileProvider).userData;
+                  final orders = ref.watch(shopOrderProvider).cart;
+                  final event = ref.read(mainProvider.notifier);
+                  return _bottom(index, ref, event, context, user, orders);
+                },
+              )
+            : AppHelpers.getType() == 3
+            ? Consumer(
+                builder: (context, ref, child) {
+                  return BottomNavigatorThree(
+                    currentIndex: ref.watch(mainProvider).selectIndex,
+                    onTap: (int value) {
+                      if (value == 3) {
+                        if (LocalStorage.getToken().isEmpty) {
+                          context.pushRoute(LoginRoute());
+                          return;
+                        }
+                        context.pushRoute(OrderRoute());
+                        return;
+                      }
+                      if (value == 2) {
+                        if (LocalStorage.getToken().isEmpty) {
+                          context.pushRoute(LoginRoute());
+                          return;
+                        }
+                        context.pushRoute(ParcelRoute());
+                        return;
+                      }
+                      ref.read(mainProvider.notifier).selectIndex(value);
+                    },
+                  );
+                },
+              )
+            : AppHelpers.getType() == 4
+            ? Consumer(
+                builder: (context, ref, child) {
+                  final index = ref.watch(mainProvider).selectIndex;
+                  final user = ref.watch(profileProvider).userData;
+                  final orders = ref.watch(shopOrderProvider).cart;
+                  final event = ref.read(mainProvider.notifier);
+                  return _bottom(index, ref, event, context, user, orders);
+                },
+              )
+            : const SizedBox(),
+        bottomNavigationBar: Consumer(
+          builder: (context, ref, child) {
             final index = ref.watch(mainProvider).selectIndex;
-            final user = ref.watch(profileProvider).userData;
-            final orders = ref.watch(shopOrderProvider).cart;
             final event = ref.read(mainProvider.notifier);
-            return _bottom(index, ref, event, context, user, orders);
-          })
-              : const SizedBox(),
-          bottomNavigationBar: Consumer(
-            builder: (context, ref, child) {
-              final index = ref.watch(mainProvider).selectIndex;
-              final event = ref.read(mainProvider.notifier);
-              return AppHelpers.getType() == 1
-                  ? BottomNavigatorOne(
-                currentIndex: index,
-                onTap: (int value) {
-                  if (value == 3) {
-                    if (LocalStorage.getToken().isEmpty) {
-                      context.pushRoute(LoginRoute());
-                      return;
-                    }
-                    context.pushRoute(OrderRoute());
-                    return;
-                  }
-                  if (value == 2) {
-                    if (LocalStorage.getToken().isEmpty) {
-                      context.pushRoute(LoginRoute());
-                      return;
-                    }
-                    context.pushRoute(ParcelRoute());
-                    return;
-                  }
-                  event.selectIndex(value);
-                },
-              )
-                  : AppHelpers.getType() == 2
-                  ? BottomNavigatorTwo(
-                currentIndex: index,
-                onTap: (int value) {
-                  if (value == 3) {
-                    if (LocalStorage.getToken().isEmpty) {
-                      context.pushRoute(LoginRoute());
-                      return;
-                    }
-                    context.pushRoute(OrderRoute());
-                    return;
-                  }
-                  if (value == 2) {
-                    if (LocalStorage.getToken().isEmpty) {
-                      context.pushRoute(LoginRoute());
-                      return;
-                    }
-                    context.pushRoute(ParcelRoute());
-                    return;
-                  }
-                  event.selectIndex(value);
-                },
-              )
-                  : const SizedBox();
-            },
-          ),
-        ));
+            return AppHelpers.getType() == 1
+                ? BottomNavigatorOne(
+                    currentIndex: index,
+                    onTap: (int value) {
+                      if (value == 3) {
+                        if (LocalStorage.getToken().isEmpty) {
+                          context.pushRoute(LoginRoute());
+                          return;
+                        }
+                        context.pushRoute(OrderRoute());
+                        return;
+                      }
+                      if (value == 2) {
+                        if (LocalStorage.getToken().isEmpty) {
+                          context.pushRoute(LoginRoute());
+                          return;
+                        }
+                        context.pushRoute(ParcelRoute());
+                        return;
+                      }
+                      event.selectIndex(value);
+                    },
+                  )
+                : AppHelpers.getType() == 2
+                ? BottomNavigatorTwo(
+                    currentIndex: index,
+                    onTap: (int value) {
+                      if (value == 3) {
+                        if (LocalStorage.getToken().isEmpty) {
+                          context.pushRoute(LoginRoute());
+                          return;
+                        }
+                        context.pushRoute(OrderRoute());
+                        return;
+                      }
+                      if (value == 2) {
+                        if (LocalStorage.getToken().isEmpty) {
+                          context.pushRoute(LoginRoute());
+                          return;
+                        }
+                        context.pushRoute(ParcelRoute());
+                        return;
+                      }
+                      event.selectIndex(value);
+                    },
+                  )
+                : const SizedBox();
+          },
+        ),
+      ),
+    );
   }
 
-  Widget _bottom(int index, WidgetRef ref, MainNotifier event,
-      BuildContext context, ProfileData? user, Cart? orders) {
+  Widget _bottom(
+    int index,
+    WidgetRef ref,
+    MainNotifier event,
+    BuildContext context,
+    ProfileData? user,
+    Cart? orders,
+  ) {
     final orders = ref.watch(shopOrderProvider).cart;
-    final bool isCartEmpty = orders == null ||
+    final bool isCartEmpty =
+        orders == null ||
         (orders.userCarts?.isEmpty ?? true) ||
         ((orders.userCarts?.isEmpty ?? true)
             ? true
@@ -418,9 +392,9 @@ class _MainPageState extends State<MainPage> {
     final bool isFixed = AppConstants.fixed;
 
     // If fixed is true, always pass false for isScrolling
-    final bool isScrollingValue =
-    isFixed ? false : ref.watch(mainProvider).isScrolling;
-
+    final bool isScrollingValue = isFixed
+        ? false
+        : ref.watch(mainProvider).isScrolling;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -442,9 +416,12 @@ class _MainPageState extends State<MainPage> {
                 Container(
                   width: MediaQuery.of(context).size.width * 0.8,
                   margin: EdgeInsets.only(
-                      bottom: 16.h), // Extra margin for the tooltip pointer
-                  padding:
-                  EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
+                    bottom: 16.h,
+                  ), // Extra margin for the tooltip pointer
+                  padding: EdgeInsets.symmetric(
+                    vertical: 8.h,
+                    horizontal: 12.w,
+                  ),
                   decoration: BoxDecoration(
                     color: AppStyle.primary.withOpacity(0.8),
                     borderRadius: BorderRadius.circular(8.r),
@@ -465,10 +442,13 @@ class _MainPageState extends State<MainPage> {
                       Consumer(
                         builder: (context, ref, child) {
                           // Check if currency is loaded
-                          final isLoading =
-                              ref.watch(shopOrderProvider).isLoading;
-                          final totalPrice =
-                              ref.watch(shopOrderProvider).cart?.totalPrice;
+                          final isLoading = ref
+                              .watch(shopOrderProvider)
+                              .isLoading;
+                          final totalPrice = ref
+                              .watch(shopOrderProvider)
+                              .cart
+                              ?.totalPrice;
                           final currency = LocalStorage.getSelectedCurrency();
 
                           if (isLoading) {
@@ -527,8 +507,9 @@ class _MainPageState extends State<MainPage> {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 500),
                 decoration: BoxDecoration(
-                    color: AppStyle.bottomNavigationBarColor.withOpacity(0.3),
-                    borderRadius: BorderRadius.all(Radius.circular(100.r))),
+                  color: AppStyle.bottomNavigationBarColor.withOpacity(0.3),
+                  borderRadius: BorderRadius.all(Radius.circular(100.r)),
+                ),
                 height: 60.r,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 10.r),
@@ -599,12 +580,14 @@ class _MainPageState extends State<MainPage> {
                           width: 40.r,
                           height: 40.r,
                           decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: index == 3
-                                      ? AppStyle.primary
-                                      : AppStyle.transparent,
-                                  width: 2.w),
-                              shape: BoxShape.circle),
+                            border: Border.all(
+                              color: index == 3
+                                  ? AppStyle.primary
+                                  : AppStyle.transparent,
+                              width: 2.w,
+                            ),
+                            shape: BoxShape.circle,
+                          ),
                           child: CustomNetworkImage(
                             profile: true,
                             url: user?.img ?? LocalStorage.getUser()?.img,
@@ -624,54 +607,54 @@ class _MainPageState extends State<MainPage> {
             (AppConstants.fixed == false && isCartEmpty)
                 ? const SizedBox.shrink()
                 : AnimationButtonEffect(
-              child: GestureDetector(
-                onTap: () {
-                  if (LocalStorage.getToken().isEmpty) {
-                    context.pushRoute(LoginRoute());
-                    return;
-                  }
-                  context.pushRoute(OrderRoute());
-                },
-                child: Container(
-                  margin: EdgeInsets.only(left: 8.w),
-                  width: 56.r,
-                  height: 56.r,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color.fromRGBO(0, 0, 0, 0.8),
-                  ),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      const Icon(
-                        FlutterRemix.shopping_basket_2_fill,
-                        color: AppStyle.white,
-                      ),
-                      Positioned(
-                        top: 9,
-                        right: 8,
-                        child: Badge(
-                          label: Text(
-                            isCartEmpty
-                                ? "0"
-                                : (ref
-                                .watch(shopOrderProvider)
-                                .cart
-                                ?.userCarts
-                                ?.first
-                                .cartDetails
-                                ?.length ??
-                                0)
-                                .toString(),
-                            style: const TextStyle(color: AppStyle.white),
-                          ),
+                    child: GestureDetector(
+                      onTap: () {
+                        if (LocalStorage.getToken().isEmpty) {
+                          context.pushRoute(LoginRoute());
+                          return;
+                        }
+                        context.pushRoute(OrderRoute());
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(left: 8.w),
+                        width: 56.r,
+                        height: 56.r,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color.fromRGBO(0, 0, 0, 0.8),
+                        ),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            const Icon(
+                              FlutterRemix.shopping_basket_2_fill,
+                              color: AppStyle.white,
+                            ),
+                            Positioned(
+                              top: 9,
+                              right: 8,
+                              child: Badge(
+                                label: Text(
+                                  isCartEmpty
+                                      ? "0"
+                                      : (ref
+                                                    .watch(shopOrderProvider)
+                                                    .cart
+                                                    ?.userCarts
+                                                    ?.first
+                                                    .cartDetails
+                                                    ?.length ??
+                                                0)
+                                            .toString(),
+                                  style: const TextStyle(color: AppStyle.white),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
-            )
           ],
         ),
       ],
@@ -688,15 +671,15 @@ String _getCartShopName(Cart? cart, WidgetRef ref) {
 
   // Look for the shop in homeState
   final shop = homeState.shops.firstWhere(
-        (s) => s.id == shopId,
+    (s) => s.id == shopId,
     orElse: () => homeState.newShops.firstWhere(
-          (s) => s.id == shopId,
+      (s) => s.id == shopId,
       orElse: () => homeState.allShops.firstWhere(
-            (s) => s.id == shopId,
+        (s) => s.id == shopId,
         orElse: () => homeState.shopsRecommend.firstWhere(
-              (s) => s.id == shopId,
+          (s) => s.id == shopId,
           orElse: () => homeState.filterShops.firstWhere(
-                (s) => s.id == shopId,
+            (s) => s.id == shopId,
             orElse: () => ShopData(),
           ),
         ),

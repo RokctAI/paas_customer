@@ -30,99 +30,107 @@ class MarketTwoItem extends StatelessWidget {
     final shouldUseBgImg = bgImg ?? AppConstants.bgImg;
     final screenWidth = MediaQuery.of(context).size.width;
     return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          final isNarrow = constraints.maxWidth < screenWidth / 2;
-          return GestureDetector(
-            onTap: () {
-              context.pushRoute(
-                  ShopRoute(shopId: (shop.id ?? 0).toString(), shop: shop));
-            },
-            child: isShop
-                ? _shopItem()
-                : Container(
-              margin: isFilter
-                  ? const EdgeInsets.symmetric(horizontal: 16)
-                  : isSimpleShop
-                  ? EdgeInsets.all(8.r)
-                  : EdgeInsets.only(right: 8.r),
-              width: 268.r,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(24.r)),
-                  // Add border when background image is disabled
-                  border: !shouldUseBgImg ? Border.all(color: AppStyle.textGrey) : null),
-              child: Stack(
-                children: [
-                  // Background image or Container with border - only construct the widget we need
-                  if (shouldUseBgImg)
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(24.r),
-                      child: CustomNetworkImage(
-                        url: shop.backgroundImg ?? '',
-                        height: double.infinity,
-                        width: double.infinity,
-                        radius: 0,
-                        fit: BoxFit.cover,
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final isNarrow = constraints.maxWidth < screenWidth / 2;
+        return GestureDetector(
+          onTap: () {
+            context.pushRoute(
+              ShopRoute(shopId: (shop.id ?? 0).toString(), shop: shop),
+            );
+          },
+          child: isShop
+              ? _shopItem()
+              : Container(
+                  margin: isFilter
+                      ? const EdgeInsets.symmetric(horizontal: 16)
+                      : isSimpleShop
+                      ? EdgeInsets.all(8.r)
+                      : EdgeInsets.only(right: 8.r),
+                  width: 268.r,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(24.r)),
+                    // Add border when background image is disabled
+                    border: !shouldUseBgImg
+                        ? Border.all(color: AppStyle.textGrey)
+                        : null,
+                  ),
+                  child: Stack(
+                    children: [
+                      // Background image or Container with border - only construct the widget we need
+                      if (shouldUseBgImg)
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(24.r),
+                          child: CustomNetworkImage(
+                            url: shop.backgroundImg ?? '',
+                            height: double.infinity,
+                            width: double.infinity,
+                            radius: 0,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      else
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(24.r),
+                          child: Container(
+                            height: double.infinity,
+                            width: double.infinity,
+                            color: AppStyle.textGrey.withOpacity(0.3),
+                          ),
+                        ),
+                      DistanceBadge(
+                        shop: shop,
+                        bottom: isNarrow ? 98.h : 70.h,
+                        //left: isNarrow ? 30.w : null
                       ),
-                    )
-                  else
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(24.r),
-                      child: Container(
-                        height: double.infinity,
-                        width: double.infinity,
-                        color: AppStyle.textGrey.withOpacity(0.3),
+                      ShopBadge(
+                        shop: shop,
+                        top: 8.h,
+                        iconSize: isNarrow ? 22 : null,
+                        containerHeight: isNarrow ? 30 : null,
+                        containerWidth: isNarrow ? 130.w : null,
+                        fontSize: isNarrow ? 10 : null,
+                        maxTextLength: isNarrow ? 12 : null,
                       ),
-                    ),
-                  DistanceBadge(
-                    shop: shop,
-                    bottom: isNarrow ? 98.h : 70.h,
-                    //left: isNarrow ? 30.w : null
-                  ),
-                  ShopBadge(
-                    shop: shop,
-                    top: 8.h,
-                    iconSize: isNarrow ? 22 : null,
-                    containerHeight: isNarrow ? 30 : null,
-                    containerWidth: isNarrow ? 130.w : null,
-                    fontSize: isNarrow ? 10 : null,
-                    maxTextLength: isNarrow ? 12 : null,
-                  ),
-                  DeliveryFeeBadge(
-                    shop: shop,
-                    right: isNarrow ? 12.w : 15.w,
-                    bottom: isNarrow ? 40.h : 10.h,
-                    //  left: isNarrow ? 50.w : null
-                  ),
-                  RatingBadge(
-                    shop: shop,
-                    bottom: isNarrow ? 70.h : 40.h,
-                    // left: isNarrow ? 50.w : null,
-                    right: isNarrow ? 12.w : null,
-                    isText: isNarrow ? false : true,
-                  ),
-                  OpTimeBadge(shop: shop,
-                      top: isNarrow ? 92.h : 95.h,
-                      right: isNarrow ? 12.w : 15.w),
-                  Positioned(
-                    bottom: isNarrow ? 4.h : 5.h,
-                    right: 0.w,
-                    left: isNarrow ? 50.w : 10.w,
-                    child: Padding(
-                      padding:
-                      EdgeInsets.only(bottom: isSimpleShop ? 6.h : 0),
-                      child: BonusDiscountPopular(
-                        isPopular: shop.isRecommend ?? false,
-                        bonus: shop.bonus,
-                        isSingleShop: false,
-                        isDiscount: shop.isDiscount ?? false,
+                      DeliveryFeeBadge(
+                        shop: shop,
+                        right: isNarrow ? 12.w : 15.w,
+                        bottom: isNarrow ? 40.h : 10.h,
+                        //  left: isNarrow ? 50.w : null
                       ),
-                    ),
+                      RatingBadge(
+                        shop: shop,
+                        bottom: isNarrow ? 70.h : 40.h,
+                        // left: isNarrow ? 50.w : null,
+                        right: isNarrow ? 12.w : null,
+                        isText: isNarrow ? false : true,
+                      ),
+                      OpTimeBadge(
+                        shop: shop,
+                        top: isNarrow ? 92.h : 95.h,
+                        right: isNarrow ? 12.w : 15.w,
+                      ),
+                      Positioned(
+                        bottom: isNarrow ? 4.h : 5.h,
+                        right: 0.w,
+                        left: isNarrow ? 50.w : 10.w,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                            bottom: isSimpleShop ? 6.h : 0,
+                          ),
+                          child: BonusDiscountPopular(
+                            isPopular: shop.isRecommend ?? false,
+                            bonus: shop.bonus,
+                            isSingleShop: false,
+                            isDiscount: shop.isDiscount ?? false,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          );
-        });
+                ),
+        );
+      },
+    );
   }
 
   Widget _shopItem() {

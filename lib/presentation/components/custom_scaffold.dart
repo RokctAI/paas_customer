@@ -16,15 +16,16 @@ class CustomScaffold extends ConsumerStatefulWidget {
   final PreferredSizeWidget? appBar;
   final Color? backgroundColor;
 
-  const CustomScaffold(
-      {super.key,
-      required this.body,
-      this.appBar,
-      this.floatingActionButton,
-      this.floatingActionButtonLocation,
-      this.backgroundColor,
-      this.bottomNavigationBar,
-      this.drawer});
+  const CustomScaffold({
+    super.key,
+    required this.body,
+    this.appBar,
+    this.floatingActionButton,
+    this.floatingActionButtonLocation,
+    this.backgroundColor,
+    this.bottomNavigationBar,
+    this.drawer,
+  });
 
   @override
   ConsumerState<CustomScaffold> createState() => _CustomScaffoldState();
@@ -37,17 +38,19 @@ class _CustomScaffoldState extends ConsumerState<CustomScaffold>
 
   void _checkCurrentNetworkState() {
     Connectivity().checkConnectivity().then((connectivityResult) {
-      isNetworkDisabled.value = connectivityResult.contains(ConnectivityResult.none);
+      isNetworkDisabled.value = connectivityResult.contains(
+        ConnectivityResult.none,
+      );
     });
   }
 
   initStateFunc() {
     _checkCurrentNetworkState();
-    connectivitySubscription = Connectivity().onConnectivityChanged.listen(
-      (result) {
-        isNetworkDisabled.value = result.contains(ConnectivityResult.none);
-      },
-    );
+    connectivitySubscription = Connectivity().onConnectivityChanged.listen((
+      result,
+    ) {
+      isNetworkDisabled.value = result.contains(ConnectivityResult.none);
+    });
   }
 
   @override
@@ -77,24 +80,24 @@ class _CustomScaffoldState extends ConsumerState<CustomScaffold>
     return Stack(
       children: [
         ValueListenableBuilder(
-            valueListenable: isNetworkDisabled,
-            builder: (_, bool networkDisabled, __) => Visibility(
-                  visible: !networkDisabled,
-                  child: KeyboardDismisser(
-                    child: Scaffold(
-                      resizeToAvoidBottomInset: false,
-                      appBar: widget.appBar,
-                      backgroundColor:
-                          widget.backgroundColor ?? AppStyle.bgGrey,
-                      body: widget.body,
-                      drawer: widget.drawer,
-                      floatingActionButton: widget.floatingActionButton,
-                      floatingActionButtonLocation:
-                          widget.floatingActionButtonLocation,
-                      bottomNavigationBar: widget.bottomNavigationBar,
-                    ),
-                  ),
-                )),
+          valueListenable: isNetworkDisabled,
+          builder: (_, bool networkDisabled, __) => Visibility(
+            visible: !networkDisabled,
+            child: KeyboardDismisser(
+              child: Scaffold(
+                resizeToAvoidBottomInset: false,
+                appBar: widget.appBar,
+                backgroundColor: widget.backgroundColor ?? AppStyle.bgGrey,
+                body: widget.body,
+                drawer: widget.drawer,
+                floatingActionButton: widget.floatingActionButton,
+                floatingActionButtonLocation:
+                    widget.floatingActionButtonLocation,
+                bottomNavigationBar: widget.bottomNavigationBar,
+              ),
+            ),
+          ),
+        ),
         ValueListenableBuilder(
           valueListenable: isNetworkDisabled,
           builder: (_, bool networkDisabled, __) => Visibility(
@@ -106,4 +109,3 @@ class _CustomScaffoldState extends ConsumerState<CustomScaffold>
     );
   }
 }
-

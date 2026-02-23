@@ -441,7 +441,6 @@ class TrKeys {
   static const String etaTime2 = '30_-_60_Min';
   static const String eTA2 = 'ETA';
 
-
   /// Added by Sinyage
   static const String introslide1 = 'intro_slide1';
   static const String introslide2 = 'intro_slide2';
@@ -478,7 +477,6 @@ class TrKeys {
   static const String mostRecentOrder = 'mostRecentOrder';
   static const String sale = 'sale';
 
-
   ////Review Text
   static const String veryBad = 'veryBad';
   static const String bad = 'bad';
@@ -500,19 +498,20 @@ class TrKeys {
   static const String thankYouPurchase = 'thank.you.purchase';
   static const String yourOrderShipping = 'your.order.shipping';
 
-  static String enterEmailOrPhone ='enterEmailOrPhone';
+  static String enterEmailOrPhone = 'enterEmailOrPhone';
 
   static String emailOrPhone = 'emailOrPhone';
 
   static String enterValidEmailOrPhone = 'enterValidEmailOrPhone';
 
-  static String pleaseSelectUser ='pleaseSelectUser';
+  static String pleaseSelectUser = 'pleaseSelectUser';
 
   static String shopping = 'you.are.shopping.at';
 
   static String weAreDelivering = 'Note:.We.will.be.delivering.to.this.address';
 
-  static const String usingDefaultLocation = 'using_default_location,_set_address';
+  static const String usingDefaultLocation =
+      'using_default_location,_set_address';
 
   static String selectCard = 'select.card';
 
@@ -526,25 +525,26 @@ class TrKeys {
 
   static String completeCardDetails = 'complete.card.details';
 
-  static String payWithSavedCard ='pay.with.saved.card';
+  static String payWithSavedCard = 'pay.with.saved.card';
 
-  static String payWithNewCard ='pay.with.new.card';
+  static String payWithNewCard = 'pay.with.new.card';
 
-  static String useYourSavedCards ='use.you.saved.cards';
+  static String useYourSavedCards = 'use.you.saved.cards';
 
-  static String payNow ='pay.now';
+  static String payNow = 'pay.now';
 
   static String payment = 'payment';
 
-  static String expires ='expires';
+  static String expires = 'expires';
 
-  static String stay ='stay';
+  static String stay = 'stay';
 
-  static String successfullyDeleted ='successfully.Deleted';
+  static String successfullyDeleted = 'successfully.Deleted';
 
-  static String delete ='delete';
+  static String delete = 'delete';
 
-  static String addNewCardDescription ='pay.with.card.to.save.it.for.future.orders';
+  static String addNewCardDescription =
+      'pay.with.card.to.save.it.for.future.orders';
 
   static String cardWillBeSaved = 'your.card.will.be.saved.for.future.payments';
 
@@ -554,10 +554,9 @@ class TrKeys {
 
   static String useThisCard = 'use.This.Card';
 
-  static String cards ='Saved.Cards';
+  static String cards = 'Saved.Cards';
 
-  static String addNewCard ='add.New.Card';
-
+  static String addNewCard = 'add.New.Card';
 
   ///wallet sends
   static const String topUpWallet = 'top_up_wallet';
@@ -613,9 +612,9 @@ class TrKeys {
   static const String withdraw = 'withdraw';
 
   static const String daysInAppThisYear = 'daysInAppThisYear';
-  static String goodMorning ='good.Morning';
-  static String goodAfternoon ='goodAfternoon';
-  static String goodEvening ='good.Evening';
+  static String goodMorning = 'good.Morning';
+  static String goodAfternoon = 'goodAfternoon';
+  static String goodEvening = 'good.Evening';
 
   static const String period = 'period';
   static const String pause = 'pause';
@@ -624,4 +623,3 @@ class TrKeys {
   static const String ended = 'ended';
   static const String insufficientBalance = 'insufficient_balance';
 }
-

@@ -13,13 +13,14 @@ class GroupItem extends StatelessWidget {
   final bool isDeleteButton;
   final VoidCallback onDelete;
 
-  const GroupItem(
-      {super.key,
-      required this.name,
-      required this.price,
-      required this.isChoosing,
-      required this.onDelete,
-      this.isDeleteButton = true});
+  const GroupItem({
+    super.key,
+    required this.name,
+    required this.price,
+    required this.isChoosing,
+    required this.onDelete,
+    this.isDeleteButton = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +29,7 @@ class GroupItem extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 10.w),
       decoration: BoxDecoration(
         color: AppStyle.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(10.h),
-        ),
+        borderRadius: BorderRadius.all(Radius.circular(10.h)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -39,12 +38,15 @@ class GroupItem extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                    width: 24.w,
-                    height: 24.h,
-                    decoration: const BoxDecoration(
-                        color: AppStyle.bgGrey, shape: BoxShape.circle),
-                    padding: EdgeInsets.all(6.r),
-                    child: SvgPicture.asset("assets/svgs/avatar.svg")),
+                  width: 24.w,
+                  height: 24.h,
+                  decoration: const BoxDecoration(
+                    color: AppStyle.bgGrey,
+                    shape: BoxShape.circle,
+                  ),
+                  padding: EdgeInsets.all(6.r),
+                  child: SvgPicture.asset("assets/svgs/avatar.svg"),
+                ),
                 10.horizontalSpace,
                 Expanded(
                   child: Text(
@@ -62,17 +64,11 @@ class GroupItem extends StatelessWidget {
             children: [
               Text(
                 "${isChoosing ? AppHelpers.getTranslation(TrKeys.choosing) : AppHelpers.getTranslation(TrKeys.done)} — ",
-                style: AppStyle.interNormal(
-                  size: 14,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interNormal(size: 14, color: AppStyle.black),
               ),
               Text(
                 AppHelpers.numberFormat(number: price),
-                style: AppStyle.interSemi(
-                  size: 14,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interSemi(size: 14, color: AppStyle.black),
               ),
               isDeleteButton
                   ? GestureDetector(
@@ -97,4 +93,3 @@ class GroupItem extends StatelessWidget {
     );
   }
 }
-

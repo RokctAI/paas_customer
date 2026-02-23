@@ -46,17 +46,26 @@ class OrderNotifier extends StateNotifier<OrderState> {
   final CartRepositoryFacade _cartRepository;
   final DrawRepositoryFacade _drawRouting;
 
-  OrderNotifier(this._orderRepository, this._shopsRepository,
-      this.paymentsRepository, this._cartRepository, this._drawRouting)
-      : super(const OrderState());
+  OrderNotifier(
+    this._orderRepository,
+    this._shopsRepository,
+    this.paymentsRepository,
+    this._cartRepository,
+    this._drawRouting,
+  ) : super(const OrderState());
 
-  void setAddressInfo(
-      {String? office, String? house, String? floor, String? note}) {
+  void setAddressInfo({
+    String? office,
+    String? house,
+    String? floor,
+    String? note,
+  }) {
     state = state.copyWith(
-        office: office ?? state.office,
-        house: house ?? state.house,
-        floor: floor ?? state.floor,
-        note: note ?? state.note);
+      office: office ?? state.office,
+      house: house ?? state.house,
+      floor: floor ?? state.floor,
+      note: note ?? state.note,
+    );
   }
 
   void setUser({String? username, String? phone}) {
@@ -72,32 +81,31 @@ class OrderNotifier extends StateNotifier<OrderState> {
       if (state.orderData?.deliveryMan?.id == null) {
         return;
       }
-      final response = await _orderRepository
-          .getDriverLocation(state.orderData?.deliveryMan?.id ?? "");
+      final response = await _orderRepository.getDriverLocation(
+        state.orderData?.deliveryMan?.id ?? "",
+      );
       response.when(
         success: (data) async {
           final ImageCropperForMarker image = ImageCropperForMarker();
           Map<MarkerId, Marker> list = Map.from(state.markers);
           list.addAll({
             const MarkerId("Driver"): Marker(
-                markerId: const MarkerId("Driver"),
-                position: LatLng(
-                  data.latitude ?? AppConstants.demoLatitude,
-                  data.longitude ?? AppConstants.demoLongitude,
-                ),
-                icon: await image.resizeAndCircle(
-                    state.orderData?.deliveryMan?.img ?? "", 120)),
+              markerId: const MarkerId("Driver"),
+              position: LatLng(
+                data.latitude ?? AppConstants.demoLatitude,
+                data.longitude ?? AppConstants.demoLongitude,
+              ),
+              icon: await image.resizeAndCircle(
+                state.orderData?.deliveryMan?.img ?? "",
+                120,
+              ),
+            ),
           });
-          state = state.copyWith(
-            markers: list,
-          );
+          state = state.copyWith(markers: list);
         },
         failure: (failure, status) {
           if (context.mounted) {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           }
         },
       );
@@ -122,7 +130,10 @@ class OrderNotifier extends StateNotifier<OrderState> {
 
   void resetState() {
     state = state.copyWith(
-        orderData: null, selectDate: null, isButtonLoading: false);
+      orderData: null,
+      selectDate: null,
+      isButtonLoading: false,
+    );
   }
 
   void changeTabIndex(int index) {
@@ -154,21 +165,23 @@ class OrderNotifier extends StateNotifier<OrderState> {
     List<ShopClosedDate> closedDays = state.shopData?.shopClosedDate ?? [];
     DateTime now = DateTime.now().add(Duration(days: i + 1));
     if (closedDays.any(
-        (e) => e.day?.withoutTime.compareTo(now.withoutTime) == 0)) {
+      (e) => e.day?.withoutTime.compareTo(now.withoutTime) == 0,
+    )) {
       return [];
     }
     List<String> times = [];
-    final yesterday = DateFormat("EEEE")
-        .format(now.subtract(const Duration(days: 1)))
-        .toLowerCase();
+    final yesterday = DateFormat(
+      "EEEE",
+    ).format(now.subtract(const Duration(days: 1))).toLowerCase();
     final today = DateFormat("EEEE").format(now).toLowerCase();
     TimeOfDay deliveryTime = TimeOfDay(
-        hour: state.shopData?.deliveryTime?.type == 'hour'
-            ? (int.tryParse(state.shopData?.deliveryTime?.to ?? '') ?? 0)
-            : 0,
-        minute: state.shopData?.deliveryTime?.type == 'minute'
-            ? (int.tryParse(state.shopData?.deliveryTime?.to ?? '') ?? 0)
-            : 0);
+      hour: state.shopData?.deliveryTime?.type == 'hour'
+          ? (int.tryParse(state.shopData?.deliveryTime?.to ?? '') ?? 0)
+          : 0,
+      minute: state.shopData?.deliveryTime?.type == 'minute'
+          ? (int.tryParse(state.shopData?.deliveryTime?.to ?? '') ?? 0)
+          : 0,
+    );
     debugPrint("today $today");
     debugPrint("yesterday $yesterday");
     debugPrint("deliveryTime $deliveryTime");
@@ -177,13 +190,16 @@ class OrderNotifier extends StateNotifier<OrderState> {
       if (element.day?.toLowerCase() == yesterday) {
         if (AppHelpers.checkYesterday(element.from, element.to) &&
             yesterday != 'sunday') {
-          TimeOfDay time =
-              i == -1 ? TimeOfDay.now() : const TimeOfDay(hour: 0, minute: 0);
+          TimeOfDay time = i == -1
+              ? TimeOfDay.now()
+              : const TimeOfDay(hour: 0, minute: 0);
           TimeOfDay time2 = time.plusMinutes(
-              minute: deliveryTime.hour * 60 + deliveryTime.minute);
+            minute: deliveryTime.hour * 60 + deliveryTime.minute,
+          );
           for (int i = time.hour; i < element.to.toTimeOfDay.hour; i++) {
             times.add(
-                "${time.hour}:${time.minute} - ${time2.hour}:${time2.minute}");
+              "${time.hour}:${time.minute} - ${time2.hour}:${time2.minute}",
+            );
             time = time.plusMinutes(minute: AppConstants.scheduleInterval);
             time2 = time2.plusMinutes(minute: AppConstants.scheduleInterval);
           }
@@ -192,13 +208,16 @@ class OrderNotifier extends StateNotifier<OrderState> {
       if (element.day?.toLowerCase() == today) {
         if (today == "monday") {
           if (AppHelpers.checkYesterday(element.from, element.to)) {
-            TimeOfDay time =
-                i == -1 ? TimeOfDay.now() : const TimeOfDay(hour: 0, minute: 0);
+            TimeOfDay time = i == -1
+                ? TimeOfDay.now()
+                : const TimeOfDay(hour: 0, minute: 0);
             TimeOfDay time2 = time.plusMinutes(
-                minute: deliveryTime.hour * 60 + deliveryTime.minute);
+              minute: deliveryTime.hour * 60 + deliveryTime.minute,
+            );
             for (num i = time.hour; i < element.to.toTimeOfDay.hour; i) {
               times.add(
-                  "${time.hour}:${time.minute} - ${time2.hour}:${time2.minute}");
+                "${time.hour}:${time.minute} - ${time2.hour}:${time2.minute}",
+              );
               time = time.plusMinutes(minute: AppConstants.scheduleInterval);
               time2 = time2.plusMinutes(minute: AppConstants.scheduleInterval);
               i += AppConstants.scheduleInterval / 60;
@@ -208,15 +227,17 @@ class OrderNotifier extends StateNotifier<OrderState> {
         if (AppHelpers.checkYesterday(element.from, element.to)) {
           TimeOfDay time = i == -1
               ? TimeOfDay.now().hour > element.from.toTimeOfDay.hour &&
-                      TimeOfDay.now().minute > element.from.toTimeOfDay.minute
-                  ? TimeOfDay.now()
-                  : element.from.toTimeOfDay
+                        TimeOfDay.now().minute > element.from.toTimeOfDay.minute
+                    ? TimeOfDay.now()
+                    : element.from.toTimeOfDay
               : element.from.toTimeOfDay;
           TimeOfDay time2 = time.plusMinutes(
-              minute: deliveryTime.hour * 60 + deliveryTime.minute);
+            minute: deliveryTime.hour * 60 + deliveryTime.minute,
+          );
           for (num i = time.hour; i < 24; i) {
             times.add(
-                "${time.hour}:${time.minute} - ${time2.hour}:${time2.minute}");
+              "${time.hour}:${time.minute} - ${time2.hour}:${time2.minute}",
+            );
             time = time.plusMinutes(minute: AppConstants.scheduleInterval);
             time2 = time2.plusMinutes(minute: AppConstants.scheduleInterval);
             i += AppConstants.scheduleInterval / 60;
@@ -224,18 +245,21 @@ class OrderNotifier extends StateNotifier<OrderState> {
         } else {
           TimeOfDay time = i == -1
               ? TimeOfDay.now().hour > element.from.toTimeOfDay.hour &&
-                      TimeOfDay.now().minute > element.from.toTimeOfDay.minute
-                  ? TimeOfDay.now()
-                  : element.from.toTimeOfDay
+                        TimeOfDay.now().minute > element.from.toTimeOfDay.minute
+                    ? TimeOfDay.now()
+                    : element.from.toTimeOfDay
               : element.from.toTimeOfDay;
           TimeOfDay time2 = time.plusMinutes(
-              minute: deliveryTime.hour * 60 + deliveryTime.minute);
+            minute: deliveryTime.hour * 60 + deliveryTime.minute,
+          );
           for (num i = time.hour; i < element.to.toTimeOfDay.hour; i) {
             times.add(
-                "${time.hour}:${time.minute} - ${time2.hour}:${time2.minute}");
+              "${time.hour}:${time.minute} - ${time2.hour}:${time2.minute}",
+            );
             time = time.plusMinutes(minute: AppConstants.scheduleInterval);
             time2 = time2.plusMinutes(minute: AppConstants.scheduleInterval);
-            if (time2.hour == element.to.toTimeOfDay.hour && time2.minute >= element.to.toTimeOfDay.minute) {
+            if (time2.hour == element.to.toTimeOfDay.hour &&
+                time2.minute >= element.to.toTimeOfDay.minute) {
               break;
             }
             i += AppConstants.scheduleInterval / 60;
@@ -267,22 +291,21 @@ class OrderNotifier extends StateNotifier<OrderState> {
           checkWorkingDay();
           final ImageCropperForMarker image = ImageCropperForMarker();
           Set<Marker> list = {};
-          list.add(Marker(
+          list.add(
+            Marker(
               markerId: const MarkerId("Shop"),
               position: LatLng(
                 data.data?.location?.latitude ?? AppConstants.demoLatitude,
                 data.data?.location?.longitude ?? AppConstants.demoLongitude,
               ),
-              icon:
-                  await image.resizeAndCircle(data.data?.logoImg ?? "", 120)));
+              icon: await image.resizeAndCircle(data.data?.logoImg ?? "", 120),
+            ),
+          );
           state = state.copyWith(shopMarkers: list);
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -309,13 +332,14 @@ class OrderNotifier extends StateNotifier<OrderState> {
     }
   }
 
-  Future<void> getCalculate(
-      {required BuildContext context,
-      required String cartId,
-      required double long,
-      required double lat,
-      required DeliveryTypeEnum type,
-      bool isLoading = true}) async {
+  Future<void> getCalculate({
+    required BuildContext context,
+    required String cartId,
+    required double long,
+    required double lat,
+    required DeliveryTypeEnum type,
+    bool isLoading = true,
+  }) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       if (isLoading) {
@@ -324,23 +348,18 @@ class OrderNotifier extends StateNotifier<OrderState> {
         state = state.copyWith(isButtonLoading: true);
       }
       final response = await _orderRepository.getCalculate(
-          cartId: cartId,
-          lat: lat,
-          long: long,
-          type: type,
-          coupon: state.promoCode);
+        cartId: cartId,
+        lat: lat,
+        long: long,
+        type: type,
+        coupon: state.promoCode,
+      );
       response.when(
         success: (data) async {
           if (isLoading) {
-            state = state.copyWith(
-              isLoading: false,
-              calculateData: data,
-            );
+            state = state.copyWith(isLoading: false, calculateData: data);
           } else {
-            state = state.copyWith(
-              isButtonLoading: false,
-              calculateData: data,
-            );
+            state = state.copyWith(isButtonLoading: false, calculateData: data);
           }
         },
         failure: (failure, status) {
@@ -349,10 +368,7 @@ class OrderNotifier extends StateNotifier<OrderState> {
           } else {
             state = state.copyWith(isButtonLoading: false);
           }
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
           if (status == 401) {
             context.router.popUntilRoot();
             context.replaceRoute(const LoginRoute());
@@ -393,28 +409,31 @@ class OrderNotifier extends StateNotifier<OrderState> {
     final num wallet = LocalStorage.getWalletData()?.price ?? 0;
     if (payment.tag == "wallet" && wallet < (price ?? 0)) {
       AppHelpers.showCheckTopSnackBarInfo(
-          context, AppHelpers.getTranslation(TrKeys.notEnoughMoney));
+        context,
+        AppHelpers.getTranslation(TrKeys.notEnoughMoney),
+      );
       state = state.copyWith(isButtonLoading: false);
       return;
     }
     if (payment.tag?.toLowerCase() != "cash") {
       final res = await _orderRepository.tipProcess(
-          orderId: state.orderData?.id ?? "",
-          tip: price?.toDouble() ?? 0.0);
-      res.map(success: (key) {
-        onSuccess?.call();
-        if (payment.tag?.toLowerCase() != 'wallet') {
-          onWebview?.call(key.data);
-        }
-      }, failure: (e) {
-        state = state.copyWith(isButtonLoading: false);
-        if (context.mounted) {
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            e.error,
-          );
-        }
-      });
+        orderId: state.orderData?.id ?? "",
+        tip: price?.toDouble() ?? 0.0,
+      );
+      res.map(
+        success: (key) {
+          onSuccess?.call();
+          if (payment.tag?.toLowerCase() != 'wallet') {
+            onWebview?.call(key.data);
+          }
+        },
+        failure: (e) {
+          state = state.copyWith(isButtonLoading: false);
+          if (context.mounted) {
+            AppHelpers.showCheckTopSnackBar(context, e.error);
+          }
+        },
+      );
     }
   }
 
@@ -423,53 +442,60 @@ class OrderNotifier extends StateNotifier<OrderState> {
     required OrderBodyData data,
     required PaymentData payment,
     VoidCallback? onSuccess,
-    Function(String,bool)? onWebview,
+    Function(String, bool)? onWebview,
   }) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isButtonLoading: true);
       if (data.deliveryType == DeliveryTypeEnum.delivery) {
         final res = await _shopsRepository.checkDriverZone(
-            LatLng(data.location.latitude ?? 0, data.location.longitude ?? 0),
-            shopId: data.shopId);
-        res.when(success: (s) async {
-          final num wallet = LocalStorage.getWalletData()?.price ?? 0;
-          if (payment.tag == "wallet" &&
-              wallet < (state.calculateData?.totalPrice ?? 0)) {
-            AppHelpers.showCheckTopSnackBarInfo(
-                context, AppHelpers.getTranslation(TrKeys.notEnoughMoney));
-            state = state.copyWith(isButtonLoading: false);
-            return;
-          }
-          if (payment.tag != "cash" && payment.tag != "wallet") {
-            final res = await _orderRepository.process(
-              data,
-              payment.tag ?? '',
-              context: context,  // Pass context for preloading if needed
-            );
-            res.map(success: (key) {
-              onWebview?.call(key.data,payment.tag == 'pay-fast');
-            }, failure: (e) {
+          LatLng(data.location.latitude ?? 0, data.location.longitude ?? 0),
+          shopId: data.shopId,
+        );
+        res.when(
+          success: (s) async {
+            final num wallet = LocalStorage.getWalletData()?.price ?? 0;
+            if (payment.tag == "wallet" &&
+                wallet < (state.calculateData?.totalPrice ?? 0)) {
+              AppHelpers.showCheckTopSnackBarInfo(
+                context,
+                AppHelpers.getTranslation(TrKeys.notEnoughMoney),
+              );
               state = state.copyWith(isButtonLoading: false);
-              if (context.mounted) {
-                AppHelpers.showCheckTopSnackBar(
-                  context,
-                  e.error,
+              return;
+            }
+            if (payment.tag != "cash" && payment.tag != "wallet") {
+              final res = await _orderRepository.process(
+                data,
+                payment.tag ?? '',
+                context: context, // Pass context for preloading if needed
+              );
+              res.map(
+                success: (key) {
+                  onWebview?.call(key.data, payment.tag == 'pay-fast');
+                },
+                failure: (e) {
+                  state = state.copyWith(isButtonLoading: false);
+                  if (context.mounted) {
+                    AppHelpers.showCheckTopSnackBar(context, e.error);
+                  }
+                },
+              );
+              return;
+            }
+            final response = await _orderRepository.createOrder(data);
+            response.when(
+              success: (data) async {
+                final ImageCropperForMarker image = ImageCropperForMarker();
+
+                state = state.copyWith(
+                  orderData: data,
+                  isButtonLoading: false,
+                  isMapLoading: true,
                 );
-              }
-            });
-            return;
-          }
-          final response = await _orderRepository.createOrder(data);
-          response.when(
-            success: (data) async {
-              final ImageCropperForMarker image = ImageCropperForMarker();
 
-              state = state.copyWith(
-                  orderData: data, isButtonLoading: false, isMapLoading: true);
-
-              Map<MarkerId, Marker> list = {
-                const MarkerId("Shop"): Marker(
+                Map<MarkerId, Marker> list = {
+                  const MarkerId("Shop"): Marker(
                     markerId: const MarkerId("Shop"),
                     position: LatLng(
                       data.shop?.location?.latitude ??
@@ -478,45 +504,52 @@ class OrderNotifier extends StateNotifier<OrderState> {
                           AppConstants.demoLongitude,
                     ),
                     icon: await image.resizeAndCircle(
-                        data.shop?.logoImg ?? "", 120)),
-                const MarkerId("User"): Marker(
+                      data.shop?.logoImg ?? "",
+                      120,
+                    ),
+                  ),
+                  const MarkerId("User"): Marker(
                     markerId: const MarkerId("User"),
                     position: LatLng(
                       data.location?.latitude ?? AppConstants.demoLatitude,
                       data.location?.longitude ?? AppConstants.demoLongitude,
                     ),
-                    icon:
-                        await image.resizeAndCircle(data.user?.img ?? "", 120)),
-              };
-              state = state.copyWith(markers: list, isMapLoading: false);
-              if (context.mounted) {
-                getRoutingAll(
+                    icon: await image.resizeAndCircle(
+                      data.user?.img ?? "",
+                      120,
+                    ),
+                  ),
+                };
+                state = state.copyWith(markers: list, isMapLoading: false);
+                if (context.mounted) {
+                  getRoutingAll(
                     context: context,
-                    end: LatLng(data.location?.latitude ?? 0,
-                        data.location?.longitude ?? 0),
-                    start: LatLng(data.shop?.location?.latitude ?? 0,
-                        data.shop?.location?.longitude ?? 0));
-              }
-            },
-            failure: (failure, status) {
-              state = state.copyWith(isButtonLoading: false);
-              if (context.mounted) {
-                AppHelpers.showCheckTopSnackBar(
-                  context,
-                  failure,
-                );
-              }
-            },
-          );
-        }, failure: (failure, e) {
-          state = state.copyWith(isButtonLoading: false);
-          if (context.mounted) {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
+                    end: LatLng(
+                      data.location?.latitude ?? 0,
+                      data.location?.longitude ?? 0,
+                    ),
+                    start: LatLng(
+                      data.shop?.location?.latitude ?? 0,
+                      data.shop?.location?.longitude ?? 0,
+                    ),
+                  );
+                }
+              },
+              failure: (failure, status) {
+                state = state.copyWith(isButtonLoading: false);
+                if (context.mounted) {
+                  AppHelpers.showCheckTopSnackBar(context, failure);
+                }
+              },
             );
-          }
-        });
+          },
+          failure: (failure, e) {
+            state = state.copyWith(isButtonLoading: false);
+            if (context.mounted) {
+              AppHelpers.showCheckTopSnackBar(context, failure);
+            }
+          },
+        );
         return;
       }
 
@@ -525,22 +558,29 @@ class OrderNotifier extends StateNotifier<OrderState> {
           wallet < (state.calculateData?.totalPrice ?? 0)) {
         if (context.mounted) {
           AppHelpers.showCheckTopSnackBarInfo(
-              context, AppHelpers.getTranslation(TrKeys.notEnoughMoney));
+            context,
+            AppHelpers.getTranslation(TrKeys.notEnoughMoney),
+          );
         }
         state = state.copyWith(isButtonLoading: false);
         return;
       }
       if (payment.tag != "cash" && payment.tag != "wallet") {
-        final res =
-            await _orderRepository.process(data, payment.tag ?? "stripe");
-        res.map(success: (key) {
-          onWebview?.call(key.data, payment.tag == 'pay-fast');
-        }, failure: (e) {
-          state = state.copyWith(isButtonLoading: false);
-          if (context.mounted) {
-            AppHelpers.showCheckTopSnackBar(context, e.error);
-          }
-        });
+        final res = await _orderRepository.process(
+          data,
+          payment.tag ?? "stripe",
+        );
+        res.map(
+          success: (key) {
+            onWebview?.call(key.data, payment.tag == 'pay-fast');
+          },
+          failure: (e) {
+            state = state.copyWith(isButtonLoading: false);
+            if (context.mounted) {
+              AppHelpers.showCheckTopSnackBar(context, e.error);
+            }
+          },
+        );
         return;
       }
 
@@ -553,42 +593,48 @@ class OrderNotifier extends StateNotifier<OrderState> {
           final ImageCropperForMarker image = ImageCropperForMarker();
 
           state = state.copyWith(
-              orderData: data, isButtonLoading: false, isMapLoading: true);
+            orderData: data,
+            isButtonLoading: false,
+            isMapLoading: true,
+          );
 
           Map<MarkerId, Marker> list = {
             const MarkerId("Shop"): Marker(
-                markerId: const MarkerId("Shop"),
-                position: LatLng(
-                  data.shop?.location?.latitude ?? AppConstants.demoLatitude,
-                  data.shop?.location?.longitude ?? AppConstants.demoLongitude,
-                ),
-                icon:
-                    await image.resizeAndCircle(data.shop?.logoImg ?? "", 120)),
+              markerId: const MarkerId("Shop"),
+              position: LatLng(
+                data.shop?.location?.latitude ?? AppConstants.demoLatitude,
+                data.shop?.location?.longitude ?? AppConstants.demoLongitude,
+              ),
+              icon: await image.resizeAndCircle(data.shop?.logoImg ?? "", 120),
+            ),
             const MarkerId("User"): Marker(
-                markerId: const MarkerId("User"),
-                position: LatLng(
-                  data.location?.latitude ?? AppConstants.demoLatitude,
-                  data.location?.longitude ?? AppConstants.demoLongitude,
-                ),
-                icon: await image.resizeAndCircle(data.user?.img ?? "", 120)),
+              markerId: const MarkerId("User"),
+              position: LatLng(
+                data.location?.latitude ?? AppConstants.demoLatitude,
+                data.location?.longitude ?? AppConstants.demoLongitude,
+              ),
+              icon: await image.resizeAndCircle(data.user?.img ?? "", 120),
+            ),
           };
           state = state.copyWith(markers: list, isMapLoading: false);
           if (context.mounted) {
             getRoutingAll(
-                context: context,
-                end: LatLng(data.location?.latitude ?? 0,
-                    data.location?.longitude ?? 0),
-                start: LatLng(data.shop?.location?.latitude ?? 0,
-                    data.shop?.location?.longitude ?? 0));
+              context: context,
+              end: LatLng(
+                data.location?.latitude ?? 0,
+                data.location?.longitude ?? 0,
+              ),
+              start: LatLng(
+                data.shop?.location?.latitude ?? 0,
+                data.shop?.location?.longitude ?? 0,
+              ),
+            );
           }
         },
         failure: (failure, status) {
           state = state.copyWith(isButtonLoading: false);
           if (context.mounted) {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           }
         },
       );
@@ -615,19 +661,24 @@ class OrderNotifier extends StateNotifier<OrderState> {
           for (Addons addon in element.addons ?? []) {
             list.add(
               CartRequest(
-                  stockId: addon.stocks?.id,
-                  quantity: addon.quantity,
-                  parentId: element.stock?.id ?? ""),
+                stockId: addon.stocks?.id,
+                quantity: addon.quantity,
+                parentId: element.stock?.id ?? "",
+              ),
             );
           }
-          list.add(CartRequest(
-            stockId: element.stock?.id ?? "",
-            quantity: element.quantity ?? 0,
-          ));
+          list.add(
+            CartRequest(
+              stockId: element.stock?.id ?? "",
+              quantity: element.quantity ?? 0,
+            ),
+          );
         });
         final response = await _cartRepository.insertCart(
-          cart:
-              CartRequest(shopId: state.orderData?.shop?.id ?? "", carts: list),
+          cart: CartRequest(
+            shopId: state.orderData?.shop?.id ?? "",
+            carts: list,
+          ),
         );
         response.when(
           success: (data) {
@@ -636,10 +687,7 @@ class OrderNotifier extends StateNotifier<OrderState> {
           },
           failure: (failure, status) {
             state = state.copyWith(isAddLoading: false);
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           },
         );
       } else {
@@ -653,7 +701,10 @@ class OrderNotifier extends StateNotifier<OrderState> {
   }
 
   Future<void> showOrder(
-      BuildContext context, String orderId, bool isRefresh) async {
+    BuildContext context,
+    String orderId,
+    bool isRefresh,
+  ) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       if (!isRefresh) {
@@ -664,60 +715,68 @@ class OrderNotifier extends StateNotifier<OrderState> {
         success: (data) async {
           final ImageCropperForMarker image = ImageCropperForMarker();
           if (!isRefresh) {
-            state = state.copyWith(
-              orderData: data,
-              isLoading: false,
-            );
+            state = state.copyWith(orderData: data, isLoading: false);
             Map<MarkerId, Marker> list = Map.from(state.markers);
             list.addAll({
               const MarkerId("Shop"): Marker(
-                  markerId: const MarkerId("Shop"),
-                  position: LatLng(
-                    data.shop?.location?.latitude ?? AppConstants.demoLatitude,
-                    data.shop?.location?.longitude ??
-                        AppConstants.demoLongitude,
-                  ),
-                  icon: await image.resizeAndCircle(
-                      data.shop?.logoImg ?? "", 120)),
+                markerId: const MarkerId("Shop"),
+                position: LatLng(
+                  data.shop?.location?.latitude ?? AppConstants.demoLatitude,
+                  data.shop?.location?.longitude ?? AppConstants.demoLongitude,
+                ),
+                icon: await image.resizeAndCircle(
+                  data.shop?.logoImg ?? "",
+                  120,
+                ),
+              ),
               const MarkerId("User"): Marker(
-                  markerId: const MarkerId("User"),
-                  position: LatLng(
-                    data.location?.latitude ?? AppConstants.demoLatitude,
-                    data.location?.longitude ?? AppConstants.demoLongitude,
-                  ),
-                  icon: await image.resizeAndCircle(data.user?.img ?? "", 120)),
+                markerId: const MarkerId("User"),
+                position: LatLng(
+                  data.location?.latitude ?? AppConstants.demoLatitude,
+                  data.location?.longitude ?? AppConstants.demoLongitude,
+                ),
+                icon: await image.resizeAndCircle(data.user?.img ?? "", 120),
+              ),
             });
 
             state = state.copyWith(markers: list, isMapLoading: false);
             if (context.mounted) {
               fetchDriver(context);
               getRoutingAll(
-                  context: context,
-                  end: LatLng(data.location?.latitude ?? 0,
-                      data.location?.longitude ?? 0),
-                  start: LatLng(data.shop?.location?.latitude ?? 0,
-                      data.shop?.location?.longitude ?? 0));
+                context: context,
+                end: LatLng(
+                  data.location?.latitude ?? 0,
+                  data.location?.longitude ?? 0,
+                ),
+                start: LatLng(
+                  data.shop?.location?.latitude ?? 0,
+                  data.shop?.location?.longitude ?? 0,
+                ),
+              );
             }
           } else {
             state = state.copyWith(orderData: data);
             Map<MarkerId, Marker> list = Map.from(state.markers);
             list.addAll({
               const MarkerId("Shop"): Marker(
-                  markerId: const MarkerId("Shop"),
-                  position: LatLng(
-                    data.shop?.location?.latitude ?? AppConstants.demoLatitude,
-                    data.shop?.location?.longitude ??
-                        AppConstants.demoLongitude,
-                  ),
-                  icon: await image.resizeAndCircle(
-                      data.shop?.logoImg ?? "", 120)),
+                markerId: const MarkerId("Shop"),
+                position: LatLng(
+                  data.shop?.location?.latitude ?? AppConstants.demoLatitude,
+                  data.shop?.location?.longitude ?? AppConstants.demoLongitude,
+                ),
+                icon: await image.resizeAndCircle(
+                  data.shop?.logoImg ?? "",
+                  120,
+                ),
+              ),
               const MarkerId("User"): Marker(
-                  markerId: const MarkerId("User"),
-                  position: LatLng(
-                    data.location?.latitude ?? AppConstants.demoLatitude,
-                    data.location?.longitude ?? AppConstants.demoLongitude,
-                  ),
-                  icon: await image.resizeAndCircle(data.user?.img ?? "", 120)),
+                markerId: const MarkerId("User"),
+                position: LatLng(
+                  data.location?.latitude ?? AppConstants.demoLatitude,
+                  data.location?.longitude ?? AppConstants.demoLongitude,
+                ),
+                icon: await image.resizeAndCircle(data.user?.img ?? "", 120),
+              ),
             });
             state = state.copyWith(markers: list);
           }
@@ -727,10 +786,7 @@ class OrderNotifier extends StateNotifier<OrderState> {
             state = state.copyWith(isLoading: false);
           }
           if (context.mounted) {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           }
         },
       );
@@ -742,7 +798,10 @@ class OrderNotifier extends StateNotifier<OrderState> {
   }
 
   Future<void> cancelOrder(
-      BuildContext context, String orderId, VoidCallback onSuccess) async {
+    BuildContext context,
+    String orderId,
+    VoidCallback onSuccess,
+  ) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isButtonLoading: true);
@@ -771,22 +830,23 @@ class OrderNotifier extends StateNotifier<OrderState> {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isButtonLoading: true);
-      final response =
-          await _orderRepository.refundOrder(state.orderData?.id ?? "", title);
+      final response = await _orderRepository.refundOrder(
+        state.orderData?.id ?? "",
+        title,
+      );
       response.when(
         success: (data) async {
           state = state.copyWith(isButtonLoading: false);
           AppHelpers.showCheckTopSnackBarDone(
-              context, AppHelpers.getTranslation(TrKeys.successfully));
+            context,
+            AppHelpers.getTranslation(TrKeys.successfully),
+          );
           context.maybePop(context);
         },
         failure: (failure, status) {
           state = state.copyWith(isButtonLoading: false);
           if (context.mounted) {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           }
         },
       );
@@ -798,14 +858,18 @@ class OrderNotifier extends StateNotifier<OrderState> {
   }
 
   Future<void> addReview(
-      BuildContext context, String comment, double rating) async {
+    BuildContext context,
+    String comment,
+    double rating,
+  ) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isButtonLoading: true);
       final response = await _orderRepository.addReview(
-          (state.orderData?.id ?? "").toString(),
-          rating: rating,
-          comment: comment);
+        (state.orderData?.id ?? "").toString(),
+        rating: rating,
+        comment: comment,
+      );
       response.when(
         success: (data) async {
           state = state.copyWith(isButtonLoading: false);
@@ -814,10 +878,7 @@ class OrderNotifier extends StateNotifier<OrderState> {
         failure: (failure, status) {
           state = state.copyWith(isButtonLoading: false);
           if (context.mounted) {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           }
         },
       );
@@ -843,9 +904,7 @@ class OrderNotifier extends StateNotifier<OrderState> {
           for (int i = 0; i < ls.length; i++) {
             list.add(LatLng(ls[i][1], ls[i][0]));
           }
-          state = state.copyWith(
-            polylineCoordinates: list,
-          );
+          state = state.copyWith(polylineCoordinates: list);
         },
         failure: (failure, status) {
           state = state.copyWith(polylineCoordinates: []);

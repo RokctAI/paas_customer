@@ -17,7 +17,7 @@ class ProductRequest {
     final map = <String, dynamic>{};
     map["shop_id"] = shopId;
     map["lang"] = LocalStorage.getLanguage()?.locale ?? "en";
-    if (LocalStorage.getSelectedCurrency() != null){
+    if (LocalStorage.getSelectedCurrency() != null) {
       map["currency_id"] = LocalStorage.getSelectedCurrency()?.id;
     }
 
@@ -34,7 +34,7 @@ class ProductRequest {
   Map<String, dynamic> toJsonPopular() {
     final map = <String, dynamic>{};
     map["lang"] = LocalStorage.getLanguage()?.locale ?? "en";
-    if (LocalStorage.getSelectedCurrency() != null){
+    if (LocalStorage.getSelectedCurrency() != null) {
       map["currency_id"] = LocalStorage.getSelectedCurrency()?.id;
     }
 
@@ -51,7 +51,7 @@ class ProductRequest {
     final map = <String, dynamic>{};
     map["shop_id"] = shopId;
     map["lang"] = LocalStorage.getLanguage()?.locale ?? "en";
-    if (LocalStorage.getSelectedCurrency() != null){
+    if (LocalStorage.getSelectedCurrency() != null) {
       map["currency_id"] = LocalStorage.getSelectedCurrency()?.id;
     }
 
@@ -65,4 +65,3 @@ class ProductRequest {
     return map;
   }
 }
-

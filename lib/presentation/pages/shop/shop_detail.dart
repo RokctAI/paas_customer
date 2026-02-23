@@ -34,17 +34,18 @@ class _ShopDetailPageState extends ConsumerState<ShopDetailPage> {
       ref.read(shopProvider.notifier)
         ..getMarker()
         ..getRoutingAll(
-            context: context,
-            start: LatLng(
-              widget.shop.location?.latitude ?? AppConstants.demoLatitude,
-              widget.shop.location?.longitude ?? AppConstants.demoLongitude,
-            ),
-            end: LatLng(
-              LocalStorage.getAddressSelected()?.location?.latitude ??
-                  AppConstants.demoLatitude,
-              LocalStorage.getAddressSelected()?.location?.longitude ??
-                  AppConstants.demoLongitude,
-            ));
+          context: context,
+          start: LatLng(
+            widget.shop.location?.latitude ?? AppConstants.demoLatitude,
+            widget.shop.location?.longitude ?? AppConstants.demoLongitude,
+          ),
+          end: LatLng(
+            LocalStorage.getAddressSelected()?.location?.latitude ??
+                AppConstants.demoLatitude,
+            LocalStorage.getAddressSelected()?.location?.longitude ??
+                AppConstants.demoLongitude,
+          ),
+        );
     });
     super.initState();
   }
@@ -61,15 +62,16 @@ class _ShopDetailPageState extends ConsumerState<ShopDetailPage> {
           child: Column(
             children: [
               OrderMap(
-                  markers: ref.watch(shopProvider).shopMarkers,
-                  latLng: LatLng(
-                    widget.shop.location?.latitude ?? AppConstants.demoLatitude,
-                    widget.shop.location?.longitude ??
-                        AppConstants.demoLongitude,
-                  ),
-                  polylineCoordinates:
-                      ref.watch(shopProvider).polylineCoordinates,
-                  isLoading: ref.watch(shopProvider).isMapLoading),
+                markers: ref.watch(shopProvider).shopMarkers,
+                latLng: LatLng(
+                  widget.shop.location?.latitude ?? AppConstants.demoLatitude,
+                  widget.shop.location?.longitude ?? AppConstants.demoLongitude,
+                ),
+                polylineCoordinates: ref
+                    .watch(shopProvider)
+                    .polylineCoordinates,
+                isLoading: ref.watch(shopProvider).isMapLoading,
+              ),
               16.verticalSpace,
               Padding(
                 padding: EdgeInsetsDirectional.only(start: 16.w),
@@ -94,125 +96,134 @@ class _ShopDetailPageState extends ConsumerState<ShopDetailPage> {
                         itemBuilder: (BuildContext context, int index) {
                           return Text(
                             "${widget.shop.tags?[index].translation?.title ?? ""} • ",
-                            style:
-                                AppStyle.interNormal(color: AppStyle.textGrey),
+                            style: AppStyle.interNormal(
+                              color: AppStyle.textGrey,
+                            ),
                           );
                         },
                       ),
                       Text(
                         LocalStorage.getSelectedCurrency()?.symbol ?? "",
                         style: AppStyle.interRegular(
-                            color: AppStyle.textGrey, size: 14),
-                      )
+                          color: AppStyle.textGrey,
+                          size: 14,
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.h),
-                child: Divider(
-                  color: AppStyle.hintColor,
-                  thickness: 1.5.w,
-                ),
+                child: Divider(color: AppStyle.hintColor, thickness: 1.5.w),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.r),
                 child: InkWell(
                   onTap: () async {
-                    await Clipboard.setData(ClipboardData(
-                        text: widget.shop.translation?.address ?? ""));
+                    await Clipboard.setData(
+                      ClipboardData(
+                        text: widget.shop.translation?.address ?? "",
+                      ),
+                    );
                   },
                   child: Row(
                     children: [
                       const Icon(Icons.place_rounded),
                       24.horizontalSpace,
                       Expanded(
-                          child: Text(widget.shop.translation?.address ?? "")),
+                        child: Text(widget.shop.translation?.address ?? ""),
+                      ),
                       const Spacer(),
                       const Icon(
                         FlutterRemix.file_copy_fill,
                         color: AppStyle.textGrey,
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
-                child: const Divider(
-                  color: AppStyle.hintColor,
-                ),
-              ),
-              Consumer(builder: (context, ref, child) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.r),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(FlutterRemix.time_fill),
-                          24.horizontalSpace,
-                          Text(
-                              "${AppHelpers.getTranslation(TrKeys.openUntil)} ${widget.workTime}"),
-                          const Spacer(),
-                          IconButton(
-                            icon: Icon(
-                              ref.watch(shopProvider).showWeekTime
-                                  ? FlutterRemix.subtract_fill
-                                  : FlutterRemix.add_fill,
-                              color: AppStyle.textGrey,
-                            ),
-                            onPressed: () {
-                              ref.read(shopProvider.notifier).showWeekTime();
-                            },
-                          ),
-                        ],
                       ),
-                      ref.watch(shopProvider).showWeekTime
-                          ? ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              padding: EdgeInsets.only(left: 48.r),
-                              itemCount:
-                                  widget.shop.shopWorkingDays?.length ?? 0,
-                              itemBuilder: (context, index) {
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 6.r),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        AppHelpers.getTranslation(widget.shop.shopWorkingDays?[index].day ?? "")
-                                            .toUpperCase(),
-                                        style: AppStyle.interNoSemi(size: 14),
-                                      ),
-                                      2.verticalSpace,
-                                      Text(
-                                          "${widget.shop.shopWorkingDays?[index].from} - ${widget.shop.shopWorkingDays?[index].to}"),
-                                    ],
-                                  ),
-                                );
-                              })
-                          : const SizedBox.shrink(),
                     ],
                   ),
-                );
-              }),
+                ),
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
-                child: const Divider(
-                  color: AppStyle.hintColor,
-                ),
+                child: const Divider(color: AppStyle.hintColor),
+              ),
+              Consumer(
+                builder: (context, ref, child) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24.r),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            const Icon(FlutterRemix.time_fill),
+                            24.horizontalSpace,
+                            Text(
+                              "${AppHelpers.getTranslation(TrKeys.openUntil)} ${widget.workTime}",
+                            ),
+                            const Spacer(),
+                            IconButton(
+                              icon: Icon(
+                                ref.watch(shopProvider).showWeekTime
+                                    ? FlutterRemix.subtract_fill
+                                    : FlutterRemix.add_fill,
+                                color: AppStyle.textGrey,
+                              ),
+                              onPressed: () {
+                                ref.read(shopProvider.notifier).showWeekTime();
+                              },
+                            ),
+                          ],
+                        ),
+                        ref.watch(shopProvider).showWeekTime
+                            ? ListView.builder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                shrinkWrap: true,
+                                padding: EdgeInsets.only(left: 48.r),
+                                itemCount:
+                                    widget.shop.shopWorkingDays?.length ?? 0,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: 6.r,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          AppHelpers.getTranslation(
+                                            widget
+                                                    .shop
+                                                    .shopWorkingDays?[index]
+                                                    .day ??
+                                                "",
+                                          ).toUpperCase(),
+                                          style: AppStyle.interNoSemi(size: 14),
+                                        ),
+                                        2.verticalSpace,
+                                        Text(
+                                          "${widget.shop.shopWorkingDays?[index].from} - ${widget.shop.shopWorkingDays?[index].to}",
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              )
+                            : const SizedBox.shrink(),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
+                child: const Divider(color: AppStyle.hintColor),
               ),
               if (ref.watch(shopProvider).branches?.isNotEmpty ?? false)
                 _branches(),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.h),
-                child: Divider(
-                  color: AppStyle.hintColor,
-                  thickness: 1.5.w,
-                ),
+                child: Divider(color: AppStyle.hintColor, thickness: 1.5.w),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.r),
@@ -221,7 +232,8 @@ class _ShopDetailPageState extends ConsumerState<ShopDetailPage> {
                     const Icon(FlutterRemix.star_fill),
                     24.horizontalSpace,
                     Text(
-                        "${widget.shop.avgRate} (${widget.shop.rateCount}+ ${AppHelpers.getTranslation(TrKeys.ratings)})"),
+                      "${widget.shop.avgRate} (${widget.shop.rateCount}+ ${AppHelpers.getTranslation(TrKeys.ratings)})",
+                    ),
                   ],
                 ),
               ),
@@ -238,89 +250,98 @@ class _ShopDetailPageState extends ConsumerState<ShopDetailPage> {
   }
 
   Consumer _branches() {
-    return Consumer(builder: (context, ref, child) {
-      return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.r),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                const Icon(FlutterRemix.store_3_fill),
-                24.horizontalSpace,
-                Text(AppHelpers.getTranslation(TrKeys.branches)),
-                const Spacer(),
-                IconButton(
-                  icon: Icon(
-                    ref.watch(shopProvider).showBranch
-                        ? FlutterRemix.subtract_fill
-                        : FlutterRemix.add_fill,
-                    color: AppStyle.textGrey,
+    return Consumer(
+      builder: (context, ref, child) {
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: 24.r),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  const Icon(FlutterRemix.store_3_fill),
+                  24.horizontalSpace,
+                  Text(AppHelpers.getTranslation(TrKeys.branches)),
+                  const Spacer(),
+                  IconButton(
+                    icon: Icon(
+                      ref.watch(shopProvider).showBranch
+                          ? FlutterRemix.subtract_fill
+                          : FlutterRemix.add_fill,
+                      color: AppStyle.textGrey,
+                    ),
+                    onPressed: () {
+                      ref.read(shopProvider.notifier).showBranch();
+                    },
                   ),
-                  onPressed: () {
-                    ref.read(shopProvider.notifier).showBranch();
-                  },
-                ),
-              ],
-            ),
-            ref.watch(shopProvider).showBranch
-                ? ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    padding: EdgeInsets.only(left: 48.r),
-                    itemCount: ref.watch(shopProvider).branches?.length ?? 0,
-                    itemBuilder: (context, index) {
-                      final branches = ref.watch(shopProvider).branches?[index];
-                      return Padding(
-                        padding: EdgeInsets.symmetric(vertical: 6.r),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: MediaQuery.sizeOf(context).width - 150.r,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "${branches?.translation?.title ?? ""} : ",
-                                    style: AppStyle.interNoSemi(size: 14),
-                                  ),
-                                  2.verticalSpace,
-                                  Text(branches?.address?.address ?? ""),
-                                ],
+                ],
+              ),
+              ref.watch(shopProvider).showBranch
+                  ? ListView.builder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(left: 48.r),
+                      itemCount: ref.watch(shopProvider).branches?.length ?? 0,
+                      itemBuilder: (context, index) {
+                        final branches = ref
+                            .watch(shopProvider)
+                            .branches?[index];
+                        return Padding(
+                          padding: EdgeInsets.symmetric(vertical: 6.r),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: MediaQuery.sizeOf(context).width - 150.r,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${branches?.translation?.title ?? ""} : ",
+                                      style: AppStyle.interNoSemi(size: 14),
+                                    ),
+                                    2.verticalSpace,
+                                    Text(branches?.address?.address ?? ""),
+                                  ],
+                                ),
                               ),
-                            ),
-                            IconButton(
+                              IconButton(
                                 onPressed: () {
                                   ref.read(shopProvider.notifier)
                                     ..changeMap(
-                                        shopLocation: LatLng(
-                                            branches?.location?.latitude ?? 0,
-                                            branches?.location?.longitude ?? 0))
+                                      shopLocation: LatLng(
+                                        branches?.location?.latitude ?? 0,
+                                        branches?.location?.longitude ?? 0,
+                                      ),
+                                    )
                                     ..getRoutingAll(
-                                        context: context,
-                                        start: LatLng(
-                                            branches?.location?.latitude ?? 0,
-                                            branches?.location?.longitude ?? 0),
-                                        end: LatLng(
-                                          LocalStorage.getAddressSelected()
-                                                  ?.location
-                                                  ?.latitude ??
-                                              AppConstants.demoLatitude,
-                                          LocalStorage.getAddressSelected()
-                                                  ?.location
-                                                  ?.longitude ??
-                                              AppConstants.demoLongitude,
-                                        ));
+                                      context: context,
+                                      start: LatLng(
+                                        branches?.location?.latitude ?? 0,
+                                        branches?.location?.longitude ?? 0,
+                                      ),
+                                      end: LatLng(
+                                        LocalStorage.getAddressSelected()
+                                                ?.location
+                                                ?.latitude ??
+                                            AppConstants.demoLatitude,
+                                        LocalStorage.getAddressSelected()
+                                                ?.location
+                                                ?.longitude ??
+                                            AppConstants.demoLongitude,
+                                      ),
+                                    );
                                 },
-                                icon: const Icon(FlutterRemix.road_map_line))
-                          ],
-                        ),
-                      );
-                    })
-                : const SizedBox.shrink(),
-          ],
-        ),
-      );
-    });
+                                icon: const Icon(FlutterRemix.road_map_line),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    )
+                  : const SizedBox.shrink(),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
-

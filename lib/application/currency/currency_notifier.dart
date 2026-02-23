@@ -52,4 +52,3 @@ class CurrencyNotifier extends StateNotifier<CurrencyState> {
     state = state.copyWith(index: index);
   }
 }
-

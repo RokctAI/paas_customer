@@ -1,11 +1,10 @@
-
-
 import 'dart:convert';
 
+GetCalculateModel getCalculateModelFromJson(String str) =>
+    GetCalculateModel.fromJson(json.decode(str));
 
-GetCalculateModel getCalculateModelFromJson(String str) => GetCalculateModel.fromJson(json.decode(str));
-
-String getCalculateModelToJson(GetCalculateModel data) => json.encode(data.toJson());
+String getCalculateModelToJson(GetCalculateModel data) =>
+    json.encode(data.toJson());
 
 class GetCalculateModel {
   GetCalculateModel({
@@ -30,17 +29,18 @@ class GetCalculateModel {
   num? serviceFee;
   num? couponPrice;
 
-  factory GetCalculateModel.fromJson(Map<String, dynamic> json) => GetCalculateModel(
-    totalTax: json["total_tax"],
-    price: json["price"],
-    totalShopTax: json["total_shop_tax"],
-    totalPrice: json["total_price"],
-    totalDiscount: json["total_discount"],
-    bonusShop: json["bonus_shop"],
-    deliveryFee: json["delivery_fee"],
-    serviceFee: json["service_fee"],
-    couponPrice: json["coupon_price"],
-  );
+  factory GetCalculateModel.fromJson(Map<String, dynamic> json) =>
+      GetCalculateModel(
+        totalTax: json["total_tax"],
+        price: json["price"],
+        totalShopTax: json["total_shop_tax"],
+        totalPrice: json["total_price"],
+        totalDiscount: json["total_discount"],
+        bonusShop: json["bonus_shop"],
+        deliveryFee: json["delivery_fee"],
+        serviceFee: json["service_fee"],
+        couponPrice: json["coupon_price"],
+      );
 
   Map<String, dynamic> toJson() => {
     "total_tax": totalTax,
@@ -54,6 +54,3 @@ class GetCalculateModel {
     "coupon_price": couponPrice,
   };
 }
-
-
-

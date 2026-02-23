@@ -9,7 +9,7 @@ import 'storage_keys.dart';
 abstract class LocalStorage {
   LocalStorage._();
 
-/*/Added
+  /*/Added
   static final LocalStorage _instance = LocalStorage._internal();
 
   factory LocalStorage() {
@@ -26,7 +26,7 @@ abstract class LocalStorage {
   }
 
 
-*///end
+*/ //end
   static SharedPreferences? _preferences;
 
   static Future<void> init() async {
@@ -96,7 +96,9 @@ abstract class LocalStorage {
 
   static Future<void> setAddressSelected(AddressData data) async {
     await _preferences?.setString(
-        StorageKeys.keyAddressSelected, jsonEncode(data.toJson()));
+      StorageKeys.keyAddressSelected,
+      jsonEncode(data.toJson()),
+    );
   }
 
   static AddressData? getAddressSelected() {
@@ -104,15 +106,25 @@ abstract class LocalStorage {
         _preferences?.getString(StorageKeys.keyAddressSelected) ?? "";
     if (dataString.isNotEmpty) {
       AddressData data = AddressData.fromJson(jsonDecode(dataString));
-  // Check if the address ends with a number
+      // Check if the address ends with a number
       RegExp numericRegex = RegExp(r'\d$');
-      if (numericRegex.hasMatch(data.address ?? "")) { // Use null-aware operator
+      if (numericRegex.hasMatch(data.address ?? "")) {
+        // Use null-aware operator
         // Reorder the address components
-        List<String> addressParts = (data.address ?? "").split(',').map((part) => part.trim()).toList(); // Use null-aware operator
+        List<String> addressParts = (data.address ?? "")
+            .split(',')
+            .map((part) => part.trim())
+            .toList(); // Use null-aware operator
         if (addressParts.length >= 3) {
-          String postalCode = addressParts.removeLast(); // Remove and store postal code
-          addressParts.insert(0, postalCode); // Insert postal code at the beginning
-          String formattedAddress = addressParts.join(', '); // Join the parts back together
+          String postalCode = addressParts
+              .removeLast(); // Remove and store postal code
+          addressParts.insert(
+            0,
+            postalCode,
+          ); // Insert postal code at the beginning
+          String formattedAddress = addressParts.join(
+            ', ',
+          ); // Join the parts back together
 
           // Update the address property in the AddressData object
           data = data.copyWith(address: formattedAddress);
@@ -124,21 +136,23 @@ abstract class LocalStorage {
     }
   }
 
-
   static void deleteAddressSelected() =>
       _preferences?.remove(StorageKeys.keyAddressSelected);
 
   static Future<void> setAddressInformation(AddressInformation data) async {
     await _preferences?.setString(
-        StorageKeys.keyAddressInformation, jsonEncode(data.toJson()));
+      StorageKeys.keyAddressInformation,
+      jsonEncode(data.toJson()),
+    );
   }
 
   static AddressInformation? getAddressInformation() {
     String dataString =
         _preferences?.getString(StorageKeys.keyAddressInformation) ?? "";
     if (dataString.isNotEmpty) {
-      AddressInformation data =
-          AddressInformation.fromJson(jsonDecode(dataString));
+      AddressInformation data = AddressInformation.fromJson(
+        jsonDecode(dataString),
+      );
       return data;
     } else {
       return null;
@@ -161,7 +175,9 @@ abstract class LocalStorage {
   static Future<void> setSelectedCurrency(CurrencyData currency) async {
     final String currencyString = jsonEncode(currency.toJson());
     await _preferences?.setString(
-        StorageKeys.keySelectedCurrency, currencyString);
+      StorageKeys.keySelectedCurrency,
+      currencyString,
+    );
   }
 
   static CurrencyData? getSelectedCurrency() {
@@ -199,8 +215,9 @@ abstract class LocalStorage {
       _preferences?.remove(StorageKeys.keyWalletData);
 
   static Future<void> setSettingsList(List<SettingsData> settings) async {
-    final List<String> strings =
-        settings.map((setting) => jsonEncode(setting.toJson())).toList();
+    final List<String> strings = settings
+        .map((setting) => jsonEncode(setting.toJson()))
+        .toList();
     await _preferences?.setStringList(StorageKeys.keyGlobalSettings, strings);
   }
 
@@ -208,9 +225,7 @@ abstract class LocalStorage {
     final List<String> settings =
         _preferences?.getStringList(StorageKeys.keyGlobalSettings) ?? [];
     final List<SettingsData> settingsList = settings
-        .map(
-          (setting) => SettingsData.fromJson(jsonDecode(setting)),
-        )
+        .map((setting) => SettingsData.fromJson(jsonDecode(setting)))
         .toList();
     return settingsList;
   }
@@ -219,7 +234,8 @@ abstract class LocalStorage {
       _preferences?.remove(StorageKeys.keyGlobalSettings);
 
   static Future<void> setTranslations(
-      Map<String, dynamic>? translations) async {
+    Map<String, dynamic>? translations,
+  ) async {
     final String encoded = jsonEncode(translations);
     await _preferences?.setString(StorageKeys.keyTranslations, encoded);
   }
@@ -286,7 +302,6 @@ abstract class LocalStorage {
 
   static void deleteLangLtr() => _preferences?.remove(StorageKeys.keyLangLtr);
 
-
   static deleteBoard() {
     return _preferences?.remove(StorageKeys.keyBoard);
   }
@@ -303,8 +318,6 @@ abstract class LocalStorage {
     return DeliveryResponse.fromJson(map);
   }
 
-
-
   static void logout() {
     deleteWalletData();
     deleteSavedShopsList();
@@ -316,4 +329,3 @@ abstract class LocalStorage {
     deleteBoard();
   }
 }
-

@@ -5,9 +5,7 @@ import 'package:foodyman/app_constants.dart';
 class CategoryModel {
   final int page;
 
-  CategoryModel({
-    required this.page
-  });
+  CategoryModel({required this.page});
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -18,8 +16,12 @@ class CategoryModel {
     map["sort"] = "asc";
     map["perPage"] = 10;
     map["address"] = {
-      "latitude" : LocalStorage.getAddressSelected()?.location?.latitude ?? AppConstants.demoLatitude,
-      "longitude" : LocalStorage.getAddressSelected()?.location?.longitude ?? AppConstants.demoLongitude
+      "latitude":
+          LocalStorage.getAddressSelected()?.location?.latitude ??
+          AppConstants.demoLatitude,
+      "longitude":
+          LocalStorage.getAddressSelected()?.location?.longitude ??
+          AppConstants.demoLongitude,
     };
     return map;
   }
@@ -31,4 +33,3 @@ class CategoryModel {
     return map;
   }
 }
-

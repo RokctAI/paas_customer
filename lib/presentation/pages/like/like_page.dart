@@ -25,10 +25,7 @@ import '../../../application/main/main_provider.dart';
 class LikePage extends ConsumerStatefulWidget {
   final bool isBackButton;
 
-  const LikePage({
-    super.key,
-    this.isBackButton = true,
-  });
+  const LikePage({super.key, this.isBackButton = true});
 
   @override
   ConsumerState<LikePage> createState() => _LikePageState();
@@ -80,10 +77,7 @@ class _LikePageState extends ConsumerState<LikePage> {
           CommonAppBar(
             child: Text(
               AppHelpers.getTranslation(TrKeys.likeRestaurants),
-              style: AppStyle.interNoSemi(
-                size: 18,
-                color: AppStyle.black,
-              ),
+              style: AppStyle.interNoSemi(size: 18, color: AppStyle.black),
             ),
           ),
           Expanded(
@@ -99,51 +93,49 @@ class _LikePageState extends ConsumerState<LikePage> {
               },
               child: SingleChildScrollView(
                 padding: EdgeInsets.only(
-                    top: 24.h, bottom: MediaQuery.paddingOf(context).bottom),
+                  top: 24.h,
+                  bottom: MediaQuery.paddingOf(context).bottom,
+                ),
                 child: Column(
                   children: [
                     state.isShopLoading
-                        ? const AllShopShimmer(
-                            isTitle: false,
-                          )
+                        ? const AllShopShimmer(isTitle: false)
                         : state.shops.isEmpty
-                            ? _resultEmpty()
-                            : ListView.builder(
-                                padding: AppHelpers.getType() == 2
-                                    ? EdgeInsets.symmetric(
-                                        horizontal: 16.r,
-                                      )
-                                    : EdgeInsets.only(top: 6.h),
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                itemCount: state.shops.length,
-                                itemBuilder: (context, index) =>
-                                    AppHelpers.getType() == 0
-                                        ? MarketItem(
-                                            shop: state.shops[index],
-                                            isSimpleShop: true,
-                                          )
-                                        : AppHelpers.getType() == 1
-                                            ? MarketOneItem(
-                                                shop: state.shops[index],
-                                                isSimpleShop: true,
-                                              )
-                                            : AppHelpers.getType() == 2
-                                                ? MarketTwoItem(
-                                                    shop: state.shops[index],
-                                                    isSimpleShop: true,
-                                                  )
-                                                : MarketThreeItem(
-                                                    shop: state.shops[index],
-                                                    isSimpleShop: true,
-                                                  ),
-                              ),
+                        ? _resultEmpty()
+                        : ListView.builder(
+                            padding: AppHelpers.getType() == 2
+                                ? EdgeInsets.symmetric(horizontal: 16.r)
+                                : EdgeInsets.only(top: 6.h),
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            itemCount: state.shops.length,
+                            itemBuilder: (context, index) =>
+                                AppHelpers.getType() == 0
+                                ? MarketItem(
+                                    shop: state.shops[index],
+                                    isSimpleShop: true,
+                                  )
+                                : AppHelpers.getType() == 1
+                                ? MarketOneItem(
+                                    shop: state.shops[index],
+                                    isSimpleShop: true,
+                                  )
+                                : AppHelpers.getType() == 2
+                                ? MarketTwoItem(
+                                    shop: state.shops[index],
+                                    isSimpleShop: true,
+                                  )
+                                : MarketThreeItem(
+                                    shop: state.shops[index],
+                                    isSimpleShop: true,
+                                  ),
+                          ),
                   ],
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
@@ -157,7 +149,6 @@ class _LikePageState extends ConsumerState<LikePage> {
   }
 
   Widget _resultEmpty() {
-  return EmptyBadge();
+    return EmptyBadge();
+  }
 }
-}
-

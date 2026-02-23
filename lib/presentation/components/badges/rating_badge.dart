@@ -54,14 +54,17 @@ class RatingBadge extends StatelessWidget {
                 if (isText) ...[
                   Text(
                     AppHelpers.reviewText(double.tryParse(shop.avgRate ?? '0')),
-                    style: AppStyle.interNormal(color: AppStyle.white, size: 12),
+                    style: AppStyle.interNormal(
+                      color: AppStyle.white,
+                      size: 12,
+                    ),
                   ),
                   8.horizontalSpace,
                 ],
                 Row(
                   children: List.generate(
                     5,
-                        (index) => SvgPicture.asset(
+                    (index) => SvgPicture.asset(
                       "assets/svgs/star.svg",
                       height: 12.r,
                       colorFilter: ColorFilter.mode(
@@ -81,4 +84,3 @@ class RatingBadge extends StatelessWidget {
     );
   }
 }
-

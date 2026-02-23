@@ -41,18 +41,24 @@ class CongratsPage extends StatelessWidget {
                       Text(
                         AppHelpers.getTranslation(TrKeys.congrats),
                         style: AppStyle.interBold(
-                            color: AppStyle.textGrey, size: 20),
+                          color: AppStyle.textGrey,
+                          size: 20,
+                        ),
                       ),
                       6.verticalSpace,
                       Text(
                         AppHelpers.getTranslation(TrKeys.thankYouPurchase),
                         style: AppStyle.interNormal(
-                            color: AppStyle.textGrey, size: 14),
+                          color: AppStyle.textGrey,
+                          size: 14,
+                        ),
                       ),
                       Text(
                         AppHelpers.getTranslation(TrKeys.yourOrderShipping),
                         style: AppStyle.interNormal(
-                            color: AppStyle.textGrey, size: 14),
+                          color: AppStyle.textGrey,
+                          size: 14,
+                        ),
                       ),
                     ],
                   ),
@@ -66,13 +72,17 @@ class CongratsPage extends StatelessWidget {
                       Text(
                         AppHelpers.getTranslation(TrKeys.congrats),
                         style: AppStyle.interBold(
-                            color: AppStyle.textGrey, size: 20),
+                          color: AppStyle.textGrey,
+                          size: 20,
+                        ),
                       ),
                       6.verticalSpace,
                       Text(
                         AppHelpers.getTranslation(TrKeys.paymentSuccessful),
                         style: AppStyle.interNormal(
-                            color: AppStyle.textGrey, size: 14),
+                          color: AppStyle.textGrey,
+                          size: 14,
+                        ),
                       ),
                     ],
                   ),
@@ -87,7 +97,9 @@ class CongratsPage extends StatelessWidget {
           height: 60.r,
           width: double.infinity,
           child: CustomButton(
-            title: AppHelpers.getTranslation(isOrder ? TrKeys.returnHome : TrKeys.ok),
+            title: AppHelpers.getTranslation(
+              isOrder ? TrKeys.returnHome : TrKeys.ok,
+            ),
             background: AppStyle.primary,
             textColor: AppStyle.white,
             onPressed: () {

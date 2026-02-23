@@ -34,16 +34,17 @@ class ShopPageAvatar extends StatelessWidget {
   final VoidCallback onLike;
   final BonusModel? bonus;
 
-  const ShopPageAvatar(
-      {super.key,
-        required this.shop,
-        required this.onLike,
-        required this.workTime,
-        required this.isLike,
-        required this.onShare,
-        required this.bonus,
-        this.cartId,
-        this.userUuid});
+  const ShopPageAvatar({
+    super.key,
+    required this.shop,
+    required this.onLike,
+    required this.workTime,
+    required this.isLike,
+    required this.onShare,
+    required this.bonus,
+    this.cartId,
+    this.userUuid,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -95,77 +96,80 @@ class ShopPageAvatar extends StatelessWidget {
                 ],
               ),*/
               AppHelpers.getTranslation(TrKeys.close) == workTime
-
                   ? Padding(
-                padding: const EdgeInsets.only(top: 10),
-                child: Container(
-                  width: MediaQuery.sizeOf(context).width - 32,
-                  decoration: BoxDecoration(
-                      color: AppStyle.bgGrey,
-                      borderRadius:
-                      BorderRadius.circular(10.r)),
-                  padding: const EdgeInsets.all(6),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        FlutterRemix.time_fill,
-                        color: AppStyle.black,
-                      ),
-                      8.horizontalSpace,
-                      Expanded(
-                        child: Text(
-                          AppHelpers.getTranslation(
-                              TrKeys.notWorkTodayTime),
-                          style: AppStyle.interNormal(
-                            size: 14,
-                            color: AppStyle.black,
-                          ),
-                          textAlign: TextAlign.start,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Container(
+                        width: MediaQuery.sizeOf(context).width - 32,
+                        decoration: BoxDecoration(
+                          color: AppStyle.bgGrey,
+                          borderRadius: BorderRadius.circular(10.r),
+                        ),
+                        padding: const EdgeInsets.all(6),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              FlutterRemix.time_fill,
+                              color: AppStyle.black,
+                            ),
+                            8.horizontalSpace,
+                            Expanded(
+                              child: Text(
+                                AppHelpers.getTranslation(
+                                  TrKeys.notWorkTodayTime,
+                                ),
+                                style: AppStyle.interNormal(
+                                  size: 14,
+                                  color: AppStyle.black,
+                                ),
+                                textAlign: TextAlign.start,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              )
+                    )
                   : const SizedBox.shrink(),
               bonus != null ? _bonusButton(context) : const SizedBox.shrink(),
               12.verticalSpace,
               if (AppHelpers.getGroupOrder()) groupOrderButton(context),
             ],
           ),
-        )
+        ),
       ],
     );
   }
 
   checkOtherShop(BuildContext context) {
     AppHelpers.showAlertDialog(
-        context: context,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              AppHelpers.getTranslation(TrKeys.allPreviouslyAdded),
-              style: AppStyle.interNormal(),
-              textAlign: TextAlign.center,
-            ),
-            16.verticalSpace,
-            Row(
-              children: [
-                Expanded(
-                  child: CustomButton(
-                      title: AppHelpers.getTranslation(TrKeys.cancel),
-                      background: AppStyle.transparent,
-                      borderColor: AppStyle.borderColor,
-                      onPressed: () {
-                        Navigator.pop(context);
-                      }),
+      context: context,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            AppHelpers.getTranslation(TrKeys.allPreviouslyAdded),
+            style: AppStyle.interNormal(),
+            textAlign: TextAlign.center,
+          ),
+          16.verticalSpace,
+          Row(
+            children: [
+              Expanded(
+                child: CustomButton(
+                  title: AppHelpers.getTranslation(TrKeys.cancel),
+                  background: AppStyle.transparent,
+                  borderColor: AppStyle.borderColor,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
-                10.horizontalSpace,
-                Expanded(child: Consumer(builder: (contextTwo, ref, child) {
-                  return CustomButton(
+              ),
+              10.horizontalSpace,
+              Expanded(
+                child: Consumer(
+                  builder: (contextTwo, ref, child) {
+                    return CustomButton(
                       isLoading: ref.watch(shopOrderProvider).isDeleteLoading,
                       title: AppHelpers.getTranslation(TrKeys.continueText),
                       onPressed: () {
@@ -173,82 +177,84 @@ class ShopPageAvatar extends StatelessWidget {
                             .read(shopOrderProvider.notifier)
                             .deleteCart(context)
                             .then((value) async {
-                          if (context.mounted) {
-                            ref.read(shopOrderProvider.notifier).createCart(
-                              context,
-                              (shop.id ?? ""),
-                            );
-                          }
-                        });
-                      });
-                })),
-              ],
-            )
-          ],
-        ));
+                              if (context.mounted) {
+                                ref
+                                    .read(shopOrderProvider.notifier)
+                                    .createCart(context, (shop.id ?? ""));
+                              }
+                            });
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   Widget groupOrderButton(BuildContext context) {
-    return Consumer(builder: (context, ref, child) {
-      ref.listen(shopOrderProvider, (previous, next) {
-        if (next.isOtherShop && next.isOtherShop != previous?.isOtherShop) {
-          checkOtherShop(context);
-        }
-        if (next.isStartGroup && next.isStartGroup != previous?.isStartGroup) {
-          AppHelpers.showCustomModalBottomSheet(
-            context: context,
-            modal: GroupOrderScreen(
-              shop: shop,
-              cartId: cartId,
-            ),
-            isDarkMode: false,
-            isDrag: true,
-            radius: 12,
-          );
-        }
-      });
-      bool isStartOrder = (ref.watch(shopOrderProvider).cart?.group ?? false) &&
-          (ref.watch(shopOrderProvider).cart?.shopId == shop.id);
-      return CustomButton(
-        isLoading: ref.watch(shopOrderProvider).isStartGroupLoading ||
-            ref.watch(shopOrderProvider).isCheckShopOrder,
-        icon: Icon(
-          isStartOrder
-              ? FlutterRemix.list_settings_line
-              : FlutterRemix.group_2_line,
-          color: isStartOrder ? AppStyle.black : AppStyle.white,
-        ),
-        title: isStartOrder
-            ? AppHelpers.getTranslation(TrKeys.manageOrder)
-            : AppHelpers.getTranslation(TrKeys.startGroupOrder),
-        background:
-        isStartOrder ? AppStyle.primary : AppStyle.orderButtonColor,
-        textColor: isStartOrder ? AppStyle.black : AppStyle.white,
-        radius: 10,
-        onPressed: () {
-          if (LocalStorage.getToken().isNotEmpty) {
-            !isStartOrder
-                ? ref.read(shopOrderProvider.notifier).createCart(
-              context,
-              shop.id ?? "",
-            )
-                : AppHelpers.showCustomModalBottomSheet(
-              paddingTop: MediaQuery.paddingOf(context).top + 160.h,
+    return Consumer(
+      builder: (context, ref, child) {
+        ref.listen(shopOrderProvider, (previous, next) {
+          if (next.isOtherShop && next.isOtherShop != previous?.isOtherShop) {
+            checkOtherShop(context);
+          }
+          if (next.isStartGroup &&
+              next.isStartGroup != previous?.isStartGroup) {
+            AppHelpers.showCustomModalBottomSheet(
               context: context,
-              modal: GroupOrderScreen(
-                shop: shop,
-                cartId: cartId,
-              ),
+              modal: GroupOrderScreen(shop: shop, cartId: cartId),
               isDarkMode: false,
               isDrag: true,
               radius: 12,
             );
-          } else {
-            context.pushRoute(const LoginRoute());
           }
-        },
-      );
-    });
+        });
+        bool isStartOrder =
+            (ref.watch(shopOrderProvider).cart?.group ?? false) &&
+            (ref.watch(shopOrderProvider).cart?.shopId == shop.id);
+        return CustomButton(
+          isLoading:
+              ref.watch(shopOrderProvider).isStartGroupLoading ||
+              ref.watch(shopOrderProvider).isCheckShopOrder,
+          icon: Icon(
+            isStartOrder
+                ? FlutterRemix.list_settings_line
+                : FlutterRemix.group_2_line,
+            color: isStartOrder ? AppStyle.black : AppStyle.white,
+          ),
+          title: isStartOrder
+              ? AppHelpers.getTranslation(TrKeys.manageOrder)
+              : AppHelpers.getTranslation(TrKeys.startGroupOrder),
+          background: isStartOrder
+              ? AppStyle.primary
+              : AppStyle.orderButtonColor,
+          textColor: isStartOrder ? AppStyle.black : AppStyle.white,
+          radius: 10,
+          onPressed: () {
+            if (LocalStorage.getToken().isNotEmpty) {
+              !isStartOrder
+                  ? ref
+                        .read(shopOrderProvider.notifier)
+                        .createCart(context, shop.id ?? "")
+                  : AppHelpers.showCustomModalBottomSheet(
+                      paddingTop: MediaQuery.paddingOf(context).top + 160.h,
+                      context: context,
+                      modal: GroupOrderScreen(shop: shop, cartId: cartId),
+                      isDarkMode: false,
+                      isDrag: true,
+                      radius: 12,
+                    );
+            } else {
+              context.pushRoute(const LoginRoute());
+            }
+          },
+        );
+      },
+    );
   }
 
   Stack shopAppBar(BuildContext context) {
@@ -288,14 +294,16 @@ class ShopPageAvatar extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         context.pushRoute(
-                            ShopDetailRoute(shop: shop, workTime: workTime));
+                          ShopDetailRoute(shop: shop, workTime: workTime),
+                        );
                       },
                       child: Text(
                         AppHelpers.getTranslation(TrKeys.moreInfo),
                         style: AppStyle.interNormal(
-                            size: 12,
-                            color: AppStyle.white,
-                            textDecoration: TextDecoration.underline),
+                          size: 12,
+                          color: AppStyle.white,
+                          textDecoration: TextDecoration.underline,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -334,9 +342,12 @@ class ShopPageAvatar extends StatelessWidget {
                     context.replaceRoute(const LoginRoute());
                     return;
                   }
-                  context.pushRoute(ChatRoute(
+                  context.pushRoute(
+                    ChatRoute(
                       roleId: shop.id.toString(),
-                      name: shop.translation?.title ?? ""));
+                      name: shop.translation?.title ?? "",
+                    ),
+                  );
                 },
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.r),
@@ -399,10 +410,10 @@ class ShopPageAvatar extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              ),
             ],
           ),
-        )
+        ),
       ],
     );
   }
@@ -410,59 +421,57 @@ class ShopPageAvatar extends StatelessWidget {
   AnimationButtonEffect _bonusButton(BuildContext context) {
     return AnimationButtonEffect(
       child: GestureDetector(
-          onTap: () {
-            AppHelpers.showCustomModalBottomSheet(
-              paddingTop: MediaQuery.paddingOf(context).top,
-              context: context,
-              modal: BonusScreen(
-                bonus: bonus,
+        onTap: () {
+          AppHelpers.showCustomModalBottomSheet(
+            paddingTop: MediaQuery.paddingOf(context).top,
+            context: context,
+            modal: BonusScreen(bonus: bonus),
+            isDarkMode: false,
+            isDrag: true,
+            radius: 12,
+          );
+        },
+        child: Container(
+          margin: EdgeInsets.only(top: 8.h),
+          width: MediaQuery.sizeOf(context).width - 32,
+          decoration: BoxDecoration(
+            color: AppStyle.bgGrey,
+            borderRadius: BorderRadius.circular(10.r),
+          ),
+          padding: const EdgeInsets.all(6),
+          child: Row(
+            children: [
+              Container(
+                width: 22.w,
+                height: 22.h,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppStyle.blueBonus,
+                ),
+                child: Icon(
+                  FlutterRemix.gift_2_fill,
+                  size: 16.r,
+                  color: AppStyle.white,
+                ),
               ),
-              isDarkMode: false,
-              isDrag: true,
-              radius: 12,
-            );
-          },
-          child: Container(
-            margin: EdgeInsets.only(top: 8.h),
-            width: MediaQuery.sizeOf(context).width - 32,
-            decoration: BoxDecoration(
-                color: AppStyle.bgGrey,
-                borderRadius: BorderRadius.circular(10.r)),
-            padding: const EdgeInsets.all(6),
-            child: Row(
-              children: [
-                Container(
-                  width: 22.w,
-                  height: 22.h,
-                  decoration: const BoxDecoration(
-                      shape: BoxShape.circle, color: AppStyle.blueBonus),
-                  child: Icon(
-                    FlutterRemix.gift_2_fill,
-                    size: 16.r,
-                    color: AppStyle.white,
-                  ),
+              8.horizontalSpace,
+              Expanded(
+                child: Text(
+                  bonus != null
+                      ? ((bonus?.type ?? "sum") == "sum")
+                            ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(number: bonus?.value)} + ${bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                            : "${AppHelpers.getTranslation(TrKeys.under)} ${bonus?.value ?? 0} + ${bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                      : "",
+                  style: AppStyle.interNormal(size: 14, color: AppStyle.black),
+                  textAlign: TextAlign.start,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-                8.horizontalSpace,
-                Expanded(
-                  child: Text(
-                    bonus != null
-                        ? ((bonus?.type ?? "sum") == "sum")
-                        ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(number: bonus?.value)} + ${bonus?.bonusStock?.product?.translation?.title ?? ""}"
-                        : "${AppHelpers.getTranslation(TrKeys.under)} ${bonus?.value ?? 0} + ${bonus?.bonusStock?.product?.translation?.title ?? ""}"
-                        : "",
-                    style: AppStyle.interNormal(
-                      size: 14,
-                      color: AppStyle.black,
-                    ),
-                    textAlign: TextAlign.start,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-          )),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
-

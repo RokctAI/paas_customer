@@ -10,10 +10,10 @@ class AddressRepository implements AddressRepositoryFacade {
   Future<ApiResult<AddressesResponse>> getUserAddresses() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.post('/api/method/paas.api.user.user.get_user_addresses');
-      return ApiResult.success(
-        data: AddressesResponse.fromJson(response.data),
+      final response = await client.post(
+        '/api/method/paas.api.user.user.get_user_addresses',
       );
+      return ApiResult.success(data: AddressesResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get user addresses failure: $e');
       return ApiResult.failure(
@@ -63,4 +63,3 @@ class AddressRepository implements AddressRepositoryFacade {
     }
   }
 }
-

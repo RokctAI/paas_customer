@@ -20,24 +20,31 @@ class FilterNotifier extends StateNotifier<FilterState> {
   int marketRefreshIndex = 1;
   final _delayed = Delayed(milliseconds: 700);
 
-  Future<void> setFilterModel(BuildContext context, FilterModel? data,String categoryId) async {
+  Future<void> setFilterModel(
+    BuildContext context,
+    FilterModel? data,
+    String categoryId,
+  ) async {
     state = state.copyWith(filterModel: data);
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isLoading: true);
-      final response = await _shopsRepository.getAllShops(1,
-          filterModel: data, isOpen: data?.isOpen ?? true,categoryId: categoryId);
+      final response = await _shopsRepository.getAllShops(
+        1,
+        filterModel: data,
+        isOpen: data?.isOpen ?? true,
+        categoryId: categoryId,
+      );
       response.when(
         success: (data) async {
           state = state.copyWith(
-              isLoading: false, shopCount: data.meta?.total ?? 0);
+            isLoading: false,
+            shopCount: data.meta?.total ?? 0,
+          );
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -47,15 +54,21 @@ class FilterNotifier extends StateNotifier<FilterState> {
     }
   }
 
-  void clear(BuildContext context,String categoryId) {
+  void clear(BuildContext context, String categoryId) {
     state = state.copyWith(
-        filterModel: FilterModel(),
-        rangeValues: RangeValues(1, state.endPrice));
-    setCheck(context,false,false,true,categoryId);
+      filterModel: FilterModel(),
+      rangeValues: RangeValues(1, state.endPrice),
+    );
+    setCheck(context, false, false, true, categoryId);
   }
 
   Future<void> setCheck(
-      BuildContext context, bool check, bool deal, bool open,String categoryId) async {
+    BuildContext context,
+    bool check,
+    bool deal,
+    bool open,
+    String categoryId,
+  ) async {
     state.filterModel?.isFreeDelivery = check;
     state.filterModel?.isDeal = deal;
     state.filterModel?.isOpen = open;
@@ -63,19 +76,22 @@ class FilterNotifier extends StateNotifier<FilterState> {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isLoading: true);
-      final response =
-          await _shopsRepository.getAllShops(1, filterModel: state.filterModel, isOpen: state.filterModel?.isOpen ?? true,categoryId: categoryId);
+      final response = await _shopsRepository.getAllShops(
+        1,
+        filterModel: state.filterModel,
+        isOpen: state.filterModel?.isOpen ?? true,
+        categoryId: categoryId,
+      );
       response.when(
         success: (data) async {
           state = state.copyWith(
-              isLoading: false, shopCount: data.meta?.total ?? 0);
+            isLoading: false,
+            shopCount: data.meta?.total ?? 0,
+          );
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -85,17 +101,24 @@ class FilterNotifier extends StateNotifier<FilterState> {
     }
   }
 
-  void setRange(RangeValues values, BuildContext context,String categoryId) {
+  void setRange(RangeValues values, BuildContext context, String categoryId) {
     state.filterModel?.price = [values.start, values.end];
     state = state.copyWith(
-        rangeValues: RangeValues(values.start, values.end),
-        filterModel: state.filterModel);
+      rangeValues: RangeValues(values.start, values.end),
+      filterModel: state.filterModel,
+    );
     _delayed.run(() {
-      setCheck(context, state.freeDelivery, state.deals, state.open,categoryId);
+      setCheck(
+        context,
+        state.freeDelivery,
+        state.deals,
+        state.open,
+        categoryId,
+      );
     });
   }
 
-  Future<void> init(BuildContext context,String categoryId) async {
+  Future<void> init(BuildContext context, String categoryId) async {
     state = state.copyWith(filterModel: FilterModel(), isTagLoading: true);
     final connected = await AppConnectivity.connectivity();
     if (connected) {
@@ -103,35 +126,32 @@ class FilterNotifier extends StateNotifier<FilterState> {
       final res = await _shopsRepository.getSuggestPrice();
       response.when(
         success: (data) async {
-          state = state.copyWith(
-            tags: data.data ?? [],
-          );
+          state = state.copyWith(tags: data.data ?? []);
         },
         failure: (failure, status) {
           state = state.copyWith(isTagLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
       res.when(
         success: (data) async {
           state = state.copyWith(
-              isTagLoading: false,
-              endPrice: data.data.max,
-              startPrice: data.data.min,
-              rangeValues: RangeValues(
-                  data.data.min, data.data.max - data.data.max / 20),
-              prices: List.generate(
-                  (20).round(), (index) => (Random().nextInt(8) + 1)));
+            isTagLoading: false,
+            endPrice: data.data.max,
+            startPrice: data.data.min,
+            rangeValues: RangeValues(
+              data.data.min,
+              data.data.max - data.data.max / 20,
+            ),
+            prices: List.generate(
+              (20).round(),
+              (index) => (Random().nextInt(8) + 1),
+            ),
+          );
         },
         failure: (failure, status) {
           state = state.copyWith(isTagLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -141,23 +161,27 @@ class FilterNotifier extends StateNotifier<FilterState> {
     }
   }
 
-  Future<void> fetchAllShops(BuildContext context,String categoryId) async {
+  Future<void> fetchAllShops(BuildContext context, String categoryId) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isAllShopsLoading: true);
-      final response = await _shopsRepository.getAllShops(1,
-          categoryId: categoryId, filterModel: state.filterModel,isOpen: state.filterModel?.isOpen ?? true);
+      final response = await _shopsRepository.getAllShops(
+        1,
+        categoryId: categoryId,
+        filterModel: state.filterModel,
+        isOpen: state.filterModel?.isOpen ?? true,
+      );
       response.when(
         success: (data) async {
           state = state.copyWith(
-              isAllShopsLoading: false, allShops: data.data ?? [],shopCount: data.meta?.total ?? 0);
+            isAllShopsLoading: false,
+            allShops: data.data ?? [],
+            shopCount: data.meta?.total ?? 0,
+          );
         },
         failure: (failure, status) {
           state = state.copyWith(isAllShopsLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -168,31 +192,32 @@ class FilterNotifier extends StateNotifier<FilterState> {
   }
 
   Future<void> fetchAllShopsPage(
-      BuildContext context, RefreshController shopController,String categoryId,
-      {bool isRefresh = false}) async {
+    BuildContext context,
+    RefreshController shopController,
+    String categoryId, {
+    bool isRefresh = false,
+  }) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       if (isRefresh) {
         shopIndex = 1;
       }
       final response = await _shopsRepository.getAllShops(
-          isRefresh ? 1 : ++shopIndex,
-          categoryId: categoryId,
-          filterModel: state.filterModel, isOpen: state.filterModel?.isOpen ?? true);
+        isRefresh ? 1 : ++shopIndex,
+        categoryId: categoryId,
+        filterModel: state.filterModel,
+        isOpen: state.filterModel?.isOpen ?? true,
+      );
       response.when(
         success: (data) async {
           if (isRefresh) {
-            state = state.copyWith(
-              allShops: data.data ?? [],
-            );
+            state = state.copyWith(allShops: data.data ?? []);
             shopController.refreshCompleted();
           } else {
             if (data.data?.isNotEmpty ?? false) {
               List<ShopData> list = List.from(state.allShops);
               list.addAll(data.data!);
-              state = state.copyWith(
-                allShops: list,
-              );
+              state = state.copyWith(allShops: list);
               shopController.loadComplete();
             } else {
               shopIndex--;
@@ -208,10 +233,7 @@ class FilterNotifier extends StateNotifier<FilterState> {
           } else {
             shopController.refreshFailed();
           }
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -220,6 +242,4 @@ class FilterNotifier extends StateNotifier<FilterState> {
       }
     }
   }
-
 }
-

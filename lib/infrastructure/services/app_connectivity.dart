@@ -18,7 +18,8 @@ abstract class AppConnectivity {
   // New method that automatically shows dialog when no connection
   static Future<bool> connectivityWithDialog(BuildContext context) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
-    bool hasConnection = connectivityResult.contains(ConnectivityResult.mobile) ||
+    bool hasConnection =
+        connectivityResult.contains(ConnectivityResult.mobile) ||
         connectivityResult.contains(ConnectivityResult.ethernet) ||
         connectivityResult.contains(ConnectivityResult.wifi);
 
@@ -33,7 +34,8 @@ abstract class AppConnectivity {
   // Alternative: Replace the existing method to always show dialog
   static Future<bool> connectivityAndShowDialog(BuildContext context) async {
     var connectivityResult = await (Connectivity().checkConnectivity());
-    bool hasConnection = connectivityResult.contains(ConnectivityResult.mobile) ||
+    bool hasConnection =
+        connectivityResult.contains(ConnectivityResult.mobile) ||
         connectivityResult.contains(ConnectivityResult.ethernet) ||
         connectivityResult.contains(ConnectivityResult.wifi);
 

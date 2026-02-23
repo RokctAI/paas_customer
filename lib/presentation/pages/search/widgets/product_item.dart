@@ -13,20 +13,20 @@ import 'package:foodyman/application/shopname/shop_name_provider.dart';
 class ProductItem extends ConsumerWidget {
   final ProductData product;
 
-  const ProductItem({
-    super.key,
-    required this.product,
-  });
+  const ProductItem({super.key, required this.product});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final shopNameAsyncValue = ref.watch(shopNameProvider(product.shopId.toString()));
+    final shopNameAsyncValue = ref.watch(
+      shopNameProvider(product.shopId.toString()),
+    );
 
     return shopNameAsyncValue.when(
       data: (shopName) {
         return buildProductItem(context, shopName);
       },
-      loading: () => CircularProgressIndicator(), // or any other loading indicator
+      loading: () =>
+          CircularProgressIndicator(), // or any other loading indicator
       error: (error, stackTrace) => Text('Error: $error'),
     );
   }
@@ -38,10 +38,7 @@ class ProductItem extends ConsumerWidget {
         onTap: () {
           AppHelpers.showCustomModalBottomDragSheet(
             context: context,
-            modal: (c) => ProductScreen(
-              controller: c,
-              data: product,
-            ),
+            modal: (c) => ProductScreen(controller: c, data: product),
             isDarkMode: false,
             isDrag: true,
             radius: 16,
@@ -65,10 +62,11 @@ class ProductItem extends ConsumerWidget {
             child: Row(
               children: [
                 CustomNetworkImage(
-                    url: product.img ?? "",
-                    height: 84.r,
-                    width: 84.r,
-                    radius: 10.r),
+                  url: product.img ?? "",
+                  height: 84.r,
+                  width: 84.r,
+                  radius: 10.r,
+                ),
                 14.horizontalSpace,
                 Expanded(
                   child: Column(
@@ -128,20 +126,21 @@ class ProductItem extends ConsumerWidget {
                                   width: 22.w,
                                   height: 22.h,
                                   decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: AppStyle.blueBonus),
+                                    shape: BoxShape.circle,
+                                    color: AppStyle.blueBonus,
+                                  ),
                                   child: Icon(
                                     FlutterRemix.gift_2_fill,
                                     size: 16.r,
                                     color: AppStyle.white,
                                   ),
                                 )
-                              : const SizedBox.shrink()
+                              : const SizedBox.shrink(),
                         ],
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ),
@@ -150,4 +149,3 @@ class ProductItem extends ConsumerWidget {
     );
   }
 }
-

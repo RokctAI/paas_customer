@@ -49,7 +49,9 @@ class BrandUtils {
   /// Build a styled brand label with appropriate color based on brand name
   static Widget buildBrandSection(BrandData? brand) {
     if (brand == null) return const SizedBox.shrink();
-    if (brand.title == null || brand.title!.isEmpty || brand.title!.toLowerCase() == 'no brand') {
+    if (brand.title == null ||
+        brand.title!.isEmpty ||
+        brand.title!.toLowerCase() == 'no brand') {
       return const SizedBox.shrink();
     }
 
@@ -94,10 +96,7 @@ class BrandUtils {
       ),
       child: Text(
         brand.title ?? "",
-        style: AppStyle.interRegular(
-          size: 12,
-          color: AppStyle.white,
-        ),
+        style: AppStyle.interRegular(size: 12, color: AppStyle.white),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),

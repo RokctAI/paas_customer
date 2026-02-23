@@ -50,10 +50,11 @@ class _CategoryTabBarState extends State<CategoryTabBar> {
                         controller: widget.controller,
                         isScrollable: true,
                         padding: REdgeInsets.only(
-                            top: MediaQuery.paddingOf(context).top - 8,
-                            bottom: 8,
-                            left: 12,
-                            right: 16),
+                          top: MediaQuery.paddingOf(context).top - 8,
+                          bottom: 8,
+                          left: 12,
+                          right: 16,
+                        ),
                         labelPadding: REdgeInsets.symmetric(horizontal: 16),
                         indicatorWeight: 6,
                         onTap: (index) {
@@ -80,7 +81,9 @@ class _CategoryTabBarState extends State<CategoryTabBar> {
                                   spreadRadius: 0,
                                   blurRadius: 2,
                                   offset: const Offset(
-                                      0, 1), // changes position of shadow
+                                    0,
+                                    1,
+                                  ), // changes position of shadow
                                 ),
                               ],
                             ),
@@ -109,19 +112,22 @@ Timer? timer;
 class FadingEffect extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    Rect rect =
-        Rect.fromPoints(const Offset(0, 0), Offset(size.width, size.height));
+    Rect rect = Rect.fromPoints(
+      const Offset(0, 0),
+      Offset(size.width, size.height),
+    );
     LinearGradient lg = LinearGradient(
-        begin: Alignment.centerRight,
-        end: Alignment.centerLeft,
-        colors: [
-          AppStyle.bgGrey,
-          Colors.grey.shade50.withOpacity(.4),
-          Colors.grey.shade50.withOpacity(.1),
-          Colors.grey.shade50.withOpacity(.01),
-          Colors.transparent,
-          Colors.transparent,
-        ]);
+      begin: Alignment.centerRight,
+      end: Alignment.centerLeft,
+      colors: [
+        AppStyle.bgGrey,
+        Colors.grey.shade50.withOpacity(.4),
+        Colors.grey.shade50.withOpacity(.1),
+        Colors.grey.shade50.withOpacity(.01),
+        Colors.transparent,
+        Colors.transparent,
+      ],
+    );
     Paint paint = Paint()..shader = lg.createShader(rect);
     canvas.drawRect(rect, paint);
   }
@@ -129,4 +135,3 @@ class FadingEffect extends CustomPainter {
   @override
   bool shouldRepaint(FadingEffect oldDelegate) => false;
 }
-

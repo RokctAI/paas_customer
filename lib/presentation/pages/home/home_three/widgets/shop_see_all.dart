@@ -21,16 +21,14 @@ class ShopSeeAll extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              padding: REdgeInsets.symmetric(
-                horizontal: 8,
-                vertical: 6,
-              ),
+              padding: REdgeInsets.symmetric(horizontal: 8, vertical: 6),
               decoration: BoxDecoration(
                 color: AppStyle.white,
                 borderRadius: BorderRadius.circular(12.r),
                 border: Border.all(
-                    color: AppStyle.outlineButtonBorder.withOpacity(0.5),
-                    width: 1.2),
+                  color: AppStyle.outlineButtonBorder.withOpacity(0.5),
+                  width: 1.2,
+                ),
               ),
               child: Center(
                 child: Column(
@@ -43,7 +41,10 @@ class ShopSeeAll extends StatelessWidget {
                     4.verticalSpace,
                     Text(
                       "$brandCount ${AppHelpers.getTranslation(TrKeys.brands)}",
-                      style: AppStyle.interNoSemi(size: 14, color: AppStyle.textGrey),
+                      style: AppStyle.interNoSemi(
+                        size: 14,
+                        color: AppStyle.textGrey,
+                      ),
                     ),
                   ],
                 ),
@@ -73,10 +74,7 @@ class ShopSeeAll extends StatelessWidget {
                       ),
                     ),
                   ),
-                  child: const Icon(
-                    FlutterRemix.arrow_right_up_line,
-                    size: 20,
-                  ),
+                  child: const Icon(FlutterRemix.arrow_right_up_line, size: 20),
                 ),
               ),
             ),
@@ -86,4 +84,3 @@ class ShopSeeAll extends StatelessWidget {
     );
   }
 }
-

@@ -38,19 +38,13 @@ class SearchTextField extends StatelessWidget {
       autocorrect: true,
       autofocus: autofocus,
       onTap: onTap,
-      style: AppStyle.interRegular(
-        size: 16,
-        color: AppStyle.black,
-      ),
+      style: AppStyle.interRegular(size: 16, color: AppStyle.black),
       onChanged: onChanged,
       controller: textEditingController,
       cursorColor: AppStyle.black,
       cursorWidth: 1,
       decoration: InputDecoration(
-        hintStyle: AppStyle.interNormal(
-          size: 13,
-          color: AppStyle.black,
-        ),
+        hintStyle: AppStyle.interNormal(size: 13, color: AppStyle.black),
         hintText: hintText ?? AppHelpers.getTranslation(TrKeys.searchApp),
         contentPadding: REdgeInsets.symmetric(horizontal: 15, vertical: 14),
         prefixIcon: isSearchIcon
@@ -66,23 +60,31 @@ class SearchTextField extends StatelessWidget {
         focusedBorder: isBorder
             ? OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12.r),
-                borderSide:
-                    const BorderSide(color: AppStyle.borderColor, width: 1.2))
+                borderSide: const BorderSide(
+                  color: AppStyle.borderColor,
+                  width: 1.2,
+                ),
+              )
             : InputBorder.none,
         border: isBorder
             ? OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12.r),
-                borderSide:
-                    const BorderSide(color: AppStyle.borderColor, width: 1.2))
+                borderSide: const BorderSide(
+                  color: AppStyle.borderColor,
+                  width: 1.2,
+                ),
+              )
             : InputBorder.none,
         enabledBorder: isBorder
             ? OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12.r),
-                borderSide:
-                    const BorderSide(color: AppStyle.borderColor, width: 1.2))
+                borderSide: const BorderSide(
+                  color: AppStyle.borderColor,
+                  width: 1.2,
+                ),
+              )
             : InputBorder.none,
       ),
     );
   }
 }
-

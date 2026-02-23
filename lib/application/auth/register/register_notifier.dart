@@ -29,10 +29,8 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
   final AuthRepositoryFacade _authRepository;
   final UserRepositoryFacade _userRepositoryFacade;
 
-  RegisterNotifier(
-    this._authRepository,
-    this._userRepositoryFacade,
-  ) : super(const RegisterState());
+  RegisterNotifier(this._authRepository, this._userRepositoryFacade)
+    : super(const RegisterState());
 
   void setPassword(String password) {
     state = state.copyWith(password: password.trim(), isPasswordInvalid: false);
@@ -54,9 +52,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
   }
 
   void setPhone(String value) {
-    state = state.copyWith(
-      phone: value.trim(),
-    );
+    state = state.copyWith(phone: value.trim());
   }
 
   void setLatName(String name) {
@@ -87,9 +83,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
         return;
       }
       state = state.copyWith(isLoading: true, isSuccess: false);
-      final response = await _authRepository.sigUp(
-        email: state.email,
-      );
+      final response = await _authRepository.sigUp(email: state.email);
       response.when(
         success: (data) async {
           state = state.copyWith(isLoading: false, isSuccess: true);
@@ -101,13 +95,11 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
             AppHelpers.showCheckTopSnackBar(
               context,
               AppHelpers.getTranslation(
-                  AppHelpers.getTranslation(TrKeys.emailAlreadyExists)),
+                AppHelpers.getTranslation(TrKeys.emailAlreadyExists),
+              ),
             );
           } else {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           }
         },
       );
@@ -119,7 +111,9 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
   }
 
   Future<void> sendCodeToNumber(
-      BuildContext context, ValueChanged<String> onSuccess) async {
+    BuildContext context,
+    ValueChanged<String> onSuccess,
+  ) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isLoading: true, isSuccess: false);
@@ -180,60 +174,78 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
         return;
       }
       if (!AppValidators.isValidConfirmPassword(
-          state.password, state.confirmPassword)) {
+        state.password,
+        state.confirmPassword,
+      )) {
         state = state.copyWith(isConfirmPasswordInvalid: true);
         return;
       }
       state = state.copyWith(isLoading: true);
       final response = await _authRepository.sigUpWithData(
-          user: UserModel(
-              email: state.email,
-              firstname: state.firstName,
-              lastname: state.lastName,
-              phone: state.phone,
-              password: state.password,
-              confirmPassword: state.confirmPassword,
-              referral: state.referral));
+        user: UserModel(
+          email: state.email,
+          firstname: state.firstName,
+          lastname: state.lastName,
+          phone: state.phone,
+          password: state.password,
+          confirmPassword: state.confirmPassword,
+          referral: state.referral,
+        ),
+      );
 
       response.when(
         success: (data) async {
-          state = state.copyWith(
-            isLoading: false,
-          );
+          state = state.copyWith(isLoading: false);
           LocalStorage.setToken(data.token);
-          LocalStorage.setAddressSelected(AddressData(
-              title: data.user?.addresses?.firstWhere(
-                      (element) => element.active ?? false, orElse: () {
-                    return AddressNewModel();
-                  }).title ??
+          LocalStorage.setAddressSelected(
+            AddressData(
+              title:
+                  data.user?.addresses
+                      ?.firstWhere(
+                        (element) => element.active ?? false,
+                        orElse: () {
+                          return AddressNewModel();
+                        },
+                      )
+                      .title ??
                   "",
-              address: data.user?.addresses
-                      ?.firstWhere((element) => element.active ?? false,
-                          orElse: () {
-                        return AddressNewModel();
-                      })
+              address:
+                  data.user?.addresses
+                      ?.firstWhere(
+                        (element) => element.active ?? false,
+                        orElse: () {
+                          return AddressNewModel();
+                        },
+                      )
                       .address
                       ?.address ??
                   "",
               location: LocationModel(
-                  longitude: data.user?.addresses
-                      ?.firstWhere((element) => element.active ?? false,
-                          orElse: () {
+                longitude: data.user?.addresses
+                    ?.firstWhere(
+                      (element) => element.active ?? false,
+                      orElse: () {
                         return AddressNewModel();
-                      })
-                      .location
-                      ?.last,
-                  latitude: data.user?.addresses
-                      ?.firstWhere((element) => element.active ?? false,
-                          orElse: () {
+                      },
+                    )
+                    .location
+                    ?.last,
+                latitude: data.user?.addresses
+                    ?.firstWhere(
+                      (element) => element.active ?? false,
+                      orElse: () {
                         return AddressNewModel();
-                      })
-                      .location
-                      ?.first)));
+                      },
+                    )
+                    .location
+                    ?.first,
+              ),
+            ),
+          );
           if (AppConstants.isDemo) {
             context.replaceRoute(UiTypeRoute());
           } else {
-             AppHelpers.goHome(context);
+            AppHelpers.goHome(context);
           }
           String? fcmToken = await FirebaseMessaging.instance.getToken();
           _userRepositoryFacade.updateFirebaseToken(fcmToken);
@@ -244,13 +256,11 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
             AppHelpers.showCheckTopSnackBar(
               context,
               AppHelpers.getTranslation(
-                  AppHelpers.getTranslation(TrKeys.referralIncorrect)),
+                AppHelpers.getTranslation(TrKeys.referralIncorrect),
+              ),
             );
           } else {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           }
         },
       );
@@ -269,58 +279,78 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
         return;
       }
       if (!AppValidators.isValidConfirmPassword(
-          state.password, state.confirmPassword)) {
+        state.password,
+        state.confirmPassword,
+      )) {
         state = state.copyWith(isConfirmPasswordInvalid: true);
         return;
       }
       state = state.copyWith(isLoading: true);
       final response = await _authRepository.sigUpWithPhone(
-          user: UserModel(
-              email: state.email,
-              firstname: state.firstName,
-              lastname: state.lastName,
-              phone: state.phone,
-              password: state.password,
-              confirmPassword: state.confirmPassword,
-              referral: state.referral));
+        user: UserModel(
+          email: state.email,
+          firstname: state.firstName,
+          lastname: state.lastName,
+          phone: state.phone,
+          password: state.password,
+          confirmPassword: state.confirmPassword,
+          referral: state.referral,
+        ),
+      );
 
       response.when(
         success: (data) async {
           state = state.copyWith(isLoading: false);
           LocalStorage.setToken(data.token);
-          LocalStorage.setAddressSelected(AddressData(
-              title: data.user?.addresses?.firstWhere(
-                      (element) => element.active ?? false, orElse: () {
-                    return AddressNewModel();
-                  }).title ??
+          LocalStorage.setAddressSelected(
+            AddressData(
+              title:
+                  data.user?.addresses
+                      ?.firstWhere(
+                        (element) => element.active ?? false,
+                        orElse: () {
+                          return AddressNewModel();
+                        },
+                      )
+                      .title ??
                   "",
-              address: data.user?.addresses
-                      ?.firstWhere((element) => element.active ?? false,
-                          orElse: () {
-                        return AddressNewModel();
-                      })
+              address:
+                  data.user?.addresses
+                      ?.firstWhere(
+                        (element) => element.active ?? false,
+                        orElse: () {
+                          return AddressNewModel();
+                        },
+                      )
                       .address
                       ?.address ??
                   "",
               location: LocationModel(
-                  longitude: data.user?.addresses
-                      ?.firstWhere((element) => element.active ?? false,
-                          orElse: () {
+                longitude: data.user?.addresses
+                    ?.firstWhere(
+                      (element) => element.active ?? false,
+                      orElse: () {
                         return AddressNewModel();
-                      })
-                      .location
-                      ?.last,
-                  latitude: data.user?.addresses
-                      ?.firstWhere((element) => element.active ?? false,
-                          orElse: () {
+                      },
+                    )
+                    .location
+                    ?.last,
+                latitude: data.user?.addresses
+                    ?.firstWhere(
+                      (element) => element.active ?? false,
+                      orElse: () {
                         return AddressNewModel();
-                      })
-                      .location
-                      ?.first)));
+                      },
+                    )
+                    .location
+                    ?.first,
+              ),
+            ),
+          );
           if (AppConstants.isDemo) {
             context.replaceRoute(UiTypeRoute());
           } else {
-             AppHelpers.goHome(context);
+            AppHelpers.goHome(context);
           }
           String? fcmToken = await FirebaseMessaging.instance.getToken();
           _userRepositoryFacade.updateFirebaseToken(fcmToken);
@@ -331,13 +361,11 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
             AppHelpers.showCheckTopSnackBar(
               context,
               AppHelpers.getTranslation(
-                  AppHelpers.getTranslation(TrKeys.referralIncorrect)),
+                AppHelpers.getTranslation(TrKeys.referralIncorrect),
+              ),
             );
           } else {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           }
         },
       );
@@ -356,20 +384,24 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
         return;
       }
       if (!AppValidators.isValidConfirmPassword(
-          state.password, state.confirmPassword)) {
+        state.password,
+        state.confirmPassword,
+      )) {
         state = state.copyWith(isConfirmPasswordInvalid: true);
         return;
       }
       state = state.copyWith(isLoading: true);
       final response = await _userRepositoryFacade.editProfile(
-          user: EditProfile(
-              // email: state.email,
-              firstname: state.firstName,
-              lastname: state.lastName,
-              phone: state.email,
-              password: state.password,
-              confirmPassword: state.confirmPassword,
-              referral: state.referral));
+        user: EditProfile(
+          // email: state.email,
+          firstname: state.firstName,
+          lastname: state.lastName,
+          phone: state.email,
+          password: state.password,
+          confirmPassword: state.confirmPassword,
+          referral: state.referral,
+        ),
+      );
 
       response.when(
         success: (data) async {
@@ -377,7 +409,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
           if (AppConstants.isDemo) {
             context.replaceRoute(UiTypeRoute());
           } else {
-             AppHelpers.goHome(context);
+            AppHelpers.goHome(context);
           }
           String? fcmToken = await FirebaseMessaging.instance.getToken();
           _userRepositoryFacade.updateFirebaseToken(fcmToken);
@@ -388,13 +420,11 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
             AppHelpers.showCheckTopSnackBar(
               context,
               AppHelpers.getTranslation(
-                  AppHelpers.getTranslation(TrKeys.referralIncorrect)),
+                AppHelpers.getTranslation(TrKeys.referralIncorrect),
+              ),
             );
           } else {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           }
         },
       );
@@ -437,35 +467,51 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
         success: (data) async {
           state = state.copyWith(isLoading: false);
           LocalStorage.setToken(data.data?.accessToken ?? '');
-          LocalStorage.setAddressSelected(AddressData(
-              title: data.data?.user?.addresses?.firstWhere(
-                      (element) => element.active ?? false, orElse: () {
-                    return AddressNewModel();
-                  }).title ??
+          LocalStorage.setAddressSelected(
+            AddressData(
+              title:
+                  data.data?.user?.addresses
+                      ?.firstWhere(
+                        (element) => element.active ?? false,
+                        orElse: () {
+                          return AddressNewModel();
+                        },
+                      )
+                      .title ??
                   "",
-              address: data.data?.user?.addresses
-                      ?.firstWhere((element) => element.active ?? false,
-                          orElse: () {
-                        return AddressNewModel();
-                      })
+              address:
+                  data.data?.user?.addresses
+                      ?.firstWhere(
+                        (element) => element.active ?? false,
+                        orElse: () {
+                          return AddressNewModel();
+                        },
+                      )
                       .address
                       ?.address ??
                   "",
               location: LocationModel(
-                  longitude: data.data?.user?.addresses
-                      ?.firstWhere((element) => element.active ?? false,
-                          orElse: () {
+                longitude: data.data?.user?.addresses
+                    ?.firstWhere(
+                      (element) => element.active ?? false,
+                      orElse: () {
                         return AddressNewModel();
-                      })
-                      .location
-                      ?.last,
-                  latitude: data.data?.user?.addresses
-                      ?.firstWhere((element) => element.active ?? false,
-                          orElse: () {
+                      },
+                    )
+                    .location
+                    ?.last,
+                latitude: data.data?.user?.addresses
+                    ?.firstWhere(
+                      (element) => element.active ?? false,
+                      orElse: () {
                         return AddressNewModel();
-                      })
-                      .location
-                      ?.first)));
+                      },
+                    )
+                    .location
+                    ?.first,
+              ),
+            ),
+          );
           context.router.popUntilRoot();
           if (AppConstants.isDemo) {
             context.replaceRoute(UiTypeRoute());
@@ -477,10 +523,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -511,22 +554,25 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
           loginBehavior: LoginBehavior.nativeWithFallback,
         );
         debugPrint(
-            '===> login with face token ${user.accessToken?.tokenString}');
+          '===> login with face token ${user.accessToken?.tokenString}',
+        );
         debugPrint('===> login with face authenticationToken ${user.status}');
         final rawNonce = AppHelpers.generateNonce();
         final OAuthCredential credential =
             user.accessToken?.type == AccessTokenType.limited
-                ? OAuthCredential(
-                    providerId: 'facebook.com',
-                    signInMethod: 'oauth',
-                    idToken: user.accessToken!.tokenString,
-                    rawNonce: rawNonce,
-                  )
-                : FacebookAuthProvider.credential(
-                    user.accessToken?.tokenString ?? "");
+            ? OAuthCredential(
+                providerId: 'facebook.com',
+                signInMethod: 'oauth',
+                idToken: user.accessToken!.tokenString,
+                rawNonce: rawNonce,
+              )
+            : FacebookAuthProvider.credential(
+                user.accessToken?.tokenString ?? "",
+              );
 
-        final userObj =
-            await FirebaseAuth.instance.signInWithCredential(credential);
+        final userObj = await FirebaseAuth.instance.signInWithCredential(
+          credential,
+        );
 
         if (user.status == LoginStatus.success) {
           final response = await _authRepository.loginWithGoogle(
@@ -539,35 +585,51 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
             success: (data) async {
               state = state.copyWith(isLoading: false);
               LocalStorage.setToken(data.data?.accessToken ?? '');
-              LocalStorage.setAddressSelected(AddressData(
-                  title: data.data?.user?.addresses?.firstWhere(
-                          (element) => element.active ?? false, orElse: () {
-                        return AddressNewModel();
-                      }).title ??
+              LocalStorage.setAddressSelected(
+                AddressData(
+                  title:
+                      data.data?.user?.addresses
+                          ?.firstWhere(
+                            (element) => element.active ?? false,
+                            orElse: () {
+                              return AddressNewModel();
+                            },
+                          )
+                          .title ??
                       "",
-                  address: data.data?.user?.addresses
-                          ?.firstWhere((element) => element.active ?? false,
-                              orElse: () {
-                            return AddressNewModel();
-                          })
+                  address:
+                      data.data?.user?.addresses
+                          ?.firstWhere(
+                            (element) => element.active ?? false,
+                            orElse: () {
+                              return AddressNewModel();
+                            },
+                          )
                           .address
                           ?.address ??
                       "",
                   location: LocationModel(
-                      longitude: data.data?.user?.addresses
-                          ?.firstWhere((element) => element.active ?? false,
-                              orElse: () {
+                    longitude: data.data?.user?.addresses
+                        ?.firstWhere(
+                          (element) => element.active ?? false,
+                          orElse: () {
                             return AddressNewModel();
-                          })
-                          .location
-                          ?.last,
-                      latitude: data.data?.user?.addresses
-                          ?.firstWhere((element) => element.active ?? false,
-                              orElse: () {
+                          },
+                        )
+                        .location
+                        ?.last,
+                    latitude: data.data?.user?.addresses
+                        ?.firstWhere(
+                          (element) => element.active ?? false,
+                          orElse: () {
                             return AddressNewModel();
-                          })
-                          .location
-                          ?.first)));
+                          },
+                        )
+                        .location
+                        ?.first,
+                  ),
+                ),
+              );
               context.router.popUntilRoot();
               AppHelpers.goHome(context);
               String? fcmToken = await FirebaseMessaging.instance.getToken();
@@ -575,10 +637,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
             },
             failure: (failure, status) {
               state = state.copyWith(isLoading: false);
-              AppHelpers.showCheckTopSnackBar(
-                context,
-                failure,
-              );
+              AppHelpers.showCheckTopSnackBar(context, failure);
             },
           );
         } else {
@@ -620,48 +679,65 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
           accessToken: credential.authorizationCode,
         );
 
-        final userObj =
-            await FirebaseAuth.instance.signInWithCredential(credentialApple);
+        final userObj = await FirebaseAuth.instance.signInWithCredential(
+          credentialApple,
+        );
 
         final response = await _authRepository.loginWithGoogle(
-            email: credential.email ?? userObj.user?.email ?? "",
-            displayName:
-                credential.givenName ?? userObj.user?.displayName ?? "",
-            id: credential.userIdentifier ?? userObj.user?.uid ?? "",
-            avatar: userObj.user?.displayName ?? "");
+          email: credential.email ?? userObj.user?.email ?? "",
+          displayName: credential.givenName ?? userObj.user?.displayName ?? "",
+          id: credential.userIdentifier ?? userObj.user?.uid ?? "",
+          avatar: userObj.user?.displayName ?? "",
+        );
         response.when(
           success: (data) async {
             state = state.copyWith(isLoading: false);
             LocalStorage.setToken(data.data?.accessToken ?? '');
-            LocalStorage.setAddressSelected(AddressData(
-                title: data.data?.user?.addresses?.firstWhere(
-                        (element) => element.active ?? false, orElse: () {
-                      return AddressNewModel();
-                    }).title ??
+            LocalStorage.setAddressSelected(
+              AddressData(
+                title:
+                    data.data?.user?.addresses
+                        ?.firstWhere(
+                          (element) => element.active ?? false,
+                          orElse: () {
+                            return AddressNewModel();
+                          },
+                        )
+                        .title ??
                     "",
-                address: data.data?.user?.addresses
-                        ?.firstWhere((element) => element.active ?? false,
-                            orElse: () {
-                          return AddressNewModel();
-                        })
+                address:
+                    data.data?.user?.addresses
+                        ?.firstWhere(
+                          (element) => element.active ?? false,
+                          orElse: () {
+                            return AddressNewModel();
+                          },
+                        )
                         .address
                         ?.address ??
                     "",
                 location: LocationModel(
-                    longitude: data.data?.user?.addresses
-                        ?.firstWhere((element) => element.active ?? false,
-                            orElse: () {
+                  longitude: data.data?.user?.addresses
+                      ?.firstWhere(
+                        (element) => element.active ?? false,
+                        orElse: () {
                           return AddressNewModel();
-                        })
-                        .location
-                        ?.last,
-                    latitude: data.data?.user?.addresses
-                        ?.firstWhere((element) => element.active ?? false,
-                            orElse: () {
+                        },
+                      )
+                      .location
+                      ?.last,
+                  latitude: data.data?.user?.addresses
+                      ?.firstWhere(
+                        (element) => element.active ?? false,
+                        orElse: () {
                           return AddressNewModel();
-                        })
-                        .location
-                        ?.first)));
+                        },
+                      )
+                      .location
+                      ?.first,
+                ),
+              ),
+            );
             context.router.popUntilRoot();
             if (AppConstants.isDemo) {
               context.replaceRoute(UiTypeRoute());
@@ -697,4 +773,3 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
     }
   }
 }
-

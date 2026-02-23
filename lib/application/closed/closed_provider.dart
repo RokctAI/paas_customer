@@ -5,6 +5,5 @@ import 'closed_state.dart';
 
 final closedProvider =
     StateNotifierProvider.autoDispose<ClosedNotifier, ClosedState>(
-  (ref) => ClosedNotifier(),
-);
-
+      (ref) => ClosedNotifier(),
+    );

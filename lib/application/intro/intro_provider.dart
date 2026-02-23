@@ -5,6 +5,5 @@ import 'intro_state.dart';
 
 final introProvider =
     StateNotifierProvider.autoDispose<IntroNotifier, IntroState>(
-  (ref) => IntroNotifier(),
-);
-
+      (ref) => IntroNotifier(),
+    );

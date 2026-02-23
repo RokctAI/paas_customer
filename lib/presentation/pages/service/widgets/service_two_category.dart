@@ -16,11 +16,12 @@ class ServiceTwoCategory extends StatelessWidget {
   final HomeNotifier event;
   final int categoryIndex;
 
-  const ServiceTwoCategory(
-      {super.key,
-      required this.state,
-      required this.event,
-      required this.categoryIndex});
+  const ServiceTwoCategory({
+    super.key,
+    required this.state,
+    required this.event,
+    required this.categoryIndex,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class ServiceTwoCategory extends StatelessWidget {
         child: ListView.builder(
           padding: EdgeInsets.only(left: 16.r, bottom: 16.r, top: 8.r),
           shrinkWrap: true,
-          
+
           scrollDirection: Axis.horizontal,
           itemCount:
               (state.categories[categoryIndex].children?.length ?? 0) + 1,
@@ -45,8 +46,11 @@ class ServiceTwoCategory extends StatelessWidget {
                   child: index == 0
                       ? AnimationButtonEffect(
                           child: Padding(
-                            padding:
-                                REdgeInsets.only(right: 8, bottom: 8, top: 4),
+                            padding: REdgeInsets.only(
+                              right: 8,
+                              bottom: 8,
+                              top: 4,
+                            ),
                             child: InkWell(
                               borderRadius: BorderRadius.circular(24.r),
                               onTap: () {
@@ -54,18 +58,20 @@ class ServiceTwoCategory extends StatelessWidget {
                                   context: context,
                                   modal: (c) => FilterPage(
                                     controller: c,
-                                    categoryId: (state.selectIndexSubCategory !=
-                                                -1
+                                    categoryId:
+                                        (state.selectIndexSubCategory != -1
                                             ? (state
-                                                .categories[
-                                                    state.selectIndexCategory]
-                                                .children?[state
-                                                    .selectIndexSubCategory]
-                                                .id?.toString())
+                                                  .categories[state
+                                                      .selectIndexCategory]
+                                                  .children?[state
+                                                      .selectIndexSubCategory]
+                                                  .id
+                                                  ?.toString())
                                             : state
-                                                .categories[
-                                                    state.selectIndexCategory]
-                                                .id?.toString()) ??
+                                                  .categories[state
+                                                      .selectIndexCategory]
+                                                  .id
+                                                  ?.toString()) ??
                                         "",
                                   ),
                                   isDarkMode: false,
@@ -76,7 +82,9 @@ class ServiceTwoCategory extends StatelessWidget {
                               child: Container(
                                 width: 44.w,
                                 padding: EdgeInsets.symmetric(
-                                    horizontal: 6.r, vertical: 4.r),
+                                  horizontal: 6.r,
+                                  vertical: 4.r,
+                                ),
                                 decoration: BoxDecoration(
                                   color: AppStyle.black,
                                   boxShadow: const [
@@ -85,7 +93,7 @@ class ServiceTwoCategory extends StatelessWidget {
                                       blurRadius: 15,
                                       offset: Offset(0, 4),
                                       spreadRadius: 0,
-                                    )
+                                    ),
                                   ],
                                   borderRadius: BorderRadius.circular(20.r),
                                 ),
@@ -102,8 +110,11 @@ class ServiceTwoCategory extends StatelessWidget {
                       : CategoryTwoItem(
                           index: index - 1,
                           image: category.children?[index - 1].img ?? "",
-                          title: category
-                                  .children?[index - 1].translation?.title ??
+                          title:
+                              category
+                                  .children?[index - 1]
+                                  .translation
+                                  ?.title ??
                               "",
                           isActive: index - 1 == state.selectIndexSubCategory,
                           onTap: () {
@@ -119,4 +130,3 @@ class ServiceTwoCategory extends StatelessWidget {
     );
   }
 }
-

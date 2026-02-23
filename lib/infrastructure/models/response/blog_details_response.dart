@@ -30,13 +30,12 @@ class BlogDetailsResponse {
     bool? status,
     String? message,
     BlogData? data,
-  }) =>
-      BlogDetailsResponse(
-        timestamp: timestamp ?? _timestamp,
-        status: status ?? _status,
-        message: message ?? _message,
-        data: data ?? _data,
-      );
+  }) => BlogDetailsResponse(
+    timestamp: timestamp ?? _timestamp,
+    status: status ?? _status,
+    message: message ?? _message,
+    data: data ?? _data,
+  );
 
   String? get timestamp => _timestamp;
 
@@ -57,4 +56,3 @@ class BlogDetailsResponse {
     return map;
   }
 }
-

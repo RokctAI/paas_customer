@@ -29,8 +29,7 @@ class MarketItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.pushRoute(
-            ShopRoute(shopId: (shop.id ?? ""), shop: shop));
+        context.pushRoute(ShopRoute(shopId: (shop.id ?? ""), shop: shop));
       },
       child: isShop
           ? _shopItem(context)
@@ -41,8 +40,9 @@ class MarketItem extends StatelessWidget {
               width: 268.w,
               height: 260.h,
               decoration: BoxDecoration(
-                  color: AppStyle.white,
-                  borderRadius: BorderRadius.circular(10.r)),
+                color: AppStyle.white,
+                borderRadius: BorderRadius.circular(10.r),
+              ),
               child: Stack(
                 children: [
                   Column(
@@ -84,7 +84,7 @@ class MarketItem extends StatelessWidget {
                                   Padding(
                                     padding: EdgeInsets.only(left: 4.r),
                                     child: const BadgeItem(),
-                                  )
+                                  ),
                               ],
                             ),
                           ),
@@ -93,10 +93,8 @@ class MarketItem extends StatelessWidget {
                             child: Text(
                               shop.bonus != null
                                   ? ((shop.bonus?.type ?? "sum") == "sum")
-                                      ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(
-                                          number: shop.bonus?.value,
-                                        )} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
-                                      : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                                        ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(number: shop.bonus?.value)} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                                        : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
                                   : shop.translation?.description ?? "",
                               style: AppStyle.interNormal(
                                 size: 12,
@@ -106,15 +104,14 @@ class MarketItem extends StatelessWidget {
                             ),
                           ),
                           8.verticalSpace,
-                          Divider(
-                            color: AppStyle.black.withOpacity(0.3),
-                          ),
+                          Divider(color: AppStyle.black.withOpacity(0.3)),
                           Padding(
                             padding: EdgeInsets.only(
-                                top: 8.h,
-                                right: 16.w,
-                                left: 16.w,
-                                bottom: 14.h),
+                              top: 8.h,
+                              right: 16.w,
+                              left: 16.w,
+                              bottom: 14.h,
+                            ),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
@@ -132,8 +129,9 @@ class MarketItem extends StatelessWidget {
                                   width: 5.w,
                                   height: 5.h,
                                   decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: AppStyle.separatorDot),
+                                    shape: BoxShape.circle,
+                                    color: AppStyle.separatorDot,
+                                  ),
                                 ),
                                 10.horizontalSpace,
                                 SvgPicture.asset("assets/svgs/star.svg"),
@@ -147,7 +145,7 @@ class MarketItem extends StatelessWidget {
                                 ),
                               ],
                             ),
-                          )
+                          ),
                         ],
                       ),
                     ],
@@ -168,13 +166,15 @@ class MarketItem extends StatelessWidget {
                             padding: 4.r,
                           ),
                           Padding(
-                            padding:
-                                EdgeInsets.only(bottom: isSimpleShop ? 6.h : 0),
+                            padding: EdgeInsets.only(
+                              bottom: isSimpleShop ? 6.h : 0,
+                            ),
                             child: BonusDiscountPopular(
-                                isPopular: shop.isRecommend ?? false,
-                                bonus: shop.bonus,
-                                isDiscount: shop.isDiscount ?? false),
-                          )
+                              isPopular: shop.isRecommend ?? false,
+                              bonus: shop.bonus,
+                              isDiscount: shop.isDiscount ?? false,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -192,9 +192,10 @@ class MarketItem extends StatelessWidget {
       height: 140.r,
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-          color: AppStyle.white,
-          borderRadius: BorderRadius.circular(10.r),
-          border: Border.all(color: AppStyle.borderColor)),
+        color: AppStyle.white,
+        borderRadius: BorderRadius.circular(10.r),
+        border: Border.all(color: AppStyle.borderColor),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -215,10 +216,7 @@ class MarketItem extends StatelessWidget {
                   (shop.translation?.title?.length ?? 0) > 12
                       ? "${shop.translation?.title?.substring(0, 12) ?? " "}.."
                       : shop.translation?.title ?? "",
-                  style: AppStyle.interSemi(
-                    size: 15,
-                    color: AppStyle.black,
-                  ),
+                  style: AppStyle.interSemi(size: 15, color: AppStyle.black),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -226,7 +224,7 @@ class MarketItem extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(left: 4.r),
                     child: const BadgeItem(),
-                  )
+                  ),
               ],
             ),
           ),
@@ -234,15 +232,10 @@ class MarketItem extends StatelessWidget {
           Text(
             shop.bonus != null
                 ? ((shop.bonus?.type ?? "sum") == "sum")
-                    ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(
-                        number: shop.bonus?.value,
-                      )} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
-                    : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                      ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(number: shop.bonus?.value)} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                      : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
                 : shop.translation?.description ?? "",
-            style: AppStyle.interNormal(
-              size: 12,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interNormal(size: 12, color: AppStyle.black),
             maxLines: 1,
           ),
         ],
@@ -250,4 +243,3 @@ class MarketItem extends StatelessWidget {
     );
   }
 }
-

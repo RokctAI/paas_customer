@@ -31,38 +31,45 @@ class AddAddress extends StatelessWidget {
           children: [
             Expanded(
               child: CustomButton(
-                  title: AppHelpers.getTranslation(TrKeys.cancel),
-                  borderColor: AppStyle.black,
-                  background: AppStyle.transparent,
-                  onPressed: () {
-                    Navigator.pop(context);
-                    context.pushRoute(ViewMapRoute(isPop: true));
-                  }),
+                title: AppHelpers.getTranslation(TrKeys.cancel),
+                borderColor: AppStyle.black,
+                background: AppStyle.transparent,
+                onPressed: () {
+                  Navigator.pop(context);
+                  context.pushRoute(ViewMapRoute(isPop: true));
+                },
+              ),
             ),
             24.horizontalSpace,
             Expanded(
-              child: Consumer(builder: (context, ref, child) {
-                return CustomButton(
+              child: Consumer(
+                builder: (context, ref, child) {
+                  return CustomButton(
                     title: AppHelpers.getTranslation(TrKeys.yes),
                     onPressed: () {
                       Navigator.pop(context);
                       LocalStorage.setAddressSelected(
                         AddressData(
-                            title: AppHelpers.getAppAddressName(),
-                            location: LocationModel(
-                                longitude: (AppHelpers.getInitialLongitude() ??
-                                    AppConstants.demoLongitude),
-                                latitude: (AppHelpers.getInitialLatitude() ??
-                                    AppConstants.demoLatitude))),
+                          title: AppHelpers.getAppAddressName(),
+                          location: LocationModel(
+                            longitude:
+                                (AppHelpers.getInitialLongitude() ??
+                                AppConstants.demoLongitude),
+                            latitude:
+                                (AppHelpers.getInitialLatitude() ??
+                                AppConstants.demoLatitude),
+                          ),
+                        ),
                       );
                       ref.read(homeProvider.notifier).setAddress();
-                    });
-              }),
+                    },
+                  );
+                },
+              ),
             ),
           ],
-        )
+        ),
       ],
     );
   }
 }
-

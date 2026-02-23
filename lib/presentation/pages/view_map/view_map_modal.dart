@@ -67,9 +67,12 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
       margin: MediaQuery.viewInsetsOf(context),
       padding: EdgeInsets.symmetric(horizontal: 16.r),
       decoration: BoxDecoration(
-          color: AppStyle.white,
-          borderRadius: BorderRadius.only(
-              topRight: Radius.circular(16.r), topLeft: Radius.circular(16.r))),
+        color: AppStyle.white,
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(16.r),
+          topLeft: Radius.circular(16.r),
+        ),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -123,16 +126,18 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
                     Expanded(
                       child: OutlinedBorderTextField(
                         textController: house,
-                        label: AppHelpers.getTranslation(TrKeys.house)
-                            .toUpperCase(),
+                        label: AppHelpers.getTranslation(
+                          TrKeys.house,
+                        ).toUpperCase(),
                       ),
                     ),
                     24.horizontalSpace,
                     Expanded(
                       child: OutlinedBorderTextField(
                         textController: floor,
-                        label: AppHelpers.getTranslation(TrKeys.floor)
-                            .toUpperCase(),
+                        label: AppHelpers.getTranslation(
+                          TrKeys.floor,
+                        ).toUpperCase(),
                       ),
                     ),
                   ],
@@ -153,8 +158,8 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
                   : AppStyle.black,
               title: !widget.isShopLocation
                   ? (state.isActive
-                      ? AppHelpers.getTranslation(TrKeys.apply)
-                      : AppHelpers.getTranslation(TrKeys.noDriverZone))
+                        ? AppHelpers.getTranslation(TrKeys.apply)
+                        : AppHelpers.getTranslation(TrKeys.noDriverZone))
                   : AppHelpers.getTranslation(TrKeys.apply),
               onPressed: () {
                 if (widget.isShopLocation) {
@@ -162,31 +167,57 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
                 } else {
                   if (state.isActive) {
                     ref.read(homeProvider.notifier)
-                      ..fetchBannerPage(context, RefreshController(),
-                          isRefresh: true)
-                      ..fetchAllShopsPage(context, RefreshController(),
-                          isRefresh: true)
-                      ..fetchShopPageRecommend(context, RefreshController(),
-                          isRefresh: true)
-                      ..fetchShopPage(context, RefreshController(),
-                          isRefresh: true)
-                      ..fetchStoriesPage(context, RefreshController(),
-                          isRefresh: true)
-                      ..fetchNewShopsPage(context, RefreshController(),
-                          isRefresh: true)
-                      ..fetchCategoriesPage(context, RefreshController(),
-                          isRefresh: true)
+                      ..fetchBannerPage(
+                        context,
+                        RefreshController(),
+                        isRefresh: true,
+                      )
+                      ..fetchAllShopsPage(
+                        context,
+                        RefreshController(),
+                        isRefresh: true,
+                      )
+                      ..fetchShopPageRecommend(
+                        context,
+                        RefreshController(),
+                        isRefresh: true,
+                      )
+                      ..fetchShopPage(
+                        context,
+                        RefreshController(),
+                        isRefresh: true,
+                      )
+                      ..fetchStoriesPage(
+                        context,
+                        RefreshController(),
+                        isRefresh: true,
+                      )
+                      ..fetchNewShopsPage(
+                        context,
+                        RefreshController(),
+                        isRefresh: true,
+                      )
+                      ..fetchCategoriesPage(
+                        context,
+                        RefreshController(),
+                        isRefresh: true,
+                      )
                       ..setAddress();
-                    LocalStorage.setAddressSelected(AddressData(
+                    LocalStorage.setAddressSelected(
+                      AddressData(
                         title: office.text,
                         address: state.place?.address?.address ?? "",
                         location: LocationModel(
-                            latitude: state.place?.location?.first,
-                            longitude: state.place?.location?.last)));
+                          latitude: state.place?.location?.first,
+                          longitude: state.place?.location?.last,
+                        ),
+                      ),
+                    );
                     AddressInformation data = AddressInformation(
-                        address: widget.controller.text,
-                        house: house.text,
-                        floor: floor.text);
+                      address: widget.controller.text,
+                      house: house.text,
+                      floor: floor.text,
+                    );
                     LocalStorage.setAddressInformation(data);
                     if (LocalStorage.getToken().isEmpty) {
                       Navigator.pop(context);
@@ -194,20 +225,26 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
                       return;
                     }
                     if (widget.address == null) {
-                      event.saveLocation(context, onSuccess: () {
-                        ref.read(profileProvider.notifier).fetchUser(context);
-                        ref.read(homeProvider.notifier).setAddress();
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      });
+                      event.saveLocation(
+                        context,
+                        onSuccess: () {
+                          ref.read(profileProvider.notifier).fetchUser(context);
+                          ref.read(homeProvider.notifier).setAddress();
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                      );
                     } else {
-                      event.updateLocation(context, widget.address?.id,
-                          onSuccess: () {
-                        ref.read(profileProvider.notifier).fetchUser(context);
-                        ref.read(homeProvider.notifier).setAddress();
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      });
+                      event.updateLocation(
+                        context,
+                        widget.address?.id,
+                        onSuccess: () {
+                          ref.read(profileProvider.notifier).fetchUser(context);
+                          ref.read(homeProvider.notifier).setAddress();
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        },
+                      );
                     }
                   } else {
                     AppHelpers.showCheckTopSnackBarInfo(
@@ -218,10 +255,9 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
                 }
               },
             ),
-          )
+          ),
         ],
       ),
     );
   }
 }
-

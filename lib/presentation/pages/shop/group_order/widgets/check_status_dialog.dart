@@ -9,11 +9,11 @@ class CheckStatusDialog extends StatelessWidget {
   final VoidCallback cancel;
   final VoidCallback onTap;
 
-  const CheckStatusDialog(
-      {super.key,
-      required this.cancel,
-      required this.onTap,
-      });
+  const CheckStatusDialog({
+    super.key,
+    required this.cancel,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +36,7 @@ class CheckStatusDialog extends StatelessWidget {
           15.verticalSpace,
           Text(
             AppHelpers.getTranslation(TrKeys.groupOrderProgress),
-            style: AppStyle.interNormal(
-              size: 14,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interNormal(size: 14, color: AppStyle.black),
             textAlign: TextAlign.center,
           ),
           36.verticalSpace,
@@ -71,4 +68,3 @@ class CheckStatusDialog extends StatelessWidget {
     );
   }
 }
-

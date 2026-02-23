@@ -22,10 +22,11 @@ class ExpandedSectionState extends State<ExpandedSection>
     _runExpandCheck();
   }
 
-
   void prepareAnimations() {
     expandController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 600));
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
     animation = CurvedAnimation(
       parent: expandController,
       curve: Curves.fastOutSlowIn,
@@ -55,7 +56,9 @@ class ExpandedSectionState extends State<ExpandedSection>
   @override
   Widget build(BuildContext context) {
     return SizeTransition(
-        axisAlignment: 1.0, sizeFactor: animation, child: widget.child);
+      axisAlignment: 1.0,
+      sizeFactor: animation,
+      child: widget.child,
+    );
   }
 }
-

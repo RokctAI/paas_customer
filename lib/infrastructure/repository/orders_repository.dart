@@ -10,16 +10,15 @@ import 'package:foodyman/infrastructure/services/enums.dart';
 class OrdersRepository implements OrdersRepositoryFacade {
   @override
   Future<ApiResult<OrderActiveModel>> createOrder(
-      OrderBodyData orderBody) async {
+    OrderBodyData orderBody,
+  ) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
         '/api/method/paas.api.order.order.create_order',
         data: orderBody.toJson(),
       );
-      return ApiResult.success(
-        data: OrderActiveModel.fromJson(response.data),
-      );
+      return ApiResult.success(data: OrderActiveModel.fromJson(response.data));
     } catch (e) {
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
@@ -63,9 +62,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
         '/api/method/paas.api.order.order.get_order_details',
         queryParameters: {'order_id': orderId},
       );
-      return ApiResult.success(
-        data: OrderActiveModel.fromJson(response.data),
-      );
+      return ApiResult.success(data: OrderActiveModel.fromJson(response.data));
     } catch (e, s) {
       debugPrint('==> get single order failure: $e,$s');
       return ApiResult.failure(
@@ -77,10 +74,10 @@ class OrdersRepository implements OrdersRepositoryFacade {
 
   @override
   Future<ApiResult<void>> addReview(
-      String orderId, {
-        required double rating,
-        required String comment,
-      }) async {
+    String orderId, {
+    required double rating,
+    required String comment,
+  }) async {
     final data = {
       'order_id': orderId,
       'rating': rating,
@@ -104,11 +101,12 @@ class OrdersRepository implements OrdersRepositoryFacade {
 
   @override
   Future<ApiResult<String>> process(
-      OrderBodyData orderBody, String name, {
-        BuildContext? context,
-        bool forceCardPayment = false,
-        bool enableTokenization = false,
-      }) async {
+    OrderBodyData orderBody,
+    String name, {
+    BuildContext? context,
+    bool forceCardPayment = false,
+    bool enableTokenization = false,
+  }) async {
     try {
       final client = dioHttp.client(requireAuth: true);
       var res = await client.post(
@@ -146,15 +144,13 @@ class OrdersRepository implements OrdersRepositoryFacade {
   @override
   Future<ApiResult<void>> refundOrder(String orderId, String title) async {
     try {
-      final data = {
-        "order": orderId,
-        "cause": title,
-      };
+      final data = {"order": orderId, "cause": title};
       final client = dioHttp.client(requireAuth: true);
-      await client.post('/api/method/paas.api.user.user.create_order_refund', data: data);
-      return const ApiResult.success(
-        data: null,
+      await client.post(
+        '/api/method/paas.api.user.user.create_order_refund',
+        data: data,
       );
+      return const ApiResult.success(data: null);
     } catch (e) {
       debugPrint('==> refund order failure: $e');
       return ApiResult.failure(
@@ -234,20 +230,16 @@ class OrdersRepository implements OrdersRepositoryFacade {
     return deleteRepeatingOrder(repeatingOrderId: orderId);
   }
 
- @override
+  @override
   Future<ApiResult<RefundOrdersModel>> getRefundOrders(int page) async {
-    final data = {
-      'page': page,
-    };
+    final data = {'page': page};
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
         '/api/method/paas.api.user.user.get_user_order_refunds',
         queryParameters: data,
       );
-      return ApiResult.success(
-        data: RefundOrdersModel.fromJson(response.data),
-      );
+      return ApiResult.success(data: RefundOrdersModel.fromJson(response.data));
     } catch (e) {
       debugPrint('==> get refund orders failure: $e');
       return ApiResult.failure(
@@ -258,12 +250,13 @@ class OrdersRepository implements OrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<GetCalculateModel>> getCalculate(
-      {required String cartId,
-        required double lat,
-        required double long,
-        required DeliveryTypeEnum type,
-        String? coupon}) async {
+  Future<ApiResult<GetCalculateModel>> getCalculate({
+    required String cartId,
+    required double lat,
+    required double long,
+    required DeliveryTypeEnum type,
+    String? coupon,
+  }) async {
     final data = {
       'cart_id': cartId,
       'address': {'latitude': lat, 'longitude': long},
@@ -276,7 +269,8 @@ class OrdersRepository implements OrdersRepositoryFacade {
         data: data,
       );
       return ApiResult.success(
-          data: GetCalculateModel.fromJson(response.data["message"]));
+        data: GetCalculateModel.fromJson(response.data["message"]),
+      );
     } catch (e) {
       debugPrint('==> get calculate failure: $e');
       return ApiResult.failure(
@@ -287,11 +281,11 @@ class OrdersRepository implements OrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<CouponResponse>> checkCoupon({required String coupon, required String shopId}) async {
-    final data = {
-      'coupon': coupon,
-      'shop': shopId,
-    };
+  Future<ApiResult<CouponResponse>> checkCoupon({
+    required String coupon,
+    required String shopId,
+  }) async {
+    final data = {'coupon': coupon, 'shop': shopId};
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
@@ -322,13 +316,6 @@ class OrdersRepository implements OrdersRepositoryFacade {
   Future<ApiResult<OrderPaginateResponse>> getHistoryOrders(int page) {
     return getOrders(page: page);
   }
-
-
-
-
-
-
-
 
   @override
   Future<ApiResult<void>> createRepeatingOrder({
@@ -375,7 +362,6 @@ class OrdersRepository implements OrdersRepositoryFacade {
       );
     }
   }
-
 
   @override
   Future<ApiResult<String>> tipProcess({

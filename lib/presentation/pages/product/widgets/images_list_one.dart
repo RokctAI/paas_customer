@@ -22,23 +22,27 @@ class ImagesOneList extends StatelessWidget {
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            children: list
-                ?.map((e) => AnimatedContainer(
-                      duration: const Duration(milliseconds: 400),
-                      margin: EdgeInsets.only(right: 6.r),
-                      height: 6.r,
-                      width: selectImageId == e.id ? 32.r : 8.r,
-                      decoration: BoxDecoration(
+            children:
+                list
+                    ?.map(
+                      (e) => AnimatedContainer(
+                        duration: const Duration(milliseconds: 400),
+                        margin: EdgeInsets.only(right: 6.r),
+                        height: 6.r,
+                        width: selectImageId == e.id ? 32.r : 8.r,
+                        decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100.r),
                           color: selectImageId == e.id
                               ? AppStyle.black
-                              : AppStyle.hintColor),
-                    ))
-                .toList() ?? [],
+                              : AppStyle.hintColor,
+                        ),
+                      ),
+                    )
+                    .toList() ??
+                [],
           ),
         ),
       ),
     );
   }
 }
-

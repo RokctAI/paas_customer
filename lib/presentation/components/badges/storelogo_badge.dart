@@ -37,7 +37,8 @@ class ShopBadge extends StatefulWidget {
   State<ShopBadge> createState() => _ShopBadgeState();
 }
 
-class _ShopBadgeState extends State<ShopBadge> with SingleTickerProviderStateMixin {
+class _ShopBadgeState extends State<ShopBadge>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<Offset> _offsetAnimation;
 
@@ -51,10 +52,7 @@ class _ShopBadgeState extends State<ShopBadge> with SingleTickerProviderStateMix
     _offsetAnimation = Tween<Offset>(
       begin: const Offset(-1.0, 0.0),
       end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOut,
-    ));
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
     // Start the animation after a short delay
     Future.delayed(const Duration(milliseconds: 100), () {
@@ -108,7 +106,9 @@ class _ShopBadgeState extends State<ShopBadge> with SingleTickerProviderStateMix
                         Row(
                           children: [
                             Text(
-                              _truncateText(widget.shop.translation?.title ?? ""),
+                              _truncateText(
+                                widget.shop.translation?.title ?? "",
+                              ),
                               style: AppStyle.interSemi(
                                 size: widget.fontSize ?? 20,
                                 color: AppStyle.white,
@@ -119,7 +119,9 @@ class _ShopBadgeState extends State<ShopBadge> with SingleTickerProviderStateMix
                                 padding: EdgeInsets.only(left: 4.r),
                                 child: BadgeItem(
                                   color: AppStyle.white,
-                                  size: widget.iconSize != null ? widget.iconSize! / 2 : null,
+                                  size: widget.iconSize != null
+                                      ? widget.iconSize! / 2
+                                      : null,
                                 ),
                               ),
                           ],

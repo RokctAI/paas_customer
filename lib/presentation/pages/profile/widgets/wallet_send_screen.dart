@@ -58,7 +58,9 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
       isValidInput = true;
     }
     // Phone validation (starts with 0 + 9 more digits = 10 total)
-    else if (query.startsWith('0') && query.length == 10 && RegExp(r'^\d+$').hasMatch(query)) {
+    else if (query.startsWith('0') &&
+        query.length == 10 &&
+        RegExp(r'^\d+$').hasMatch(query)) {
       isValidInput = true;
     }
     // Phone with country code (starts with + or just the country code) + 9 digits
@@ -86,9 +88,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
     });
 
     try {
-      final result = await walletRepository.searchSending({
-        'search': query,
-      });
+      final result = await walletRepository.searchSending({'search': query});
 
       result.when(
         success: (data) {
@@ -100,19 +100,13 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
         },
         failure: (error, statusCode) {
           if (!mounted) return;
-          AppHelpers.showCheckTopSnackBarInfo(
-            context,
-            error,
-          );
+          AppHelpers.showCheckTopSnackBarInfo(context, error);
           ref.read(userSearchProvider.notifier).state = [];
         },
       );
     } catch (e) {
       if (!mounted) return;
-      AppHelpers.showCheckTopSnackBarInfo(
-        context,
-        'Failed to search users',
-      );
+      AppHelpers.showCheckTopSnackBarInfo(context, 'Failed to search users');
       ref.read(userSearchProvider.notifier).state = [];
     } finally {
       if (mounted) {
@@ -171,10 +165,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
         },
         failure: (error, statusCode) {
           if (!mounted) return;
-          AppHelpers.showCheckTopSnackBarInfo(
-            context,
-            error,
-          );
+          AppHelpers.showCheckTopSnackBarInfo(context, error);
         },
       );
     } catch (e) {
@@ -183,10 +174,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
         _isLoading = false;
       });
 
-      AppHelpers.showCheckTopSnackBarInfo(
-        context,
-        'Failed to send money',
-      );
+      AppHelpers.showCheckTopSnackBarInfo(context, 'Failed to send money');
     }
   }
 
@@ -208,7 +196,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
             ),
           ),
           width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.7,
+          height: MediaQuery.of(context).size.height * 0.7,
           child: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -242,11 +230,18 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
                   TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      hintText: AppHelpers.getTranslation(TrKeys.searchByPhoneOrEmail),
-                      prefixIcon: const Icon(Icons.search, color: AppStyle.textGrey),
+                      hintText: AppHelpers.getTranslation(
+                        TrKeys.searchByPhoneOrEmail,
+                      ),
+                      prefixIcon: const Icon(
+                        Icons.search,
+                        color: AppStyle.textGrey,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.r),
-                        borderSide: const BorderSide(color: AppStyle.borderColor),
+                        borderSide: const BorderSide(
+                          color: AppStyle.borderColor,
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8.r),
@@ -262,18 +257,20 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
                   16.verticalSpace,
                   // Search Results or Loading Indicator
                   if (_isSearching)
-                    Center(child: CircularProgressIndicator(color: AppStyle.primary))
+                    Center(
+                      child: CircularProgressIndicator(color: AppStyle.primary),
+                    )
                   else if (selectedUser != null)
                     _buildSelectedUser(selectedUser)
                   else if (_searchComplete && searchResults.isEmpty)
-                      Center(
-                        child: Text(
-                          AppHelpers.getTranslation(TrKeys.noUsersFound),
-                          style: AppStyle.interNormal(color: AppStyle.textGrey),
-                        ),
-                      )
-                    else if (searchResults.isNotEmpty)
-                        _buildSearchResults(searchResults),
+                    Center(
+                      child: Text(
+                        AppHelpers.getTranslation(TrKeys.noUsersFound),
+                        style: AppStyle.interNormal(color: AppStyle.textGrey),
+                      ),
+                    )
+                  else if (searchResults.isNotEmpty)
+                    _buildSearchResults(searchResults),
 
                   // Amount Input and Send Button (only shown when a user is selected)
                   if (selectedUser != null) ...[
@@ -285,7 +282,9 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
                     16.verticalSpace,
                     TextField(
                       controller: _amountController,
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
                       decoration: InputDecoration(
                         hintText: '0.00',
                         prefixIcon: Padding(
@@ -295,10 +294,15 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
                             style: AppStyle.interBold(size: 18.sp),
                           ),
                         ),
-                        prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+                        prefixIconConstraints: BoxConstraints(
+                          minWidth: 0,
+                          minHeight: 0,
+                        ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.r),
-                          borderSide: const BorderSide(color: AppStyle.borderColor),
+                          borderSide: const BorderSide(
+                            color: AppStyle.borderColor,
+                          ),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.r),
@@ -319,12 +323,12 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
                       child: _isLoading
                           ? CircularProgressIndicator(color: AppStyle.white)
                           : Text(
-                        AppHelpers.getTranslation(TrKeys.sendNow),
-                        style: AppStyle.interSemi(
-                          size: 16.sp,
-                          color: AppStyle.white,
-                        ),
-                      ),
+                              AppHelpers.getTranslation(TrKeys.sendNow),
+                              style: AppStyle.interSemi(
+                                size: 16.sp,
+                                color: AppStyle.white,
+                              ),
+                            ),
                     ),
                   ],
                   24.verticalSpace,
@@ -360,12 +364,14 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
           return ListTile(
             leading: CircleAvatar(
               backgroundColor: AppStyle.primary.withOpacity(0.1),
-              backgroundImage: user.img != null ? NetworkImage(user.img!) : null,
+              backgroundImage: user.img != null
+                  ? NetworkImage(user.img!)
+                  : null,
               child: user.img == null
                   ? Text(
-                user.firstname?.substring(0, 1).toUpperCase() ?? '',
-                style: AppStyle.interBold(color: AppStyle.primary),
-              )
+                      user.firstname?.substring(0, 1).toUpperCase() ?? '',
+                      style: AppStyle.interBold(color: AppStyle.primary),
+                    )
                   : null,
             ),
             title: Text(
@@ -374,7 +380,10 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
             ),
             subtitle: Text(
               user.email ?? user.phone ?? '',
-              style: AppStyle.interNormal(size: 12.sp, color: AppStyle.textGrey),
+              style: AppStyle.interNormal(
+                size: 12.sp,
+                color: AppStyle.textGrey,
+              ),
             ),
             onTap: () {
               ref.read(selectedUserProvider.notifier).state = user;
@@ -408,9 +417,9 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
             radius: 20.r,
             child: user.img == null
                 ? Text(
-              user.firstname?.substring(0, 1).toUpperCase() ?? '',
-              style: AppStyle.interBold(color: AppStyle.primary),
-            )
+                    user.firstname?.substring(0, 1).toUpperCase() ?? '',
+                    style: AppStyle.interBold(color: AppStyle.primary),
+                  )
                 : null,
           ),
           16.horizontalSpace,
@@ -425,7 +434,10 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
                 4.verticalSpace,
                 Text(
                   user.email ?? user.phone ?? '',
-                  style: AppStyle.interNormal(size: 14.sp, color: AppStyle.textGrey),
+                  style: AppStyle.interNormal(
+                    size: 14.sp,
+                    color: AppStyle.textGrey,
+                  ),
                 ),
               ],
             ),

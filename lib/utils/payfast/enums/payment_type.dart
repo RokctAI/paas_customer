@@ -1,5 +1,1 @@
-enum PaymentType {
-  simplePayment,
-  recurringBilling,
-}
-
+enum PaymentType { simplePayment, recurringBilling }

@@ -6,8 +6,12 @@ class ButtonEffectAnimation extends StatefulWidget {
   final Widget child;
   final VoidCallback? onTap;
 
-  const ButtonEffectAnimation(
-      {super.key, this.disabled = true, required this.child, this.onTap});
+  const ButtonEffectAnimation({
+    super.key,
+    this.disabled = true,
+    required this.child,
+    this.onTap,
+  });
 
   @override
   State createState() => _ButtonEffectAnimationState();
@@ -57,12 +61,14 @@ class _ButtonEffectAnimationState extends State<ButtonEffectAnimation>
             child: Transform.scale(
               scale: squareScaleA,
               child: GestureDetector(
-                  onTap: widget.onTap,
-                  child: Container(
-                      color: AppStyle.transparent, child: widget.child)),
+                onTap: widget.onTap,
+                child: Container(
+                  color: AppStyle.transparent,
+                  child: widget.child,
+                ),
+              ),
             ),
           )
         : GestureDetector(onTap: widget.onTap, child: widget.child);
   }
 }
-

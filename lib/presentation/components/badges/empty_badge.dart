@@ -20,23 +20,17 @@ class EmptyBadge extends StatelessWidget {
     String? subtitleText,
     this.linkText,
     this.onLinkTap,
-  }) :
-        titleText = titleText ?? AppHelpers.getTranslation(TrKeys.nothingFound),
-        subtitleText = subtitleText ?? AppHelpers.getTranslation(TrKeys.trySearchingAgain);
+  }) : titleText = titleText ?? AppHelpers.getTranslation(TrKeys.nothingFound),
+       subtitleText =
+           subtitleText ?? AppHelpers.getTranslation(TrKeys.trySearchingAgain);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         //32.verticalSpace,
-        Lottie.asset(
-          imagePath,
-          height: 200,
-        ),
-        Text(
-          titleText,
-          style: AppStyle.interSemi(size: 18.sp),
-        ),
+        Lottie.asset(imagePath, height: 200),
+        Text(titleText, style: AppStyle.interSemi(size: 18.sp)),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 32.w),
           child: RichText(
@@ -46,15 +40,15 @@ class EmptyBadge extends StatelessWidget {
               style: AppStyle.interRegular(size: 14.sp),
               children: linkText != null && onLinkTap != null
                   ? [
-                TextSpan(
-                  text: ' $linkText',
-                  style: const TextStyle(
-                    color: AppStyle.primary,
-                    decoration: TextDecoration.underline,
-                  ),
-                  recognizer: TapGestureRecognizer()..onTap = onLinkTap,
-                ),
-              ]
+                      TextSpan(
+                        text: ' $linkText',
+                        style: const TextStyle(
+                          color: AppStyle.primary,
+                          decoration: TextDecoration.underline,
+                        ),
+                        recognizer: TapGestureRecognizer()..onTap = onLinkTap,
+                      ),
+                    ]
                   : [],
             ),
           ),
@@ -63,4 +57,3 @@ class EmptyBadge extends StatelessWidget {
     );
   }
 }
-

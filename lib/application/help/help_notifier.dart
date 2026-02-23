@@ -18,17 +18,11 @@ class HelpNotifier extends StateNotifier<HelpState> {
       final response = await _settingsRepository.getFaq();
       response.when(
         success: (data) async {
-          state = state.copyWith(
-            isLoading: false,
-            data: data,
-          );
+          state = state.copyWith(isLoading: false, data: data);
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -38,4 +32,3 @@ class HelpNotifier extends StateNotifier<HelpState> {
     }
   }
 }
-

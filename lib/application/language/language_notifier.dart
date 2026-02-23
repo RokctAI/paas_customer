@@ -20,7 +20,10 @@ class LanguageNotifier extends StateNotifier<LanguageState> {
     LocalStorage.setLanguageData(state.list[index]);
   }
 
-  Future<void> getLanguages(BuildContext context, {bool autoSelectIfSingle = false}) async {
+  Future<void> getLanguages(
+    BuildContext context, {
+    bool autoSelectIfSingle = false,
+  }) async {
     final connect = await AppConnectivity.connectivity();
     if (connect) {
       state = state.copyWith(isLoading: true, isSuccess: false);
@@ -39,11 +42,11 @@ class LanguageNotifier extends StateNotifier<LanguageState> {
             LocalStorage.setLangLtr(languages[0].backward);
             getTranslations(context);
             state = state.copyWith(
-                isLoading: false,
-                list: languages,
-                index: 0,
-                isSuccess: true,
-                autoSelected: true
+              isLoading: false,
+              list: languages,
+              index: 0,
+              isSuccess: true,
+              autoSelected: true,
             );
             return;
           }
@@ -64,10 +67,7 @@ class LanguageNotifier extends StateNotifier<LanguageState> {
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {

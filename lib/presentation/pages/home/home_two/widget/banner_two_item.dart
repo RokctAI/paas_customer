@@ -19,14 +19,15 @@ class BannerTwoItem extends StatelessWidget {
       child: GestureDetector(
         onTap: () {
           AppHelpers.showCustomModalBottomSheet(
-              context: context,
-              modal: BannerScreen(
-                bannerId: banner.id ?? 0,
-                image: banner.img ?? "",
-                desc: banner.translation?.description ?? "",
-                list: banner.shops ?? [],
-              ),
-              isDarkMode: false);
+            context: context,
+            modal: BannerScreen(
+              bannerId: banner.id ?? 0,
+              image: banner.img ?? "",
+              desc: banner.translation?.description ?? "",
+              list: banner.shops ?? [],
+            ),
+            isDarkMode: false,
+          );
         },
         child: Stack(
           children: [
@@ -38,28 +39,29 @@ class BannerTwoItem extends StatelessWidget {
               radius: 20.r,
             ),
             Positioned(
-                bottom: 0,
-                top: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  decoration: ShapeDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        AppStyle.black.withOpacity(0.2),
-                        AppStyle.black.withOpacity(0.2),
-                        AppStyle.black.withOpacity(0.2),
-                        AppStyle.black.withOpacity(0.5),
-                        AppStyle.black.withOpacity(0.7),
-                      ],
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20.r),
-                    ),
+              bottom: 0,
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                decoration: ShapeDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      AppStyle.black.withOpacity(0.2),
+                      AppStyle.black.withOpacity(0.2),
+                      AppStyle.black.withOpacity(0.2),
+                      AppStyle.black.withOpacity(0.5),
+                      AppStyle.black.withOpacity(0.7),
+                    ],
                   ),
-                )),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.r),
+                  ),
+                ),
+              ),
+            ),
             Positioned(
               bottom: 24,
               left: 0,
@@ -67,9 +69,7 @@ class BannerTwoItem extends StatelessWidget {
               child: Center(
                 child: Text(
                   banner.translation?.title ?? "",
-                  style: AppStyle.interNoSemi(
-                    color: AppStyle.white,
-                  ),
+                  style: AppStyle.interNoSemi(color: AppStyle.white),
                   textAlign: TextAlign.center,
                   maxLines: 1,
                 ),
@@ -81,4 +81,3 @@ class BannerTwoItem extends StatelessWidget {
     );
   }
 }
-

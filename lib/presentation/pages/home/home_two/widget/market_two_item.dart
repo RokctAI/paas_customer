@@ -31,7 +31,8 @@ class MarketTwoItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         context.pushRoute(
-            ShopRoute(shopId: (shop.id ?? 0).toString(), shop: shop));
+          ShopRoute(shopId: (shop.id ?? 0).toString(), shop: shop),
+        );
       },
       child: isShop
           ? _shopItem()
@@ -39,12 +40,13 @@ class MarketTwoItem extends StatelessWidget {
               margin: isFilter
                   ? REdgeInsets.symmetric(horizontal: 16)
                   : isSimpleShop
-                      ? EdgeInsets.all(8.r)
-                      : EdgeInsets.only(right: 8.r),
+                  ? EdgeInsets.all(8.r)
+                  : EdgeInsets.only(right: 8.r),
               width: 268.r,
               decoration: BoxDecoration(
-                  color: AppStyle.white,
-                  borderRadius: BorderRadius.all(Radius.circular(24.r))),
+                color: AppStyle.white,
+                borderRadius: BorderRadius.all(Radius.circular(24.r)),
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -62,8 +64,9 @@ class MarketTwoItem extends StatelessWidget {
                         height: 140.h,
                         child: ClipRRect(
                           borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(24.r),
-                              topRight: Radius.circular(24.r)),
+                            topLeft: Radius.circular(24.r),
+                            topRight: Radius.circular(24.r),
+                          ),
                           child: CustomNetworkImage(
                             url: shop.backgroundImg ?? '',
                             height: isSimpleShop ? 136.h : 150.h,
@@ -77,12 +80,14 @@ class MarketTwoItem extends StatelessWidget {
                         right: 0,
                         left: 0,
                         child: Padding(
-                          padding:
-                              EdgeInsets.only(bottom: isSimpleShop ? 6.h : 0),
+                          padding: EdgeInsets.only(
+                            bottom: isSimpleShop ? 6.h : 0,
+                          ),
                           child: TwoBonusDiscountPopular(
-                              isPopular: shop.isRecommend ?? false,
-                              bonus: shop.bonus,
-                              isDiscount: shop.isDiscount ?? false),
+                            isPopular: shop.isRecommend ?? false,
+                            bonus: shop.bonus,
+                            isDiscount: shop.isDiscount ?? false,
+                          ),
                         ),
                       ),
                       Positioned(
@@ -169,10 +174,8 @@ class MarketTwoItem extends StatelessWidget {
                         Text(
                           shop.bonus != null
                               ? ((shop.bonus?.type ?? "sum") == "sum")
-                              ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(
-                            number: shop.bonus?.value,
-                          )} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
-                              : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                                    ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(number: shop.bonus?.value)} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                                    : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
                               : shop.translation?.description ?? "",
                           style: AppStyle.interNormal(
                             size: 12,
@@ -216,10 +219,7 @@ class MarketTwoItem extends StatelessWidget {
                   (shop.translation?.title?.length ?? 0) > 12
                       ? "${shop.translation?.title?.substring(0, 12) ?? " "}.."
                       : shop.translation?.title ?? "",
-                  style: AppStyle.interSemi(
-                    size: 14,
-                    color: AppStyle.black,
-                  ),
+                  style: AppStyle.interSemi(size: 14, color: AppStyle.black),
                   maxLines: 2,
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
@@ -235,10 +235,7 @@ class MarketTwoItem extends StatelessWidget {
           6.verticalSpace,
           Text(
             "${shop.deliveryTime?.from ?? 0} - ${shop.deliveryTime?.to ?? 0} ${shop.deliveryTime?.type ?? "min"}",
-            style: AppStyle.interSemi(
-              size: 12,
-              color: AppStyle.textGrey,
-            ),
+            style: AppStyle.interSemi(size: 12, color: AppStyle.textGrey),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -248,4 +245,3 @@ class MarketTwoItem extends StatelessWidget {
     );
   }
 }
-

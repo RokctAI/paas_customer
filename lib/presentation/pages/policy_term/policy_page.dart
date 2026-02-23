@@ -38,53 +38,45 @@ class _PolicyPageState extends ConsumerState<PolicyPage> {
       body: state.isPolicyLoading
           ? const Center(child: Loading())
           : Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          CommonAppBar(
-            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(
-                  AppAssets.pngLogo,
-                  width: 40,
-                  height: 40,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: Text(
-                      state.policy?.title ?? "",
-                      style: AppStyle.interSemi(color: AppStyle.primary),
-                    ),
+                CommonAppBar(
+                  child: Row(
+                    children: [
+                      Image.asset(AppAssets.pngLogo, width: 40, height: 40),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: Text(
+                            state.policy?.title ?? "",
+                            style: AppStyle.interSemi(color: AppStyle.primary),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+                state.isPolicyLoading
+                    ? const Center(child: Loading())
+                    : Expanded(
+                        child: SingleChildScrollView(
+                          padding: EdgeInsets.all(16.r),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Html(
+                                data: state.policy?.description ?? "",
+                                style: {"body": Style()},
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
               ],
             ),
-          ),
-          state.isPolicyLoading
-              ? const Center(child: Loading())
-              : Expanded(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.all(16.r),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-
-                  Html(
-                    data: state.policy?.description ?? "",
-                    style: {
-                      "body": Style(),
-                    },
-                  )
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
 
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: const PopButton(),
     );
   }
 }
-

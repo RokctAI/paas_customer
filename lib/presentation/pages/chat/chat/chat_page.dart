@@ -37,11 +37,9 @@ class _ChatPageState extends ConsumerState<ChatPage> {
   void initState() {
     super.initState();
     ref.refresh(chatProvider);
-    WidgetsBinding.instance.addPostFrameCallback(
-          (_) {
-        ref.read(chatProvider.notifier).fetchChats(context, widget.roleId);
-      },
-    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(chatProvider.notifier).fetchChats(context, widget.roleId);
+    });
   }
 
   @override
@@ -117,7 +115,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                       final List<DocumentSnapshot> docs = snapshot.data!.docs;
                       final List<ChatMessageData> messages = docs.map((doc) {
                         final Map<String, dynamic> data =
-                        doc.data() as Map<String, dynamic>;
+                            doc.data() as Map<String, dynamic>;
                         final Timestamp t = data['created_at'];
                         final DateTime date = t.toDate();
                         return ChatMessageData(
@@ -127,7 +125,7 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                           message: data['chat_content'],
                           time: '${date.hour}:${date.minute}',
                           date: date,
-                          messageId: doc.id,  // Ensure messageId is passed
+                          messageId: doc.id, // Ensure messageId is passed
                         );
                       }).toList();
                       messages.sort((a, b) => b.date.compareTo(a.date));
@@ -149,7 +147,9 @@ class _ChatPageState extends ConsumerState<ChatPage> {
                               // Long press to edit the message
                               if (chatData.messageOwner == MessageOwner.you) {
                                 notifier.toggleEditMode(
-                                    chatData.messageId, chatData.message);
+                                  chatData.messageId,
+                                  chatData.message,
+                                );
                               }
                             },
                             child: ChatItem(chatData: chatData),
@@ -218,4 +218,3 @@ class _ChatPageState extends ConsumerState<ChatPage> {
     );
   }
 }
-

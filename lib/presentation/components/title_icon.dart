@@ -7,7 +7,8 @@ import '../theme/theme.dart';
 // ignore: must_be_immutable
 class TitleAndIcon extends StatelessWidget {
   final String? title;
-  final dynamic secondTitle; // Changed to dynamic to support both String and IconData
+  final dynamic
+  secondTitle; // Changed to dynamic to support both String and IconData
   final double titleSize;
   final String? rightTitle;
   final bool isIcon;
@@ -63,21 +64,21 @@ class TitleAndIcon extends StatelessWidget {
                         WidgetSpan(
                           child: secondTitle is String
                               ? Text(
-                            ' $secondTitle',
-                            style: AppStyle.interBold(
-                              size: titleSize.sp,
-                              color: secondTitleColor,
-                            ),
-                          )
+                                  ' $secondTitle',
+                                  style: AppStyle.interBold(
+                                    size: titleSize.sp,
+                                    color: secondTitleColor,
+                                  ),
+                                )
                               : secondTitle is IconData
                               ? Padding(
-                            padding: EdgeInsets.only(left: 4.w),
-                            child: Icon(
-                              secondTitle,
-                              color: secondTitleColor,
-                              size: titleSize.sp,
-                            ),
-                          )
+                                  padding: EdgeInsets.only(left: 4.w),
+                                  child: Icon(
+                                    secondTitle,
+                                    color: secondTitleColor,
+                                    size: titleSize.sp,
+                                  ),
+                                )
                               : const SizedBox.shrink(),
                         ),
                     ],
@@ -107,7 +108,9 @@ class TitleAndIcon extends StatelessWidget {
                             color: rightTitleColor,
                           ),
                         ),
-                      if (isIcon && rightTitle != null && rightTitle!.isNotEmpty)
+                      if (isIcon &&
+                          rightTitle != null &&
+                          rightTitle!.isNotEmpty)
                         SizedBox(width: 5.w),
                       if (isIcon)
                         Icon(

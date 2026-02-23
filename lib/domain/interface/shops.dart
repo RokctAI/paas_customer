@@ -5,21 +5,31 @@ import 'package:foodyman/domain/handlers/handlers.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 
 abstract class ShopsRepositoryFacade {
-  Future<ApiResult<ShopsPaginateResponse>> getShopFilter(
-      {String? categoryId, required int page, String? subCategoryId,});
+  Future<ApiResult<ShopsPaginateResponse>> getShopFilter({
+    String? categoryId,
+    required int page,
+    String? subCategoryId,
+  });
 
   Future<ApiResult<ShopsPaginateResponse>> getPickupShops();
 
-  Future<ApiResult<ShopsPaginateResponse>> searchShops(
-      {required String text, String? categoryId});
+  Future<ApiResult<ShopsPaginateResponse>> searchShops({
+    required String text,
+    String? categoryId,
+  });
 
   Future<ApiResult<ShopsPaginateResponse>> getNearbyShops(
     double latitude,
     double longitude,
   );
 
-  Future<ApiResult<ShopsPaginateResponse>> getAllShops(int page,
-      {String? categoryId, FilterModel? filterModel, required bool isOpen,bool? verify});
+  Future<ApiResult<ShopsPaginateResponse>> getAllShops(
+    int page, {
+    String? categoryId,
+    FilterModel? filterModel,
+    required bool isOpen,
+    bool? verify,
+  });
 
   Future<ApiResult<TagResponse>> getTags(String categoryId);
 
@@ -41,9 +51,7 @@ abstract class ShopsRepositoryFacade {
 
   Future<ApiResult<BranchResponse>> getShopBranch({required String uuid});
 
-  Future<ApiResult<ShopsPaginateResponse>> getShopsByIds(
-    List<String> shopIds,
-  );
+  Future<ApiResult<ShopsPaginateResponse>> getShopsByIds(List<String> shopIds);
 
   Future<ApiResult<void>> createShop({
     required double tax,
@@ -62,4 +70,3 @@ abstract class ShopsRepositoryFacade {
     String? backgroundImage,
   });
 }
-

@@ -25,28 +25,25 @@ class OrganicTagBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return product.vegetarian == true
         ? Positioned(
-      bottom: bottom,
-      left: left ?? 98.w,
-      right: right,
-      top: top ?? 20.h,
-      child: Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: Colors.green,
-            width: 1,
-          ),
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(4.w),
-          child: const Icon(
-            Remix.leaf_fill,
-            color: Colors.green,
-            size: 15,
-          ),
-        ),
-      ),
-    )
+            bottom: bottom,
+            left: left ?? 98.w,
+            right: right,
+            top: top ?? 20.h,
+            child: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.green, width: 1),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(4.w),
+                child: const Icon(
+                  Remix.leaf_fill,
+                  color: Colors.green,
+                  size: 15,
+                ),
+              ),
+            ),
+          )
         : const SizedBox.shrink();
   }
 }

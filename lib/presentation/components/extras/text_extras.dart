@@ -37,4 +37,3 @@ class TextExtras extends StatelessWidget {
     );
   }
 }
-

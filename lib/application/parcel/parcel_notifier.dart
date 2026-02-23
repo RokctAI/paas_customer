@@ -1,5 +1,3 @@
-
-
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,15 +21,21 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
   final DrawRepositoryFacade _drawRouting;
 
   ParcelNotifier(this._parcelRepository, this._drawRouting)
-      : super(const ParcelState());
+    : super(const ParcelState());
 
   Future<void> addReview(
-      BuildContext context, String comment, double rating) async {
+    BuildContext context,
+    String comment,
+    double rating,
+  ) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isButtonLoading: true);
-      final response = await _parcelRepository.addReview((state.parcel?.id ?? "").toString(),
-          rating: rating, comment: comment);
+      final response = await _parcelRepository.addReview(
+        (state.parcel?.id ?? "").toString(),
+        rating: rating,
+        comment: comment,
+      );
       response.when(
         success: (data) async {
           state = state.copyWith(isButtonLoading: false);
@@ -40,10 +44,7 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
         failure: (failure, status) {
           state = state.copyWith(isButtonLoading: false);
           if (context.mounted) {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           }
         },
       );
@@ -95,19 +96,17 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
     if (connected) {
       state = state.copyWith(isLoading: true, error: false);
       final response = await _parcelRepository.getCalculate(
-          typeId: state.types[state.selectType]?.id ?? "",
-          from: state.locationFrom ?? LocationModel(),
-          to: state.locationTo ?? LocationModel());
+        typeId: state.types[state.selectType]?.id ?? "",
+        from: state.locationFrom ?? LocationModel(),
+        to: state.locationTo ?? LocationModel(),
+      );
       response.when(
         success: (data) {
           state = state.copyWith(isLoading: false, calculate: data);
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false, error: true);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -140,7 +139,9 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
     final num wallet = LocalStorage.getWalletData()?.price ?? 0;
     if (state.selectPayment?.tag == "wallet" && wallet < totalPrice) {
       AppHelpers.showCheckTopSnackBarInfo(
-          context, AppHelpers.getTranslation(TrKeys.notEnoughMoney));
+        context,
+        AppHelpers.getTranslation(TrKeys.notEnoughMoney),
+      );
       return;
     }
     final connected = await AppConnectivity.connectivity();
@@ -171,18 +172,23 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
       response.when(
         success: (data) async {
           state = state.copyWith(isLoading: false);
-          String id = state.selectPayment?.id ??
+          String id =
+              state.selectPayment?.id ??
               (LocalStorage.getSelectedCurrency()?.id ?? "").toString();
           switch (state.selectPayment?.tag) {
             case 'cash':
             case 'wallet':
               _parcelRepository.createTransaction(
-                  orderId: data ?? 0, paymentId: id);
+                orderId: data ?? 0,
+                paymentId: id,
+              );
               context.replaceRoute(const ParcelListRoute());
               break;
             default:
               _parcelRepository.createTransaction(
-                  orderId: data ?? 0, paymentId: id);
+                orderId: data ?? 0,
+                paymentId: id,
+              );
               context.replaceRoute(const ParcelListRoute());
               await makePayment(
                 context,
@@ -213,31 +219,28 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
     String? orderId,
   ) async {
     try {
-      final response = await _parcelRepository.process((orderId ?? "").toString(), name);
+      final response = await _parcelRepository.process(
+        (orderId ?? "").toString(),
+        name,
+      );
       response.when(
         success: (data) async {
           // ignore: deprecated_member_use
-          await launch(
-            data,
-            enableJavaScript: true,
-          );
+          await launch(data, enableJavaScript: true);
         },
         failure: (failure, status) {
           state = state.copyWith(isButtonLoading: false);
           if (context.mounted) {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           }
         },
       );
     } catch (e) {
-      if(context.mounted) {
+      if (context.mounted) {
         AppHelpers.showCheckTopSnackBar(
-        context,
-        AppHelpers.getTranslation(TrKeys.paymentMethodFailed),
-      );
+          context,
+          AppHelpers.getTranslation(TrKeys.paymentMethodFailed),
+        );
       }
     }
   }
@@ -251,10 +254,11 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
     }
   }
 
-  void setToAddress(
-      {required String? title,
-      required LocationModel? location,
-      required BuildContext context}) {
+  void setToAddress({
+    required String? title,
+    required LocationModel? location,
+    required BuildContext context,
+  }) {
     state = state.copyWith(addressTo: title, locationTo: location);
     if (state.types.isNotEmpty &&
         state.addressFrom != null &&
@@ -263,10 +267,11 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
     }
   }
 
-  void setFromAddress(
-      {required String? title,
-      required LocationModel? location,
-      required BuildContext context}) {
+  void setFromAddress({
+    required String? title,
+    required LocationModel? location,
+    required BuildContext context,
+  }) {
     state = state.copyWith(addressFrom: title, locationFrom: location);
     if (state.types.isNotEmpty &&
         state.addressFrom != null &&
@@ -277,10 +282,11 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
 
   void switchAddress({required BuildContext context}) {
     state = state.copyWith(
-        addressFrom: state.addressTo,
-        locationFrom: state.locationTo,
-        addressTo: state.addressFrom,
-        locationTo: state.locationFrom);
+      addressFrom: state.addressTo,
+      locationFrom: state.locationTo,
+      addressTo: state.addressFrom,
+      locationTo: state.locationFrom,
+    );
     if (state.types.isNotEmpty &&
         state.addressFrom != null &&
         state.addressTo != null) {
@@ -293,7 +299,10 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
   }
 
   Future<void> showParcel(
-      BuildContext context, String orderId, bool isRefresh) async {
+    BuildContext context,
+    String orderId,
+    bool isRefresh,
+  ) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       if (!isRefresh) {
@@ -306,25 +315,30 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
           final ImageCropperForMarker image = ImageCropperForMarker();
           if (!isRefresh) {
             state = state.copyWith(
-                parcel: data, isLoading: false, isMapLoading: true);
+              parcel: data,
+              isLoading: false,
+              isMapLoading: true,
+            );
             Map<MarkerId, Marker> list = {
               const MarkerId("Shop"): Marker(
-                  markerId: const MarkerId("Shop"),
-                  position: LatLng(
-                    data.addressFrom?.latitude ?? AppConstants.demoLatitude,
-                    data.addressFrom?.longitude ?? AppConstants.demoLongitude,
-                  ),
-                  icon: await image.resizeAndCircle(data.user?.img ?? "", 120)),
+                markerId: const MarkerId("Shop"),
+                position: LatLng(
+                  data.addressFrom?.latitude ?? AppConstants.demoLatitude,
+                  data.addressFrom?.longitude ?? AppConstants.demoLongitude,
+                ),
+                icon: await image.resizeAndCircle(data.user?.img ?? "", 120),
+              ),
               const MarkerId("User"): Marker(
-                  markerId: const MarkerId("User"),
-                  position: LatLng(
-                    data.addressTo?.latitude ?? AppConstants.demoLatitude,
-                    data.addressTo?.longitude ?? AppConstants.demoLongitude,
-                  ),
-                  icon: await image.resizeAndCircle("", 120)),
+                markerId: const MarkerId("User"),
+                position: LatLng(
+                  data.addressTo?.latitude ?? AppConstants.demoLatitude,
+                  data.addressTo?.longitude ?? AppConstants.demoLongitude,
+                ),
+                icon: await image.resizeAndCircle("", 120),
+              ),
             };
             state = state.copyWith(markers: list, isMapLoading: false);
-            if(context.mounted) {
+            if (context.mounted) {
               getRoutingAll(
                 context: context,
                 end: LatLng(
@@ -334,25 +348,28 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
                 start: LatLng(
                   data.addressFrom?.latitude ?? AppConstants.demoLatitude,
                   data.addressFrom?.longitude ?? AppConstants.demoLongitude,
-                ));
+                ),
+              );
             }
           } else {
             state = state.copyWith(parcel: data);
             Map<MarkerId, Marker> list = {
               const MarkerId("Shop"): Marker(
-                  markerId: const MarkerId("Shop"),
-                  position: LatLng(
-                    data.addressFrom?.latitude ?? AppConstants.demoLatitude,
-                    data.addressFrom?.longitude ?? AppConstants.demoLongitude,
-                  ),
-                  icon: await image.resizeAndCircle(data.user?.img ?? "", 120)),
+                markerId: const MarkerId("Shop"),
+                position: LatLng(
+                  data.addressFrom?.latitude ?? AppConstants.demoLatitude,
+                  data.addressFrom?.longitude ?? AppConstants.demoLongitude,
+                ),
+                icon: await image.resizeAndCircle(data.user?.img ?? "", 120),
+              ),
               const MarkerId("User"): Marker(
-                  markerId: const MarkerId("User"),
-                  position: LatLng(
-                    data.addressTo?.latitude ?? AppConstants.demoLatitude,
-                    data.addressTo?.longitude ?? AppConstants.demoLongitude,
-                  ),
-                  icon: await image.resizeAndCircle("", 120)),
+                markerId: const MarkerId("User"),
+                position: LatLng(
+                  data.addressTo?.latitude ?? AppConstants.demoLatitude,
+                  data.addressTo?.longitude ?? AppConstants.demoLongitude,
+                ),
+                icon: await image.resizeAndCircle("", 120),
+              ),
             };
 
             state = state.copyWith(markers: list);
@@ -363,10 +380,7 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
             state = state.copyWith(isLoading: false);
           }
           if (context.mounted) {
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           }
         },
       );
@@ -392,9 +406,7 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
           for (int i = 0; i < ls.length; i++) {
             list.add(LatLng(ls[i][1], ls[i][0]));
           }
-          state = state.copyWith(
-            polylineCoordinates: list,
-          );
+          state = state.copyWith(polylineCoordinates: list);
         },
         failure: (failure, status) {
           state = state.copyWith(polylineCoordinates: []);
@@ -407,4 +419,3 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
     }
   }
 }
-

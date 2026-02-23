@@ -9,13 +9,8 @@ import 'package:foodyman/infrastructure/services/app_helpers.dart';
 
 class NotificationRepositoryImpl extends NotificationRepositoryFacade {
   @override
-  Future<ApiResult<NotificationResponse>> getNotifications({
-    int? page,
-  }) async {
-    final data = {
-      'limit_start': ((page ?? 1) - 1) * 7,
-      'limit_page_length': 7,
-    };
+  Future<ApiResult<NotificationResponse>> getNotifications({int? page}) async {
+    final data = {'limit_start': ((page ?? 1) - 1) * 7, 'limit_page_length': 7};
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
@@ -69,7 +64,9 @@ class NotificationRepositoryImpl extends NotificationRepositoryFacade {
   Future<ApiResult<CountNotificationModel>> getCount() async {
     try {
       final client = dioHttp.client(requireAuth: true);
-      final response = await client.get('/api/method/paas.api.get_notification_count');
+      final response = await client.get(
+        '/api/method/paas.api.get_notification_count',
+      );
       return ApiResult.success(
         data: CountNotificationModel.fromJson(response.data['message']),
       );

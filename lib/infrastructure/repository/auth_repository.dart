@@ -16,17 +16,12 @@ class AuthRepository implements AuthRepositoryFacade {
       // NOTE: Frappe's core login endpoint is `/api/method/login`
       // NOTE: Using custom PaaS login endpoint to match frontend behavior
       final response = await client.post(
-          '/api/method/paas.api.user.user.login',
-        data: {
-          'usr': email,
-          'pwd': password,
-        },
+        '/api/method/paas.api.user.user.login',
+        data: {'usr': email, 'pwd': password},
       );
       // Assuming a successful login returns user data that can be adapted to LoginResponse
       // This part will need careful adaptation based on the actual Frappe response
-      return ApiResult.success(
-        data: LoginResponse.fromJson(response.data),
-      );
+      return ApiResult.success(data: LoginResponse.fromJson(response.data));
     } catch (e) {
       debugPrint('==> login failure: $e');
       return ApiResult.failure(
@@ -67,7 +62,8 @@ class AuthRepository implements AuthRepositoryFacade {
         queryParameters: {'token': verifyCode},
       );
       return ApiResult.success(
-          data: VerifyPhoneResponse.fromJson(response.data));
+        data: VerifyPhoneResponse.fromJson(response.data),
+      );
     } catch (e) {
       debugPrint('==> verify email failure: $e');
       return ApiResult.failure(
@@ -86,13 +82,11 @@ class AuthRepository implements AuthRepositoryFacade {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.post(
         '/api/method/paas.api.verify_phone_code',
-        data: {
-          "phone": verifyId,
-          "otp": verifyCode,
-        },
+        data: {"phone": verifyId, "otp": verifyCode},
       );
       return ApiResult.success(
-          data: VerifyPhoneResponse.fromJson(response.data));
+        data: VerifyPhoneResponse.fromJson(response.data),
+      );
     } catch (e) {
       debugPrint('==> verify phone failure: $e');
       return ApiResult.failure(
@@ -145,18 +139,19 @@ class AuthRepository implements AuthRepositoryFacade {
   // Finalized implementation for AuthRepository
   // Placeholder for unimplemented methods from the interface
   @override
-  Future<ApiResult<VerifyData>> forgotPasswordConfirm(
-      {required String verifyCode, required String email}) async {
+  Future<ApiResult<VerifyData>> forgotPasswordConfirm({
+    required String verifyCode,
+    required String email,
+  }) async {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.post(
         '/api/method/paas.api.forgot_password_confirm',
-        data: {
-          'verify_code': verifyCode,
-          'email': email,
-        },
+        data: {'verify_code': verifyCode, 'email': email},
       );
-      return ApiResult.success(data: VerifyData.fromJson(response.data['data'] ?? response.data));
+      return ApiResult.success(
+        data: VerifyData.fromJson(response.data['data'] ?? response.data),
+      );
     } catch (e) {
       debugPrint('==> forgot password confirm failure: $e');
       return ApiResult.failure(
@@ -167,21 +162,26 @@ class AuthRepository implements AuthRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<VerifyData>> forgotPasswordConfirmWithPhone(
-      {required String phone}) async {
+  Future<ApiResult<VerifyData>> forgotPasswordConfirmWithPhone({
+    required String phone,
+  }) async {
     // Usually followed by sendOtp and verifyPhone
-    return sendOtp(phone: phone).then((value) => value.when(
-          success: (data) => ApiResult.success(data: VerifyData()),
-          failure: (error, status) => ApiResult.failure(error: error, statusCode: status),
-        ));
+    return sendOtp(phone: phone).then(
+      (value) => value.when(
+        success: (data) => ApiResult.success(data: VerifyData()),
+        failure: (error, status) =>
+            ApiResult.failure(error: error, statusCode: status),
+      ),
+    );
   }
 
   @override
-  Future<ApiResult<LoginResponse>> loginWithGoogle(
-      {required String email,
-      required String displayName,
-      required String id,
-      required String avatar}) async {
+  Future<ApiResult<LoginResponse>> loginWithGoogle({
+    required String email,
+    required String displayName,
+    required String id,
+    required String avatar,
+  }) async {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.post(
@@ -222,14 +222,18 @@ class AuthRepository implements AuthRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<VerifyData>> sigUpWithPhone({required UserModel user}) async {
+  Future<ApiResult<VerifyData>> sigUpWithPhone({
+    required UserModel user,
+  }) async {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.post(
         '/api/method/paas.api.register_user',
         data: user.toJsonForSignUp(),
       );
-      return ApiResult.success(data: VerifyData.fromJson(response.data['data'] ?? response.data));
+      return ApiResult.success(
+        data: VerifyData.fromJson(response.data['data'] ?? response.data),
+      );
     } catch (e) {
       debugPrint('==> signup with phone failure: $e');
       return ApiResult.failure(

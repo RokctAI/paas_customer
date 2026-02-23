@@ -99,8 +99,9 @@ class OrderActiveModel {
         deliveryMan: json["data"]["deliveryman"] != null
             ? DeliveryMan.fromJson(json["data"]["deliveryman"])
             : null,
-        deliveryDate:
-            DateTime.tryParse(json["data"]?["delivery_date"] ?? '')?.toLocal(),
+        deliveryDate: DateTime.tryParse(
+          json["data"]?["delivery_date"] ?? '',
+        )?.toLocal(),
         deliveryTime: json["data"]["delivery_time"],
         totalDiscount: json["data"]["total_discount"],
         serviceFee: json["data"]["service_fee"],
@@ -116,13 +117,17 @@ class OrderActiveModel {
             ? UserModel.fromJson(json["data"]["user"])
             : null,
         details: List<Detail>.from(
-            json["data"]["details"].map((x) => Detail.fromJson(x))),
+          json["data"]["details"].map((x) => Detail.fromJson(x)),
+        ),
         transaction: json["data"]["transaction"] != null
             ? TransactionData.fromJson(json["data"]["transaction"])
             : null,
         refunds: json["data"]["order_refunds"] != null
-            ? List<RefundModel>.from(json["data"]["order_refunds"]
-                .map((x) => RefundModel.fromJson(x)))
+            ? List<RefundModel>.from(
+                json["data"]["order_refunds"].map(
+                  (x) => RefundModel.fromJson(x),
+                ),
+              )
             : [],
         review: json["data"]["review"],
       );
@@ -143,8 +148,9 @@ class OrderActiveModel {
           : null,
       commissionFee: json["commission_fee"],
       status: json["status"],
-      location:
-          json["location"] != null ? Location.fromJson(json["location"]) : null,
+      location: json["location"] != null
+          ? Location.fromJson(json["location"])
+          : null,
       address: AddressModel.fromJson(json["address"]),
       deliveryType: json["delivery_type"],
       deliveryFee: json["delivery_fee"],
@@ -159,8 +165,9 @@ class OrderActiveModel {
       createdAt: DateTime.tryParse(json["created_at"])?.toLocal(),
       updatedAt: DateTime.tryParse(json["updated_at"])?.toLocal(),
       shop: json["shop"] != null ? ShopData.fromJson(json["shop"]) : null,
-      repeat:
-          json["repeat"] != null ? RepeatData.fromJson(json["repeat"]) : null,
+      repeat: json["repeat"] != null
+          ? RepeatData.fromJson(json["repeat"])
+          : null,
       user: json["user"] != null ? UserModel.fromJson(json["user"]) : null,
       details: json["details"] != null
           ? List<Detail>.from(json["details"].map((x) => Detail.fromJson(x)))
@@ -205,92 +212,92 @@ class OrderActiveModel {
     TransactionData? transaction,
     dynamic review,
     List<dynamic>? ponumHistories,
-  }) =>
-      OrderActiveModel(
-        id: id ?? this.id,
-        userId: userId ?? this.userId,
-        totalPrice: totalPrice ?? this.totalPrice,
-        originPrice: originPrice ?? this.originPrice,
-        coupon: coupon ?? this.coupon,
-        rate: rate ?? this.rate,
-        tax: tax ?? this.tax,
-        commissionFee: commissionFee ?? this.commissionFee,
-        status: status ?? this.status,
-        location: location ?? this.location,
-        address: address ?? this.address,
-        deliveryType: deliveryType ?? this.deliveryType,
-        tips: tips ?? this.tips,
-        afterDeliveredImage: afterDeliveredImage ?? this.afterDeliveredImage,
-        deliveryFee: deliveryFee ?? this.deliveryFee,
-        otp: otp ?? this.otp,
-        currencyModel: currencyModel ?? this.currencyModel,
-        deliveryMan: deliveryMan ?? this.deliveryMan,
-        deliveryDate: deliveryDate ?? this.deliveryDate,
-        deliveryTime: deliveryTime ?? this.deliveryTime,
-        totalDiscount: totalDiscount ?? this.totalDiscount,
-        serviceFee: serviceFee ?? this.serviceFee,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-        shop: shop ?? this.shop,
-        repeat: repeat ?? this.repeat,
-        user: user ?? this.user,
-        details: details ?? this.details,
-        refunds: refunds ?? this.refunds,
-        transaction: transaction ?? this.transaction,
-        review: review ?? this.review,
-        ponumHistories: ponumHistories ?? this.ponumHistories,
-      );
+  }) => OrderActiveModel(
+    id: id ?? this.id,
+    userId: userId ?? this.userId,
+    totalPrice: totalPrice ?? this.totalPrice,
+    originPrice: originPrice ?? this.originPrice,
+    coupon: coupon ?? this.coupon,
+    rate: rate ?? this.rate,
+    tax: tax ?? this.tax,
+    commissionFee: commissionFee ?? this.commissionFee,
+    status: status ?? this.status,
+    location: location ?? this.location,
+    address: address ?? this.address,
+    deliveryType: deliveryType ?? this.deliveryType,
+    tips: tips ?? this.tips,
+    afterDeliveredImage: afterDeliveredImage ?? this.afterDeliveredImage,
+    deliveryFee: deliveryFee ?? this.deliveryFee,
+    otp: otp ?? this.otp,
+    currencyModel: currencyModel ?? this.currencyModel,
+    deliveryMan: deliveryMan ?? this.deliveryMan,
+    deliveryDate: deliveryDate ?? this.deliveryDate,
+    deliveryTime: deliveryTime ?? this.deliveryTime,
+    totalDiscount: totalDiscount ?? this.totalDiscount,
+    serviceFee: serviceFee ?? this.serviceFee,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    shop: shop ?? this.shop,
+    repeat: repeat ?? this.repeat,
+    user: user ?? this.user,
+    details: details ?? this.details,
+    refunds: refunds ?? this.refunds,
+    transaction: transaction ?? this.transaction,
+    review: review ?? this.review,
+    ponumHistories: ponumHistories ?? this.ponumHistories,
+  );
 
   Map<String, dynamic> toJson({bool isPayment = true}) => {
-        "id": id,
-        "user_id": userId,
-        "total_price": totalPrice,
-        "origin_price": originPrice,
-        "rate": rate,
-        "tax": tax,
-        "tips": tips,
-        "commission_fee": commissionFee,
-        "status": status,
-        "image_after_delivered": afterDeliveredImage,
-        "location": location?.toJson(),
-        "address": address,
-        "delivery_type": deliveryType,
-        "delivery_fee": deliveryFee,
-        "otp": otp,
-        "service_fee": serviceFee,
-        "delivery_date":
-            "${deliveryDate?.year.toString().padLeft(4, '0')}-${deliveryDate?.month.toString().padLeft(2, '0')}-${deliveryDate?.day.toString().padLeft(2, '0')}",
-        "delivery_time": deliveryTime,
-        "total_discount": totalDiscount,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "shop": shop?.toJson(),
-        "repeat": repeat?.toJson(),
-        "user": user?.toJson(),
-        "details": List<dynamic>.from(details!.map((x) => x.toJson())),
-        "transaction": transaction,
-        "review": review,
-        "ponum_histories": List<dynamic>.from(ponumHistories!.map((x) => x)),
-      };
+    "id": id,
+    "user_id": userId,
+    "total_price": totalPrice,
+    "origin_price": originPrice,
+    "rate": rate,
+    "tax": tax,
+    "tips": tips,
+    "commission_fee": commissionFee,
+    "status": status,
+    "image_after_delivered": afterDeliveredImage,
+    "location": location?.toJson(),
+    "address": address,
+    "delivery_type": deliveryType,
+    "delivery_fee": deliveryFee,
+    "otp": otp,
+    "service_fee": serviceFee,
+    "delivery_date":
+        "${deliveryDate?.year.toString().padLeft(4, '0')}-${deliveryDate?.month.toString().padLeft(2, '0')}-${deliveryDate?.day.toString().padLeft(2, '0')}",
+    "delivery_time": deliveryTime,
+    "total_discount": totalDiscount,
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+    "shop": shop?.toJson(),
+    "repeat": repeat?.toJson(),
+    "user": user?.toJson(),
+    "details": List<dynamic>.from(details!.map((x) => x.toJson())),
+    "transaction": transaction,
+    "review": review,
+    "ponum_histories": List<dynamic>.from(ponumHistories!.map((x) => x)),
+  };
 }
 
 class Detail {
-  Detail(
-      {this.id,
-      this.orderId,
-      this.stockId,
-      this.originPrice,
-      this.totalPrice,
-      this.tax,
-      this.discount,
-      this.quantity,
-      this.bonus,
-      this.bonusShop,
-      this.note,
-      this.createdAt,
-      this.updatedAt,
-      this.stock,
-      this.addons});
+  Detail({
+    this.id,
+    this.orderId,
+    this.stockId,
+    this.originPrice,
+    this.totalPrice,
+    this.tax,
+    this.discount,
+    this.quantity,
+    this.bonus,
+    this.bonusShop,
+    this.note,
+    this.createdAt,
+    this.updatedAt,
+    this.stock,
+    this.addons,
+  });
 
   String? id;
   String? orderId;
@@ -309,64 +316,67 @@ class Detail {
   List<Addons>? addons;
 
   factory Detail.fromJson(Map<String, dynamic> json) => Detail(
-        id: json["id"]?.toString() ?? "",
-        orderId: json["order_id"]?.toString(),
-        stockId: json["stock_id"]?.toString(),
-        originPrice: json["origin_price"],
-        totalPrice: json["total_price"],
-        tax: json["tax"],
-        note: json["note"],
-        discount: json["discount"],
-        quantity: json["quantity"],
-        bonus: (json["bonus"].runtimeType == int)
-            ? json["bonus"] == 1
-            : json["bonus"],
-        bonusShop: (json["bonus_shop"].runtimeType == int)
-            ? json["bonus_shop"] == 1
-            : json["bonus_shop"],
-        createdAt: DateTime.tryParse(json["created_at"])?.toLocal(),
-        updatedAt: DateTime.tryParse(json["updated_at"])?.toLocal(),
-        addons: json['addons'] != null
-            ? List<Addons>.from(json["addons"].map((x) {
-                if (x["product"] != null || x["stock"] != null || x != null) {
-                  return Addons.fromJson(x);
-                }
-              }))
-            : null,
-        stock: json["stock"] != null ? Stocks.fromJson(json["stock"]) : null,
-      );
+    id: json["id"]?.toString() ?? "",
+    orderId: json["order_id"]?.toString(),
+    stockId: json["stock_id"]?.toString(),
+    originPrice: json["origin_price"],
+    totalPrice: json["total_price"],
+    tax: json["tax"],
+    note: json["note"],
+    discount: json["discount"],
+    quantity: json["quantity"],
+    bonus: (json["bonus"].runtimeType == int)
+        ? json["bonus"] == 1
+        : json["bonus"],
+    bonusShop: (json["bonus_shop"].runtimeType == int)
+        ? json["bonus_shop"] == 1
+        : json["bonus_shop"],
+    createdAt: DateTime.tryParse(json["created_at"])?.toLocal(),
+    updatedAt: DateTime.tryParse(json["updated_at"])?.toLocal(),
+    addons: json['addons'] != null
+        ? List<Addons>.from(
+            json["addons"].map((x) {
+              if (x["product"] != null || x["stock"] != null || x != null) {
+                return Addons.fromJson(x);
+              }
+            }),
+          )
+        : null,
+    stock: json["stock"] != null ? Stocks.fromJson(json["stock"]) : null,
+  );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "order_id": orderId,
-        "stock_id": stockId,
-        "origin_price": originPrice,
-        "total_price": totalPrice,
-        "tax": tax,
-        "discount": discount,
-        "quantity": quantity,
-        "bonus": bonus,
-        "bonus_shop": bonusShop,
-        "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "stock": stock?.toJson(),
-      };
+    "id": id,
+    "order_id": orderId,
+    "stock_id": stockId,
+    "origin_price": originPrice,
+    "total_price": totalPrice,
+    "tax": tax,
+    "discount": discount,
+    "quantity": quantity,
+    "bonus": bonus,
+    "bonus_shop": bonusShop,
+    "created_at": createdAt?.toIso8601String(),
+    "updated_at": updatedAt?.toIso8601String(),
+    "stock": stock?.toJson(),
+  };
 }
 
 class DeliveryMan {
-  DeliveryMan(
-      {this.id,
-      this.uuid,
-      this.firstname,
-      this.lastname,
-      this.phone,
-      this.birthday,
-      this.gender,
-      this.emailVerifiedAt,
-      this.registeredAt,
-      this.active,
-      this.role,
-      this.img});
+  DeliveryMan({
+    this.id,
+    this.uuid,
+    this.firstname,
+    this.lastname,
+    this.phone,
+    this.birthday,
+    this.gender,
+    this.emailVerifiedAt,
+    this.registeredAt,
+    this.active,
+    this.role,
+    this.img,
+  });
 
   String? id;
   String? uuid;
@@ -398,18 +408,18 @@ class DeliveryMan {
   }
 
   Map<String, dynamic> toJson() => {
-        "id": id,
-        "uuid": uuid,
-        "firstname": firstname,
-        "lastname": lastname,
-        "phone": phone,
-        "birthday": birthday?.toIso8601String(),
-        "gender": gender,
-        "email_verified_at": emailVerifiedAt?.toIso8601String(),
-        "registered_at": registeredAt?.toIso8601String(),
-        "active": active,
-        "role": role,
-      };
+    "id": id,
+    "uuid": uuid,
+    "firstname": firstname,
+    "lastname": lastname,
+    "phone": phone,
+    "birthday": birthday?.toIso8601String(),
+    "gender": gender,
+    "email_verified_at": emailVerifiedAt?.toIso8601String(),
+    "registered_at": registeredAt?.toIso8601String(),
+    "active": active,
+    "role": role,
+  };
 }
 
 class CurrencyModel {
@@ -436,4 +446,3 @@ class CurrencyModel {
     return data;
   }
 }
-

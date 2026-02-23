@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 
-
 /// Helper class for size information
 class SizeInfo {
   final String? size;
@@ -19,7 +18,7 @@ class KeywordCheck {
   KeywordCheck({
     required this.hasCold,
     required this.hasFrozen,
-    required this.isAdult
+    required this.isAdult,
   });
 }
 
@@ -54,7 +53,10 @@ class ProductUtils {
       final brandPatterns = [
         RegExp(r'^' + RegExp.escape(brandName) + r'\s+', caseSensitive: false),
         RegExp(r'\s+' + RegExp.escape(brandName) + r'$', caseSensitive: false),
-        RegExp(r'\s+' + RegExp.escape(brandName) + r'\s+', caseSensitive: false)
+        RegExp(
+          r'\s+' + RegExp.escape(brandName) + r'\s+',
+          caseSensitive: false,
+        ),
       ];
 
       for (final pattern in brandPatterns) {
@@ -80,14 +82,18 @@ class ProductUtils {
     // Remove size information
     final sizePatterns = [
       RegExp(
-          r'\d+(?:\.\d+)?\s*(?:Litre|Liter|L|ml|milliliter|millilitre|kg|kilo|kilogram|g|gram|grams|pack|pck|case|cs)\s*-',
-          caseSensitive: false),
+        r'\d+(?:\.\d+)?\s*(?:Litre|Liter|L|ml|milliliter|millilitre|kg|kilo|kilogram|g|gram|grams|pack|pck|case|cs)\s*-',
+        caseSensitive: false,
+      ),
       RegExp(
-          r'-\s*\d+(?:\.\d+)?\s*(?:Litre|Liter|L|ml|milliliter|millilitre|kg|kilo|kilogram|g|gram|grams|pack|pck|case|cs)',
-          caseSensitive: false),
+        r'-\s*\d+(?:\.\d+)?\s*(?:Litre|Liter|L|ml|milliliter|millilitre|kg|kilo|kilogram|g|gram|grams|pack|pck|case|cs)',
+        caseSensitive: false,
+      ),
       RegExp(r'\d+(?:\.\d+)?\s*(?:Litre|Liter|L)\b', caseSensitive: false),
-      RegExp(r'\d+(?:\.\d+)?\s*(?:ml|milliliter|millilitre)\b',
-          caseSensitive: false),
+      RegExp(
+        r'\d+(?:\.\d+)?\s*(?:ml|milliliter|millilitre)\b',
+        caseSensitive: false,
+      ),
       RegExp(r'\d+(?:\.\d+)?\s*(?:kg|kilo|kilogram)\b', caseSensitive: false),
       RegExp(r'\d+(?:\.\d+)?\s*(?:g|gram|grams)\b', caseSensitive: false),
       RegExp(r'\d+(?:\.\d+)?\s*(?:pack|pck)\b', caseSensitive: false),
@@ -113,12 +119,14 @@ class ProductUtils {
       'packet',
       'packets',
       'pack',
-      'packs'
+      'packs',
     ];
 
     for (final word in containerWords) {
       cleanedTitle = cleanedTitle.replaceAll(
-          RegExp('\\b$word\\b', caseSensitive: false), '');
+        RegExp('\\b$word\\b', caseSensitive: false),
+        '',
+      );
     }
 
     // Clean up any remaining mess
@@ -132,15 +140,22 @@ class ProductUtils {
   static SizeInfo? extractSize(String? title) {
     if (title == null) return null;
 
-    final literPattern =
-    RegExp(r'(\d+(?:\.\d+)?)\s*(?:Litre|Liter|L)\b', caseSensitive: false);
+    final literPattern = RegExp(
+      r'(\d+(?:\.\d+)?)\s*(?:Litre|Liter|L)\b',
+      caseSensitive: false,
+    );
     final mlPattern = RegExp(
-        r'(\d+(?:\.\d+)?)\s*(?:ml|milliliter|millilitre)\b',
-        caseSensitive: false);
-    final kgPattern = RegExp(r'(\d+(?:\.\d+)?)\s*(?:kg|kilo|kilogram)\b',
-        caseSensitive: false);
-    final gramPattern =
-    RegExp(r'(\d+(?:\.\d+)?)\s*(?:g|gram|grams)\b', caseSensitive: false);
+      r'(\d+(?:\.\d+)?)\s*(?:ml|milliliter|millilitre)\b',
+      caseSensitive: false,
+    );
+    final kgPattern = RegExp(
+      r'(\d+(?:\.\d+)?)\s*(?:kg|kilo|kilogram)\b',
+      caseSensitive: false,
+    );
+    final gramPattern = RegExp(
+      r'(\d+(?:\.\d+)?)\s*(?:g|gram|grams)\b',
+      caseSensitive: false,
+    );
 
     var match = literPattern.firstMatch(title);
     if (match != null) {
@@ -173,8 +188,21 @@ class ProductUtils {
   /// Helper method to find packaging type in title or description
   static String? findPackagingType(String? title, String? description) {
     // Exclude 'container' from the list of packaging types to look for in title (as requested)
-    final List<String> packagingTypes = ['pack', 'bottle', 'sachet', 'case', 'box', 'bucket'];
-    final List<String> allPackagingTypes = ['pack', 'container', 'bottle', 'sachet', 'case'];
+    final List<String> packagingTypes = [
+      'pack',
+      'bottle',
+      'sachet',
+      'case',
+      'box',
+      'bucket',
+    ];
+    final List<String> allPackagingTypes = [
+      'pack',
+      'container',
+      'bottle',
+      'sachet',
+      'case',
+    ];
 
     // Look for packaging types (except 'container') in title first
     for (final type in packagingTypes) {
@@ -206,34 +234,42 @@ class ProductUtils {
     bool isAdult = false;
 
     // Check for cold/frozen in title and description
-    if (containsKeyword(title, 'cold') || containsKeyword(description, 'cold')) {
+    if (containsKeyword(title, 'cold') ||
+        containsKeyword(description, 'cold')) {
       hasCold = true;
     }
-    if (containsKeyword(title, 'frozen') || containsKeyword(description, 'frozen')) {
+    if (containsKeyword(title, 'frozen') ||
+        containsKeyword(description, 'frozen')) {
       hasFrozen = true;
     }
 
     // Check for adult content
-    if (containsKeyword(title, 'adult') || containsKeyword(description, 'adult') ||
-        containsKeyword(title, 'alcohol') || containsKeyword(description, 'alcohol')) {
+    if (containsKeyword(title, 'adult') ||
+        containsKeyword(description, 'adult') ||
+        containsKeyword(title, 'alcohol') ||
+        containsKeyword(description, 'alcohol')) {
       isAdult = true;
     }
 
     return KeywordCheck(
-        hasCold: hasCold,
-        hasFrozen: hasFrozen,
-        isAdult: isAdult
+      hasCold: hasCold,
+      hasFrozen: hasFrozen,
+      isAdult: isAdult,
     );
   }
 
   /// Helper method to calculate savings text for the SAVE badge
-  static String calculateSavingsText(double originalPrice, double discountedPrice) {
+  static String calculateSavingsText(
+    double originalPrice,
+    double discountedPrice,
+  ) {
     if (originalPrice <= 0 || discountedPrice >= originalPrice) {
       return 'SAVE';
     }
 
     // Calculate percentage saved
-    final percentageSaved = ((originalPrice - discountedPrice) / originalPrice * 100).round();
+    final percentageSaved =
+        ((originalPrice - discountedPrice) / originalPrice * 100).round();
 
     return 'SAVE $percentageSaved%';
   }
@@ -245,15 +281,21 @@ class ProductUtils {
     final double discountedPrice = product.stock?.totalPrice?.toDouble() ?? 0;
 
     // Set discount threshold to 5% (0.95 of original price)
-    bool hasPriceDiscount = originalPrice > 0 &&
+    bool hasPriceDiscount =
+        originalPrice > 0 &&
         discountedPrice > 0 &&
         discountedPrice <= (originalPrice * 0.95);
 
     if (!hasPriceDiscount) {
-      debugPrint("Product ${product.id}: No valid price discount. Original: $originalPrice, Discounted: $discountedPrice");
+      debugPrint(
+        "Product ${product.id}: No valid price discount. Original: $originalPrice, Discounted: $discountedPrice",
+      );
       if (originalPrice > 0) {
-        final discountPercentage = ((originalPrice - discountedPrice) / originalPrice * 100);
-        debugPrint("Discount percentage: ${discountPercentage.toStringAsFixed(2)}%, Required: 5%");
+        final discountPercentage =
+            ((originalPrice - discountedPrice) / originalPrice * 100);
+        debugPrint(
+          "Discount percentage: ${discountPercentage.toStringAsFixed(2)}%, Required: 5%",
+        );
       }
       return false;
     }
@@ -270,14 +312,20 @@ class ProductUtils {
       // For percentage discounts, we can calculate the expected price and compare
       if (discountType == "percent" && discountValue != null) {
         // Calculate what the discounted price should be
-        double expectedDiscountedPrice = originalPrice * (1 - (discountValue / 100));
+        double expectedDiscountedPrice =
+            originalPrice * (1 - (discountValue / 100));
 
         // Allow for small rounding differences (0.01 currency units)
-        bool priceMatchesDiscount = (discountedPrice - expectedDiscountedPrice).abs() <= 0.01;
+        bool priceMatchesDiscount =
+            (discountedPrice - expectedDiscountedPrice).abs() <= 0.01;
 
         if (!priceMatchesDiscount) {
-          debugPrint("Product ${product.id}: Discounted price doesn't match expected price for $discountType discount");
-          debugPrint("Expected: $expectedDiscountedPrice, Actual: $discountedPrice, Discount value: $discountValue%");
+          debugPrint(
+            "Product ${product.id}: Discounted price doesn't match expected price for $discountType discount",
+          );
+          debugPrint(
+            "Expected: $expectedDiscountedPrice, Actual: $discountedPrice, Discount value: $discountValue%",
+          );
           // We'll still continue because the price difference is valid, but this is a warning
         }
       }
@@ -291,7 +339,9 @@ class ProductUtils {
       // Check start date
       if (discount.start != null) {
         if (now.isBefore(discount.start!)) {
-          debugPrint("Product ${product.id}: Discount hasn't started yet. Start date: ${discount.start}");
+          debugPrint(
+            "Product ${product.id}: Discount hasn't started yet. Start date: ${discount.start}",
+          );
           return false;
         }
       }
@@ -299,21 +349,29 @@ class ProductUtils {
       // Check end date
       if (discount.end != null) {
         if (now.isAfter(discount.end!)) {
-          debugPrint("Product ${product.id}: Discount has expired. End date: ${discount.end}");
+          debugPrint(
+            "Product ${product.id}: Discount has expired. End date: ${discount.end}",
+          );
           return false;
         }
       }
 
       // If we got here, both price discount and date checks passed
-      final discountPercentage = ((originalPrice - discountedPrice) / originalPrice * 100);
-      debugPrint("Product ${product.id}: Valid discount of ${discountPercentage.toStringAsFixed(2)}%, valid until ${discount.end}");
+      final discountPercentage =
+          ((originalPrice - discountedPrice) / originalPrice * 100);
+      debugPrint(
+        "Product ${product.id}: Valid discount of ${discountPercentage.toStringAsFixed(2)}%, valid until ${discount.end}",
+      );
       return true;
     }
 
     // If product has price discount but no discount object,
     // we'll accept it based just on the price difference
-    final discountPercentage = ((originalPrice - discountedPrice) / originalPrice * 100);
-    debugPrint("Product ${product.id}: Has ${discountPercentage.toStringAsFixed(2)}% price discount but no discount object. Accepting based on price.");
+    final discountPercentage =
+        ((originalPrice - discountedPrice) / originalPrice * 100);
+    debugPrint(
+      "Product ${product.id}: Has ${discountPercentage.toStringAsFixed(2)}% price discount but no discount object. Accepting based on price.",
+    );
     return true;
   }
 }

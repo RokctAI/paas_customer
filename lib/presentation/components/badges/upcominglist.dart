@@ -27,7 +27,9 @@ class UpComingList extends ConsumerStatefulWidget {
 
 class _UpComingListState extends ConsumerState<UpComingList> {
   Timer? _timer;
-  final ValueNotifier<OrderActiveModel?> _currentOrderNotifier = ValueNotifier(null);
+  final ValueNotifier<OrderActiveModel?> _currentOrderNotifier = ValueNotifier(
+    null,
+  );
   final ValueNotifier<bool> _isLoadingNotifier = ValueNotifier(false);
 
   @override
@@ -55,7 +57,9 @@ class _UpComingListState extends ConsumerState<UpComingList> {
     _isLoadingNotifier.value = true;
     await ref.read(ordersListProvider.notifier).fetchActiveOrders(context);
     final ordersState = ref.read(ordersListProvider);
-    final mostRecentOrder = ordersState.activeOrders.isNotEmpty ? ordersState.activeOrders.first : null;
+    final mostRecentOrder = ordersState.activeOrders.isNotEmpty
+        ? ordersState.activeOrders.first
+        : null;
 
     _currentOrderNotifier.value = mostRecentOrder;
     _isLoadingNotifier.value = false;
@@ -75,14 +79,17 @@ class _UpComingListState extends ConsumerState<UpComingList> {
         return Column(
           children: [
             TitleAndIcon(
-              title: "$firstName\u{1F44B}, ${AppHelpers.getTranslation(TrKeys.mostRecentOrder)}",
+              title:
+                  "$firstName\u{1F44B}, ${AppHelpers.getTranslation(TrKeys.mostRecentOrder)}",
               titleColor: AppStyle.black,
             ),
             8.verticalSpace,
             SizedBox(
               height: 120.h,
               child: FutureBuilder<ShopData?>(
-                future: ref.read(shopProvider.notifier).fetchShopData(currentOrder.shop?.id?.toString() ?? ''),
+                future: ref
+                    .read(shopProvider.notifier)
+                    .fetchShopData(currentOrder.shop?.id?.toString() ?? ''),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -92,7 +99,12 @@ class _UpComingListState extends ConsumerState<UpComingList> {
                     return ValueListenableBuilder<bool>(
                       valueListenable: _isLoadingNotifier,
                       builder: (context, isLoading, _) {
-                        return _orderItem(currentOrder, snapshot.data!, context, isLoading);
+                        return _orderItem(
+                          currentOrder,
+                          snapshot.data!,
+                          context,
+                          isLoading,
+                        );
                       },
                     );
                   } else {
@@ -107,14 +119,15 @@ class _UpComingListState extends ConsumerState<UpComingList> {
     );
   }
 
-  Widget _orderItem(OrderActiveModel order, ShopData shopData, BuildContext context, bool isLoading) {
+  Widget _orderItem(
+    OrderActiveModel order,
+    ShopData shopData,
+    BuildContext context,
+    bool isLoading,
+  ) {
     return ButtonEffectAnimation(
       onTap: () {
-        context.pushRoute(
-          OrderProgressRoute(
-            orderId: (order.id ?? ""),
-          ),
-        );
+        context.pushRoute(OrderProgressRoute(orderId: (order.id ?? "")));
       },
       child: UpcomingOrderWidget(
         order: order,
@@ -177,14 +190,24 @@ class UpcomingOrderWidget extends StatelessWidget {
                       children: [
                         RichText(
                           text: TextSpan(
-                            style: AppStyle.interNormal(color: AppStyle.white, size: 14),
+                            style: AppStyle.interNormal(
+                              color: AppStyle.white,
+                              size: 14,
+                            ),
                             children: [
-                              TextSpan(text: "Order №${(order.id ?? "").toString()} is "),
+                              TextSpan(
+                                text:
+                                    "Order №${(order.id ?? "").toString()} is ",
+                              ),
                               TextSpan(
                                 text: (order.status ?? "").isNotEmpty
-                                    ? order.status![0].toUpperCase() + order.status!.substring(1)
+                                    ? order.status![0].toUpperCase() +
+                                          order.status!.substring(1)
                                     : "",
-                                style: AppStyle.interBold(color: AppStyle.white, size: 14),
+                                style: AppStyle.interBold(
+                                  color: AppStyle.white,
+                                  size: 14,
+                                ),
                               ),
                             ],
                           ),
@@ -300,14 +323,18 @@ class _ETADisplayState extends State<ETADisplay> {
                 height: 40.r,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: isShowingFirstPart ? AppStyle.white : (isDelayed ? Colors.red : AppStyle.primary),
+                  color: isShowingFirstPart
+                      ? AppStyle.white
+                      : (isDelayed ? Colors.red : AppStyle.primary),
                 ),
                 child: Center(
                   child: Text(
                     displayText,
                     style: AppStyle.interBold(
                       size: 16,
-                      color: isShowingFirstPart ? AppStyle.primary : AppStyle.white,
+                      color: isShowingFirstPart
+                          ? AppStyle.primary
+                          : AppStyle.white,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -328,17 +355,11 @@ class _ETADisplayState extends State<ETADisplay> {
         children: [
           Text(
             AppHelpers.getTranslation(TrKeys.titleETA),
-            style: AppStyle.interBold(
-              size: 14,
-              color: AppStyle.black,
-            ),
+            style: AppStyle.interBold(size: 14, color: AppStyle.black),
           ),
           Text(
             AppHelpers.getTranslation(TrKeys.etaTimeDialog),
-            style: AppStyle.interNormal(
-              size: 12,
-              color: AppStyle.textGrey,
-            ),
+            style: AppStyle.interNormal(size: 12, color: AppStyle.textGrey),
           ),
         ],
       ),
@@ -353,11 +374,16 @@ class _ETADisplayState extends State<ETADisplay> {
       return "N/A";
     }
 
-    if (deliveryTime == null || deliveryTime.to == null || deliveryTime.type == null) {
+    if (deliveryTime == null ||
+        deliveryTime.to == null ||
+        deliveryTime.type == null) {
       return "N/A";
     }
 
-    final int deliveryMinutes = _convertToMinutes(deliveryTime.to, deliveryTime.type);
+    final int deliveryMinutes = _convertToMinutes(
+      deliveryTime.to,
+      deliveryTime.type,
+    );
     final now = DateTime.now();
     final int elapsedMinutes = now.difference(createdAt).inMinutes;
 

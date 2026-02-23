@@ -10,7 +10,8 @@ class ChatNotifier extends StateNotifier<ChatState> {
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   String roleId = "";
 
-  ChatNotifier() : super(ChatState(textController: TextEditingController(), chatId: ''));
+  ChatNotifier()
+    : super(ChatState(textController: TextEditingController(), chatId: ''));
 
   // Method to fetch chats based on user and role
   Future<void> fetchChats(BuildContext context, String roleId) async {
@@ -45,12 +46,15 @@ class ChatNotifier extends StateNotifier<ChatState> {
           'id': LocalStorage.getUser()?.id,
           'img': LocalStorage.getUser()?.img,
           'lastname': LocalStorage.getUser()?.lastname,
-        }
+        },
       });
       final String chatId = res.id;
       state = state.copyWith(chatId: chatId, isLoading: false);
     } else {
-      state = state.copyWith(chatId: query?.docs.first.id ?? '', isLoading: false);
+      state = state.copyWith(
+        chatId: query?.docs.first.id ?? '',
+        isLoading: false,
+      );
     }
   }
 
@@ -91,7 +95,10 @@ class ChatNotifier extends StateNotifier<ChatState> {
     if (state.chats.isNotEmpty) {
       final latestMessageId = state.chats.first.messageId;
       if (messageId == latestMessageId) {
-        state = state.copyWith(isEditing: !state.isEditing, editingMessageId: messageId);
+        state = state.copyWith(
+          isEditing: !state.isEditing,
+          editingMessageId: messageId,
+        );
         if (state.isEditing) {
           state.textController?.text = content;
         } else {
@@ -117,4 +124,3 @@ class ChatNotifier extends StateNotifier<ChatState> {
     // }
   }
 }
-

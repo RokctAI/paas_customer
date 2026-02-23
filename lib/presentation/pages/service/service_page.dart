@@ -45,65 +45,74 @@ class _ServicePageState extends State<ServicePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-               SizedBox(width: 46.r,),
+              SizedBox(width: 46.r),
               const Spacer(),
               Text(
                 AppHelpers.getTranslation(TrKeys.allServices),
                 style: AppStyle.interNoSemi(),
               ),
               const Spacer(),
-              IconButton(onPressed: (){
-                context.pushRoute( SearchRoute());
-              }, icon: const Icon(FlutterRemix.search_2_line)),
+              IconButton(
+                onPressed: () {
+                  context.pushRoute(SearchRoute());
+                },
+                icon: const Icon(FlutterRemix.search_2_line),
+              ),
             ],
           ),
         ),
         Expanded(
-          child: Consumer(builder: (context, ref, child) {
-            final state = ref.watch(homeProvider);
-            final notifier = ref.read(homeProvider.notifier);
-            return SmartRefresher(
-              scrollDirection: Axis.vertical,
-              enablePullDown: false,
-              enablePullUp: true,
-              controller: categoryController,
-              onLoading: () async {
-                await notifier.fetchCategoriesPage(context, categoryController);
-              },
-              child: GridView.custom(
-                physics: const BouncingScrollPhysics(),
-                padding: REdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                gridDelegate: SliverQuiltedGridDelegate(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  repeatPattern: QuiltedGridRepeatPattern.same,
-                  pattern: [
-                    const QuiltedGridTile(1, 2),
-                    const QuiltedGridTile(1, 1),
-                    const QuiltedGridTile(1, 1),
-                    const QuiltedGridTile(1, 2),
-                  ],
-                ),
-                childrenDelegate: SliverChildBuilderDelegate(
-                  childCount: state.categories.length,
-                  (context, index) => ServiceTwoCategoriesItem(
-                    category: state.categories[index],
-                    onTap: () async {
-                      if (state.selectIndexCategory != index) {
-                        notifier.setSelectCategory(index, context);
-                      }
+          child: Consumer(
+            builder: (context, ref, child) {
+              final state = ref.watch(homeProvider);
+              final notifier = ref.read(homeProvider.notifier);
+              return SmartRefresher(
+                scrollDirection: Axis.vertical,
+                enablePullDown: false,
+                enablePullUp: true,
+                controller: categoryController,
+                onLoading: () async {
+                  await notifier.fetchCategoriesPage(
+                    context,
+                    categoryController,
+                  );
+                },
+                child: GridView.custom(
+                  physics: const BouncingScrollPhysics(),
+                  padding: REdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  gridDelegate: SliverQuiltedGridDelegate(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
+                    repeatPattern: QuiltedGridRepeatPattern.same,
+                    pattern: [
+                      const QuiltedGridTile(1, 2),
+                      const QuiltedGridTile(1, 1),
+                      const QuiltedGridTile(1, 1),
+                      const QuiltedGridTile(1, 2),
+                    ],
+                  ),
+                  childrenDelegate: SliverChildBuilderDelegate(
+                    childCount: state.categories.length,
+                    (context, index) => ServiceTwoCategoriesItem(
+                      category: state.categories[index],
+                      onTap: () async {
+                        if (state.selectIndexCategory != index) {
+                          notifier.setSelectCategory(index, context);
+                        }
 
-                      context.pushRoute(ServiceTwoCategoryRoute(index: index));
-                    },
+                        context.pushRoute(
+                          ServiceTwoCategoryRoute(index: index),
+                        );
+                      },
+                    ),
                   ),
                 ),
-              ),
-            );
-          }),
+              );
+            },
+          ),
         ),
       ],
     );
   }
 }
-

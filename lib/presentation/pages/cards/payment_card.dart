@@ -66,9 +66,13 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
             }
             // If we had a selected card, make sure it still exists in the updated list
             else if (_selectedCard != null) {
-              final stillExists = _savedCards.any((card) => card.id == _selectedCard!.id);
+              final stillExists = _savedCards.any(
+                (card) => card.id == _selectedCard!.id,
+              );
               if (!stillExists) {
-                _selectedCard = _savedCards.isNotEmpty ? _savedCards.first : null;
+                _selectedCard = _savedCards.isNotEmpty
+                    ? _savedCards.first
+                    : null;
                 widget.onCardSelected(_selectedCard);
               }
             }
@@ -151,10 +155,7 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
       });
 
       if (!mounted) return;
-      AppHelpers.showCheckTopSnackBarInfo(
-        context,
-        'Failed to delete card',
-      );
+      AppHelpers.showCheckTopSnackBarInfo(context, 'Failed to delete card');
     }
   }
 
@@ -204,11 +205,7 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.credit_card_off,
-              size: 48.r,
-              color: AppStyle.textGrey,
-            ),
+            Icon(Icons.credit_card_off, size: 48.r, color: AppStyle.textGrey),
             16.verticalSpace,
             Text(
               AppHelpers.getTranslation(TrKeys.noSavedCard),
@@ -233,10 +230,10 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (_savedCards.length >= 2)
-        Text(
-          AppHelpers.getTranslation(TrKeys.selectCard),
-          style: AppStyle.interSemi(size: 16.sp),
-        ),
+          Text(
+            AppHelpers.getTranslation(TrKeys.selectCard),
+            style: AppStyle.interSemi(size: 16.sp),
+          ),
         12.verticalSpace,
 
         // Cards list (vertical list instead of horizontal)
@@ -260,7 +257,9 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                 decoration: BoxDecoration(
-                  color: isSelected ? AppStyle.primary.withOpacity(0.05) : AppStyle.white,
+                  color: isSelected
+                      ? AppStyle.primary.withOpacity(0.05)
+                      : AppStyle.white,
                   borderRadius: BorderRadius.circular(12.r),
                   border: Border.all(
                     color: isSelected ? AppStyle.primary : AppStyle.borderColor,

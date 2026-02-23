@@ -9,7 +9,6 @@ import 'package:foodyman/presentation/theme/app_style.dart';
 import 'package:foodyman/utils/products/product_utils.dart';
 import 'package:remixicon/remixicon.dart';
 
-
 import 'brand_utils.dart';
 import 'product_ui_components.dart';
 
@@ -55,12 +54,16 @@ class ProductCard extends ConsumerWidget {
     }
 
     // Clean the title
-    final String cleanedTitle = ProductUtils.cleanTitleWithBrand(title, brand?.title);
+    final String cleanedTitle = ProductUtils.cleanTitleWithBrand(
+      title,
+      brand?.title,
+    );
 
     // Get price information
     final double originalPrice = product.stock?.price?.toDouble() ?? 0;
     final double discountedPrice = product.stock?.totalPrice?.toDouble() ?? 0;
-    final bool hasDiscount = discountedPrice < originalPrice && originalPrice > 0;
+    final bool hasDiscount =
+        discountedPrice < originalPrice && originalPrice > 0;
 
     // Check if stock quantity is low
     final int stockQuantity = product.stock?.quantity ?? 0;
@@ -70,32 +73,42 @@ class ProductCard extends ConsumerWidget {
     final SizeInfo? sizeInfo = ProductUtils.extractSize(title);
 
     // Find packaging type in title or description
-    final String? packagingType = ProductUtils.findPackagingType(title, description);
+    final String? packagingType = ProductUtils.findPackagingType(
+      title,
+      description,
+    );
 
     // Check for cold/frozen and adult content
-    final KeywordCheck keywords = ProductUtils.checkKeywords(title, description);
+    final KeywordCheck keywords = ProductUtils.checkKeywords(
+      title,
+      description,
+    );
 
     // Calculate price per unit if needed
     String? pricePerUnit;
     if (showPerUnitPrice && !isLowStock) {
       // Don't show per unit price if title/description contains "drink" or "bottle"
-      bool shouldShow = !ProductUtils.containsKeyword(title, "drink") &&
+      bool shouldShow =
+          !ProductUtils.containsKeyword(title, "drink") &&
           !ProductUtils.containsKeyword(description, "drink") &&
           !ProductUtils.containsKeyword(title, "bottle") &&
           !ProductUtils.containsKeyword(description, "bottle");
 
       if (shouldShow) {
         pricePerUnit = ProductUIComponents.calculatePerUnitPrice(
-            hasDiscount ? discountedPrice : originalPrice,
-            sizeInfo,
-            shouldShow: shouldShow);
+          hasDiscount ? discountedPrice : originalPrice,
+          sizeInfo,
+          shouldShow: shouldShow,
+        );
       }
     }
 
     return Container(
       margin: EdgeInsets.all(4.r),
       decoration: BoxDecoration(
-          color: AppStyle.white, borderRadius: BorderRadius.circular(10.r)),
+        color: AppStyle.white,
+        borderRadius: BorderRadius.circular(10.r),
+      ),
       child: Stack(
         children: [
           GestureDetector(
@@ -127,12 +140,16 @@ class ProductCard extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Brand name if available
-                        if (brand != null && brand.title != null && brand.title!.toLowerCase() != 'no brand')
+                        if (brand != null &&
+                            brand.title != null &&
+                            brand.title!.toLowerCase() != 'no brand')
                           BrandUtils.buildBrandSection(brand),
 
                         // Product title
                         Text(
-                          cleanedTitle.isNotEmpty ? cleanedTitle : (title ?? ""),
+                          cleanedTitle.isNotEmpty
+                              ? cleanedTitle
+                              : (title ?? ""),
                           style: AppStyle.interNoSemi(
                             size: 12,
                             color: AppStyle.black,
@@ -165,16 +182,18 @@ class ProductCard extends ConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  AppHelpers.numberFormat(number: discountedPrice),
+                                  AppHelpers.numberFormat(
+                                    number: discountedPrice,
+                                  ),
                                   style: hasDiscount
                                       ? AppStyle.interNoSemi(
-                                    size: 16,
-                                    color: AppStyle.red,
-                                  )
+                                          size: 16,
+                                          color: AppStyle.red,
+                                        )
                                       : AppStyle.interNoSemi(
-                                    size: 16,
-                                    color: AppStyle.black,
-                                  ),
+                                          size: 16,
+                                          color: AppStyle.black,
+                                        ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -199,11 +218,14 @@ class ProductCard extends ConsumerWidget {
                               children: [
                                 if (hasDiscount)
                                   Text(
-                                    AppHelpers.numberFormat(number: originalPrice),
+                                    AppHelpers.numberFormat(
+                                      number: originalPrice,
+                                    ),
                                     style: AppStyle.interRegular(
                                       size: 12,
                                       color: AppStyle.textGrey,
-                                      textDecoration: TextDecoration.lineThrough,
+                                      textDecoration:
+                                          TextDecoration.lineThrough,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -264,7 +286,10 @@ class ProductCard extends ConsumerWidget {
             Positioned(
               top: 8.r,
               left: 8.r,
-              child: ProductUIComponents.buildDiscountBadge(originalPrice, discountedPrice),
+              child: ProductUIComponents.buildDiscountBadge(
+                originalPrice,
+                discountedPrice,
+              ),
             ),
 
           // Bonus indicator (if product has bonus)
@@ -296,31 +321,31 @@ class ProductCard extends ConsumerWidget {
                   : 8.r, // Adjust position if there's a discount badge
               child: keywords.hasCold && keywords.hasFrozen
                   ? Row(
-                children: [
-                  ProductUIComponents.buildColdFrozenBadge(
-                    "Cold",
-                    Colors.blue.shade100,
-                    Colors.blue.shade700,
-                  ),
-                  SizedBox(width: 8.r),
-                  ProductUIComponents.buildColdFrozenBadge(
-                    "Frozen",
-                    Colors.indigo.shade100,
-                    Colors.indigo.shade700,
-                  ),
-                ],
-              )
+                      children: [
+                        ProductUIComponents.buildColdFrozenBadge(
+                          "Cold",
+                          Colors.blue.shade100,
+                          Colors.blue.shade700,
+                        ),
+                        SizedBox(width: 8.r),
+                        ProductUIComponents.buildColdFrozenBadge(
+                          "Frozen",
+                          Colors.indigo.shade100,
+                          Colors.indigo.shade700,
+                        ),
+                      ],
+                    )
                   : keywords.hasFrozen
                   ? ProductUIComponents.buildColdFrozenBadge(
-                "Frozen",
-                Colors.indigo.shade100,
-                Colors.indigo.shade700,
-              )
+                      "Frozen",
+                      Colors.indigo.shade100,
+                      Colors.indigo.shade700,
+                    )
                   : ProductUIComponents.buildColdFrozenBadge(
-                "Cold",
-                Colors.blue.shade100,
-                Colors.blue.shade700,
-              ),
+                      "Cold",
+                      Colors.blue.shade100,
+                      Colors.blue.shade700,
+                    ),
             ),
 
           // Adult content badge (18+)
@@ -352,7 +377,12 @@ class ProductCard extends ConsumerWidget {
             top: 4.r,
             right: 4.r,
             child: ProductUIComponents.buildQuantityControl(
-                context, ref, product, cartQuantity, canAddDirectly: canAddDirectly),
+              context,
+              ref,
+              product,
+              cartQuantity,
+              canAddDirectly: canAddDirectly,
+            ),
           ),
         ],
       ),

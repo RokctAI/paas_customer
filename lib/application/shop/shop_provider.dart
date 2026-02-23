@@ -5,7 +5,11 @@ import 'shop_notifier.dart';
 import 'shop_state.dart';
 
 final shopProvider = StateNotifierProvider<ShopNotifier, ShopState>(
-  (ref) => ShopNotifier(shopsRepository, productsRepository,
-      categoriesRepository, drawRepository, brandsRepository),
+  (ref) => ShopNotifier(
+    shopsRepository,
+    productsRepository,
+    categoriesRepository,
+    drawRepository,
+    brandsRepository,
+  ),
 );
-

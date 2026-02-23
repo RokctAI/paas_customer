@@ -16,13 +16,16 @@ import 'package:foodyman/presentation/components/shop_avarat.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 
-
 @RoutePage()
 class StoryListPage extends StatefulWidget {
   final RefreshController controller;
   final int index;
 
-  const StoryListPage({super.key, required this.index, required this.controller});
+  const StoryListPage({
+    super.key,
+    required this.index,
+    required this.controller,
+  });
 
   @override
   State<StoryListPage> createState() => _StoryListPageState();
@@ -45,43 +48,49 @@ class _StoryListPageState extends State<StoryListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer(builder: (context, ref, child) {
-      return PageView.builder(
-        controller: pageController,
-        itemCount: ref.watch(homeProvider).story?.length ?? 0,
-        physics: const PageScrollPhysics(),
-        itemBuilder: (context, index) {
-          return StoryPage(
-            story: ref.watch(homeProvider).story?[index],
-            nextPage: () {
-              if (index == ref.watch(homeProvider).story!.length - 2) {
-                ref
-                    .read(homeProvider.notifier)
-                    .fetchStoriesPage(context, widget.controller);
-              }
-              if (index != ref.watch(homeProvider).story!.length - 1) {
-                pageController!.animateToPage(++index,
+    return Consumer(
+      builder: (context, ref, child) {
+        return PageView.builder(
+          controller: pageController,
+          itemCount: ref.watch(homeProvider).story?.length ?? 0,
+          physics: const PageScrollPhysics(),
+          itemBuilder: (context, index) {
+            return StoryPage(
+              story: ref.watch(homeProvider).story?[index],
+              nextPage: () {
+                if (index == ref.watch(homeProvider).story!.length - 2) {
+                  ref
+                      .read(homeProvider.notifier)
+                      .fetchStoriesPage(context, widget.controller);
+                }
+                if (index != ref.watch(homeProvider).story!.length - 1) {
+                  pageController!.animateToPage(
+                    ++index,
                     duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeIn);
-                setState(() {});
-              } else {
-                context.maybePop();
-              }
-            },
-            prevPage: () {
-              if (index != 0) {
-                pageController!.animateToPage(--index,
+                    curve: Curves.easeIn,
+                  );
+                  setState(() {});
+                } else {
+                  context.maybePop();
+                }
+              },
+              prevPage: () {
+                if (index != 0) {
+                  pageController!.animateToPage(
+                    --index,
                     duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeIn);
-                setState(() {});
-              } else {
-                context.maybePop();
-              }
-            },
-          );
-        },
-      );
-    });
+                    curve: Curves.easeIn,
+                  );
+                  setState(() {});
+                } else {
+                  context.maybePop();
+                }
+              },
+            );
+          },
+        );
+      },
+    );
   }
 }
 
@@ -90,11 +99,12 @@ class StoryPage extends StatefulWidget {
   final VoidCallback nextPage;
   final VoidCallback prevPage;
 
-  const StoryPage(
-      {super.key,
-      required this.story,
-      required this.nextPage,
-      required this.prevPage});
+  const StoryPage({
+    super.key,
+    required this.story,
+    required this.nextPage,
+    required this.prevPage,
+  });
 
   @override
   State<StoryPage> createState() => _StoryPageState();
@@ -108,21 +118,20 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 7),
-    )..addListener(() {
-        if (controller.status == AnimationStatus.completed) {
-          if (currentIndex == widget.story!.length - 1) {
-            widget.nextPage();
-          } else {
-            currentIndex++;
-            controller.reset();
-            controller.forward();
-          }
-        }
-        setState(() {});
-      });
+    controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 7))
+          ..addListener(() {
+            if (controller.status == AnimationStatus.completed) {
+              if (currentIndex == widget.story!.length - 1) {
+                widget.nextPage();
+              } else {
+                currentIndex++;
+                controller.reset();
+                controller.forward();
+              }
+            }
+            setState(() {});
+          });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.forward();
     });
@@ -140,8 +149,7 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
     return Stack(
       children: [
         CachedNetworkImage(
-          imageUrl:
-              widget.story?[currentIndex]?.url ?? "",
+          imageUrl: widget.story?[currentIndex]?.url ?? "",
           width: MediaQuery.sizeOf(context).width,
           height: MediaQuery.sizeOf(context).height,
           fit: BoxFit.cover,
@@ -165,55 +173,60 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                       width: MediaQuery.sizeOf(context).width,
                       margin: EdgeInsets.only(left: 20.w, top: 10.h),
                       child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: widget.story?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            return AnimatedContainer(
-                              margin: EdgeInsets.only(right: 8.w),
-                              height: 4.h,
-                              width: (MediaQuery.sizeOf(context).width -
-                                      (36.w +
-                                          ((widget.story!.length == 1
-                                                  ? widget.story!.length
-                                                  : (widget.story!.length -
-                                                      1)) *
-                                              8.w))) /
-                                  widget.story!.length,
-                              decoration: BoxDecoration(
-                                color: currentIndex >= index
-                                    ? AppStyle.primary
-                                    : AppStyle.white,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(122.r)),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: widget.story?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return AnimatedContainer(
+                            margin: EdgeInsets.only(right: 8.w),
+                            height: 4.h,
+                            width:
+                                (MediaQuery.sizeOf(context).width -
+                                    (36.w +
+                                        ((widget.story!.length == 1
+                                                ? widget.story!.length
+                                                : (widget.story!.length - 1)) *
+                                            8.w))) /
+                                widget.story!.length,
+                            decoration: BoxDecoration(
+                              color: currentIndex >= index
+                                  ? AppStyle.primary
+                                  : AppStyle.white,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(122.r),
                               ),
-                              duration: const Duration(milliseconds: 500),
-                              child: currentIndex == index
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(122.r)),
-                                      child: LinearProgressIndicator(
-                                        value: controller.value,
-                                        valueColor:
-                                            const AlwaysStoppedAnimation<Color>(
-                                                AppStyle.primary),
-                                        backgroundColor: AppStyle.white,
-                                      ),
-                                    )
-                                  : currentIndex > index
-                                      ? ClipRRect(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(122.r)),
-                                          child: const LinearProgressIndicator(
-                                            value: 1,
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                    AppStyle.primary),
-                                            backgroundColor: AppStyle.white,
+                            ),
+                            duration: const Duration(milliseconds: 500),
+                            child: currentIndex == index
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(122.r),
+                                    ),
+                                    child: LinearProgressIndicator(
+                                      value: controller.value,
+                                      valueColor:
+                                          const AlwaysStoppedAnimation<Color>(
+                                            AppStyle.primary,
                                           ),
-                                        )
-                                      : const SizedBox.shrink(),
-                            );
-                          }),
+                                      backgroundColor: AppStyle.white,
+                                    ),
+                                  )
+                                : currentIndex > index
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(122.r),
+                                    ),
+                                    child: const LinearProgressIndicator(
+                                      value: 1,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        AppStyle.primary,
+                                      ),
+                                      backgroundColor: AppStyle.white,
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -229,9 +242,7 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                 Container(
                   decoration: BoxDecoration(
                     color: AppStyle.textGrey,
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(16.r),
-                    ),
+                    borderRadius: BorderRadius.all(Radius.circular(16.r)),
                   ),
                   alignment: Alignment.center,
                   child: Column(
@@ -246,7 +257,7 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                       Text(
                         AppHelpers.getTranslation(TrKeys.notFound),
                         style: AppStyle.interNormal(color: AppStyle.white),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -259,55 +270,60 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                       width: MediaQuery.sizeOf(context).width,
                       margin: EdgeInsets.only(left: 20.w, top: 10.h),
                       child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: widget.story?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            return AnimatedContainer(
-                              margin: EdgeInsets.only(right: 8.w),
-                              height: 4.h,
-                              width: (MediaQuery.sizeOf(context).width -
-                                      (36.w +
-                                          ((widget.story!.length == 1
-                                                  ? widget.story!.length
-                                                  : (widget.story!.length -
-                                                      1)) *
-                                              8.w))) /
-                                  widget.story!.length,
-                              decoration: BoxDecoration(
-                                color: currentIndex >= index
-                                    ? AppStyle.primary
-                                    : AppStyle.white,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(122.r)),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: widget.story?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return AnimatedContainer(
+                            margin: EdgeInsets.only(right: 8.w),
+                            height: 4.h,
+                            width:
+                                (MediaQuery.sizeOf(context).width -
+                                    (36.w +
+                                        ((widget.story!.length == 1
+                                                ? widget.story!.length
+                                                : (widget.story!.length - 1)) *
+                                            8.w))) /
+                                widget.story!.length,
+                            decoration: BoxDecoration(
+                              color: currentIndex >= index
+                                  ? AppStyle.primary
+                                  : AppStyle.white,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(122.r),
                               ),
-                              duration: const Duration(milliseconds: 500),
-                              child: currentIndex == index
-                                  ? ClipRRect(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(122.r)),
-                                      child: LinearProgressIndicator(
-                                        value: controller.value,
-                                        valueColor:
-                                            const AlwaysStoppedAnimation<Color>(
-                                                AppStyle.primary),
-                                        backgroundColor: AppStyle.white,
-                                      ),
-                                    )
-                                  : currentIndex > index
-                                      ? ClipRRect(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(122.r)),
-                                          child: const LinearProgressIndicator(
-                                            value: 1,
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                    AppStyle.primary),
-                                            backgroundColor: AppStyle.white,
+                            ),
+                            duration: const Duration(milliseconds: 500),
+                            child: currentIndex == index
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(122.r),
+                                    ),
+                                    child: LinearProgressIndicator(
+                                      value: controller.value,
+                                      valueColor:
+                                          const AlwaysStoppedAnimation<Color>(
+                                            AppStyle.primary,
                                           ),
-                                        )
-                                      : const SizedBox.shrink(),
-                            );
-                          }),
+                                      backgroundColor: AppStyle.white,
+                                    ),
+                                  )
+                                : currentIndex > index
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(122.r),
+                                    ),
+                                    child: const LinearProgressIndicator(
+                                      value: 1,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        AppStyle.primary,
+                                      ),
+                                      backgroundColor: AppStyle.white,
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -374,9 +390,11 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      context.pushRoute(ShopRoute(
-                          shopId:
-                              (widget.story?.first?.shopId ?? 0).toString()));
+                      context.pushRoute(
+                        ShopRoute(
+                          shopId: (widget.story?.first?.shopId ?? 0).toString(),
+                        ),
+                      );
                     },
                     child: Row(
                       children: [
@@ -391,13 +409,20 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                         Text(
                           widget.story?.first?.title ?? "",
                           style: AppStyle.interNormal(
-                              size: 14.sp, color: AppStyle.white),
+                            size: 14.sp,
+                            color: AppStyle.white,
+                          ),
                         ),
                         6.horizontalSpace,
                         Text(
-                        Jiffy.parseFromDateTime(widget.story?[currentIndex]?.createdAt ?? DateTime.now()).fromNow(),
+                          Jiffy.parseFromDateTime(
+                            widget.story?[currentIndex]?.createdAt ??
+                                DateTime.now(),
+                          ).fromNow(),
                           style: AppStyle.interNormal(
-                              size: 10.sp, color: AppStyle.white),
+                            size: 10.sp,
+                            color: AppStyle.white,
+                          ),
                         ),
                       ],
                     ),
@@ -411,11 +436,12 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                       color: AppStyle.transparent,
                       child: Padding(
                         padding: EdgeInsets.only(
-                            top: 8.r, bottom: 8.r, left: 8.r, right: 4.r),
-                        child: const Icon(
-                          Icons.close,
-                          color: AppStyle.white,
+                          top: 8.r,
+                          bottom: 8.r,
+                          left: 8.r,
+                          right: 4.r,
                         ),
+                        child: const Icon(Icons.close, color: AppStyle.white),
                       ),
                     ),
                   ),
@@ -428,15 +454,17 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
           alignment: Alignment.bottomCenter,
           child: SafeArea(
             child: Padding(
-              padding: EdgeInsets.only(left: 24.w,right: 24.w,bottom: 32.h),
+              padding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 32.h),
               child: CustomButton(
                 title: AppHelpers.getTranslation(TrKeys.order),
                 onPressed: () {
-                  context.pushRoute(ShopRoute(
-                      shopId:
-                          (widget.story?[currentIndex]?.shopId ?? 0).toString(),
-                      productId:
-                          widget.story?[currentIndex]?.productUuid ?? ""));
+                  context.pushRoute(
+                    ShopRoute(
+                      shopId: (widget.story?[currentIndex]?.shopId ?? 0)
+                          .toString(),
+                      productId: widget.story?[currentIndex]?.productUuid ?? "",
+                    ),
+                  );
                 },
               ),
             ),
@@ -446,4 +474,3 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
     );
   }
 }
-

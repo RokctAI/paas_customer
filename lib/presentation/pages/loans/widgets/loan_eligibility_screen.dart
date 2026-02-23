@@ -21,10 +21,7 @@ import 'loan_qualification_dialog.dart';
 class LoanEligibilityScreen extends ConsumerStatefulWidget {
   final Map<String, dynamic>? financialDetails;
 
-  const LoanEligibilityScreen({
-    super.key,
-    this.financialDetails,
-  });
+  const LoanEligibilityScreen({super.key, this.financialDetails});
 
   @override
   ConsumerState<LoanEligibilityScreen> createState() =>
@@ -32,7 +29,6 @@ class LoanEligibilityScreen extends ConsumerStatefulWidget {
 }
 
 class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
-
   // Controllers for financial details
   final _monthlyIncomeController = TextEditingController();
   final _groceryExpensesController = TextEditingController();
@@ -53,7 +49,8 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
     super.initState();
 
     // Check if financial details exist
-    _fieldsReadOnly = widget.financialDetails != null &&
+    _fieldsReadOnly =
+        widget.financialDetails != null &&
         (widget.financialDetails!['monthly_income'] != null ||
             widget.financialDetails!['grocery_expenses'] != null ||
             widget.financialDetails!['other_expenses'] != null ||
@@ -73,7 +70,9 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
 
   void _populateFieldsFromSavedData() {
     if (widget.financialDetails != null) {
-      debugPrint('Populating fields from saved data: ${widget.financialDetails}');
+      debugPrint(
+        'Populating fields from saved data: ${widget.financialDetails}',
+      );
 
       // Extract values from financial details
       final monthlyIncome = widget.financialDetails!['monthly_income'];
@@ -167,7 +166,6 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
     }
   }
 
-
   Future<void> _checkFinancialEligibility() async {
     // Validate input fields
     if (!_validateInputs()) return;
@@ -178,10 +176,18 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
 
     try {
       // Parse and store financial details
-      final monthlyIncome = double.parse(_monthlyIncomeController.text.replaceAll(',', ''));
-      final groceryExpenses = double.parse(_groceryExpensesController.text.replaceAll(',', ''));
-      final otherExpenses = double.parse(_otherExpensesController.text.replaceAll(',', ''));
-      final existingCredits = double.parse(_existingCreditsController.text.replaceAll(',', ''));
+      final monthlyIncome = double.parse(
+        _monthlyIncomeController.text.replaceAll(',', ''),
+      );
+      final groceryExpenses = double.parse(
+        _groceryExpensesController.text.replaceAll(',', ''),
+      );
+      final otherExpenses = double.parse(
+        _otherExpensesController.text.replaceAll(',', ''),
+      );
+      final existingCredits = double.parse(
+        _existingCreditsController.text.replaceAll(',', ''),
+      );
 
       // Create financial details map
       final financialDetails = {
@@ -234,10 +240,13 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
     }
   }
 
-  Future<void> _calculatePreApprovalAmount(Map<String, dynamic> financialDetails) async {
+  Future<void> _calculatePreApprovalAmount(
+    Map<String, dynamic> financialDetails,
+  ) async {
     try {
       // Pass the financial details to the repository method
-      final preApprovalResult = await _loansRepository.calculatePreApprovalAmount(financialDetails);
+      final preApprovalResult = await _loansRepository
+          .calculatePreApprovalAmount(financialDetails);
 
       preApprovalResult.when(
         success: (amount) {
@@ -275,7 +284,8 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
         onAccept: () {
           // Store the pre-approved amount
           ref.read(loanAmountProvider.notifier).state = preApprovalAmount;
-          ref.read(acceptedQualifyingAmountProvider.notifier).state = preApprovalAmount;
+          ref.read(acceptedQualifyingAmountProvider.notifier).state =
+              preApprovalAmount;
 
           // Continue to document upload
           _navigateToDocumentUpload();
@@ -298,12 +308,12 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
       final cancellationData = {
         'id_number': ref.read(idNumberProvider),
         'loan_amount': ref.read(loanAmountProvider),
-        'status': 'cancelled',  // Explicitly set status to cancelled
+        'status': 'cancelled', // Explicitly set status to cancelled
         'additional_data': {
           'financial_details': financialDetails,
           'cancellation_reason': 'User declined pre-approval offer',
           'cancellation_date': DateTime.now().toIso8601String(),
-        }
+        },
       };
 
       debugPrint('Cancelling application with data: $cancellationData');
@@ -316,8 +326,8 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
       result.when(
         success: (_) {
           AppHelpers.showCheckTopSnackBarInfo(
-              context,
-              'Loan application cancelled'
+            context,
+            'Loan application cancelled',
           );
         },
         failure: (error, _) {
@@ -328,7 +338,6 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
       // Return to loan screen
       if (!mounted) return;
       Navigator.of(context).pop();
-
     } catch (e) {
       debugPrint('Error in cancel flow: $e');
       // Still return to loan screen
@@ -337,7 +346,7 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
     }
   }
 
-// Also update the save method to use the provider
+  // Also update the save method to use the provider
   Future<void> _saveIncompleteLoanApplication() async {
     // Validate input fields
     if (!_validateInputs()) return;
@@ -350,10 +359,18 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
       debugPrint("Saving incomplete loan application");
 
       // Parse financial values from input fields
-      final monthlyIncome = double.parse(_monthlyIncomeController.text.replaceAll(',', ''));
-      final groceryExpenses = double.parse(_groceryExpensesController.text.replaceAll(',', ''));
-      final otherExpenses = double.parse(_otherExpensesController.text.replaceAll(',', ''));
-      final existingCredits = double.parse(_existingCreditsController.text.replaceAll(',', ''));
+      final monthlyIncome = double.parse(
+        _monthlyIncomeController.text.replaceAll(',', ''),
+      );
+      final groceryExpenses = double.parse(
+        _groceryExpensesController.text.replaceAll(',', ''),
+      );
+      final otherExpenses = double.parse(
+        _otherExpensesController.text.replaceAll(',', ''),
+      );
+      final existingCredits = double.parse(
+        _existingCreditsController.text.replaceAll(',', ''),
+      );
 
       // Store financial details in the provider for access in document upload screen
       ref.read(financialDetailsProvider.notifier).state = {
@@ -383,7 +400,8 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
       result.when(
         success: (applicationId) {
           debugPrint(
-              "Save incomplete success - Application ID: $applicationId");
+            "Save incomplete success - Application ID: $applicationId",
+          );
           setState(() {
             _isLoading = false;
           });
@@ -433,9 +451,15 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
 
     // Parse values to check for zeros
     try {
-      final monthlyIncome = double.parse(_monthlyIncomeController.text.replaceAll(',', ''));
-      final groceryExpenses = double.parse(_groceryExpensesController.text.replaceAll(',', ''));
-      final otherExpenses = double.parse(_otherExpensesController.text.replaceAll(',', ''));
+      final monthlyIncome = double.parse(
+        _monthlyIncomeController.text.replaceAll(',', ''),
+      );
+      final groceryExpenses = double.parse(
+        _groceryExpensesController.text.replaceAll(',', ''),
+      );
+      final otherExpenses = double.parse(
+        _otherExpensesController.text.replaceAll(',', ''),
+      );
 
       // Check for zero or negative values
       if (groceryExpenses <= 0) {
@@ -462,7 +486,6 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
         );
         return false;
       }
-
     } catch (e) {
       debugPrint('Error parsing financial values: $e');
       AppHelpers.showCheckTopSnackBarInfo(
@@ -477,21 +500,20 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
 
   void _navigateToDocumentUpload() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      // First pop the current screen
+      Navigator.of(context).pop();
 
-    // First pop the current screen
-    Navigator.of(context).pop();
-
-    AppHelpers.showCustomModalBottomSheet(
-      context: context,
-      modal: ProviderScope(
-        child: Consumer(
-          builder: (context, ref, _) => LoanDocumentUploadScreen(
-            prefilledIdNumber: ref.read(idNumberProvider),
+      AppHelpers.showCustomModalBottomSheet(
+        context: context,
+        modal: ProviderScope(
+          child: Consumer(
+            builder: (context, ref, _) => LoanDocumentUploadScreen(
+              prefilledIdNumber: ref.read(idNumberProvider),
+            ),
           ),
         ),
-      ),
-      isDarkMode: false,
-    );
+        isDarkMode: false,
+      );
     });
   }
 
@@ -519,20 +541,34 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
         'loan_amount': ref.read(loanAmountProvider),
         'financial_details': {
           'monthly_income':
-          double.tryParse(_monthlyIncomeController.text.replaceAll(',', '')) ?? 0,
+              double.tryParse(
+                _monthlyIncomeController.text.replaceAll(',', ''),
+              ) ??
+              0,
           'grocery_expenses':
-          double.tryParse(_groceryExpensesController.text.replaceAll(',', '')) ?? 0,
+              double.tryParse(
+                _groceryExpensesController.text.replaceAll(',', ''),
+              ) ??
+              0,
           'other_expenses':
-          double.tryParse(_otherExpensesController.text.replaceAll(',', '')) ?? 0,
+              double.tryParse(
+                _otherExpensesController.text.replaceAll(',', ''),
+              ) ??
+              0,
           'existing_credits':
-          double.tryParse(_existingCreditsController.text.replaceAll(',', '')) ?? 0,
+              double.tryParse(
+                _existingCreditsController.text.replaceAll(',', ''),
+              ) ??
+              0,
         },
         'rejection_reason': 'Failed eligibility check',
         'rejection_date': DateTime.now().toIso8601String(),
-        'status': 'rejected'  // Explicitly set the status
+        'status': 'rejected', // Explicitly set the status
       };
 
-      debugPrint('Marking application as rejected with data: $financialDetails');
+      debugPrint(
+        'Marking application as rejected with data: $financialDetails',
+      );
 
       // Call API to mark application as rejected
       final result = await _loansRepository.markApplicationAsRejected(
@@ -564,8 +600,6 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
       debugPrint('Error marking application as rejected: $e');
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -705,22 +739,20 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
                           inputFormatters: _fieldsReadOnly
                               ? [] // No formatters needed if read-only
                               : [
-                            FilteringTextInputFormatter.digitsOnly,
-                            _CurrencyInputFormatter(),
-                          ],
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  _CurrencyInputFormatter(),
+                                ],
                         ),
                         if (_fieldsReadOnly)
                           Positioned.fill(
                             child: GestureDetector(
                               onTap: () {
                                 AppHelpers.showCheckTopSnackBarInfo(
-                                    context,
-                                    'This field cannot be modified for a saved application'
+                                  context,
+                                  'This field cannot be modified for a saved application',
                                 );
                               },
-                              child: Container(
-                                color: Colors.transparent,
-                              ),
+                              child: Container(color: Colors.transparent),
                             ),
                           ),
                       ],
@@ -743,22 +775,20 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
                           inputFormatters: _fieldsReadOnly
                               ? [] // No formatters needed if read-only
                               : [
-                            FilteringTextInputFormatter.digitsOnly,
-                            _CurrencyInputFormatter(),
-                          ],
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  _CurrencyInputFormatter(),
+                                ],
                         ),
                         if (_fieldsReadOnly)
                           Positioned.fill(
                             child: GestureDetector(
                               onTap: () {
                                 AppHelpers.showCheckTopSnackBarInfo(
-                                    context,
-                                    'This field cannot be modified for a saved application'
+                                  context,
+                                  'This field cannot be modified for a saved application',
                                 );
                               },
-                              child: Container(
-                                color: Colors.transparent,
-                              ),
+                              child: Container(color: Colors.transparent),
                             ),
                           ),
                       ],
@@ -781,22 +811,20 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
                           inputFormatters: _fieldsReadOnly
                               ? [] // No formatters needed if read-only
                               : [
-                            FilteringTextInputFormatter.digitsOnly,
-                            _CurrencyInputFormatter(),
-                          ],
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  _CurrencyInputFormatter(),
+                                ],
                         ),
                         if (_fieldsReadOnly)
                           Positioned.fill(
                             child: GestureDetector(
                               onTap: () {
                                 AppHelpers.showCheckTopSnackBarInfo(
-                                    context,
-                                    'This field cannot be modified for a saved application'
+                                  context,
+                                  'This field cannot be modified for a saved application',
                                 );
                               },
-                              child: Container(
-                                color: Colors.transparent,
-                              ),
+                              child: Container(color: Colors.transparent),
                             ),
                           ),
                       ],
@@ -819,22 +847,20 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
                           inputFormatters: _fieldsReadOnly
                               ? [] // No formatters needed if read-only
                               : [
-                            FilteringTextInputFormatter.digitsOnly,
-                            _CurrencyInputFormatter(),
-                          ],
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  _CurrencyInputFormatter(),
+                                ],
                         ),
                         if (_fieldsReadOnly)
                           Positioned.fill(
                             child: GestureDetector(
                               onTap: () {
                                 AppHelpers.showCheckTopSnackBarInfo(
-                                    context,
-                                    'This field cannot be modified for a saved application'
+                                  context,
+                                  'This field cannot be modified for a saved application',
                                 );
                               },
-                              child: Container(
-                                color: Colors.transparent,
-                              ),
+                              child: Container(color: Colors.transparent),
                             ),
                           ),
                       ],
@@ -847,7 +873,9 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
                       children: [
                         Expanded(
                           child: CustomButton(
-                            title: AppHelpers.getTranslation(TrKeys.saveForLater),
+                            title: AppHelpers.getTranslation(
+                              TrKeys.saveForLater,
+                            ),
                             background: AppStyle.white,
                             borderColor: AppStyle.primary,
                             textColor: AppStyle.primary,
@@ -881,37 +909,34 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
     final reasons = <Widget>[];
 
     if (_disqualificationReasons?['has_unpaid_loans'] == true) {
-      reasons.add(Text(
-        '• Unpaid previous loans detected',
-        style: AppStyle.interNormal(
-          size: 14.sp,
-          color: AppStyle.black,
+      reasons.add(
+        Text(
+          '• Unpaid previous loans detected',
+          style: AppStyle.interNormal(size: 14.sp, color: AppStyle.black),
         ),
-      ));
+      );
     }
 
     if (_disqualificationReasons?['has_declined_loans'] == true) {
-      reasons.add(Text(
-        '• Previous loan applications were declined',
-        style: AppStyle.interNormal(
-          size: 14.sp,
-          color: AppStyle.black,
+      reasons.add(
+        Text(
+          '• Previous loan applications were declined',
+          style: AppStyle.interNormal(size: 14.sp, color: AppStyle.black),
         ),
-      ));
+      );
     }
 
     return reasons;
   }
-
 }
 
 // Custom currency input formatter
 class _CurrencyInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue,
-      TextEditingValue newValue,
-      ) {
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     if (newValue.text.isEmpty) {
       return newValue.copyWith(text: '');
     }

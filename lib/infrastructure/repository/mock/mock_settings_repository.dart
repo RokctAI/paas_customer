@@ -15,8 +15,12 @@ class MockSettingsRepository implements SettingsRepositoryFacade {
         data: [
           Datum(
             id: 1,
-            translation: HelpTranslation(question: "How to order?", answer: "Select items and checkout", locale: "en"),
-          )
+            translation: HelpTranslation(
+              question: "How to order?",
+              answer: "Select items and checkout",
+              locale: "en",
+            ),
+          ),
         ],
       ),
     );
@@ -58,27 +62,23 @@ class MockSettingsRepository implements SettingsRepositoryFacade {
   Future<ApiResult<MobileTranslationsResponse>> getMobileTranslations() async {
     return ApiResult.success(
       data: MobileTranslationsResponse(
-        data: {
-          "home": "Home",
-          "cart": "Cart",
-          "profile": "Profile",
-        },
+        data: {"home": "Home", "cart": "Cart", "profile": "Profile"},
       ),
     );
   }
 
   @override
   Future<ApiResult<NotificationsListModel>> getNotificationList() async {
-     return ApiResult.success(
+    return ApiResult.success(
       data: NotificationsListModel(
         data: [
-           NotificationData(
+          NotificationData(
             id: 1,
             type: "order",
             createdAt: DateTime.now(),
             payload: ["Order Update", "Your order has been placed."],
-           )
-        ]
+          ),
+        ],
       ),
     );
   }
@@ -96,7 +96,7 @@ class MockSettingsRepository implements SettingsRepositoryFacade {
 
   @override
   Future<ApiResult<Translation>> getTerm() async {
-     return ApiResult.success(
+    return ApiResult.success(
       data: Translation(
         title: "Terms of Service",
         description: "These are demo terms of service.",
@@ -106,7 +106,9 @@ class MockSettingsRepository implements SettingsRepositoryFacade {
   }
 
   @override
-  Future<ApiResult> updateNotification(List<NotificationData>? notifications) async {
+  Future<ApiResult> updateNotification(
+    List<NotificationData>? notifications,
+  ) async {
     return ApiResult.success(data: null);
   }
 }

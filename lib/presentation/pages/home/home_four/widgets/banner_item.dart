@@ -13,11 +13,7 @@ class BannerItem extends StatelessWidget {
   final BannerData banner;
   final bool isAds;
 
-  const BannerItem({
-    super.key,
-    required this.banner,
-    this.isAds = false,
-  });
+  const BannerItem({super.key, required this.banner, this.isAds = false});
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +21,17 @@ class BannerItem extends StatelessWidget {
       print("BUTTON TEXT DEBUG: BannerItem build for banner ID: ${banner.id}");
     }
     if (kDebugMode) {
-      print("BUTTON TEXT DEBUG: Button text in BannerItem build: '${banner.buttonText}'");
+      print(
+        "BUTTON TEXT DEBUG: Button text in BannerItem build: '${banner.buttonText}'",
+      );
     }
-    
+
     return GestureDetector(
       onTap: () {
         if (kDebugMode) {
-          print("MODAL DEBUG: About to create BannerScreen with buttonText: '${banner.buttonText}'");
+          print(
+            "MODAL DEBUG: About to create BannerScreen with buttonText: '${banner.buttonText}'",
+          );
         }
         AppHelpers.showCustomModalBottomSheet(
           context: context,
@@ -53,9 +53,7 @@ class BannerItem extends StatelessWidget {
             width: MediaQuery.of(context).size.width - 46,
             decoration: BoxDecoration(
               color: AppStyle.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(15.r),
-              ),
+              borderRadius: BorderRadius.all(Radius.circular(15.r)),
             ),
             child: CustomNetworkImage(
               bgColor: AppStyle.white,
@@ -65,15 +63,9 @@ class BannerItem extends StatelessWidget {
               radius: 15.r,
             ),
           ),
-          if (isAds)
-            Positioned(
-              right: 13.w,
-              top: 10.h,
-              child: const AdBadge(),
-            ),
+          if (isAds) Positioned(right: 13.w, top: 10.h, child: const AdBadge()),
         ],
       ),
     );
   }
 }
-

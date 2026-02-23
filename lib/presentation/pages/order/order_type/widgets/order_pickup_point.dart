@@ -37,7 +37,9 @@ class _OrderPickupPointState extends ConsumerState<OrderPickupPoint> {
       setState(() {
         _initialPosition = LatLng(position.latitude, position.longitude);
       });
-      ref.read(deliveryPointsProvider.notifier).fetchDeliveryPoints(
+      ref
+          .read(deliveryPointsProvider.notifier)
+          .fetchDeliveryPoints(
             context,
             latitude: position.latitude,
             longitude: position.longitude,
@@ -50,10 +52,7 @@ class _OrderPickupPointState extends ConsumerState<OrderPickupPoint> {
       return Marker(
         markerId: MarkerId(point.name ?? UniqueKey().toString()),
         position: LatLng(point.latitude ?? 0, point.longitude ?? 0),
-        infoWindow: InfoWindow(
-          title: point.name,
-          snippet: point.address,
-        ),
+        infoWindow: InfoWindow(title: point.name, snippet: point.address),
         onTap: () {
           setState(() {
             _selectedPoint = point;
@@ -113,10 +112,11 @@ class _OrderPickupPointState extends ConsumerState<OrderPickupPoint> {
                     : () {
                         notifier.setDeliveryPoint(_selectedPoint);
                         AppHelpers.showCheckTopSnackBarDone(
-                            context,
-                            "${AppHelpers.getTranslation(TrKeys.select)}: ${_selectedPoint!.name}");
+                          context,
+                          "${AppHelpers.getTranslation(TrKeys.select)}: ${_selectedPoint!.name}",
+                        );
                       },
-              )
+              ),
             ],
           );
   }

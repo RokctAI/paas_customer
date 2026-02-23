@@ -36,9 +36,7 @@ import 'widgets/order_status.dart';
 
 @RoutePage()
 class OrderPage extends ConsumerStatefulWidget {
-  const OrderPage({
-    super.key,
-  });
+  const OrderPage({super.key});
 
   @override
   ConsumerState<OrderPage> createState() => _OrderPageState();
@@ -56,51 +54,62 @@ class _OrderPageState extends ConsumerState<OrderPage>
   bool check = false;
 
   void getAddress() {
-    long = LocalStorage.getAddressSelected()?.location?.longitude ??
+    long =
+        LocalStorage.getAddressSelected()?.location?.longitude ??
         AppConstants.demoLongitude;
-    lat = LocalStorage.getAddressSelected()?.location?.latitude ??
+    lat =
+        LocalStorage.getAddressSelected()?.location?.latitude ??
         AppConstants.demoLatitude;
   }
 
   checkCart(ShopOrderState stateShopOrder, OrderState state) {
     final cart = stateShopOrder.cart;
-    check = !(!(cart == null ||
-            (cart.userCarts?.isEmpty ?? true) ||
-            ((cart.userCarts?.isEmpty ?? true)
-                    ? true
-                    : (cart.userCarts?.first.cartDetails?.isEmpty ?? true)) &&
-                !(cart.group ?? false)) ||
-        state.orderData != null);
+    check =
+        !(!(cart == null ||
+                (cart.userCarts?.isEmpty ?? true) ||
+                ((cart.userCarts?.isEmpty ?? true)
+                        ? true
+                        : (cart.userCarts?.first.cartDetails?.isEmpty ??
+                              true)) &&
+                    !(cart.group ?? false)) ||
+            state.orderData != null);
   }
 
   @override
   void initState() {
     _tabController = TabController(length: 3, vsync: this);
-    _controllerCenter =
-        ConfettiController(duration: const Duration(seconds: 2));
+    _controllerCenter = ConfettiController(
+      duration: const Duration(seconds: 2),
+    );
     refreshController = RefreshController();
     if (ref.read(shopOrderProvider).cart != null) {
       _tabController.addListener(() {
         ref.read(orderProvider.notifier).changeTabIndex(_tabController.index);
         if (_tabController.index == 1) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            ref.read(orderProvider.notifier).getCalculate(
-                isLoading: false,
-                context: context,
-                cartId: ref.read(shopOrderProvider).cart?.id ?? "",
-                long: long,
-                lat: lat,
-                type: DeliveryTypeEnum.pickup);
+            ref
+                .read(orderProvider.notifier)
+                .getCalculate(
+                  isLoading: false,
+                  context: context,
+                  cartId: ref.read(shopOrderProvider).cart?.id ?? "",
+                  long: long,
+                  lat: lat,
+                  type: DeliveryTypeEnum.pickup,
+                );
           });
         } else {
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            ref.read(orderProvider.notifier).getCalculate(
-                isLoading: false,
-                context: context,
-                cartId: ref.read(shopOrderProvider).cart?.id ?? "",
-                long: long,
-                lat: lat,
-                type: DeliveryTypeEnum.delivery);
+            ref
+                .read(orderProvider.notifier)
+                .getCalculate(
+                  isLoading: false,
+                  context: context,
+                  cartId: ref.read(shopOrderProvider).cart?.id ?? "",
+                  long: long,
+                  lat: lat,
+                  type: DeliveryTypeEnum.delivery,
+                );
           });
         }
       });
@@ -109,10 +118,14 @@ class _OrderPageState extends ConsumerState<OrderPage>
         ref.read(shopOrderProvider.notifier).getCart(context, () {});
         ref.read(orderProvider.notifier)
           ..resetState()
-          ..fetchShop(context,
-              (ref.watch(shopOrderProvider).cart?.shopId ?? "").toString())
+          ..fetchShop(
+            context,
+            (ref.watch(shopOrderProvider).cart?.shopId ?? "").toString(),
+          )
           ..fetchShopBranch(
-              context, (ref.watch(shopOrderProvider).cart?.shopId ?? ""))
+            context,
+            (ref.watch(shopOrderProvider).cart?.shopId ?? ""),
+          )
           ..getCalculate(
             context: context,
             cartId: ref.watch(shopOrderProvider).cart?.id ?? "",
@@ -143,10 +156,9 @@ class _OrderPageState extends ConsumerState<OrderPage>
     checkCart(ref.watch(shopOrderProvider), state);
     ref.listen(orderProvider, (previous, next) {
       if (AppHelpers.getOrderStatus(next.orderData?.status ?? "") ==
-              OrderStatus.delivered
-          && next.orderData?.review == null
-          && previous?.orderData?.status != next.orderData?.status
-      ) {
+              OrderStatus.delivered &&
+          next.orderData?.review == null &&
+          previous?.orderData?.status != next.orderData?.status) {
         AppHelpers.showCustomModalBottomSheet(
           context: context,
           modal: RatingPage(totalPrice: next.orderData?.totalPrice),
@@ -157,8 +169,12 @@ class _OrderPageState extends ConsumerState<OrderPage>
 
     ref.listen(orderProvider, (previous, next) {
       if (next.shopData != null && (previous?.shopData != next.shopData)) {
-        ref.read(paymentProvider.notifier).fetchPayments(context,
-            shopEnableCod: next.shopData?.enableCod ?? true);
+        ref
+            .read(paymentProvider.notifier)
+            .fetchPayments(
+              context,
+              shopEnableCod: next.shopData?.enableCod ?? true,
+            );
       }
     });
     return Directionality(
@@ -175,13 +191,14 @@ class _OrderPageState extends ConsumerState<OrderPage>
           displayTarget: true,
           child: Scaffold(
             resizeToAvoidBottomInset: false,
-            backgroundColor:
-                isDarkMode ? AppStyle.mainBackDark : AppStyle.bgGrey,
+            backgroundColor: isDarkMode
+                ? AppStyle.mainBackDark
+                : AppStyle.bgGrey,
             body: check
                 ? _resultEmpty()
                 : state.isLoading
-                    ? const Loading()
-                    : _orderScreen(context, state, event),
+                ? const Loading()
+                : _orderScreen(context, state, event),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerFloat,
             floatingActionButton: _bottom(state, context),
@@ -194,17 +211,15 @@ class _OrderPageState extends ConsumerState<OrderPage>
   Widget _bottom(OrderState state, BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
-      child: Row(
-        children: [
-          const PopButton(),
-          16.horizontalSpace,
-        ],
-      ),
+      child: Row(children: [const PopButton(), 16.horizontalSpace]),
     );
   }
 
   Widget _orderScreen(
-      BuildContext context, OrderState state, OrderNotifier event) {
+    BuildContext context,
+    OrderState state,
+    OrderNotifier event,
+  ) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -230,8 +245,9 @@ class _OrderPageState extends ConsumerState<OrderPage>
                           polylineCoordinates: state.polylineCoordinates,
                           markers: Set<Marker>.of(state.markers.values),
                           latLng: LatLng(
-                              state.orderData?.shop?.location?.latitude ?? 0,
-                              state.orderData?.shop?.location?.longitude ?? 0),
+                            state.orderData?.shop?.location?.latitude ?? 0,
+                            state.orderData?.shop?.location?.longitude ?? 0,
+                          ),
                         )
                       : OrderType(
                           sendUser: ref.watch(orderProvider).sendOtherUser,
@@ -243,7 +259,8 @@ class _OrderPageState extends ConsumerState<OrderPage>
                             event.getCalculate(
                               isLoading: false,
                               context: context,
-                              cartId: ref.read(shopOrderProvider).cart?.id ?? "",
+                              cartId:
+                                  ref.read(shopOrderProvider).cart?.id ?? "",
                               long: long,
                               lat: lat,
                               type: _tabController.index == 0
@@ -265,12 +282,13 @@ class _OrderPageState extends ConsumerState<OrderPage>
                   ),
                   OrderCheck(
                     orderStatus: AppHelpers.getOrderStatus(
-                        state.orderData?.status ?? ""),
+                      state.orderData?.status ?? "",
+                    ),
                     isOrder: state.orderData != null,
                     isActive: state.isActive,
                     controllerCenter: _controllerCenter,
                   ),
-                  64.verticalSpace
+                  64.verticalSpace,
                 ],
               ),
             ),
@@ -335,7 +353,7 @@ class _OrderPageState extends ConsumerState<OrderPage>
                       state.orderData == null
                           ? (state.shopData?.translation?.description ?? "")
                           : (state.orderData?.shop?.translation?.description ??
-                              ""),
+                                ""),
                       style: AppStyle.interNormal(
                         size: 12,
                         color: AppStyle.black,
@@ -350,10 +368,11 @@ class _OrderPageState extends ConsumerState<OrderPage>
           ),
           state.orderData != null
               ? OrderStatusScreen(
-                  status:
-                      AppHelpers.getOrderStatus(state.orderData?.status ?? ""),
+                  status: AppHelpers.getOrderStatus(
+                    state.orderData?.status ?? "",
+                  ),
                 )
-              : const SizedBox.shrink()
+              : const SizedBox.shrink(),
         ],
       ),
     );
@@ -366,9 +385,7 @@ Widget _customLoading() {
     child: Container(
       width: double.infinity,
       height: 200,
-      decoration: BoxDecoration(
-        color: AppStyle.white.withOpacity(0.5),
-      ),
+      decoration: BoxDecoration(color: AppStyle.white.withOpacity(0.5)),
       child: Container(
         width: 80,
         height: 80,
@@ -378,4 +395,3 @@ Widget _customLoading() {
     ),
   );
 }
-

@@ -31,7 +31,6 @@ class OrdersItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: () {
         context.pushRoute(
@@ -55,27 +54,27 @@ class OrdersItem extends StatelessWidget {
               children: [
                 const SizedBox(height: 2),
                 Text(
-                  intl.DateFormat("MMM").format(order?.createdAt ?? DateTime.now()).toUpperCase(),
-                  style: AppStyle.interRegular(
-                    size: 20,
-                  ),
+                  intl.DateFormat(
+                    "MMM",
+                  ).format(order?.createdAt ?? DateTime.now()).toUpperCase(),
+                  style: AppStyle.interRegular(size: 20),
                 ),
                 Text(
-                  intl.DateFormat("dd").format(order?.createdAt ?? DateTime.now()),
-                  style: AppStyle.interNoSemi(
-                    size: 20,
-                  ),
+                  intl.DateFormat(
+                    "dd",
+                  ).format(order?.createdAt ?? DateTime.now()),
+                  style: AppStyle.interNoSemi(size: 20),
                 ),
                 Text(
-                  intl.DateFormat("HH:mm").format(order?.createdAt ?? DateTime.now()),
-                  style: AppStyle.interRegular(
-                    size: 12,
-                  ),
+                  intl.DateFormat(
+                    "HH:mm",
+                  ).format(order?.createdAt ?? DateTime.now()),
+                  style: AppStyle.interRegular(size: 12),
                 ),
               ],
             ),
             SizedBox(width: 10.w),
-           /* Container(
+            /* Container(
               height: 36.h,
               width: 36.w,
               decoration: BoxDecoration(
@@ -143,8 +142,8 @@ class OrdersItem extends StatelessWidget {
                 ),
               ),
             ), */
-        //    SizedBox(width: 6.w),
-        /*    ShopAvatar(
+            //    SizedBox(width: 6.w),
+            /*    ShopAvatar(
               shopImage: isRefund
                   ? (refund?.order?.shop?.logoImg ?? "")
                   : (order?.shop?.logoImg ?? ""),
@@ -153,7 +152,7 @@ class OrdersItem extends StatelessWidget {
               radius: 6,
               bgColor: AppStyle.bgGrey,
             ), */
-          //  SizedBox(width: 10.w),
+            //  SizedBox(width: 10.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,9 +162,7 @@ class OrdersItem extends StatelessWidget {
                     isRefund
                         ? (refund?.order?.shop?.translation?.title ?? "")
                         : (order?.shop?.translation?.title ?? ""),
-                    style: AppStyle.interNoSemi(
-                      size: 20,
-                    ),
+                    style: AppStyle.interNoSemi(size: 20),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -173,28 +170,25 @@ class OrdersItem extends StatelessWidget {
                     children: [
                       Text(
                         "№${order?.id ?? ""} • ${order?.deliveryType ?? ""} • ",
-                        style: AppStyle.interRegular(
-                          size: 14,
-                        ),
+                        style: AppStyle.interRegular(size: 14),
                       ),
                       Text(
                         isRefund
                             ? AppHelpers.getTranslation(TrKeys.cause)
                             : AppHelpers.numberFormat(
-                            isOrder: order?.currencyModel?.symbol != null,
-                            symbol: order?.currencyModel?.symbol,
-                            number: isRefund
-                                ? 0
-                                : (order?.totalPrice?.isNegative ?? true)
-                                ? 0
-                                : (order?.totalPrice ?? 0)),
-                        style: AppStyle.interBold(
-                          size: 14,
-                        ),
+                                isOrder: order?.currencyModel?.symbol != null,
+                                symbol: order?.currencyModel?.symbol,
+                                number: isRefund
+                                    ? 0
+                                    : (order?.totalPrice?.isNegative ?? true)
+                                    ? 0
+                                    : (order?.totalPrice ?? 0),
+                              ),
+                        style: AppStyle.interBold(size: 14),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                    /*  Text(
+                      /*  Text(
                         " • ",
                         style: TextStyle(color: Colors.black),
                       ),
@@ -209,9 +203,7 @@ class OrdersItem extends StatelessWidget {
                   if (isRefund)
                     Text(
                       refund?.cause ?? "",
-                      style: AppStyle.interRegular(
-                        size: 12,
-                      ),
+                      style: AppStyle.interRegular(size: 12),
                     ),
                 ],
               ),
@@ -224,13 +216,14 @@ class OrdersItem extends StatelessWidget {
               onRightTap: () {
                 context.pushRoute(
                   OrderProgressRoute(
-                    orderId: isRefund ? (refund?.order?.id ?? "") : (order?.id ?? ""),
+                    orderId: isRefund
+                        ? (refund?.order?.id ?? "")
+                        : (order?.id ?? ""),
                   ),
                 );
               },
-
             ),
-         /*  Container(
+            /*  Container(
               width: 50.w,
               height: 50.h,
               decoration: const BoxDecoration(
@@ -246,4 +239,3 @@ class OrdersItem extends StatelessWidget {
     );
   }
 }
-

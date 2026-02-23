@@ -27,13 +27,12 @@ class ProfileResponse {
     bool? status,
     String? message,
     ProfileData? data,
-  }) =>
-      ProfileResponse(
-        timestamp: timestamp ?? _timestamp,
-        status: status ?? _status,
-        message: message ?? _message,
-        data: data ?? _data,
-      );
+  }) => ProfileResponse(
+    timestamp: timestamp ?? _timestamp,
+    status: status ?? _status,
+    message: message ?? _message,
+    data: data ?? _data,
+  );
 
   String? get timestamp => _timestamp;
 
@@ -54,4 +53,3 @@ class ProfileResponse {
     return map;
   }
 }
-

@@ -18,23 +18,14 @@ class SavedCardsNotifier extends StateNotifier<SavedCardsState> {
 
       result.when(
         success: (cards) {
-          state = state.copyWith(
-            cards: cards,
-            isLoading: false,
-          );
+          state = state.copyWith(cards: cards, isLoading: false);
         },
         failure: (error, statusCode) {
-          state = state.copyWith(
-            isLoading: false,
-            error: error.toString(),
-          );
+          state = state.copyWith(isLoading: false, error: error.toString());
         },
       );
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 
@@ -63,19 +54,13 @@ class SavedCardsNotifier extends StateNotifier<SavedCardsState> {
           loadSavedCards();
         },
         failure: (error, statusCode) {
-          state = state.copyWith(
-            isLoading: false,
-            error: error.toString(),
-          );
+          state = state.copyWith(isLoading: false, error: error.toString());
         },
       );
 
       return success;
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
       return false;
     }
   }
@@ -90,27 +75,20 @@ class SavedCardsNotifier extends StateNotifier<SavedCardsState> {
       result.when(
         success: (data) {
           // Remove card from state
-          final updatedCards = state.cards.where((card) => card.id != cardId).toList();
-          state = state.copyWith(
-              cards: updatedCards,
-              isLoading: false
-          );
+          final updatedCards = state.cards
+              .where((card) => card.id != cardId)
+              .toList();
+          state = state.copyWith(cards: updatedCards, isLoading: false);
           success = true;
         },
         failure: (error, statusCode) {
-          state = state.copyWith(
-            isLoading: false,
-            error: error.toString(),
-          );
+          state = state.copyWith(isLoading: false, error: error.toString());
         },
       );
 
       return success;
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
       return false;
     }
   }

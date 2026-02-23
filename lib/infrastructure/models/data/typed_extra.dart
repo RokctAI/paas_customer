@@ -26,4 +26,3 @@ class TypedExtra {
     return '(Extras type: $type ui extras: $uiExtras title: $title group index: $groupIndex})';
   }
 }
-

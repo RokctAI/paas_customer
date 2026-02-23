@@ -59,10 +59,7 @@ class _ShareReferralPageState extends ConsumerState<ShareReferralPage> {
             CommonAppBar(
               child: Text(
                 AppHelpers.getTranslation(TrKeys.referral),
-                style: AppStyle.interNoSemi(
-                  size: 18,
-                  color: AppStyle.black,
-                ),
+                style: AppStyle.interNoSemi(size: 18, color: AppStyle.black),
               ),
             ),
             state.isReferralLoading
@@ -92,60 +89,77 @@ class _ShareReferralPageState extends ConsumerState<ShareReferralPage> {
                         16.verticalSpace,
                         GestureDetector(
                           onTap: () {
-                            context.pushRoute(ShareReferralFaqRoute(
-                                terms: state
-                                        .referralData?.translation?.shortDesc ??
-                                    ""));
+                            context.pushRoute(
+                              ShareReferralFaqRoute(
+                                terms:
+                                    state
+                                        .referralData
+                                        ?.translation
+                                        ?.shortDesc ??
+                                    "",
+                              ),
+                            );
                           },
                           child: RichText(
                             text: TextSpan(
-                                text:
-                                    "${state.referralData?.translation?.description} ",
-                                style: AppStyle.interNoSemi(
-                                  size: 14,
-                                  color: AppStyle.textGrey,
+                              text:
+                                  "${state.referralData?.translation?.description} ",
+                              style: AppStyle.interNoSemi(
+                                size: 14,
+                                color: AppStyle.textGrey,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: AppHelpers.getTranslation(
+                                    TrKeys.referralFaq,
+                                  ).toLowerCase(),
+                                  style: AppStyle.interNoSemi(
+                                    size: 14,
+                                    color: AppStyle.black,
+                                    decoration: TextDecoration.underline,
+                                  ),
                                 ),
-                                children: [
-                                  TextSpan(
-                                    text: AppHelpers.getTranslation(
-                                            TrKeys.referralFaq)
-                                        .toLowerCase(),
-                                    style: AppStyle.interNoSemi(
-                                        size: 14,
-                                        color: AppStyle.black,
-                                        decoration: TextDecoration.underline),
-                                  )
-                                ]),
+                              ],
+                            ),
                           ),
                         ),
                         16.verticalSpace,
                         CustomButton(
-                            title: AppHelpers.getTranslation(TrKeys.share),
-                            onPressed: () {
-                              Share.share(
-                                ref.watch(profileProvider).userData?.referral ??
-                                    "",
-                                subject:
-                                    AppHelpers.getTranslation(TrKeys.referral),
-                              );
-                            }),
+                          title: AppHelpers.getTranslation(TrKeys.share),
+                          onPressed: () {
+                            Share.share(
+                              ref.watch(profileProvider).userData?.referral ??
+                                  "",
+                              subject: AppHelpers.getTranslation(
+                                TrKeys.referral,
+                              ),
+                            );
+                          },
+                        ),
                         16.verticalSpace,
                         CustomButton(
-                            background: AppStyle.transparent,
-                            borderColor: AppStyle.black,
-                            title: AppHelpers.getTranslation(TrKeys.copyCode),
-                            onPressed: () async {
-                              await Clipboard.setData(ClipboardData(
-                                  text: ref
-                                          .watch(profileProvider)
-                                          .userData
-                                          ?.referral ??
-                                      ""));
-                              if (context.mounted) {
-                                AppHelpers.showCheckTopSnackBarDone(context,
-                                    AppHelpers.getTranslation(TrKeys.copyCode));
-                              }
-                            }),
+                          background: AppStyle.transparent,
+                          borderColor: AppStyle.black,
+                          title: AppHelpers.getTranslation(TrKeys.copyCode),
+                          onPressed: () async {
+                            await Clipboard.setData(
+                              ClipboardData(
+                                text:
+                                    ref
+                                        .watch(profileProvider)
+                                        .userData
+                                        ?.referral ??
+                                    "",
+                              ),
+                            );
+                            if (context.mounted) {
+                              AppHelpers.showCheckTopSnackBarDone(
+                                context,
+                                AppHelpers.getTranslation(TrKeys.copyCode),
+                              );
+                            }
+                          },
+                        ),
                         16.verticalSpace,
                         Container(
                           height: 74.r,
@@ -179,12 +193,16 @@ class _ShareReferralPageState extends ConsumerState<ShareReferralPage> {
                                     ),
                                     Text(
                                       AppHelpers.numberFormat(
-                                          number: (state.userData
-                                                      ?.referralFromPrice ??
-                                                  0) -
-                                              (state.userData
-                                                      ?.referralFromWithdrawPrice ??
-                                                  0)),
+                                        number:
+                                            (state
+                                                    .userData
+                                                    ?.referralFromPrice ??
+                                                0) -
+                                            (state
+                                                    .userData
+                                                    ?.referralFromWithdrawPrice ??
+                                                0),
+                                      ),
                                       style: AppStyle.interSemi(
                                         size: 18.sp,
                                         color: AppStyle.black,
@@ -202,7 +220,8 @@ class _ShareReferralPageState extends ConsumerState<ShareReferralPage> {
                                 const Spacer(),
                                 Text(
                                   ((state.userData?.referralFromPrice ?? 0) -
-                                          (state.userData
+                                          (state
+                                                  .userData
                                                   ?.referralFromWithdrawPrice ??
                                               0))
                                       .toString(),
@@ -230,4 +249,3 @@ class _ShareReferralPageState extends ConsumerState<ShareReferralPage> {
     );
   }
 }
-

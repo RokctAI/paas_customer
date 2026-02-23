@@ -33,20 +33,20 @@ class RepeatData {
     int? isActive,
     String? paymentMethod,
     String? savedCard,
-  }) =>
-      RepeatData(
-        id: id ?? this.id,
-        orderId: orderId ?? this.orderId,
-        from: from ?? this.from,
-        to: to ?? this.to,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-        isActive: isActive ?? this.isActive,
-        paymentMethod: paymentMethod ?? this.paymentMethod,
-        savedCard: savedCard ?? this.savedCard,
-      );
+  }) => RepeatData(
+    id: id ?? this.id,
+    orderId: orderId ?? this.orderId,
+    from: from ?? this.from,
+    to: to ?? this.to,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    isActive: isActive ?? this.isActive,
+    paymentMethod: paymentMethod ?? this.paymentMethod,
+    savedCard: savedCard ?? this.savedCard,
+  );
 
-  factory RepeatData.fromRawJson(String str) => RepeatData.fromJson(json.decode(str));
+  factory RepeatData.fromRawJson(String str) =>
+      RepeatData.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 

@@ -48,14 +48,15 @@ class ResetPasswordPage extends ConsumerWidget {
       child: AbsorbPointer(
         absorbing: state.isLoading,
         child: KeyboardDismisser(
-            child: Container(
-              padding: MediaQuery.of(context).viewInsets,
-              decoration: BoxDecoration(
-                  color: AppStyle.bgGrey.withOpacity(0.96),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16.r),
-                    topRight: Radius.circular(16.r),
-                  )),
+          child: Container(
+            padding: MediaQuery.of(context).viewInsets,
+            decoration: BoxDecoration(
+              color: AppStyle.bgGrey.withOpacity(0.96),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16.r),
+                topRight: Radius.circular(16.r),
+              ),
+            ),
             width: double.infinity,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -67,8 +68,9 @@ class ResetPasswordPage extends ConsumerWidget {
                     Column(
                       children: [
                         AppBarBottomSheet(
-                          title:
-                              AppHelpers.getTranslation(TrKeys.resetPassword),
+                          title: AppHelpers.getTranslation(
+                            TrKeys.resetPassword,
+                          ),
                         ),
                         Text(
                           AppHelpers.getTranslation(TrKeys.resetPasswordText),
@@ -78,10 +80,11 @@ class ResetPasswordPage extends ConsumerWidget {
                           ),
                         ),
                         40.verticalSpace,
-                        if (AppConstants.signUpType== SignUpType.phone)
+                        if (AppConstants.signUpType == SignUpType.phone)
                           Directionality(
-                            textDirection:
-                                isLtr ? TextDirection.ltr : TextDirection.rtl,
+                            textDirection: isLtr
+                                ? TextDirection.ltr
+                                : TextDirection.rtl,
                             child: IntlPhoneField(
                               disableLengthCheck:
                                   !AppConstants.isNumberLengthAlwaysSame,
@@ -92,50 +95,61 @@ class ResetPasswordPage extends ConsumerWidget {
                                 if (AppConstants.isNumberLengthAlwaysSame &&
                                     (s?.isValidNumber() ?? true)) {
                                   return AppHelpers.getTranslation(
-                                      TrKeys.phoneNumberIsNotValid);
+                                    TrKeys.phoneNumberIsNotValid,
+                                  );
                                 }
                                 return null;
                               },
                               keyboardType: TextInputType.phone,
                               initialCountryCode: AppConstants.countryCodeISO,
                               invalidNumberMessage: AppHelpers.getTranslation(
-                                  TrKeys.phoneNumberIsNotValid),
+                                TrKeys.phoneNumberIsNotValid,
+                              ),
                               inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
+                                FilteringTextInputFormatter.digitsOnly,
                               ],
                               showCountryFlag: AppConstants.showFlag,
                               showDropdownIcon: AppConstants.showArrowIcon,
                               autovalidateMode:
                                   AppConstants.isNumberLengthAlwaysSame
-                                      ? AutovalidateMode.onUserInteraction
-                                      : AutovalidateMode.disabled,
+                                  ? AutovalidateMode.onUserInteraction
+                                  : AutovalidateMode.disabled,
                               textAlignVertical: TextAlignVertical.center,
                               decoration: InputDecoration(
                                 counterText: '',
                                 enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide.merge(
-                                        const BorderSide(
-                                            color: AppStyle.differBorderColor),
-                                        const BorderSide(
-                                            color:
-                                                AppStyle.differBorderColor))),
+                                  borderSide: BorderSide.merge(
+                                    const BorderSide(
+                                      color: AppStyle.differBorderColor,
+                                    ),
+                                    const BorderSide(
+                                      color: AppStyle.differBorderColor,
+                                    ),
+                                  ),
+                                ),
                                 errorBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide.merge(
-                                        const BorderSide(
-                                            color: AppStyle.differBorderColor),
-                                        const BorderSide(
-                                            color:
-                                                AppStyle.differBorderColor))),
+                                  borderSide: BorderSide.merge(
+                                    const BorderSide(
+                                      color: AppStyle.differBorderColor,
+                                    ),
+                                    const BorderSide(
+                                      color: AppStyle.differBorderColor,
+                                    ),
+                                  ),
+                                ),
                                 border: const UnderlineInputBorder(),
                                 focusedErrorBorder:
                                     const UnderlineInputBorder(),
                                 disabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide.merge(
-                                        const BorderSide(
-                                            color: AppStyle.differBorderColor),
-                                        const BorderSide(
-                                            color:
-                                                AppStyle.differBorderColor))),
+                                  borderSide: BorderSide.merge(
+                                    const BorderSide(
+                                      color: AppStyle.differBorderColor,
+                                    ),
+                                    const BorderSide(
+                                      color: AppStyle.differBorderColor,
+                                    ),
+                                  ),
+                                ),
                                 focusedBorder: const UnderlineInputBorder(),
                               ),
                             ),
@@ -143,19 +157,21 @@ class ResetPasswordPage extends ConsumerWidget {
                         if (AppConstants.signUpType == SignUpType.both)
                           OutlinedBorderTextField(
                             label: AppHelpers.getTranslation(
-                                    TrKeys.emailOrPhoneNumber)
-                                .toUpperCase(),
+                              TrKeys.emailOrPhoneNumber,
+                            ).toUpperCase(),
                             onChanged: notifier.setEmail,
                             isError: !state.isSuccess,
-                            descriptionText:
-                                AppHelpers.getTranslation(TrKeys.canNotBeEmpty),
+                            descriptionText: AppHelpers.getTranslation(
+                              TrKeys.canNotBeEmpty,
+                            ),
                           ),
                       ],
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                          bottom: MediaQuery.paddingOf(context).bottom,
-                          top: 120.h),
+                        bottom: MediaQuery.paddingOf(context).bottom,
+                        top: 120.h,
+                      ),
                       child: CustomButton(
                         isLoading: state.isLoading,
                         title: AppHelpers.getTranslation(TrKeys.send),
@@ -177,10 +193,8 @@ class ResetPasswordPage extends ConsumerWidget {
               ),
             ),
           ),
-
         ),
       ),
     );
   }
 }
-

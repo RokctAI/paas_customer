@@ -72,14 +72,16 @@ class BannerData {
 
     if (kDebugMode) {
       print(
-        "CONSTRUCTOR DEBUG: Created BannerData with ID: $id, buttonText: '$buttonText'");
+        "CONSTRUCTOR DEBUG: Created BannerData with ID: $id, buttonText: '$buttonText'",
+      );
     }
   }
 
   BannerData.fromJson(dynamic json) {
     if (kDebugMode) {
       print(
-        "FROM_JSON DEBUG: Starting to parse BannerData from JSON for ID: ${json['id']}");
+        "FROM_JSON DEBUG: Starting to parse BannerData from JSON for ID: ${json['id']}",
+      );
     }
 
     _id = json['id'];
@@ -112,7 +114,8 @@ class BannerData {
       } else if (json['clickable'] is int) {
         _clickable = json['clickable'] == 1;
       } else if (json['clickable'] is String) {
-        _clickable = json['clickable'] == '1' ||
+        _clickable =
+            json['clickable'] == '1' ||
             json['clickable'].toLowerCase() == 'true';
       } else {
         _clickable = false;
@@ -126,7 +129,8 @@ class BannerData {
 
     if (kDebugMode) {
       print(
-        "TRANSLATION DEBUG: Translation object in JSON: ${json['translation']}");
+        "TRANSLATION DEBUG: Translation object in JSON: ${json['translation']}",
+      );
     }
     _translation = json['translation'] != null
         ? Translation.fromJson(json['translation'])
@@ -143,7 +147,9 @@ class BannerData {
     }
 
     if (kDebugMode) {
-      print("BUTTON_TEXT DEBUG: Final button_text: '$_buttonText' for banner ID: ${json['id']}");
+      print(
+        "BUTTON_TEXT DEBUG: Final button_text: '$_buttonText' for banner ID: ${json['id']}",
+      );
     }
   }
 
@@ -173,21 +179,20 @@ class BannerData {
     String? updatedAt,
     Translation? translation,
     String? buttonText, // Added parameter
-  }) =>
-      BannerData(
-        id: id ?? _id,
-        shopId: shopId ?? _shopId,
-        url: url ?? _url,
-        shops: shops ?? _shops,
-        img: img ?? _img,
-        active: active ?? _active,
-        clickable: clickable ?? _clickable,
-        likes: likes ?? _likes,
-        createdAt: createdAt ?? _createdAt,
-        updatedAt: updatedAt ?? _updatedAt,
-        translation: translation ?? _translation,
-        buttonText: buttonText ?? _buttonText, // Include in copyWith
-      );
+  }) => BannerData(
+    id: id ?? _id,
+    shopId: shopId ?? _shopId,
+    url: url ?? _url,
+    shops: shops ?? _shops,
+    img: img ?? _img,
+    active: active ?? _active,
+    clickable: clickable ?? _clickable,
+    likes: likes ?? _likes,
+    createdAt: createdAt ?? _createdAt,
+    updatedAt: updatedAt ?? _updatedAt,
+    translation: translation ?? _translation,
+    buttonText: buttonText ?? _buttonText, // Include in copyWith
+  );
 
   int? get id => _id;
 

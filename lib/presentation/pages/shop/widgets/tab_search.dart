@@ -22,7 +22,8 @@ class TabSearch extends StatelessWidget {
       builder: (context, ref, child) {
         return AnimatedContainer(
           margin: EdgeInsets.only(
-              top: ref.watch(shopProvider).isSearchEnabled ? 20 : 25),
+            top: ref.watch(shopProvider).isSearchEnabled ? 20 : 25,
+          ),
           duration: const Duration(milliseconds: 400),
           width: ref.watch(shopProvider).isSearchEnabled
               ? MediaQuery.sizeOf(context).width - 24
@@ -58,8 +59,10 @@ class TabSearch extends StatelessWidget {
                   });
                 },
                 decoration: InputDecoration(
-                  contentPadding:
-                      REdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  contentPadding: REdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 12,
+                  ),
                   suffixIcon: ref.watch(shopProvider).isSearchEnabled
                       ? GestureDetector(
                           onTap: () {
@@ -86,39 +89,45 @@ class TabSearch extends StatelessWidget {
                           ? null
                           : BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Colors.grey.shade300),
-                      child: const Icon(
-                        Icons.search,
-                        color: Colors.black,
-                      ),
+                              color: Colors.grey.shade300,
+                            ),
+                      child: const Icon(Icons.search, color: Colors.black),
                     ),
                   ),
                   border: !ref.watch(shopProvider).isSearchEnabled
                       ? InputBorder.none
                       : OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.black, width: .5),
+                          borderSide: const BorderSide(
+                            color: Colors.black,
+                            width: .5,
+                          ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                   enabledBorder: !ref.watch(shopProvider).isSearchEnabled
                       ? InputBorder.none
                       : OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.black, width: .5),
+                          borderSide: const BorderSide(
+                            color: Colors.black,
+                            width: .5,
+                          ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                   focusedBorder: !ref.watch(shopProvider).isSearchEnabled
                       ? InputBorder.none
                       : OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.black, width: .5),
+                          borderSide: const BorderSide(
+                            color: Colors.black,
+                            width: .5,
+                          ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                   disabledBorder: !ref.watch(shopProvider).isSearchEnabled
                       ? InputBorder.none
                       : OutlineInputBorder(
-                          borderSide:
-                              const BorderSide(color: Colors.black, width: .5),
+                          borderSide: const BorderSide(
+                            color: Colors.black,
+                            width: .5,
+                          ),
                           borderRadius: BorderRadius.circular(10),
                         ),
                 ),
@@ -130,4 +139,3 @@ class TabSearch extends StatelessWidget {
     );
   }
 }
-

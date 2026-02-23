@@ -21,7 +21,13 @@ class PaymentMethods extends ConsumerStatefulWidget {
   final num? tipPrice;
   final bool shopEnableCod;
 
-  const PaymentMethods({this.payLater, this.tips, this.tipPrice, this.shopEnableCod = true, super.key});
+  const PaymentMethods({
+    this.payLater,
+    this.tips,
+    this.tipPrice,
+    this.shopEnableCod = true,
+    super.key,
+  });
 
   @override
   ConsumerState<PaymentMethods> createState() => _PaymentMethodsState();
@@ -37,7 +43,11 @@ class _PaymentMethodsState extends ConsumerState<PaymentMethods> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
           .read(paymentProvider.notifier)
-          .fetchPayments(context, withOutCash: widget.tipPrice != null, shopEnableCod: widget.shopEnableCod);
+          .fetchPayments(
+            context,
+            withOutCash: widget.tipPrice != null,
+            shopEnableCod: widget.shopEnableCod,
+          );
     });
     super.initState();
   }
@@ -63,113 +73,130 @@ class _PaymentMethodsState extends ConsumerState<PaymentMethods> {
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Container(
         decoration: BoxDecoration(
-            color: AppStyle.bgGrey.withOpacity(0.96),
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(12.r),
-              topRight: Radius.circular(12.r),
-            )),
+          color: AppStyle.bgGrey.withOpacity(0.96),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(12.r),
+            topRight: Radius.circular(12.r),
+          ),
+        ),
         width: double.infinity,
         child: state.isPaymentsLoading
             ? const Loading()
             : SingleChildScrollView(
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    8.verticalSpace,
-                    Center(
-                      child: Container(
-                        height: 4.h,
-                        width: 48.w,
-                        decoration: BoxDecoration(
-                            color: AppStyle.dragElement,
-                            borderRadius:
-                            BorderRadius.all(Radius.circular(40.r))),
-                      ),
-                    ),
-                    14.verticalSpace,
-                    TitleAndIcon(
-                      title: AppHelpers.getTranslation(
-                          TrKeys.paymentMethods),
-                    ),
-                    24.verticalSpace,
-                    (state.payments.isNotEmpty)
-                        ? ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: state.payments.length,
-                        itemBuilder: (context, index) {
-                          final bool isPayfast = state.payments[index].tag?.toLowerCase() == "payfast";
-                          return SelectItem(
-                            onTap: () {
-                              event.change(index);
-                              if (isPayfast) {
-                                _checkIfPayfast(index);
-                              }
-                            },
-                            isActive: state.currentIndex == index,
-                            title: AppHelpers.getTranslation(
-                                state.payments[index].tag ?? ""),
-                          );
-                        })
-                        : Center(
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            bottom: 32.h, left: 24.w, right: 24.w),
-                        child: Text(
-                          AppHelpers.getTranslation(
-                              TrKeys.paymentTypeIsNotAdded),
-                          style: AppStyle.interSemi(
-                            size: 16,
-                            color: AppStyle.textGrey,
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          8.verticalSpace,
+                          Center(
+                            child: Container(
+                              height: 4.h,
+                              width: 48.w,
+                              decoration: BoxDecoration(
+                                color: AppStyle.dragElement,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(40.r),
+                                ),
+                              ),
+                            ),
                           ),
-                          textAlign: TextAlign.center,
-                        ),
+                          14.verticalSpace,
+                          TitleAndIcon(
+                            title: AppHelpers.getTranslation(
+                              TrKeys.paymentMethods,
+                            ),
+                          ),
+                          24.verticalSpace,
+                          (state.payments.isNotEmpty)
+                              ? ListView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  shrinkWrap: true,
+                                  itemCount: state.payments.length,
+                                  itemBuilder: (context, index) {
+                                    final bool isPayfast =
+                                        state.payments[index].tag
+                                            ?.toLowerCase() ==
+                                        "payfast";
+                                    return SelectItem(
+                                      onTap: () {
+                                        event.change(index);
+                                        if (isPayfast) {
+                                          _checkIfPayfast(index);
+                                        }
+                                      },
+                                      isActive: state.currentIndex == index,
+                                      title: AppHelpers.getTranslation(
+                                        state.payments[index].tag ?? "",
+                                      ),
+                                    );
+                                  },
+                                )
+                              : Center(
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom: 32.h,
+                                      left: 24.w,
+                                      right: 24.w,
+                                    ),
+                                    child: Text(
+                                      AppHelpers.getTranslation(
+                                        TrKeys.paymentTypeIsNotAdded,
+                                      ),
+                                      style: AppStyle.interSemi(
+                                        size: 16,
+                                        color: AppStyle.textGrey,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ),
+                          if (widget.payLater != null)
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 32.r),
+                              child: CustomButton(
+                                title: AppHelpers.getTranslation(TrKeys.pay),
+                                onPressed: () {
+                                  context.maybePop();
+                                  widget.payLater?.call(
+                                    PaymentData(
+                                      id: state.payments[state.currentIndex].id,
+                                      tag: AppHelpers.getTranslation(
+                                        state.payments[state.currentIndex].tag,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          if (widget.tips != null)
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 32.r),
+                              child: CustomButton(
+                                title: AppHelpers.getTranslation(TrKeys.pay),
+                                onPressed: () {
+                                  context.maybePop();
+                                  widget.tips?.call(
+                                    PaymentData(
+                                      id: state.payments[state.currentIndex].id,
+                                      tag: AppHelpers.getTranslation(
+                                        state.payments[state.currentIndex].tag,
+                                      ),
+                                    ),
+                                    widget.tipPrice ?? 0,
+                                  );
+                                },
+                              ),
+                            ),
+                        ],
                       ),
                     ),
-                    if (widget.payLater != null)
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 32.r),
-                        child: CustomButton(
-                            title: AppHelpers.getTranslation(TrKeys.pay),
-                            onPressed: () {
-                              context.maybePop();
-                              widget.payLater?.call(PaymentData(
-                                  id: state
-                                      .payments[state.currentIndex].id,
-                                  tag: AppHelpers.getTranslation(state
-                                      .payments[state.currentIndex]
-                                      .tag)));
-                            }),
-                      ),
-                    if (widget.tips != null)
-                      Padding(
-                        padding: EdgeInsets.only(bottom: 32.r),
-                        child: CustomButton(
-                            title: AppHelpers.getTranslation(TrKeys.pay),
-                            onPressed: () {
-                              context.maybePop();
-                              widget.tips?.call(
-                                PaymentData(
-                                    id: state
-                                        .payments[state.currentIndex].id,
-                                    tag: AppHelpers.getTranslation(state
-                                        .payments[state.currentIndex]
-                                        .tag)),
-                                widget.tipPrice ?? 0,
-                              );
-                            }),
-                      )
                   ],
                 ),
               ),
-            ],
-          ),
-        ),
       ),
     );
   }

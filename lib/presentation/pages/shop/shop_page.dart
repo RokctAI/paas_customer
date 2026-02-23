@@ -85,9 +85,7 @@ class _ShopPageState extends ConsumerState<ShopPage>
             children: [
               Text(
                 AppHelpers.getTranslation(TrKeys.joinOrder),
-                style: AppStyle.interNoSemi(
-                  size: 24.r,
-                ),
+                style: AppStyle.interNoSemi(size: 24.r),
               ),
               8.verticalSpace,
               Text(
@@ -100,20 +98,28 @@ class _ShopPageState extends ConsumerState<ShopPage>
                 label: AppHelpers.getTranslation(TrKeys.firstname),
               ),
               24.verticalSpace,
-              Consumer(builder: (contextt, ref, child) {
-                return CustomButton(
+              Consumer(
+                builder: (contextt, ref, child) {
+                  return CustomButton(
                     isLoading: ref.watch(shopProvider).isJoinOrder,
                     title: AppHelpers.getTranslation(TrKeys.join),
                     onPressed: () {
-                      event.joinOrder(context, widget.shopId,
-                          widget.cartId ?? "", name.text, () {
-                            Navigator.pop(context);
-                            ref
-                                .read(shopOrderProvider.notifier)
-                                .joinGroupOrder(context);
-                          });
-                    });
-              })
+                      event.joinOrder(
+                        context,
+                        widget.shopId,
+                        widget.cartId ?? "",
+                        name.text,
+                        () {
+                          Navigator.pop(context);
+                          ref
+                              .read(shopOrderProvider.notifier)
+                              .joinGroupOrder(context);
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
             ],
           ),
         );
@@ -131,31 +137,32 @@ class _ShopPageState extends ConsumerState<ShopPage>
         ..checkProductsPopular(context, widget.shopId)
         ..changeIndex(0);
       if (LocalStorage.getToken().isNotEmpty) {
-        ref.read(shopOrderProvider.notifier).getCart(context, () {},
-            userUuid: ref.watch(shopProvider).userUuid,
-            shopId: widget.shopId,
-            cartId: widget.cartId);
+        ref
+            .read(shopOrderProvider.notifier)
+            .getCart(
+              context,
+              () {},
+              userUuid: ref.watch(shopProvider).userUuid,
+              shopId: widget.shopId,
+              cartId: widget.cartId,
+            );
       }
       if (widget.productId != null) {
         AppHelpers.showCustomModalBottomDragSheet(
           context: context,
-          modal: (c) => ProductScreen(
-            productId: widget.productId,
-            controller: c,
-          ),
+          modal: (c) =>
+              ProductScreen(productId: widget.productId, controller: c),
           isDarkMode: false,
           isDrag: true,
           radius: 16,
         );
       }
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ref.read(shopProvider.notifier).fetchProducts(
-          context,
-          widget.shopId,
-              (i) {
-            _tabController = TabController(length: i, vsync: this);
-          },
-        );
+        ref.read(shopProvider.notifier).fetchProducts(context, widget.shopId, (
+          i,
+        ) {
+          _tabController = TabController(length: i, vsync: this);
+        });
       });
     });
     _tabController = TabController(length: 0, vsync: this);
@@ -213,7 +220,8 @@ class _ShopPageState extends ConsumerState<ShopPage>
     final state = ref.watch(shopProvider);
     final orders = ref.watch(shopOrderProvider).cart;
 
-    final bool isCartEmpty = orders == null ||
+    final bool isCartEmpty =
+        orders == null ||
         (orders.userCarts?.isEmpty ?? true) ||
         ((orders.userCarts?.isEmpty ?? true)
             ? true
@@ -230,57 +238,64 @@ class _ShopPageState extends ConsumerState<ShopPage>
         body: state.isLoading
             ? const Loading()
             : CustomScrollView(
-          controller: scrollController,
-          slivers: [
-            SliverAppBar(
-              backgroundColor: AppStyle.white,
-              toolbarHeight: calculateAppBarHeight(state),
-              elevation: 0.0,
-              leading: const SizedBox.shrink(),
-              flexibleSpace: FlexibleSpaceBar(
-                background: state.isSearchEnabled
-                    ? const SizedBox.shrink() // Hide when search is active
-                    : ShopPageAvatar(
-                  workTime: state.endTodayTime.hour > TimeOfDay.now().hour
-                      ? "${TimeService.timeFormatTime(state.startTodayTime.format(context))} - ${TimeService.timeFormatTime(state.endTodayTime.format(context))}"
-                      : AppHelpers.getTranslation(TrKeys.close),
-                  onLike: () {
-                    event.onLike();
-                    eventLike.fetchLikeShop(context);
-                  },
-                  isLike: state.isLike,
-                  shop: state.shopData ?? ShopData(),
-                  onShare: event.onShare,
-                  bonus: state.shopData?.bonus,
-                  cartId: widget.cartId,
-                  userUuid: state.userUuid,
-                ),
+                controller: scrollController,
+                slivers: [
+                  SliverAppBar(
+                    backgroundColor: AppStyle.white,
+                    toolbarHeight: calculateAppBarHeight(state),
+                    elevation: 0.0,
+                    leading: const SizedBox.shrink(),
+                    flexibleSpace: FlexibleSpaceBar(
+                      background: state.isSearchEnabled
+                          ? const SizedBox.shrink() // Hide when search is active
+                          : ShopPageAvatar(
+                              workTime:
+                                  state.endTodayTime.hour > TimeOfDay.now().hour
+                                  ? "${TimeService.timeFormatTime(state.startTodayTime.format(context))} - ${TimeService.timeFormatTime(state.endTodayTime.format(context))}"
+                                  : AppHelpers.getTranslation(TrKeys.close),
+                              onLike: () {
+                                event.onLike();
+                                eventLike.fetchLikeShop(context);
+                              },
+                              isLike: state.isLike,
+                              shop: state.shopData ?? ShopData(),
+                              onShare: event.onShare,
+                              bonus: state.shopData?.bonus,
+                              cartId: widget.cartId,
+                              userUuid: state.userUuid,
+                            ),
+                    ),
+                  ),
+                  SliverPersistentHeader(
+                    delegate: _CategoryTabBarDelegate(
+                      controller: _tabController,
+                      data: state.allData,
+                      textController: search,
+                      isLoading: state.isProductLoading,
+                    ),
+                    pinned: true,
+                  ),
+                  SliverPadding(
+                    padding: EdgeInsets.only(bottom: 80.h),
+                    sliver: SliverToBoxAdapter(child: contentList()),
+                  ),
+                ],
               ),
-            ),
-            SliverPersistentHeader(
-              delegate: _CategoryTabBarDelegate(
-                controller: _tabController,
-                data: state.allData,
-                textController: search,
-                isLoading: state.isProductLoading,
-              ),
-              pinned: true,
-            ),
-            SliverPadding(
-              padding: EdgeInsets.only(bottom: 80.h),
-              sliver: SliverToBoxAdapter(
-                child: contentList(),
-              ),
-            )
-          ],
-        ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: _buildBottomNavWithCart(state, isCartEmpty, context),
+        floatingActionButton: _buildBottomNavWithCart(
+          state,
+          isCartEmpty,
+          context,
+        ),
       ),
     );
   }
 
-  Widget _buildBottomNavWithCart(dynamic state, bool isCartEmpty, BuildContext context) {
+  Widget _buildBottomNavWithCart(
+    dynamic state,
+    bool isCartEmpty,
+    BuildContext context,
+  ) {
     final bool isFixed = AppConstants.fixed;
     final cart = ref.watch(shopOrderProvider).cart;
 
@@ -315,8 +330,13 @@ class _ShopPageState extends ConsumerState<ShopPage>
                 // Main container
                 Container(
                   width: MediaQuery.of(context).size.width * 0.8,
-                  margin: EdgeInsets.only(bottom: 16.h), // Extra margin for the tooltip pointer
-                  padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
+                  margin: EdgeInsets.only(
+                    bottom: 16.h,
+                  ), // Extra margin for the tooltip pointer
+                  padding: EdgeInsets.symmetric(
+                    vertical: 8.h,
+                    horizontal: 12.w,
+                  ),
                   decoration: BoxDecoration(
                     color: AppStyle.primary.withOpacity(0.8),
                     borderRadius: BorderRadius.circular(8.r),
@@ -336,8 +356,13 @@ class _ShopPageState extends ConsumerState<ShopPage>
                       Consumer(
                         builder: (context, ref, child) {
                           // Check if currency is loaded
-                          final isLoading = ref.watch(shopOrderProvider).isLoading;
-                          final totalPrice = ref.watch(shopOrderProvider).cart?.totalPrice;
+                          final isLoading = ref
+                              .watch(shopOrderProvider)
+                              .isLoading;
+                          final totalPrice = ref
+                              .watch(shopOrderProvider)
+                              .cart
+                              ?.totalPrice;
                           final currency = LocalStorage.getSelectedCurrency();
 
                           if (isLoading) {
@@ -409,9 +434,7 @@ class _ShopPageState extends ConsumerState<ShopPage>
                       // Back button (using PopButton instead of custom implementation)
                       SizedBox(
                         height: 60.r,
-                        child: Center(
-                          child: PopButton(),
-                        ),
+                        child: Center(child: PopButton()),
                       ),
 
                       // Categories button
@@ -423,7 +446,9 @@ class _ShopPageState extends ConsumerState<ShopPage>
                               context: context,
                               backgroundColor: AppStyle.white,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.vertical(top: Radius.circular(12.r)),
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(12.r),
+                                ),
                               ),
                               builder: (context) => Container(
                                 padding: EdgeInsets.all(16.r),
@@ -433,7 +458,11 @@ class _ShopPageState extends ConsumerState<ShopPage>
                                   itemBuilder: (context, index) {
                                     return ListTile(
                                       title: Text(
-                                        state.allData[index].translation?.title ?? "",
+                                        state
+                                                .allData[index]
+                                                .translation
+                                                ?.title ??
+                                            "",
                                         style: AppStyle.interNoSemi(
                                           size: 14,
                                           color: AppStyle.black,
@@ -445,8 +474,13 @@ class _ShopPageState extends ConsumerState<ShopPage>
                                         // Scroll to the category
                                         if (state.allData[index].key != null) {
                                           Scrollable.ensureVisible(
-                                            state.allData[index].key!.currentContext!,
-                                            duration: const Duration(milliseconds: 300),
+                                            state
+                                                .allData[index]
+                                                .key!
+                                                .currentContext!,
+                                            duration: const Duration(
+                                              milliseconds: 300,
+                                            ),
                                           );
                                         }
                                       },
@@ -491,7 +525,9 @@ class _ShopPageState extends ConsumerState<ShopPage>
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                state.isSearchEnabled ? Remix.search_fill : Remix.search_line,
+                                state.isSearchEnabled
+                                    ? Remix.search_fill
+                                    : Remix.search_line,
                                 size: 24.r,
                                 color: AppStyle.white,
                               ),
@@ -557,8 +593,15 @@ class _ShopPageState extends ConsumerState<ShopPage>
                           label: Text(
                             isCartEmpty
                                 ? "0"
-                                : (ref.watch(shopOrderProvider).cart?.userCarts?.first.cartDetails?.length ?? 0)
-                                .toString(),
+                                : (ref
+                                              .watch(shopOrderProvider)
+                                              .cart
+                                              ?.userCarts
+                                              ?.first
+                                              .cartDetails
+                                              ?.length ??
+                                          0)
+                                      .toString(),
                             style: const TextStyle(color: AppStyle.white),
                           ),
                         ),
@@ -573,34 +616,35 @@ class _ShopPageState extends ConsumerState<ShopPage>
       ],
     );
   }
+
   Widget contentList() {
     final state = ref.watch(shopProvider);
     return SingleChildScrollView(
       child: (state.isProductLoading || state.isBrandsLoading)
           ? const ShimmerProductList()
           : Column(
-        children: List.generate(state.allData.length, (index) {
-          var item = state.allData[index];
-          return VisibilityDetector(
-            key: item.key!,
-            onVisibilityChanged: (VisibilityInfo info) {
-              double screenHeight = MediaQuery.sizeOf(context).height;
-              double visibleAreaOnScreen =
-                  info.visibleBounds.bottom - info.visibleBounds.top;
+              children: List.generate(state.allData.length, (index) {
+                var item = state.allData[index];
+                return VisibilityDetector(
+                  key: item.key!,
+                  onVisibilityChanged: (VisibilityInfo info) {
+                    double screenHeight = MediaQuery.sizeOf(context).height;
+                    double visibleAreaOnScreen =
+                        info.visibleBounds.bottom - info.visibleBounds.top;
 
-              if (info.visibleFraction > 0.5 ||
-                  visibleAreaOnScreen > screenHeight * 0.5) {
-                _tabController.animateTo(index);
-              }
-            },
-            child: ProductsList(
-              shopId: widget.shopId,
-              cartId: widget.cartId,
-              all: item,
+                    if (info.visibleFraction > 0.5 ||
+                        visibleAreaOnScreen > screenHeight * 0.5) {
+                      _tabController.animateTo(index);
+                    }
+                  },
+                  child: ProductsList(
+                    shopId: widget.shopId,
+                    cartId: widget.cartId,
+                    all: item,
+                  ),
+                );
+              }),
             ),
-          );
-        }),
-      ),
     );
   }
 }
@@ -618,17 +662,15 @@ String _getCartShopName(Cart? cart, WidgetRef ref) {
 
   // Check in shops list
   foundShop = homeState.shops.firstWhere(
-        (shop) => shop.id == shopId,
+    (shop) => shop.id == shopId,
     orElse: () => ShopData(), // Empty shop data
   );
 
   if (foundShop.id != null) return foundShop.translation?.title ?? "";
 
-
-
   // Check in newShops list
   foundShop = homeState.newShops.firstWhere(
-        (shop) => shop.id == shopId,
+    (shop) => shop.id == shopId,
     orElse: () => ShopData(), // Empty shop data
   );
 
@@ -636,7 +678,7 @@ String _getCartShopName(Cart? cart, WidgetRef ref) {
 
   // Check in shopsRecommend list
   foundShop = homeState.shopsRecommend.firstWhere(
-        (shop) => shop.id == shopId,
+    (shop) => shop.id == shopId,
     orElse: () => ShopData(), // Empty shop data
   );
 
@@ -644,7 +686,7 @@ String _getCartShopName(Cart? cart, WidgetRef ref) {
 
   // Check in filterShops list
   foundShop = homeState.filterShops.firstWhere(
-        (shop) => shop.id == shopId,
+    (shop) => shop.id == shopId,
     orElse: () => ShopData(), // Empty shop data
   );
 
@@ -666,10 +708,10 @@ class _CategoryTabBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(
-      BuildContext context,
-      double shrinkOffset,
-      bool overlapsContent,
-      ) {
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return SizedBox.expand(
       child: CategoryTabBar(
         controller: controller,

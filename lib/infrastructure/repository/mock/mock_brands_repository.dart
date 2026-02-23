@@ -15,21 +15,23 @@ class MockBrandsRepository implements BrandsRepositoryFacade {
   );
 
   @override
-  Future<ApiResult<BrandsPaginateResponse>> getAllBrands({String? categoryId, String? shopId}) async {
+  Future<ApiResult<BrandsPaginateResponse>> getAllBrands({
+    String? categoryId,
+    String? shopId,
+  }) async {
     return ApiResult.success(
       data: BrandsPaginateResponse(
-        data: [_demoBrand, _demoBrand.copyWith(id: "2", title: "Another Brand")],
+        data: [
+          _demoBrand,
+          _demoBrand.copyWith(id: "2", title: "Another Brand"),
+        ],
       ),
     );
   }
 
   @override
   Future<ApiResult<BrandsPaginateResponse>> getBrandsPaginate(int page) async {
-    return ApiResult.success(
-      data: BrandsPaginateResponse(
-        data: [_demoBrand],
-      ),
-    );
+    return ApiResult.success(data: BrandsPaginateResponse(data: [_demoBrand]));
   }
 
   @override
@@ -39,10 +41,6 @@ class MockBrandsRepository implements BrandsRepositoryFacade {
 
   @override
   Future<ApiResult<BrandsPaginateResponse>> searchBrands(String query) async {
-    return ApiResult.success(
-      data: BrandsPaginateResponse(
-        data: [_demoBrand],
-      ),
-    );
+    return ApiResult.success(data: BrandsPaginateResponse(data: [_demoBrand]));
   }
 }

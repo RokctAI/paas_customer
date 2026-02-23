@@ -10,9 +10,7 @@ import 'like_state.dart';
 class LikeNotifier extends StateNotifier<LikeState> {
   final ShopsRepositoryFacade _shopsRepository;
 
-  LikeNotifier(
-      this._shopsRepository,
-      ) : super(const LikeState());
+  LikeNotifier(this._shopsRepository) : super(const LikeState());
 
   Future<void> fetchLikeShop(BuildContext context) async {
     final connected = await AppConnectivity.connectivity();
@@ -31,14 +29,15 @@ class LikeNotifier extends StateNotifier<LikeState> {
           },
           failure: (failure, status) {
             state = state.copyWith(isShopLoading: false);
-            AppHelpers.showCheckTopSnackBar(
-              context,
-              failure,
-            );
+            AppHelpers.showCheckTopSnackBar(context, failure);
           },
         );
       } else {
-        state = state.copyWith(isShopLoading: false, shops: [], likedShopsCount: 0); // Add this line
+        state = state.copyWith(
+          isShopLoading: false,
+          shops: [],
+          likedShopsCount: 0,
+        ); // Add this line
       }
     } else {
       if (context.mounted) {
@@ -47,4 +46,3 @@ class LikeNotifier extends StateNotifier<LikeState> {
     }
   }
 }
-

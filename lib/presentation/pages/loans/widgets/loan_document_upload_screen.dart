@@ -38,10 +38,7 @@ import '../provider/loans_provider.dart';
 class LoanDocumentUploadScreen extends ConsumerStatefulWidget {
   final String? prefilledIdNumber;
 
-  const LoanDocumentUploadScreen({
-    super.key,
-    this.prefilledIdNumber,
-  });
+  const LoanDocumentUploadScreen({super.key, this.prefilledIdNumber});
 
   @override
   ConsumerState<LoanDocumentUploadScreen> createState() =>
@@ -62,7 +59,7 @@ class _LoanDocumentUploadScreenState
     'ID Copy',
     '3 Months Bank Statement',
     'Latest Payslip',
-    'Proof of Address'
+    'Proof of Address',
   ];
 
   // State variables
@@ -76,12 +73,14 @@ class _LoanDocumentUploadScreenState
     _loansRepository = LoansRepository();
 
     // Initialize ID number controller
-    _idNumberController =
-        TextEditingController(text: widget.prefilledIdNumber ?? '');
+    _idNumberController = TextEditingController(
+      text: widget.prefilledIdNumber ?? '',
+    );
 
     // If ID number is prefilled, make it read-only
-    _idNumberReadOnly = widget.prefilledIdNumber != null && widget.prefilledIdNumber!.isNotEmpty;
-
+    _idNumberReadOnly =
+        widget.prefilledIdNumber != null &&
+        widget.prefilledIdNumber!.isNotEmpty;
 
     // Set initial ID number in provider
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -126,16 +125,13 @@ class _LoanDocumentUploadScreenState
         debugPrint("Updating documents map - adding $docType");
         ref.read(uploadedDocumentsProvider.notifier).state = {
           ...currentDocs,
-          docType: file
+          docType: file,
         };
       }
     } catch (e) {
       debugPrint("Error uploading document: $e");
       if (!mounted) return;
-      AppHelpers.showCheckTopSnackBarInfo(
-        context,
-        'Failed to upload document',
-      );
+      AppHelpers.showCheckTopSnackBarInfo(context, 'Failed to upload document');
     }
   }
 
@@ -186,7 +182,10 @@ class _LoanDocumentUploadScreenState
       );
     } catch (e) {
       if (!mounted) return;
-      AppHelpers.showCheckTopSnackBarInfo(context, 'Failed to submit loan application');
+      AppHelpers.showCheckTopSnackBarInfo(
+        context,
+        'Failed to submit loan application',
+      );
     } finally {
       setState(() {
         _isSubmitting = false;
@@ -239,9 +238,13 @@ class _LoanDocumentUploadScreenState
         financialDetails: ref.read(financialDetailsProvider),
       );
 
-      debugPrint("Created loan application model with amount: ${loanApplication.amount}");
+      debugPrint(
+        "Created loan application model with amount: ${loanApplication.amount}",
+      );
       debugPrint("Document count: ${loanApplication.documents.length}");
-      debugPrint("Using saved application ID: ${loanApplication.savedApplicationId}");
+      debugPrint(
+        "Using saved application ID: ${loanApplication.savedApplicationId}",
+      );
 
       // Submit loan application
       debugPrint("Submitting loan application");
@@ -268,11 +271,10 @@ class _LoanDocumentUploadScreenState
           ref.read(uploadedDocumentsProvider.notifier).state = {};
         },
         failure: (error, statusCode) {
-          debugPrint("Loan application submission failed: $error, code: $statusCode");
-          AppHelpers.showCheckTopSnackBarInfo(
-            context,
-            error,
+          debugPrint(
+            "Loan application submission failed: $error, code: $statusCode",
           );
+          AppHelpers.showCheckTopSnackBarInfo(context, error);
         },
       );
     } catch (e) {
@@ -320,8 +322,9 @@ class _LoanDocumentUploadScreenState
         'id_number': idNumber,
         'loan_amount': ref.read(loanAmountProvider),
         'financial_details': financialDetails,
-        'uploaded_documents': uploadedDocs
-            .map((key, value) => MapEntry(key, value.path)),
+        'uploaded_documents': uploadedDocs.map(
+          (key, value) => MapEntry(key, value.path),
+        ),
       };
 
       debugPrint("Financial details for incomplete application: $data");
@@ -333,7 +336,9 @@ class _LoanDocumentUploadScreenState
 
       result.when(
         success: (applicationId) {
-          debugPrint("Save incomplete application success - ID: $applicationId");
+          debugPrint(
+            "Save incomplete application success - ID: $applicationId",
+          );
           AppHelpers.showCheckTopSnackBarDone(
             context,
             'Loan application saved. You can continue later.',
@@ -343,11 +348,10 @@ class _LoanDocumentUploadScreenState
           Navigator.of(context).pop();
         },
         failure: (error, statusCode) {
-          debugPrint("Save incomplete application failed: $error, code: $statusCode");
-          AppHelpers.showCheckTopSnackBarInfo(
-            context,
-            error,
+          debugPrint(
+            "Save incomplete application failed: $error, code: $statusCode",
           );
+          AppHelpers.showCheckTopSnackBarInfo(context, error);
         },
       );
     } catch (e) {
@@ -370,7 +374,9 @@ class _LoanDocumentUploadScreenState
     debugPrint("Building UI with ${uploadedDocs.length} uploaded documents");
 
     return Directionality(
-      textDirection: LocalStorage.getLangLtr() ? TextDirection.ltr : TextDirection.rtl,
+      textDirection: LocalStorage.getLangLtr()
+          ? TextDirection.ltr
+          : TextDirection.rtl,
       child: KeyboardDismisser(
         child: Container(
           decoration: BoxDecoration(
@@ -382,7 +388,9 @@ class _LoanDocumentUploadScreenState
           ),
           width: double.infinity,
           constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.85, // Use 85% of screen height
+            maxHeight:
+                MediaQuery.of(context).size.height *
+                0.85, // Use 85% of screen height
           ),
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -425,7 +433,8 @@ class _LoanDocumentUploadScreenState
                               label: 'Enter 13-digit ID Number',
                               onChanged: (value) {
                                 // Update ID number in provider
-                                ref.read(idNumberProvider.notifier).state = value;
+                                ref.read(idNumberProvider.notifier).state =
+                                    value;
                               },
                               inputType: TextInputType.number,
                               inputFormatters: [
@@ -438,13 +447,11 @@ class _LoanDocumentUploadScreenState
                                 child: GestureDetector(
                                   onTap: () {
                                     AppHelpers.showCheckTopSnackBarInfo(
-                                        context,
-                                        'ID number cannot be modified for a saved application'
+                                      context,
+                                      'ID number cannot be modified for a saved application',
                                     );
                                   },
-                                  child: Container(
-                                    color: Colors.transparent,
-                                  ),
+                                  child: Container(color: Colors.transparent),
                                 ),
                               ),
                           ],
@@ -465,7 +472,9 @@ class _LoanDocumentUploadScreenState
                           children: [
                             Expanded(
                               child: CustomButton(
-                                title: AppHelpers.getTranslation(TrKeys.saveForLater),
+                                title: AppHelpers.getTranslation(
+                                  TrKeys.saveForLater,
+                                ),
                                 background: AppStyle.white,
                                 borderColor: AppStyle.primary,
                                 textColor: AppStyle.primary,
@@ -526,36 +535,36 @@ class _LoanDocumentUploadScreenState
           ],
         ),
         child: ListTile(
-          title: Text(
-            docType,
-            style: AppStyle.interNormal(size: 14.sp),
-          ),
+          title: Text(docType, style: AppStyle.interNormal(size: 14.sp)),
           subtitle: isUploaded
               ? Text(
-            uploadedFile!.path.split(Platform.pathSeparator).last,
-            style: AppStyle.interNormal(
-              size: 12.sp,
-              color: AppStyle.textGrey,
-            ),
-          )
+                  uploadedFile!.path.split(Platform.pathSeparator).last,
+                  style: AppStyle.interNormal(
+                    size: 12.sp,
+                    color: AppStyle.textGrey,
+                  ),
+                )
               : null,
           trailing: isUploaded
               ? IconButton(
-            icon: Icon(Icons.close, color: Colors.red, size: 24.r),
-            onPressed: () {
-              // Remove the specific document
-              final currentDocs = ref.read(uploadedDocumentsProvider);
-              final updatedDocs = Map<String, File>.from(currentDocs);
-              updatedDocs.remove(docType);
-              ref.read(uploadedDocumentsProvider.notifier).state =
-                  updatedDocs;
-            },
-          )
+                  icon: Icon(Icons.close, color: Colors.red, size: 24.r),
+                  onPressed: () {
+                    // Remove the specific document
+                    final currentDocs = ref.read(uploadedDocumentsProvider);
+                    final updatedDocs = Map<String, File>.from(currentDocs);
+                    updatedDocs.remove(docType);
+                    ref.read(uploadedDocumentsProvider.notifier).state =
+                        updatedDocs;
+                  },
+                )
               : IconButton(
-            icon: Icon(Icons.upload_file,
-                color: AppStyle.primary, size: 24.r),
-            onPressed: () => _uploadDocument(docType),
-          ),
+                  icon: Icon(
+                    Icons.upload_file,
+                    color: AppStyle.primary,
+                    size: 24.r,
+                  ),
+                  onPressed: () => _uploadDocument(docType),
+                ),
           onTap: isUploaded ? null : () => _uploadDocument(docType),
         ),
       );

@@ -8,25 +8,19 @@ class AllProductsResponse {
   String? message;
   Data? data;
 
-  AllProductsResponse({
-    this.timestamp,
-    this.status,
-    this.message,
-    this.data,
-  });
+  AllProductsResponse({this.timestamp, this.status, this.message, this.data});
 
   AllProductsResponse copyWith({
     DateTime? timestamp,
     bool? status,
     String? message,
     Data? data,
-  }) =>
-      AllProductsResponse(
-        timestamp: timestamp ?? this.timestamp,
-        status: status ?? this.status,
-        message: message ?? this.message,
-        data: data ?? this.data,
-      );
+  }) => AllProductsResponse(
+    timestamp: timestamp ?? this.timestamp,
+    status: status ?? this.status,
+    message: message ?? this.message,
+    data: data ?? this.data,
+  );
 
   factory AllProductsResponse.fromJson(Map<String, dynamic> json) =>
       AllProductsResponse(
@@ -50,25 +44,17 @@ class Data {
   List<Product>? recommended;
   List<All>? all;
 
-  Data({
-    this.recommended,
-    this.all,
-  });
+  Data({this.recommended, this.all});
 
-  Data copyWith({
-    List<Product>? recommended,
-    List<All>? all,
-  }) =>
-      Data(
-        recommended: recommended ?? this.recommended,
-        all: all ?? this.all,
-      );
+  Data copyWith({List<Product>? recommended, List<All>? all}) =>
+      Data(recommended: recommended ?? this.recommended, all: all ?? this.all);
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
     recommended: json["recommended"] == null
         ? []
         : List<Product>.from(
-        json["recommended"]!.map((x) => Product.fromJson(x))),
+            json["recommended"]!.map((x) => Product.fromJson(x)),
+          ),
     all: json["all"] == null
         ? []
         : List<All>.from(json["all"]!.map((x) => All.fromJson(x))),
@@ -78,8 +64,7 @@ class Data {
     "recommended": recommended == null
         ? []
         : List<dynamic>.from(recommended!.map((x) => x.toJson())),
-    "all":
-    all == null ? [] : List<dynamic>.from(all!.map((x) => x.toJson())),
+    "all": all == null ? [] : List<dynamic>.from(all!.map((x) => x.toJson())),
   };
 }
 
@@ -125,21 +110,20 @@ class All {
     Translation? translation,
     List<dynamic>? children,
     List<Product>? products,
-  }) =>
-      All(
-        id: id ?? this.id,
-        key: key ?? this.key,
-        uuid: uuid ?? this.uuid,
-        type: type ?? this.type,
-        input: input ?? this.input,
-        shopId: shopId ?? this.shopId,
-        img: img ?? this.img,
-        active: active ?? this.active,
-        status: status ?? this.status,
-        translation: translation ?? this.translation,
-        children: children ?? this.children,
-        products: products ?? this.products,
-      );
+  }) => All(
+    id: id ?? this.id,
+    key: key ?? this.key,
+    uuid: uuid ?? this.uuid,
+    type: type ?? this.type,
+    input: input ?? this.input,
+    shopId: shopId ?? this.shopId,
+    img: img ?? this.img,
+    active: active ?? this.active,
+    status: status ?? this.status,
+    translation: translation ?? this.translation,
+    children: children ?? this.children,
+    products: products ?? this.products,
+  );
 
   factory All.fromJson(Map<String, dynamic> json) => All(
     id: json["id"]?.toString(),
@@ -158,8 +142,7 @@ class All {
         : List<dynamic>.from(json["children"]!.map((x) => x)),
     products: json["products"] == null
         ? []
-        : List<Product>.from(
-        json["products"]!.map((x) => Product.fromJson(x))),
+        : List<Product>.from(json["products"]!.map((x) => Product.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
@@ -172,8 +155,9 @@ class All {
     "active": active,
     "status": status,
     "translation": translation?.toJson(),
-    "children":
-    children == null ? [] : List<dynamic>.from(children!.map((x) => x)),
+    "children": children == null
+        ? []
+        : List<dynamic>.from(children!.map((x) => x)),
     "products": products == null
         ? []
         : List<dynamic>.from(products!.map((x) => x.toJson())),
@@ -234,25 +218,24 @@ class Product {
     List<dynamic>? discounts,
     Translation? translation,
     Stock? stock,
-  }) =>
-      Product(
-        id: id ?? this.id,
-        uuid: uuid ?? this.uuid,
-        shopId: shopId ?? this.shopId,
-        categoryId: categoryId ?? this.categoryId,
-        brandId: brandId ?? this.brandId,
-        status: status ?? this.status,
-        active: active ?? this.active,
-        addon: addon ?? this.addon,
-        vegetarian: vegetarian ?? this.vegetarian,
-        img: img ?? this.img,
-        minQty: minQty ?? this.minQty,
-        maxQty: maxQty ?? this.maxQty,
-        interval: interval ?? this.interval,
-        discounts: discounts ?? this.discounts,
-        translation: translation ?? this.translation,
-        stock: stock ?? this.stock,
-      );
+  }) => Product(
+    id: id ?? this.id,
+    uuid: uuid ?? this.uuid,
+    shopId: shopId ?? this.shopId,
+    categoryId: categoryId ?? this.categoryId,
+    brandId: brandId ?? this.brandId,
+    status: status ?? this.status,
+    active: active ?? this.active,
+    addon: addon ?? this.addon,
+    vegetarian: vegetarian ?? this.vegetarian,
+    img: img ?? this.img,
+    minQty: minQty ?? this.minQty,
+    maxQty: maxQty ?? this.maxQty,
+    interval: interval ?? this.interval,
+    discounts: discounts ?? this.discounts,
+    translation: translation ?? this.translation,
+    stock: stock ?? this.stock,
+  );
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
@@ -278,7 +261,6 @@ class Product {
       stock: json["stock"] == null ? null : Stock.fromJson(json["stock"]),
     );
   }
-
 
   Map<String, dynamic> toJson() => {
     "id": id,
@@ -332,17 +314,16 @@ class Stock {
     double? totalPrice,
     bool? addon,
     dynamic bonus,
-  }) =>
-      Stock(
-        id: id ?? this.id,
-        countableId: countableId ?? this.countableId,
-        price: price ?? this.price,
-        quantity: quantity ?? this.quantity,
-        tax: tax ?? this.tax,
-        totalPrice: totalPrice ?? this.totalPrice,
-        addon: addon ?? this.addon,
-        bonus: bonus ?? this.bonus,
-      );
+  }) => Stock(
+    id: id ?? this.id,
+    countableId: countableId ?? this.countableId,
+    price: price ?? this.price,
+    quantity: quantity ?? this.quantity,
+    tax: tax ?? this.tax,
+    totalPrice: totalPrice ?? this.totalPrice,
+    addon: addon ?? this.addon,
+    bonus: bonus ?? this.bonus,
+  );
 
   factory Stock.fromJson(Map<String, dynamic> json) => Stock(
     id: json["id"]?.toString(),

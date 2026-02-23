@@ -13,7 +13,7 @@ class SettingNotifier extends StateNotifier<SettingState> {
   final UserRepositoryFacade _userRepository;
 
   SettingNotifier(this._settingsRepository, this._userRepository)
-      : super(const SettingState());
+    : super(const SettingState());
 
   void changeIndex(bool isChange) {
     state = state.copyWith(isLoading: isChange);
@@ -43,19 +43,13 @@ class SettingNotifier extends StateNotifier<SettingState> {
             },
             failure: (failure, status) {
               state = state.copyWith(isLoading: false);
-              AppHelpers.showCheckTopSnackBar(
-                context,
-                failure,
-              );
+              AppHelpers.showCheckTopSnackBar(context, failure);
             },
           );
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false);
-          AppHelpers.showCheckTopSnackBar(
-            context,
-            failure,
-          );
+          AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );
     } else {
@@ -75,4 +69,3 @@ class SettingNotifier extends StateNotifier<SettingState> {
     _settingsRepository.updateNotification(state.notifications);
   }
 }
-

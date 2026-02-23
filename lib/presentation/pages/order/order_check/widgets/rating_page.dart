@@ -61,11 +61,12 @@ class _RatingPageState extends ConsumerState<RatingPage> {
     return Container(
       margin: MediaQuery.of(context).viewInsets,
       decoration: BoxDecoration(
-          color: AppStyle.bgGrey.withOpacity(0.96),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(16.r),
-            topRight: Radius.circular(16.r),
-          )),
+        color: AppStyle.bgGrey.withOpacity(0.96),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16.r),
+          topRight: Radius.circular(16.r),
+        ),
+      ),
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       width: double.infinity,
       child: SingleChildScrollView(
@@ -162,8 +163,9 @@ class _RatingPageState extends ConsumerState<RatingPage> {
                                 6.verticalSpace,
                                 Text(
                                   AppHelpers.numberFormat(
-                                      number:
-                                          ((widget.totalPrice ?? 0) / 100) * e),
+                                    number:
+                                        ((widget.totalPrice ?? 0) / 100) * e,
+                                  ),
                                   style: AppStyle.interNormal(
                                     size: 14,
                                     color: state.selectedIndex == i
@@ -201,8 +203,9 @@ class _RatingPageState extends ConsumerState<RatingPage> {
                 padding: REdgeInsets.only(top: 12),
                 child: OutlinedBorderTextField(
                   textController: priceController,
-                  label:
-                      AppHelpers.getTranslation(TrKeys.customTip).toUpperCase(),
+                  label: AppHelpers.getTranslation(
+                    TrKeys.customTip,
+                  ).toUpperCase(),
                   inputFormatters: [InputFormatter.currency],
                   onChanged: (s) {
                     price = double.tryParse(s) ?? 0;
@@ -212,81 +215,101 @@ class _RatingPageState extends ConsumerState<RatingPage> {
             40.verticalSpace,
             Padding(
               padding: EdgeInsets.only(
-                  bottom: MediaQuery.paddingOf(context).bottom + 36.h),
-              child: Consumer(builder: (context, ref, child) {
-                return CustomButton(
-                  isLoading: widget.parcel
-                      ? ref.watch(parcelProvider).isButtonLoading
-                      : ref.watch(orderProvider).isButtonLoading,
-                  background: AppStyle.primary,
-                  textColor: AppStyle.black,
-                  title: AppHelpers.getTranslation(TrKeys.save),
-                  onPressed: () {
-                    if (state.selectedIndex != -1) {
-                      AppHelpers.showCustomModalBottomSheet(
-                        context: context,
-                        modal: PaymentMethods(
-                          shopEnableCod: ref.watch(orderProvider).shopData?.enableCod ?? true,
-                          tipPrice: price,
-                          tips: (payment, price) {
-                            ref.read(orderProvider.notifier).sendTips(
-                                  context: context,
-                                  payment: payment,
-                                  price: price,
-                                  onWebview: (s) {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) => WebViewPage(url: s)),
-                                    ).whenComplete(() {
-                                      if (context.mounted) {
-                                        if (widget.parcel) {
-                                          ref
-                                              .read(parcelProvider.notifier)
-                                              .addReview(
+                bottom: MediaQuery.paddingOf(context).bottom + 36.h,
+              ),
+              child: Consumer(
+                builder: (context, ref, child) {
+                  return CustomButton(
+                    isLoading: widget.parcel
+                        ? ref.watch(parcelProvider).isButtonLoading
+                        : ref.watch(orderProvider).isButtonLoading,
+                    background: AppStyle.primary,
+                    textColor: AppStyle.black,
+                    title: AppHelpers.getTranslation(TrKeys.save),
+                    onPressed: () {
+                      if (state.selectedIndex != -1) {
+                        AppHelpers.showCustomModalBottomSheet(
+                          context: context,
+                          modal: PaymentMethods(
+                            shopEnableCod:
+                                ref.watch(orderProvider).shopData?.enableCod ??
+                                true,
+                            tipPrice: price,
+                            tips: (payment, price) {
+                              ref
+                                  .read(orderProvider.notifier)
+                                  .sendTips(
+                                    context: context,
+                                    payment: payment,
+                                    price: price,
+                                    onWebview: (s) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => WebViewPage(url: s),
+                                        ),
+                                      ).whenComplete(() {
+                                        if (context.mounted) {
+                                          if (widget.parcel) {
+                                            ref
+                                                .read(parcelProvider.notifier)
+                                                .addReview(
                                                   context,
                                                   textEditingController.text,
-                                                  rating);
-                                        } else {
-                                          ref
-                                              .read(orderProvider.notifier)
-                                              .addReview(
+                                                  rating,
+                                                );
+                                          } else {
+                                            ref
+                                                .read(orderProvider.notifier)
+                                                .addReview(
                                                   context,
                                                   textEditingController.text,
-                                                  rating);
+                                                  rating,
+                                                );
+                                          }
+                                          context.replaceRoute(
+                                            const OrdersListRoute(),
+                                          );
                                         }
-                                        context.replaceRoute(
-                                            const OrdersListRoute());
-                                      }
-                                    });
-                                  },
-                                  onSuccess: () {
-                                    Navigator.maybePop(context);
-                                  },
-                                );
-                          },
-                        ),
-                        isDarkMode: false,
-                      );
-                    } else {
-                      if (widget.parcel) {
-                        ref.read(parcelProvider.notifier).addReview(
-                            context, textEditingController.text, rating);
+                                      });
+                                    },
+                                    onSuccess: () {
+                                      Navigator.maybePop(context);
+                                    },
+                                  );
+                            },
+                          ),
+                          isDarkMode: false,
+                        );
                       } else {
-                        ref.read(orderProvider.notifier).addReview(
-                            context, textEditingController.text, rating);
-                      }
+                        if (widget.parcel) {
+                          ref
+                              .read(parcelProvider.notifier)
+                              .addReview(
+                                context,
+                                textEditingController.text,
+                                rating,
+                              );
+                        } else {
+                          ref
+                              .read(orderProvider.notifier)
+                              .addReview(
+                                context,
+                                textEditingController.text,
+                                rating,
+                              );
+                        }
 
-                      context.replaceRoute(const OrdersListRoute());
-                    }
-                  },
-                );
-              }),
-            )
+                        context.replaceRoute(const OrdersListRoute());
+                      }
+                    },
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 }
-

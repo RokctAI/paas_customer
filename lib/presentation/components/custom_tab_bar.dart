@@ -8,11 +8,12 @@ class CustomTabBar extends StatelessWidget {
   final TabController tabController;
   final List<Tab> tabs;
 
-  const CustomTabBar(
-      {super.key,
-      required this.tabController,
-      required this.tabs,
-      this.isScrollable = false});
+  const CustomTabBar({
+    super.key,
+    required this.tabController,
+    required this.tabs,
+    this.isScrollable = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,24 +21,23 @@ class CustomTabBar extends StatelessWidget {
       padding: EdgeInsets.all(6.r),
       height: 50.h,
       decoration: BoxDecoration(
-          color: AppStyle.transparent,
-          borderRadius: BorderRadius.circular(10.r),
-          border: Border.all(color: AppStyle.tabBarBorderColor)),
+        color: AppStyle.transparent,
+        borderRadius: BorderRadius.circular(10.r),
+        border: Border.all(color: AppStyle.tabBarBorderColor),
+      ),
       child: TabBar(
-          isScrollable: isScrollable,
-          controller: tabController,
-          indicator: BoxDecoration(
-              borderRadius: BorderRadius.circular(10.r), color: AppStyle.black),
-          labelColor: AppStyle.white,
-          unselectedLabelColor: AppStyle.black,
-          unselectedLabelStyle: AppStyle.interRegular(
-            size: 14.sp,
-          ),
-          labelStyle: AppStyle.interSemi(
-            size: 14.sp,
-          ),
-          tabs: tabs),
+        isScrollable: isScrollable,
+        controller: tabController,
+        indicator: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.r),
+          color: AppStyle.black,
+        ),
+        labelColor: AppStyle.white,
+        unselectedLabelColor: AppStyle.black,
+        unselectedLabelStyle: AppStyle.interRegular(size: 14.sp),
+        labelStyle: AppStyle.interSemi(size: 14.sp),
+        tabs: tabs,
+      ),
     );
   }
 }
-

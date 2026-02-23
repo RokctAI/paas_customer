@@ -4,6 +4,5 @@ import 'view_map_notifier.dart';
 import 'view_map_state.dart';
 
 final viewMapProvider = StateNotifierProvider<ViewMapNotifier, ViewMapState>(
-  (ref) => ViewMapNotifier(shopsRepository,userRepository),
+  (ref) => ViewMapNotifier(shopsRepository, userRepository),
 );
-

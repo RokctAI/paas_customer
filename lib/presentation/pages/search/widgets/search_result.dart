@@ -8,12 +8,12 @@ class SearchResultText extends StatelessWidget {
   final VoidCallback canceled;
   final VoidCallback onTap;
 
-  const SearchResultText(
-      {super.key,
-      required this.title,
-      required this.canceled,
-      required this.onTap});
-
+  const SearchResultText({
+    super.key,
+    required this.title,
+    required this.canceled,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +45,15 @@ class SearchResultText extends StatelessWidget {
                 ),
               ),
               Expanded(
-                  child: GestureDetector(
-                      onTap: onTap,
-                      child: Container(
-                        height: 20.r,
-                        width: double.infinity,
-                        color: AppStyle.transparent,
-                      ))),
+                child: GestureDetector(
+                  onTap: onTap,
+                  child: Container(
+                    height: 20.r,
+                    width: double.infinity,
+                    color: AppStyle.transparent,
+                  ),
+                ),
+              ),
               GestureDetector(
                 onTap: canceled,
                 child: Container(
@@ -69,12 +71,9 @@ class SearchResultText extends StatelessWidget {
             ],
           ),
           10.verticalSpace,
-          const Divider(
-            color: AppStyle.borderColor,
-          ),
+          const Divider(color: AppStyle.borderColor),
         ],
       ),
     );
   }
 }
-

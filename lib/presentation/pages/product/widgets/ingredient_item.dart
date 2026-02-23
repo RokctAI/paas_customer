@@ -33,17 +33,15 @@ class IngredientItem extends ConsumerWidget {
         width: double.infinity,
         margin: EdgeInsets.symmetric(vertical: 10.r),
         decoration: BoxDecoration(
-            color: AppStyle.white,
-            borderRadius: BorderRadius.circular(10.r)),
+          color: AppStyle.white,
+          borderRadius: BorderRadius.circular(10.r),
+        ),
         child: Column(
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                CustomCheckbox(
-                  isActive: addon.active ?? false,
-                  onTap: onTap,
-                ),
+                CustomCheckbox(isActive: addon.active ?? false, onTap: onTap),
                 10.horizontalSpace,
                 Expanded(
                   child: Row(
@@ -64,7 +62,7 @@ class IngredientItem extends ConsumerWidget {
                           size: 14,
                           color: AppStyle.textGrey,
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -82,9 +80,7 @@ class IngredientItem extends ConsumerWidget {
                           ),
                           Text(
                             "${addon.quantity ?? 1}",
-                            style: AppStyle.interNormal(
-                              size: 16.sp,
-                            ),
+                            style: AppStyle.interNormal(size: 16.sp),
                           ),
                           IconButton(
                             onPressed: add,
@@ -92,16 +88,13 @@ class IngredientItem extends ConsumerWidget {
                           ),
                         ],
                       )
-                    : const SizedBox.shrink()
+                    : const SizedBox.shrink(),
               ],
             ),
-            Divider(
-              color: AppStyle.textGrey.withOpacity(0.2),
-            )
+            Divider(color: AppStyle.textGrey.withOpacity(0.2)),
           ],
         ),
       ),
     );
   }
 }
-

@@ -21,36 +21,34 @@ class ShopShimmerThree extends StatelessWidget {
           style: AppStyle.interNoSemi(),
         ),
         SizedBox(
-            child: AnimationLimiter(
-              child: GridView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 8.r,
-                  crossAxisSpacing: 8.r,
-                  mainAxisExtent: 168.r,
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16),
-                
-                shrinkWrap: true,
-                itemCount: 6,
-                itemBuilder: (context, index) =>
-                    AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 375),
-                  child: const SlideAnimation(
-                    verticalOffset: 50.0,
-                    child: FadeInAnimation(
-                      child: MarketShimmerThree(
-                        isShop: true,
+          child: AnimationLimiter(
+            child: GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisSpacing: 8.r,
+                crossAxisSpacing: 8.r,
+                mainAxisExtent: 168.r,
+              ),
+              padding: EdgeInsets.symmetric(horizontal: 16.r, vertical: 16),
+
+              shrinkWrap: true,
+              itemCount: 6,
+              itemBuilder: (context, index) =>
+                  AnimationConfiguration.staggeredList(
+                    position: index,
+                    duration: const Duration(milliseconds: 375),
+                    child: const SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(
+                        child: MarketShimmerThree(isShop: true),
                       ),
                     ),
                   ),
-                ),
-              ),
-            )),
+            ),
+          ),
+        ),
       ],
     );
   }
 }
-
