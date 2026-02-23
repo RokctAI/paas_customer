@@ -27,5 +27,4 @@ class OrderPaginateResponse {
   List<OrderActiveModel>? get data => _data;
 
   Meta? get meta => _meta;
-
 }

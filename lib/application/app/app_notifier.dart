@@ -22,7 +22,6 @@ class AppNotifier extends Notifier<AppState> {
     );
   }
 
-
   Future<void> changeLocale(LanguageData? language) async {
     await LocalStorage.setLanguageData(language);
     await LocalStorage.setLangLtr(language?.backward);

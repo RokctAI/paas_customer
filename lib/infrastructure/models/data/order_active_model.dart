@@ -112,8 +112,9 @@ class OrderActiveModel {
         orderStatusesData: json["data"]["data"] != null
             ? OrderStatusesData.fromJson(json["data"]["data"])
             : null,
-        deliveryDate:
-        DateTime.tryParse(json["data"]?["delivery_date"] ?? '')?.toLocal(),
+        deliveryDate: DateTime.tryParse(
+          json["data"]?["delivery_date"] ?? '',
+        )?.toLocal(),
         deliveryTime: json["data"]["delivery_time"],
         totalDiscount: json["data"]["total_discount"],
         serviceFee: json["data"]["service_fee"],
@@ -129,13 +130,17 @@ class OrderActiveModel {
             ? UserModel.fromJson(json["data"]["user"])
             : null,
         details: List<OrderProduct>.from(
-            json["data"]["details"].map((x) => OrderProduct.fromJson(x))),
+          json["data"]["details"].map((x) => OrderProduct.fromJson(x)),
+        ),
         transaction: json["data"]["transaction"] != null
             ? TransactionData.fromJson(json["data"]["transaction"])
             : null,
         refunds: json["data"]["order_refunds"] != null
-            ? List<RefundModel>.from(json["data"]["order_refunds"]
-            .map((x) => RefundModel.fromJson(x)))
+            ? List<RefundModel>.from(
+                json["data"]["order_refunds"].map(
+                  (x) => RefundModel.fromJson(x),
+                ),
+              )
             : [],
         review: json["data"]["review"],
       );
@@ -156,8 +161,9 @@ class OrderActiveModel {
           : null,
       commissionFee: json["commission_fee"],
       status: json["status"],
-      location:
-      json["location"] != null ? Location.fromJson(json["location"]) : null,
+      location: json["location"] != null
+          ? Location.fromJson(json["location"])
+          : null,
       orderStatusesData: json["data"] != null
           ? OrderStatusesData.fromJson(json["data"])
           : null,
@@ -181,12 +187,14 @@ class OrderActiveModel {
           ? DateTime.tryParse(json["updated_at"])?.toLocal()
           : null,
       shop: json["shop"] != null ? ShopData.fromJson(json["shop"]) : null,
-      repeat:
-      json["repeat"] != null ? RepeatData.fromJson(json["repeat"]) : null,
+      repeat: json["repeat"] != null
+          ? RepeatData.fromJson(json["repeat"])
+          : null,
       user: json["user"] != null ? UserModel.fromJson(json["user"]) : null,
       details: json["details"] != null
           ? List<OrderProduct>.from(
-          json["details"].map((x) => OrderProduct.fromJson(x)))
+              json["details"].map((x) => OrderProduct.fromJson(x)),
+            )
           : null,
       transaction: json["transaction"] != null
           ? TransactionData.fromJson(json["transaction"])
@@ -231,64 +239,64 @@ class OrderActiveModel {
     dynamic review,
     List<dynamic>? ponumHistories,
     OrderStatusesData? orderStatusesData,
-  }) =>
-      OrderActiveModel(
-        id: id ?? this.id,
-        userId: userId ?? this.userId,
-        totalPrice: totalPrice ?? this.totalPrice,
-        originPrice: originPrice ?? this.originPrice,
-        coupon: coupon ?? this.coupon,
-        rate: rate ?? this.rate,
-        tax: tax ?? this.tax,
-        tips: tips ?? this.tips,
-        commissionFee: commissionFee ?? this.commissionFee,
-        status: status ?? this.status,
-        location: location ?? this.location,
-        address: address ?? this.address,
-        deliveryType: deliveryType ?? this.deliveryType,
-        afterDeliveredImage: afterDeliveredImage ?? this.afterDeliveredImage,
-        deliveryFee: deliveryFee ?? this.deliveryFee,
-        otp: otp ?? this.otp,
-        currencyModel: currencyModel ?? this.currencyModel,
-        deliveryMan: deliveryMan ?? this.deliveryMan,
-        deliveryDate: deliveryDate ?? this.deliveryDate,
-        deliveryTime: deliveryTime ?? this.deliveryTime,
-        totalDiscount: totalDiscount ?? this.totalDiscount,
-        serviceFee: serviceFee ?? this.serviceFee,
-        km: km ?? this.km,
-        minute: minute ?? this.minute,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-        shop: shop ?? this.shop,
-        repeat: repeat ?? this.repeat,
-        user: user ?? this.user,
-        details: details ?? this.details,
-        refunds: refunds ?? this.refunds,
-        transaction: transaction ?? this.transaction,
-        review: review ?? this.review,
-        ponumHistories: ponumHistories ?? this.ponumHistories,
-        orderStatusesData: orderStatusesData ?? this.orderStatusesData,
-      );
+  }) => OrderActiveModel(
+    id: id ?? this.id,
+    userId: userId ?? this.userId,
+    totalPrice: totalPrice ?? this.totalPrice,
+    originPrice: originPrice ?? this.originPrice,
+    coupon: coupon ?? this.coupon,
+    rate: rate ?? this.rate,
+    tax: tax ?? this.tax,
+    tips: tips ?? this.tips,
+    commissionFee: commissionFee ?? this.commissionFee,
+    status: status ?? this.status,
+    location: location ?? this.location,
+    address: address ?? this.address,
+    deliveryType: deliveryType ?? this.deliveryType,
+    afterDeliveredImage: afterDeliveredImage ?? this.afterDeliveredImage,
+    deliveryFee: deliveryFee ?? this.deliveryFee,
+    otp: otp ?? this.otp,
+    currencyModel: currencyModel ?? this.currencyModel,
+    deliveryMan: deliveryMan ?? this.deliveryMan,
+    deliveryDate: deliveryDate ?? this.deliveryDate,
+    deliveryTime: deliveryTime ?? this.deliveryTime,
+    totalDiscount: totalDiscount ?? this.totalDiscount,
+    serviceFee: serviceFee ?? this.serviceFee,
+    km: km ?? this.km,
+    minute: minute ?? this.minute,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+    shop: shop ?? this.shop,
+    repeat: repeat ?? this.repeat,
+    user: user ?? this.user,
+    details: details ?? this.details,
+    refunds: refunds ?? this.refunds,
+    transaction: transaction ?? this.transaction,
+    review: review ?? this.review,
+    ponumHistories: ponumHistories ?? this.ponumHistories,
+    orderStatusesData: orderStatusesData ?? this.orderStatusesData,
+  );
 }
 
 class OrderProduct {
-  OrderProduct(
-      {this.id,
-        this.orderId,
-        this.stockId,
-        this.originPrice,
-        this.totalPrice,
-        this.tax,
-        this.customName,
-        this.discount,
-        this.quantity,
-        this.bonus,
-        this.bonusShop,
-        this.note,
-        this.createdAt,
-        this.updatedAt,
-        this.stock,
-        this.addons});
+  OrderProduct({
+    this.id,
+    this.orderId,
+    this.stockId,
+    this.originPrice,
+    this.totalPrice,
+    this.tax,
+    this.customName,
+    this.discount,
+    this.quantity,
+    this.bonus,
+    this.bonusShop,
+    this.note,
+    this.createdAt,
+    this.updatedAt,
+    this.stock,
+    this.addons,
+  });
 
   num? id;
   num? orderId;
@@ -328,11 +336,13 @@ class OrderProduct {
       createdAt: DateTime.tryParse(json["created_at"])?.toLocal(),
       updatedAt: DateTime.tryParse(json["updated_at"])?.toLocal(),
       addons: json['addons'] != null
-          ? List<Addons>.from(json["addons"].map((x) {
-        if (x["product"] != null || x["stock"] != null || x != null) {
-          return Addons.fromJson(x);
-        }
-      }))
+          ? List<Addons>.from(
+              json["addons"].map((x) {
+                if (x["product"] != null || x["stock"] != null || x != null) {
+                  return Addons.fromJson(x);
+                }
+              }),
+            )
           : null,
       stock: json["stock"] != null ? Stocks.fromJson(json["stock"]) : null,
     );
@@ -382,9 +392,7 @@ class CurrencyModel {
 }
 
 class OrderStatusesData {
-  OrderStatusesData({
-    OrderStatusesEditDate? statuses,
-  }) {
+  OrderStatusesData({OrderStatusesEditDate? statuses}) {
     _statuses = statuses;
   }
 
@@ -396,12 +404,8 @@ class OrderStatusesData {
 
   OrderStatusesEditDate? _statuses;
 
-  OrderStatusesData copyWith({
-    OrderStatusesEditDate? statuses,
-  }) =>
-      OrderStatusesData(
-        statuses: statuses ?? _statuses,
-      );
+  OrderStatusesData copyWith({OrderStatusesEditDate? statuses}) =>
+      OrderStatusesData(statuses: statuses ?? _statuses);
 
   OrderStatusesEditDate? get statuses => _statuses;
 
@@ -454,15 +458,14 @@ class OrderStatusesEditDate {
     String? ready,
     String? onAWay,
     String? delivered,
-  }) =>
-      OrderStatusesEditDate(
-        newStatus: newStatus ?? _new,
-        accepted: accepted ?? _accepted,
-        cooking: cooking ?? _cooking,
-        ready: ready ?? _ready,
-        onAWay: onAWay ?? _onAWay,
-        delivered: delivered ?? _delivered,
-      );
+  }) => OrderStatusesEditDate(
+    newStatus: newStatus ?? _new,
+    accepted: accepted ?? _accepted,
+    cooking: cooking ?? _cooking,
+    ready: ready ?? _ready,
+    onAWay: onAWay ?? _onAWay,
+    delivered: delivered ?? _delivered,
+  );
 
   String? get newStatus => _new;
 

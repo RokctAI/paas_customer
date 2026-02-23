@@ -260,7 +260,10 @@ class OrderNotifier extends Notifier<OrderState> {
                 data.data?.location?.latitude ?? AppConstants.demoLatitude,
                 data.data?.location?.longitude ?? AppConstants.demoLongitude,
               ),
-              icon: await imageCropper.resizeAndCircle(data.data?.logoImg ?? "", 120),
+              icon: await imageCropper.resizeAndCircle(
+                data.data?.logoImg ?? "",
+                120,
+              ),
             ),
           );
           state = state.copyWith(shopMarkers: list);

@@ -128,9 +128,7 @@ class OrderStatusScreen extends StatelessWidget {
           isProgress: isAccepted,
           colors: colors,
         ),
-        _buildConnector(
-          isReadyOrOnWay ? colors.primary : colors.icon,
-        ),
+        _buildConnector(isReadyOrOnWay ? colors.primary : colors.icon),
         _buildStatusItem(
           icon: parcel
               ? Icon(FlutterRemix.truck_fill, color: colors.textBlack)

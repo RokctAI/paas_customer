@@ -1,4 +1,3 @@
-
 import '../data/translation.dart';
 
 class PagesResponse {
@@ -46,8 +45,9 @@ class PageData {
       type: json['type'] ?? '',
       img: json['img'] ?? '',
       active: json['active'] ?? false,
-      buttons:
-      json['buttons'] != null ? Buttons.fromJson(json['buttons']) : null,
+      buttons: json['buttons'] != null
+          ? Buttons.fromJson(json['buttons'])
+          : null,
       createdAt: json['created_at'],
       updatedAt: json['updated_at'],
       translation: json['translation'] != null
@@ -65,10 +65,7 @@ class Buttons {
   final String? appStoreButtonLink;
   final String? googlePlayButtonLink;
 
-  Buttons({
-    this.appStoreButtonLink,
-    this.googlePlayButtonLink,
-  });
+  Buttons({this.appStoreButtonLink, this.googlePlayButtonLink});
 
   factory Buttons.fromJson(Map<String, dynamic> json) {
     return Buttons(
@@ -77,5 +74,3 @@ class Buttons {
     );
   }
 }
-
-

@@ -57,7 +57,6 @@ class ProductsRepository implements ProductsRepositoryFacade {
     }
   }
 
-
   @override
   Future<ApiResult<ProductsPaginateResponse>> getProductsByCategoryPaginate({
     String? shopId,

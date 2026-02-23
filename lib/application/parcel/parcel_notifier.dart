@@ -14,6 +14,7 @@ import '../../presentation/app_assets.dart';
 import 'parcel_state.dart';
 
 import 'package:foodyman/presentation/components/components.dart';
+
 class ParcelNotifier extends Notifier<ParcelState> {
   @override
   ParcelState build() => const ParcelState();
