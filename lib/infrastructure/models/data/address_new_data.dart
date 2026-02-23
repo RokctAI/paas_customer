@@ -80,9 +80,8 @@ class AddressNewModel {
     id: id,
     title: title,
     address: address?.address,
-    location: (location?.isNotEmpty ?? false) ? LocationModel(
-      latitude: location?.first,
-      longitude: location?.last,
-    ): null,
+    location: (location?.isNotEmpty ?? false)
+        ? LocationModel(latitude: location?.first, longitude: location?.last)
+        : null,
   );
 }

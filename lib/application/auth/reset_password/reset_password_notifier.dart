@@ -143,7 +143,6 @@ class ResetPasswordNotifier extends Notifier<ResetPasswordState> {
         success: (data) async {
           state = state.copyWith(isLoading: false, isSuccess: true);
           context.replaceRoute(MainRoute());
-
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false, isSuccess: false);

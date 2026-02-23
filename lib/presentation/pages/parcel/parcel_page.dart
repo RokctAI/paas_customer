@@ -210,9 +210,7 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
                     borderColor: !state.error
                         ? AppStyle.transparent
                         : AppStyle.textGrey,
-                    background: !state.error
-                        ? colors.primary
-                        : AppStyle.white,
+                    background: !state.error ? colors.primary : AppStyle.white,
                     textColor: !state.error
                         ? AppStyle.black
                         : AppStyle.textGrey,

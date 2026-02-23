@@ -199,9 +199,7 @@ class _PermissionLocationPageState
 
                     Container(
                       decoration: BoxDecoration(
-                        color: colors.primary.withValues(
-                          alpha: 0.05,
-                        ),
+                        color: colors.primary.withValues(alpha: 0.05),
                         shape: BoxShape.circle,
                       ),
                       padding: EdgeInsets.all(24.r),

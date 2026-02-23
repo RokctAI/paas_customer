@@ -11,7 +11,7 @@ class SearchShopModel {
       "address": {
         "latitude": LocalStorage.getAddressSelected()?.location?.latitude,
         "longitude": LocalStorage.getAddressSelected()?.location?.longitude,
-      }
+      },
     };
     map["search"] = text;
     map["perPage"] = 100;

@@ -222,9 +222,7 @@ class WalletHistoryItem extends StatelessWidget {
             value: AppHelpers.numberFormat(history.price),
             valueStyle: AppStyle.interSemi(
               size: 16,
-              color: (history.price ?? 0) >= 0
-                  ? colors.primary
-                  : AppStyle.red,
+              color: (history.price ?? 0) >= 0 ? colors.primary : AppStyle.red,
             ),
           ),
         ],

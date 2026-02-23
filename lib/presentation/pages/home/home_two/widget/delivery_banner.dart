@@ -99,9 +99,7 @@ class DeliveryBanner extends StatelessWidget {
                         height: 50.r,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: colors.buttonFontColor,
-                          ),
+                          border: Border.all(color: colors.buttonFontColor),
                         ),
                         child: Center(
                           child: Text(

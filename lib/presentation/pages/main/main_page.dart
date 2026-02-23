@@ -275,9 +275,7 @@ class _MainPageState extends State<MainPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   BottomNavigatorItem(
-                    isScrolling: index == 3
-                        ? false
-                        : mainState.isScrolling,
+                    isScrolling: index == 3 ? false : mainState.isScrolling,
                     selectItem: () {
                       event.changeScrolling(false);
                       event.selectIndex(0);
@@ -288,9 +286,7 @@ class _MainPageState extends State<MainPage> {
                     unSelectIcon: FlutterRemix.restaurant_line,
                   ),
                   BottomNavigatorItem(
-                    isScrolling: index == 3
-                        ? false
-                        : mainState.isScrolling,
+                    isScrolling: index == 3 ? false : mainState.isScrolling,
                     selectItem: () {
                       event.changeScrolling(false);
                       event.selectIndex(1);
@@ -301,9 +297,7 @@ class _MainPageState extends State<MainPage> {
                     unSelectIcon: FlutterRemix.search_line,
                   ),
                   BottomNavigatorItem(
-                    isScrolling: index == 3
-                        ? false
-                        : mainState.isScrolling,
+                    isScrolling: index == 3 ? false : mainState.isScrolling,
                     selectItem: () {
                       event.changeScrolling(false);
                       event.selectIndex(2);

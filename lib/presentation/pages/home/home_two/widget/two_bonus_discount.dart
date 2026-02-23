@@ -12,7 +12,6 @@ class TwoBonusDiscountPopular extends StatelessWidget {
   final bool isSingleShop;
   final CustomColorSet colors;
 
-
   const TwoBonusDiscountPopular({
     super.key,
     required this.isPopular,

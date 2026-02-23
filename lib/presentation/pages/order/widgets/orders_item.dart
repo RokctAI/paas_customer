@@ -58,9 +58,7 @@ class OrdersItem extends StatelessWidget {
                             ? ((refund?.status ?? "") == "pending"
                                   ? colors.primary
                                   : AppStyle.bgGrey)
-                            : (isActive
-                                  ? colors.primary
-                                  : AppStyle.bgGrey),
+                            : (isActive ? colors.primary : AppStyle.bgGrey),
                         borderRadius: BorderRadius.circular(8.r),
                       ),
                       child: isRefund
@@ -78,8 +76,7 @@ class OrdersItem extends StatelessWidget {
                                             "15",
                                             style: AppStyle.interNoSemi(
                                               size: 10,
-                                              color:
-                                                  colors.buttonFontColor,
+                                              color: colors.buttonFontColor,
                                             ),
                                           ),
                                         ),
@@ -110,8 +107,7 @@ class OrdersItem extends StatelessWidget {
                                             "15",
                                             style: AppStyle.interNoSemi(
                                               size: 10,
-                                              color:
-                                                  colors.buttonFontColor,
+                                              color: colors.buttonFontColor,
                                             ),
                                           ),
                                         ),

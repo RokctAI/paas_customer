@@ -37,8 +37,9 @@ class CareerData {
           ? null
           : DateTime.tryParse(json["updated_at"]),
 
-      category:
-      json["category"] == null ? null : Category.fromJson(json["category"]),
+      category: json["category"] == null
+          ? null
+          : Category.fromJson(json["category"]),
 
       translation: json["translation"] == null
           ? null
@@ -47,8 +48,8 @@ class CareerData {
       translations: json["translations"] == null
           ? []
           : List<Translation>.from(
-        json["translations"].map((x) => Translation.fromJson(x)),
-      ),
+              json["translations"].map((x) => Translation.fromJson(x)),
+            ),
 
       locales: json["locales"] == null
           ? []

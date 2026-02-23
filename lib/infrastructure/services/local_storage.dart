@@ -13,7 +13,6 @@ abstract class LocalStorage {
     _preferences = await SharedPreferences.getInstance();
   }
 
-
   static bool getFirstEntry() {
     return _preferences?.getBool(StorageKeys.keyFirstEntry) ?? true;
   }
@@ -21,7 +20,6 @@ abstract class LocalStorage {
   static Future<void> setFirstEntry(bool isFirst) async {
     await _preferences?.setBool(StorageKeys.keyFirstEntry, isFirst);
   }
-
 
   static Future<void> setToken(String? token) async {
     await _preferences?.setString(StorageKeys.keyToken, token ?? '');
@@ -91,7 +89,6 @@ abstract class LocalStorage {
 
   static void deleteSavedShopsList() =>
       _preferences?.remove(StorageKeys.keySavedStores);
-
 
   static Future<void> setAddressSelected(AddressData data) async {
     await _preferences?.setString(
@@ -229,10 +226,11 @@ abstract class LocalStorage {
       _preferences?.remove(StorageKeys.keyTranslations);
 
   static bool getAppThemeMode() {
-    final modeKey = _preferences?.getString(ThemePreference.prefKey) ??
+    final modeKey =
+        _preferences?.getString(ThemePreference.prefKey) ??
         CustomThemeMode.light.toKey;
 
-    return CustomThemeModeX.toValue(modeKey)== CustomThemeMode.dark;
+    return CustomThemeModeX.toValue(modeKey) == CustomThemeMode.dark;
   }
 
   static Future<void> setSettingsFetched(bool fetched) async {

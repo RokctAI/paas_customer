@@ -29,9 +29,7 @@ class TabBarItem extends StatelessWidget {
             duration: const Duration(milliseconds: 500),
             decoration: BoxDecoration(
               color: isShopTabBar
-                  ? (currentIndex == index
-                        ? colors.primary
-                        : colors.icon)
+                  ? (currentIndex == index ? colors.primary : colors.icon)
                   : colors.icon,
               borderRadius: BorderRadius.circular(10.r),
               boxShadow: [

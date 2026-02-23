@@ -41,9 +41,7 @@ class ParcelItem extends StatelessWidget {
                   height: 36.h,
                   width: 36.w,
                   decoration: BoxDecoration(
-                    color: (isActive
-                        ? colors.primary
-                        : AppStyle.bgGrey),
+                    color: (isActive ? colors.primary : AppStyle.bgGrey),
                     borderRadius: const BorderRadius.all(Radius.circular(8)),
                   ),
                   child: Center(

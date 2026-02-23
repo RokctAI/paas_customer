@@ -19,8 +19,9 @@ class TrKeys {
   static const String deny = 'deny';
   static const String chooseYourPreferredStyle = 'choose.your.preferred.style';
   static const String guest = 'guest';
-  static const String enableLocationServices='enable.location.services';
-  static const String locationServicesDescription='to.provide.better.service.we.need.access.to.your.location.please.enable.location.services';
+  static const String enableLocationServices = 'enable.location.services';
+  static const String locationServicesDescription =
+      'to.provide.better.service.we.need.access.to.your.location.please.enable.location.services';
   static const String tapToSignIn = 'tap.to.sign.in';
   static const String created = 'created';
   static const String offers = 'offers';
@@ -442,5 +443,6 @@ class TrKeys {
   static const String locationEnabled = 'location.enabled';
   static const String locationDeniedPermanently = 'location.denied.permanently';
   static const String locationPermissionDenied = 'location.permission.denied';
-  static const String locationPermissionDeniedDescription = 'location.permission.was.permanently.denied.please.enable.it.in.settings.to.use.this.feature';
+  static const String locationPermissionDeniedDescription =
+      'location.permission.was.permanently.denied.please.enable.it.in.settings.to.use.this.feature';
 }
