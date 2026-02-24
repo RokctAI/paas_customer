@@ -64,22 +64,22 @@ class FilterCategoryService extends StatelessWidget {
                     categoryIndex: categoryIndex,
                   )
                 : AppHelpers.getType() == 2
-                ? ServiceTwoCategory(
-                    state: state,
-                    event: event,
-                    categoryIndex: categoryIndex,
-                  )
-                : AppHelpers.getType() == 3
-                ? ServiceThreeCategory(
-                    state: state,
-                    event: event,
-                    categoryIndex: categoryIndex,
-                  )
-                : ServiceTwoCategory(
-                    state: state,
-                    event: event,
-                    categoryIndex: categoryIndex,
-                  ),
+                    ? ServiceTwoCategory(
+                        state: state,
+                        event: event,
+                        categoryIndex: categoryIndex,
+                      )
+                    : AppHelpers.getType() == 3
+                        ? ServiceThreeCategory(
+                            state: state,
+                            event: event,
+                            categoryIndex: categoryIndex,
+                          )
+                        : ServiceTwoCategory(
+                            state: state,
+                            event: event,
+                            categoryIndex: categoryIndex,
+                          ),
             TitleAndIcon(
               title: AppHelpers.getTranslation(TrKeys.restaurants),
               rightTitle:
@@ -88,40 +88,40 @@ class FilterCategoryService extends StatelessWidget {
             state.isSelectCategoryLoading == -1
                 ? const Loading()
                 : state.filterShops.isNotEmpty
-                ? ListView.builder(
-                    padding: REdgeInsets.symmetric(vertical: 12),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    itemCount: state.filterShops.length,
-                    itemBuilder: (context, index) => Padding(
-                      padding: REdgeInsets.only(bottom: 12),
-                      child: AppHelpers.getType() == 1
-                          ? MarketOneItem(
-                              shop: state.filterShops[index],
-                              isSimpleShop: true,
-                            )
-                          : AppHelpers.getType() == 2
-                          ? MarketTwoItem(
-                              shop: state.filterShops[index],
-                              isSimpleShop: true,
-                              isFilter: true,
-                            )
-                          : AppHelpers.getType() == 3
-                          ? MarketThreeItem(
-                              shop: state.filterShops[index],
-                              isSimpleShop: true,
-                            )
-                          : MarketItem(
-                              shop: state.filterShops[index],
-                              isSimpleShop: true,
-                            ),
-                    ),
-                  )
-                : Padding(
-                    padding: EdgeInsets.only(top: 24.h),
-                    child: _resultEmpty(),
-                  ),
+                    ? ListView.builder(
+                        padding: REdgeInsets.symmetric(vertical: 12),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        itemCount: state.filterShops.length,
+                        itemBuilder: (context, index) => Padding(
+                          padding: REdgeInsets.only(bottom: 12),
+                          child: AppHelpers.getType() == 1
+                              ? MarketOneItem(
+                                  shop: state.filterShops[index],
+                                  isSimpleShop: true,
+                                )
+                              : AppHelpers.getType() == 2
+                                  ? MarketTwoItem(
+                                      shop: state.filterShops[index],
+                                      isSimpleShop: true,
+                                      isFilter: true,
+                                    )
+                                  : AppHelpers.getType() == 3
+                                      ? MarketThreeItem(
+                                          shop: state.filterShops[index],
+                                          isSimpleShop: true,
+                                        )
+                                      : MarketItem(
+                                          shop: state.filterShops[index],
+                                          isSimpleShop: true,
+                                        ),
+                        ),
+                      )
+                    : Padding(
+                        padding: EdgeInsets.only(top: 24.h),
+                        child: _resultEmpty(),
+                      ),
           ],
         ),
       ),

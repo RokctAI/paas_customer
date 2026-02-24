@@ -39,17 +39,17 @@ class BonusModel {
   }
 
   Map<String, dynamic> toJson() => {
-    "bonusable_type": bonusableType,
-    "bonusable_id": bonusableId,
-    "bonus_quantity": bonusQuantity,
-    "bonus_stock_id": bonusStockId,
-    "value": value,
-    "type": type,
-    "status": status,
-    "expired_at":
-        "${expiredAt?.year.toString().padLeft(4, '0')}-${expiredAt?.month.toString().padLeft(2, '0')}-${expiredAt?.day.toString().padLeft(2, '0')}",
-    "bonusStock": bonusStock?.toJson(),
-  };
+        "bonusable_type": bonusableType,
+        "bonusable_id": bonusableId,
+        "bonus_quantity": bonusQuantity,
+        "bonus_stock_id": bonusStockId,
+        "value": value,
+        "type": type,
+        "status": status,
+        "expired_at":
+            "${expiredAt?.year.toString().padLeft(4, '0')}-${expiredAt?.month.toString().padLeft(2, '0')}-${expiredAt?.day.toString().padLeft(2, '0')}",
+        "bonusStock": bonusStock?.toJson(),
+      };
 }
 
 class BonusStock {
@@ -72,23 +72,23 @@ class BonusStock {
   ProductData? product;
 
   factory BonusStock.fromJson(Map<String, dynamic> json) => BonusStock(
-    id: json["id"],
-    countableId: json["countable_id"],
-    price: json["price"],
-    quantity: json["quantity"],
-    tax: json["tax"],
-    totalPrice: json["total_price"],
-    product: json["product"] != null
-        ? ProductData.fromJson(json["product"])
-        : null,
-  );
+        id: json["id"],
+        countableId: json["countable_id"],
+        price: json["price"],
+        quantity: json["quantity"],
+        tax: json["tax"],
+        totalPrice: json["total_price"],
+        product: json["product"] != null
+            ? ProductData.fromJson(json["product"])
+            : null,
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "countable_id": countableId,
-    "price": price,
-    "quantity": quantity,
-    "tax": tax,
-    "total_price": totalPrice,
-  };
+        "id": id,
+        "countable_id": countableId,
+        "price": price,
+        "quantity": quantity,
+        "tax": tax,
+        "total_price": totalPrice,
+      };
 }

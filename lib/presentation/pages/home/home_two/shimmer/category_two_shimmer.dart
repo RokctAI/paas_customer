@@ -14,7 +14,6 @@ class CategoryTwoShimmer extends StatelessWidget {
         child: ListView.builder(
           padding: EdgeInsets.only(left: 16.r, bottom: 16.r, top: 8.r),
           shrinkWrap: true,
-
           scrollDirection: Axis.horizontal,
           itemCount: 6,
           itemBuilder: (context, index) {

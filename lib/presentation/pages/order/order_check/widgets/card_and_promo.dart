@@ -40,52 +40,47 @@ class CardAndPromo extends StatelessWidget {
                 },
                 icon: Icon(
                   FlutterRemix.bank_card_fill,
-                  color:
-                      ((AppHelpers.getPaymentType() == "admin")
+                  color: ((AppHelpers.getPaymentType() == "admin")
                           ? (ref.watch(paymentProvider).payments.isNotEmpty)
                           : (ref
-                                    .watch(orderProvider)
-                                    .shopData
-                                    ?.shopPayments
-                                    ?.isNotEmpty ??
-                                false))
-                      ? AppStyle.primary
-                      : AppStyle.black,
-                ),
-                title:
-                    ((AppHelpers.getPaymentType() == "admin")
-                        ? (ref.watch(paymentProvider).payments.isNotEmpty)
-                        : (ref
                                   .watch(orderProvider)
                                   .shopData
                                   ?.shopPayments
                                   ?.isNotEmpty ??
                               false))
+                      ? AppStyle.primary
+                      : AppStyle.black,
+                ),
+                title: ((AppHelpers.getPaymentType() == "admin")
+                        ? (ref.watch(paymentProvider).payments.isNotEmpty)
+                        : (ref
+                                .watch(orderProvider)
+                                .shopData
+                                ?.shopPayments
+                                ?.isNotEmpty ??
+                            false))
                     ? ((AppHelpers.getPaymentType() == "admin")
-                          ? (ref
-                                .watch(paymentProvider)
-                                .payments[ref
-                                    .watch(paymentProvider)
-                                    .currentIndex]
-                                .tag)
-                          : (ref
-                                    .watch(orderProvider)
-                                    .shopData
-                                    ?.shopPayments?[ref
-                                        .watch(paymentProvider)
-                                        .currentIndex]
-                                    ?.payment
-                                    ?.tag ??
-                                ""))
+                        ? (ref
+                            .watch(paymentProvider)
+                            .payments[ref.watch(paymentProvider).currentIndex]
+                            .tag)
+                        : (ref
+                                .watch(orderProvider)
+                                .shopData
+                                ?.shopPayments?[
+                                    ref.watch(paymentProvider).currentIndex]
+                                ?.payment
+                                ?.tag ??
+                            ""))
                     : AppHelpers.getTranslation(TrKeys.noPaymentType),
                 isActive: ((AppHelpers.getPaymentType() == "admin")
                     ? (ref.watch(paymentProvider).payments.isNotEmpty)
                     : (ref
-                              .watch(orderProvider)
-                              .shopData
-                              ?.shopPayments
-                              ?.isNotEmpty ??
-                          false)),
+                            .watch(orderProvider)
+                            .shopData
+                            ?.shopPayments
+                            ?.isNotEmpty ??
+                        false)),
               );
             },
           ),
@@ -108,8 +103,7 @@ class CardAndPromo extends StatelessWidget {
                       ? AppStyle.black
                       : AppStyle.primary,
                 ),
-                title:
-                    ref.watch(orderProvider).promoCode ??
+                title: ref.watch(orderProvider).promoCode ??
                     AppHelpers.getTranslation(TrKeys.youHavePromoCode),
               );
             },

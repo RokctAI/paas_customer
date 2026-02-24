@@ -37,12 +37,12 @@ class DeliveryPointData {
       );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "address": address,
-    "latitude": latitude,
-    "longitude": longitude,
-    "img": img,
-    "distance": distance,
-  };
+        "id": id,
+        "name": name,
+        "address": address,
+        "latitude": latitude,
+        "longitude": longitude,
+        "img": img,
+        "distance": distance,
+      };
 }

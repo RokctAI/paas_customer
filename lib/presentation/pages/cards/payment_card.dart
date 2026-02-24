@@ -70,9 +70,8 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
                 (card) => card.id == _selectedCard!.id,
               );
               if (!stillExists) {
-                _selectedCard = _savedCards.isNotEmpty
-                    ? _savedCards.first
-                    : null;
+                _selectedCard =
+                    _savedCards.isNotEmpty ? _savedCards.first : null;
                 widget.onCardSelected(_selectedCard);
               }
             }

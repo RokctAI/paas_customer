@@ -11,7 +11,7 @@ class ChatNotifier extends StateNotifier<ChatState> {
   String roleId = "";
 
   ChatNotifier()
-    : super(ChatState(textController: TextEditingController(), chatId: ''));
+      : super(ChatState(textController: TextEditingController(), chatId: ''));
 
   // Method to fetch chats based on user and role
   Future<void> fetchChats(BuildContext context, String roleId) async {

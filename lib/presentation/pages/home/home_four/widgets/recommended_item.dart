@@ -56,12 +56,10 @@ class RecommendedItem extends StatelessWidget {
                   top: 8.h,
                   left: 8.w,
                   iconSize: itemCount == 1 ? 40 : (isNarrow ? 22 : 22),
-                  containerHeight: itemCount == 1
-                      ? 40.h
-                      : (isNarrow ? 30 : 30.h),
-                  containerWidth: itemCount == 1
-                      ? 170.w
-                      : (isNarrow ? 130.w : 100.w),
+                  containerHeight:
+                      itemCount == 1 ? 40.h : (isNarrow ? 30 : 30.h),
+                  containerWidth:
+                      itemCount == 1 ? 170.w : (isNarrow ? 130.w : 100.w),
                   fontSize: itemCount == 1 ? 18 : (isNarrow ? 10 : 8),
                   maxTextLength: 12,
                 ),

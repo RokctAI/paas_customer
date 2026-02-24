@@ -15,12 +15,13 @@ class AllProductsResponse {
     bool? status,
     String? message,
     Data? data,
-  }) => AllProductsResponse(
-    timestamp: timestamp ?? this.timestamp,
-    status: status ?? this.status,
-    message: message ?? this.message,
-    data: data ?? this.data,
-  );
+  }) =>
+      AllProductsResponse(
+        timestamp: timestamp ?? this.timestamp,
+        status: status ?? this.status,
+        message: message ?? this.message,
+        data: data ?? this.data,
+      );
 
   factory AllProductsResponse.fromJson(Map<String, dynamic> json) =>
       AllProductsResponse(
@@ -33,11 +34,11 @@ class AllProductsResponse {
       );
 
   Map<String, dynamic> toJson() => {
-    "timestamp": timestamp?.toIso8601String(),
-    "status": status,
-    "message": message,
-    "data": data?.toJson(),
-  };
+        "timestamp": timestamp?.toIso8601String(),
+        "status": status,
+        "message": message,
+        "data": data?.toJson(),
+      };
 }
 
 class Data {
@@ -50,22 +51,23 @@ class Data {
       Data(recommended: recommended ?? this.recommended, all: all ?? this.all);
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    recommended: json["recommended"] == null
-        ? []
-        : List<Product>.from(
-            json["recommended"]!.map((x) => Product.fromJson(x)),
-          ),
-    all: json["all"] == null
-        ? []
-        : List<All>.from(json["all"]!.map((x) => All.fromJson(x))),
-  );
+        recommended: json["recommended"] == null
+            ? []
+            : List<Product>.from(
+                json["recommended"]!.map((x) => Product.fromJson(x)),
+              ),
+        all: json["all"] == null
+            ? []
+            : List<All>.from(json["all"]!.map((x) => All.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "recommended": recommended == null
-        ? []
-        : List<dynamic>.from(recommended!.map((x) => x.toJson())),
-    "all": all == null ? [] : List<dynamic>.from(all!.map((x) => x.toJson())),
-  };
+        "recommended": recommended == null
+            ? []
+            : List<dynamic>.from(recommended!.map((x) => x.toJson())),
+        "all":
+            all == null ? [] : List<dynamic>.from(all!.map((x) => x.toJson())),
+      };
 }
 
 class All {
@@ -110,58 +112,59 @@ class All {
     Translation? translation,
     List<dynamic>? children,
     List<Product>? products,
-  }) => All(
-    id: id ?? this.id,
-    key: key ?? this.key,
-    uuid: uuid ?? this.uuid,
-    type: type ?? this.type,
-    input: input ?? this.input,
-    shopId: shopId ?? this.shopId,
-    img: img ?? this.img,
-    active: active ?? this.active,
-    status: status ?? this.status,
-    translation: translation ?? this.translation,
-    children: children ?? this.children,
-    products: products ?? this.products,
-  );
+  }) =>
+      All(
+        id: id ?? this.id,
+        key: key ?? this.key,
+        uuid: uuid ?? this.uuid,
+        type: type ?? this.type,
+        input: input ?? this.input,
+        shopId: shopId ?? this.shopId,
+        img: img ?? this.img,
+        active: active ?? this.active,
+        status: status ?? this.status,
+        translation: translation ?? this.translation,
+        children: children ?? this.children,
+        products: products ?? this.products,
+      );
 
   factory All.fromJson(Map<String, dynamic> json) => All(
-    id: json["id"]?.toString(),
-    uuid: json["uuid"],
-    type: json["type"],
-    input: json["input"],
-    shopId: json["shop_id"]?.toString(),
-    img: json["img"],
-    active: json["active"],
-    status: json["status"],
-    translation: json["translation"] == null
-        ? null
-        : Translation.fromJson(json["translation"]),
-    children: json["children"] == null
-        ? []
-        : List<dynamic>.from(json["children"]!.map((x) => x)),
-    products: json["products"] == null
-        ? []
-        : List<Product>.from(json["products"]!.map((x) => Product.fromJson(x))),
-  );
+        id: json["id"]?.toString(),
+        uuid: json["uuid"],
+        type: json["type"],
+        input: json["input"],
+        shopId: json["shop_id"]?.toString(),
+        img: json["img"],
+        active: json["active"],
+        status: json["status"],
+        translation: json["translation"] == null
+            ? null
+            : Translation.fromJson(json["translation"]),
+        children: json["children"] == null
+            ? []
+            : List<dynamic>.from(json["children"]!.map((x) => x)),
+        products: json["products"] == null
+            ? []
+            : List<Product>.from(
+                json["products"]!.map((x) => Product.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "uuid": uuid,
-    "type": type,
-    "input": input,
-    "shop_id": shopId,
-    "img": img,
-    "active": active,
-    "status": status,
-    "translation": translation?.toJson(),
-    "children": children == null
-        ? []
-        : List<dynamic>.from(children!.map((x) => x)),
-    "products": products == null
-        ? []
-        : List<dynamic>.from(products!.map((x) => x.toJson())),
-  };
+        "id": id,
+        "uuid": uuid,
+        "type": type,
+        "input": input,
+        "shop_id": shopId,
+        "img": img,
+        "active": active,
+        "status": status,
+        "translation": translation?.toJson(),
+        "children":
+            children == null ? [] : List<dynamic>.from(children!.map((x) => x)),
+        "products": products == null
+            ? []
+            : List<dynamic>.from(products!.map((x) => x.toJson())),
+      };
 }
 
 class Product {
@@ -218,24 +221,25 @@ class Product {
     List<dynamic>? discounts,
     Translation? translation,
     Stock? stock,
-  }) => Product(
-    id: id ?? this.id,
-    uuid: uuid ?? this.uuid,
-    shopId: shopId ?? this.shopId,
-    categoryId: categoryId ?? this.categoryId,
-    brandId: brandId ?? this.brandId,
-    status: status ?? this.status,
-    active: active ?? this.active,
-    addon: addon ?? this.addon,
-    vegetarian: vegetarian ?? this.vegetarian,
-    img: img ?? this.img,
-    minQty: minQty ?? this.minQty,
-    maxQty: maxQty ?? this.maxQty,
-    interval: interval ?? this.interval,
-    discounts: discounts ?? this.discounts,
-    translation: translation ?? this.translation,
-    stock: stock ?? this.stock,
-  );
+  }) =>
+      Product(
+        id: id ?? this.id,
+        uuid: uuid ?? this.uuid,
+        shopId: shopId ?? this.shopId,
+        categoryId: categoryId ?? this.categoryId,
+        brandId: brandId ?? this.brandId,
+        status: status ?? this.status,
+        active: active ?? this.active,
+        addon: addon ?? this.addon,
+        vegetarian: vegetarian ?? this.vegetarian,
+        img: img ?? this.img,
+        minQty: minQty ?? this.minQty,
+        maxQty: maxQty ?? this.maxQty,
+        interval: interval ?? this.interval,
+        discounts: discounts ?? this.discounts,
+        translation: translation ?? this.translation,
+        stock: stock ?? this.stock,
+      );
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
@@ -263,25 +267,25 @@ class Product {
   }
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "uuid": uuid,
-    "shop_id": shopId,
-    "category_id": categoryId,
-    "brand_id": brandId,
-    "status": status,
-    "active": active,
-    "addon": addon,
-    "vegetarian": vegetarian,
-    "img": img,
-    "min_qty": minQty,
-    "max_qty": maxQty,
-    "interval": interval,
-    "discounts": discounts == null
-        ? []
-        : List<dynamic>.from(discounts!.map((x) => x)),
-    "translation": translation?.toJson(),
-    "stock": stock?.toJson(),
-  };
+        "id": id,
+        "uuid": uuid,
+        "shop_id": shopId,
+        "category_id": categoryId,
+        "brand_id": brandId,
+        "status": status,
+        "active": active,
+        "addon": addon,
+        "vegetarian": vegetarian,
+        "img": img,
+        "min_qty": minQty,
+        "max_qty": maxQty,
+        "interval": interval,
+        "discounts": discounts == null
+            ? []
+            : List<dynamic>.from(discounts!.map((x) => x)),
+        "translation": translation?.toJson(),
+        "stock": stock?.toJson(),
+      };
 }
 
 class Stock {
@@ -314,36 +318,37 @@ class Stock {
     double? totalPrice,
     bool? addon,
     dynamic bonus,
-  }) => Stock(
-    id: id ?? this.id,
-    countableId: countableId ?? this.countableId,
-    price: price ?? this.price,
-    quantity: quantity ?? this.quantity,
-    tax: tax ?? this.tax,
-    totalPrice: totalPrice ?? this.totalPrice,
-    addon: addon ?? this.addon,
-    bonus: bonus ?? this.bonus,
-  );
+  }) =>
+      Stock(
+        id: id ?? this.id,
+        countableId: countableId ?? this.countableId,
+        price: price ?? this.price,
+        quantity: quantity ?? this.quantity,
+        tax: tax ?? this.tax,
+        totalPrice: totalPrice ?? this.totalPrice,
+        addon: addon ?? this.addon,
+        bonus: bonus ?? this.bonus,
+      );
 
   factory Stock.fromJson(Map<String, dynamic> json) => Stock(
-    id: json["id"]?.toString(),
-    countableId: json["countable_id"]?.toString(),
-    price: json["price"]?.toDouble(),
-    quantity: json["quantity"],
-    tax: json["tax"]?.toDouble(),
-    totalPrice: json["total_price"]?.toDouble(),
-    addon: json["addon"],
-    bonus: json["bonus"],
-  );
+        id: json["id"]?.toString(),
+        countableId: json["countable_id"]?.toString(),
+        price: json["price"]?.toDouble(),
+        quantity: json["quantity"],
+        tax: json["tax"]?.toDouble(),
+        totalPrice: json["total_price"]?.toDouble(),
+        addon: json["addon"],
+        bonus: json["bonus"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "countable_id": countableId,
-    "price": price,
-    "quantity": quantity,
-    "tax": tax,
-    "total_price": totalPrice,
-    "addon": addon,
-    "bonus": bonus,
-  };
+        "id": id,
+        "countable_id": countableId,
+        "price": price,
+        "quantity": quantity,
+        "tax": tax,
+        "total_price": totalPrice,
+        "addon": addon,
+        "bonus": bonus,
+      };
 }

@@ -177,13 +177,13 @@ class OrderButton extends ConsumerWidget {
           // Check if cart is not empty
           final isNotEmptyCart =
               (shopOrderState.cart?.userCarts?.first.cartDetails?.isNotEmpty ??
-              false);
+                  false);
 
           // Check if payment methods are available
           final isNotEmptyPaymentType =
               ((AppHelpers.getPaymentType() == "admin")
-              ? (paymentState.payments.isNotEmpty)
-              : (orderState.shopData?.shopPayments?.isNotEmpty ?? false));
+                  ? (paymentState.payments.isNotEmpty)
+                  : (orderState.shopData?.shopPayments?.isNotEmpty ?? false));
 
           // Check if PayFast is selected
 

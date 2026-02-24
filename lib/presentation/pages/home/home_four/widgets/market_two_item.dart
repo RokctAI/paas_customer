@@ -44,8 +44,8 @@ class MarketTwoItem extends StatelessWidget {
                   margin: isFilter
                       ? const EdgeInsets.symmetric(horizontal: 16)
                       : isSimpleShop
-                      ? EdgeInsets.all(8.r)
-                      : EdgeInsets.only(right: 8.r),
+                          ? EdgeInsets.all(8.r)
+                          : EdgeInsets.only(right: 8.r),
                   width: 268.r,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(24.r)),

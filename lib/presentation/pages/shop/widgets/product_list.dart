@@ -22,14 +22,13 @@ extension MyExtension1 on Iterable<Product> {
         bool isOk = false;
         int level = 0;
         state.searchText.split(' ').forEach((e) {
-          isOk =
-              (element.translation?.title?.toLowerCase().contains(
-                    e.toLowerCase(),
-                  ) ??
+          isOk = (element.translation?.title?.toLowerCase().contains(
+                        e.toLowerCase(),
+                      ) ??
                   false) ||
               (element.translation?.description?.toLowerCase().contains(
-                    e.toLowerCase(),
-                  ) ??
+                        e.toLowerCase(),
+                      ) ??
                   false);
           if (isOk) {
             level++;
@@ -89,14 +88,14 @@ class _ProductsListState extends ConsumerState<ProductsList> {
     // Check if there are products to display
     final bool hasProducts =
         (widget.all?.products?.search(state).isNotEmpty ?? false) &&
-        (widget.all?.products?.isNotEmpty ?? false);
+            (widget.all?.products?.isNotEmpty ?? false);
 
     // Hide if it's the popular section with search text
     final bool shouldHidePopular =
         (widget.all?.products?.search(state).isNotEmpty ?? false) &&
-        widget.all?.translation?.title ==
-            AppHelpers.getTranslation(TrKeys.popular) &&
-        state.searchText.isNotEmpty;
+            widget.all?.translation?.title ==
+                AppHelpers.getTranslation(TrKeys.popular) &&
+            state.searchText.isNotEmpty;
 
     if (shouldHidePopular) {
       return const SizedBox.shrink();
@@ -145,8 +144,7 @@ class _ProductsListState extends ConsumerState<ProductsList> {
                         if (userCart.cartDetails != null) {
                           for (var cartDetail in userCart.cartDetails!) {
                             if (cartDetail.stock?.id == product.stock?.id) {
-                              final qtyInt =
-                                  int.tryParse(
+                              final qtyInt = int.tryParse(
                                     cartDetail.quantity.toString(),
                                   ) ??
                                   0;

@@ -42,9 +42,8 @@ class PreloadedWebViewService {
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageFinished: (String url) {
-            ref.read(preloadedWebViewProvider.notifier).state = ref
-                .read(preloadedWebViewProvider)
-                ?.copyWith(isReady: true);
+            ref.read(preloadedWebViewProvider.notifier).state =
+                ref.read(preloadedWebViewProvider)?.copyWith(isReady: true);
           },
           onNavigationRequest: (NavigationRequest request) {
             if (request.url.startsWith(AppConstants.baseUrl)) {

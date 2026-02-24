@@ -43,14 +43,14 @@ class GetCalculateModel {
       );
 
   Map<String, dynamic> toJson() => {
-    "total_tax": totalTax,
-    "price": price,
-    "total_shop_tax": totalShopTax,
-    "total_price": totalPrice,
-    "total_discount": totalDiscount,
-    "bonus_shop": bonusShop,
-    "delivery_fee": deliveryFee,
-    "rate": serviceFee,
-    "coupon_price": couponPrice,
-  };
+        "total_tax": totalTax,
+        "price": price,
+        "total_shop_tax": totalShopTax,
+        "total_price": totalPrice,
+        "total_discount": totalDiscount,
+        "bonus_shop": bonusShop,
+        "delivery_fee": deliveryFee,
+        "rate": serviceFee,
+        "coupon_price": couponPrice,
+      };
 }

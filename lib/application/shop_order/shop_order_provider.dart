@@ -6,5 +6,5 @@ import 'shop_order_state.dart';
 
 final shopOrderProvider =
     StateNotifierProvider<ShopOrderNotifier, ShopOrderState>(
-      (ref) => ShopOrderNotifier(cartRepository),
-    );
+  (ref) => ShopOrderNotifier(cartRepository),
+);

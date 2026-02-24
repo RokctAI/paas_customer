@@ -30,7 +30,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
   final UserRepositoryFacade _userRepositoryFacade;
 
   RegisterNotifier(this._authRepository, this._userRepositoryFacade)
-    : super(const RegisterState());
+      : super(const RegisterState());
 
   void setPassword(String password) {
     state = state.copyWith(password: password.trim(), isPasswordInvalid: false);
@@ -199,18 +199,14 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
           LocalStorage.setToken(data.token);
           LocalStorage.setAddressSelected(
             AddressData(
-              title:
-                  data.user?.addresses
-                      ?.firstWhere(
-                        (element) => element.active ?? false,
-                        orElse: () {
-                          return AddressNewModel();
-                        },
-                      )
-                      .title ??
+              title: data.user?.addresses?.firstWhere(
+                    (element) => element.active ?? false,
+                    orElse: () {
+                      return AddressNewModel();
+                    },
+                  ).title ??
                   "",
-              address:
-                  data.user?.addresses
+              address: data.user?.addresses
                       ?.firstWhere(
                         (element) => element.active ?? false,
                         orElse: () {
@@ -304,18 +300,14 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
           LocalStorage.setToken(data.token);
           LocalStorage.setAddressSelected(
             AddressData(
-              title:
-                  data.user?.addresses
-                      ?.firstWhere(
-                        (element) => element.active ?? false,
-                        orElse: () {
-                          return AddressNewModel();
-                        },
-                      )
-                      .title ??
+              title: data.user?.addresses?.firstWhere(
+                    (element) => element.active ?? false,
+                    orElse: () {
+                      return AddressNewModel();
+                    },
+                  ).title ??
                   "",
-              address:
-                  data.user?.addresses
+              address: data.user?.addresses
                       ?.firstWhere(
                         (element) => element.active ?? false,
                         orElse: () {
@@ -469,18 +461,14 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
           LocalStorage.setToken(data.data?.accessToken ?? '');
           LocalStorage.setAddressSelected(
             AddressData(
-              title:
-                  data.data?.user?.addresses
-                      ?.firstWhere(
-                        (element) => element.active ?? false,
-                        orElse: () {
-                          return AddressNewModel();
-                        },
-                      )
-                      .title ??
+              title: data.data?.user?.addresses?.firstWhere(
+                    (element) => element.active ?? false,
+                    orElse: () {
+                      return AddressNewModel();
+                    },
+                  ).title ??
                   "",
-              address:
-                  data.data?.user?.addresses
+              address: data.data?.user?.addresses
                       ?.firstWhere(
                         (element) => element.active ?? false,
                         orElse: () {
@@ -560,15 +548,15 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
         final rawNonce = AppHelpers.generateNonce();
         final OAuthCredential credential =
             user.accessToken?.type == AccessTokenType.limited
-            ? OAuthCredential(
-                providerId: 'facebook.com',
-                signInMethod: 'oauth',
-                idToken: user.accessToken!.tokenString,
-                rawNonce: rawNonce,
-              )
-            : FacebookAuthProvider.credential(
-                user.accessToken?.tokenString ?? "",
-              );
+                ? OAuthCredential(
+                    providerId: 'facebook.com',
+                    signInMethod: 'oauth',
+                    idToken: user.accessToken!.tokenString,
+                    rawNonce: rawNonce,
+                  )
+                : FacebookAuthProvider.credential(
+                    user.accessToken?.tokenString ?? "",
+                  );
 
         final userObj = await FirebaseAuth.instance.signInWithCredential(
           credential,
@@ -587,18 +575,14 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
               LocalStorage.setToken(data.data?.accessToken ?? '');
               LocalStorage.setAddressSelected(
                 AddressData(
-                  title:
-                      data.data?.user?.addresses
-                          ?.firstWhere(
-                            (element) => element.active ?? false,
-                            orElse: () {
-                              return AddressNewModel();
-                            },
-                          )
-                          .title ??
+                  title: data.data?.user?.addresses?.firstWhere(
+                        (element) => element.active ?? false,
+                        orElse: () {
+                          return AddressNewModel();
+                        },
+                      ).title ??
                       "",
-                  address:
-                      data.data?.user?.addresses
+                  address: data.data?.user?.addresses
                           ?.firstWhere(
                             (element) => element.active ?? false,
                             orElse: () {
@@ -695,18 +679,14 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
             LocalStorage.setToken(data.data?.accessToken ?? '');
             LocalStorage.setAddressSelected(
               AddressData(
-                title:
-                    data.data?.user?.addresses
-                        ?.firstWhere(
-                          (element) => element.active ?? false,
-                          orElse: () {
-                            return AddressNewModel();
-                          },
-                        )
-                        .title ??
+                title: data.data?.user?.addresses?.firstWhere(
+                      (element) => element.active ?? false,
+                      orElse: () {
+                        return AddressNewModel();
+                      },
+                    ).title ??
                     "",
-                address:
-                    data.data?.user?.addresses
+                address: data.data?.user?.addresses
                         ?.firstWhere(
                           (element) => element.active ?? false,
                           orElse: () {

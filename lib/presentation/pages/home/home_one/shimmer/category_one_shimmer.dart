@@ -14,7 +14,6 @@ class CategoryOneShimmer extends StatelessWidget {
       child: AnimationLimiter(
         child: ListView.builder(
           shrinkWrap: true,
-
           scrollDirection: Axis.horizontal,
           itemCount: 5,
           itemBuilder: (context, index) {

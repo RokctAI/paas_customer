@@ -31,7 +31,6 @@ class ServiceOneCategory extends StatelessWidget {
         child: ListView.builder(
           padding: EdgeInsets.only(left: 16.r, bottom: 16.r, top: 8.r),
           shrinkWrap: true,
-
           scrollDirection: Axis.horizontal,
           itemCount:
               (state.categories[categoryIndex].children?.length ?? 0) + 1,
@@ -58,20 +57,20 @@ class ServiceOneCategory extends StatelessWidget {
                                   context: context,
                                   modal: (c) => FilterPage(
                                     controller: c,
-                                    categoryId:
-                                        (state.selectIndexSubCategory != -1
+                                    categoryId: (state.selectIndexSubCategory !=
+                                                -1
                                             ? (state
-                                                  .categories[state
-                                                      .selectIndexCategory]
-                                                  .children?[state
-                                                      .selectIndexSubCategory]
-                                                  .id
-                                                  ?.toString())
+                                                .categories[
+                                                    state.selectIndexCategory]
+                                                .children?[state
+                                                    .selectIndexSubCategory]
+                                                .id
+                                                ?.toString())
                                             : state
-                                                  .categories[state
-                                                      .selectIndexCategory]
-                                                  .id
-                                                  ?.toString()) ??
+                                                .categories[
+                                                    state.selectIndexCategory]
+                                                .id
+                                                ?.toString()) ??
                                         "",
                                   ),
                                   isDarkMode: false,
@@ -110,11 +109,8 @@ class ServiceOneCategory extends StatelessWidget {
                       : CategoryOneItem(
                           index: index - 1,
                           image: category.children?[index - 1].img ?? "",
-                          title:
-                              category
-                                  .children?[index - 1]
-                                  .translation
-                                  ?.title ??
+                          title: category
+                                  .children?[index - 1].translation?.title ??
                               "",
                           isActive: index - 1 == state.selectIndexSubCategory,
                           onTap: () {

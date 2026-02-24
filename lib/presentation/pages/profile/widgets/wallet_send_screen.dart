@@ -364,9 +364,8 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
           return ListTile(
             leading: CircleAvatar(
               backgroundColor: AppStyle.primary.withOpacity(0.1),
-              backgroundImage: user.img != null
-                  ? NetworkImage(user.img!)
-                  : null,
+              backgroundImage:
+                  user.img != null ? NetworkImage(user.img!) : null,
               child: user.img == null
                   ? Text(
                       user.firstname?.substring(0, 1).toUpperCase() ?? '',

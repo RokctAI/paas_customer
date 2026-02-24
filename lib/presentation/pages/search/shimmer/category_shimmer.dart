@@ -14,7 +14,6 @@ class SearchCategoryShimmer extends StatelessWidget {
           height: 36.h,
           child: ListView.builder(
             shrinkWrap: true,
-
             scrollDirection: Axis.horizontal,
             itemCount: 4,
             padding: EdgeInsets.only(left: 16.w),

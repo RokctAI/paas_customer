@@ -20,7 +20,7 @@ class EditProfileNotifier extends StateNotifier<EditProfileState> {
   final GalleryRepositoryFacade _galleryRepository;
 
   EditProfileNotifier(this._userRepository, this._galleryRepository)
-    : super(const EditProfileState());
+      : super(const EditProfileState());
 
   void setUser(ProfileData user) {
     state = state.copyWith(

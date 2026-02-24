@@ -206,15 +206,12 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
                 child: Padding(
                   padding: EdgeInsets.only(left: 16.r),
                   child: CustomButton(
-                    borderColor: !state.error
-                        ? AppStyle.transparent
-                        : AppStyle.textGrey,
-                    background: !state.error
-                        ? AppStyle.primary
-                        : AppStyle.white,
-                    textColor: !state.error
-                        ? AppStyle.black
-                        : AppStyle.textGrey,
+                    borderColor:
+                        !state.error ? AppStyle.transparent : AppStyle.textGrey,
+                    background:
+                        !state.error ? AppStyle.primary : AppStyle.white,
+                    textColor:
+                        !state.error ? AppStyle.black : AppStyle.textGrey,
                     title:
                         "${state.expand ? AppHelpers.getTranslation(TrKeys.order) : AppHelpers.getTranslation(TrKeys.continueText)} ${AppHelpers.numberFormat(number: state.calculate?.data?.price ?? 0)}",
                     onPressed: () {

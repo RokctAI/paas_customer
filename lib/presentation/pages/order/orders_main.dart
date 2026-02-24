@@ -93,7 +93,6 @@ class _MainPageState extends ConsumerState<OrdersMainPage>
                 ],
               ),
             ),
-
             Expanded(
               child: TabBarView(
                 controller: _tabController,

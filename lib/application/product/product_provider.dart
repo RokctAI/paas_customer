@@ -6,5 +6,5 @@ import 'product_state.dart';
 
 final productProvider =
     StateNotifierProvider.autoDispose<ProductNotifier, ProductState>(
-      (ref) => ProductNotifier(cartRepository, productsRepository),
-    );
+  (ref) => ProductNotifier(cartRepository, productsRepository),
+);

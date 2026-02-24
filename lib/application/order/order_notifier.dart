@@ -190,9 +190,8 @@ class OrderNotifier extends StateNotifier<OrderState> {
       if (element.day?.toLowerCase() == yesterday) {
         if (AppHelpers.checkYesterday(element.from, element.to) &&
             yesterday != 'sunday') {
-          TimeOfDay time = i == -1
-              ? TimeOfDay.now()
-              : const TimeOfDay(hour: 0, minute: 0);
+          TimeOfDay time =
+              i == -1 ? TimeOfDay.now() : const TimeOfDay(hour: 0, minute: 0);
           TimeOfDay time2 = time.plusMinutes(
             minute: deliveryTime.hour * 60 + deliveryTime.minute,
           );
@@ -208,9 +207,8 @@ class OrderNotifier extends StateNotifier<OrderState> {
       if (element.day?.toLowerCase() == today) {
         if (today == "monday") {
           if (AppHelpers.checkYesterday(element.from, element.to)) {
-            TimeOfDay time = i == -1
-                ? TimeOfDay.now()
-                : const TimeOfDay(hour: 0, minute: 0);
+            TimeOfDay time =
+                i == -1 ? TimeOfDay.now() : const TimeOfDay(hour: 0, minute: 0);
             TimeOfDay time2 = time.plusMinutes(
               minute: deliveryTime.hour * 60 + deliveryTime.minute,
             );
@@ -227,9 +225,9 @@ class OrderNotifier extends StateNotifier<OrderState> {
         if (AppHelpers.checkYesterday(element.from, element.to)) {
           TimeOfDay time = i == -1
               ? TimeOfDay.now().hour > element.from.toTimeOfDay.hour &&
-                        TimeOfDay.now().minute > element.from.toTimeOfDay.minute
-                    ? TimeOfDay.now()
-                    : element.from.toTimeOfDay
+                      TimeOfDay.now().minute > element.from.toTimeOfDay.minute
+                  ? TimeOfDay.now()
+                  : element.from.toTimeOfDay
               : element.from.toTimeOfDay;
           TimeOfDay time2 = time.plusMinutes(
             minute: deliveryTime.hour * 60 + deliveryTime.minute,
@@ -245,9 +243,9 @@ class OrderNotifier extends StateNotifier<OrderState> {
         } else {
           TimeOfDay time = i == -1
               ? TimeOfDay.now().hour > element.from.toTimeOfDay.hour &&
-                        TimeOfDay.now().minute > element.from.toTimeOfDay.minute
-                    ? TimeOfDay.now()
-                    : element.from.toTimeOfDay
+                      TimeOfDay.now().minute > element.from.toTimeOfDay.minute
+                  ? TimeOfDay.now()
+                  : element.from.toTimeOfDay
               : element.from.toTimeOfDay;
           TimeOfDay time2 = time.plusMinutes(
             minute: deliveryTime.hour * 60 + deliveryTime.minute,

@@ -5,5 +5,5 @@ import 'select_notifier.dart';
 
 final selectProvider =
     StateNotifierProvider.autoDispose<SelectNotifier, SelectState>(
-      (ref) => SelectNotifier(),
-    );
+  (ref) => SelectNotifier(),
+);

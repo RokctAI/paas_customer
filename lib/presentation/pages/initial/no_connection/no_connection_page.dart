@@ -100,8 +100,8 @@ class NoConnectionDialog extends ConsumerWidget {
       final connectivityResult = await Connectivity().checkConnectivity();
       final hasConnection =
           connectivityResult.contains(ConnectivityResult.mobile) ||
-          connectivityResult.contains(ConnectivityResult.ethernet) ||
-          connectivityResult.contains(ConnectivityResult.wifi);
+              connectivityResult.contains(ConnectivityResult.ethernet) ||
+              connectivityResult.contains(ConnectivityResult.wifi);
 
       if (hasConnection) {
         // Connection restored, go back to splash to reinitialize

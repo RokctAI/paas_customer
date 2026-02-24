@@ -15,7 +15,6 @@ class BannerShimmer extends StatelessWidget {
       child: AnimationLimiter(
         child: ListView.builder(
           shrinkWrap: true,
-
           scrollDirection: Axis.horizontal,
           itemCount: 3,
           padding: EdgeInsets.only(left: 16.w),

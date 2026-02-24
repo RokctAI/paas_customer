@@ -135,29 +135,24 @@ class _PromoCodeState extends ConsumerState<PromoCodeScreen> {
                       background: state.isActive
                           ? AppStyle.primary
                           : AppStyle.borderColor,
-                      textColor: state.isActive
-                          ? AppStyle.black
-                          : AppStyle.textGrey,
+                      textColor:
+                          state.isActive ? AppStyle.black : AppStyle.textGrey,
                       title: AppHelpers.getTranslation(TrKeys.save),
                       onPressed: () {
                         if (state.isActive) {
                           ref
                               .read(orderProvider.notifier)
                               .setPromoCode(promoCodeController.text);
-                          ref
-                              .read(orderProvider.notifier)
-                              .getCalculate(
+                          ref.read(orderProvider.notifier).getCalculate(
                                 context: context,
                                 isLoading: false,
                                 cartId:
                                     ref.read(shopOrderProvider).cart?.id ?? "",
-                                long:
-                                    LocalStorage.getAddressSelected()
+                                long: LocalStorage.getAddressSelected()
                                         ?.location
                                         ?.longitude ??
                                     AppConstants.demoLongitude,
-                                lat:
-                                    LocalStorage.getAddressSelected()
+                                lat: LocalStorage.getAddressSelected()
                                         ?.location
                                         ?.latitude ??
                                     AppConstants.demoLatitude,

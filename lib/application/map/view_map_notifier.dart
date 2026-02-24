@@ -19,7 +19,7 @@ class ViewMapNotifier extends StateNotifier<ViewMapState> {
   final UserRepositoryFacade _userRepository;
 
   ViewMapNotifier(this._shopsRepository, this._userRepository)
-    : super(const ViewMapState());
+      : super(const ViewMapState());
 
   void scrolling(bool scroll) {
     state = state.copyWith(isScrolling: scroll);

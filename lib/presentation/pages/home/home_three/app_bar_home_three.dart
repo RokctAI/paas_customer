@@ -76,9 +76,9 @@ class AppBarThree extends StatelessWidget {
                                         ?.isEmpty ??
                                     true)
                                 ? LocalStorage.getAddressSelected()?.address ??
-                                      ''
+                                    ''
                                 : LocalStorage.getAddressSelected()?.title ??
-                                      "",
+                                    "",
                             style: AppStyle.interBold(
                               size: 14,
                               color: AppStyle.black,

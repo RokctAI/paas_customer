@@ -31,11 +31,12 @@ class ProductsPaginateResponse {
     List<ProductData>? data,
     // Links? links,
     Meta? meta,
-  }) => ProductsPaginateResponse(
-    data: data ?? _data,
-    // links: links ?? _links,
-    meta: meta ?? _meta,
-  );
+  }) =>
+      ProductsPaginateResponse(
+        data: data ?? _data,
+        // links: links ?? _links,
+        meta: meta ?? _meta,
+      );
 
   List<ProductData>? get data => _data;
 

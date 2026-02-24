@@ -35,19 +35,19 @@ class OpTimeBadge extends StatelessWidget {
       child: //(shop.avgRate == 3) //&& AppHelpers.getTranslation(TrKeys.close) == workTime
           // ?
           ClipRRect(
-            borderRadius: BorderRadius.circular(10.r),
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
-                decoration: BoxDecoration(
-                  color: //(AppHelpers.getTranslation(TrKeys.close) == workTime)
+        borderRadius: BorderRadius.circular(10.r),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+            decoration: BoxDecoration(
+              color: //(AppHelpers.getTranslation(TrKeys.close) == workTime)
                   shop.open == true
                       ? Colors.green.withOpacity(0.3)
                       : AppStyle.red,
-                  borderRadius: BorderRadius.circular(10.r),
-                ),
-                child: //(AppHelpers.getTranslation(TrKeys.close) == workTime)
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            child: //(AppHelpers.getTranslation(TrKeys.close) == workTime)
                 shop.open == true
                     ? Row(
                         children: [
@@ -95,9 +95,9 @@ class OpTimeBadge extends StatelessWidget {
                           ),
                         ],
                       ),
-              ),
-            ),
           ),
+        ),
+      ),
     );
   }
 }

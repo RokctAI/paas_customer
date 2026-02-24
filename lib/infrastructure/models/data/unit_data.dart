@@ -25,36 +25,37 @@ class ProductUnit {
     DateTime? createdAt,
     DateTime? updatedAt,
     Translation? translation,
-  }) => ProductUnit(
-    id: id ?? this.id,
-    active: active ?? this.active,
-    position: position ?? this.position,
-    createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
-    translation: translation ?? this.translation,
-  );
+  }) =>
+      ProductUnit(
+        id: id ?? this.id,
+        active: active ?? this.active,
+        position: position ?? this.position,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+        translation: translation ?? this.translation,
+      );
 
   factory ProductUnit.fromJson(Map<String, dynamic> json) => ProductUnit(
-    id: json["id"],
-    active: json["active"],
-    position: json["position"],
-    createdAt: json["created_at"] == null
-        ? null
-        : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null
-        ? null
-        : DateTime.parse(json["updated_at"]),
-    translation: json["translation"] == null
-        ? null
-        : Translation.fromJson(json["translation"]),
-  );
+        id: json["id"],
+        active: json["active"],
+        position: json["position"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+        translation: json["translation"] == null
+            ? null
+            : Translation.fromJson(json["translation"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "active": active,
-    "position": position,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
-    "translation": translation?.toJson(),
-  };
+        "id": id,
+        "active": active,
+        "position": position,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "translation": translation?.toJson(),
+      };
 }

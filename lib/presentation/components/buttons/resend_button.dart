@@ -33,15 +33,15 @@ class ResendButton extends StatelessWidget {
       onPressed: onPressed,
       child: isTimeExpired
           ? isResending
-                ? SizedBox(
-                    width: 10.r,
-                    height: 10.r,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 1.r,
-                      color: AppStyle.white,
-                    ),
-                  )
-                : Icon(iconData, color: AppStyle.white, size: 20)
+              ? SizedBox(
+                  width: 10.r,
+                  height: 10.r,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 1.r,
+                    color: AppStyle.white,
+                  ),
+                )
+              : Icon(iconData, color: AppStyle.white, size: 20)
           : Text(
               title,
               style: AppStyle.interNormal(size: 15, color: AppStyle.white),

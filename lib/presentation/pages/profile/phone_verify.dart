@@ -53,9 +53,8 @@ class PhoneVerify extends ConsumerWidget {
                       ),
                       if (AppConstants.signUpType == SignUpType.phone)
                         Directionality(
-                          textDirection: isLtr
-                              ? TextDirection.ltr
-                              : TextDirection.rtl,
+                          textDirection:
+                              isLtr ? TextDirection.ltr : TextDirection.rtl,
                           child: IntlPhoneField(
                             onChanged: (phoneNum) {
                               event.setEmail(phoneNum.completeNumber);
@@ -83,8 +82,8 @@ class PhoneVerify extends ConsumerWidget {
                             showDropdownIcon: AppConstants.showArrowIcon,
                             autovalidateMode:
                                 AppConstants.isNumberLengthAlwaysSame
-                                ? AutovalidateMode.onUserInteraction
-                                : AutovalidateMode.disabled,
+                                    ? AutovalidateMode.onUserInteraction
+                                    : AutovalidateMode.disabled,
                             textAlignVertical: TextAlignVertical.center,
                             decoration: InputDecoration(
                               counterText: '',

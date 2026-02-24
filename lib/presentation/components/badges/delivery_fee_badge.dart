@@ -52,8 +52,7 @@ class DeliveryFeeBadge extends StatelessWidget {
               color: color,
               borderRadius: BorderRadius.circular(10.r),
             ),
-            child:
-                shop.open ==
+            child: shop.open ==
                     false //&& AppHelpers.getTranslation(TrKeys.close) == workTime
                 ? Row(
                     children: [

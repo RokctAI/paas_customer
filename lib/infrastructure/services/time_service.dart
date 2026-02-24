@@ -4,9 +4,8 @@ import 'package:intl/intl.dart';
 abstract class TimeService {
   TimeService._();
 
-  static final String _timeFormat = AppConstants.use24Format
-      ? 'HH:mm'
-      : 'h:mm a';
+  static final String _timeFormat =
+      AppConstants.use24Format ? 'HH:mm' : 'h:mm a';
 
   static String dateFormatYMD(DateTime? time) {
     return DateFormat("yyyy-MM-dd").format(time ?? DateTime.now());

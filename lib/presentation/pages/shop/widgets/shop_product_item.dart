@@ -76,10 +76,9 @@ class ShopProductItem extends StatelessWidget {
                           children: [
                             Text(
                               AppHelpers.numberFormat(
-                                number:
-                                    (product.discounts?.isNotEmpty ?? false
+                                number: (product.discounts?.isNotEmpty ?? false
                                         ? ((product.stock?.price ?? 0) +
-                                              (product.stock?.tax ?? 0))
+                                            (product.stock?.tax ?? 0))
                                         : null) ??
                                     (product.stock?.totalPrice ?? 0),
                               ),
@@ -88,19 +87,19 @@ class ShopProductItem extends StatelessWidget {
                                 color: AppStyle.black,
                                 decoration:
                                     (product.discounts?.isNotEmpty ?? false
-                                            ? ((product.stock?.price ?? 0) +
-                                                  (product.stock?.tax ?? 0))
-                                            : null) ==
-                                        null
-                                    ? TextDecoration.none
-                                    : TextDecoration.lineThrough,
+                                                ? ((product.stock?.price ?? 0) +
+                                                    (product.stock?.tax ?? 0))
+                                                : null) ==
+                                            null
+                                        ? TextDecoration.none
+                                        : TextDecoration.lineThrough,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                             (product.discounts?.isNotEmpty ?? false
                                         ? ((product.stock?.price ?? 0) +
-                                              (product.stock?.tax ?? 0))
+                                            (product.stock?.tax ?? 0))
                                         : null) ==
                                     null
                                 ? const SizedBox.shrink()
@@ -127,7 +126,7 @@ class ShopProductItem extends StatelessWidget {
                                             AppHelpers.numberFormat(
                                               number:
                                                   (product.stock?.totalPrice ??
-                                                  0),
+                                                      0),
                                             ),
                                             style: AppStyle.interNoSemi(
                                               size: 10,

@@ -19,11 +19,11 @@ class GenerateImageModel {
       );
 
   Map<String, dynamic> toJson() => {
-    "created": created,
-    "data": data == null
-        ? []
-        : List<dynamic>.from(data!.map((x) => x.toJson())),
-  };
+        "created": created,
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
 }
 
 class Datum {

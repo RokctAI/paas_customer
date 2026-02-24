@@ -21,7 +21,7 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
   final DrawRepositoryFacade _drawRouting;
 
   ParcelNotifier(this._parcelRepository, this._drawRouting)
-    : super(const ParcelState());
+      : super(const ParcelState());
 
   Future<void> addReview(
     BuildContext context,
@@ -172,8 +172,7 @@ class ParcelNotifier extends StateNotifier<ParcelState> {
       response.when(
         success: (data) async {
           state = state.copyWith(isLoading: false);
-          String id =
-              state.selectPayment?.id ??
+          String id = state.selectPayment?.id ??
               (LocalStorage.getSelectedCurrency()?.id ?? "").toString();
           switch (state.selectPayment?.tag) {
             case 'cash':

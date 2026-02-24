@@ -22,8 +22,7 @@ class ImagesOneList extends StatelessWidget {
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
-            children:
-                list
+            children: list
                     ?.map(
                       (e) => AnimatedContainer(
                         duration: const Duration(milliseconds: 400),

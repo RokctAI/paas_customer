@@ -52,11 +52,9 @@ class AddAddress extends StatelessWidget {
                         AddressData(
                           title: AppHelpers.getAppAddressName(),
                           location: LocationModel(
-                            longitude:
-                                (AppHelpers.getInitialLongitude() ??
+                            longitude: (AppHelpers.getInitialLongitude() ??
                                 AppConstants.demoLongitude),
-                            latitude:
-                                (AppHelpers.getInitialLatitude() ??
+                            latitude: (AppHelpers.getInitialLatitude() ??
                                 AppConstants.demoLatitude),
                           ),
                         ),

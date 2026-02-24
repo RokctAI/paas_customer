@@ -222,11 +222,8 @@ class RecipientWidget extends StatelessWidget {
                         return InkWell(
                           onTap: () {
                             if (description.text.contains(
-                              (state
-                                      .types[state.selectType]
-                                      ?.options?[index]
-                                      .translation
-                                      ?.title ??
+                              (state.types[state.selectType]?.options?[index]
+                                      .translation?.title ??
                                   ""),
                             )) {
                               return;
@@ -234,13 +231,9 @@ class RecipientWidget extends StatelessWidget {
                             if (description.text.isNotEmpty) {
                               description.text = "${description.text}, ";
                             }
-                            description.text =
-                                description.text +
-                                (state
-                                        .types[state.selectType]
-                                        ?.options?[index]
-                                        .translation
-                                        ?.title ??
+                            description.text = description.text +
+                                (state.types[state.selectType]?.options?[index]
+                                        .translation?.title ??
                                     "");
                           },
                           child: AnimationButtonEffect(
@@ -255,11 +248,8 @@ class RecipientWidget extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10.r),
                               ),
                               child: Text(
-                                state
-                                        .types[state.selectType]
-                                        ?.options?[index]
-                                        .translation
-                                        ?.title ??
+                                state.types[state.selectType]?.options?[index]
+                                        .translation?.title ??
                                     "",
                                 style: AppStyle.interNormal(size: 14),
                               ),

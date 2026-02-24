@@ -208,8 +208,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     // Only apply height constraint if there are fewer than 2 saved cards
     if (!_loadingCards && _savedCards.length <= 2) {
       heightConstraint = BoxConstraints(
-        maxHeight:
-            MediaQuery.of(context).size.height *
+        maxHeight: MediaQuery.of(context).size.height *
             0.3, // Smaller height with fewer cards
       );
     }

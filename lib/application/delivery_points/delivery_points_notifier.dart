@@ -8,7 +8,7 @@ class DeliveryPointsNotifier extends StateNotifier<DeliveryPointsState> {
   final DeliveryPointsRepositoryFacade _deliveryPointsRepository;
 
   DeliveryPointsNotifier(this._deliveryPointsRepository)
-    : super(const DeliveryPointsState());
+      : super(const DeliveryPointsState());
 
   Future<void> fetchDeliveryPoints(
     BuildContext context, {

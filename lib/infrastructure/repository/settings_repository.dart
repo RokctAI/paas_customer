@@ -58,7 +58,8 @@ class SettingsRepository implements SettingsRepositoryFacade {
         '/api/method/paas.api.system.system.get_languages',
       );
       if (LocalStorage.getLanguage() == null ||
-          !(LanguagesResponse.fromJson(response.data).data
+          !(LanguagesResponse.fromJson(response.data)
+                  .data
                   ?.map((e) => e.id)
                   .contains(LocalStorage.getLanguage()?.id) ??
               true)) {
@@ -142,8 +143,7 @@ class SettingsRepository implements SettingsRepositoryFacade {
         '/api/method/paas.api.notification.notification.get_notification_settings',
       );
       return ApiResult.success(
-        data:
-            notificationsListModelFromJson(response.data) ??
+        data: notificationsListModelFromJson(response.data) ??
             NotificationsListModel(),
       );
     } catch (e) {

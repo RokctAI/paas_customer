@@ -21,7 +21,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
   final CartRepositoryFacade _cartRepository;
 
   ProductNotifier(this._cartRepository, this._productsRepository)
-    : super(const ProductState());
+      : super(const ProductState());
   String? shareLink;
 
   void change(int index) {

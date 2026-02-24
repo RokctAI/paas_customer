@@ -295,17 +295,17 @@ class _IntroPageState extends ConsumerState<IntroPage>
                               ),
                             )
                           : state.currentIndex > index
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(122),
-                              child: const LinearProgressIndicator(
-                                value: 1,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  AppStyle.primary,
-                                ),
-                                backgroundColor: AppStyle.white,
-                              ),
-                            )
-                          : const SizedBox.shrink(),
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(122),
+                                  child: const LinearProgressIndicator(
+                                    value: 1,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      AppStyle.primary,
+                                    ),
+                                    backgroundColor: AppStyle.white,
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
                     );
                   },
                 ),

@@ -96,14 +96,14 @@ class _HomeOnePageState extends ConsumerState<HomeOnePage> {
   void _onRefresh() {
     ref.watch(homeProvider).selectIndexCategory == -1
         ? (event
-            ..fetchBannerPage(context, _shopController, isRefresh: true)
-            ..fetchAllShopsPage(context, _shopController, isRefresh: true)
-            ..fetchCategoriesPage(context, _shopController, isRefresh: true)
-            ..fetchStoriesPage(context, _shopController, isRefresh: true)
-            ..fetchShopPage(context, _shopController, isRefresh: true)
-            ..fetchAds(context)
-            ..fetchNewShopsPage(context, _shopController, isRefresh: true)
-            ..fetchShopPageRecommend(context, _shopController, isRefresh: true))
+          ..fetchBannerPage(context, _shopController, isRefresh: true)
+          ..fetchAllShopsPage(context, _shopController, isRefresh: true)
+          ..fetchCategoriesPage(context, _shopController, isRefresh: true)
+          ..fetchStoriesPage(context, _shopController, isRefresh: true)
+          ..fetchShopPage(context, _shopController, isRefresh: true)
+          ..fetchAds(context)
+          ..fetchNewShopsPage(context, _shopController, isRefresh: true)
+          ..fetchShopPageRecommend(context, _shopController, isRefresh: true))
         : event.fetchFilterShops(
             context,
             controller: _shopController,
@@ -190,17 +190,17 @@ class _HomeOnePageState extends ConsumerState<HomeOnePage> {
                           padding: EdgeInsets.only(left: 16.w),
                           itemBuilder: (context, index) =>
                               AnimationConfiguration.staggeredList(
-                                position: index,
-                                duration: const Duration(milliseconds: 375),
-                                child: SlideAnimation(
-                                  verticalOffset: 50.0,
-                                  child: FadeInAnimation(
-                                    child: BannerOneItem(
-                                      banner: state.banners[index],
-                                    ),
-                                  ),
+                            position: index,
+                            duration: const Duration(milliseconds: 375),
+                            child: SlideAnimation(
+                              verticalOffset: 50.0,
+                              child: FadeInAnimation(
+                                child: BannerOneItem(
+                                  banner: state.banners[index],
                                 ),
                               ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -224,23 +224,22 @@ class _HomeOnePageState extends ConsumerState<HomeOnePage> {
                     child: AnimationLimiter(
                       child: ListView.builder(
                         padding: EdgeInsets.only(left: 16.r),
-
                         scrollDirection: Axis.horizontal,
                         itemCount: state.shops.length,
                         itemBuilder: (context, index) =>
                             AnimationConfiguration.staggeredList(
-                              position: index,
-                              duration: const Duration(milliseconds: 375),
-                              child: SlideAnimation(
-                                verticalOffset: 50.0,
-                                child: FadeInAnimation(
-                                  child: MarketOneItem(
-                                    isShop: true,
-                                    shop: state.shops[index],
-                                  ),
-                                ),
+                          position: index,
+                          duration: const Duration(milliseconds: 375),
+                          child: SlideAnimation(
+                            verticalOffset: 50.0,
+                            child: FadeInAnimation(
+                              child: MarketOneItem(
+                                isShop: true,
+                                shop: state.shops[index],
                               ),
                             ),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -269,25 +268,24 @@ class _HomeOnePageState extends ConsumerState<HomeOnePage> {
                       child: AnimationLimiter(
                         child: ListView.builder(
                           shrinkWrap: true,
-
                           scrollDirection: Axis.horizontal,
                           itemCount: state.story?.length ?? 0,
                           padding: EdgeInsets.only(left: 16.w),
                           itemBuilder: (context, index) =>
                               AnimationConfiguration.staggeredList(
-                                position: index,
-                                duration: const Duration(milliseconds: 375),
-                                child: SlideAnimation(
-                                  verticalOffset: 50.0,
-                                  child: FadeInAnimation(
-                                    child: ShopBarOneItem(
-                                      index: index,
-                                      controller: _storyController,
-                                      story: state.story?[index]?.first,
-                                    ),
-                                  ),
+                            position: index,
+                            duration: const Duration(milliseconds: 375),
+                            child: SlideAnimation(
+                              verticalOffset: 50.0,
+                              child: FadeInAnimation(
+                                child: ShopBarOneItem(
+                                  index: index,
+                                  controller: _storyController,
+                                  story: state.story?[index]?.first,
                                 ),
                               ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -299,28 +297,27 @@ class _HomeOnePageState extends ConsumerState<HomeOnePage> {
         state.isShopRecommendLoading
             ? const RecommendShopShimmer()
             : state.shopsRecommend.isNotEmpty
-            ? Column(
-                children: [
-                  TitleAndIcon(
-                    rightTitle: AppHelpers.getTranslation(TrKeys.seeAll),
-                    isIcon: true,
-                    title: AppHelpers.getTranslation(TrKeys.popularNearYou),
-                    onRightTap: () {
-                      context.pushRoute(RecommendedOneRoute());
-                    },
-                  ),
-                  12.verticalSpace,
-                  SizedBox(
-                    height: 170.h,
-                    child: AnimationLimiter(
-                      child: ListView.builder(
-                        shrinkWrap: false,
-
-                        scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.symmetric(horizontal: 16.w),
-                        itemCount: state.shopsRecommend.length,
-                        itemBuilder: (context, index) =>
-                            AnimationConfiguration.staggeredList(
+                ? Column(
+                    children: [
+                      TitleAndIcon(
+                        rightTitle: AppHelpers.getTranslation(TrKeys.seeAll),
+                        isIcon: true,
+                        title: AppHelpers.getTranslation(TrKeys.popularNearYou),
+                        onRightTap: () {
+                          context.pushRoute(RecommendedOneRoute());
+                        },
+                      ),
+                      12.verticalSpace,
+                      SizedBox(
+                        height: 170.h,
+                        child: AnimationLimiter(
+                          child: ListView.builder(
+                            shrinkWrap: false,
+                            scrollDirection: Axis.horizontal,
+                            padding: EdgeInsets.symmetric(horizontal: 16.w),
+                            itemCount: state.shopsRecommend.length,
+                            itemBuilder: (context, index) =>
+                                AnimationConfiguration.staggeredList(
                               position: index,
                               duration: const Duration(milliseconds: 375),
                               child: SlideAnimation(
@@ -332,41 +329,40 @@ class _HomeOnePageState extends ConsumerState<HomeOnePage> {
                                 ),
                               ),
                             ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  30.verticalSpace,
-                ],
-              )
-            : const SizedBox.shrink(),
+                      30.verticalSpace,
+                    ],
+                  )
+                : const SizedBox.shrink(),
         state.isNewShopsLoading
             ? NewsShopShimmer(
                 title: AppHelpers.getTranslation(TrKeys.newsOfWeek),
               )
             : state.newShops.isNotEmpty
-            ? Column(
-                children: [
-                  TitleAndIcon(
-                    rightTitle: AppHelpers.getTranslation(TrKeys.seeAll),
-                    isIcon: true,
-                    title: AppHelpers.getTranslation(TrKeys.newsOfWeek),
-                    onRightTap: () {
-                      context.pushRoute(
-                        RecommendedOneRoute(isNewsOfPage: true),
-                      );
-                    },
-                  ),
-                  12.verticalSpace,
-                  SizedBox(
-                    height: 250.h,
-                    child: AnimationLimiter(
-                      child: ListView.builder(
-                        padding: EdgeInsets.only(left: 16.r),
-
-                        scrollDirection: Axis.horizontal,
-                        itemCount: state.newShops.length,
-                        itemBuilder: (context, index) =>
-                            AnimationConfiguration.staggeredList(
+                ? Column(
+                    children: [
+                      TitleAndIcon(
+                        rightTitle: AppHelpers.getTranslation(TrKeys.seeAll),
+                        isIcon: true,
+                        title: AppHelpers.getTranslation(TrKeys.newsOfWeek),
+                        onRightTap: () {
+                          context.pushRoute(
+                            RecommendedOneRoute(isNewsOfPage: true),
+                          );
+                        },
+                      ),
+                      12.verticalSpace,
+                      SizedBox(
+                        height: 250.h,
+                        child: AnimationLimiter(
+                          child: ListView.builder(
+                            padding: EdgeInsets.only(left: 16.r),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: state.newShops.length,
+                            itemBuilder: (context, index) =>
+                                AnimationConfiguration.staggeredList(
                               position: index,
                               duration: const Duration(milliseconds: 375),
                               child: SlideAnimation(
@@ -378,12 +374,12 @@ class _HomeOnePageState extends ConsumerState<HomeOnePage> {
                                 ),
                               ),
                             ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ],
-              )
-            : const SizedBox.shrink(),
+                    ],
+                  )
+                : const SizedBox.shrink(),
         30.verticalSpace,
         state.isAllShopsLoading
             ? const AllShopShimmer()
@@ -397,24 +393,23 @@ class _HomeOnePageState extends ConsumerState<HomeOnePage> {
                           child: ListView.builder(
                             padding: EdgeInsets.only(top: 6.h),
                             shrinkWrap: true,
-
                             physics: const NeverScrollableScrollPhysics(),
                             scrollDirection: Axis.vertical,
                             itemCount: state.allShops.length,
                             itemBuilder: (context, index) =>
                                 AnimationConfiguration.staggeredList(
-                                  position: index,
-                                  duration: const Duration(milliseconds: 375),
-                                  child: SlideAnimation(
-                                    verticalOffset: 50.0,
-                                    child: FadeInAnimation(
-                                      child: MarketOneItem(
-                                        shop: state.allShops[index],
-                                        isSimpleShop: true,
-                                      ),
-                                    ),
+                              position: index,
+                              duration: const Duration(milliseconds: 375),
+                              child: SlideAnimation(
+                                verticalOffset: 50.0,
+                                child: FadeInAnimation(
+                                  child: MarketOneItem(
+                                    shop: state.allShops[index],
+                                    isSimpleShop: true,
                                   ),
                                 ),
+                              ),
+                            ),
                           ),
                         )
                       : SvgPicture.asset(

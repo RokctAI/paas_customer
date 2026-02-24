@@ -112,26 +112,24 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 
       if (!mounted) return;
       // Then check authentication
-      ref
-          .read(splashProvider.notifier)
-          .getToken(
-            context,
-            goMain: () {
-              FlutterNativeSplash.remove();
-              if (!mounted) return;
-              AppHelpers.goHome(context);
-            },
-            goLogin: () {
-              FlutterNativeSplash.remove();
-              if (!mounted) return;
-              context.replaceRoute(const LoginRoute());
-            },
-            goNoInternet: () {
-              FlutterNativeSplash.remove();
-              if (!mounted) return;
-              context.replaceRoute(const NoConnectionRoute());
-            },
-          );
+      ref.read(splashProvider.notifier).getToken(
+        context,
+        goMain: () {
+          FlutterNativeSplash.remove();
+          if (!mounted) return;
+          AppHelpers.goHome(context);
+        },
+        goLogin: () {
+          FlutterNativeSplash.remove();
+          if (!mounted) return;
+          context.replaceRoute(const LoginRoute());
+        },
+        goNoInternet: () {
+          FlutterNativeSplash.remove();
+          if (!mounted) return;
+          context.replaceRoute(const NoConnectionRoute());
+        },
+      );
     } catch (e) {
       // If online flow fails, try offline
       await _proceedOffline();

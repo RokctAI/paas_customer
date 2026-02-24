@@ -146,8 +146,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
       // final savedApplicationsResult = results[1] as ApiResult<List<Map<String, dynamic>>>;
       // final myApplicationsResult = results[2] as ApiResult<List<dynamic>>;
 
-      final savedApplicationsResult =
-          results[1]; // Keeping this for now as dynamic cast might be needed if inference fails
+      final savedApplicationsResult = results[
+          1]; // Keeping this for now as dynamic cast might be needed if inference fails
       final myApplicationsResult = results[2];
 
       debugPrint("All data fetched");
@@ -765,8 +765,7 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
           ),
           width: double.infinity,
           constraints: BoxConstraints(
-            maxHeight:
-                MediaQuery.of(context).size.height *
+            maxHeight: MediaQuery.of(context).size.height *
                 0.85, // Increased to 85% for more space
           ),
           child: Padding(
@@ -829,20 +828,20 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
 
                                 // Continue to Eligibility Check Button
                                 CustomButton(
-                                  title:
-                                      ref.watch(hasPendingApplicationProvider)
+                                  title: ref
+                                          .watch(hasPendingApplicationProvider)
                                       ? 'Application Under Review'
                                       : (_savedApplication != null
-                                            ? 'Continue Application'
-                                            : 'Continue to Eligibility Check'),
-                                  onPressed:
-                                      ref.watch(hasPendingApplicationProvider)
+                                          ? 'Continue Application'
+                                          : 'Continue to Eligibility Check'),
+                                  onPressed: ref
+                                          .watch(hasPendingApplicationProvider)
                                       ? null // Disable button if there's a pending application
                                       : _navigateToLoanEligibilityScreen,
                                   background:
                                       ref.watch(hasPendingApplicationProvider)
-                                      ? AppStyle.textGrey
-                                      : AppStyle.primary,
+                                          ? AppStyle.textGrey
+                                          : AppStyle.primary,
                                   textColor: AppStyle.white,
                                 ),
 
@@ -1220,8 +1219,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
                 size: 14.sp,
                 color:
                     activeLoan['status']?.toString().toLowerCase() == 'overdue'
-                    ? AppStyle.red
-                    : Colors.green,
+                        ? AppStyle.red
+                        : Colors.green,
               ),
             ),
             subtitle: Text(
@@ -1237,8 +1236,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
                 size: 12.sp,
                 color:
                     activeLoan['status']?.toString().toLowerCase() == 'overdue'
-                    ? AppStyle.red
-                    : Colors.green,
+                        ? AppStyle.red
+                        : Colors.green,
               ),
             ),
           );
@@ -1255,8 +1254,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
               status == 'pending_review'
                   ? Icons.hourglass_top
                   : status == 'pending'
-                  ? Icons.pending_outlined
-                  : Icons.drafts_outlined,
+                      ? Icons.pending_outlined
+                      : Icons.drafts_outlined,
               color: Colors.orange,
               size: 32.r,
             ),
@@ -1264,8 +1263,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
               status == 'pending_review'
                   ? 'Application Under Review'
                   : status == 'pending'
-                  ? 'Pending Application'
-                  : 'Draft Application',
+                      ? 'Pending Application'
+                      : 'Draft Application',
               style: AppStyle.interSemi(size: 14.sp, color: Colors.orange),
             ),
             subtitle: Column(
@@ -1297,8 +1296,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
                 status == 'pending_review'
                     ? 'Under Review'
                     : status == 'pending'
-                    ? 'Pending'
-                    : 'Draft',
+                        ? 'Pending'
+                        : 'Draft',
                 style: AppStyle.interSemi(size: 12.sp, color: Colors.orange),
               ),
             ),
@@ -1548,9 +1547,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
                 : 'R ${intl.NumberFormat('#,##0').format(ref.watch(loanAmountProvider))}',
             style: AppStyle.interBold(
               size: 18.sp,
-              color: hasPendingApplication
-                  ? AppStyle.textGrey
-                  : AppStyle.primary,
+              color:
+                  hasPendingApplication ? AppStyle.textGrey : AppStyle.primary,
             ),
           ),
           16.verticalSpace,
@@ -1564,8 +1562,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
               label:
                   'R ${intl.NumberFormat('#,##0').format(ref.watch(loanAmountProvider))}',
               onChanged: (double value) {
-                ref.read(loanAmountProvider.notifier).state = value
-                    .roundToDouble();
+                ref.read(loanAmountProvider.notifier).state =
+                    value.roundToDouble();
               },
               // Make it look disabled visually
               activeColor: (_sliderDisabled || hasPendingApplication)
@@ -1634,7 +1632,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
     final hasPendingApplication = ref.watch(hasPendingApplicationProvider);
 
     if (!hasPendingApplication) {
-      return const SizedBox.shrink(); // Return empty widget if no pending application
+      return const SizedBox
+          .shrink(); // Return empty widget if no pending application
     }
 
     return Container(

@@ -78,8 +78,7 @@ class _LoanDocumentUploadScreenState
     );
 
     // If ID number is prefilled, make it read-only
-    _idNumberReadOnly =
-        widget.prefilledIdNumber != null &&
+    _idNumberReadOnly = widget.prefilledIdNumber != null &&
         widget.prefilledIdNumber!.isNotEmpty;
 
     // Set initial ID number in provider
@@ -374,9 +373,8 @@ class _LoanDocumentUploadScreenState
     debugPrint("Building UI with ${uploadedDocs.length} uploaded documents");
 
     return Directionality(
-      textDirection: LocalStorage.getLangLtr()
-          ? TextDirection.ltr
-          : TextDirection.rtl,
+      textDirection:
+          LocalStorage.getLangLtr() ? TextDirection.ltr : TextDirection.rtl,
       child: KeyboardDismisser(
         child: Container(
           decoration: BoxDecoration(
@@ -388,8 +386,7 @@ class _LoanDocumentUploadScreenState
           ),
           width: double.infinity,
           constraints: BoxConstraints(
-            maxHeight:
-                MediaQuery.of(context).size.height *
+            maxHeight: MediaQuery.of(context).size.height *
                 0.85, // Use 85% of screen height
           ),
           child: Padding(

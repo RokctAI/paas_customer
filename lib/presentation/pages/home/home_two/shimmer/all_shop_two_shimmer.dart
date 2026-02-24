@@ -31,21 +31,20 @@ class AllShopTwoShimmer extends StatelessWidget {
             ),
             padding: EdgeInsets.only(top: 6.h, left: 16, right: 16),
             shrinkWrap: true,
-
             physics: const NeverScrollableScrollPhysics(),
             scrollDirection: Axis.vertical,
             itemCount: 6,
             itemBuilder: (context, index) =>
                 AnimationConfiguration.staggeredList(
-                  position: index,
-                  duration: const Duration(milliseconds: 375),
-                  child: SlideAnimation(
-                    verticalOffset: 50.0,
-                    child: FadeInAnimation(
-                      child: MarketTwoShimmer(isSimpleShop: true, index: index),
-                    ),
-                  ),
+              position: index,
+              duration: const Duration(milliseconds: 375),
+              child: SlideAnimation(
+                verticalOffset: 50.0,
+                child: FadeInAnimation(
+                  child: MarketTwoShimmer(isSimpleShop: true, index: index),
                 ),
+              ),
+            ),
           ),
         ),
       ],

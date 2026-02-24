@@ -20,7 +20,7 @@ class ResetPasswordNotifier extends StateNotifier<ResetPasswordState> {
   final UserRepositoryFacade _userRepositoryFacade;
 
   ResetPasswordNotifier(this._authRepository, this._userRepositoryFacade)
-    : super(const ResetPasswordState());
+      : super(const ResetPasswordState());
 
   void setEmail(String text) {
     state = state.copyWith(email: text.trim(), isEmailError: false);

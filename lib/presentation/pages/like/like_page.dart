@@ -101,36 +101,36 @@ class _LikePageState extends ConsumerState<LikePage> {
                     state.isShopLoading
                         ? const AllShopShimmer(isTitle: false)
                         : state.shops.isEmpty
-                        ? _resultEmpty()
-                        : ListView.builder(
-                            padding: AppHelpers.getType() == 2
-                                ? EdgeInsets.symmetric(horizontal: 16.r)
-                                : EdgeInsets.only(top: 6.h),
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            itemCount: state.shops.length,
-                            itemBuilder: (context, index) =>
-                                AppHelpers.getType() == 0
-                                ? MarketItem(
-                                    shop: state.shops[index],
-                                    isSimpleShop: true,
-                                  )
-                                : AppHelpers.getType() == 1
-                                ? MarketOneItem(
-                                    shop: state.shops[index],
-                                    isSimpleShop: true,
-                                  )
-                                : AppHelpers.getType() == 2
-                                ? MarketTwoItem(
-                                    shop: state.shops[index],
-                                    isSimpleShop: true,
-                                  )
-                                : MarketThreeItem(
-                                    shop: state.shops[index],
-                                    isSimpleShop: true,
-                                  ),
-                          ),
+                            ? _resultEmpty()
+                            : ListView.builder(
+                                padding: AppHelpers.getType() == 2
+                                    ? EdgeInsets.symmetric(horizontal: 16.r)
+                                    : EdgeInsets.only(top: 6.h),
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                itemCount: state.shops.length,
+                                itemBuilder: (context, index) =>
+                                    AppHelpers.getType() == 0
+                                        ? MarketItem(
+                                            shop: state.shops[index],
+                                            isSimpleShop: true,
+                                          )
+                                        : AppHelpers.getType() == 1
+                                            ? MarketOneItem(
+                                                shop: state.shops[index],
+                                                isSimpleShop: true,
+                                              )
+                                            : AppHelpers.getType() == 2
+                                                ? MarketTwoItem(
+                                                    shop: state.shops[index],
+                                                    isSimpleShop: true,
+                                                  )
+                                                : MarketThreeItem(
+                                                    shop: state.shops[index],
+                                                    isSimpleShop: true,
+                                                  ),
+                              ),
                   ],
                 ),
               ),

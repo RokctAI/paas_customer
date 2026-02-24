@@ -158,8 +158,8 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
                   : AppStyle.black,
               title: !widget.isShopLocation
                   ? (state.isActive
-                        ? AppHelpers.getTranslation(TrKeys.apply)
-                        : AppHelpers.getTranslation(TrKeys.noDriverZone))
+                      ? AppHelpers.getTranslation(TrKeys.apply)
+                      : AppHelpers.getTranslation(TrKeys.noDriverZone))
                   : AppHelpers.getTranslation(TrKeys.apply),
               onPressed: () {
                 if (widget.isShopLocation) {

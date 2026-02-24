@@ -114,8 +114,7 @@ class BannerData {
       } else if (json['clickable'] is int) {
         _clickable = json['clickable'] == 1;
       } else if (json['clickable'] is String) {
-        _clickable =
-            json['clickable'] == '1' ||
+        _clickable = json['clickable'] == '1' ||
             json['clickable'].toLowerCase() == 'true';
       } else {
         _clickable = false;
@@ -179,20 +178,21 @@ class BannerData {
     String? updatedAt,
     Translation? translation,
     String? buttonText, // Added parameter
-  }) => BannerData(
-    id: id ?? _id,
-    shopId: shopId ?? _shopId,
-    url: url ?? _url,
-    shops: shops ?? _shops,
-    img: img ?? _img,
-    active: active ?? _active,
-    clickable: clickable ?? _clickable,
-    likes: likes ?? _likes,
-    createdAt: createdAt ?? _createdAt,
-    updatedAt: updatedAt ?? _updatedAt,
-    translation: translation ?? _translation,
-    buttonText: buttonText ?? _buttonText, // Include in copyWith
-  );
+  }) =>
+      BannerData(
+        id: id ?? _id,
+        shopId: shopId ?? _shopId,
+        url: url ?? _url,
+        shops: shops ?? _shops,
+        img: img ?? _img,
+        active: active ?? _active,
+        clickable: clickable ?? _clickable,
+        likes: likes ?? _likes,
+        createdAt: createdAt ?? _createdAt,
+        updatedAt: updatedAt ?? _updatedAt,
+        translation: translation ?? _translation,
+        buttonText: buttonText ?? _buttonText, // Include in copyWith
+      );
 
   int? get id => _id;
 

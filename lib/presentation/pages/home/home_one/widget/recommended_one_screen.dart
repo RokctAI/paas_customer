@@ -52,8 +52,8 @@ class _RecommendedPageState extends ConsumerState<RecommendedOnePage> {
                 widget.isShop
                     ? TrKeys.shops
                     : widget.isNewsOfPage
-                    ? TrKeys.newsOfWeek
-                    : TrKeys.recommended,
+                        ? TrKeys.newsOfWeek
+                        : TrKeys.recommended,
               ),
               style: AppStyle.interNoSemi(size: 18.sp),
             ),
@@ -65,7 +65,6 @@ class _RecommendedPageState extends ConsumerState<RecommendedOnePage> {
                           controller: _recommendedController,
                           enablePullDown: true,
                           enablePullUp: true,
-
                           onLoading: () async {
                             await event.fetchShopPage(
                               context,
@@ -81,7 +80,6 @@ class _RecommendedPageState extends ConsumerState<RecommendedOnePage> {
                           },
                           child: ListView.builder(
                             shrinkWrap: true,
-
                             itemCount: state.shops.length,
                             padding: EdgeInsets.symmetric(vertical: 24.h),
                             itemBuilder: (context, index) => MarketOneItem(
@@ -104,101 +102,102 @@ class _RecommendedPageState extends ConsumerState<RecommendedOnePage> {
                         ),
                 )
               : widget.isNewsOfPage
-              ? Expanded(
-                  child: state.newShops.isNotEmpty
-                      ? SmartRefresher(
-                          controller: _recommendedController,
-                          enablePullDown: true,
-                          enablePullUp: true,
-
-                          onLoading: () async {
-                            await event.fetchNewShopsPage(
-                              context,
-                              _recommendedController,
-                            );
-                          },
-                          onRefresh: () async {
-                            await event.fetchNewShopsPage(
-                              context,
-                              _recommendedController,
-                              isRefresh: true,
-                            );
-                          },
-                          child: ListView.builder(
-                            shrinkWrap: true,
-
-                            itemCount: state.newShops.length,
-                            padding: EdgeInsets.symmetric(vertical: 24.h),
-                            itemBuilder: (context, index) => MarketOneItem(
-                              shop: state.newShops[index],
-                              isSimpleShop: true,
+                  ? Expanded(
+                      child: state.newShops.isNotEmpty
+                          ? SmartRefresher(
+                              controller: _recommendedController,
+                              enablePullDown: true,
+                              enablePullUp: true,
+                              onLoading: () async {
+                                await event.fetchNewShopsPage(
+                                  context,
+                                  _recommendedController,
+                                );
+                              },
+                              onRefresh: () async {
+                                await event.fetchNewShopsPage(
+                                  context,
+                                  _recommendedController,
+                                  isRefresh: true,
+                                );
+                              },
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: state.newShops.length,
+                                padding: EdgeInsets.symmetric(vertical: 24.h),
+                                itemBuilder: (context, index) => MarketOneItem(
+                                  shop: state.newShops[index],
+                                  isSimpleShop: true,
+                                ),
+                              ),
+                            )
+                          : Column(
+                              children: [
+                                SizedBox(
+                                  height: MediaQuery.sizeOf(context).height / 2,
+                                  child:
+                                      SvgPicture.asset("assets/svgs/empty.svg"),
+                                ),
+                                16.verticalSpace,
+                                Text(
+                                  AppHelpers.getTranslation(
+                                      TrKeys.noRestaurant),
+                                ),
+                              ],
                             ),
-                          ),
-                        )
-                      : Column(
-                          children: [
-                            SizedBox(
-                              height: MediaQuery.sizeOf(context).height / 2,
-                              child: SvgPicture.asset("assets/svgs/empty.svg"),
-                            ),
-                            16.verticalSpace,
-                            Text(
-                              AppHelpers.getTranslation(TrKeys.noRestaurant),
-                            ),
-                          ],
-                        ),
-                )
-              : Expanded(
-                  child: state.shopsRecommend.isNotEmpty
-                      ? SmartRefresher(
-                          controller: _recommendedController,
-                          enablePullDown: true,
-                          enablePullUp: false,
-
-                          onLoading: () async {
-                            // await event.fetchShopPageRecommend(
-                            //     context, _recommendedController);
-                          },
-                          onRefresh: () async {
-                            await event.fetchShopPageRecommend(
-                              context,
-                              _recommendedController,
-                              isRefresh: true,
-                            );
-                          },
-                          child: GridView.builder(
-                            shrinkWrap: true,
-
-                            itemCount: state.shopsRecommend.length,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16.w,
-                              vertical: 24.h,
-                            ),
-                            itemBuilder: (context, index) => RecommendedOneItem(
-                              shop: state.shopsRecommend[index],
-                            ),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
+                    )
+                  : Expanded(
+                      child: state.shopsRecommend.isNotEmpty
+                          ? SmartRefresher(
+                              controller: _recommendedController,
+                              enablePullDown: true,
+                              enablePullUp: false,
+                              onLoading: () async {
+                                // await event.fetchShopPageRecommend(
+                                //     context, _recommendedController);
+                              },
+                              onRefresh: () async {
+                                await event.fetchShopPageRecommend(
+                                  context,
+                                  _recommendedController,
+                                  isRefresh: true,
+                                );
+                              },
+                              child: GridView.builder(
+                                shrinkWrap: true,
+                                itemCount: state.shopsRecommend.length,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 16.w,
+                                  vertical: 24.h,
+                                ),
+                                itemBuilder: (context, index) =>
+                                    RecommendedOneItem(
+                                  shop: state.shopsRecommend[index],
+                                ),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
                                   childAspectRatio: 0.66.r,
                                   crossAxisCount: 2,
                                   mainAxisExtent: 190.h,
                                   mainAxisSpacing: 10.h,
                                 ),
-                          ),
-                        )
-                      : Column(
-                          children: [
-                            SizedBox(
-                              height: MediaQuery.sizeOf(context).height / 2,
-                              child: SvgPicture.asset("assets/svgs/empty.svg"),
+                              ),
+                            )
+                          : Column(
+                              children: [
+                                SizedBox(
+                                  height: MediaQuery.sizeOf(context).height / 2,
+                                  child:
+                                      SvgPicture.asset("assets/svgs/empty.svg"),
+                                ),
+                                16.verticalSpace,
+                                Text(
+                                  AppHelpers.getTranslation(
+                                      TrKeys.noRestaurant),
+                                ),
+                              ],
                             ),
-                            16.verticalSpace,
-                            Text(
-                              AppHelpers.getTranslation(TrKeys.noRestaurant),
-                            ),
-                          ],
-                        ),
-                ),
+                    ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,

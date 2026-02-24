@@ -53,7 +53,6 @@ class MyAccount extends StatelessWidget {
             const SizedBox(height: 24),
             ButtonItem(
               isLtr: isLtr,
-
               icon: FlutterRemix.edit_2_line,
               title: AppHelpers.getTranslation(TrKeys.editAccount),
               onTap: () {
@@ -128,7 +127,7 @@ class MyAccount extends StatelessWidget {
 
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
         floatingActionButton: //isBackButton ?
-        Padding(
+            Padding(
           padding: EdgeInsets.only(left: 16.w),
           child: const PopButton(),
         ),

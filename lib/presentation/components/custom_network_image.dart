@@ -34,9 +34,7 @@ class CustomNetworkImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(radius),
-      child:
-          color !=
-              null // Check if color is provided
+      child: color != null // Check if color is provided
           ? ColorFiltered(
               // Apply color filter if color is provided
               colorFilter: ColorFilter.mode(color!, BlendMode.srcIn),

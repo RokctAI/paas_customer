@@ -40,8 +40,8 @@ class LoansRepository implements LoansRepositoryFacade {
           (financials['monthly_income'] as num?)?.toDouble() ?? 0.0;
       final double expenses =
           ((financials['grocery_expenses'] as num?)?.toDouble() ?? 0.0) +
-          ((financials['other_expenses'] as num?)?.toDouble() ?? 0.0) +
-          ((financials['existing_credits'] as num?)?.toDouble() ?? 0.0);
+              ((financials['other_expenses'] as num?)?.toDouble() ?? 0.0) +
+              ((financials['existing_credits'] as num?)?.toDouble() ?? 0.0);
 
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
@@ -50,7 +50,8 @@ class LoansRepository implements LoansRepositoryFacade {
           'applicant_type': 'Customer',
           'applicant': user?.firstname != null
               ? "${user?.firstname} ${user?.lastname}"
-              : user?.email, // Best guess for Name, backend should key off User though.
+              : user
+                  ?.email, // Best guess for Name, backend should key off User though.
           'loan_product': 'Personal Loan',
           'loan_amount': applicationData.amount,
           'income': income,
@@ -271,8 +272,7 @@ class LoansRepository implements LoansRepositoryFacade {
         production: !(settings["is_sandbox"] ?? true),
         amount: '5.00',
         itemName: 'Loan Tokenization',
-        notifyUrl:
-            settings["success_redirect_url"] ??
+        notifyUrl: settings["success_redirect_url"] ??
             "", // Map success to notify/return as fallback
         cancelUrl: settings["failure_redirect_url"] ?? "",
         returnUrl: settings["success_redirect_url"] ?? "",

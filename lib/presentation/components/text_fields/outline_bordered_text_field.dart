@@ -133,8 +133,8 @@ class OutlinedBorderTextField extends StatelessWidget {
                   color: isError
                       ? AppStyle.red
                       : isSuccess
-                      ? AppStyle.bgGrey
-                      : AppStyle.black,
+                          ? AppStyle.bgGrey
+                          : AppStyle.black,
                 ),
               ),
             ],

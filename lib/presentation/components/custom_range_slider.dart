@@ -68,9 +68,8 @@ class CustomRoundRangeSliderThumbShape extends RangeSliderThumbShape {
       );
     }
 
-    final double evaluatedElevation = isPressed!
-        ? elevationTween.evaluate(activationAnimation)
-        : elevation;
+    final double evaluatedElevation =
+        isPressed! ? elevationTween.evaluate(activationAnimation) : elevation;
     final Path shadowPath = Path()
       ..addArc(
         Rect.fromCenter(center: center, width: 36.r, height: 20.r),

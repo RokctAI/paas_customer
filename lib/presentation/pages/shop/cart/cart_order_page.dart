@@ -49,9 +49,7 @@ class _ShopOrderState extends ConsumerState<CartOrderPage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
-          .read(shopOrderProvider.notifier)
-          .getCart(
+      ref.read(shopOrderProvider.notifier).getCart(
             context,
             () {},
             isShowLoading: false,
@@ -61,9 +59,7 @@ class _ShopOrderState extends ConsumerState<CartOrderPage> {
           );
     });
     timer = Timer.periodic(const Duration(seconds: 5), (Timer t) {
-      ref
-          .read(shopOrderProvider.notifier)
-          .getCart(
+      ref.read(shopOrderProvider.notifier).getCart(
             context,
             () {},
             isShowLoading: false,
@@ -111,18 +107,13 @@ class _ShopOrderState extends ConsumerState<CartOrderPage> {
               ),
             ),
             width: double.infinity,
-            child:
-                state.cart == null ||
+            child: state.cart == null ||
                     (state.cart?.userCarts?.isEmpty ?? true) ||
                     ((state.cart?.userCarts?.isEmpty ?? true)
                             ? true
-                            : (state
-                                      .cart
-                                      ?.userCarts
-                                      ?.first
-                                      .cartDetails
-                                      ?.isEmpty ??
-                                  true)) &&
+                            : (state.cart?.userCarts?.first.cartDetails
+                                    ?.isEmpty ??
+                                true)) &&
                         !(state.cart?.group ?? false)
                 ? _resultEmpty()
                 : Stack(
@@ -184,13 +175,8 @@ class _ShopOrderState extends ConsumerState<CartOrderPage> {
                                       physics:
                                           const NeverScrollableScrollPhysics(),
                                       shrinkWrap: true,
-                                      itemCount:
-                                          state
-                                              .cart
-                                              ?.userCarts
-                                              ?.first
-                                              .cartDetails
-                                              ?.length ??
+                                      itemCount: state.cart?.userCarts?.first
+                                              .cartDetails?.length ??
                                           0,
                                       itemBuilder: (context, index) {
                                         return CartOrderItem(
@@ -198,10 +184,7 @@ class _ShopOrderState extends ConsumerState<CartOrderPage> {
                                               event.addCount(context, index),
                                           remove: () =>
                                               event.removeCount(context, index),
-                                          cart: state
-                                              .cart
-                                              ?.userCarts
-                                              ?.first
+                                          cart: state.cart?.userCarts?.first
                                               .cartDetails?[index],
                                         );
                                       },
@@ -249,29 +232,27 @@ class _ShopOrderState extends ConsumerState<CartOrderPage> {
                       return CartOrderItem(
                         isOwn: ref.watch(shopProvider).userUuid.isNotEmpty
                             ? (state.cart?.userCarts?[index].uuid ==
-                                  ref.watch(shopProvider).userUuid)
+                                ref.watch(shopProvider).userUuid)
                             : (state.cart?.userCarts?[index].userId ==
-                                  LocalStorage.getUser()?.id),
+                                LocalStorage.getUser()?.id),
                         add: () =>
                             LocalStorage.getUser()?.id == state.cart?.ownerId
-                            ? event.addCount(context, indexCart)
-                            : event.addCountWithGroup(
-                                context: context,
-                                productIndex: indexCart,
-                                userIndex: index,
-                              ),
+                                ? event.addCount(context, indexCart)
+                                : event.addCountWithGroup(
+                                    context: context,
+                                    productIndex: indexCart,
+                                    userIndex: index,
+                                  ),
                         remove: () =>
                             LocalStorage.getUser()?.id == state.cart?.ownerId
-                            ? event.removeCount(context, indexCart)
-                            : event.removeCountWithGroup(
-                                context: context,
-                                productIndex: indexCart,
-                                userIndex: index,
-                              ),
+                                ? event.removeCount(context, indexCart)
+                                : event.removeCountWithGroup(
+                                    context: context,
+                                    productIndex: indexCart,
+                                    userIndex: index,
+                                  ),
                         cart: state
-                            .cart
-                            ?.userCarts?[index]
-                            .cartDetails?[indexCart],
+                            .cart?.userCarts?[index].cartDetails?[indexCart],
                       );
                     },
                   ),
@@ -346,24 +327,21 @@ class _ShopOrderState extends ConsumerState<CartOrderPage> {
               left: 16.w,
             ),
             child: CustomButton(
-              background:
-                  (state.cart?.group ?? false) &&
+              background: (state.cart?.group ?? false) &&
                       state.isEditOrder &&
                       ref.watch(shopProvider).userUuid.isNotEmpty
                   ? AppStyle.transparent
                   : AppStyle.primary,
-              borderColor:
-                  (state.cart?.group ?? false) &&
+              borderColor: (state.cart?.group ?? false) &&
                       state.isEditOrder &&
                       ref.watch(shopProvider).userUuid.isNotEmpty
                   ? AppStyle.black
                   : AppStyle.primary,
-              title:
-                  (state.cart?.ownerId != LocalStorage.getUser()?.id &&
+              title: (state.cart?.ownerId != LocalStorage.getUser()?.id &&
                       (state.cart?.group ?? false))
                   ? (state.isEditOrder
-                        ? AppHelpers.getTranslation(TrKeys.isEditOrder)
-                        : AppHelpers.getTranslation(TrKeys.done))
+                      ? AppHelpers.getTranslation(TrKeys.isEditOrder)
+                      : AppHelpers.getTranslation(TrKeys.done))
                   : AppHelpers.getTranslation(TrKeys.order),
               onPressed: () {
                 if ((state.cart?.ownerId != LocalStorage.getUser()?.id &&

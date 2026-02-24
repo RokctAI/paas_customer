@@ -79,11 +79,11 @@ class AppBarTwo extends StatelessWidget {
                                             ?.isEmpty ??
                                         true)
                                     ? LocalStorage.getAddressSelected()
-                                              ?.address ??
-                                          ''
+                                            ?.address ??
+                                        ''
                                     : LocalStorage.getAddressSelected()
-                                              ?.title ??
-                                          "",
+                                            ?.title ??
+                                        "",
                                 style: AppStyle.interBold(
                                   size: 14,
                                   color: AppStyle.black,

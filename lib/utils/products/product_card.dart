@@ -88,8 +88,7 @@ class ProductCard extends ConsumerWidget {
     String? pricePerUnit;
     if (showPerUnitPrice && !isLowStock) {
       // Don't show per unit price if title/description contains "drink" or "bottle"
-      bool shouldShow =
-          !ProductUtils.containsKeyword(title, "drink") &&
+      bool shouldShow = !ProductUtils.containsKeyword(title, "drink") &&
           !ProductUtils.containsKeyword(description, "drink") &&
           !ProductUtils.containsKeyword(title, "bottle") &&
           !ProductUtils.containsKeyword(description, "bottle");
@@ -265,7 +264,6 @@ class ProductCard extends ConsumerWidget {
                 children: [
                   if (sizeInfo?.size != null)
                     ProductUIComponents.buildSizeBadge(sizeInfo?.size),
-
                   if (packagingType != null)
                     Text(
                       packagingType,
@@ -336,16 +334,16 @@ class ProductCard extends ConsumerWidget {
                       ],
                     )
                   : keywords.hasFrozen
-                  ? ProductUIComponents.buildColdFrozenBadge(
-                      "Frozen",
-                      Colors.indigo.shade100,
-                      Colors.indigo.shade700,
-                    )
-                  : ProductUIComponents.buildColdFrozenBadge(
-                      "Cold",
-                      Colors.blue.shade100,
-                      Colors.blue.shade700,
-                    ),
+                      ? ProductUIComponents.buildColdFrozenBadge(
+                          "Frozen",
+                          Colors.indigo.shade100,
+                          Colors.indigo.shade700,
+                        )
+                      : ProductUIComponents.buildColdFrozenBadge(
+                          "Cold",
+                          Colors.blue.shade100,
+                          Colors.blue.shade700,
+                        ),
             ),
 
           // Adult content badge (18+)

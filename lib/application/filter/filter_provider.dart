@@ -6,5 +6,5 @@ import 'filter_state.dart';
 
 final filterProvider =
     StateNotifierProvider.autoDispose<FilterNotifier, FilterState>(
-      (ref) => FilterNotifier(shopsRepository),
-    );
+  (ref) => FilterNotifier(shopsRepository),
+);

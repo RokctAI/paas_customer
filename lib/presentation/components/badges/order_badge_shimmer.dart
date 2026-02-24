@@ -37,8 +37,7 @@ class OrderBadge extends StatelessWidget {
         Container(
           height: 22.h, // Adjust height as needed using ScreenUtil
           decoration: BoxDecoration(
-            color:
-                containerColor ??
+            color: containerColor ??
                 AppStyle.primary, // Use customizable color with default
             borderRadius: const BorderRadius.only(
               topRight: Radius.circular(
@@ -61,8 +60,7 @@ class OrderBadge extends StatelessWidget {
                 ), // Make sure AppHelpers is imported and accessible
                 style: AppStyle.interNoSemi(
                   size: 12,
-                  color:
-                      textColor ??
+                  color: textColor ??
                       AppStyle.white, // Use customizable color with default
                 ),
               ),

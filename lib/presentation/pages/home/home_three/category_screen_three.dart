@@ -35,7 +35,6 @@ class CategoryScreenThree extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               enablePullDown: false,
               enablePullUp: true,
-
               controller: categoryController,
               onLoading: () async {
                 await event.fetchCategoriesPage(context, categoryController);
@@ -44,11 +43,9 @@ class CategoryScreenThree extends StatelessWidget {
                 child: ListView.builder(
                   padding: REdgeInsets.symmetric(horizontal: 12),
                   shrinkWrap: true,
-
                   scrollDirection: Axis.horizontal,
-                  itemCount: state.isCategoryLoading
-                      ? 5
-                      : state.categories.length,
+                  itemCount:
+                      state.isCategoryLoading ? 5 : state.categories.length,
                   itemBuilder: (context, index) {
                     return AnimationConfiguration.staggeredList(
                       position: index,
@@ -58,8 +55,7 @@ class CategoryScreenThree extends StatelessWidget {
                         child: FadeInAnimation(
                           child: CategoryBarItemThree(
                             image: state.categories[index].img ?? "",
-                            title:
-                                state.categories[index].translation?.title ??
+                            title: state.categories[index].translation?.title ??
                                 "",
                             isActive: state.selectIndexCategory == index,
                             onTap: () {

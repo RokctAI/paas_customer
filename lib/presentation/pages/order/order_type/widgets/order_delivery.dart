@@ -117,9 +117,9 @@ class _OrderDeliveryState extends State<OrderDelivery> {
                   title: AppHelpers.getTranslation(TrKeys.deliveryAddress),
                   description:
                       (LocalStorage.getAddressSelected()?.title?.isEmpty ??
-                          true)
-                      ? LocalStorage.getAddressSelected()?.address ?? ''
-                      : LocalStorage.getAddressSelected()?.title ?? "",
+                              true)
+                          ? LocalStorage.getAddressSelected()?.address ?? ''
+                          : LocalStorage.getAddressSelected()?.title ?? "",
                 ),
                 10.verticalSpace,
                 OrderContainer(

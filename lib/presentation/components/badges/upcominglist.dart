@@ -73,7 +73,8 @@ class _UpComingListState extends ConsumerState<UpComingList> {
       valueListenable: _currentOrderNotifier,
       builder: (context, currentOrder, child) {
         if (currentOrder == null) {
-          return const SizedBox.shrink(); // Hide the widget when there's no order
+          return const SizedBox
+              .shrink(); // Hide the widget when there's no order
         }
 
         return Column(
@@ -202,7 +203,7 @@ class UpcomingOrderWidget extends StatelessWidget {
                               TextSpan(
                                 text: (order.status ?? "").isNotEmpty
                                     ? order.status![0].toUpperCase() +
-                                          order.status!.substring(1)
+                                        order.status!.substring(1)
                                     : "",
                                 style: AppStyle.interBold(
                                   color: AppStyle.white,

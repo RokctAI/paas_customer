@@ -21,7 +21,7 @@ class RegisterConfirmationNotifier
   final UserRepositoryFacade _userRepositoryFacade;
 
   RegisterConfirmationNotifier(this._authRepository, this._userRepositoryFacade)
-    : super(const RegisterConfirmationState());
+      : super(const RegisterConfirmationState());
 
   Timer? _timer;
   int _initialTime = 30;

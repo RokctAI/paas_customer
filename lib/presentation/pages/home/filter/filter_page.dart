@@ -53,9 +53,7 @@ class _FilterPageState extends ConsumerState<FilterPage> {
         ..fetchAllShops(context, widget.categoryId);
     });
     _freeDeliveryController.addListener(() {
-      ref
-          .read(filterProvider.notifier)
-          .setCheck(
+      ref.read(filterProvider.notifier).setCheck(
             context,
             _freeDeliveryController.value,
             _dealsController.value,
@@ -64,9 +62,7 @@ class _FilterPageState extends ConsumerState<FilterPage> {
           );
     });
     _dealsController.addListener(() {
-      ref
-          .read(filterProvider.notifier)
-          .setCheck(
+      ref.read(filterProvider.notifier).setCheck(
             context,
             _freeDeliveryController.value,
             _dealsController.value,
@@ -75,9 +71,7 @@ class _FilterPageState extends ConsumerState<FilterPage> {
           );
     });
     _openController.addListener(() {
-      ref
-          .read(filterProvider.notifier)
-          .setCheck(
+      ref.read(filterProvider.notifier).setCheck(
             context,
             _freeDeliveryController.value,
             _dealsController.value,
@@ -308,8 +302,7 @@ class _FilterPageState extends ConsumerState<FilterPage> {
                               width: 8.w,
                               height: 100.h / state.prices[i],
                               decoration: BoxDecoration(
-                                color:
-                                    ((state.rangeValues.start /
+                                color: ((state.rangeValues.start /
                                                     (state.endPrice / 20))
                                                 .round() <=
                                             i) &&

@@ -29,17 +29,13 @@ class OrderMap extends StatelessWidget {
   }
 
   LatLngBounds _createBounds(List<LatLng> positions) {
-    final southwestLat = positions
-        .map((p) => p.latitude)
-        .reduce(
+    final southwestLat = positions.map((p) => p.latitude).reduce(
           (value, element) => value < element ? value : element,
         ); // smallest
     final southwestLon = positions
         .map((p) => p.longitude)
         .reduce((value, element) => value < element ? value : element);
-    final northeastLat = positions
-        .map((p) => p.latitude)
-        .reduce(
+    final northeastLat = positions.map((p) => p.latitude).reduce(
           (value, element) => value > element ? value : element,
         ); // biggest
     final northeastLon = positions

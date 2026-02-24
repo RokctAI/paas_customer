@@ -94,7 +94,6 @@ class MarketThreeItem extends StatelessWidget {
                                       ),
                                   ],
                                 ),
-
                                 Container(
                                   padding: REdgeInsets.all(8),
                                   decoration: const ShapeDecoration(
@@ -118,8 +117,8 @@ class MarketThreeItem extends StatelessWidget {
                                   child: Text(
                                     shop.bonus != null
                                         ? ((shop.bonus?.type ?? "sum") == "sum")
-                                              ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(number: shop.bonus?.value)} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
-                                              : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                                            ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(number: shop.bonus?.value)} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                                            : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
                                         : shop.translation?.description ?? "",
                                     style: AppStyle.interNormal(
                                       size: 12,

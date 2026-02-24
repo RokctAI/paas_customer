@@ -70,11 +70,9 @@ class ShopRequest {
     map["perPage"] = AppHelpers.getType() == 3 ? 9 : 6;
     map["lang"] = LocalStorage.getLanguage()?.locale ?? "en";
     map["address"] = {
-      "latitude":
-          LocalStorage.getAddressSelected()?.location?.latitude ??
+      "latitude": LocalStorage.getAddressSelected()?.location?.latitude ??
           AppConstants.demoLatitude,
-      "longitude":
-          LocalStorage.getAddressSelected()?.location?.longitude ??
+      "longitude": LocalStorage.getAddressSelected()?.location?.longitude ??
           AppConstants.demoLongitude,
     };
     return map;

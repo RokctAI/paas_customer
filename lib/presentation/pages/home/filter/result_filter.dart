@@ -110,25 +110,25 @@ class _ResultFilterState extends ConsumerState<ResultFilterPage> {
                                 itemCount: state.allShops.length,
                                 itemBuilder: (context, index) =>
                                     AppHelpers.getType() == 0
-                                    ? MarketItem(
-                                        shop: state.allShops[index],
-                                        isSimpleShop: true,
-                                      )
-                                    : AppHelpers.getType() == 1
-                                    ? MarketOneItem(
-                                        shop: state.allShops[index],
-                                        isSimpleShop: true,
-                                      )
-                                    : AppHelpers.getType() == 2
-                                    ? MarketTwoItem(
-                                        shop: state.allShops[index],
-                                        isSimpleShop: true,
-                                        isFilter: true,
-                                      )
-                                    : MarketThreeItem(
-                                        shop: state.allShops[index],
-                                        isSimpleShop: true,
-                                      ),
+                                        ? MarketItem(
+                                            shop: state.allShops[index],
+                                            isSimpleShop: true,
+                                          )
+                                        : AppHelpers.getType() == 1
+                                            ? MarketOneItem(
+                                                shop: state.allShops[index],
+                                                isSimpleShop: true,
+                                              )
+                                            : AppHelpers.getType() == 2
+                                                ? MarketTwoItem(
+                                                    shop: state.allShops[index],
+                                                    isSimpleShop: true,
+                                                    isFilter: true,
+                                                  )
+                                                : MarketThreeItem(
+                                                    shop: state.allShops[index],
+                                                    isSimpleShop: true,
+                                                  ),
                               ),
                             ],
                           ),

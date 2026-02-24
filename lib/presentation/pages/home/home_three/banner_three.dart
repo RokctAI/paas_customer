@@ -33,7 +33,6 @@ class BannerThree extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             enablePullDown: false,
             enablePullUp: true,
-
             controller: bannerController,
             onLoading: () async {
               await notifier.fetchBannerPage(context, bannerController);

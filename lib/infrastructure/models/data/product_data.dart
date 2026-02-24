@@ -163,34 +163,35 @@ class ProductData {
     Unit? unit,
     List<ReviewData>? reviews,
     List<Galleries>? galleries,
-  }) => ProductData(
-    id: id ?? _id,
-    uuid: uuid ?? _uuid,
-    stock: stock ?? _stock,
-    shopId: shopId ?? _shopId,
-    categoryId: categoryId ?? _categoryId,
-    keywords: keywords ?? _keywords,
-    brandId: brandId ?? _brandId,
-    tax: tax ?? _tax,
-    interval: interval ?? _interval,
-    minQty: minQty ?? _minQty,
-    maxQty: maxQty ?? _maxQty,
-    active: active ?? _active,
-    img: img ?? _img,
-    createdAt: createdAt ?? _createdAt,
-    updatedAt: updatedAt ?? _updatedAt,
-    ratingAvg: ratingAvg ?? _ratingAvg,
-    ordersCount: ordersCount ?? _ordersCount,
-    translation: translation ?? _translation,
-    properties: properties ?? _properties,
-    stocks: stocks ?? _stocks,
-    shop: shop ?? _shop,
-    category: category ?? _category,
-    brand: brand ?? _brand,
-    unit: unit ?? _unit,
-    reviews: reviews ?? _reviews,
-    galleries: galleries ?? _galleries,
-  );
+  }) =>
+      ProductData(
+        id: id ?? _id,
+        uuid: uuid ?? _uuid,
+        stock: stock ?? _stock,
+        shopId: shopId ?? _shopId,
+        categoryId: categoryId ?? _categoryId,
+        keywords: keywords ?? _keywords,
+        brandId: brandId ?? _brandId,
+        tax: tax ?? _tax,
+        interval: interval ?? _interval,
+        minQty: minQty ?? _minQty,
+        maxQty: maxQty ?? _maxQty,
+        active: active ?? _active,
+        img: img ?? _img,
+        createdAt: createdAt ?? _createdAt,
+        updatedAt: updatedAt ?? _updatedAt,
+        ratingAvg: ratingAvg ?? _ratingAvg,
+        ordersCount: ordersCount ?? _ordersCount,
+        translation: translation ?? _translation,
+        properties: properties ?? _properties,
+        stocks: stocks ?? _stocks,
+        shop: shop ?? _shop,
+        category: category ?? _category,
+        brand: brand ?? _brand,
+        unit: unit ?? _unit,
+        reviews: reviews ?? _reviews,
+        galleries: galleries ?? _galleries,
+      );
 
   String? get id => _id;
 
@@ -343,14 +344,15 @@ class Unit {
     String? createdAt,
     String? updatedAt,
     Translation? translation,
-  }) => Unit(
-    id: id ?? _id,
-    active: active ?? _active,
-    position: position ?? _position,
-    createdAt: createdAt ?? _createdAt,
-    updatedAt: updatedAt ?? _updatedAt,
-    translation: translation ?? _translation,
-  );
+  }) =>
+      Unit(
+        id: id ?? _id,
+        active: active ?? _active,
+        position: position ?? _position,
+        createdAt: createdAt ?? _createdAt,
+        updatedAt: updatedAt ?? _updatedAt,
+        translation: translation ?? _translation,
+      );
 
   String? get id => _id;
   bool? get active => _active;
@@ -438,12 +440,13 @@ class Category {
     String? uuid,
     String? parentId,
     Translation? translation,
-  }) => Category(
-    id: id ?? _id,
-    uuid: uuid ?? _uuid,
-    parentId: parentId ?? _parentId,
-    translation: translation ?? _translation,
-  );
+  }) =>
+      Category(
+        id: id ?? _id,
+        uuid: uuid ?? _uuid,
+        parentId: parentId ?? _parentId,
+        translation: translation ?? _translation,
+      );
 
   String? get id => _id;
   String? get uuid => _uuid;
@@ -515,9 +518,8 @@ class Stocks {
         }
       });
     }
-    _product = json['product'] != null
-        ? ProductData.fromJson(json['product'])
-        : null;
+    _product =
+        json['product'] != null ? ProductData.fromJson(json['product']) : null;
   }
 
   String? _id;
@@ -544,19 +546,20 @@ class Stocks {
     List<Extras>? extras,
     List<Addons>? addons,
     ProductData? product,
-  }) => Stocks(
-    bonus: bonus ?? _bonus,
-    id: id ?? _id,
-    countableId: countableId ?? _countableId,
-    price: price ?? _price,
-    quantity: quantity ?? _quantity,
-    discount: discount ?? _discount,
-    tax: tax ?? _tax,
-    totalPrice: totalPrice ?? _totalPrice,
-    extras: extras ?? _extras,
-    product: product ?? _product,
-    addons: addons ?? _addons,
-  );
+  }) =>
+      Stocks(
+        bonus: bonus ?? _bonus,
+        id: id ?? _id,
+        countableId: countableId ?? _countableId,
+        price: price ?? _price,
+        quantity: quantity ?? _quantity,
+        discount: discount ?? _discount,
+        tax: tax ?? _tax,
+        totalPrice: totalPrice ?? _totalPrice,
+        extras: extras ?? _extras,
+        product: product ?? _product,
+        addons: addons ?? _addons,
+      );
 
   String? get id => _id;
 
@@ -627,12 +630,13 @@ class Extras {
     String? value,
     bool? active,
     Group? group,
-  }) => Extras(
-    id: id ?? _id,
-    extraGroupId: extraGroupId ?? _extraGroupId,
-    value: value ?? _value,
-    group: group ?? _group,
-  );
+  }) =>
+      Extras(
+        id: id ?? _id,
+        extraGroupId: extraGroupId ?? _extraGroupId,
+        value: value ?? _value,
+        group: group ?? _group,
+      );
 
   int? get id => _id;
 
@@ -683,12 +687,13 @@ class Group {
     String? type,
     bool? active,
     Translation? translation,
-  }) => Group(
-    id: id ?? _id,
-    type: type ?? _type,
-    active: active ?? _active,
-    translation: translation ?? _translation,
-  );
+  }) =>
+      Group(
+        id: id ?? _id,
+        type: type ?? _type,
+        active: active ?? _active,
+        translation: translation ?? _translation,
+      );
 
   int? get id => _id;
 
@@ -785,48 +790,49 @@ class DiscountData {
     String? img,
     DateTime? createdAt,
     DateTime? updatedAt,
-  }) => DiscountData(
-    id: id ?? this.id,
-    shopId: shopId ?? this.shopId,
-    type: type ?? this.type,
-    price: price ?? this.price,
-    start: start ?? this.start,
-    end: end ?? this.end,
-    active: active ?? this.active,
-    img: img ?? this.img,
-    createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
-  );
+  }) =>
+      DiscountData(
+        id: id ?? this.id,
+        shopId: shopId ?? this.shopId,
+        type: type ?? this.type,
+        price: price ?? this.price,
+        start: start ?? this.start,
+        end: end ?? this.end,
+        active: active ?? this.active,
+        img: img ?? this.img,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+      );
 
   factory DiscountData.fromJson(Map<String, dynamic> json) => DiscountData(
-    id: json["id"]?.toString(),
-    shopId: json["shop_id"]?.toString(),
-    type: json["type"],
-    price: json["price"],
-    start: json["start"] == null ? null : DateTime.parse(json["start"]),
-    end: json["end"] == null ? null : DateTime.parse(json["end"]),
-    active: json["active"],
-    img: json["img"],
-    createdAt: json["created_at"] == null
-        ? null
-        : DateTime.parse(json["created_at"]),
-    updatedAt: json["updated_at"] == null
-        ? null
-        : DateTime.parse(json["updated_at"]),
-  );
+        id: json["id"]?.toString(),
+        shopId: json["shop_id"]?.toString(),
+        type: json["type"],
+        price: json["price"],
+        start: json["start"] == null ? null : DateTime.parse(json["start"]),
+        end: json["end"] == null ? null : DateTime.parse(json["end"]),
+        active: json["active"],
+        img: json["img"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+        updatedAt: json["updated_at"] == null
+            ? null
+            : DateTime.parse(json["updated_at"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "shop_id": shopId,
-    "type": type,
-    "price": price,
-    "start":
-        "${start!.year.toString().padLeft(4, '0')}-${start!.month.toString().padLeft(2, '0')}-${start!.day.toString().padLeft(2, '0')}",
-    "end":
-        "${end!.year.toString().padLeft(4, '0')}-${end!.month.toString().padLeft(2, '0')}-${end!.day.toString().padLeft(2, '0')}",
-    "active": active,
-    "img": img,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
-  };
+        "id": id,
+        "shop_id": shopId,
+        "type": type,
+        "price": price,
+        "start":
+            "${start!.year.toString().padLeft(4, '0')}-${start!.month.toString().padLeft(2, '0')}-${start!.day.toString().padLeft(2, '0')}",
+        "end":
+            "${end!.year.toString().padLeft(4, '0')}-${end!.month.toString().padLeft(2, '0')}-${end!.day.toString().padLeft(2, '0')}",
+        "active": active,
+        "img": img,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+      };
 }

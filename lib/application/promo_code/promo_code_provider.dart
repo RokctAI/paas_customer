@@ -6,5 +6,5 @@ import 'promo_code_state.dart';
 
 final promoCodeProvider =
     StateNotifierProvider<PromoCodeNotifier, PromoCodeState>(
-      (ref) => PromoCodeNotifier(ordersRepository),
-    );
+  (ref) => PromoCodeNotifier(ordersRepository),
+);
