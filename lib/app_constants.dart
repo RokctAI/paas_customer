@@ -8,12 +8,10 @@ abstract class AppConstants {
   static const bool isDemo = bool.fromEnvironment('IS_DEMO');
   static const bool isPhoneFirebase = true;
   static const int scheduleInterval = 60;
-  static const SignUpType signUpType =
-      String.fromEnvironment('SIGN_UP_TYPE') == 'phone'
-      ? SignUpType.phone
-      : (String.fromEnvironment('SIGN_UP_TYPE') == 'email'
-            ? SignUpType.email
-            : SignUpType.both);
+
+   static SignUpType get signUpType =>
+      SignUpType.values.byName(const String.fromEnvironment('SIGN_UP_TYPE'));
+
   static const bool use24Format = true;
   static const double radius = 16;
 
