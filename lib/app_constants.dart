@@ -10,10 +10,10 @@ abstract class AppConstants {
   static const int scheduleInterval = 60;
   static const SignUpType signUpType =
       String.fromEnvironment('SIGN_UP_TYPE') == 'phone'
-          ? SignUpType.phone
-          : (String.fromEnvironment('SIGN_UP_TYPE') == 'email'
-              ? SignUpType.email
-              : SignUpType.both);
+      ? SignUpType.phone
+      : (String.fromEnvironment('SIGN_UP_TYPE') == 'email'
+            ? SignUpType.email
+            : SignUpType.both);
   static const bool use24Format = true;
   static const double radius = 16;
 
@@ -44,9 +44,7 @@ abstract class AppConstants {
     'PAYFAST_MERCHANT_KEY',
   );
 
-  static const String demoUserLogin = String.fromEnvironment(
-    'DEMO_USER_LOGIN',
-  );
+  static const String demoUserLogin = String.fromEnvironment('DEMO_USER_LOGIN');
   static const String demoUserPassword = String.fromEnvironment(
     'DEMO_USER_PASSWORD',
   );
