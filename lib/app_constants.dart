@@ -5,10 +5,11 @@ import 'package:foodyman/presentation/app_assets.dart';
 abstract class AppConstants {
   AppConstants._();
 
-  static const bool isDemo = true;
+  static const bool isDemo = bool.fromEnvironment('IS_DEMO');
   static const bool isPhoneFirebase = true;
   static const int scheduleInterval = 60;
-  static const SignUpType signUpType = SignUpType.both;
+  static SignUpType get signUpType =>
+      SignUpType.values.byName(const String.fromEnvironment('SIGN_UP_TYPE'));
   static const bool use24Format = true;
   static const double radius = 16;
 
@@ -39,21 +40,25 @@ abstract class AppConstants {
     'PAYFAST_MERCHANT_KEY',
   );
 
-  static const String demoUserLogin = 'user@githubit.com';
-  static const String demoUserPassword = 'githubit';
+  static const String demoUserLogin = String.fromEnvironment('DEMO_USER_LOGIN');
+  static const String demoUserPassword = String.fromEnvironment('DEMO_USER_PASSWORD');
 
   /// locales
   static const String localeCodeEn = 'en';
 
   /// auth phone fields
-  static const bool isNumberLengthAlwaysSame = true;
-  static const String countryCodeISO = 'UZ';
-  static const bool showFlag = true;
-  static const bool showArrowIcon = true;
+  static const bool isNumberLengthAlwaysSame = bool.fromEnvironment('IS_NUMBER_LENGTH_ALWAYS_SAME');
+  static const String countryCodeISO = String.fromEnvironment('COUNTRY_ISO');
+  static const bool showFlag = bool.fromEnvironment('SHOW_FLAG');
+  static const bool showArrowIcon = bool.fromEnvironment('SHOW_ARROW_ICON');
 
   /// location
-  static const double demoLatitude = 41.304223;
-  static const double demoLongitude = 69.2348277;
+  static final double demoLatitude = double.parse(
+    const String.fromEnvironment('DEMO_LATITUDE'),
+  );
+  static final double demoLongitude = double.parse(
+    const String.fromEnvironment('DEMO_LONGITUDE'),
+  );
   static const double pinLoadingMin = 0.116666667;
   static const double pinLoadingMax = 0.611111111;
 
