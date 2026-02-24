@@ -41,13 +41,17 @@ abstract class AppConstants {
   );
 
   static const String demoUserLogin = String.fromEnvironment('DEMO_USER_LOGIN');
-  static const String demoUserPassword = String.fromEnvironment('DEMO_USER_PASSWORD');
+  static const String demoUserPassword = String.fromEnvironment(
+    'DEMO_USER_PASSWORD',
+  );
 
   /// locales
   static const String localeCodeEn = 'en';
 
   /// auth phone fields
-  static const bool isNumberLengthAlwaysSame = bool.fromEnvironment('IS_NUMBER_LENGTH_ALWAYS_SAME');
+  static const bool isNumberLengthAlwaysSame = bool.fromEnvironment(
+    'IS_NUMBER_LENGTH_ALWAYS_SAME',
+  );
   static const String countryCodeISO = String.fromEnvironment('COUNTRY_ISO');
   static const bool showFlag = bool.fromEnvironment('SHOW_FLAG');
   static const bool showArrowIcon = bool.fromEnvironment('SHOW_ARROW_ICON');
