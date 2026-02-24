@@ -49,7 +49,7 @@ on:
         default: '17'
       flutter-version:
         type: string
-        default: '3.24.0'
+        default: '3.38.5'
       version_format:
         type: string
         default: '##.##.##'
@@ -101,9 +101,10 @@ jobs:
       postgres-version: ${{ inputs.postgres-version || '15' }}
       db-type: ${{ inputs.db-type || 'mariadb' }}
       flutter-channel: ${{ inputs.flutter-channel || 'stable' }}
-      # Recommended: Pin to 3.24.0 to avoid google_fonts/kotlin errors
+      # Recommended: Pin to 3.38.5 to avoid google_fonts/kotlin errors
       flutter-version: ${{ inputs.flutter-version || '3.38.5' }}
       java-version: ${{ inputs.java-version || '17' }}
       version_format: ${{ inputs.version_format || '##.##.##' }}
       app-type: 'customer'
     secrets: inherit
+
