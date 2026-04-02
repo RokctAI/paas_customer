@@ -9,7 +9,7 @@ abstract class AppConstants {
   static const bool isPhoneFirebase = true;
   static const int scheduleInterval = 60;
 
-   static SignUpType get signUpType =>
+  static SignUpType get signUpType =>
       SignUpType.values.byName(const String.fromEnvironment('SIGN_UP_TYPE'));
 
   static const bool use24Format = true;
