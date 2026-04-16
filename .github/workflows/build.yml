@@ -1,18 +1,25 @@
 name: Build (Smart)
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 permissions: write-all
-
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main, develop]
     paths-ignore:
       - '**.md'
   workflow_dispatch:
     inputs:
+      backfill_ai_notes_cutoff_version:
+        type: string
+        default: ""
+        description: "Regenerate AI release notes starting from this version (use 'all' for full history)"
+
       build-type:
         description: 'Build Type (apk/appbundle) - Ignored for Node'
         required: true
@@ -49,6 +56,10 @@ on:
         type: string
         default: '##.##.##'
         description: "Format for version bumping (e.g. ##.##.## or ##.##.#)"
+      run_import_healer:
+        type: boolean
+        default: false
+        description: "Auto-heal missing imports (Flutter only — commits fixes and reruns pipeline)"
 
 jobs:
   # --- 1. DETECT PROJECT TYPE ---
@@ -64,28 +75,31 @@ jobs:
         run: |
           if [ -f "pubspec.yaml" ]; then
              echo "Flutter project detected."
-             echo "is_flutter=true" >> $GITHUB_OUTPUT
-             echo "is_node=false" >> $GITHUB_OUTPUT
+             echo "is_flutter=true" >> "$GITHUB_OUTPUT"
+             echo "is_node=false" >> "$GITHUB_OUTPUT"
           elif [ -f "package.json" ]; then
              echo "Node.js project detected."
-             echo "is_flutter=false" >> $GITHUB_OUTPUT
-             echo "is_node=true" >> $GITHUB_OUTPUT
+             echo "is_flutter=false" >> "$GITHUB_OUTPUT"
+             echo "is_node=true" >> "$GITHUB_OUTPUT"
           else
              echo "Unknown project type. Skipping builds."
-             echo "is_flutter=false" >> $GITHUB_OUTPUT
-             echo "is_node=false" >> $GITHUB_OUTPUT
+             echo "is_flutter=false" >> "$GITHUB_OUTPUT"
+             echo "is_node=false" >> "$GITHUB_OUTPUT"
           fi
 
   # --- 2. UNIFIED PIPELINE (Smart) ---
   pipeline:
     needs: detect
+    permissions: write-all
     uses: RokctAI/shared-workflows/.github/workflows/universal-pipeline.yml@main
     with:
+      backfill_ai_notes_cutoff_version: ${{ inputs.backfill_ai_notes_cutoff_version }}
       project_type: ${{ needs.detect.outputs.is_flutter == 'true' && 'flutter' || (needs.detect.outputs.is_node == 'true' && 'node' || 'frappe') }}
       # Quality Gate Toggles
       run_security: true
       run_lint: true
       run_ci: true
+      run_import_healer: ${{ inputs.run_import_healer || true }}
       # Deployment Configuration (Immediate release on Main)
       release_strategy: 'immediate'
       build_android: true
@@ -102,4 +116,3 @@ jobs:
       version_format: ${{ inputs.version_format || '##.##.##' }}
       app-type: 'customer'
     secrets: inherit
-
