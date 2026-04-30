@@ -5,7 +5,7 @@ import 'package:foodyman/presentation/app_assets.dart';
 abstract class AppConstants {
   AppConstants._();
 
-  static const bool isDemo = true;
+  static const bool isDemo = bool.fromEnvironment('IS_DEMO');
   static const bool isPhoneFirebase = true;
   static const int scheduleInterval = 60;
 
