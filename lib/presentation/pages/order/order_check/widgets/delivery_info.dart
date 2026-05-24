@@ -34,7 +34,8 @@ class DeliveryInfo extends StatelessWidget {
                         ClipOval(
                           child: CustomNetworkImage(
                             profile: true,
-                            url: ref
+                            url:
+                                ref
                                     .watch(orderProvider)
                                     .orderData
                                     ?.deliveryMan
