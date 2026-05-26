@@ -67,8 +67,9 @@ class _ShopDetailPageState extends ConsumerState<ShopDetailPage> {
                   widget.shop.location?.latitude ?? AppConstants.demoLatitude,
                   widget.shop.location?.longitude ?? AppConstants.demoLongitude,
                 ),
-                polylineCoordinates:
-                    ref.watch(shopProvider).polylineCoordinates,
+                polylineCoordinates: ref
+                    .watch(shopProvider)
+                    .polylineCoordinates,
                 isLoading: ref.watch(shopProvider).isMapLoading,
               ),
               16.verticalSpace,
@@ -191,7 +192,9 @@ class _ShopDetailPageState extends ConsumerState<ShopDetailPage> {
                                       children: [
                                         Text(
                                           AppHelpers.getTranslation(
-                                            widget.shop.shopWorkingDays?[index]
+                                            widget
+                                                    .shop
+                                                    .shopWorkingDays?[index]
                                                     .day ??
                                                 "",
                                           ).toUpperCase(),
@@ -279,8 +282,9 @@ class _ShopDetailPageState extends ConsumerState<ShopDetailPage> {
                       padding: EdgeInsets.only(left: 48.r),
                       itemCount: ref.watch(shopProvider).branches?.length ?? 0,
                       itemBuilder: (context, index) {
-                        final branches =
-                            ref.watch(shopProvider).branches?[index];
+                        final branches = ref
+                            .watch(shopProvider)
+                            .branches?[index];
                         return Padding(
                           padding: EdgeInsets.symmetric(vertical: 6.r),
                           child: Row(
