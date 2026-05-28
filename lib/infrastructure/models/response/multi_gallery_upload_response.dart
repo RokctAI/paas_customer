@@ -16,13 +16,12 @@ class MultiGalleryUploadResponse {
     bool? status,
     String? message,
     MultiGalleryUploadData? data,
-  }) =>
-      MultiGalleryUploadResponse(
-        timestamp: timestamp ?? this.timestamp,
-        status: status ?? this.status,
-        message: message ?? this.message,
-        data: data ?? this.data,
-      );
+  }) => MultiGalleryUploadResponse(
+    timestamp: timestamp ?? this.timestamp,
+    status: status ?? this.status,
+    message: message ?? this.message,
+    data: data ?? this.data,
+  );
 
   factory MultiGalleryUploadResponse.fromJson(Map<String, dynamic> json) =>
       MultiGalleryUploadResponse(
@@ -37,11 +36,11 @@ class MultiGalleryUploadResponse {
       );
 
   Map<String, dynamic> toJson() => {
-        "timestamp": timestamp?.toIso8601String(),
-        "status": status,
-        "message": message,
-        "data": data?.toJson(),
-      };
+    "timestamp": timestamp?.toIso8601String(),
+    "status": status,
+    "message": message,
+    "data": data?.toJson(),
+  };
 }
 
 class MultiGalleryUploadData {
@@ -65,7 +64,7 @@ class MultiGalleryUploadData {
       );
 
   Map<String, dynamic> toJson() => {
-        "title": title == null ? [] : List<dynamic>.from(title!.map((x) => x)),
-        "type": type,
-      };
+    "title": title == null ? [] : List<dynamic>.from(title!.map((x) => x)),
+    "type": type,
+  };
 }
