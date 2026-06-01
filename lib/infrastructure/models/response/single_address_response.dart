@@ -17,8 +17,9 @@ class SingleAddressResponse {
     _timestamp = json['timestamp'];
     _status = json['status'];
     _message = json['message'];
-    _data =
-        json['data'] != null ? AddressNewModel.fromJson(json['data']) : null;
+    _data = json['data'] != null
+        ? AddressNewModel.fromJson(json['data'])
+        : null;
   }
 
   String? _timestamp;
@@ -31,13 +32,12 @@ class SingleAddressResponse {
     bool? status,
     String? message,
     AddressNewModel? data,
-  }) =>
-      SingleAddressResponse(
-        timestamp: timestamp ?? _timestamp,
-        status: status ?? _status,
-        message: message ?? _message,
-        data: data ?? _data,
-      );
+  }) => SingleAddressResponse(
+    timestamp: timestamp ?? _timestamp,
+    status: status ?? _status,
+    message: message ?? _message,
+    data: data ?? _data,
+  );
 
   String? get timestamp => _timestamp;
 

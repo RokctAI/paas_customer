@@ -68,7 +68,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
   void setAddress([AddressNewModel? data]) async {
     AddressData? addressData = LocalStorage.getAddressSelected();
     state = state.copyWith(
-      addressData: data ??
+      addressData:
+          data ??
           AddressNewModel(
             title: addressData?.title ?? "",
             address: AddressInformation(address: addressData?.address ?? ""),
@@ -148,7 +149,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
           : null;
 
       // Check if we have preloaded shops for this category
-      final bool hasPreloadedShops = categoryId != null &&
+      final bool hasPreloadedShops =
+          categoryId != null &&
           _preloadedCategoryShops.containsKey(categoryId) &&
           _preloadedCategoryShops[categoryId] != null;
 
@@ -194,11 +196,13 @@ class HomeNotifier extends StateNotifier<HomeState> {
         selectIndexSubCategory: -1,
         isSelectCategoryLoading: index,
         // If we have preloaded shops, use them immediately to prevent "No stores" flash
-        filterShops:
-            hasPreloadedShops ? _preloadedCategoryShops[categoryId]! : [],
+        filterShops: hasPreloadedShops
+            ? _preloadedCategoryShops[categoryId]!
+            : [],
         filterMarket: [],
-        totalShops:
-            hasPreloadedShops ? _categoryTotalShops[categoryId] ?? 0 : 0,
+        totalShops: hasPreloadedShops
+            ? _categoryTotalShops[categoryId] ?? 0
+            : 0,
       );
 
       if (index != -1 && categoryId != null) {
@@ -236,8 +240,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
                   context.router
                       .push(ShopRoute(shopId: shop.id.toString()))
                       .then((_) {
-                    _isNavigatingToShop = false;
-                  });
+                        _isNavigatingToShop = false;
+                      });
                 } else {
                   _isNavigatingToShop = false;
                 }
@@ -314,7 +318,8 @@ class HomeNotifier extends StateNotifier<HomeState> {
       }
 
       // Get category ID and subcategory ID if applicable
-      final String? categoryId = state.selectIndexCategory >= 0 &&
+      final String? categoryId =
+          state.selectIndexCategory >= 0 &&
               state.selectIndexCategory < state.categories.length
           ? state.categories[state.selectIndexCategory].id
           : null;
@@ -327,8 +332,10 @@ class HomeNotifier extends StateNotifier<HomeState> {
           state.selectIndexSubCategory <
               (state.categories[state.selectIndexCategory].children?.length ??
                   0)) {
-        subCategoryId = state.categories[state.selectIndexCategory]
-            .children?[state.selectIndexSubCategory].id;
+        subCategoryId = state
+            .categories[state.selectIndexCategory]
+            .children?[state.selectIndexSubCategory]
+            .id;
       } else {
         subCategoryId = null;
       }
@@ -657,8 +664,10 @@ class HomeNotifier extends StateNotifier<HomeState> {
         );
       }
       final categoryId = state.selectIndexSubCategory != -1
-          ? (state.categories[state.selectIndexCategory]
-              .children?[state.selectIndexSubCategory].id)
+          ? (state
+                .categories[state.selectIndexCategory]
+                .children?[state.selectIndexSubCategory]
+                .id)
           : (state.categories[state.selectIndexCategory].id);
       final response = await _shopsRepository.getAllShops(
         isRefresh ? 1 : ++filterShopIndex,
@@ -1038,8 +1047,10 @@ class HomeNotifier extends StateNotifier<HomeState> {
             }
 
             // Step 2: Get existing cached brands
-            final Set<String> cachedBrandIds =
-                state.brands.map((b) => b.id).whereType<String>().toSet();
+            final Set<String> cachedBrandIds = state.brands
+                .map((b) => b.id)
+                .whereType<String>()
+                .toSet();
 
             // Step 3: Determine which brands we need to fetch
             final Set<String> missingBrandIds = brandIds.difference(
@@ -1055,24 +1066,25 @@ class HomeNotifier extends StateNotifier<HomeState> {
               final future = _brandsRepository
                   .getSingleBrand(brandId.toString())
                   .then((response) {
-                response.when(
-                  success: (data) {
-                    if (data.data != null) {
-                      newBrands.add(data.data!);
-                      debugPrint(
-                        "✅ Fetched brand: ${data.data!.title} (ID: $brandId)",
-                      );
-                    }
-                  },
-                  failure: (failure, status) {
-                    debugPrint(
-                      "❌ Failed to fetch brand ID $brandId: $failure",
+                    response.when(
+                      success: (data) {
+                        if (data.data != null) {
+                          newBrands.add(data.data!);
+                          debugPrint(
+                            "✅ Fetched brand: ${data.data!.title} (ID: $brandId)",
+                          );
+                        }
+                      },
+                      failure: (failure, status) {
+                        debugPrint(
+                          "❌ Failed to fetch brand ID $brandId: $failure",
+                        );
+                      },
                     );
-                  },
-                );
-              }).catchError((e) {
-                debugPrint("❌ Exception fetching brand ID $brandId: $e");
-              });
+                  })
+                  .catchError((e) {
+                    debugPrint("❌ Exception fetching brand ID $brandId: $e");
+                  });
 
               brandFutures.add(future);
             }
