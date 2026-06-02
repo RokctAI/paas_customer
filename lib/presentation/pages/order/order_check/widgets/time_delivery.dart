@@ -129,8 +129,9 @@ class _TimeDeliveryState extends ConsumerState<TimeDelivery>
                   ? ""
                   : AppHelpers.getTranslation(TrKeys.clear),
               rightTitleColor: AppStyle.red,
-              onRightTap:
-                  state.currentIndexOne == 0 ? () {} : () => event.changeOne(0),
+              onRightTap: state.currentIndexOne == 0
+                  ? () {}
+                  : () => event.changeOne(0),
             ),
             24.verticalSpace,
             state.currentIndexOne == 0 && stateOrder.todayTimes.isNotEmpty
@@ -171,7 +172,8 @@ class _TimeDeliveryState extends ConsumerState<TimeDelivery>
                                             ref
                                                 .read(orderProvider.notifier)
                                                 .setTimeAndDay(
-                                                  stateOrder.todayTimes[index]
+                                                  stateOrder
+                                                      .todayTimes[index]
                                                       .toNextTime,
                                                   DateTime.now(),
                                                 );
@@ -217,7 +219,8 @@ class _TimeDeliveryState extends ConsumerState<TimeDelivery>
                                           bottom: 16.h,
                                         ),
                                         itemCount: stateOrder
-                                            .dailyTimes[indexTab].length,
+                                            .dailyTimes[indexTab]
+                                            .length,
                                         itemBuilder: (context, index) {
                                           return SelectItem(
                                             onTap: () {
@@ -237,8 +240,7 @@ class _TimeDeliveryState extends ConsumerState<TimeDelivery>
                                                   .read(orderProvider.notifier)
                                                   .setTimeAndDay(
                                                     stateOrder
-                                                        .dailyTimes[indexTab]
-                                                            [index]
+                                                        .dailyTimes[indexTab][index]
                                                         .toNextTime,
                                                     day,
                                                   );
