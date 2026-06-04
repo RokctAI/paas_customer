@@ -40,8 +40,9 @@ class CategoryTwo extends StatelessWidget {
                   padding: EdgeInsets.only(left: 16.r, bottom: 16.r, top: 8.r),
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount:
-                      state.isCategoryLoading ? 5 : state.categories.length,
+                  itemCount: state.isCategoryLoading
+                      ? 5
+                      : state.categories.length,
                   itemBuilder: (context, index) {
                     return AnimationConfiguration.staggeredList(
                       position: index,
@@ -52,7 +53,8 @@ class CategoryTwo extends StatelessWidget {
                           child: CategoryTwoItem(
                             index: index,
                             image: state.categories[index].img ?? "",
-                            title: state.categories[index].translation?.title ??
+                            title:
+                                state.categories[index].translation?.title ??
                                 "",
                             isActive: state.selectIndexCategory == index,
                             onTap: () {
