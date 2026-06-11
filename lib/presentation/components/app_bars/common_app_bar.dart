@@ -18,7 +18,8 @@ class CommonAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: height.h +
+      height:
+          height.h +
           ((MediaQuery.paddingOf(context).top > 34)
               ? 34.h
               : MediaQuery.paddingOf(context).top),
