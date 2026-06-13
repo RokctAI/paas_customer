@@ -18,13 +18,12 @@ class ParcelCalculateResponse {
     bool? status,
     String? message,
     Data? data,
-  }) =>
-      ParcelCalculateResponse(
-        timestamp: timestamp ?? this.timestamp,
-        status: status ?? this.status,
-        message: message ?? this.message,
-        data: data ?? this.data,
-      );
+  }) => ParcelCalculateResponse(
+    timestamp: timestamp ?? this.timestamp,
+    status: status ?? this.status,
+    message: message ?? this.message,
+    data: data ?? this.data,
+  );
 
   factory ParcelCalculateResponse.fromJson(Map<String, dynamic> json) =>
       ParcelCalculateResponse(
@@ -37,11 +36,11 @@ class ParcelCalculateResponse {
       );
 
   Map<String, dynamic> toJson() => {
-        "timestamp": timestamp?.toIso8601String(),
-        "status": status,
-        "message": message,
-        "data": data?.toJson(),
-      };
+    "timestamp": timestamp?.toIso8601String(),
+    "status": status,
+    "message": message,
+    "data": data?.toJson(),
+  };
 }
 
 class Data {
