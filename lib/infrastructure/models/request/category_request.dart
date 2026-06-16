@@ -16,9 +16,11 @@ class CategoryModel {
     map["sort"] = "asc";
     map["perPage"] = 10;
     map["address"] = {
-      "latitude": LocalStorage.getAddressSelected()?.location?.latitude ??
+      "latitude":
+          LocalStorage.getAddressSelected()?.location?.latitude ??
           AppConstants.demoLatitude,
-      "longitude": LocalStorage.getAddressSelected()?.location?.longitude ??
+      "longitude":
+          LocalStorage.getAddressSelected()?.location?.longitude ??
           AppConstants.demoLongitude,
     };
     return map;
