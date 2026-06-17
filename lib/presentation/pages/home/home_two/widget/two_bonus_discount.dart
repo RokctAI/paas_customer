@@ -57,171 +57,167 @@ class TwoBonusDiscountPopular extends StatelessWidget {
                 ],
               )
             : isDiscount && isPopular && bonus == null
-                ? Row(
-                    children: [
-                      Container(
-                        width: 22.w,
-                        height: 22.h,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppStyle.red,
-                        ),
-                        child: Icon(
-                          FlutterRemix.percent_fill,
-                          size: 16.r,
-                          color: AppStyle.white,
-                        ),
-                      ),
-                      8.horizontalSpace,
-                      Container(
-                        width: 22.w,
-                        height: 22.h,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppStyle.blueBonus,
-                        ),
-                        child: Icon(
-                          FlutterRemix.flashlight_fill,
-                          size: 16.r,
-                          color: AppStyle.white,
-                        ),
-                      ),
-                    ],
-                  )
-                : isDiscount && isPopular && bonus != null
-                    ? Row(
-                        children: [
-                          Container(
-                            width: 22.w,
-                            height: 22.h,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppStyle.red,
-                            ),
-                            child: Icon(
-                              FlutterRemix.percent_fill,
-                              size: 16.r,
-                              color: AppStyle.white,
-                            ),
+            ? Row(
+                children: [
+                  Container(
+                    width: 22.w,
+                    height: 22.h,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppStyle.red,
+                    ),
+                    child: Icon(
+                      FlutterRemix.percent_fill,
+                      size: 16.r,
+                      color: AppStyle.white,
+                    ),
+                  ),
+                  8.horizontalSpace,
+                  Container(
+                    width: 22.w,
+                    height: 22.h,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppStyle.blueBonus,
+                    ),
+                    child: Icon(
+                      FlutterRemix.flashlight_fill,
+                      size: 16.r,
+                      color: AppStyle.white,
+                    ),
+                  ),
+                ],
+              )
+            : isDiscount && isPopular && bonus != null
+            ? Row(
+                children: [
+                  Container(
+                    width: 22.w,
+                    height: 22.h,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppStyle.red,
+                    ),
+                    child: Icon(
+                      FlutterRemix.percent_fill,
+                      size: 16.r,
+                      color: AppStyle.white,
+                    ),
+                  ),
+                  8.horizontalSpace,
+                  Container(
+                    width: 22.w,
+                    height: 22.h,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppStyle.blueBonus,
+                    ),
+                    child: Icon(
+                      FlutterRemix.flashlight_fill,
+                      size: 16.r,
+                      color: AppStyle.white,
+                    ),
+                  ),
+                  8.horizontalSpace,
+                  Container(
+                    width: 22.w,
+                    height: 22.h,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppStyle.primary,
+                    ),
+                    child: Icon(
+                      FlutterRemix.gift_2_fill,
+                      size: 16.r,
+                      color: AppStyle.black,
+                    ),
+                  ),
+                ],
+              )
+            : isPopular && bonus != null && !isDiscount
+            ? Row(
+                children: [
+                  Container(
+                    width: 22.w,
+                    height: 22.h,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppStyle.primary,
+                    ),
+                    child: Icon(
+                      FlutterRemix.gift_2_fill,
+                      size: 16.r,
+                      color: AppStyle.black,
+                    ),
+                  ),
+                  8.horizontalSpace,
+                  Container(
+                    width: 22.w,
+                    height: 22.h,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppStyle.blueBonus,
+                    ),
+                    child: Icon(
+                      FlutterRemix.flashlight_fill,
+                      size: 16.r,
+                      color: AppStyle.white,
+                    ),
+                  ),
+                ],
+              )
+            : isSingleShop
+            ? singleShop()
+            : Row(
+                children: [
+                  isDiscount
+                      ? Container(
+                          margin: EdgeInsets.only(left: 8.r),
+                          width: 22.w,
+                          height: 22.h,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppStyle.red,
                           ),
-                          8.horizontalSpace,
-                          Container(
-                            width: 22.w,
-                            height: 22.h,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppStyle.blueBonus,
-                            ),
-                            child: Icon(
-                              FlutterRemix.flashlight_fill,
-                              size: 16.r,
-                              color: AppStyle.white,
-                            ),
+                          child: Icon(
+                            FlutterRemix.percent_fill,
+                            size: 16.r,
+                            color: AppStyle.white,
                           ),
-                          8.horizontalSpace,
-                          Container(
-                            width: 22.w,
-                            height: 22.h,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppStyle.primary,
-                            ),
-                            child: Icon(
-                              FlutterRemix.gift_2_fill,
-                              size: 16.r,
-                              color: AppStyle.black,
-                            ),
+                        )
+                      : bonus != null
+                      ? Container(
+                          margin: EdgeInsets.only(left: 8.r),
+                          width: 22.w,
+                          height: 22.h,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppStyle.primary,
                           ),
-                        ],
-                      )
-                    : isPopular && bonus != null && !isDiscount
-                        ? Row(
-                            children: [
-                              Container(
-                                width: 22.w,
-                                height: 22.h,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppStyle.primary,
-                                ),
-                                child: Icon(
-                                  FlutterRemix.gift_2_fill,
-                                  size: 16.r,
-                                  color: AppStyle.black,
-                                ),
-                              ),
-                              8.horizontalSpace,
-                              Container(
-                                width: 22.w,
-                                height: 22.h,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppStyle.blueBonus,
-                                ),
-                                child: Icon(
-                                  FlutterRemix.flashlight_fill,
-                                  size: 16.r,
-                                  color: AppStyle.white,
-                                ),
-                              ),
-                            ],
-                          )
-                        : isSingleShop
-                            ? singleShop()
-                            : Row(
-                                children: [
-                                  isDiscount
-                                      ? Container(
-                                          margin: EdgeInsets.only(left: 8.r),
-                                          width: 22.w,
-                                          height: 22.h,
-                                          decoration: const BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: AppStyle.red,
-                                          ),
-                                          child: Icon(
-                                            FlutterRemix.percent_fill,
-                                            size: 16.r,
-                                            color: AppStyle.white,
-                                          ),
-                                        )
-                                      : bonus != null
-                                          ? Container(
-                                              margin:
-                                                  EdgeInsets.only(left: 8.r),
-                                              width: 22.w,
-                                              height: 22.h,
-                                              decoration: const BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: AppStyle.primary,
-                                              ),
-                                              child: Icon(
-                                                FlutterRemix.gift_2_fill,
-                                                size: 16.r,
-                                                color: AppStyle.black,
-                                              ),
-                                            )
-                                          : isPopular
-                                              ? Container(
-                                                  margin: EdgeInsets.only(
-                                                      left: 8.r),
-                                                  width: 22.w,
-                                                  height: 22.h,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: AppStyle.blueBonus,
-                                                  ),
-                                                  child: Icon(
-                                                    FlutterRemix
-                                                        .flashlight_fill,
-                                                    size: 16.r,
-                                                    color: AppStyle.white,
-                                                  ),
-                                                )
-                                              : const SizedBox.shrink(),
-                                ],
-                              ),
+                          child: Icon(
+                            FlutterRemix.gift_2_fill,
+                            size: 16.r,
+                            color: AppStyle.black,
+                          ),
+                        )
+                      : isPopular
+                      ? Container(
+                          margin: EdgeInsets.only(left: 8.r),
+                          width: 22.w,
+                          height: 22.h,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppStyle.blueBonus,
+                          ),
+                          child: Icon(
+                            FlutterRemix.flashlight_fill,
+                            size: 16.r,
+                            color: AppStyle.white,
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                ],
+              ),
       ],
     );
   }
@@ -244,7 +240,65 @@ class TwoBonusDiscountPopular extends StatelessWidget {
                 ),
               )
             : bonus != null
-                ? Container(
+            ? Container(
+                width: 22.w,
+                height: 22.h,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppStyle.primary,
+                ),
+                child: Icon(
+                  FlutterRemix.gift_2_fill,
+                  size: 16.r,
+                  color: AppStyle.black,
+                ),
+              )
+            : isPopular
+            ? Container(
+                width: 22.w,
+                height: 22.h,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppStyle.blueBonus,
+                ),
+                child: Icon(
+                  FlutterRemix.flashlight_fill,
+                  size: 16.r,
+                  color: AppStyle.white,
+                ),
+              )
+            : isDiscount && isPopular && bonus != null
+            ? Row(
+                children: [
+                  Container(
+                    width: 22.w,
+                    height: 22.h,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppStyle.red,
+                    ),
+                    child: Icon(
+                      FlutterRemix.percent_fill,
+                      size: 16.r,
+                      color: AppStyle.white,
+                    ),
+                  ),
+                  8.horizontalSpace,
+                  Container(
+                    width: 22.w,
+                    height: 22.h,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppStyle.blueBonus,
+                    ),
+                    child: Icon(
+                      FlutterRemix.flashlight_fill,
+                      size: 16.r,
+                      color: AppStyle.white,
+                    ),
+                  ),
+                  8.horizontalSpace,
+                  Container(
                     width: 22.w,
                     height: 22.h,
                     decoration: const BoxDecoration(
@@ -256,68 +310,10 @@ class TwoBonusDiscountPopular extends StatelessWidget {
                       size: 16.r,
                       color: AppStyle.black,
                     ),
-                  )
-                : isPopular
-                    ? Container(
-                        width: 22.w,
-                        height: 22.h,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppStyle.blueBonus,
-                        ),
-                        child: Icon(
-                          FlutterRemix.flashlight_fill,
-                          size: 16.r,
-                          color: AppStyle.white,
-                        ),
-                      )
-                    : isDiscount && isPopular && bonus != null
-                        ? Row(
-                            children: [
-                              Container(
-                                width: 22.w,
-                                height: 22.h,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppStyle.red,
-                                ),
-                                child: Icon(
-                                  FlutterRemix.percent_fill,
-                                  size: 16.r,
-                                  color: AppStyle.white,
-                                ),
-                              ),
-                              8.horizontalSpace,
-                              Container(
-                                width: 22.w,
-                                height: 22.h,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppStyle.blueBonus,
-                                ),
-                                child: Icon(
-                                  FlutterRemix.flashlight_fill,
-                                  size: 16.r,
-                                  color: AppStyle.white,
-                                ),
-                              ),
-                              8.horizontalSpace,
-                              Container(
-                                width: 22.w,
-                                height: 22.h,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppStyle.primary,
-                                ),
-                                child: Icon(
-                                  FlutterRemix.gift_2_fill,
-                                  size: 16.r,
-                                  color: AppStyle.black,
-                                ),
-                              ),
-                            ],
-                          )
-                        : const SizedBox.shrink(),
+                  ),
+                ],
+              )
+            : const SizedBox.shrink(),
       ],
     );
   }
