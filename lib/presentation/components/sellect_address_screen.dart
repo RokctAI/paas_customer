@@ -85,7 +85,8 @@ class _SelectAddressScreenState extends ConsumerState<SelectAddressScreen> {
                     padding: EdgeInsets.zero,
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: ref
+                    itemCount:
+                        ref
                             .watch(profileProvider)
                             .userData
                             ?.addresses
@@ -113,14 +114,16 @@ class _SelectAddressScreenState extends ConsumerState<SelectAddressScreen> {
                             ),
                           );
                           if (context.mounted) {
-                            ref.read(profileProvider.notifier).fetchUser(
-                              context,
-                              onSuccess: () {
-                                ref
-                                    .read(profileProvider.notifier)
-                                    .findSelectIndex();
-                              },
-                            );
+                            ref
+                                .read(profileProvider.notifier)
+                                .fetchUser(
+                                  context,
+                                  onSuccess: () {
+                                    ref
+                                        .read(profileProvider.notifier)
+                                        .findSelectIndex();
+                                  },
+                                );
                           }
                         },
                       );
@@ -138,29 +141,36 @@ class _SelectAddressScreenState extends ConsumerState<SelectAddressScreen> {
                   CustomButton(
                     title: AppHelpers.getTranslation(TrKeys.save),
                     onPressed: () {
-                      ref.read(profileProvider.notifier).setActiveAddress(
+                      ref
+                          .read(profileProvider.notifier)
+                          .setActiveAddress(
                             index: ref.watch(profileProvider).selectAddress,
                             id: ref
                                 .watch(profileProvider)
                                 .userData
-                                ?.addresses?[
-                                    ref.watch(profileProvider).selectAddress]
+                                ?.addresses?[ref
+                                    .watch(profileProvider)
+                                    .selectAddress]
                                 .id,
                           );
                       LocalStorage.setAddressSelected(
                         AddressData(
-                          title: ref
+                          title:
+                              ref
                                   .watch(profileProvider)
                                   .userData
-                                  ?.addresses?[
-                                      ref.watch(profileProvider).selectAddress]
+                                  ?.addresses?[ref
+                                      .watch(profileProvider)
+                                      .selectAddress]
                                   .title ??
                               "",
-                          address: ref
+                          address:
+                              ref
                                   .watch(profileProvider)
                                   .userData
-                                  ?.addresses?[
-                                      ref.watch(profileProvider).selectAddress]
+                                  ?.addresses?[ref
+                                      .watch(profileProvider)
+                                      .selectAddress]
                                   .address
                                   ?.address ??
                               "",
@@ -168,15 +178,17 @@ class _SelectAddressScreenState extends ConsumerState<SelectAddressScreen> {
                             longitude: ref
                                 .watch(profileProvider)
                                 .userData
-                                ?.addresses?[
-                                    ref.watch(profileProvider).selectAddress]
+                                ?.addresses?[ref
+                                    .watch(profileProvider)
+                                    .selectAddress]
                                 .location
                                 ?.last,
                             latitude: ref
                                 .watch(profileProvider)
                                 .userData
-                                ?.addresses?[
-                                    ref.watch(profileProvider).selectAddress]
+                                ?.addresses?[ref
+                                    .watch(profileProvider)
+                                    .selectAddress]
                                 .location
                                 ?.first,
                           ),
@@ -219,15 +231,19 @@ class _SelectAddressScreenState extends ConsumerState<SelectAddressScreen> {
                           isRefresh: true,
                         )
                         ..setAddress();
-                      ref.read(orderProvider.notifier).getCalculate(
+                      ref
+                          .read(orderProvider.notifier)
+                          .getCalculate(
                             context: context,
                             isLoading: false,
                             cartId: ref.read(shopOrderProvider).cart?.id ?? "",
-                            long: LocalStorage.getAddressSelected()
+                            long:
+                                LocalStorage.getAddressSelected()
                                     ?.location
                                     ?.longitude ??
                                 AppConstants.demoLongitude,
-                            lat: LocalStorage.getAddressSelected()
+                            lat:
+                                LocalStorage.getAddressSelected()
                                     ?.location
                                     ?.latitude ??
                                 AppConstants.demoLatitude,
