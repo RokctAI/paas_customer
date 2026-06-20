@@ -27,10 +27,12 @@ class SignatureService {
     final sortedKeys = params.keys.toList()..sort();
 
     // Build parameter string
-    final parameterString = sortedKeys.map((key) {
-      final value = params[key]!;
-      return '$key=$value';
-    }).join('&');
+    final parameterString = sortedKeys
+        .map((key) {
+          final value = params[key]!;
+          return '$key=$value';
+        })
+        .join('&');
 
     // Add passphrase
     final signatureString = passphrase.isNotEmpty
