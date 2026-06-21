@@ -53,20 +53,20 @@ class ServiceThreeCategory extends StatelessWidget {
                                   context: context,
                                   modal: (c) => FilterPage(
                                     controller: c,
-                                    categoryId: (state.selectIndexSubCategory !=
-                                                -1
+                                    categoryId:
+                                        (state.selectIndexSubCategory != -1
                                             ? (state
-                                                .categories[
-                                                    state.selectIndexCategory]
-                                                .children?[state
-                                                    .selectIndexSubCategory]
-                                                .id
-                                                ?.toString())
+                                                  .categories[state
+                                                      .selectIndexCategory]
+                                                  .children?[state
+                                                      .selectIndexSubCategory]
+                                                  .id
+                                                  ?.toString())
                                             : state
-                                                .categories[
-                                                    state.selectIndexCategory]
-                                                .id
-                                                ?.toString()) ??
+                                                  .categories[state
+                                                      .selectIndexCategory]
+                                                  .id
+                                                  ?.toString()) ??
                                         "",
                                   ),
                                   isDarkMode: false,
@@ -102,7 +102,10 @@ class ServiceThreeCategory extends StatelessWidget {
                             child: FadeInAnimation(
                               child: CategoryBarItemThree(
                                 image: category.children?[index - 1].img ?? "",
-                                title: category.children?[index - 1].translation
+                                title:
+                                    category
+                                        .children?[index - 1]
+                                        .translation
                                         ?.title ??
                                     "",
                                 isActive:
