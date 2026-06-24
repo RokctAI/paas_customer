@@ -26,12 +26,11 @@ class BlogsPaginateResponse {
     List<BlogData>? data,
     Links? links,
     Meta? meta,
-  }) =>
-      BlogsPaginateResponse(
-        data: data ?? _data,
-        links: links ?? _links,
-        meta: meta ?? _meta,
-      );
+  }) => BlogsPaginateResponse(
+    data: data ?? _data,
+    links: links ?? _links,
+    meta: meta ?? _meta,
+  );
 
   List<BlogData>? get data => _data;
 
@@ -109,17 +108,16 @@ class Meta {
     String? perPage,
     int? to,
     int? total,
-  }) =>
-      Meta(
-        currentPage: currentPage ?? _currentPage,
-        from: from ?? _from,
-        lastPage: lastPage ?? _lastPage,
-        links: links ?? _links,
-        path: path ?? _path,
-        perPage: perPage ?? _perPage,
-        to: to ?? _to,
-        total: total ?? _total,
-      );
+  }) => Meta(
+    currentPage: currentPage ?? _currentPage,
+    from: from ?? _from,
+    lastPage: lastPage ?? _lastPage,
+    links: links ?? _links,
+    path: path ?? _path,
+    perPage: perPage ?? _perPage,
+    to: to ?? _to,
+    total: total ?? _total,
+  );
 
   int? get currentPage => _currentPage;
 
@@ -171,10 +169,10 @@ class Links {
   bool? _active;
 
   Links copyWith({dynamic url, String? label, bool? active}) => Links(
-        url: url ?? _url,
-        label: label ?? _label,
-        active: active ?? _active,
-      );
+    url: url ?? _url,
+    label: label ?? _label,
+    active: active ?? _active,
+  );
 
   dynamic get url => _url;
 

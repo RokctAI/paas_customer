@@ -82,14 +82,16 @@ class _AddressListPageState extends State<AddressListPage> {
                           ),
                         );
                         if (context.mounted) {
-                          ref.read(profileProvider.notifier).fetchUser(
-                            context,
-                            onSuccess: () {
-                              ref
-                                  .read(profileProvider.notifier)
-                                  .findSelectIndex();
-                            },
-                          );
+                          ref
+                              .read(profileProvider.notifier)
+                              .fetchUser(
+                                context,
+                                onSuccess: () {
+                                  ref
+                                      .read(profileProvider.notifier)
+                                      .findSelectIndex();
+                                },
+                              );
                         }
                       },
                     );
@@ -122,18 +124,22 @@ class _AddressListPageState extends State<AddressListPage> {
                     child: CustomButton(
                       title: AppHelpers.getTranslation(TrKeys.save),
                       onPressed: () {
-                        ref.read(profileProvider.notifier).setActiveAddress(
+                        ref
+                            .read(profileProvider.notifier)
+                            .setActiveAddress(
                               index: ref.watch(profileProvider).selectAddress,
                               id: ref
                                   .watch(profileProvider)
                                   .userData
-                                  ?.addresses?[
-                                      ref.watch(profileProvider).selectAddress]
+                                  ?.addresses?[ref
+                                      .watch(profileProvider)
+                                      .selectAddress]
                                   .id,
                             );
                         LocalStorage.setAddressSelected(
                           AddressData(
-                            title: ref
+                            title:
+                                ref
                                     .watch(profileProvider)
                                     .userData
                                     ?.addresses?[ref
@@ -141,7 +147,8 @@ class _AddressListPageState extends State<AddressListPage> {
                                         .selectAddress]
                                     .title ??
                                 "",
-                            address: ref
+                            address:
+                                ref
                                     .watch(profileProvider)
                                     .userData
                                     ?.addresses?[ref
@@ -154,15 +161,17 @@ class _AddressListPageState extends State<AddressListPage> {
                               longitude: ref
                                   .watch(profileProvider)
                                   .userData
-                                  ?.addresses?[
-                                      ref.watch(profileProvider).selectAddress]
+                                  ?.addresses?[ref
+                                      .watch(profileProvider)
+                                      .selectAddress]
                                   .location
                                   ?.last,
                               latitude: ref
                                   .watch(profileProvider)
                                   .userData
-                                  ?.addresses?[
-                                      ref.watch(profileProvider).selectAddress]
+                                  ?.addresses?[ref
+                                      .watch(profileProvider)
+                                      .selectAddress]
                                   .location
                                   ?.first,
                             ),
