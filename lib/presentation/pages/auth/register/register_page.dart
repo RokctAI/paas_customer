@@ -122,8 +122,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         Form(
                           key: phoneNumKey,
                           child: Directionality(
-                            textDirection:
-                                isLtr ? TextDirection.ltr : TextDirection.rtl,
+                            textDirection: isLtr
+                                ? TextDirection.ltr
+                                : TextDirection.rtl,
                             child: IntlPhoneField(
                               onChanged: (phoneNum) {
                                 event.setEmail(phoneNum.completeNumber);
@@ -151,8 +152,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               ],
                               autovalidateMode:
                                   AppConstants.isNumberLengthAlwaysSame
-                                      ? AutovalidateMode.onUserInteraction
-                                      : AutovalidateMode.disabled,
+                                  ? AutovalidateMode.onUserInteraction
+                                  : AutovalidateMode.disabled,
                               textAlignVertical: TextAlignVertical.center,
                               decoration: InputDecoration(
                                 counterText: '',
@@ -232,7 +233,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                 SizedBox(
                                   width:
                                       (MediaQuery.sizeOf(context).width - 40) /
-                                          2,
+                                      2,
                                   child: OutlinedBorderTextField(
                                     label: AppHelpers.getTranslation(
                                       TrKeys.firstname,
@@ -244,7 +245,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                 SizedBox(
                                   width:
                                       (MediaQuery.sizeOf(context).width - 40) /
-                                          2,
+                                      2,
                                   child: OutlinedBorderTextField(
                                     label: AppHelpers.getTranslation(
                                       TrKeys.surname,
@@ -438,8 +439,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                   SocialButton(
                                     iconData:
                                         currentSignUpType == SignUpType.phone
-                                            ? FlutterRemix.mail_fill
-                                            : FlutterRemix.phone_fill,
+                                        ? FlutterRemix.mail_fill
+                                        : FlutterRemix.phone_fill,
                                     onPressed: toggleSignUpType,
                                     title: currentSignUpType == SignUpType.phone
                                         ? "Email"
