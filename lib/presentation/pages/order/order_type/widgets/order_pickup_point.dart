@@ -37,7 +37,9 @@ class _OrderPickupPointState extends ConsumerState<OrderPickupPoint> {
       setState(() {
         _initialPosition = LatLng(position.latitude, position.longitude);
       });
-      ref.read(deliveryPointsProvider.notifier).fetchDeliveryPoints(
+      ref
+          .read(deliveryPointsProvider.notifier)
+          .fetchDeliveryPoints(
             context,
             latitude: position.latitude,
             longitude: position.longitude,
