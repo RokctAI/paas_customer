@@ -41,7 +41,9 @@ class _PaymentMethodsState extends ConsumerState<PaymentMethods> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(paymentProvider.notifier).fetchPayments(
+      ref
+          .read(paymentProvider.notifier)
+          .fetchPayments(
             context,
             withOutCash: widget.tipPrice != null,
             shopEnableCod: widget.shopEnableCod,
@@ -115,8 +117,8 @@ class _PaymentMethodsState extends ConsumerState<PaymentMethods> {
                                   shrinkWrap: true,
                                   itemCount: state.payments.length,
                                   itemBuilder: (context, index) {
-                                    final bool isPayfast = state
-                                            .payments[index].tag
+                                    final bool isPayfast =
+                                        state.payments[index].tag
                                             ?.toLowerCase() ==
                                         "payfast";
                                     return SelectItem(
