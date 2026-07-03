@@ -141,14 +141,18 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
             LocalStorage.setUser(data.data);
             LocalStorage.setAddressSelected(
               AddressData(
-                title: data.data?.addresses?.firstWhere(
-                      (element) => element.active ?? false,
-                      orElse: () {
-                        return AddressNewModel();
-                      },
-                    ).title ??
+                title:
+                    data.data?.addresses
+                        ?.firstWhere(
+                          (element) => element.active ?? false,
+                          orElse: () {
+                            return AddressNewModel();
+                          },
+                        )
+                        .title ??
                     "",
-                address: data.data?.addresses
+                address:
+                    data.data?.addresses
                         ?.firstWhere(
                           (element) => element.active ?? false,
                           orElse: () {

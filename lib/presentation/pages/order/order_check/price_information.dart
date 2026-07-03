@@ -109,8 +109,8 @@ class PriceInformation extends StatelessWidget {
             symbol: state.orderData?.currencyModel?.symbol,
             number: isOrder
                 ? (state.orderData?.totalPrice?.isNegative ?? true)
-                    ? 0
-                    : state.orderData?.totalPrice
+                      ? 0
+                      : state.orderData?.totalPrice
                 : state.calculateData?.totalPrice,
           ),
           textStyle: AppStyle.interSemi(size: 20, color: AppStyle.black),
