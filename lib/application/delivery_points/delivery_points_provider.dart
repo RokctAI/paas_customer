@@ -5,5 +5,5 @@ import 'delivery_points_state.dart';
 
 final deliveryPointsProvider =
     StateNotifierProvider<DeliveryPointsNotifier, DeliveryPointsState>(
-  (ref) => DeliveryPointsNotifier(deliveryPointsRepository),
-);
+      (ref) => DeliveryPointsNotifier(deliveryPointsRepository),
+    );
