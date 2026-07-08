@@ -111,7 +111,9 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
                                 context.pushRoute(
                                   OrderProgressRoute(
                                     orderId: state
-                                        .notifications[index].orderData?.id,
+                                        .notifications[index]
+                                        .orderData
+                                        ?.id,
                                   ),
                                 );
                               } else if (state.notifications[index].blogData !=
