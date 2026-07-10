@@ -32,13 +32,13 @@ class NewsShopShimmer extends StatelessWidget {
               itemCount: 4,
               itemBuilder: (context, index) =>
                   AnimationConfiguration.staggeredList(
-                position: index,
-                duration: const Duration(milliseconds: 375),
-                child: const SlideAnimation(
-                  verticalOffset: 50.0,
-                  child: FadeInAnimation(child: MarketShimmerThree()),
-                ),
-              ),
+                    position: index,
+                    duration: const Duration(milliseconds: 375),
+                    child: const SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(child: MarketShimmerThree()),
+                    ),
+                  ),
             ),
           ),
         ),
