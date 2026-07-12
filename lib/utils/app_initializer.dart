@@ -6,9 +6,9 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../app_constants.dart';
-import '../application/poidata/poi_data_provider.dart';
-import '../infrastructure/models/data/poi_data.dart';
+import 'package:base_sdk/src/constants/app_constants.dart';
+import 'package:map_sdk/src/application/customer/poidata/poi_data_provider.dart';
+import 'package:base_sdk/src/models/data/poi_data.dart';
 //import 'package:foodyman/utils/excluded_product_ids.dart';
 
 class AppInitializer extends StatefulWidget {

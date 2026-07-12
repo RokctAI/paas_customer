@@ -3,12 +3,16 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
-import 'domain/di/dependency_manager.dart';
-import 'presentation/app_widget.dart';
+import 'package:base_sdk/src/navigation/app_routes.dart';
+import 'package:base_sdk/src/navigation/embedded_widgets.dart';
+import 'package:base_sdk/src/services/local_storage.dart';
+import 'package:base_sdk/src/presentation/theme/theme.dart';
+import 'package:foodyman/domain/di/dependency_manager.dart';
+import 'package:foodyman/presentation/routes/app_routes_impl.dart';
+import 'package:foodyman/presentation/routes/embedded_widgets_impl.dart';
+import 'package:foodyman/presentation/app_widget.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'utils/app_initializer_widget.dart';
+import 'package:foodyman/utils/app_initializer_widget.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -38,5 +42,8 @@ void main() async {
   );
   await LocalStorage.init();
   setUpDependencies();
+  // SDK-resident code navigates/embeds through these host-backed registries.
+  AppRoutes.I = AppRoutesImpl();
+  EmbeddedWidgets.I = EmbeddedWidgetsImpl();
   runApp(ProviderScope(child: AppInitializerWidget(child: AppWidget())));
 }

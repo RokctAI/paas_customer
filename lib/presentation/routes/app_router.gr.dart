@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -10,23 +11,23 @@
 part of 'app_router.dart';
 
 /// generated route for
-/// [AddressListPage]
+/// [AddressListRouteView]
 class AddressListRoute extends PageRouteInfo<void> {
   const AddressListRoute({List<PageRouteInfo>? children})
-      : super(AddressListRoute.name, initialChildren: children);
+    : super(AddressListRoute.name, initialChildren: children);
 
   static const String name = 'AddressListRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const AddressListPage();
+      return const AddressListRouteView();
     },
   );
 }
 
 /// generated route for
-/// [ChatPage]
+/// [ChatRouteView]
 class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
   ChatRoute({
     Key? key,
@@ -34,10 +35,10 @@ class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
     required String name,
     List<PageRouteInfo>? children,
   }) : super(
-          ChatRoute.name,
-          args: ChatRouteArgs(key: key, roleId: roleId, name: name),
-          initialChildren: children,
-        );
+         ChatRoute.name,
+         args: ChatRouteArgs(key: key, roleId: roleId, name: name),
+         initialChildren: children,
+       );
 
   static const String name = 'ChatRoute';
 
@@ -45,7 +46,7 @@ class ChatRoute extends PageRouteInfo<ChatRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<ChatRouteArgs>();
-      return ChatPage(key: args.key, roleId: args.roleId, name: args.name);
+      return ChatRouteView(key: args.key, roleId: args.roleId, name: args.name);
     },
   );
 }
@@ -66,62 +67,62 @@ class ChatRouteArgs {
 }
 
 /// generated route for
-/// [ClosedPage]
+/// [ClosedRouteView]
 class ClosedRoute extends PageRouteInfo<void> {
   const ClosedRoute({List<PageRouteInfo>? children})
-      : super(ClosedRoute.name, initialChildren: children);
+    : super(ClosedRoute.name, initialChildren: children);
 
   static const String name = 'ClosedRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const ClosedPage();
+      return const ClosedRouteView();
     },
   );
 }
 
 /// generated route for
-/// [CreateShopPage]
+/// [CreateShopRouteView]
 class CreateShopRoute extends PageRouteInfo<void> {
   const CreateShopRoute({List<PageRouteInfo>? children})
-      : super(CreateShopRoute.name, initialChildren: children);
+    : super(CreateShopRoute.name, initialChildren: children);
 
   static const String name = 'CreateShopRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const CreateShopPage();
+      return const CreateShopRouteView();
     },
   );
 }
 
 /// generated route for
-/// [HelpPage]
+/// [HelpRouteView]
 class HelpRoute extends PageRouteInfo<void> {
   const HelpRoute({List<PageRouteInfo>? children})
-      : super(HelpRoute.name, initialChildren: children);
+    : super(HelpRoute.name, initialChildren: children);
 
   static const String name = 'HelpRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const HelpPage();
+      return const HelpRouteView();
     },
   );
 }
 
 /// generated route for
-/// [InfoPage]
+/// [InfoRouteView]
 class InfoRoute extends PageRouteInfo<InfoRouteArgs> {
   InfoRoute({Key? key, required int index, List<PageRouteInfo>? children})
-      : super(
-          InfoRoute.name,
-          args: InfoRouteArgs(key: key, index: index),
-          initialChildren: children,
-        );
+    : super(
+        InfoRoute.name,
+        args: InfoRouteArgs(key: key, index: index),
+        initialChildren: children,
+      );
 
   static const String name = 'InfoRoute';
 
@@ -129,7 +130,7 @@ class InfoRoute extends PageRouteInfo<InfoRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<InfoRouteArgs>();
-      return InfoPage(key: args.key, index: args.index);
+      return InfoRouteView(key: args.key, index: args.index);
     },
   );
 }
@@ -148,30 +149,30 @@ class InfoRouteArgs {
 }
 
 /// generated route for
-/// [IntroPage]
+/// [IntroRouteView]
 class IntroRoute extends PageRouteInfo<void> {
   const IntroRoute({List<PageRouteInfo>? children})
-      : super(IntroRoute.name, initialChildren: children);
+    : super(IntroRoute.name, initialChildren: children);
 
   static const String name = 'IntroRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const IntroPage();
+      return const IntroRouteView();
     },
   );
 }
 
 /// generated route for
-/// [LikePage]
+/// [LikeRouteView]
 class LikeRoute extends PageRouteInfo<LikeRouteArgs> {
   LikeRoute({Key? key, bool isBackButton = true, List<PageRouteInfo>? children})
-      : super(
-          LikeRoute.name,
-          args: LikeRouteArgs(key: key, isBackButton: isBackButton),
-          initialChildren: children,
-        );
+    : super(
+        LikeRoute.name,
+        args: LikeRouteArgs(key: key, isBackButton: isBackButton),
+        initialChildren: children,
+      );
 
   static const String name = 'LikeRoute';
 
@@ -181,7 +182,7 @@ class LikeRoute extends PageRouteInfo<LikeRouteArgs> {
       final args = data.argsAs<LikeRouteArgs>(
         orElse: () => const LikeRouteArgs(),
       );
-      return LikePage(key: args.key, isBackButton: args.isBackButton);
+      return LikeRouteView(key: args.key, isBackButton: args.isBackButton);
     },
   );
 }
@@ -200,7 +201,7 @@ class LikeRouteArgs {
 }
 
 /// generated route for
-/// [LoanDocumentUploadScreen]
+/// [LoanDocumentUploadRouteView]
 class LoanDocumentUploadRoute
     extends PageRouteInfo<LoanDocumentUploadRouteArgs> {
   LoanDocumentUploadRoute({
@@ -208,13 +209,13 @@ class LoanDocumentUploadRoute
     String? prefilledIdNumber,
     List<PageRouteInfo>? children,
   }) : super(
-          LoanDocumentUploadRoute.name,
-          args: LoanDocumentUploadRouteArgs(
-            key: key,
-            prefilledIdNumber: prefilledIdNumber,
-          ),
-          initialChildren: children,
-        );
+         LoanDocumentUploadRoute.name,
+         args: LoanDocumentUploadRouteArgs(
+           key: key,
+           prefilledIdNumber: prefilledIdNumber,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'LoanDocumentUploadRoute';
 
@@ -224,7 +225,7 @@ class LoanDocumentUploadRoute
       final args = data.argsAs<LoanDocumentUploadRouteArgs>(
         orElse: () => const LoanDocumentUploadRouteArgs(),
       );
-      return LoanDocumentUploadScreen(
+      return LoanDocumentUploadRouteView(
         key: args.key,
         prefilledIdNumber: args.prefilledIdNumber,
       );
@@ -246,20 +247,20 @@ class LoanDocumentUploadRouteArgs {
 }
 
 /// generated route for
-/// [LoanEligibilityScreen]
+/// [LoanEligibilityRouteView]
 class LoanEligibilityRoute extends PageRouteInfo<LoanEligibilityRouteArgs> {
   LoanEligibilityRoute({
     Key? key,
     Map<String, dynamic>? financialDetails,
     List<PageRouteInfo>? children,
   }) : super(
-          LoanEligibilityRoute.name,
-          args: LoanEligibilityRouteArgs(
-            key: key,
-            financialDetails: financialDetails,
-          ),
-          initialChildren: children,
-        );
+         LoanEligibilityRoute.name,
+         args: LoanEligibilityRouteArgs(
+           key: key,
+           financialDetails: financialDetails,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'LoanEligibilityRoute';
 
@@ -269,7 +270,7 @@ class LoanEligibilityRoute extends PageRouteInfo<LoanEligibilityRouteArgs> {
       final args = data.argsAs<LoanEligibilityRouteArgs>(
         orElse: () => const LoanEligibilityRouteArgs(),
       );
-      return LoanEligibilityScreen(
+      return LoanEligibilityRouteView(
         key: args.key,
         financialDetails: args.financialDetails,
       );
@@ -291,33 +292,33 @@ class LoanEligibilityRouteArgs {
 }
 
 /// generated route for
-/// [LoanScreen]
+/// [LoanRouteView]
 class LoanRoute extends PageRouteInfo<void> {
   const LoanRoute({List<PageRouteInfo>? children})
-      : super(LoanRoute.name, initialChildren: children);
+    : super(LoanRoute.name, initialChildren: children);
 
   static const String name = 'LoanRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const LoanScreen();
+      return const LoanRouteView();
     },
   );
 }
 
 /// generated route for
-/// [LoginPage]
+/// [LoginRouteView]
 class LoginRoute extends PageRouteInfo<void> {
   const LoginRoute({List<PageRouteInfo>? children})
-      : super(LoginRoute.name, initialChildren: children);
+    : super(LoginRoute.name, initialChildren: children);
 
   static const String name = 'LoginRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const LoginPage();
+      return const LoginRouteView();
     },
   );
 }
@@ -326,7 +327,7 @@ class LoginRoute extends PageRouteInfo<void> {
 /// [MainPage]
 class MainRoute extends PageRouteInfo<void> {
   const MainRoute({List<PageRouteInfo>? children})
-      : super(MainRoute.name, initialChildren: children);
+    : super(MainRoute.name, initialChildren: children);
 
   static const String name = 'MainRoute';
 
@@ -339,78 +340,62 @@ class MainRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [MapSearchPage]
+/// [MapSearchRouteView]
 class MapSearchRoute extends PageRouteInfo<void> {
   const MapSearchRoute({List<PageRouteInfo>? children})
-      : super(MapSearchRoute.name, initialChildren: children);
+    : super(MapSearchRoute.name, initialChildren: children);
 
   static const String name = 'MapSearchRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const MapSearchPage();
+      return const MapSearchRouteView();
     },
   );
 }
 
 /// generated route for
-/// [NoConnectionPage]
+/// [NoConnectionRouteView]
 class NoConnectionRoute extends PageRouteInfo<void> {
   const NoConnectionRoute({List<PageRouteInfo>? children})
-      : super(NoConnectionRoute.name, initialChildren: children);
+    : super(NoConnectionRoute.name, initialChildren: children);
 
   static const String name = 'NoConnectionRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const NoConnectionPage();
+      return const NoConnectionRouteView();
     },
   );
 }
 
 /// generated route for
-/// [NotificationListPage]
+/// [NotificationListRouteView]
 class NotificationListRoute extends PageRouteInfo<void> {
   const NotificationListRoute({List<PageRouteInfo>? children})
-      : super(NotificationListRoute.name, initialChildren: children);
+    : super(NotificationListRoute.name, initialChildren: children);
 
   static const String name = 'NotificationListRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const NotificationListPage();
+      return const NotificationListRouteView();
     },
   );
 }
 
 /// generated route for
-/// [OrderPage]
-class OrderRoute extends PageRouteInfo<void> {
-  const OrderRoute({List<PageRouteInfo>? children})
-      : super(OrderRoute.name, initialChildren: children);
-
-  static const String name = 'OrderRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      return const OrderPage();
-    },
-  );
-}
-
-/// generated route for
-/// [OrderProgressPage]
+/// [OrderProgressRouteView]
 class OrderProgressRoute extends PageRouteInfo<OrderProgressRouteArgs> {
   OrderProgressRoute({Key? key, String? orderId, List<PageRouteInfo>? children})
-      : super(
-          OrderProgressRoute.name,
-          args: OrderProgressRouteArgs(key: key, orderId: orderId),
-          initialChildren: children,
-        );
+    : super(
+        OrderProgressRoute.name,
+        args: OrderProgressRouteArgs(key: key, orderId: orderId),
+        initialChildren: children,
+      );
 
   static const String name = 'OrderProgressRoute';
 
@@ -420,7 +405,7 @@ class OrderProgressRoute extends PageRouteInfo<OrderProgressRouteArgs> {
       final args = data.argsAs<OrderProgressRouteArgs>(
         orElse: () => const OrderProgressRouteArgs(),
       );
-      return OrderProgressPage(key: args.key, orderId: args.orderId);
+      return OrderProgressRouteView(key: args.key, orderId: args.orderId);
     },
   );
 }
@@ -439,104 +424,81 @@ class OrderProgressRouteArgs {
 }
 
 /// generated route for
-/// [OrdersListPage]
+/// [OrderRouteView]
+class OrderRoute extends PageRouteInfo<void> {
+  const OrderRoute({List<PageRouteInfo>? children})
+    : super(OrderRoute.name, initialChildren: children);
+
+  static const String name = 'OrderRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const OrderRouteView();
+    },
+  );
+}
+
+/// generated route for
+/// [OrdersListRouteView]
 class OrdersListRoute extends PageRouteInfo<void> {
   const OrdersListRoute({List<PageRouteInfo>? children})
-      : super(OrdersListRoute.name, initialChildren: children);
+    : super(OrdersListRoute.name, initialChildren: children);
 
   static const String name = 'OrdersListRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const OrdersListPage();
+      return const OrdersListRouteView();
     },
   );
 }
 
 /// generated route for
-/// [OrdersMainPage]
+/// [OrdersMainRouteView]
 class OrdersMainRoute extends PageRouteInfo<void> {
   const OrdersMainRoute({List<PageRouteInfo>? children})
-      : super(OrdersMainRoute.name, initialChildren: children);
+    : super(OrdersMainRoute.name, initialChildren: children);
 
   static const String name = 'OrdersMainRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const OrdersMainPage();
+      return const OrdersMainRouteView();
     },
   );
 }
 
 /// generated route for
-/// [ParcelListPage]
+/// [ParcelListRouteView]
 class ParcelListRoute extends PageRouteInfo<void> {
   const ParcelListRoute({List<PageRouteInfo>? children})
-      : super(ParcelListRoute.name, initialChildren: children);
+    : super(ParcelListRoute.name, initialChildren: children);
 
   static const String name = 'ParcelListRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const ParcelListPage();
+      return const ParcelListRouteView();
     },
   );
 }
 
 /// generated route for
-/// [ParcelPage]
-class ParcelRoute extends PageRouteInfo<ParcelRouteArgs> {
-  ParcelRoute({
-    Key? key,
-    bool isBackButton = true,
-    List<PageRouteInfo>? children,
-  }) : super(
-          ParcelRoute.name,
-          args: ParcelRouteArgs(key: key, isBackButton: isBackButton),
-          initialChildren: children,
-        );
-
-  static const String name = 'ParcelRoute';
-
-  static PageInfo page = PageInfo(
-    name,
-    builder: (data) {
-      final args = data.argsAs<ParcelRouteArgs>(
-        orElse: () => const ParcelRouteArgs(),
-      );
-      return ParcelPage(key: args.key, isBackButton: args.isBackButton);
-    },
-  );
-}
-
-class ParcelRouteArgs {
-  const ParcelRouteArgs({this.key, this.isBackButton = true});
-
-  final Key? key;
-
-  final bool isBackButton;
-
-  @override
-  String toString() {
-    return 'ParcelRouteArgs{key: $key, isBackButton: $isBackButton}';
-  }
-}
-
-/// generated route for
-/// [ParcelProgressPage]
+/// [ParcelProgressRouteView]
 class ParcelProgressRoute extends PageRouteInfo<ParcelProgressRouteArgs> {
   ParcelProgressRoute({
     Key? key,
     String? parcelId,
     List<PageRouteInfo>? children,
   }) : super(
-          ParcelProgressRoute.name,
-          args: ParcelProgressRouteArgs(key: key, parcelId: parcelId),
-          initialChildren: children,
-        );
+         ParcelProgressRoute.name,
+         args: ParcelProgressRouteArgs(key: key, parcelId: parcelId),
+         initialChildren: children,
+       );
 
   static const String name = 'ParcelProgressRoute';
 
@@ -546,7 +508,7 @@ class ParcelProgressRoute extends PageRouteInfo<ParcelProgressRouteArgs> {
       final args = data.argsAs<ParcelProgressRouteArgs>(
         orElse: () => const ParcelProgressRouteArgs(),
       );
-      return ParcelProgressPage(key: args.key, parcelId: args.parcelId);
+      return ParcelProgressRouteView(key: args.key, parcelId: args.parcelId);
     },
   );
 }
@@ -565,23 +527,62 @@ class ParcelProgressRouteArgs {
 }
 
 /// generated route for
-/// [PolicyPage]
+/// [ParcelRouteView]
+class ParcelRoute extends PageRouteInfo<ParcelRouteArgs> {
+  ParcelRoute({
+    Key? key,
+    bool isBackButton = true,
+    List<PageRouteInfo>? children,
+  }) : super(
+         ParcelRoute.name,
+         args: ParcelRouteArgs(key: key, isBackButton: isBackButton),
+         initialChildren: children,
+       );
+
+  static const String name = 'ParcelRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      final args = data.argsAs<ParcelRouteArgs>(
+        orElse: () => const ParcelRouteArgs(),
+      );
+      return ParcelRouteView(key: args.key, isBackButton: args.isBackButton);
+    },
+  );
+}
+
+class ParcelRouteArgs {
+  const ParcelRouteArgs({this.key, this.isBackButton = true});
+
+  final Key? key;
+
+  final bool isBackButton;
+
+  @override
+  String toString() {
+    return 'ParcelRouteArgs{key: $key, isBackButton: $isBackButton}';
+  }
+}
+
+/// generated route for
+/// [PolicyRouteView]
 class PolicyRoute extends PageRouteInfo<void> {
   const PolicyRoute({List<PageRouteInfo>? children})
-      : super(PolicyRoute.name, initialChildren: children);
+    : super(PolicyRoute.name, initialChildren: children);
 
   static const String name = 'PolicyRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const PolicyPage();
+      return const PolicyRouteView();
     },
   );
 }
 
 /// generated route for
-/// [ProfilePage]
+/// [ProfileRouteView]
 class ProfileRoute extends PageRouteInfo<ProfileRouteArgs> {
   ProfileRoute({
     Key? key,
@@ -589,14 +590,14 @@ class ProfileRoute extends PageRouteInfo<ProfileRouteArgs> {
     bool isBackButton = true,
     List<PageRouteInfo>? children,
   }) : super(
-          ProfileRoute.name,
-          args: ProfileRouteArgs(
-            key: key,
-            onCardAdded: onCardAdded,
-            isBackButton: isBackButton,
-          ),
-          initialChildren: children,
-        );
+         ProfileRoute.name,
+         args: ProfileRouteArgs(
+           key: key,
+           onCardAdded: onCardAdded,
+           isBackButton: isBackButton,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'ProfileRoute';
 
@@ -606,7 +607,7 @@ class ProfileRoute extends PageRouteInfo<ProfileRouteArgs> {
       final args = data.argsAs<ProfileRouteArgs>(
         orElse: () => const ProfileRouteArgs(),
       );
-      return ProfilePage(
+      return ProfileRouteView(
         key: args.key,
         onCardAdded: args.onCardAdded,
         isBackButton: args.isBackButton,
@@ -635,7 +636,7 @@ class ProfileRouteArgs {
 }
 
 /// generated route for
-/// [RecommendedOnePage]
+/// [RecommendedOneRouteView]
 class RecommendedOneRoute extends PageRouteInfo<RecommendedOneRouteArgs> {
   RecommendedOneRoute({
     Key? key,
@@ -643,14 +644,14 @@ class RecommendedOneRoute extends PageRouteInfo<RecommendedOneRouteArgs> {
     bool isShop = false,
     List<PageRouteInfo>? children,
   }) : super(
-          RecommendedOneRoute.name,
-          args: RecommendedOneRouteArgs(
-            key: key,
-            isNewsOfPage: isNewsOfPage,
-            isShop: isShop,
-          ),
-          initialChildren: children,
-        );
+         RecommendedOneRoute.name,
+         args: RecommendedOneRouteArgs(
+           key: key,
+           isNewsOfPage: isNewsOfPage,
+           isShop: isShop,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'RecommendedOneRoute';
 
@@ -660,7 +661,7 @@ class RecommendedOneRoute extends PageRouteInfo<RecommendedOneRouteArgs> {
       final args = data.argsAs<RecommendedOneRouteArgs>(
         orElse: () => const RecommendedOneRouteArgs(),
       );
-      return RecommendedOnePage(
+      return RecommendedOneRouteView(
         key: args.key,
         isNewsOfPage: args.isNewsOfPage,
         isShop: args.isShop,
@@ -689,7 +690,7 @@ class RecommendedOneRouteArgs {
 }
 
 /// generated route for
-/// [RecommendedPage]
+/// [RecommendedRouteView]
 class RecommendedRoute extends PageRouteInfo<RecommendedRouteArgs> {
   RecommendedRoute({
     Key? key,
@@ -697,14 +698,14 @@ class RecommendedRoute extends PageRouteInfo<RecommendedRouteArgs> {
     bool isShop = false,
     List<PageRouteInfo>? children,
   }) : super(
-          RecommendedRoute.name,
-          args: RecommendedRouteArgs(
-            key: key,
-            isNewsOfPage: isNewsOfPage,
-            isShop: isShop,
-          ),
-          initialChildren: children,
-        );
+         RecommendedRoute.name,
+         args: RecommendedRouteArgs(
+           key: key,
+           isNewsOfPage: isNewsOfPage,
+           isShop: isShop,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'RecommendedRoute';
 
@@ -714,7 +715,7 @@ class RecommendedRoute extends PageRouteInfo<RecommendedRouteArgs> {
       final args = data.argsAs<RecommendedRouteArgs>(
         orElse: () => const RecommendedRouteArgs(),
       );
-      return RecommendedPage(
+      return RecommendedRouteView(
         key: args.key,
         isNewsOfPage: args.isNewsOfPage,
         isShop: args.isShop,
@@ -743,7 +744,7 @@ class RecommendedRouteArgs {
 }
 
 /// generated route for
-/// [RecommendedThreePage]
+/// [RecommendedThreeRouteView]
 class RecommendedThreeRoute extends PageRouteInfo<RecommendedThreeRouteArgs> {
   RecommendedThreeRoute({
     Key? key,
@@ -752,15 +753,15 @@ class RecommendedThreeRoute extends PageRouteInfo<RecommendedThreeRouteArgs> {
     bool isPopular = false,
     List<PageRouteInfo>? children,
   }) : super(
-          RecommendedThreeRoute.name,
-          args: RecommendedThreeRouteArgs(
-            key: key,
-            isNewsOfPage: isNewsOfPage,
-            isShop: isShop,
-            isPopular: isPopular,
-          ),
-          initialChildren: children,
-        );
+         RecommendedThreeRoute.name,
+         args: RecommendedThreeRouteArgs(
+           key: key,
+           isNewsOfPage: isNewsOfPage,
+           isShop: isShop,
+           isPopular: isPopular,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'RecommendedThreeRoute';
 
@@ -770,7 +771,7 @@ class RecommendedThreeRoute extends PageRouteInfo<RecommendedThreeRouteArgs> {
       final args = data.argsAs<RecommendedThreeRouteArgs>(
         orElse: () => const RecommendedThreeRouteArgs(),
       );
-      return RecommendedThreePage(
+      return RecommendedThreeRouteView(
         key: args.key,
         isNewsOfPage: args.isNewsOfPage,
         isShop: args.isShop,
@@ -803,7 +804,7 @@ class RecommendedThreeRouteArgs {
 }
 
 /// generated route for
-/// [RecommendedTwoPage]
+/// [RecommendedTwoRouteView]
 class RecommendedTwoRoute extends PageRouteInfo<RecommendedTwoRouteArgs> {
   RecommendedTwoRoute({
     Key? key,
@@ -812,15 +813,15 @@ class RecommendedTwoRoute extends PageRouteInfo<RecommendedTwoRouteArgs> {
     bool isPopular = false,
     List<PageRouteInfo>? children,
   }) : super(
-          RecommendedTwoRoute.name,
-          args: RecommendedTwoRouteArgs(
-            key: key,
-            isNewsOfPage: isNewsOfPage,
-            isShop: isShop,
-            isPopular: isPopular,
-          ),
-          initialChildren: children,
-        );
+         RecommendedTwoRoute.name,
+         args: RecommendedTwoRouteArgs(
+           key: key,
+           isNewsOfPage: isNewsOfPage,
+           isShop: isShop,
+           isPopular: isPopular,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'RecommendedTwoRoute';
 
@@ -830,7 +831,7 @@ class RecommendedTwoRoute extends PageRouteInfo<RecommendedTwoRouteArgs> {
       final args = data.argsAs<RecommendedTwoRouteArgs>(
         orElse: () => const RecommendedTwoRouteArgs(),
       );
-      return RecommendedTwoPage(
+      return RecommendedTwoRouteView(
         key: args.key,
         isNewsOfPage: args.isNewsOfPage,
         isShop: args.isShop,
@@ -863,7 +864,7 @@ class RecommendedTwoRouteArgs {
 }
 
 /// generated route for
-/// [RegisterConfirmationPage]
+/// [RegisterConfirmationRouteView]
 class RegisterConfirmationRoute
     extends PageRouteInfo<RegisterConfirmationRouteArgs> {
   RegisterConfirmationRoute({
@@ -874,16 +875,16 @@ class RegisterConfirmationRoute
     bool editPhone = false,
     List<PageRouteInfo>? children,
   }) : super(
-          RegisterConfirmationRoute.name,
-          args: RegisterConfirmationRouteArgs(
-            key: key,
-            userModel: userModel,
-            isResetPassword: isResetPassword,
-            verificationId: verificationId,
-            editPhone: editPhone,
-          ),
-          initialChildren: children,
-        );
+         RegisterConfirmationRoute.name,
+         args: RegisterConfirmationRouteArgs(
+           key: key,
+           userModel: userModel,
+           isResetPassword: isResetPassword,
+           verificationId: verificationId,
+           editPhone: editPhone,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'RegisterConfirmationRoute';
 
@@ -891,7 +892,7 @@ class RegisterConfirmationRoute
     name,
     builder: (data) {
       final args = data.argsAs<RegisterConfirmationRouteArgs>();
-      return RegisterConfirmationPage(
+      return RegisterConfirmationRouteView(
         key: args.key,
         userModel: args.userModel,
         isResetPassword: args.isResetPassword,
@@ -928,17 +929,17 @@ class RegisterConfirmationRouteArgs {
 }
 
 /// generated route for
-/// [RegisterPage]
+/// [RegisterRouteView]
 class RegisterRoute extends PageRouteInfo<RegisterRouteArgs> {
   RegisterRoute({
     Key? key,
     required bool isOnlyEmail,
     List<PageRouteInfo>? children,
   }) : super(
-          RegisterRoute.name,
-          args: RegisterRouteArgs(key: key, isOnlyEmail: isOnlyEmail),
-          initialChildren: children,
-        );
+         RegisterRoute.name,
+         args: RegisterRouteArgs(key: key, isOnlyEmail: isOnlyEmail),
+         initialChildren: children,
+       );
 
   static const String name = 'RegisterRoute';
 
@@ -946,7 +947,7 @@ class RegisterRoute extends PageRouteInfo<RegisterRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<RegisterRouteArgs>();
-      return RegisterPage(key: args.key, isOnlyEmail: args.isOnlyEmail);
+      return RegisterRouteView(key: args.key, isOnlyEmail: args.isOnlyEmail);
     },
   );
 }
@@ -965,33 +966,33 @@ class RegisterRouteArgs {
 }
 
 /// generated route for
-/// [ResetPasswordPage]
+/// [ResetPasswordRouteView]
 class ResetPasswordRoute extends PageRouteInfo<void> {
   const ResetPasswordRoute({List<PageRouteInfo>? children})
-      : super(ResetPasswordRoute.name, initialChildren: children);
+    : super(ResetPasswordRoute.name, initialChildren: children);
 
   static const String name = 'ResetPasswordRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const ResetPasswordPage();
+      return const ResetPasswordRouteView();
     },
   );
 }
 
 /// generated route for
-/// [ResultFilterPage]
+/// [ResultFilterRouteView]
 class ResultFilterRoute extends PageRouteInfo<ResultFilterRouteArgs> {
   ResultFilterRoute({
     Key? key,
     required String categoryId,
     List<PageRouteInfo>? children,
   }) : super(
-          ResultFilterRoute.name,
-          args: ResultFilterRouteArgs(key: key, categoryId: categoryId),
-          initialChildren: children,
-        );
+         ResultFilterRoute.name,
+         args: ResultFilterRouteArgs(key: key, categoryId: categoryId),
+         initialChildren: children,
+       );
 
   static const String name = 'ResultFilterRoute';
 
@@ -999,7 +1000,7 @@ class ResultFilterRoute extends PageRouteInfo<ResultFilterRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<ResultFilterRouteArgs>();
-      return ResultFilterPage(key: args.key, categoryId: args.categoryId);
+      return ResultFilterRouteView(key: args.key, categoryId: args.categoryId);
     },
   );
 }
@@ -1018,17 +1019,17 @@ class ResultFilterRouteArgs {
 }
 
 /// generated route for
-/// [SearchPage]
+/// [SearchRouteView]
 class SearchRoute extends PageRouteInfo<SearchRouteArgs> {
   SearchRoute({
     Key? key,
     bool isBackButton = true,
     List<PageRouteInfo>? children,
   }) : super(
-          SearchRoute.name,
-          args: SearchRouteArgs(key: key, isBackButton: isBackButton),
-          initialChildren: children,
-        );
+         SearchRoute.name,
+         args: SearchRouteArgs(key: key, isBackButton: isBackButton),
+         initialChildren: children,
+       );
 
   static const String name = 'SearchRoute';
 
@@ -1038,7 +1039,7 @@ class SearchRoute extends PageRouteInfo<SearchRouteArgs> {
       final args = data.argsAs<SearchRouteArgs>(
         orElse: () => const SearchRouteArgs(),
       );
-      return SearchPage(key: args.key, isBackButton: args.isBackButton);
+      return SearchRouteView(key: args.key, isBackButton: args.isBackButton);
     },
   );
 }
@@ -1057,7 +1058,7 @@ class SearchRouteArgs {
 }
 
 /// generated route for
-/// [ServiceTwoCategoryPage]
+/// [ServiceTwoCategoryRouteView]
 class ServiceTwoCategoryRoute
     extends PageRouteInfo<ServiceTwoCategoryRouteArgs> {
   ServiceTwoCategoryRoute({
@@ -1065,10 +1066,10 @@ class ServiceTwoCategoryRoute
     required int index,
     List<PageRouteInfo>? children,
   }) : super(
-          ServiceTwoCategoryRoute.name,
-          args: ServiceTwoCategoryRouteArgs(key: key, index: index),
-          initialChildren: children,
-        );
+         ServiceTwoCategoryRoute.name,
+         args: ServiceTwoCategoryRouteArgs(key: key, index: index),
+         initialChildren: children,
+       );
 
   static const String name = 'ServiceTwoCategoryRoute';
 
@@ -1076,7 +1077,7 @@ class ServiceTwoCategoryRoute
     name,
     builder: (data) {
       final args = data.argsAs<ServiceTwoCategoryRouteArgs>();
-      return ServiceTwoCategoryPage(key: args.key, index: args.index);
+      return ServiceTwoCategoryRouteView(key: args.key, index: args.index);
     },
   );
 }
@@ -1095,33 +1096,33 @@ class ServiceTwoCategoryRouteArgs {
 }
 
 /// generated route for
-/// [SettingPage]
+/// [SettingRouteView]
 class SettingRoute extends PageRouteInfo<void> {
   const SettingRoute({List<PageRouteInfo>? children})
-      : super(SettingRoute.name, initialChildren: children);
+    : super(SettingRoute.name, initialChildren: children);
 
   static const String name = 'SettingRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const SettingPage();
+      return const SettingRouteView();
     },
   );
 }
 
 /// generated route for
-/// [ShareReferralFaqPage]
+/// [ShareReferralFaqRouteView]
 class ShareReferralFaqRoute extends PageRouteInfo<ShareReferralFaqRouteArgs> {
   ShareReferralFaqRoute({
     Key? key,
     required String terms,
     List<PageRouteInfo>? children,
   }) : super(
-          ShareReferralFaqRoute.name,
-          args: ShareReferralFaqRouteArgs(key: key, terms: terms),
-          initialChildren: children,
-        );
+         ShareReferralFaqRoute.name,
+         args: ShareReferralFaqRouteArgs(key: key, terms: terms),
+         initialChildren: children,
+       );
 
   static const String name = 'ShareReferralFaqRoute';
 
@@ -1129,7 +1130,7 @@ class ShareReferralFaqRoute extends PageRouteInfo<ShareReferralFaqRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<ShareReferralFaqRouteArgs>();
-      return ShareReferralFaqPage(key: args.key, terms: args.terms);
+      return ShareReferralFaqRouteView(key: args.key, terms: args.terms);
     },
   );
 }
@@ -1148,23 +1149,23 @@ class ShareReferralFaqRouteArgs {
 }
 
 /// generated route for
-/// [ShareReferralPage]
+/// [ShareReferralRouteView]
 class ShareReferralRoute extends PageRouteInfo<void> {
   const ShareReferralRoute({List<PageRouteInfo>? children})
-      : super(ShareReferralRoute.name, initialChildren: children);
+    : super(ShareReferralRoute.name, initialChildren: children);
 
   static const String name = 'ShareReferralRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const ShareReferralPage();
+      return const ShareReferralRouteView();
     },
   );
 }
 
 /// generated route for
-/// [ShopDetailPage]
+/// [ShopDetailRouteView]
 class ShopDetailRoute extends PageRouteInfo<ShopDetailRouteArgs> {
   ShopDetailRoute({
     Key? key,
@@ -1172,10 +1173,10 @@ class ShopDetailRoute extends PageRouteInfo<ShopDetailRouteArgs> {
     required String workTime,
     List<PageRouteInfo>? children,
   }) : super(
-          ShopDetailRoute.name,
-          args: ShopDetailRouteArgs(key: key, shop: shop, workTime: workTime),
-          initialChildren: children,
-        );
+         ShopDetailRoute.name,
+         args: ShopDetailRouteArgs(key: key, shop: shop, workTime: workTime),
+         initialChildren: children,
+       );
 
   static const String name = 'ShopDetailRoute';
 
@@ -1183,7 +1184,7 @@ class ShopDetailRoute extends PageRouteInfo<ShopDetailRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<ShopDetailRouteArgs>();
-      return ShopDetailPage(
+      return ShopDetailRouteView(
         key: args.key,
         shop: args.shop,
         workTime: args.workTime,
@@ -1212,7 +1213,7 @@ class ShopDetailRouteArgs {
 }
 
 /// generated route for
-/// [ShopPage]
+/// [ShopRouteView]
 class ShopRoute extends PageRouteInfo<ShopRouteArgs> {
   ShopRoute({
     Key? key,
@@ -1223,17 +1224,17 @@ class ShopRoute extends PageRouteInfo<ShopRouteArgs> {
     String? ownerId,
     List<PageRouteInfo>? children,
   }) : super(
-          ShopRoute.name,
-          args: ShopRouteArgs(
-            key: key,
-            shopId: shopId,
-            productId: productId,
-            cartId: cartId,
-            shop: shop,
-            ownerId: ownerId,
-          ),
-          initialChildren: children,
-        );
+         ShopRoute.name,
+         args: ShopRouteArgs(
+           key: key,
+           shopId: shopId,
+           productId: productId,
+           cartId: cartId,
+           shop: shop,
+           ownerId: ownerId,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'ShopRoute';
 
@@ -1241,7 +1242,7 @@ class ShopRoute extends PageRouteInfo<ShopRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<ShopRouteArgs>();
-      return ShopPage(
+      return ShopRouteView(
         key: args.key,
         shopId: args.shopId,
         productId: args.productId,
@@ -1282,7 +1283,7 @@ class ShopRouteArgs {
 }
 
 /// generated route for
-/// [ShopsBannerPage]
+/// [ShopsBannerRouteView]
 class ShopsBannerRoute extends PageRouteInfo<ShopsBannerRouteArgs> {
   ShopsBannerRoute({
     Key? key,
@@ -1291,15 +1292,15 @@ class ShopsBannerRoute extends PageRouteInfo<ShopsBannerRouteArgs> {
     bool isAds = false,
     List<PageRouteInfo>? children,
   }) : super(
-          ShopsBannerRoute.name,
-          args: ShopsBannerRouteArgs(
-            key: key,
-            bannerId: bannerId,
-            title: title,
-            isAds: isAds,
-          ),
-          initialChildren: children,
-        );
+         ShopsBannerRoute.name,
+         args: ShopsBannerRouteArgs(
+           key: key,
+           bannerId: bannerId,
+           title: title,
+           isAds: isAds,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'ShopsBannerRoute';
 
@@ -1307,7 +1308,7 @@ class ShopsBannerRoute extends PageRouteInfo<ShopsBannerRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<ShopsBannerRouteArgs>();
-      return ShopsBannerPage(
+      return ShopsBannerRouteView(
         key: args.key,
         bannerId: args.bannerId,
         title: args.title,
@@ -1340,23 +1341,23 @@ class ShopsBannerRouteArgs {
 }
 
 /// generated route for
-/// [SplashPage]
+/// [SplashRouteView]
 class SplashRoute extends PageRouteInfo<void> {
   const SplashRoute({List<PageRouteInfo>? children})
-      : super(SplashRoute.name, initialChildren: children);
+    : super(SplashRoute.name, initialChildren: children);
 
   static const String name = 'SplashRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const SplashPage();
+      return const SplashRouteView();
     },
   );
 }
 
 /// generated route for
-/// [StoryListPage]
+/// [StoryListRouteView]
 class StoryListRoute extends PageRouteInfo<StoryListRouteArgs> {
   StoryListRoute({
     Key? key,
@@ -1364,14 +1365,14 @@ class StoryListRoute extends PageRouteInfo<StoryListRouteArgs> {
     required RefreshController controller,
     List<PageRouteInfo>? children,
   }) : super(
-          StoryListRoute.name,
-          args: StoryListRouteArgs(
-            key: key,
-            index: index,
-            controller: controller,
-          ),
-          initialChildren: children,
-        );
+         StoryListRoute.name,
+         args: StoryListRouteArgs(
+           key: key,
+           index: index,
+           controller: controller,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'StoryListRoute';
 
@@ -1379,7 +1380,7 @@ class StoryListRoute extends PageRouteInfo<StoryListRouteArgs> {
     name,
     builder: (data) {
       final args = data.argsAs<StoryListRouteArgs>();
-      return StoryListPage(
+      return StoryListRouteView(
         key: args.key,
         index: args.index,
         controller: args.controller,
@@ -1408,30 +1409,30 @@ class StoryListRouteArgs {
 }
 
 /// generated route for
-/// [TermPage]
+/// [TermRouteView]
 class TermRoute extends PageRouteInfo<void> {
   const TermRoute({List<PageRouteInfo>? children})
-      : super(TermRoute.name, initialChildren: children);
+    : super(TermRoute.name, initialChildren: children);
 
   static const String name = 'TermRoute';
 
   static PageInfo page = PageInfo(
     name,
     builder: (data) {
-      return const TermPage();
+      return const TermRouteView();
     },
   );
 }
 
 /// generated route for
-/// [UiTypePage]
+/// [UiTypeRouteView]
 class UiTypeRoute extends PageRouteInfo<UiTypeRouteArgs> {
   UiTypeRoute({Key? key, bool isBack = false, List<PageRouteInfo>? children})
-      : super(
-          UiTypeRoute.name,
-          args: UiTypeRouteArgs(key: key, isBack: isBack),
-          initialChildren: children,
-        );
+    : super(
+        UiTypeRoute.name,
+        args: UiTypeRouteArgs(key: key, isBack: isBack),
+        initialChildren: children,
+      );
 
   static const String name = 'UiTypeRoute';
 
@@ -1441,7 +1442,7 @@ class UiTypeRoute extends PageRouteInfo<UiTypeRouteArgs> {
       final args = data.argsAs<UiTypeRouteArgs>(
         orElse: () => const UiTypeRouteArgs(),
       );
-      return UiTypePage(key: args.key, isBack: args.isBack);
+      return UiTypeRouteView(key: args.key, isBack: args.isBack);
     },
   );
 }
@@ -1460,7 +1461,7 @@ class UiTypeRouteArgs {
 }
 
 /// generated route for
-/// [ViewMapPage]
+/// [ViewMapRouteView]
 class ViewMapRoute extends PageRouteInfo<ViewMapRouteArgs> {
   ViewMapRoute({
     Key? key,
@@ -1472,18 +1473,18 @@ class ViewMapRoute extends PageRouteInfo<ViewMapRouteArgs> {
     AddressNewModel? address,
     List<PageRouteInfo>? children,
   }) : super(
-          ViewMapRoute.name,
-          args: ViewMapRouteArgs(
-            key: key,
-            isParcel: isParcel,
-            isPop: isPop,
-            isShopLocation: isShopLocation,
-            shopId: shopId,
-            indexAddress: indexAddress,
-            address: address,
-          ),
-          initialChildren: children,
-        );
+         ViewMapRoute.name,
+         args: ViewMapRouteArgs(
+           key: key,
+           isParcel: isParcel,
+           isPop: isPop,
+           isShopLocation: isShopLocation,
+           shopId: shopId,
+           indexAddress: indexAddress,
+           address: address,
+         ),
+         initialChildren: children,
+       );
 
   static const String name = 'ViewMapRoute';
 
@@ -1493,7 +1494,7 @@ class ViewMapRoute extends PageRouteInfo<ViewMapRouteArgs> {
       final args = data.argsAs<ViewMapRouteArgs>(
         orElse: () => const ViewMapRouteArgs(),
       );
-      return ViewMapPage(
+      return ViewMapRouteView(
         key: args.key,
         isParcel: args.isParcel,
         isPop: args.isPop,
@@ -1538,17 +1539,17 @@ class ViewMapRouteArgs {
 }
 
 /// generated route for
-/// [WalletHistoryPage]
+/// [WalletHistoryRouteView]
 class WalletHistoryRoute extends PageRouteInfo<WalletHistoryRouteArgs> {
   WalletHistoryRoute({
     Key? key,
     bool isBackButton = true,
     List<PageRouteInfo>? children,
   }) : super(
-          WalletHistoryRoute.name,
-          args: WalletHistoryRouteArgs(key: key, isBackButton: isBackButton),
-          initialChildren: children,
-        );
+         WalletHistoryRoute.name,
+         args: WalletHistoryRouteArgs(key: key, isBackButton: isBackButton),
+         initialChildren: children,
+       );
 
   static const String name = 'WalletHistoryRoute';
 
@@ -1558,7 +1559,10 @@ class WalletHistoryRoute extends PageRouteInfo<WalletHistoryRouteArgs> {
       final args = data.argsAs<WalletHistoryRouteArgs>(
         orElse: () => const WalletHistoryRouteArgs(),
       );
-      return WalletHistoryPage(key: args.key, isBackButton: args.isBackButton);
+      return WalletHistoryRouteView(
+        key: args.key,
+        isBackButton: args.isBackButton,
+      );
     },
   );
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
-import 'package:foodyman/app_constants.dart'; // Import AppConstants
+import 'package:base_sdk/src/presentation/theme/theme.dart';
+import 'package:base_sdk/src/constants/app_constants.dart'; // Import AppConstants
 
 class BottomNavigatorItem extends StatelessWidget {
   final VoidCallback selectItem;

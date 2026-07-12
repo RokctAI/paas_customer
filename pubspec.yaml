@@ -15,6 +15,42 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Refork 2026-07-11: paas_customer is now a host app over the extracted SDK
+  # set. Paths point at the sibling repos in the RokctAI workspace; the
+  # composed-app flow (sdk_composer.py) swaps these for .rokct/cache copies.
+  base_sdk:
+    path: ../core/base/dart
+  comms_sdk:
+    path: ../core/comms/dart
+  auth_sdk:
+    path: ../Users/auth/dart
+  users_sdk:
+    path: ../Users/users/dart
+  onboarding_sdk:
+    path: ../Users/onboarding/dart
+  products_sdk:
+    path: ../commerce/products/dart
+  merchants_sdk:
+    path: ../commerce/merchants/dart
+  orders_sdk:
+    path: ../commerce/orders/dart
+  promotions_sdk:
+    path: ../commerce/promotions/dart
+  marketplace_sdk:
+    path: ../commerce/marketplace/dart
+  delivery_sdk:
+    path: ../zones/delivery/dart
+  map_sdk:
+    path: ../zones/map/dart
+  corporate_sdk:
+    path: ../corporate/corporate/dart
+  polaris_sdk:
+    path: ../corporate/polaris/dart
+  payments_sdk:
+    path: ../pay/payments/dart
+  wallet_sdk:
+    path: ../pay/wallet/dart
+
   #base:
   dio: ^5.7.0
   intl: ^0.19.0
@@ -144,3 +180,10 @@ flutter_icons:
   ios: true
   remove_alpha_ios: true
   image_path: 'assets/images/app_logo.png'
+
+# Feature SDK pubspecs point at ../base (the composed-app cache layout).
+# When paas_customer itself is the resolution root against sibling repos,
+# this override redirects base_sdk to its real workspace location.
+dependency_overrides:
+  base_sdk:
+    path: ../core/base/dart
