@@ -31,12 +31,11 @@ class ShopsPaginateResponse {
     List<ShopData>? data,
     // Links? links,
     Meta? meta,
-  }) =>
-      ShopsPaginateResponse(
-        data: data ?? _data,
-        // links: links ?? _links,
-        meta: meta ?? _meta,
-      );
+  }) => ShopsPaginateResponse(
+    data: data ?? _data,
+    // links: links ?? _links,
+    meta: meta ?? _meta,
+  );
 
   List<ShopData>? get data => _data;
 

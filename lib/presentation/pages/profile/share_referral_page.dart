@@ -91,8 +91,11 @@ class _ShareReferralPageState extends ConsumerState<ShareReferralPage> {
                           onTap: () {
                             context.pushRoute(
                               ShareReferralFaqRoute(
-                                terms: state
-                                        .referralData?.translation?.shortDesc ??
+                                terms:
+                                    state
+                                        .referralData
+                                        ?.translation
+                                        ?.shortDesc ??
                                     "",
                               ),
                             );
@@ -141,7 +144,8 @@ class _ShareReferralPageState extends ConsumerState<ShareReferralPage> {
                           onPressed: () async {
                             await Clipboard.setData(
                               ClipboardData(
-                                text: ref
+                                text:
+                                    ref
                                         .watch(profileProvider)
                                         .userData
                                         ?.referral ??
@@ -189,10 +193,13 @@ class _ShareReferralPageState extends ConsumerState<ShareReferralPage> {
                                     ),
                                     Text(
                                       AppHelpers.numberFormat(
-                                        number: (state.userData
+                                        number:
+                                            (state
+                                                    .userData
                                                     ?.referralFromPrice ??
                                                 0) -
-                                            (state.userData
+                                            (state
+                                                    .userData
                                                     ?.referralFromWithdrawPrice ??
                                                 0),
                                       ),
@@ -213,7 +220,8 @@ class _ShareReferralPageState extends ConsumerState<ShareReferralPage> {
                                 const Spacer(),
                                 Text(
                                   ((state.userData?.referralFromPrice ?? 0) -
-                                          (state.userData
+                                          (state
+                                                  .userData
                                                   ?.referralFromWithdrawPrice ??
                                               0))
                                       .toString(),
