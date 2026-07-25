@@ -32,12 +32,11 @@ class BrandsPaginateResponse {
     List<BrandData>? data,
     // Links? links,
     Meta? meta,
-  }) =>
-      BrandsPaginateResponse(
-        data: data ?? _data,
-        // links: links ?? _links,
-        meta: meta ?? _meta,
-      );
+  }) => BrandsPaginateResponse(
+    data: data ?? _data,
+    // links: links ?? _links,
+    meta: meta ?? _meta,
+  );
 
   List<BrandData>? get data => _data;
 

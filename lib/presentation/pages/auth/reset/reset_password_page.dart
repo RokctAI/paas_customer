@@ -82,8 +82,9 @@ class ResetPasswordPage extends ConsumerWidget {
                         40.verticalSpace,
                         if (AppConstants.signUpType == SignUpType.phone)
                           Directionality(
-                            textDirection:
-                                isLtr ? TextDirection.ltr : TextDirection.rtl,
+                            textDirection: isLtr
+                                ? TextDirection.ltr
+                                : TextDirection.rtl,
                             child: IntlPhoneField(
                               disableLengthCheck:
                                   !AppConstants.isNumberLengthAlwaysSame,
@@ -111,8 +112,8 @@ class ResetPasswordPage extends ConsumerWidget {
                               showDropdownIcon: AppConstants.showArrowIcon,
                               autovalidateMode:
                                   AppConstants.isNumberLengthAlwaysSame
-                                      ? AutovalidateMode.onUserInteraction
-                                      : AutovalidateMode.disabled,
+                                  ? AutovalidateMode.onUserInteraction
+                                  : AutovalidateMode.disabled,
                               textAlignVertical: TextAlignVertical.center,
                               decoration: InputDecoration(
                                 counterText: '',
