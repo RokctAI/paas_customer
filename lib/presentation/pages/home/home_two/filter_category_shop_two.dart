@@ -40,8 +40,8 @@ class FilterCategoryShopTwo extends StatelessWidget {
             shrinkWrap: true,
             itemCount:
                 (state.categories[state.selectIndexCategory].children?.length ??
-                        0) +
-                    1,
+                    0) +
+                1,
             itemBuilder: (BuildContext context, int index) {
               final category = state.categories[state.selectIndexCategory];
               return index == 0
@@ -52,15 +52,18 @@ class FilterCategoryShopTwo extends StatelessWidget {
                             context: context,
                             modal: (c) => FilterPage(
                               controller: c,
-                              categoryId: (state.selectIndexSubCategory != -1
+                              categoryId:
+                                  (state.selectIndexSubCategory != -1
                                       ? (state
-                                          .categories[state.selectIndexCategory]
-                                          .children?[
-                                              state.selectIndexSubCategory]
-                                          .id)
+                                            .categories[state
+                                                .selectIndexCategory]
+                                            .children?[state
+                                                .selectIndexSubCategory]
+                                            .id)
                                       : state
-                                          .categories[state.selectIndexCategory]
-                                          .id) ??
+                                            .categories[state
+                                                .selectIndexCategory]
+                                            .id) ??
                                   "",
                             ),
                             isDarkMode: false,
@@ -96,7 +99,8 @@ class FilterCategoryShopTwo extends StatelessWidget {
                     )
                   : TabBarItem(
                       isShopTabBar: index - 1 == state.selectIndexSubCategory,
-                      title: category.children?[index - 1].translation?.title ??
+                      title:
+                          category.children?[index - 1].translation?.title ??
                           "",
                       index: index - 1,
                       currentIndex: state.selectIndexSubCategory,
@@ -115,25 +119,24 @@ class FilterCategoryShopTwo extends StatelessWidget {
         state.isSelectCategoryLoading == -1
             ? const Loading()
             : state.filterShops.isNotEmpty
-                ? ListView.builder(
-                    padding:
-                        REdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    itemCount: state.filterShops.length,
-                    itemBuilder: (context, index) => Padding(
-                      padding: REdgeInsets.only(bottom: 12),
-                      child: MarketTwoItem(
-                        shop: state.filterShops[index],
-                        isSimpleShop: true,
-                      ),
-                    ),
-                  )
-                : Padding(
-                    padding: EdgeInsets.only(top: 24.h),
-                    child: Center(child: _resultEmpty()),
+            ? ListView.builder(
+                padding: REdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                scrollDirection: Axis.vertical,
+                itemCount: state.filterShops.length,
+                itemBuilder: (context, index) => Padding(
+                  padding: REdgeInsets.only(bottom: 12),
+                  child: MarketTwoItem(
+                    shop: state.filterShops[index],
+                    isSimpleShop: true,
                   ),
+                ),
+              )
+            : Padding(
+                padding: EdgeInsets.only(top: 24.h),
+                child: Center(child: _resultEmpty()),
+              ),
       ],
     );
   }
