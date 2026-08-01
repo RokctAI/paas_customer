@@ -43,8 +43,9 @@ class CategoryBarItem extends StatelessWidget {
               height: isActive ? 48 : 48.r,
               width: isActive ? 48 : 48.r,
               radius: 0,
-              color:
-                  isActive ? AppStyle.white : AppStyle.primary, // Changed added
+              color: isActive
+                  ? AppStyle.white
+                  : AppStyle.primary, // Changed added
             ),
             4.verticalSpace,
             Padding(
