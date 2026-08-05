@@ -58,7 +58,8 @@ class _LanguagePageState extends ConsumerState<CurrencyScreen> {
           ),
           width: double.infinity,
           constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height *
+            maxHeight:
+                MediaQuery.of(context).size.height *
                 0.3, // Use only 30% of screen height
           ),
           child: Padding(
