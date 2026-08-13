@@ -5,6 +5,7 @@ import 'package:foodyman/presentation/theme/theme.dart';
 
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/infrastructure/services/tr_keys.dart';
+
 import 'market_shimmer_three.dart';
 
 class ShopShimmerThree extends StatelessWidget {
@@ -35,15 +36,15 @@ class ShopShimmerThree extends StatelessWidget {
               itemCount: 6,
               itemBuilder: (context, index) =>
                   AnimationConfiguration.staggeredList(
-                position: index,
-                duration: const Duration(milliseconds: 375),
-                child: const SlideAnimation(
-                  verticalOffset: 50.0,
-                  child: FadeInAnimation(
-                    child: MarketShimmerThree(isShop: true),
+                    position: index,
+                    duration: const Duration(milliseconds: 375),
+                    child: const SlideAnimation(
+                      verticalOffset: 50.0,
+                      child: FadeInAnimation(
+                        child: MarketShimmerThree(isShop: true),
+                      ),
+                    ),
                   ),
-                ),
-              ),
             ),
           ),
         ),

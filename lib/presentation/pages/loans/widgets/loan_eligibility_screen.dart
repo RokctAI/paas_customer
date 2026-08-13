@@ -49,7 +49,8 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
     super.initState();
 
     // Check if financial details exist
-    _fieldsReadOnly = widget.financialDetails != null &&
+    _fieldsReadOnly =
+        widget.financialDetails != null &&
         (widget.financialDetails!['monthly_income'] != null ||
             widget.financialDetails!['grocery_expenses'] != null ||
             widget.financialDetails!['other_expenses'] != null ||
@@ -244,8 +245,8 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
   ) async {
     try {
       // Pass the financial details to the repository method
-      final preApprovalResult =
-          await _loansRepository.calculatePreApprovalAmount(financialDetails);
+      final preApprovalResult = await _loansRepository
+          .calculatePreApprovalAmount(financialDetails);
 
       preApprovalResult.when(
         success: (amount) {
@@ -539,19 +540,23 @@ class _LoanEligibilityScreenState extends ConsumerState<LoanEligibilityScreen> {
         'id_number': ref.read(idNumberProvider),
         'loan_amount': ref.read(loanAmountProvider),
         'financial_details': {
-          'monthly_income': double.tryParse(
+          'monthly_income':
+              double.tryParse(
                 _monthlyIncomeController.text.replaceAll(',', ''),
               ) ??
               0,
-          'grocery_expenses': double.tryParse(
+          'grocery_expenses':
+              double.tryParse(
                 _groceryExpensesController.text.replaceAll(',', ''),
               ) ??
               0,
-          'other_expenses': double.tryParse(
+          'other_expenses':
+              double.tryParse(
                 _otherExpensesController.text.replaceAll(',', ''),
               ) ??
               0,
-          'existing_credits': double.tryParse(
+          'existing_credits':
+              double.tryParse(
                 _existingCreditsController.text.replaceAll(',', ''),
               ) ??
               0,

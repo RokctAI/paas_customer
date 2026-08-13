@@ -1,8 +1,10 @@
 import 'dart:convert';
+
 import 'package:crypto/crypto.dart' as crypto;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
 import '../../../application/webview/preloaded_webview_provider.dart';
 import '../../../domain/di/dependency_manager.dart';
 import '../../../domain/handlers/handlers.dart';
@@ -131,9 +133,9 @@ class PayFastService {
       );
 
       // Set initial state with the controller
-      ProviderScope.containerOf(
-        context,
-      ).read(preloadedWebViewProvider.notifier).state = PreloadedWebViewState(
+      ProviderScope.containerOf(context)
+          .read(preloadedWebViewProvider.notifier)
+          .state = PreloadedWebViewState(
         controller: webController,
         url: paymentUrl,
         isReady: false,

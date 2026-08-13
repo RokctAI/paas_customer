@@ -10,6 +10,7 @@ import 'package:foodyman/infrastructure/services/tpying_delay.dart';
 import 'package:foodyman/infrastructure/models/data/shop_data.dart';
 import 'package:foodyman/infrastructure/services/app_connectivity.dart';
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
+
 import 'filter_state.dart';
 
 class FilterNotifier extends StateNotifier<FilterState> {

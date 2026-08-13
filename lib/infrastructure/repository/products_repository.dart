@@ -4,6 +4,7 @@ import 'package:foodyman/domain/interface/products.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:foodyman/infrastructure/models/response/all_products_response.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
+
 import '../services/app_helpers.dart';
 
 class ProductsRepository implements ProductsRepositoryFacade {
@@ -313,7 +314,7 @@ class ProductsRepository implements ProductsRepositoryFacade {
 
   @override
   Future<ApiResult<ProductsPaginateResponse>>
-      getProductsShopByCategoryPaginate({
+  getProductsShopByCategoryPaginate({
     String? shopId,
     List<String>? brands,
     int? sortIndex,

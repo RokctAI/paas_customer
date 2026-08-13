@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,9 +41,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   void initState() {
     birthDay = TextEditingController(
       text: intl.DateFormat("yyyy-MM-dd").format(
-        DateTime.tryParse(
-              ref.read(profileProvider).userData?.birthday ?? "",
-            )?.toLocal() ??
+        DateTime.tryParse(ref.read(profileProvider).userData?.birthday ?? "")
+                ?.toLocal() ??
             DateTime.now(),
       ),
     );
@@ -50,7 +50,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       ref
           .read(editProfileProvider.notifier)
           .setPhone(ref.read(profileProvider).userData?.phone ?? "");
-      ref.read(editProfileProvider.notifier).setBirth(
+      ref
+          .read(editProfileProvider.notifier)
+          .setBirth(
             intl.DateFormat("yyyy-MM-dd").format(
               DateTime.tryParse(
                     ref.read(profileProvider).userData?.birthday ?? "",
@@ -142,27 +144,27 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                       borderRadius: BorderRadius.circular(42.r),
                                       child:
                                           ((user?.img?.isNotEmpty ?? false) &&
-                                                  state.imagePath.isEmpty)
-                                              ? CustomNetworkImage(
-                                                  profile: true,
-                                                  url: user!.img ?? "",
-                                                  height: 84.r,
-                                                  width: 84.r,
-                                                  radius: 42.r,
-                                                )
-                                              : state.imagePath.isNotEmpty
-                                                  ? Image.file(
-                                                      File(state.imagePath),
-                                                      width: 84.r,
-                                                      height: 84.r,
-                                                    )
-                                                  : CustomNetworkImage(
-                                                      profile: true,
-                                                      url: state.url,
-                                                      height: 84.r,
-                                                      width: 84.r,
-                                                      radius: 42.r,
-                                                    ),
+                                              state.imagePath.isEmpty)
+                                          ? CustomNetworkImage(
+                                              profile: true,
+                                              url: user!.img ?? "",
+                                              height: 84.r,
+                                              width: 84.r,
+                                              radius: 42.r,
+                                            )
+                                          : state.imagePath.isNotEmpty
+                                          ? Image.file(
+                                              File(state.imagePath),
+                                              width: 84.r,
+                                              height: 84.r,
+                                            )
+                                          : CustomNetworkImage(
+                                              profile: true,
+                                              url: state.url,
+                                              height: 84.r,
+                                              width: 84.r,
+                                              radius: 42.r,
+                                            ),
                                     ),
                                   ),
                                   Padding(
@@ -197,9 +199,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                 readOnly: AppValidators.isValidEmail(
                                   user?.email ?? '',
                                 ),
-                                label: AppHelpers.getTranslation(
-                                  TrKeys.email,
-                                ).toUpperCase(),
+                                label: AppHelpers.getTranslation(TrKeys.email)
+                                    .toUpperCase(),
                                 initialText: user?.email ?? "",
                                 validation: AppValidators.emailCheck,
                                 onChanged: event.setEmail,
@@ -210,7 +211,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   SizedBox(
-                                    width: (MediaQuery.sizeOf(context).width -
+                                    width:
+                                        (MediaQuery.sizeOf(context).width -
                                             88) /
                                         2,
                                     child: OutlinedBorderTextField(
@@ -226,7 +228,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                     ),
                                   ),
                                   SizedBox(
-                                    width: (MediaQuery.sizeOf(context).width -
+                                    width:
+                                        (MediaQuery.sizeOf(context).width -
                                             40) /
                                         2,
                                     child: OutlinedBorderTextField(
@@ -257,9 +260,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                     context: context,
                                     modal: const PhoneVerify(),
                                     isDarkMode: false,
-                                    paddingTop: MediaQuery.paddingOf(
-                                      context,
-                                    ).top,
+                                    paddingTop: MediaQuery.paddingOf(context)
+                                        .top,
                                   );
                                 },
                               ),
@@ -272,31 +274,30 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                       height: 250.h,
                                       padding: const EdgeInsets.only(top: 6.0),
                                       margin: EdgeInsets.only(
-                                        bottom: MediaQuery.viewInsetsOf(
-                                          context,
-                                        ).bottom,
+                                        bottom: MediaQuery.viewInsetsOf(context)
+                                            .bottom,
                                       ),
                                       color: CupertinoColors.systemBackground
                                           .resolveFrom(context),
                                       child: SafeArea(
                                         top: false,
                                         child: CupertinoDatePicker(
-                                          initialDateTime: DateTime.tryParse(
-                                                birthDay.text,
-                                              )?.toLocal() ??
+                                          initialDateTime:
+                                              DateTime.tryParse(birthDay.text)
+                                                  ?.toLocal() ??
                                               DateTime.now(),
                                           maximumDate: DateTime.now(),
                                           mode: CupertinoDatePickerMode.date,
                                           use24hFormat: true,
                                           onDateTimeChanged:
                                               (DateTime newDate) {
-                                            birthDay.text = intl.DateFormat(
-                                              "yyyy-MM-dd",
-                                            ).format(newDate);
-                                            event.setBirth(
-                                              newDate.toString(),
-                                            );
-                                          },
+                                                birthDay.text = intl.DateFormat(
+                                                  "yyyy-MM-dd",
+                                                ).format(newDate);
+                                                event.setBirth(
+                                                  newDate.toString(),
+                                                );
+                                              },
                                         ),
                                       ),
                                     ),
@@ -317,9 +318,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                 hint: AppHelpers.getTranslation(
                                   TrKeys.typeHere,
                                 ),
-                                label: AppHelpers.getTranslation(
-                                  TrKeys.gender,
-                                ).toUpperCase(),
+                                label: AppHelpers.getTranslation(TrKeys.gender)
+                                    .toUpperCase(),
                                 list: AppConstants.genderList,
                                 onChanged: event.setGender,
                                 validator: (s) {

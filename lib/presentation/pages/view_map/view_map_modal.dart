@@ -126,18 +126,16 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
                     Expanded(
                       child: OutlinedBorderTextField(
                         textController: house,
-                        label: AppHelpers.getTranslation(
-                          TrKeys.house,
-                        ).toUpperCase(),
+                        label: AppHelpers.getTranslation(TrKeys.house)
+                            .toUpperCase(),
                       ),
                     ),
                     24.horizontalSpace,
                     Expanded(
                       child: OutlinedBorderTextField(
                         textController: floor,
-                        label: AppHelpers.getTranslation(
-                          TrKeys.floor,
-                        ).toUpperCase(),
+                        label: AppHelpers.getTranslation(TrKeys.floor)
+                            .toUpperCase(),
                       ),
                     ),
                   ],
@@ -158,8 +156,8 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
                   : AppStyle.black,
               title: !widget.isShopLocation
                   ? (state.isActive
-                      ? AppHelpers.getTranslation(TrKeys.apply)
-                      : AppHelpers.getTranslation(TrKeys.noDriverZone))
+                        ? AppHelpers.getTranslation(TrKeys.apply)
+                        : AppHelpers.getTranslation(TrKeys.noDriverZone))
                   : AppHelpers.getTranslation(TrKeys.apply),
               onPressed: () {
                 if (widget.isShopLocation) {

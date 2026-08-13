@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../theme/theme.dart';
 
 class CommonAppBar2 extends StatelessWidget {
@@ -20,7 +21,8 @@ class CommonAppBar2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: height.h +
+      height:
+          height.h +
           ((MediaQuery.of(context).padding.top > 34)
               ? 34.h
               : MediaQuery.of(context).padding.top),

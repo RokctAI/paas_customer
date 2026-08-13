@@ -18,8 +18,11 @@ import 'package:foodyman/infrastructure/services/marker_image_cropper.dart';
 import 'package:foodyman/domain/interface/draw.dart';
 import 'package:foodyman/infrastructure/models/response/all_products_response.dart';
 import 'package:share_plus/share_plus.dart';
+
 import '../../app_constants.dart';
+
 import 'package:foodyman/infrastructure/services/tr_keys.dart';
+
 import '../../infrastructure/models/data/translation.dart';
 import 'shop_state.dart';
 
@@ -207,31 +210,34 @@ class ShopNotifier extends StateNotifier<ShopState> {
       }
       if (state.isTodayWorkingDay) {
         TimeOfDay startTimeOfDay = TimeOfDay(
-          hour: int.tryParse(
+          hour:
+              int.tryParse(
                 state.shopData!.shopWorkingDays?[todayWeekIndex].from
                         ?.substring(
-                      0,
-                      state.shopData!.shopWorkingDays?[todayWeekIndex].from
-                              ?.indexOf("-") ??
                           0,
-                    ) ??
+                          state.shopData!.shopWorkingDays?[todayWeekIndex].from
+                                  ?.indexOf("-") ??
+                              0,
+                        ) ??
                     "",
               ) ??
               0,
-          minute: int.tryParse(
+          minute:
+              int.tryParse(
                 state.shopData!.shopWorkingDays?[todayWeekIndex].from
                         ?.substring(
-                      (state.shopData!.shopWorkingDays?[todayWeekIndex].from
-                                  ?.indexOf("-") ??
-                              0) +
-                          1,
-                    ) ??
+                          (state.shopData!.shopWorkingDays?[todayWeekIndex].from
+                                      ?.indexOf("-") ??
+                                  0) +
+                              1,
+                        ) ??
                     "",
               ) ??
               0,
         );
         TimeOfDay endTimeOfDay = TimeOfDay(
-          hour: int.tryParse(
+          hour:
+              int.tryParse(
                 state.shopData!.shopWorkingDays?[todayWeekIndex].to?.substring(
                       0,
                       state.shopData!.shopWorkingDays?[todayWeekIndex].to
@@ -241,7 +247,8 @@ class ShopNotifier extends StateNotifier<ShopState> {
                     "",
               ) ??
               0,
-          minute: int.tryParse(
+          minute:
+              int.tryParse(
                 state.shopData!.shopWorkingDays?[todayWeekIndex].to?.substring(
                       (state.shopData!.shopWorkingDays?[todayWeekIndex].to
                                   ?.indexOf("-") ??
@@ -633,14 +640,14 @@ class ShopNotifier extends StateNotifier<ShopState> {
     if (connected) {
       state = state.copyWith(isProductCategoryLoading: true);
       page = 1;
-      final response =
-          await _productsRepository.getProductsShopByCategoryPaginate(
-        page: 1,
-        shopId: shopId,
-        categoryId: categoryId,
-        sortIndex: state.sortIndex,
-        brands: state.brandIds,
-      );
+      final response = await _productsRepository
+          .getProductsShopByCategoryPaginate(
+            page: 1,
+            shopId: shopId,
+            categoryId: categoryId,
+            sortIndex: state.sortIndex,
+            brands: state.brandIds,
+          );
       response.when(
         success: (data) {
           state = state.copyWith(
@@ -668,12 +675,12 @@ class ShopNotifier extends StateNotifier<ShopState> {
   }) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
-      final response =
-          await _productsRepository.getProductsShopByCategoryPaginate(
-        page: ++page,
-        shopId: shopId,
-        categoryId: categoryId,
-      );
+      final response = await _productsRepository
+          .getProductsShopByCategoryPaginate(
+            page: ++page,
+            shopId: shopId,
+            categoryId: categoryId,
+          );
       response.when(
         success: (data) {
           List<ProductData> list = List.from(state.categoryProducts);

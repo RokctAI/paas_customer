@@ -16,6 +16,7 @@ import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/domain/interface/gallery.dart';
 import 'package:foodyman/domain/interface/shops.dart';
 import 'package:foodyman/infrastructure/services/tr_keys.dart';
+
 import 'profile_state.dart';
 
 class ProfileNotifier extends StateNotifier<ProfileState> {
@@ -141,14 +142,18 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
             LocalStorage.setUser(data.data);
             LocalStorage.setAddressSelected(
               AddressData(
-                title: data.data?.addresses?.firstWhere(
-                      (element) => element.active ?? false,
-                      orElse: () {
-                        return AddressNewModel();
-                      },
-                    ).title ??
+                title:
+                    data.data?.addresses
+                        ?.firstWhere(
+                          (element) => element.active ?? false,
+                          orElse: () {
+                            return AddressNewModel();
+                          },
+                        )
+                        .title ??
                     "",
-                address: data.data?.addresses
+                address:
+                    data.data?.addresses
                         ?.firstWhere(
                           (element) => element.active ?? false,
                           orElse: () {

@@ -13,6 +13,7 @@ import 'package:foodyman/presentation/components/title_icon.dart';
 import 'package:foodyman/presentation/pages/home/filter/filter_page.dart';
 import 'package:foodyman/presentation/components/badges.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
+
 import '../../../theme/theme.dart';
 import 'shimmer/news_shop_shimmer.dart';
 import 'widgets/market_three_item.dart';
@@ -43,8 +44,8 @@ class FilterCategoryShopThree extends StatelessWidget {
             shrinkWrap: true,
             itemCount:
                 (state.categories[state.selectIndexCategory].children?.length ??
-                        0) +
-                    1,
+                    0) +
+                1,
             itemBuilder: (BuildContext context, int index) {
               final category = state.categories[state.selectIndexCategory];
               return index == 0
@@ -55,17 +56,20 @@ class FilterCategoryShopThree extends StatelessWidget {
                             context: context,
                             modal: (c) => FilterPage(
                               controller: c,
-                              categoryId: (state.selectIndexSubCategory != -1
+                              categoryId:
+                                  (state.selectIndexSubCategory != -1
                                       ? (state
-                                          .categories[state.selectIndexCategory]
-                                          .children?[
-                                              state.selectIndexSubCategory]
-                                          .id
-                                          ?.toString())
+                                            .categories[state
+                                                .selectIndexCategory]
+                                            .children?[state
+                                                .selectIndexSubCategory]
+                                            .id
+                                            ?.toString())
                                       : state
-                                          .categories[state.selectIndexCategory]
-                                          .id
-                                          ?.toString()) ??
+                                            .categories[state
+                                                .selectIndexCategory]
+                                            .id
+                                            ?.toString()) ??
                                   "",
                             ),
                             isDarkMode: false,
@@ -93,7 +97,8 @@ class FilterCategoryShopThree extends StatelessWidget {
                     )
                   : TabBarItemThree(
                       isShopTabBar: index - 1 == state.selectIndexSubCategory,
-                      title: category.children?[index - 1].translation?.title ??
+                      title:
+                          category.children?[index - 1].translation?.title ??
                           "",
                       index: index - 1,
                       currentIndex: state.selectIndexSubCategory,
@@ -113,39 +118,38 @@ class FilterCategoryShopThree extends StatelessWidget {
                           title: AppHelpers.getTranslation(TrKeys.shops),
                         )
                       : state.filterMarket.isNotEmpty
-                          ? Column(
-                              children: [
-                                TitleAndIcon(
-                                  title:
-                                      AppHelpers.getTranslation(TrKeys.shops),
-                                  rightTitle:
-                                      "${AppHelpers.getTranslation(TrKeys.found)} ${state.totalShops} ${AppHelpers.getTranslation(TrKeys.results)}",
-                                ),
-                                12.verticalSpace,
-                                SizedBox(
-                                  height: 246.h,
-                                  child: SmartRefresher(
-                                    scrollDirection: Axis.horizontal,
-                                    controller: shopController,
-                                    enablePullDown: false,
-                                    enablePullUp: true,
-                                    onLoading: () async {},
-                                    child: ListView.builder(
-                                      padding: EdgeInsets.only(left: 16.r),
-                                      shrinkWrap: false,
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: state.filterMarket.length,
-                                      itemBuilder: (context, index) =>
-                                          MarketThreeItem(
+                      ? Column(
+                          children: [
+                            TitleAndIcon(
+                              title: AppHelpers.getTranslation(TrKeys.shops),
+                              rightTitle:
+                                  "${AppHelpers.getTranslation(TrKeys.found)} ${state.totalShops} ${AppHelpers.getTranslation(TrKeys.results)}",
+                            ),
+                            12.verticalSpace,
+                            SizedBox(
+                              height: 246.h,
+                              child: SmartRefresher(
+                                scrollDirection: Axis.horizontal,
+                                controller: shopController,
+                                enablePullDown: false,
+                                enablePullUp: true,
+                                onLoading: () async {},
+                                child: ListView.builder(
+                                  padding: EdgeInsets.only(left: 16.r),
+                                  shrinkWrap: false,
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: state.filterMarket.length,
+                                  itemBuilder: (context, index) =>
+                                      MarketThreeItem(
                                         shop: state.filterMarket[index],
                                       ),
-                                    ),
-                                  ),
                                 ),
-                                16.verticalSpace,
-                              ],
-                            )
-                          : const SizedBox.shrink(),
+                              ),
+                            ),
+                            16.verticalSpace,
+                          ],
+                        )
+                      : const SizedBox.shrink(),
                   TitleAndIcon(
                     title: AppHelpers.getTranslation(TrKeys.restaurants),
                     rightTitle:
@@ -177,8 +181,7 @@ class FilterCategoryShopThree extends StatelessWidget {
     return EmptyBadge(
       imagePath: 'assets/lottie/sad_man.json',
       titleText: 'No Store in this Category nearby',
-      subtitleText:
-          'We are adding more stores to more locations. You can suggest your local favorite.\n',
+      subtitleText: 'We are adding more stores to more locations. You can suggest your local favorite.\n',
       linkText: 'Chat with us',
       onLinkTap: () {
         context.pushRoute(ChatRoute(roleId: "admin", name: "Admin"));

@@ -5,8 +5,10 @@ import 'package:foodyman/infrastructure/models/data/shop_data.dart';
 import 'package:foodyman/presentation/components/custom_network_image.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/components/badges.dart';
+
 import '../../../../../app_constants.dart';
 import '../../../../theme/theme.dart';
+
 //import 'package:foodyman/presentation/pages/home_two/widget/two_bonus_discount.dart';
 
 class MarketTwoItem extends StatelessWidget {
@@ -44,8 +46,8 @@ class MarketTwoItem extends StatelessWidget {
                   margin: isFilter
                       ? const EdgeInsets.symmetric(horizontal: 16)
                       : isSimpleShop
-                          ? EdgeInsets.all(8.r)
-                          : EdgeInsets.only(right: 8.r),
+                      ? EdgeInsets.all(8.r)
+                      : EdgeInsets.only(right: 8.r),
                   width: 268.r,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(24.r)),

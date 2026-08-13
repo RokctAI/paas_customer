@@ -4,6 +4,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/application/home/home_notifier.dart';
 import 'package:foodyman/application/home/home_state.dart';
+
 import '../shimmer/category_shimmer.dart';
 import 'tab_bar_item.dart';
 
@@ -43,8 +44,9 @@ class CategoryScreen extends StatelessWidget {
                   padding: EdgeInsets.only(left: 16.r),
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount:
-                      state.isCategoryLoading ? 5 : state.categories.length,
+                  itemCount: state.isCategoryLoading
+                      ? 5
+                      : state.categories.length,
                   itemBuilder: (context, index) {
                     return AnimationConfiguration.staggeredList(
                       position: index,
@@ -55,7 +57,8 @@ class CategoryScreen extends StatelessWidget {
                           child: CategoryBarItem(
                             index: index,
                             image: state.categories[index].img ?? "",
-                            title: state.categories[index].translation?.title ??
+                            title:
+                                state.categories[index].translation?.title ??
                                 "",
                             isActive: state.selectIndexCategory == index,
                             onTap: () {

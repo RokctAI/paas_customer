@@ -7,6 +7,7 @@ import 'package:foodyman/domain/handlers/network_exceptions.dart';
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
 
 import 'dart:convert';
+
 import 'package:foodyman/infrastructure/models/request/cart_request.dart';
 
 class CartRepository implements CartRepositoryFacade {

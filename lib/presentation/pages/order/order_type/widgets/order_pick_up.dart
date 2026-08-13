@@ -10,6 +10,7 @@ import 'package:foodyman/presentation/components/select_item.dart';
 import 'package:foodyman/presentation/components/title_icon.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 import 'package:foodyman/infrastructure/services/tr_keys.dart';
+
 import 'order_container.dart';
 
 class OrderPickUp extends ConsumerStatefulWidget {
@@ -59,17 +60,20 @@ class _OrderPickUpState extends ConsumerState<OrderPickUp> {
                                               .read(orderProvider.notifier)
                                               .changeBranch(index);
                                         },
-                                        isActive: ref
+                                        isActive:
+                                            ref
                                                 .watch(orderProvider)
                                                 .branchIndex ==
                                             index,
-                                        desc: ref
+                                        desc:
+                                            ref
                                                 .watch(orderProvider)
                                                 .branches?[index]
                                                 .address
                                                 ?.address ??
                                             "",
-                                        title: ref
+                                        title:
+                                            ref
                                                 .watch(orderProvider)
                                                 .branches?[index]
                                                 .translation
@@ -77,7 +81,8 @@ class _OrderPickUpState extends ConsumerState<OrderPickUp> {
                                             "",
                                       );
                                     },
-                                    itemCount: ref
+                                    itemCount:
+                                        ref
                                             .watch(orderProvider)
                                             .branches
                                             ?.length ??
@@ -105,7 +110,7 @@ class _OrderPickUpState extends ConsumerState<OrderPickUp> {
                 title: AppHelpers.getTranslation(TrKeys.deliveryAddress),
                 description:
                     ref.watch(orderProvider).shopData?.translation?.address ??
-                        '',
+                    '',
               );
             },
           ),

@@ -14,7 +14,9 @@ import 'package:foodyman/presentation/theme/theme.dart';
 import 'package:foodyman/application/promo_code/promo_code_notifier.dart';
 import 'package:foodyman/application/promo_code/promo_code_provider.dart';
 import 'package:foodyman/application/shop_order/shop_order_provider.dart';
+
 import '../../../../../app_constants.dart';
+
 import 'package:foodyman/infrastructure/services/local_storage.dart';
 import 'package:foodyman/infrastructure/services/tpying_delay.dart';
 
@@ -97,9 +99,8 @@ class _PromoCodeState extends ConsumerState<PromoCodeScreen> {
                   24.verticalSpace,
                   OutlinedBorderTextField(
                     textController: promoCodeController,
-                    label: AppHelpers.getTranslation(
-                      TrKeys.promoCode,
-                    ).toUpperCase(),
+                    label: AppHelpers.getTranslation(TrKeys.promoCode)
+                        .toUpperCase(),
                     onChanged: (s) {
                       _delayed.run(() {
                         event.checkPromoCode(
@@ -135,24 +136,29 @@ class _PromoCodeState extends ConsumerState<PromoCodeScreen> {
                       background: state.isActive
                           ? AppStyle.primary
                           : AppStyle.borderColor,
-                      textColor:
-                          state.isActive ? AppStyle.black : AppStyle.textGrey,
+                      textColor: state.isActive
+                          ? AppStyle.black
+                          : AppStyle.textGrey,
                       title: AppHelpers.getTranslation(TrKeys.save),
                       onPressed: () {
                         if (state.isActive) {
                           ref
                               .read(orderProvider.notifier)
                               .setPromoCode(promoCodeController.text);
-                          ref.read(orderProvider.notifier).getCalculate(
+                          ref
+                              .read(orderProvider.notifier)
+                              .getCalculate(
                                 context: context,
                                 isLoading: false,
                                 cartId:
                                     ref.read(shopOrderProvider).cart?.id ?? "",
-                                long: LocalStorage.getAddressSelected()
+                                long:
+                                    LocalStorage.getAddressSelected()
                                         ?.location
                                         ?.longitude ??
                                     AppConstants.demoLongitude,
-                                lat: LocalStorage.getAddressSelected()
+                                lat:
+                                    LocalStorage.getAddressSelected()
                                         ?.location
                                         ?.latitude ??
                                     AppConstants.demoLatitude,

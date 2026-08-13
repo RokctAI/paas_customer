@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import '../../infrastructure/services/app_helpers.dart';
 import '../../infrastructure/services/tr_keys.dart';
 import '../theme/app_style.dart';

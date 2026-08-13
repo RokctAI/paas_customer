@@ -10,6 +10,7 @@ import 'package:foodyman/presentation/components/custom_network_image.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 
 import 'package:foodyman/presentation/theme/theme.dart';
+
 import 'badge_item.dart';
 import 'shop_avarat.dart';
 
@@ -93,8 +94,8 @@ class MarketItem extends StatelessWidget {
                             child: Text(
                               shop.bonus != null
                                   ? ((shop.bonus?.type ?? "sum") == "sum")
-                                      ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(number: shop.bonus?.value)} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
-                                      : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                                        ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(number: shop.bonus?.value)} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                                        : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
                                   : shop.translation?.description ?? "",
                               style: AppStyle.interNormal(
                                 size: 12,
@@ -232,8 +233,8 @@ class MarketItem extends StatelessWidget {
           Text(
             shop.bonus != null
                 ? ((shop.bonus?.type ?? "sum") == "sum")
-                    ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(number: shop.bonus?.value)} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
-                    : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                      ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(number: shop.bonus?.value)} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
+                      : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
                 : shop.translation?.description ?? "",
             style: AppStyle.interNormal(size: 12, color: AppStyle.black),
             maxLines: 1,

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:foodyman/infrastructure/services/app_connectivity.dart';
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/domain/interface/payments.dart';
+
 import 'payment_state.dart';
 
 class PaymentNotifier extends StateNotifier<PaymentState> {
@@ -29,7 +30,7 @@ class PaymentNotifier extends StateNotifier<PaymentState> {
           if (withOutCash || !shopEnableCod) {
             payments =
                 data?.data?.reversed.where((e) => e.tag != "cash").toList() ??
-                    [];
+                [];
           } else {
             payments = data?.data?.reversed.toList() ?? [];
           }

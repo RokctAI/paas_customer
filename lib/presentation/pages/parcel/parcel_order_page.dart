@@ -238,12 +238,11 @@ class _ParcelProgressPageState extends ConsumerState<ParcelProgressPage> {
                                           ),
                                         ),
                                         Text(
-                                          intl.DateFormat(
-                                            "MMM dd, HH:mm",
-                                          ).format(
-                                            state.parcel?.createdAt ??
-                                                DateTime.now(),
-                                          ),
+                                          intl.DateFormat("MMM dd, HH:mm")
+                                              .format(
+                                                state.parcel?.createdAt ??
+                                                    DateTime.now(),
+                                              ),
                                           style: AppStyle.interNormal(
                                             size: 14,
                                             color: AppStyle.textGrey,

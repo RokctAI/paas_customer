@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 import 'package:foodyman/domain/interface/cart.dart';
 import 'package:foodyman/infrastructure/models/request/cart_request.dart';
 import 'package:share_plus/share_plus.dart';
+
 import '../../app_constants.dart';
 import 'product_state.dart';
 
@@ -21,7 +22,7 @@ class ProductNotifier extends StateNotifier<ProductState> {
   final CartRepositoryFacade _cartRepository;
 
   ProductNotifier(this._cartRepository, this._productsRepository)
-      : super(const ProductState());
+    : super(const ProductState());
   String? shareLink;
 
   void change(int index) {

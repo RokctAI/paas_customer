@@ -4,6 +4,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:foodyman/application/home/home_notifier.dart';
 import 'package:foodyman/application/home/home_state.dart';
+
 import 'shimmer/category_two_shimmer.dart';
 import 'widget/category_two_item.dart';
 
@@ -40,8 +41,9 @@ class CategoryTwo extends StatelessWidget {
                   padding: EdgeInsets.only(left: 16.r, bottom: 16.r, top: 8.r),
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount:
-                      state.isCategoryLoading ? 5 : state.categories.length,
+                  itemCount: state.isCategoryLoading
+                      ? 5
+                      : state.categories.length,
                   itemBuilder: (context, index) {
                     return AnimationConfiguration.staggeredList(
                       position: index,
@@ -52,7 +54,8 @@ class CategoryTwo extends StatelessWidget {
                           child: CategoryTwoItem(
                             index: index,
                             image: state.categories[index].img ?? "",
-                            title: state.categories[index].translation?.title ??
+                            title:
+                                state.categories[index].translation?.title ??
                                 "",
                             isActive: state.selectIndexCategory == index,
                             onTap: () {
