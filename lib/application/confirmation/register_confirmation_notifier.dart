@@ -11,6 +11,7 @@ import 'package:foodyman/infrastructure/services/app_connectivity.dart';
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/infrastructure/services/local_storage.dart';
 import 'package:foodyman/infrastructure/services/tr_keys.dart';
+
 import '../../domain/interface/auth.dart';
 import '../../domain/interface/user.dart';
 import 'register_confirmation_state.dart';
@@ -21,7 +22,7 @@ class RegisterConfirmationNotifier
   final UserRepositoryFacade _userRepositoryFacade;
 
   RegisterConfirmationNotifier(this._authRepository, this._userRepositoryFacade)
-      : super(const RegisterConfirmationState());
+    : super(const RegisterConfirmationState());
 
   Timer? _timer;
   int _initialTime = 30;

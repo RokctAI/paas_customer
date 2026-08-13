@@ -5,6 +5,7 @@ import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import '../models/data/filter_model.dart';
 
 class ShopsRepository implements ShopsRepositoryFacade {

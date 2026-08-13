@@ -13,6 +13,7 @@ import 'package:foodyman/infrastructure/services/tr_keys.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 import 'package:foodyman/infrastructure/services/local_storage.dart';
 import 'package:foodyman/infrastructure/services/marker_image_cropper.dart';
+
 import 'edit_profile_state.dart';
 
 class EditProfileNotifier extends StateNotifier<EditProfileState> {
@@ -20,7 +21,7 @@ class EditProfileNotifier extends StateNotifier<EditProfileState> {
   final GalleryRepositoryFacade _galleryRepository;
 
   EditProfileNotifier(this._userRepository, this._galleryRepository)
-      : super(const EditProfileState());
+    : super(const EditProfileState());
 
   void setUser(ProfileData user) {
     state = state.copyWith(

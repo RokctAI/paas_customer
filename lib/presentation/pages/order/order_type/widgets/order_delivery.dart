@@ -16,8 +16,10 @@ import 'package:foodyman/presentation/components/text_fields/outline_bordered_te
 import 'package:foodyman/presentation/pages/profile/phone_verify.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
+
 import '../../order_check/widgets/time_delivery.dart';
 import 'order_container.dart';
+
 import 'package:foodyman/presentation/components/sellect_address_screen.dart';
 
 class OrderDelivery extends StatefulWidget {
@@ -117,9 +119,9 @@ class _OrderDeliveryState extends State<OrderDelivery> {
                   title: AppHelpers.getTranslation(TrKeys.deliveryAddress),
                   description:
                       (LocalStorage.getAddressSelected()?.title?.isEmpty ??
-                              true)
-                          ? LocalStorage.getAddressSelected()?.address ?? ''
-                          : LocalStorage.getAddressSelected()?.title ?? "",
+                          true)
+                      ? LocalStorage.getAddressSelected()?.address ?? ''
+                      : LocalStorage.getAddressSelected()?.title ?? "",
                 ),
                 10.verticalSpace,
                 OrderContainer(
@@ -159,9 +161,8 @@ class _OrderDeliveryState extends State<OrderDelivery> {
                 ),
                 12.verticalSpace,
                 OutlinedBorderTextField(
-                  label: AppHelpers.getTranslation(
-                    TrKeys.comment,
-                  ).toUpperCase(),
+                  label: AppHelpers.getTranslation(TrKeys.comment)
+                      .toUpperCase(),
                   textController: commentController,
                   onChanged: (s) {
                     ref.read(orderProvider.notifier).setAddressInfo(note: s);
@@ -169,9 +170,8 @@ class _OrderDeliveryState extends State<OrderDelivery> {
                 ),
                 12.verticalSpace,
                 OutlinedBorderTextField(
-                  label: AppHelpers.getTranslation(
-                    TrKeys.phoneNumber,
-                  ).toUpperCase(),
+                  label: AppHelpers.getTranslation(TrKeys.phoneNumber)
+                      .toUpperCase(),
                   textController: userPhoneNumber,
                   readOnly: true,
                   onTap: () {
@@ -208,9 +208,8 @@ class _OrderDeliveryState extends State<OrderDelivery> {
                         children: [
                           Expanded(
                             child: OutlinedBorderTextField(
-                              label: AppHelpers.getTranslation(
-                                TrKeys.firstname,
-                              ).toUpperCase(),
+                              label: AppHelpers.getTranslation(TrKeys.firstname)
+                                  .toUpperCase(),
                               textController: nameController,
                               validation: AppValidators.isNotEmptyValidator,
                               onChanged: (s) {

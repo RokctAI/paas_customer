@@ -72,9 +72,8 @@ class _RefundScreenState extends State<RefundScreen> {
                   24.verticalSpace,
                   OutlinedBorderTextField(
                     textController: textEditingController,
-                    label: AppHelpers.getTranslation(
-                      TrKeys.whyDoYouWant,
-                    ).toUpperCase(),
+                    label: AppHelpers.getTranslation(TrKeys.whyDoYouWant)
+                        .toUpperCase(),
                   ),
                   146.verticalSpace,
                   Padding(
@@ -87,7 +86,9 @@ class _RefundScreenState extends State<RefundScreen> {
                           isLoading: ref.watch(orderProvider).isButtonLoading,
                           title: AppHelpers.getTranslation(TrKeys.send),
                           onPressed: () {
-                            ref.read(orderProvider.notifier).refundOrder(
+                            ref
+                                .read(orderProvider.notifier)
+                                .refundOrder(
                                   context,
                                   textEditingController.text,
                                 );

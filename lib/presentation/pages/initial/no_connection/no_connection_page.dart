@@ -1,4 +1,5 @@
 import 'dart:ui';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
@@ -100,8 +101,8 @@ class NoConnectionDialog extends ConsumerWidget {
       final connectivityResult = await Connectivity().checkConnectivity();
       final hasConnection =
           connectivityResult.contains(ConnectivityResult.mobile) ||
-              connectivityResult.contains(ConnectivityResult.ethernet) ||
-              connectivityResult.contains(ConnectivityResult.wifi);
+          connectivityResult.contains(ConnectivityResult.ethernet) ||
+          connectivityResult.contains(ConnectivityResult.wifi);
 
       if (hasConnection) {
         // Connection restored, go back to splash to reinitialize

@@ -1,8 +1,10 @@
 import 'dart:convert';
+
 import 'package:foodyman/infrastructure/models/data/address_information.dart';
 import 'package:foodyman/infrastructure/models/data/address_old_data.dart';
 import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../models/response/driver_show_response.dart';
 import 'storage_keys.dart';
 
@@ -116,8 +118,8 @@ abstract class LocalStorage {
             .map((part) => part.trim())
             .toList(); // Use null-aware operator
         if (addressParts.length >= 3) {
-          String postalCode =
-              addressParts.removeLast(); // Remove and store postal code
+          String postalCode = addressParts
+              .removeLast(); // Remove and store postal code
           addressParts.insert(
             0,
             postalCode,
@@ -215,8 +217,9 @@ abstract class LocalStorage {
       _preferences?.remove(StorageKeys.keyWalletData);
 
   static Future<void> setSettingsList(List<SettingsData> settings) async {
-    final List<String> strings =
-        settings.map((setting) => jsonEncode(setting.toJson())).toList();
+    final List<String> strings = settings
+        .map((setting) => jsonEncode(setting.toJson()))
+        .toList();
     await _preferences?.setStringList(StorageKeys.keyGlobalSettings, strings);
   }
 

@@ -10,12 +10,12 @@ import 'package:foodyman/infrastructure/services/tr_keys.dart';
 
 class AutoOrderNotifier extends StateNotifier<AutoOrderState> {
   AutoOrderNotifier()
-      : super(
-          AutoOrderState(
-            from: DateTime.now().add(const Duration(days: 1)),
-            to: DateTime.now().add(const Duration(days: 7)),
-          ),
-        );
+    : super(
+        AutoOrderState(
+          from: DateTime.now().add(const Duration(days: 1)),
+          to: DateTime.now().add(const Duration(days: 7)),
+        ),
+      );
 
   void init(RepeatData data, double grandTotal) {
     state = state.copyWith(
@@ -146,14 +146,14 @@ class AutoOrderNotifier extends StateNotifier<AutoOrderState> {
     if (repeatData == null) {
       return true;
     }
-    return (((DateTime.parse(
-              repeatData.from ?? "",
-            ).difference(state.from).inDays) !=
+    return (((DateTime.parse(repeatData.from ?? "")
+                .difference(state.from)
+                .inDays) !=
             0) ||
         (state.to != null &&
-            (DateTime.parse(
-                  repeatData.to ?? "",
-                ).difference(state.to!).inDays) !=
+            (DateTime.parse(repeatData.to ?? "")
+                    .difference(state.to!)
+                    .inDays) !=
                 0));
   }
 

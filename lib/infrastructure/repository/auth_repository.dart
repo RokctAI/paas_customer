@@ -3,6 +3,7 @@ import 'package:foodyman/domain/di/dependency_manager.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
 import 'package:foodyman/domain/interface/auth.dart';
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
+
 import '../models/models.dart';
 
 class AuthRepository implements AuthRepositoryFacade {

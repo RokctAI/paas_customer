@@ -51,9 +51,8 @@ class SetPasswordPage extends ConsumerWidget {
                         ),
                         40.verticalSpace,
                         OutlinedBorderTextField(
-                          label: AppHelpers.getTranslation(
-                            TrKeys.password,
-                          ).toUpperCase(),
+                          label: AppHelpers.getTranslation(TrKeys.password)
+                              .toUpperCase(),
                           obscure: state.showPassword,
                           suffixIcon: IconButton(
                             splashRadius: 25,
@@ -76,9 +75,8 @@ class SetPasswordPage extends ConsumerWidget {
                         ),
                         34.verticalSpace,
                         OutlinedBorderTextField(
-                          label: AppHelpers.getTranslation(
-                            TrKeys.password,
-                          ).toUpperCase(),
+                          label: AppHelpers.getTranslation(TrKeys.password)
+                              .toUpperCase(),
                           obscure: state.showConfirmPassword,
                           suffixIcon: IconButton(
                             splashRadius: 25,

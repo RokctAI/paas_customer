@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../infrastructure/models/data/loans/loan_application.dart';
 import '../../infrastructure/models/data/loans/loan_contract_model.dart';
 import '../handlers/handlers.dart';

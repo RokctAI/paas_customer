@@ -54,21 +54,19 @@ class OrdersItem extends StatelessWidget {
               children: [
                 const SizedBox(height: 2),
                 Text(
-                  intl.DateFormat(
-                    "MMM",
-                  ).format(order?.createdAt ?? DateTime.now()).toUpperCase(),
+                  intl.DateFormat("MMM")
+                      .format(order?.createdAt ?? DateTime.now())
+                      .toUpperCase(),
                   style: AppStyle.interRegular(size: 20),
                 ),
                 Text(
-                  intl.DateFormat(
-                    "dd",
-                  ).format(order?.createdAt ?? DateTime.now()),
+                  intl.DateFormat("dd")
+                      .format(order?.createdAt ?? DateTime.now()),
                   style: AppStyle.interNoSemi(size: 20),
                 ),
                 Text(
-                  intl.DateFormat(
-                    "HH:mm",
-                  ).format(order?.createdAt ?? DateTime.now()),
+                  intl.DateFormat("HH:mm")
+                      .format(order?.createdAt ?? DateTime.now()),
                   style: AppStyle.interRegular(size: 12),
                 ),
               ],
@@ -181,8 +179,8 @@ class OrdersItem extends StatelessWidget {
                                 number: isRefund
                                     ? 0
                                     : (order?.totalPrice?.isNegative ?? true)
-                                        ? 0
-                                        : (order?.totalPrice ?? 0),
+                                    ? 0
+                                    : (order?.totalPrice ?? 0),
                               ),
                         style: AppStyle.interBold(size: 14),
                         maxLines: 1,

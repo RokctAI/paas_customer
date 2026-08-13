@@ -7,7 +7,9 @@ import 'package:foodyman/infrastructure/models/data/product_data.dart';
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/presentation/components/custom_network_image.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
+
 import '../../product/product_page.dart';
+
 import 'package:foodyman/application/shopname/shop_name_provider.dart';
 
 class ProductItem extends ConsumerWidget {

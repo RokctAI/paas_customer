@@ -4,17 +4,17 @@ import 'package:intl/intl.dart';
 abstract class TimeService {
   TimeService._();
 
-  static final String _timeFormat =
-      AppConstants.use24Format ? 'HH:mm' : 'h:mm a';
+  static final String _timeFormat = AppConstants.use24Format
+      ? 'HH:mm'
+      : 'h:mm a';
 
   static String dateFormatYMD(DateTime? time) {
     return DateFormat("yyyy-MM-dd").format(time ?? DateTime.now());
   }
 
   static String dateFormatMDYHm(DateTime? time) {
-    return DateFormat(
-      "MMM d, yyyy - $_timeFormat",
-    ).format(time ?? DateTime.now());
+    return DateFormat("MMM d, yyyy - $_timeFormat")
+        .format(time ?? DateTime.now());
   }
 
   static String dateFormatDMY(DateTime? time) {

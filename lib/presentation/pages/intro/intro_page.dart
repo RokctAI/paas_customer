@@ -9,6 +9,7 @@ import 'package:foodyman/presentation/components/buttons/second_button.dart';
 //import '../../components/helper/shimmer.dart';
 
 import '../../../application/intro/intro_provider.dart';
+
 //import '../../component/components.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
@@ -295,17 +296,17 @@ class _IntroPageState extends ConsumerState<IntroPage>
                               ),
                             )
                           : state.currentIndex > index
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(122),
-                                  child: const LinearProgressIndicator(
-                                    value: 1,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      AppStyle.primary,
-                                    ),
-                                    backgroundColor: AppStyle.white,
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(122),
+                              child: const LinearProgressIndicator(
+                                value: 1,
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppStyle.primary,
+                                ),
+                                backgroundColor: AppStyle.white,
+                              ),
+                            )
+                          : const SizedBox.shrink(),
                     );
                   },
                 ),

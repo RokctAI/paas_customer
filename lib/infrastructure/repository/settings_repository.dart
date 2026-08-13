@@ -7,6 +7,7 @@ import 'package:foodyman/infrastructure/models/models.dart';
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/infrastructure/services/local_storage.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
+
 import '../models/data/translation.dart';
 
 class SettingsRepository implements SettingsRepositoryFacade {
@@ -58,8 +59,7 @@ class SettingsRepository implements SettingsRepositoryFacade {
         '/api/method/paas.api.system.system.get_languages',
       );
       if (LocalStorage.getLanguage() == null ||
-          !(LanguagesResponse.fromJson(response.data)
-                  .data
+          !(LanguagesResponse.fromJson(response.data).data
                   ?.map((e) => e.id)
                   .contains(LocalStorage.getLanguage()?.id) ??
               true)) {
@@ -143,7 +143,8 @@ class SettingsRepository implements SettingsRepositoryFacade {
         '/api/method/paas.api.notification.notification.get_notification_settings',
       );
       return ApiResult.success(
-        data: notificationsListModelFromJson(response.data) ??
+        data:
+            notificationsListModelFromJson(response.data) ??
             NotificationsListModel(),
       );
     } catch (e) {

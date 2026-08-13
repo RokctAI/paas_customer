@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 import '../../../application/profile/profile_notifier.dart';
 import '../../../application/profile/profile_provider.dart';
 import '../../../application/profile/profile_state.dart';
@@ -11,7 +12,9 @@ import '../../../infrastructure/services/local_storage.dart';
 import '../../../infrastructure/services/tr_keys.dart';
 import '../../components/app_bars/common_app_bar.dart';
 import '../../components/badges.dart';
+
 import 'package:intl/intl.dart' as intl;
+
 import '../../components/buttons/pop_button.dart';
 import '../../components/buttons/second_button.dart';
 import '../../components/loading.dart';
@@ -155,118 +158,115 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
               child: state.isLoadingHistory
                   ? const Center(child: Loading())
                   : state.isEmptyWallet
-                      ? _resultEmpty()
-                      : SmartRefresher(
-                          enablePullDown: true,
-                          enablePullUp: true,
-                          physics: const BouncingScrollPhysics(),
-                          controller: controller,
-                          onLoading: () {
-                            event.getWalletPage(context, controller);
-                          },
-                          onRefresh: () {
-                            event.getWallet(context,
-                                refreshController: controller);
-                          },
-                          child: ListView.builder(
-                            padding: EdgeInsets.all(16.r),
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            itemCount: state.walletHistory?.length ?? 0,
-                            itemBuilder: (context, index) => Container(
-                              margin: EdgeInsets.only(bottom: 16.h),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12.r),
-                                color:
-                                    state.walletHistory?[index].type == "topup"
-                                        ? Colors.green.withOpacity(0.5)
-                                        : state.walletHistory?[index].type ==
-                                                "withdraw"
-                                            ? AppStyle.red.withOpacity(0.5)
-                                            : AppStyle.white,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      top: 16.r,
-                                      right: 16.r,
-                                      left: 16.r,
+                  ? _resultEmpty()
+                  : SmartRefresher(
+                      enablePullDown: true,
+                      enablePullUp: true,
+                      physics: const BouncingScrollPhysics(),
+                      controller: controller,
+                      onLoading: () {
+                        event.getWalletPage(context, controller);
+                      },
+                      onRefresh: () {
+                        event.getWallet(context, refreshController: controller);
+                      },
+                      child: ListView.builder(
+                        padding: EdgeInsets.all(16.r),
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        itemCount: state.walletHistory?.length ?? 0,
+                        itemBuilder: (context, index) => Container(
+                          margin: EdgeInsets.only(bottom: 16.h),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.r),
+                            color: state.walletHistory?[index].type == "topup"
+                                ? Colors.green.withOpacity(0.5)
+                                : state.walletHistory?[index].type == "withdraw"
+                                ? AppStyle.red.withOpacity(0.5)
+                                : AppStyle.white,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  top: 16.r,
+                                  right: 16.r,
+                                  left: 16.r,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "${AppHelpers.getTranslation(TrKeys.paymentDate)}: ${intl.DateFormat("MMM dd,yyyy h:mm a").format(DateTime.tryParse(state.walletHistory?[index].createdAt ?? "")?.toLocal() ?? DateTime.now())}",
+                                      style: AppStyle.interRegular(
+                                        size: 12.sp,
+                                        color: AppStyle.black,
+                                      ),
                                     ),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                    4.verticalSpace,
+                                    RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: "Ref: ",
+                                            style: AppStyle.interBold(
+                                              size: 16.sp,
+                                              color: AppStyle.black,
+                                            ),
+                                          ),
+                                          TextSpan(
+                                            text:
+                                                state
+                                                    .walletHistory?[index]
+                                                    .note ??
+                                                "",
+                                            style: AppStyle.interRegular(
+                                              size: 16.sp,
+                                              color: AppStyle.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Divider(color: AppStyle.black),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  bottom: 16.r,
+                                  right: 16.r,
+                                  left: 16.r,
+                                ),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          "${AppHelpers.getTranslation(TrKeys.paymentDate)}: ${intl.DateFormat("MMM dd,yyyy h:mm a").format(DateTime.tryParse(state.walletHistory?[index].createdAt ?? "")?.toLocal() ?? DateTime.now())}",
+                                          "Transaction type: ",
                                           style: AppStyle.interRegular(
                                             size: 12.sp,
                                             color: AppStyle.black,
                                           ),
                                         ),
-                                        4.verticalSpace,
-                                        RichText(
-                                          text: TextSpan(
-                                            children: [
-                                              TextSpan(
-                                                text: "Ref: ",
-                                                style: AppStyle.interBold(
-                                                  size: 16.sp,
-                                                  color: AppStyle.black,
-                                                ),
-                                              ),
-                                              TextSpan(
-                                                text: state
-                                                        .walletHistory?[index]
-                                                        .note ??
-                                                    "",
-                                                style: AppStyle.interRegular(
-                                                  size: 16.sp,
-                                                  color: AppStyle.black,
-                                                ),
-                                              ),
-                                            ],
+                                        Text(
+                                          AppHelpers.numberFormat(
+                                            number: state
+                                                .walletHistory?[index]
+                                                .price,
+                                          ),
+                                          style: AppStyle.interBold(
+                                            size: 16.sp,
+                                            color: AppStyle.black,
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  const Divider(color: AppStyle.black),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                      bottom: 16.r,
-                                      right: 16.r,
-                                      left: 16.r,
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              "Transaction type: ",
-                                              style: AppStyle.interRegular(
-                                                size: 12.sp,
-                                                color: AppStyle.black,
-                                              ),
-                                            ),
-                                            Text(
-                                              AppHelpers.numberFormat(
-                                                number: state
-                                                    .walletHistory?[index]
-                                                    .price,
-                                              ),
-                                              style: AppStyle.interBold(
-                                                size: 16.sp,
-                                                color: AppStyle.black,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        /*16.verticalSpace,
+                                    /*16.verticalSpace,
                                  Row(
                                 mainAxisAlignment:
                                 MainAxisAlignment.spaceBetween,
@@ -289,46 +289,46 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                 ],
                               ),
                               16.verticalSpace,*/
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              (state.walletHistory?[index]
-                                                          .type ??
-                                                      "")
-                                                  .capitalize(), // is ${(state.walletHistory?[index].status ?? "").capitalize()}',
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          (state.walletHistory?[index].type ??
+                                                  "")
+                                              .capitalize(), // is ${(state.walletHistory?[index].status ?? "").capitalize()}',
 
-                                              style: AppStyle.interBold(
-                                                size: 12.sp,
-                                                color: AppStyle.black,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Status: ${(state.walletHistory?[index].status ?? "").capitalize()}',
-                                              style: AppStyle.interRegular(
-                                                size: 12.sp,
-                                                color: AppStyle.black,
-                                              ),
-                                            ),
-                                          ],
+                                          style: AppStyle.interBold(
+                                            size: 12.sp,
+                                            color: AppStyle.black,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Status: ${(state.walletHistory?[index].status ?? "").capitalize()}',
+                                          style: AppStyle.interRegular(
+                                            size: 12.sp,
+                                            color: AppStyle.black,
+                                          ),
                                         ),
                                       ],
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                         ),
+                      ),
+                    ),
             ),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
         floatingActionButton: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child:
-              widget.isBackButton ? const PopButton() : const SizedBox.shrink(),
+          child: widget.isBackButton
+              ? const PopButton()
+              : const SizedBox.shrink(),
         ),
       ),
     );

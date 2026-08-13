@@ -17,6 +17,7 @@ import 'package:foodyman/presentation/pages/auth/reset/set_password_page.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 import 'package:foodyman/application/auth/auth.dart';
+
 import '../register/register_page.dart';
 
 @RoutePage()
@@ -153,8 +154,8 @@ class _RegisterConfirmationPageState
                                   state.isCodeError
                                       ? AppStyle.red
                                       : isDarkMode
-                                          ? AppStyle.borderDark
-                                          : AppStyle.outlineButtonBorder,
+                                      ? AppStyle.borderDark
+                                      : AppStyle.outlineButtonBorder,
                                 ),
                               ),
                             ),
@@ -224,11 +225,11 @@ class _RegisterConfirmationPageState
                                             widget.userModel.email ?? "",
                                           )
                                         : notifier
-                                            .confirmCodeResetPasswordWithPhone(
-                                            context,
-                                            widget.userModel.email ?? "",
-                                            widget.verificationId,
-                                          );
+                                              .confirmCodeResetPasswordWithPhone(
+                                                context,
+                                                widget.userModel.email ?? "",
+                                                widget.verificationId,
+                                              );
                                   } else {
                                     widget.verificationId.isEmpty
                                         ? notifier.confirmCode(
@@ -254,7 +255,8 @@ class _RegisterConfirmationPageState
                                                               phone: widget
                                                                   .userModel
                                                                   .email,
-                                                              firstname: ref
+                                                              firstname:
+                                                                  ref
                                                                       .watch(
                                                                         profileProvider,
                                                                       )
@@ -271,7 +273,8 @@ class _RegisterConfirmationPageState
                                   }
                                 }
                               },
-                              weight: 2 *
+                              weight:
+                                  2 *
                                   (MediaQuery.sizeOf(context).width - 40) /
                                   3,
                               background: state.isConfirm

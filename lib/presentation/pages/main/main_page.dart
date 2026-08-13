@@ -33,7 +33,9 @@ import 'package:foodyman/presentation/components/buttons/animation_button_effect
 import 'package:foodyman/presentation/components/custom_network_image.dart';
 import 'package:foodyman/presentation/components/keyboard_dismisser.dart';
 import 'package:foodyman/presentation/pages/home/home_page.dart';
+
 import '../../../app_constants.dart';
+
 import 'package:foodyman/presentation/pages/like/like_page.dart';
 import 'package:foodyman/presentation/pages/main/widgets/bottom_navigator_three.dart';
 import 'package:foodyman/presentation/pages/profile/profile_page.dart';
@@ -42,6 +44,7 @@ import 'package:foodyman/presentation/pages/service/service_page.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../../application/home/home_provider.dart';
 import '../../../application/main/main_provider.dart';
 import '../../../infrastructure/models/data/shop_data.dart';
@@ -53,6 +56,7 @@ import '../home/home_one/home_one_page.dart';
 import '../home/home_three/home_page_three.dart';
 import '../home/home_two/home_two_page.dart';
 import 'widgets/bottom_navigator_item.dart';
+
 import 'package:proste_indexed_stack/proste_indexed_stack.dart';
 
 import 'widgets/bottom_navigator_one.dart';
@@ -185,41 +189,43 @@ class _MainPageState extends State<MainPage> {
   }
 
   Future<void> initDynamicLinks() async {
-    dynamicLinks.onLink.listen((dynamicLinkData) {
-      Uri link = dynamicLinkData.link;
-      if (link.queryParameters.keys.contains('group')) {
-        if (!mounted) return;
-        context.router.popUntilRoot();
-        if (!mounted) return;
-        context.pushRoute(
-          ShopRoute(
-            shopId: link.pathSegments.last,
-            cartId: link.queryParameters['group'],
-            ownerId: link.queryParameters['owner_id'] ?? '',
-          ),
-        );
-      } else if (!link.queryParameters.keys.contains("product") &&
-          link.pathSegments.contains("shop")) {
-        if (!mounted) return;
-        context.router.popUntilRoot();
-        context.pushRoute(ShopRoute(shopId: link.pathSegments.last));
-      } else if (link.pathSegments.contains("shop")) {
-        if (!mounted) return;
-        context.router.popUntilRoot();
-        if (!mounted) return;
-        context.pushRoute(
-          ShopRoute(
-            shopId: link.pathSegments.last,
-            productId: link.queryParameters['product'],
-          ),
-        );
-      }
-    }).onError((error) {
-      debugPrint(error.message);
-    });
+    dynamicLinks.onLink
+        .listen((dynamicLinkData) {
+          Uri link = dynamicLinkData.link;
+          if (link.queryParameters.keys.contains('group')) {
+            if (!mounted) return;
+            context.router.popUntilRoot();
+            if (!mounted) return;
+            context.pushRoute(
+              ShopRoute(
+                shopId: link.pathSegments.last,
+                cartId: link.queryParameters['group'],
+                ownerId: link.queryParameters['owner_id'] ?? '',
+              ),
+            );
+          } else if (!link.queryParameters.keys.contains("product") &&
+              link.pathSegments.contains("shop")) {
+            if (!mounted) return;
+            context.router.popUntilRoot();
+            context.pushRoute(ShopRoute(shopId: link.pathSegments.last));
+          } else if (link.pathSegments.contains("shop")) {
+            if (!mounted) return;
+            context.router.popUntilRoot();
+            if (!mounted) return;
+            context.pushRoute(
+              ShopRoute(
+                shopId: link.pathSegments.last,
+                productId: link.queryParameters['product'],
+              ),
+            );
+          }
+        })
+        .onError((error) {
+          debugPrint(error.message);
+        });
 
-    final PendingDynamicLinkData? data =
-        await FirebaseDynamicLinks.instance.getInitialLink();
+    final PendingDynamicLinkData? data = await FirebaseDynamicLinks.instance
+        .getInitialLink();
     if (!mounted) return;
     final Uri? deepLink = data?.link;
     if (deepLink?.queryParameters.keys.contains("group") ?? false) {
@@ -275,44 +281,43 @@ class _MainPageState extends State<MainPage> {
                 },
               )
             : AppHelpers.getType() == 3
-                ? Consumer(
-                    builder: (context, ref, child) {
-                      return BottomNavigatorThree(
-                        currentIndex: ref.watch(mainProvider).selectIndex,
-                        onTap: (int value) {
-                          if (value == 3) {
-                            if (LocalStorage.getToken().isEmpty) {
-                              context.pushRoute(LoginRoute());
-                              return;
-                            }
-                            context.pushRoute(OrderRoute());
-                            return;
-                          }
-                          if (value == 2) {
-                            if (LocalStorage.getToken().isEmpty) {
-                              context.pushRoute(LoginRoute());
-                              return;
-                            }
-                            context.pushRoute(ParcelRoute());
-                            return;
-                          }
-                          ref.read(mainProvider.notifier).selectIndex(value);
-                        },
-                      );
+            ? Consumer(
+                builder: (context, ref, child) {
+                  return BottomNavigatorThree(
+                    currentIndex: ref.watch(mainProvider).selectIndex,
+                    onTap: (int value) {
+                      if (value == 3) {
+                        if (LocalStorage.getToken().isEmpty) {
+                          context.pushRoute(LoginRoute());
+                          return;
+                        }
+                        context.pushRoute(OrderRoute());
+                        return;
+                      }
+                      if (value == 2) {
+                        if (LocalStorage.getToken().isEmpty) {
+                          context.pushRoute(LoginRoute());
+                          return;
+                        }
+                        context.pushRoute(ParcelRoute());
+                        return;
+                      }
+                      ref.read(mainProvider.notifier).selectIndex(value);
                     },
-                  )
-                : AppHelpers.getType() == 4
-                    ? Consumer(
-                        builder: (context, ref, child) {
-                          final index = ref.watch(mainProvider).selectIndex;
-                          final user = ref.watch(profileProvider).userData;
-                          final orders = ref.watch(shopOrderProvider).cart;
-                          final event = ref.read(mainProvider.notifier);
-                          return _bottom(
-                              index, ref, event, context, user, orders);
-                        },
-                      )
-                    : const SizedBox(),
+                  );
+                },
+              )
+            : AppHelpers.getType() == 4
+            ? Consumer(
+                builder: (context, ref, child) {
+                  final index = ref.watch(mainProvider).selectIndex;
+                  final user = ref.watch(profileProvider).userData;
+                  final orders = ref.watch(shopOrderProvider).cart;
+                  final event = ref.read(mainProvider.notifier);
+                  return _bottom(index, ref, event, context, user, orders);
+                },
+              )
+            : const SizedBox(),
         bottomNavigationBar: Consumer(
           builder: (context, ref, child) {
             final index = ref.watch(mainProvider).selectIndex;
@@ -341,29 +346,29 @@ class _MainPageState extends State<MainPage> {
                     },
                   )
                 : AppHelpers.getType() == 2
-                    ? BottomNavigatorTwo(
-                        currentIndex: index,
-                        onTap: (int value) {
-                          if (value == 3) {
-                            if (LocalStorage.getToken().isEmpty) {
-                              context.pushRoute(LoginRoute());
-                              return;
-                            }
-                            context.pushRoute(OrderRoute());
-                            return;
-                          }
-                          if (value == 2) {
-                            if (LocalStorage.getToken().isEmpty) {
-                              context.pushRoute(LoginRoute());
-                              return;
-                            }
-                            context.pushRoute(ParcelRoute());
-                            return;
-                          }
-                          event.selectIndex(value);
-                        },
-                      )
-                    : const SizedBox();
+                ? BottomNavigatorTwo(
+                    currentIndex: index,
+                    onTap: (int value) {
+                      if (value == 3) {
+                        if (LocalStorage.getToken().isEmpty) {
+                          context.pushRoute(LoginRoute());
+                          return;
+                        }
+                        context.pushRoute(OrderRoute());
+                        return;
+                      }
+                      if (value == 2) {
+                        if (LocalStorage.getToken().isEmpty) {
+                          context.pushRoute(LoginRoute());
+                          return;
+                        }
+                        context.pushRoute(ParcelRoute());
+                        return;
+                      }
+                      event.selectIndex(value);
+                    },
+                  )
+                : const SizedBox();
           },
         ),
       ),
@@ -379,7 +384,8 @@ class _MainPageState extends State<MainPage> {
     Cart? orders,
   ) {
     final orders = ref.watch(shopOrderProvider).cart;
-    final bool isCartEmpty = orders == null ||
+    final bool isCartEmpty =
+        orders == null ||
         (orders.userCarts?.isEmpty ?? true) ||
         ((orders.userCarts?.isEmpty ?? true)
             ? true
@@ -390,8 +396,9 @@ class _MainPageState extends State<MainPage> {
     final bool isFixed = AppConstants.fixed;
 
     // If fixed is true, always pass false for isScrolling
-    final bool isScrollingValue =
-        isFixed ? false : ref.watch(mainProvider).isScrolling;
+    final bool isScrollingValue = isFixed
+        ? false
+        : ref.watch(mainProvider).isScrolling;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -439,10 +446,13 @@ class _MainPageState extends State<MainPage> {
                       Consumer(
                         builder: (context, ref, child) {
                           // Check if currency is loaded
-                          final isLoading =
-                              ref.watch(shopOrderProvider).isLoading;
-                          final totalPrice =
-                              ref.watch(shopOrderProvider).cart?.totalPrice;
+                          final isLoading = ref
+                              .watch(shopOrderProvider)
+                              .isLoading;
+                          final totalPrice = ref
+                              .watch(shopOrderProvider)
+                              .cart
+                              ?.totalPrice;
                           final currency = LocalStorage.getSelectedCurrency();
 
                           if (isLoading) {
@@ -632,14 +642,14 @@ class _MainPageState extends State<MainPage> {
                                   isCartEmpty
                                       ? "0"
                                       : (ref
-                                                  .watch(shopOrderProvider)
-                                                  .cart
-                                                  ?.userCarts
-                                                  ?.first
-                                                  .cartDetails
-                                                  ?.length ??
-                                              0)
-                                          .toString(),
+                                                    .watch(shopOrderProvider)
+                                                    .cart
+                                                    ?.userCarts
+                                                    ?.first
+                                                    .cartDetails
+                                                    ?.length ??
+                                                0)
+                                            .toString(),
                                   style: const TextStyle(color: AppStyle.white),
                                 ),
                               ),

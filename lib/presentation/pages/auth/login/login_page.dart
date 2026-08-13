@@ -5,13 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:foodyman/application/language/language_provider.dart';
+
 import '../../../../app_constants.dart';
+
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/infrastructure/services/local_storage.dart';
 import 'package:foodyman/infrastructure/services/tr_keys.dart';
 import 'package:foodyman/presentation/components/buttons/custom_button.dart';
 import 'package:foodyman/presentation/pages/auth/register/register_page.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
+
 import '../../../../application/auth/login/login_provider.dart';
 import '../../profile/language_page.dart';
 import 'login_screen.dart';
@@ -61,24 +64,26 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   Future<void> initDynamicLinks() async {
-    dynamicLinks.onLink.listen((dynamicLinkData) {
-      String link = dynamicLinkData.link.toString().substring(
+    dynamicLinks.onLink
+        .listen((dynamicLinkData) {
+          String link = dynamicLinkData.link.toString().substring(
             dynamicLinkData.link.toString().indexOf("shop") + 4,
           );
-      if (link.toString().contains("product") ||
-          link.toString().contains("shop")) {
-        if (AppConstants.isDemo) {
-          context.replaceRoute(UiTypeRoute());
-          return;
-        }
-        AppHelpers.goHome(context);
-      }
-    }).onError((error) {
-      debugPrint(error.message);
-    });
+          if (link.toString().contains("product") ||
+              link.toString().contains("shop")) {
+            if (AppConstants.isDemo) {
+              context.replaceRoute(UiTypeRoute());
+              return;
+            }
+            AppHelpers.goHome(context);
+          }
+        })
+        .onError((error) {
+          debugPrint(error.message);
+        });
 
-    final PendingDynamicLinkData? data =
-        await FirebaseDynamicLinks.instance.getInitialLink();
+    final PendingDynamicLinkData? data = await FirebaseDynamicLinks.instance
+        .getInitialLink();
     final Uri? deepLink = data?.link;
 
     if (deepLink.toString().contains("product") ||
@@ -141,8 +146,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor:
-            isDarkMode ? AppStyle.dontHaveAnAccBackDark : AppStyle.white,
+        backgroundColor: isDarkMode
+            ? AppStyle.dontHaveAnAccBackDark
+            : AppStyle.white,
         body: _showIntro
             ? _introPage // Show preloaded IntroPage if _showIntro is true
             : Container(
@@ -178,17 +184,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                         ),
                                         WidgetSpan(
                                           child: Transform.translate(
-                                            offset: Offset(
-                                              0,
-                                              -15,
-                                            ), // Move up by 15 pixels, adjust as needed
+                                            offset: Offset(0, -15), // Move up by 15 pixels, adjust as needed
                                             child: Text(
                                               "®",
                                               style:
                                                   AppStyle.logoFontBoldItalic(
-                                                color: AppStyle.white,
-                                                size: 12.sp,
-                                              ),
+                                                    color: AppStyle.white,
+                                                    size: 12.sp,
+                                                  ),
                                             ),
                                           ),
                                         ),
@@ -200,8 +203,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             const Spacer(),
                             const Spacer(),
                             SecondButton(
-                              onTap:
-                                  _showIntroPage, // Show IntroPage when Skip is tapped
+                              onTap: _showIntroPage, // Show IntroPage when Skip is tapped
                               title: AppHelpers.getTranslation(TrKeys.skip),
                               bgColor: AppStyle.primary,
                               titleColor: AppStyle.white,
@@ -269,8 +271,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                       AppHelpers.getTranslation(TrKeys.terms),
                                       style: const TextStyle(
                                         decoration: TextDecoration.underline,
-                                        color: AppStyle
-                                            .black, // Optional: Different color for links
+                                        color: AppStyle.black, // Optional: Different color for links
                                       ),
                                     ),
                                   ),
@@ -296,8 +297,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                       ),
                                       style: const TextStyle(
                                         decoration: TextDecoration.underline,
-                                        color: AppStyle
-                                            .black, // Optional: Different color for links
+                                        color: AppStyle.black, // Optional: Different color for links
                                       ),
                                     ),
                                   ),

@@ -15,6 +15,7 @@ import 'package:foodyman/presentation/components/loading.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
 import 'parcel_item.dart';
+
 import 'package:foodyman/presentation/components/badges/empty_badge.dart';
 
 @RoutePage()

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_interpolation_to_compose_strings, use_build_context_synchronously
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -278,8 +279,9 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage>
         textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor:
-              isDarkMode ? AppStyle.mainBackDark : AppStyle.mainBack,
+          backgroundColor: isDarkMode
+              ? AppStyle.mainBackDark
+              : AppStyle.mainBack,
           body: SizedBox(
             width: MediaQuery.sizeOf(context).width,
             height: MediaQuery.sizeOf(context).height,
@@ -310,10 +312,11 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage>
                         try {
                           final List<Placemark> placemarks =
                               await placemarkFromCoordinates(
-                            cameraPosition?.target.latitude ?? latLng.latitude,
-                            cameraPosition?.target.longitude ??
-                                latLng.longitude,
-                          );
+                                cameraPosition?.target.latitude ??
+                                    latLng.latitude,
+                                cameraPosition?.target.longitude ??
+                                    latLng.longitude,
+                              );
                           if (placemarks.isNotEmpty) {
                             final Placemark pos = placemarks[0];
                             final List<String> addressData = [];
@@ -369,10 +372,11 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage>
                         try {
                           final List<Placemark> placemarks =
                               await placemarkFromCoordinates(
-                            cameraPosition?.target.latitude ?? latLng.latitude,
-                            cameraPosition?.target.longitude ??
-                                latLng.longitude,
-                          );
+                                cameraPosition?.target.latitude ??
+                                    latLng.latitude,
+                                cameraPosition?.target.longitude ??
+                                    latLng.longitude,
+                              );
                           if (placemarks.isNotEmpty) {
                             final Placemark pos = placemarks[0];
                             final List<String> addressData = [];
@@ -562,7 +566,9 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage>
                     right: state.isScrolling ? -100 : 16.w,
                     child: InkWell(
                       onTap: () async {
-                        ref.read(profileProvider.notifier).deleteAddress(
+                        ref
+                            .read(profileProvider.notifier)
+                            .deleteAddress(
                               index: widget.indexAddress ?? 0,
                               id: widget.address?.id,
                             );
@@ -654,10 +660,10 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage>
                                         latLng: latLng,
                                         isShopLocation: widget.isShopLocation,
                                         onSearch: () async {
-                                          final placeId =
-                                              await context.pushRoute(
-                                            const MapSearchRoute(),
-                                          );
+                                          final placeId = await context
+                                              .pushRoute(
+                                                const MapSearchRoute(),
+                                              );
                                           if (placeId != null) {
                                             final res = await googlePlace
                                                 .details
@@ -665,13 +671,19 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage>
                                             try {
                                               final List<Placemark> placemarks =
                                                   await placemarkFromCoordinates(
-                                                res?.result?.geometry?.location
-                                                        ?.lat ??
-                                                    latLng.latitude,
-                                                res?.result?.geometry?.location
-                                                        ?.lng ??
-                                                    latLng.longitude,
-                                              );
+                                                    res
+                                                            ?.result
+                                                            ?.geometry
+                                                            ?.location
+                                                            ?.lat ??
+                                                        latLng.latitude,
+                                                    res
+                                                            ?.result
+                                                            ?.geometry
+                                                            ?.location
+                                                            ?.lng ??
+                                                        latLng.longitude,
+                                                  );
                                               if (placemarks.isNotEmpty) {
                                                 final Placemark pos =
                                                     placemarks[0];
@@ -679,14 +691,16 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage>
                                                     [];
                                                 addressData.add(pos.locality!);
                                                 if (pos.subLocality != null &&
-                                                    pos.subLocality!
+                                                    pos
+                                                        .subLocality!
                                                         .isNotEmpty) {
                                                   addressData.add(
                                                     pos.subLocality!,
                                                   );
                                                 }
                                                 if (pos.thoroughfare != null &&
-                                                    pos.thoroughfare!
+                                                    pos
+                                                        .thoroughfare!
                                                         .isNotEmpty) {
                                                   addressData.add(
                                                     pos.thoroughfare!,
@@ -704,11 +718,17 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage>
                                             googleMapController!.animateCamera(
                                               CameraUpdate.newLatLngZoom(
                                                 LatLng(
-                                                  res?.result?.geometry
-                                                          ?.location?.lat ??
+                                                  res
+                                                          ?.result
+                                                          ?.geometry
+                                                          ?.location
+                                                          ?.lat ??
                                                       latLng.latitude,
-                                                  res?.result?.geometry
-                                                          ?.location?.lng ??
+                                                  res
+                                                          ?.result
+                                                          ?.geometry
+                                                          ?.location
+                                                          ?.lng ??
                                                       latLng.longitude,
                                                 ),
                                                 15,
@@ -721,10 +741,12 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage>
                                                 ),
                                                 location: [
                                                   cameraPosition
-                                                          ?.target.latitude ??
+                                                          ?.target
+                                                          .latitude ??
                                                       latLng.latitude,
                                                   cameraPosition
-                                                          ?.target.longitude ??
+                                                          ?.target
+                                                          .longitude ??
                                                       latLng.longitude,
                                                 ],
                                               ),

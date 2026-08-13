@@ -8,6 +8,7 @@ import 'package:foodyman/presentation/components/custom_network_image.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 
 import 'package:foodyman/infrastructure/models/response/all_products_response.dart';
+
 import 'bonus_screen.dart';
 
 class ShopProductItem extends StatelessWidget {
@@ -76,9 +77,10 @@ class ShopProductItem extends StatelessWidget {
                           children: [
                             Text(
                               AppHelpers.numberFormat(
-                                number: (product.discounts?.isNotEmpty ?? false
+                                number:
+                                    (product.discounts?.isNotEmpty ?? false
                                         ? ((product.stock?.price ?? 0) +
-                                            (product.stock?.tax ?? 0))
+                                              (product.stock?.tax ?? 0))
                                         : null) ??
                                     (product.stock?.totalPrice ?? 0),
                               ),
@@ -87,19 +89,19 @@ class ShopProductItem extends StatelessWidget {
                                 color: AppStyle.black,
                                 decoration:
                                     (product.discounts?.isNotEmpty ?? false
-                                                ? ((product.stock?.price ?? 0) +
-                                                    (product.stock?.tax ?? 0))
-                                                : null) ==
-                                            null
-                                        ? TextDecoration.none
-                                        : TextDecoration.lineThrough,
+                                            ? ((product.stock?.price ?? 0) +
+                                                  (product.stock?.tax ?? 0))
+                                            : null) ==
+                                        null
+                                    ? TextDecoration.none
+                                    : TextDecoration.lineThrough,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
                             (product.discounts?.isNotEmpty ?? false
                                         ? ((product.stock?.price ?? 0) +
-                                            (product.stock?.tax ?? 0))
+                                              (product.stock?.tax ?? 0))
                                         : null) ==
                                     null
                                 ? const SizedBox.shrink()
@@ -126,7 +128,7 @@ class ShopProductItem extends StatelessWidget {
                                             AppHelpers.numberFormat(
                                               number:
                                                   (product.stock?.totalPrice ??
-                                                      0),
+                                                  0),
                                             ),
                                             style: AppStyle.interNoSemi(
                                               size: 10,
@@ -147,9 +149,8 @@ class ShopProductItem extends StatelessWidget {
                               child: InkWell(
                                 onTap: () {
                                   AppHelpers.showCustomModalBottomSheet(
-                                    paddingTop: MediaQuery.paddingOf(
-                                      context,
-                                    ).top,
+                                    paddingTop: MediaQuery.paddingOf(context)
+                                        .top,
                                     context: context,
                                     modal: BonusScreen(
                                       bonus: product.stock?.bonus,

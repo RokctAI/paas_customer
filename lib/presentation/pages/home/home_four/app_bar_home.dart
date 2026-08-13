@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,6 +15,7 @@ import 'package:foodyman/presentation/components/sellect_address_screen.dart';
 import 'package:foodyman/presentation/routes/app_router.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
 import 'package:flutter/gestures.dart';
+
 import '../../../../app_constants.dart';
 
 class AppBarHome extends ConsumerStatefulWidget {
@@ -234,11 +236,11 @@ class _AppBarHomeState extends ConsumerState<AppBarHome>
                                                 ?.isEmpty ??
                                             true)
                                         ? LocalStorage.getAddressSelected()
-                                                ?.address ??
-                                            ''
+                                                  ?.address ??
+                                              ''
                                         : LocalStorage.getAddressSelected()
-                                                ?.title ??
-                                            "",
+                                                  ?.title ??
+                                              "",
                                     style: AppStyle.interBold(
                                       size: 14,
                                       color: AppStyle.black,

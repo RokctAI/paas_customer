@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:foodyman/application/delivery_points/delivery_points_provider.dart';
@@ -37,7 +38,9 @@ class _OrderPickupPointState extends ConsumerState<OrderPickupPoint> {
       setState(() {
         _initialPosition = LatLng(position.latitude, position.longitude);
       });
-      ref.read(deliveryPointsProvider.notifier).fetchDeliveryPoints(
+      ref
+          .read(deliveryPointsProvider.notifier)
+          .fetchDeliveryPoints(
             context,
             latitude: position.latitude,
             longitude: position.longitude,

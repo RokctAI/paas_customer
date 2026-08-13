@@ -4,6 +4,7 @@ import 'package:foodyman/infrastructure/services/app_helpers.dart';
 
 import 'package:foodyman/domain/interface/settings.dart';
 import 'package:foodyman/infrastructure/services/app_connectivity.dart';
+
 import 'help_state.dart';
 
 class HelpNotifier extends StateNotifier<HelpState> {

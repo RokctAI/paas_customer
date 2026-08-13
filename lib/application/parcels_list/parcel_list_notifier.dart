@@ -5,6 +5,7 @@ import 'package:foodyman/domain/interface/parcel.dart';
 import 'package:foodyman/infrastructure/models/data/parcel_order.dart';
 import 'package:foodyman/infrastructure/services/app_connectivity.dart';
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
+
 import 'parcel_list_state.dart';
 
 class ParcelListNotifier extends StateNotifier<ParcelListState> {

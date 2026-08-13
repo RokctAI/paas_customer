@@ -4,6 +4,7 @@ import 'package:foodyman/application/order/order_state.dart';
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/infrastructure/services/tr_keys.dart';
 import 'package:foodyman/presentation/theme/app_style.dart';
+
 import 'widgets/title_price.dart';
 
 class PriceInformation extends StatelessWidget {
@@ -109,8 +110,8 @@ class PriceInformation extends StatelessWidget {
             symbol: state.orderData?.currencyModel?.symbol,
             number: isOrder
                 ? (state.orderData?.totalPrice?.isNegative ?? true)
-                    ? 0
-                    : state.orderData?.totalPrice
+                      ? 0
+                      : state.orderData?.totalPrice
                 : state.calculateData?.totalPrice,
           ),
           textStyle: AppStyle.interSemi(size: 20, color: AppStyle.black),

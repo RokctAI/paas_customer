@@ -1,8 +1,10 @@
 //import 'dart:math' show cos, sqrt, asin;
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:remixicon/remixicon.dart';
+
 //import 'package:flutter_svg/flutter_svg.dart';
 import '../../../infrastructure/models/data/shop_data.dart';
 //import '../../../infrastructure/services/app_constants.dart';
@@ -10,6 +12,7 @@ import '../../../infrastructure/services/app_helpers.dart';
 //import '../../../infrastructure/services/tr_keys.dart';
 import '../../../infrastructure/services/tr_keys.dart';
 import '../../theme/app_style.dart';
+
 //import 'package:foodyman/application/shop/shop_provider.dart';
 //import '../../../infrastructure/services/local_storage.dart';
 //import '../../../utils/utils.dart';
@@ -52,7 +55,8 @@ class DeliveryFeeBadge extends StatelessWidget {
               color: color,
               borderRadius: BorderRadius.circular(10.r),
             ),
-            child: shop.open ==
+            child:
+                shop.open ==
                     false //&& AppHelpers.getTranslation(TrKeys.close) == workTime
                 ? Row(
                     children: [

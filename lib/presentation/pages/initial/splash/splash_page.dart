@@ -17,11 +17,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+
 import '../../../../app_constants.dart';
 import '../../../../application/splash/splash_provider.dart';
+
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+
 import '../../../../infrastructure/services/local_storage.dart';
 import '../../../routes/app_router.dart';
+
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
 
 @RoutePage()
@@ -112,24 +116,26 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 
       if (!mounted) return;
       // Then check authentication
-      ref.read(splashProvider.notifier).getToken(
-        context,
-        goMain: () {
-          FlutterNativeSplash.remove();
-          if (!mounted) return;
-          AppHelpers.goHome(context);
-        },
-        goLogin: () {
-          FlutterNativeSplash.remove();
-          if (!mounted) return;
-          context.replaceRoute(const LoginRoute());
-        },
-        goNoInternet: () {
-          FlutterNativeSplash.remove();
-          if (!mounted) return;
-          context.replaceRoute(const NoConnectionRoute());
-        },
-      );
+      ref
+          .read(splashProvider.notifier)
+          .getToken(
+            context,
+            goMain: () {
+              FlutterNativeSplash.remove();
+              if (!mounted) return;
+              AppHelpers.goHome(context);
+            },
+            goLogin: () {
+              FlutterNativeSplash.remove();
+              if (!mounted) return;
+              context.replaceRoute(const LoginRoute());
+            },
+            goNoInternet: () {
+              FlutterNativeSplash.remove();
+              if (!mounted) return;
+              context.replaceRoute(const NoConnectionRoute());
+            },
+          );
     } catch (e) {
       // If online flow fails, try offline
       await _proceedOffline();

@@ -15,7 +15,9 @@ import 'package:foodyman/presentation/components/app_bars/common_app_bar2.dart';
 import 'package:foodyman/presentation/components/custom_tab_bar.dart';
 import 'package:foodyman/presentation/components/loading.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
+
 import 'widgets/orders_item.dart';
+
 import 'package:foodyman/presentation/pages/parcel/parcel_item.dart';
 import 'package:foodyman/presentation/components/badges/empty_badge.dart';
 
@@ -65,9 +67,7 @@ class _MainPageState extends ConsumerState<OrdersMainPage>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(
-                    height: 42,
-                  ), // Assuming 40.verticalSpace is a constant or a function that returns a height value
+                  const SizedBox(height: 42), // Assuming 40.verticalSpace is a constant or a function that returns a height value
                   TabBar(
                     controller: _tabController,
                     tabs: _tabs.map((Tab tab) {

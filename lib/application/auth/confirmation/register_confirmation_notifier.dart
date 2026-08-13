@@ -14,6 +14,7 @@ import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/infrastructure/services/local_storage.dart';
 import 'package:foodyman/infrastructure/services/tr_keys.dart';
 import 'package:foodyman/domain/interface/user.dart';
+
 import '../../main/main_provider.dart';
 import 'register_confirmation_state.dart';
 
@@ -23,7 +24,7 @@ class RegisterConfirmationNotifier
   final UserRepositoryFacade _userRepositoryFacade;
 
   RegisterConfirmationNotifier(this._authRepository, this._userRepositoryFacade)
-      : super(const RegisterConfirmationState());
+    : super(const RegisterConfirmationState());
 
   Timer? _timer;
   int _initialTime = 30;
@@ -93,14 +94,18 @@ class RegisterConfirmationNotifier
             LocalStorage.setToken(data.data?.token);
             LocalStorage.setAddressSelected(
               AddressData(
-                title: data.data?.user?.addresses?.firstWhere(
-                      (element) => element.active ?? false,
-                      orElse: () {
-                        return AddressNewModel();
-                      },
-                    ).title ??
+                title:
+                    data.data?.user?.addresses
+                        ?.firstWhere(
+                          (element) => element.active ?? false,
+                          orElse: () {
+                            return AddressNewModel();
+                          },
+                        )
+                        .title ??
                     "",
-                address: data.data?.user?.addresses
+                address:
+                    data.data?.user?.addresses
                         ?.firstWhere(
                           (element) => element.active ?? false,
                           orElse: () {
@@ -299,14 +304,18 @@ class RegisterConfirmationNotifier
             LocalStorage.setToken(data.data?.token);
             LocalStorage.setAddressSelected(
               AddressData(
-                title: data.data?.user?.addresses?.firstWhere(
-                      (element) => element.active ?? false,
-                      orElse: () {
-                        return AddressNewModel();
-                      },
-                    ).title ??
+                title:
+                    data.data?.user?.addresses
+                        ?.firstWhere(
+                          (element) => element.active ?? false,
+                          orElse: () {
+                            return AddressNewModel();
+                          },
+                        )
+                        .title ??
                     "",
-                address: data.data?.user?.addresses
+                address:
+                    data.data?.user?.addresses
                         ?.firstWhere(
                           (element) => element.active ?? false,
                           orElse: () {

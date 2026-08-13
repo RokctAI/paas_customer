@@ -2,13 +2,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
 import 'dart:convert';
 import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../app_constants.dart';
 import '../application/poidata/poi_data_provider.dart';
 import '../infrastructure/models/data/poi_data.dart';
+
 //import 'package:foodyman/utils/excluded_product_ids.dart';
 
 class AppInitializer extends StatefulWidget {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:remixicon/remixicon.dart';
+
 import '../../../../infrastructure/models/response/all_products_response.dart';
 
 class OrganicTagBadge extends StatelessWidget {

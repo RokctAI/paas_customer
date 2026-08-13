@@ -114,8 +114,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                         if (currentSignUpType == SignUpType.phone)
                           Directionality(
-                            textDirection:
-                                isLtr ? TextDirection.ltr : TextDirection.rtl,
+                            textDirection: isLtr
+                                ? TextDirection.ltr
+                                : TextDirection.rtl,
                             child: IntlPhoneField(
                               onChanged: (phoneNum) {
                                 event.setEmail(phoneNum.completeNumber);
@@ -143,8 +144,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               showDropdownIcon: AppConstants.showArrowIcon,
                               autovalidateMode:
                                   AppConstants.isNumberLengthAlwaysSame
-                                      ? AutovalidateMode.onUserInteraction
-                                      : AutovalidateMode.disabled,
+                                  ? AutovalidateMode.onUserInteraction
+                                  : AutovalidateMode.disabled,
                               textAlignVertical: TextAlignVertical.center,
                               decoration: InputDecoration(
                                 counterText: '',
@@ -210,9 +211,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         if (currentSignUpType == SignUpType.email)
                           OutlinedBorderTextField(
                             textCapitalization: TextCapitalization.none,
-                            label: AppHelpers.getTranslation(
-                              TrKeys.email,
-                            ).toUpperCase(),
+                            label: AppHelpers.getTranslation(TrKeys.email)
+                                .toUpperCase(),
                             onChanged: event.setEmail,
                             isError: state.isEmailNotValid,
                             validation: (s) {
@@ -231,9 +231,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           ),
                         34.verticalSpace,
                         OutlinedBorderTextField(
-                          label: AppHelpers.getTranslation(
-                            TrKeys.password,
-                          ).toUpperCase(),
+                          label: AppHelpers.getTranslation(TrKeys.password)
+                              .toUpperCase(),
                           obscure: state.showPassword,
                           suffixIcon: IconButton(
                             splashRadius: 25,

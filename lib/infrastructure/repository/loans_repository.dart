@@ -14,6 +14,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:foodyman/app_constants.dart';
 import 'package:foodyman/domain/di/dependency_manager.dart';
@@ -21,8 +22,11 @@ import 'package:foodyman/infrastructure/models/data/loans/loan_contract_model.da
 import 'package:foodyman/infrastructure/services/app_helpers.dart';
 import 'package:foodyman/infrastructure/services/local_storage.dart';
 import 'package:foodyman/domain/handlers/handlers.dart';
+
 import 'dart:math';
+
 import 'package:payfast/payfast.dart';
+
 import '../../domain/interface/loans.dart';
 import '../../utils/payfast/payfast_webview.dart';
 import '../models/data/loans/loan_application.dart';
@@ -40,8 +44,8 @@ class LoansRepository implements LoansRepositoryFacade {
           (financials['monthly_income'] as num?)?.toDouble() ?? 0.0;
       final double expenses =
           ((financials['grocery_expenses'] as num?)?.toDouble() ?? 0.0) +
-              ((financials['other_expenses'] as num?)?.toDouble() ?? 0.0) +
-              ((financials['existing_credits'] as num?)?.toDouble() ?? 0.0);
+          ((financials['other_expenses'] as num?)?.toDouble() ?? 0.0) +
+          ((financials['existing_credits'] as num?)?.toDouble() ?? 0.0);
 
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
@@ -50,8 +54,7 @@ class LoansRepository implements LoansRepositoryFacade {
           'applicant_type': 'Customer',
           'applicant': user?.firstname != null
               ? "${user?.firstname} ${user?.lastname}"
-              : user
-                  ?.email, // Best guess for Name, backend should key off User though.
+              : user?.email, // Best guess for Name, backend should key off User though.
           'loan_product': 'Personal Loan',
           'loan_amount': applicationData.amount,
           'income': income,
@@ -272,7 +275,8 @@ class LoansRepository implements LoansRepositoryFacade {
         production: !(settings["is_sandbox"] ?? true),
         amount: '5.00',
         itemName: 'Loan Tokenization',
-        notifyUrl: settings["success_redirect_url"] ??
+        notifyUrl:
+            settings["success_redirect_url"] ??
             "", // Map success to notify/return as fallback
         cancelUrl: settings["failure_redirect_url"] ?? "",
         returnUrl: settings["success_redirect_url"] ?? "",

@@ -19,6 +19,7 @@ import 'package:foodyman/presentation/components/text_fields/outline_bordered_te
 import 'package:foodyman/app_constants.dart';
 import 'package:foodyman/presentation/theme/theme.dart';
 import 'package:foodyman/application/auth/auth.dart';
+
 import '../confirmation/register_confirmation_page.dart';
 
 @RoutePage()
@@ -122,8 +123,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         Form(
                           key: phoneNumKey,
                           child: Directionality(
-                            textDirection:
-                                isLtr ? TextDirection.ltr : TextDirection.rtl,
+                            textDirection: isLtr
+                                ? TextDirection.ltr
+                                : TextDirection.rtl,
                             child: IntlPhoneField(
                               onChanged: (phoneNum) {
                                 event.setEmail(phoneNum.completeNumber);
@@ -151,8 +153,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               ],
                               autovalidateMode:
                                   AppConstants.isNumberLengthAlwaysSame
-                                      ? AutovalidateMode.onUserInteraction
-                                      : AutovalidateMode.disabled,
+                                  ? AutovalidateMode.onUserInteraction
+                                  : AutovalidateMode.disabled,
                               textAlignVertical: TextAlignVertical.center,
                               decoration: InputDecoration(
                                 counterText: '',
@@ -232,7 +234,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                 SizedBox(
                                   width:
                                       (MediaQuery.sizeOf(context).width - 40) /
-                                          2,
+                                      2,
                                   child: OutlinedBorderTextField(
                                     label: AppHelpers.getTranslation(
                                       TrKeys.firstname,
@@ -244,7 +246,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                 SizedBox(
                                   width:
                                       (MediaQuery.sizeOf(context).width - 40) /
-                                          2,
+                                      2,
                                   child: OutlinedBorderTextField(
                                     label: AppHelpers.getTranslation(
                                       TrKeys.surname,
@@ -256,9 +258,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             ),
                             30.verticalSpace,
                             OutlinedBorderTextField(
-                              label: AppHelpers.getTranslation(
-                                TrKeys.password,
-                              ).toUpperCase(),
+                              label: AppHelpers.getTranslation(TrKeys.password)
+                                  .toUpperCase(),
                               obscure: state.showPassword,
                               suffixIcon: IconButton(
                                 splashRadius: 25,
@@ -284,9 +285,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             ),
                             34.verticalSpace,
                             OutlinedBorderTextField(
-                              label: AppHelpers.getTranslation(
-                                TrKeys.password,
-                              ).toUpperCase(),
+                              label: AppHelpers.getTranslation(TrKeys.password)
+                                  .toUpperCase(),
                               obscure: state.showConfirmPassword,
                               suffixIcon: IconButton(
                                 splashRadius: 25,
@@ -313,9 +313,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             ),
                             30.verticalSpace,
                             OutlinedBorderTextField(
-                              label: AppHelpers.getTranslation(
-                                TrKeys.referral,
-                              ).toUpperCase(),
+                              label: AppHelpers.getTranslation(TrKeys.referral)
+                                  .toUpperCase(),
                               onChanged: event.setReferral,
                             ),
                           ],
@@ -438,8 +437,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                   SocialButton(
                                     iconData:
                                         currentSignUpType == SignUpType.phone
-                                            ? FlutterRemix.mail_fill
-                                            : FlutterRemix.phone_fill,
+                                        ? FlutterRemix.mail_fill
+                                        : FlutterRemix.phone_fill,
                                     onPressed: toggleSignUpType,
                                     title: currentSignUpType == SignUpType.phone
                                         ? "Email"

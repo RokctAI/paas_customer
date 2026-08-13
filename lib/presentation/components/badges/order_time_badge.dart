@@ -1,8 +1,10 @@
 //import 'dart:math' show cos, sqrt, asin;
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:remixicon/remixicon.dart';
+
 import '../../../infrastructure/models/data/shop_data.dart';
 import '../../theme/app_style.dart';
 
@@ -35,19 +37,19 @@ class OpTimeBadge extends StatelessWidget {
       child: //(shop.avgRate == 3) //&& AppHelpers.getTranslation(TrKeys.close) == workTime
           // ?
           ClipRRect(
-        borderRadius: BorderRadius.circular(10.r),
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
-            decoration: BoxDecoration(
-              color: //(AppHelpers.getTranslation(TrKeys.close) == workTime)
+            borderRadius: BorderRadius.circular(10.r),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                decoration: BoxDecoration(
+                  color: //(AppHelpers.getTranslation(TrKeys.close) == workTime)
                   shop.open == true
                       ? Colors.green.withOpacity(0.3)
                       : AppStyle.red,
-              borderRadius: BorderRadius.circular(10.r),
-            ),
-            child: //(AppHelpers.getTranslation(TrKeys.close) == workTime)
+                  borderRadius: BorderRadius.circular(10.r),
+                ),
+                child: //(AppHelpers.getTranslation(TrKeys.close) == workTime)
                 shop.open == true
                     ? Row(
                         children: [
@@ -95,9 +97,9 @@ class OpTimeBadge extends StatelessWidget {
                           ),
                         ],
                       ),
+              ),
+            ),
           ),
-        ),
-      ),
     );
   }
 }
