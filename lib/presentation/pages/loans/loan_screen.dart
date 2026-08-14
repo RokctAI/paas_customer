@@ -147,7 +147,8 @@ class _LoanScreenState extends ConsumerState<LoanScreen> {
       // final savedApplicationsResult = results[1] as ApiResult<List<Map<String, dynamic>>>;
       // final myApplicationsResult = results[2] as ApiResult<List<dynamic>>;
 
-      final savedApplicationsResult = results[1]; // Keeping this for now as dynamic cast might be needed if inference fails
+      final savedApplicationsResult =
+          results[1]; // Keeping this for now as dynamic cast might be needed if inference fails
       final myApplicationsResult = results[2];
 
       debugPrint("All data fetched");

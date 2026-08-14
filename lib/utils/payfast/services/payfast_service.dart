@@ -133,9 +133,9 @@ class PayFastService {
       );
 
       // Set initial state with the controller
-      ProviderScope.containerOf(context)
-          .read(preloadedWebViewProvider.notifier)
-          .state = PreloadedWebViewState(
+      ProviderScope.containerOf(
+        context,
+      ).read(preloadedWebViewProvider.notifier).state = PreloadedWebViewState(
         controller: webController,
         url: paymentUrl,
         isReady: false,

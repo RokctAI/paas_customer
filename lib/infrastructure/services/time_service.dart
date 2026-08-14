@@ -13,8 +13,9 @@ abstract class TimeService {
   }
 
   static String dateFormatMDYHm(DateTime? time) {
-    return DateFormat("MMM d, yyyy - $_timeFormat")
-        .format(time ?? DateTime.now());
+    return DateFormat(
+      "MMM d, yyyy - $_timeFormat",
+    ).format(time ?? DateTime.now());
   }
 
   static String dateFormatDMY(DateTime? time) {

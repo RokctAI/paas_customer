@@ -434,11 +434,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
                                                     context: context,
                                                     modal: ProviderScope(
                                                       child: Consumer(
-                                                        builder: (
-                                                          context,
-                                                          ref,
-                                                          _,
-                                                        ) => const WalletTopUpScreen(),
+                                                        builder:
+                                                            (context, ref, _) =>
+                                                                const WalletTopUpScreen(),
                                                       ),
                                                     ),
                                                     isDarkMode: false,
@@ -460,11 +458,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
                                                     context: context,
                                                     modal: ProviderScope(
                                                       child: Consumer(
-                                                        builder: (
-                                                          context,
-                                                          ref,
-                                                          _,
-                                                        ) => const WalletSendScreen(),
+                                                        builder:
+                                                            (context, ref, _) =>
+                                                                const WalletSendScreen(),
                                                       ),
                                                     ),
                                                     isDarkMode: false,
@@ -487,11 +483,13 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
                                                       context: context,
                                                       modal: ProviderScope(
                                                         child: Consumer(
-                                                          builder: (
-                                                            context,
-                                                            ref,
-                                                            _,
-                                                          ) => const LoanScreen(),
+                                                          builder:
+                                                              (
+                                                                context,
+                                                                ref,
+                                                                _,
+                                                              ) =>
+                                                                  const LoanScreen(),
                                                         ),
                                                       ),
                                                       isDarkMode: false,

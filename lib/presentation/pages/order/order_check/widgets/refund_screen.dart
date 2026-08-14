@@ -72,8 +72,9 @@ class _RefundScreenState extends State<RefundScreen> {
                   24.verticalSpace,
                   OutlinedBorderTextField(
                     textController: textEditingController,
-                    label: AppHelpers.getTranslation(TrKeys.whyDoYouWant)
-                        .toUpperCase(),
+                    label: AppHelpers.getTranslation(
+                      TrKeys.whyDoYouWant,
+                    ).toUpperCase(),
                   ),
                   146.verticalSpace,
                   Padding(

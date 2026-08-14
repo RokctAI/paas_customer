@@ -79,12 +79,13 @@ class _AboutPageState extends ConsumerState<AboutPage> {
                               url: aboutState
                                   .value!['img'], // Pass the 'img' URL
                               height: 200, // Adjust height as needed
-                              width: MediaQuery.of(context)
-                                  .size
-                                  .width, // Use full width of the screen
+                              width: MediaQuery.of(
+                                context,
+                              ).size.width, // Use full width of the screen
                               radius: 10, // Adjust border radius as needed
                               fit: BoxFit.cover, // Adjust fit as needed
-                              bgColor: Colors.transparent, // Adjust background color as needed
+                              bgColor: Colors
+                                  .transparent, // Adjust background color as needed
                             ),
                           if (aboutState.value!['img'] != null)
                             SizedBox(

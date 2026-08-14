@@ -203,8 +203,9 @@ class _RatingPageState extends ConsumerState<RatingPage> {
                 padding: REdgeInsets.only(top: 12),
                 child: OutlinedBorderTextField(
                   textController: priceController,
-                  label: AppHelpers.getTranslation(TrKeys.customTip)
-                      .toUpperCase(),
+                  label: AppHelpers.getTranslation(
+                    TrKeys.customTip,
+                  ).toUpperCase(),
                   inputFormatters: [InputFormatter.currency],
                   onChanged: (s) {
                     price = double.tryParse(s) ?? 0;

@@ -145,9 +145,9 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
                                     ),
                                     onPressed: () {
                                       AppHelpers.showCustomModalBottomSheet(
-                                        paddingTop: MediaQuery.of(context)
-                                            .padding
-                                            .top,
+                                        paddingTop: MediaQuery.of(
+                                          context,
+                                        ).padding.top,
                                         context: context,
                                         modal: ParcelPayments(
                                           payLater: (payment) async {

@@ -258,8 +258,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             ),
                             30.verticalSpace,
                             OutlinedBorderTextField(
-                              label: AppHelpers.getTranslation(TrKeys.password)
-                                  .toUpperCase(),
+                              label: AppHelpers.getTranslation(
+                                TrKeys.password,
+                              ).toUpperCase(),
                               obscure: state.showPassword,
                               suffixIcon: IconButton(
                                 splashRadius: 25,
@@ -285,8 +286,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             ),
                             34.verticalSpace,
                             OutlinedBorderTextField(
-                              label: AppHelpers.getTranslation(TrKeys.password)
-                                  .toUpperCase(),
+                              label: AppHelpers.getTranslation(
+                                TrKeys.password,
+                              ).toUpperCase(),
                               obscure: state.showConfirmPassword,
                               suffixIcon: IconButton(
                                 splashRadius: 25,
@@ -313,8 +315,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             ),
                             30.verticalSpace,
                             OutlinedBorderTextField(
-                              label: AppHelpers.getTranslation(TrKeys.referral)
-                                  .toUpperCase(),
+                              label: AppHelpers.getTranslation(
+                                TrKeys.referral,
+                              ).toUpperCase(),
                               onChanged: event.setReferral,
                             ),
                           ],

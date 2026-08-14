@@ -99,8 +99,9 @@ class _PromoCodeState extends ConsumerState<PromoCodeScreen> {
                   24.verticalSpace,
                   OutlinedBorderTextField(
                     textController: promoCodeController,
-                    label: AppHelpers.getTranslation(TrKeys.promoCode)
-                        .toUpperCase(),
+                    label: AppHelpers.getTranslation(
+                      TrKeys.promoCode,
+                    ).toUpperCase(),
                     onChanged: (s) {
                       _delayed.run(() {
                         event.checkPromoCode(
