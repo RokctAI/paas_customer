@@ -398,9 +398,9 @@ class PayFastWebViewPreloader {
         ..setJavaScriptMode(JavaScriptMode.unrestricted);
 
       // Set initial state
-      ProviderScope.containerOf(context)
-          .read(payFastWebViewProvider.notifier)
-          .state = PayFastWebViewState(
+      ProviderScope.containerOf(
+        context,
+      ).read(payFastWebViewProvider.notifier).state = PayFastWebViewState(
         controller: controller,
         url: url,
         isReady: false,
@@ -413,9 +413,9 @@ class PayFastWebViewPreloader {
         NavigationDelegate(
           onPageFinished: (String loadedUrl) {
             // Update provider state when load is complete
-            ProviderScope.containerOf(context)
-                .read(payFastWebViewProvider.notifier)
-                .state = PayFastWebViewState(
+            ProviderScope.containerOf(
+              context,
+            ).read(payFastWebViewProvider.notifier).state = PayFastWebViewState(
               controller: controller,
               url: url,
               isReady: true,

@@ -67,7 +67,9 @@ class _MainPageState extends ConsumerState<OrdersMainPage>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 42), // Assuming 40.verticalSpace is a constant or a function that returns a height value
+                  const SizedBox(
+                    height: 42,
+                  ), // Assuming 40.verticalSpace is a constant or a function that returns a height value
                   TabBar(
                     controller: _tabController,
                     tabs: _tabs.map((Tab tab) {

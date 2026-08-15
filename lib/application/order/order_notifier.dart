@@ -171,9 +171,9 @@ class OrderNotifier extends StateNotifier<OrderState> {
       return [];
     }
     List<String> times = [];
-    final yesterday = DateFormat("EEEE")
-        .format(now.subtract(const Duration(days: 1)))
-        .toLowerCase();
+    final yesterday = DateFormat(
+      "EEEE",
+    ).format(now.subtract(const Duration(days: 1))).toLowerCase();
     final today = DateFormat("EEEE").format(now).toLowerCase();
     TimeOfDay deliveryTime = TimeOfDay(
       hour: state.shopData?.deliveryTime?.type == 'hour'

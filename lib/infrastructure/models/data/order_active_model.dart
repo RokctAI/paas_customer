@@ -100,8 +100,9 @@ class OrderActiveModel {
         deliveryMan: json["data"]["deliveryman"] != null
             ? DeliveryMan.fromJson(json["data"]["deliveryman"])
             : null,
-        deliveryDate: DateTime.tryParse(json["data"]?["delivery_date"] ?? '')
-            ?.toLocal(),
+        deliveryDate: DateTime.tryParse(
+          json["data"]?["delivery_date"] ?? '',
+        )?.toLocal(),
         deliveryTime: json["data"]["delivery_time"],
         totalDiscount: json["data"]["total_discount"],
         serviceFee: json["data"]["service_fee"],

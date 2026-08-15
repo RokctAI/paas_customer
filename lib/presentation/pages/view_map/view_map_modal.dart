@@ -126,16 +126,18 @@ class _ViewMapModalState extends ConsumerState<ViewMapModal> {
                     Expanded(
                       child: OutlinedBorderTextField(
                         textController: house,
-                        label: AppHelpers.getTranslation(TrKeys.house)
-                            .toUpperCase(),
+                        label: AppHelpers.getTranslation(
+                          TrKeys.house,
+                        ).toUpperCase(),
                       ),
                     ),
                     24.horizontalSpace,
                     Expanded(
                       child: OutlinedBorderTextField(
                         textController: floor,
-                        label: AppHelpers.getTranslation(TrKeys.floor)
-                            .toUpperCase(),
+                        label: AppHelpers.getTranslation(
+                          TrKeys.floor,
+                        ).toUpperCase(),
                       ),
                     ),
                   ],

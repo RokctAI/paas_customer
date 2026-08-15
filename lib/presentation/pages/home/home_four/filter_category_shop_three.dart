@@ -181,7 +181,8 @@ class FilterCategoryShopThree extends StatelessWidget {
     return EmptyBadge(
       imagePath: 'assets/lottie/sad_man.json',
       titleText: 'No Store in this Category nearby',
-      subtitleText: 'We are adding more stores to more locations. You can suggest your local favorite.\n',
+      subtitleText:
+          'We are adding more stores to more locations. You can suggest your local favorite.\n',
       linkText: 'Chat with us',
       onLinkTap: () {
         context.pushRoute(ChatRoute(roleId: "admin", name: "Admin"));

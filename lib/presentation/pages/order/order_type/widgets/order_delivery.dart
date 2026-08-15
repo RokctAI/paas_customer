@@ -161,8 +161,9 @@ class _OrderDeliveryState extends State<OrderDelivery> {
                 ),
                 12.verticalSpace,
                 OutlinedBorderTextField(
-                  label: AppHelpers.getTranslation(TrKeys.comment)
-                      .toUpperCase(),
+                  label: AppHelpers.getTranslation(
+                    TrKeys.comment,
+                  ).toUpperCase(),
                   textController: commentController,
                   onChanged: (s) {
                     ref.read(orderProvider.notifier).setAddressInfo(note: s);
@@ -170,8 +171,9 @@ class _OrderDeliveryState extends State<OrderDelivery> {
                 ),
                 12.verticalSpace,
                 OutlinedBorderTextField(
-                  label: AppHelpers.getTranslation(TrKeys.phoneNumber)
-                      .toUpperCase(),
+                  label: AppHelpers.getTranslation(
+                    TrKeys.phoneNumber,
+                  ).toUpperCase(),
                   textController: userPhoneNumber,
                   readOnly: true,
                   onTap: () {
@@ -208,8 +210,9 @@ class _OrderDeliveryState extends State<OrderDelivery> {
                         children: [
                           Expanded(
                             child: OutlinedBorderTextField(
-                              label: AppHelpers.getTranslation(TrKeys.firstname)
-                                  .toUpperCase(),
+                              label: AppHelpers.getTranslation(
+                                TrKeys.firstname,
+                              ).toUpperCase(),
                               textController: nameController,
                               validation: AppValidators.isNotEmptyValidator,
                               onChanged: (s) {
