@@ -110,7 +110,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       var res = await client.post(
-        '/api/method/paas.api.payment.payment.initiate_${name.toLowerCase()}_payment',
+        '/api/method/paas.api.payment.initiate_${name.toLowerCase()}_payment',
         data: {'order_id': orderBody.cartId},
       );
       return ApiResult.success(data: res.data["redirect_url"]);
