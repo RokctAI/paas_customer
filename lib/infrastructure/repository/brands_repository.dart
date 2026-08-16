@@ -22,7 +22,7 @@ class BrandsRepository implements BrandsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/method/paas.api.brand.brand.get_brands',
+        '/api/method/paas.api.brand.get_brands',
         queryParameters: params,
       );
       return ApiResult.success(
@@ -42,7 +42,7 @@ class BrandsRepository implements BrandsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/method/paas.api.brand.brand.get_brand_by_uuid',
+        '/api/method/paas.api.brand.get_brand_by_uuid',
         queryParameters: {
           'uuid': uuid,
           'lang': LocalStorage.getLanguage()?.locale,

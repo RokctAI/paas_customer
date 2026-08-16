@@ -60,7 +60,7 @@ class WalletRepository implements WalletRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/method/paas.api.user.user.send_wallet_balance',
+        '/api/method/paas.api.user.send_wallet_balance',
         data: {'receiver': userUuid, 'amount': amount},
       );
 
@@ -81,7 +81,7 @@ class WalletRepository implements WalletRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
-        '/api/method/paas.api.user.user.get_wallet_history',
+        '/api/method/paas.api.user.get_wallet_history',
       );
 
       return ApiResult.success(
@@ -106,7 +106,7 @@ class WalletRepository implements WalletRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/method/paas.api.payment.payment.process_wallet_top_up',
+        '/api/method/paas.api.payment.process_wallet_top_up',
         data: {'amount': amount, 'token': token},
       );
       // Return message (URL) or data (Transaction) depending on backend response.

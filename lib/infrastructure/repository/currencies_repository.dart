@@ -11,7 +11,7 @@ class CurrenciesRepository implements CurrenciesRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/method/paas.api.system.system.get_currencies',
+        '/api/method/paas.api.system.get_currencies',
       );
       return ApiResult.success(
         data: CurrenciesResponse.fromJson(response.data),

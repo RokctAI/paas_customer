@@ -14,7 +14,7 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
       final client = dioHttp.client(requireAuth: true);
       debugPrint('==> Getting payments');
       final response = await client.get(
-        '/api/method/paas.api.payment.payment.get_payment_gateways',
+        '/api/method/paas.api.payment.get_payment_gateways',
       );
       debugPrint('==> Payments response: ${response.data}');
       return ApiResult.success(data: PaymentsResponse.fromJson(response.data));
@@ -35,7 +35,7 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/method/paas.api.payment.payment.create_transaction',
+        '/api/method/paas.api.payment.create_transaction',
         data: {'order_id': orderId, 'payment_id': paymentId},
       );
       return ApiResult.success(
@@ -55,7 +55,7 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
-        '/api/method/paas.api.payment.payment.get_saved_cards',
+        '/api/method/paas.api.payment.get_saved_cards',
       );
 
       return ApiResult.success(
@@ -83,7 +83,7 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/method/paas.api.payment.payment.tokenize_card',
+        '/api/method/paas.api.payment.tokenize_card',
         data: {
           'card_number': cardNumber,
           'card_holder': cardName,
@@ -127,7 +127,7 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
-        '/api/method/paas.api.payment.payment.delete_card',
+        '/api/method/paas.api.payment.delete_card',
         data: {'card_name': cardId},
       );
       return const ApiResult.success(data: true);
@@ -155,7 +155,7 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
-        '/api/method/paas.api.payment.payment.process_token_payment',
+        '/api/method/paas.api.payment.process_token_payment',
         data: {'order_id': orderData.cartId, 'token': token},
       );
       return const ApiResult.success(data: "Success");
@@ -178,7 +178,7 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/method/paas.api.payment.payment.process_direct_card_payment',
+        '/api/method/paas.api.payment.process_direct_card_payment',
         data: {
           'order_id': orderBody.cartId,
           'card_number': cardNumber,

@@ -39,7 +39,7 @@ class DeliveryPointsRepository implements DeliveryPointsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/method/paas.api.get_delivery_points',
+        '/api/method/paas.api.delivery.get_delivery_points',
       );
       final List<dynamic> data = response.data['message'];
       final List<DeliveryPointData> deliveryPoints = data

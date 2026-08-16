@@ -16,7 +16,7 @@ class CartRepository implements CartRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
-        '/api/method/paas.api.cart.cart.get_cart',
+        '/api/method/paas.api.cart.get_cart',
         queryParameters: {'shop_id': shopId},
       );
       return ApiResult.success(data: CartModel.fromJson(response.data));
@@ -53,7 +53,7 @@ class CartRepository implements CartRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
-        '/api/method/paas.api.get_cart_in_group',
+        '/api/method/paas.api.cart.get_cart_in_group',
         queryParameters: params,
       );
       return ApiResult.success(data: CartModel.fromJson(response.data));
@@ -92,7 +92,7 @@ class CartRepository implements CartRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
-        '/api/method/paas.api.change_status',
+        '/api/method/paas.api.cart.change_status',
         data: {'user_uuid': userUuid, 'cart_id': cartId},
       );
       return const ApiResult.success(data: null);
@@ -110,7 +110,7 @@ class CartRepository implements CartRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/method/paas.api.delete_cart',
+        '/api/method/paas.api.cart.delete_cart',
         data: {'cart_id': cartId},
       );
       return ApiResult.success(data: CartModel.fromJson(response.data));
@@ -131,7 +131,7 @@ class CartRepository implements CartRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
-        '/api/method/paas.api.delete_user',
+        '/api/method/paas.api.cart.delete_user',
         data: {'cart_id': cartId, 'user_id': userId},
       );
       return const ApiResult.success(data: null);
@@ -152,7 +152,7 @@ class CartRepository implements CartRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/method/paas.api.cart.cart.remove_product_cart',
+        '/api/method/paas.api.cart.remove_product_cart',
         data: {'cart_detail_id': cartDetailId},
       );
       return ApiResult.success(data: CartModel.fromJson(response.data));
@@ -185,7 +185,7 @@ class CartRepository implements CartRepositoryFacade {
         params['addons'] = jsonEncode(cart.toJsonCart());
       }
       final response = await client.post(
-        '/api/method/paas.api.cart.cart.add_to_cart',
+        '/api/method/paas.api.cart.add_to_cart',
         data: params,
       );
       return ApiResult.success(data: CartModel.fromJson(response.data));
