@@ -15,7 +15,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/method/paas.api.order.create_order',
+        '/api/v1/method/paas.api.order.create_order',
         data: orderBody.toJson(),
       );
       return ApiResult.success(data: OrderActiveModel.fromJson(response.data));
@@ -39,7 +39,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
-        '/api/method/paas.api.order.list_orders',
+        '/api/v1/method/paas.api.order.list_orders',
         queryParameters: data,
       );
       return ApiResult.success(
@@ -59,7 +59,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
-        '/api/method/paas.api.order.get_order_details',
+        '/api/v1/method/paas.api.order.get_order_details',
         queryParameters: {'order_id': orderId},
       );
       return ApiResult.success(data: OrderActiveModel.fromJson(response.data));
@@ -86,7 +86,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
-        '/api/method/paas.api.order.add_order_review',
+        '/api/v1/method/paas.api.order.add_order_review',
         data: data,
       );
       return const ApiResult.success(data: null);
@@ -110,7 +110,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       var res = await client.post(
-        '/api/method/paas.api.payment.initiate_${name.toLowerCase()}_payment',
+        '/api/v1/method/paas.api.payment.initiate_${name.toLowerCase()}_payment',
         data: {'order_id': orderBody.cartId},
       );
       return ApiResult.success(data: res.data["redirect_url"]);
@@ -128,7 +128,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
-        '/api/method/paas.api.order.cancel_order',
+        '/api/v1/method/paas.api.order.cancel_order',
         data: {'order_id': orderId},
       );
       return const ApiResult.success(data: null);
@@ -147,7 +147,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
       final data = {"order": orderId, "cause": title};
       final client = dioHttp.client(requireAuth: true);
       await client.post(
-        '/api/method/paas.api.user.create_order_refund',
+        '/api/v1/method/paas.api.user.create_order_refund',
         data: data,
       );
       return const ApiResult.success(data: null);
@@ -236,7 +236,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
-        '/api/method/paas.api.user.get_user_order_refunds',
+        '/api/v1/method/paas.api.user.get_user_order_refunds',
         queryParameters: data,
       );
       return ApiResult.success(data: RefundOrdersModel.fromJson(response.data));
@@ -265,7 +265,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/method/paas.api.order.get_calculate',
+        '/api/v1/method/paas.api.order.get_calculate',
         data: data,
       );
       return ApiResult.success(
@@ -289,7 +289,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/method/paas.api.coupon.check_coupon',
+        '/api/v1/method/paas.api.coupon.check_coupon',
         data: data,
       );
       return ApiResult.success(data: CouponResponse.fromJson(response.data));
@@ -371,7 +371,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/method/paas.api.payment.tip_process',
+        '/api/v1/method/paas.api.payment.tip_process',
         data: {'order_id': orderId, 'tip': tip},
       );
       return ApiResult.success(data: response.data['redirect_url']);
@@ -391,7 +391,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/method/paas.api.shop.check_cashback',
+        '/api/v1/method/paas.api.shop.check_cashback',
         data: {'shop_id': shopId, 'amount': amount},
       );
       return ApiResult.success(
@@ -410,7 +410,7 @@ class OrdersRepository implements OrdersRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.get(
-        '/api/method/paas.api.delivery.get_driver_location',
+        '/api/v1/method/paas.api.delivery.get_driver_location',
         queryParameters: {'order_id': deliveryId},
       );
       return ApiResult.success(

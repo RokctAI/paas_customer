@@ -19,7 +19,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
-        '/api/method/paas.api.parcel.add_parcel_review',
+        '/api/v1/method/paas.api.parcel.add_parcel_review',
         data: data,
       );
       return const ApiResult.success(data: null);
@@ -38,7 +38,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.post(
-        '/api/method/paas.api.parcel.get_types',
+        '/api/v1/method/paas.api.parcel.get_types',
         data: data,
       );
       return ApiResult.success(
@@ -71,7 +71,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.post(
-        '/api/method/paas.api.parcel.calculate_price',
+        '/api/v1/method/paas.api.parcel.calculate_price',
         data: data,
       );
       return ApiResult.success(
@@ -142,7 +142,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final res = await client.post(
-        '/api/method/paas.api.parcel.create_parcel_order',
+        '/api/v1/method/paas.api.parcel.create_parcel_order',
         data: {'order_data': data},
       );
       return ApiResult.success(data: res.data["data"]["id"]);
@@ -182,7 +182,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
         data.removeWhere((key, value) => key.startsWith('statuses'));
       }
       final response = await client.post(
-        '/api/method/paas.api.parcel.get_parcel_orders',
+        '/api/v1/method/paas.api.parcel.get_parcel_orders',
         data: data,
       );
       return ApiResult.success(
@@ -216,7 +216,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
         data.removeWhere((key, value) => key.startsWith('statuses'));
       }
       final response = await client.post(
-        '/api/method/paas.api.parcel.get_parcel_orders',
+        '/api/v1/method/paas.api.parcel.get_parcel_orders',
         data: data,
       );
       return ApiResult.success(
@@ -241,7 +241,7 @@ class ParcelRepository implements ParcelRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: true);
       final response = await client.post(
-        '/api/method/paas.api.parcel.get_user_parcel_order',
+        '/api/v1/method/paas.api.parcel.get_user_parcel_order',
         data: {'name': orderId},
       );
       return ApiResult.success(
