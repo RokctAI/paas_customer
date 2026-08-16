@@ -30,10 +30,16 @@ class WalletRepository implements WalletRepositoryFacade {
   ) async {
     try {
       final client = dioHttp.client(requireAuth: true);
+      // Backend endpoint is api.user.search_user and takes the search term as
+      // the `name` parameter, so translate the legacy `search` key.
+      final query = Map<String, dynamic>.from(params);
+      if (query.containsKey('search')) {
+        query['name'] = query.remove('search');
+      }
       final response = await client.get(
-        '/api/method/paas.api.user.user.search_users',
+        '/api/method/paas.api.user.search_user',
         queryParameters: {
-          ...params,
+          ...query,
           'lang': LocalStorage.getLanguage()?.locale,
         },
       );

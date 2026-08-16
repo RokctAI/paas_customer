@@ -77,7 +77,7 @@ class ShopsRepository implements ShopsRepositoryFacade {
     try {
       final client = dioHttp.client(requireAuth: false);
       final response = await client.get(
-        '/api/method/paas.api.shop.shop.get_shop_by_uuid',
+        '/api/method/paas.api.shop.get_shop_details',
         queryParameters: {'uuid': uuid},
       );
       return ApiResult.success(
