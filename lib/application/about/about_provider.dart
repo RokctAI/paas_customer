@@ -8,14 +8,19 @@ import '../../app_constants.dart';
 final aboutProvider = FutureProvider<Map<String, dynamic>?>((ref) async {
   try {
     final response = await http.get(
-      Uri.parse('${AppConstants.baseUrl}/api/v1/rest/pages/about'),
+      Uri.parse(
+        '${AppConstants.baseUrl}/api/v1/method/paas.api.page.get_page?route=about',
+      ),
     );
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      final translation = data['data']['translation'];
+      // Raw http (no dio interceptor) — unwrap Frappe's top-level
+      // `message` envelope ourselves.
+      final page = (data is Map ? data['message'] : null) ?? data;
+      final translation = page['translation'];
 
-      final imgUrl = data['data']['img'];
+      final imgUrl = page['img'];
 
       return {
         'title': translation['title'],

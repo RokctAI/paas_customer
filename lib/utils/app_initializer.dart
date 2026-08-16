@@ -152,12 +152,22 @@ class AppInitializer extends StatefulWidget {
     // Check the app status from the API with a 5-second timeout
     try {
       final response = await http
-          .get(Uri.parse('${AppConstants.baseUrl}/public/api/v1/rest/status'))
+          .get(
+            Uri.parse(
+              '${AppConstants.baseUrl}/api/v1/method/paas.api.system.api_status',
+            ),
+          )
           .timeout(const Duration(seconds: 5));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        AppConstants.isMaintain = data['status'] != 'OK';
+        // Raw http (no dio interceptor) — unwrap Frappe's top-level
+        // `message` envelope; api_status returns
+        // api_response(data={"status": "ok" | "maintenance", ...}).
+        final result = (data is Map ? data['message'] : null) ?? data;
+        final statusData = result is Map ? result['data'] : null;
+        final status = statusData is Map ? statusData['status'] : null;
+        AppConstants.isMaintain = status != 'ok';
       } else {
         AppConstants.isMaintain =
             true; // Set isMaintain to true if API response is not successful

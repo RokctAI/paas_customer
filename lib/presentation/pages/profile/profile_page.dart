@@ -64,7 +64,9 @@ class _ProfilePageState extends ConsumerState<ProfilePage>
 
   Future<bool> checkApiStatus() async {
     final response = await http.get(
-      Uri.parse('${AppConstants.baseUrl}/api/v1/rest/status'),
+      Uri.parse(
+        '${AppConstants.baseUrl}/api/v1/method/paas.api.system.api_status',
+      ),
     );
     return response.statusCode == 200;
   }

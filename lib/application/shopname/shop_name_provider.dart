@@ -10,12 +10,19 @@ final shopNameProvider = FutureProvider.family<String, String>((
   shopId,
 ) async {
   final response = await http.get(
-    Uri.parse('${AppConstants.baseUrl}/api/v1/rest/shops?shops[0]=$shopId'),
+    Uri.parse(
+      '${AppConstants.baseUrl}/api/v1/method/paas.api.shop.get_shops_by_ids'
+      '?shops=${Uri.encodeComponent(jsonEncode([shopId]))}',
+    ),
   );
 
   if (response.statusCode == 200) {
     final responseData = jsonDecode(response.body);
-    final shopTranslation = responseData['data'][0]['translation']['title'];
+    // Raw http (no dio interceptor) — unwrap Frappe's top-level `message`
+    // envelope ourselves; the backend returns api_response(data=[...]) inside.
+    final result =
+        (responseData is Map ? responseData['message'] : null) ?? responseData;
+    final shopTranslation = result['data'][0]['translation']['title'];
     return shopTranslation;
   } else {
     throw Exception('Failed to load shop details');
