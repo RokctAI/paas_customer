@@ -193,7 +193,7 @@ class Payfast {
 
   void chargeTokenization() {
     Map<String, dynamic> recurringTokenizationQueryParameters = {
-      'token': '3ee21522-7cc9-464d-837a-3e791c5a6f1d',
+      'token': const String.fromEnvironment('PAYFAST_TOKEN'),
       'merchant-id': '10026561',
       'version': 'v1',
       'timestamp': '2022-07-25',
