@@ -194,7 +194,7 @@ class Payfast {
   void chargeTokenization() {
     Map<String, dynamic> recurringTokenizationQueryParameters = {
       'token': const String.fromEnvironment('PAYFAST_TOKEN'),
-      'merchant-id': '10026561',
+      'merchant-id': const String.fromEnvironment('PAYFAST_MERCHANT_ID'),
       'version': 'v1',
       'timestamp': '2022-07-25',
       'amount': '444',
@@ -203,7 +203,7 @@ class Payfast {
 
     Map<String, dynamic> signatureEntry = {
       'signature': SignatureService.createSignature(
-          recurringTokenizationQueryParameters, 'JoshuaMunstermann'),
+          recurringTokenizationQueryParameters, const String.fromEnvironment('PAYFAST_PASSPHRASE')),
     };
 
     recurringTokenizationQueryParameters.addEntries(signatureEntry.entries);
