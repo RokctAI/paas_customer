@@ -19,8 +19,10 @@ class DefaultFirebaseOptions {
     projectId: 'goshops-7c405',
     // databaseURL: 'https://onlyu-live-default-rtdb.firebaseio.com',
     storageBucket: 'goshops-7c405.appspot.com',
-    androidClientId: '732738074097-4f1op36ibs6481rc03321q89f5dp3krh.apps.googleusercontent.com',
-    iosClientId: '732738074097-4f1op36ibs6481rc03321q89f5dp3krh.apps.googleusercontent.com',
+    androidClientId:
+        '732738074097-4f1op36ibs6481rc03321q89f5dp3krh.apps.googleusercontent.com',
+    iosClientId:
+        '732738074097-4f1op36ibs6481rc03321q89f5dp3krh.apps.googleusercontent.com',
     iosBundleId: 'org.goshops',
   );
 }

@@ -351,8 +351,9 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                                 child: CustomButton(
                                   title:
                                       (widget.repeatData?.to != null &&
-                                          DateTime.parse(widget.repeatData!.to!)
-                                              .isBefore(DateTime.now()))
+                                          DateTime.parse(
+                                            widget.repeatData!.to!,
+                                          ).isBefore(DateTime.now()))
                                       ? AppHelpers.getTranslation(TrKeys.ended)
                                       : (widget.repeatData?.isActive == 1
                                             ? AppHelpers.getTranslation(
@@ -363,8 +364,9 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                                               )),
                                   onPressed:
                                       (widget.repeatData?.to != null &&
-                                          DateTime.parse(widget.repeatData!.to!)
-                                              .isBefore(DateTime.now()))
+                                          DateTime.parse(
+                                            widget.repeatData!.to!,
+                                          ).isBefore(DateTime.now()))
                                       ? null
                                       : () {
                                           if (widget.repeatData?.isActive ==

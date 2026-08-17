@@ -41,8 +41,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   void initState() {
     birthDay = TextEditingController(
       text: intl.DateFormat("yyyy-MM-dd").format(
-        DateTime.tryParse(ref.read(profileProvider).userData?.birthday ?? "")
-                ?.toLocal() ??
+        DateTime.tryParse(
+              ref.read(profileProvider).userData?.birthday ?? "",
+            )?.toLocal() ??
             DateTime.now(),
       ),
     );
@@ -199,8 +200,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                 readOnly: AppValidators.isValidEmail(
                                   user?.email ?? '',
                                 ),
-                                label: AppHelpers.getTranslation(TrKeys.email)
-                                    .toUpperCase(),
+                                label: AppHelpers.getTranslation(
+                                  TrKeys.email,
+                                ).toUpperCase(),
                                 initialText: user?.email ?? "",
                                 validation: AppValidators.emailCheck,
                                 onChanged: event.setEmail,
@@ -260,8 +262,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                     context: context,
                                     modal: const PhoneVerify(),
                                     isDarkMode: false,
-                                    paddingTop: MediaQuery.paddingOf(context)
-                                        .top,
+                                    paddingTop: MediaQuery.paddingOf(
+                                      context,
+                                    ).top,
                                   );
                                 },
                               ),
@@ -274,8 +277,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                       height: 250.h,
                                       padding: const EdgeInsets.only(top: 6.0),
                                       margin: EdgeInsets.only(
-                                        bottom: MediaQuery.viewInsetsOf(context)
-                                            .bottom,
+                                        bottom: MediaQuery.viewInsetsOf(
+                                          context,
+                                        ).bottom,
                                       ),
                                       color: CupertinoColors.systemBackground
                                           .resolveFrom(context),
@@ -283,8 +287,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                         top: false,
                                         child: CupertinoDatePicker(
                                           initialDateTime:
-                                              DateTime.tryParse(birthDay.text)
-                                                  ?.toLocal() ??
+                                              DateTime.tryParse(
+                                                birthDay.text,
+                                              )?.toLocal() ??
                                               DateTime.now(),
                                           maximumDate: DateTime.now(),
                                           mode: CupertinoDatePickerMode.date,
@@ -318,8 +323,9 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                 hint: AppHelpers.getTranslation(
                                   TrKeys.typeHere,
                                 ),
-                                label: AppHelpers.getTranslation(TrKeys.gender)
-                                    .toUpperCase(),
+                                label: AppHelpers.getTranslation(
+                                  TrKeys.gender,
+                                ).toUpperCase(),
                                 list: AppConstants.genderList,
                                 onChanged: event.setGender,
                                 validator: (s) {

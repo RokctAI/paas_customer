@@ -146,14 +146,14 @@ class AutoOrderNotifier extends StateNotifier<AutoOrderState> {
     if (repeatData == null) {
       return true;
     }
-    return (((DateTime.parse(repeatData.from ?? "")
-                .difference(state.from)
-                .inDays) !=
+    return (((DateTime.parse(
+              repeatData.from ?? "",
+            ).difference(state.from).inDays) !=
             0) ||
         (state.to != null &&
-            (DateTime.parse(repeatData.to ?? "")
-                    .difference(state.to!)
-                    .inDays) !=
+            (DateTime.parse(
+                  repeatData.to ?? "",
+                ).difference(state.to!).inDays) !=
                 0));
   }
 

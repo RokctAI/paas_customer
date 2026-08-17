@@ -184,7 +184,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                         ),
                                         WidgetSpan(
                                           child: Transform.translate(
-                                            offset: Offset(0, -15), // Move up by 15 pixels, adjust as needed
+                                            offset: Offset(
+                                              0,
+                                              -15,
+                                            ), // Move up by 15 pixels, adjust as needed
                                             child: Text(
                                               "®",
                                               style:
@@ -203,7 +206,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             const Spacer(),
                             const Spacer(),
                             SecondButton(
-                              onTap: _showIntroPage, // Show IntroPage when Skip is tapped
+                              onTap:
+                                  _showIntroPage, // Show IntroPage when Skip is tapped
                               title: AppHelpers.getTranslation(TrKeys.skip),
                               bgColor: AppStyle.primary,
                               titleColor: AppStyle.white,
@@ -271,7 +275,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                       AppHelpers.getTranslation(TrKeys.terms),
                                       style: const TextStyle(
                                         decoration: TextDecoration.underline,
-                                        color: AppStyle.black, // Optional: Different color for links
+                                        color: AppStyle
+                                            .black, // Optional: Different color for links
                                       ),
                                     ),
                                   ),
@@ -297,7 +302,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                       ),
                                       style: const TextStyle(
                                         decoration: TextDecoration.underline,
-                                        color: AppStyle.black, // Optional: Different color for links
+                                        color: AppStyle
+                                            .black, // Optional: Different color for links
                                       ),
                                     ),
                                   ),

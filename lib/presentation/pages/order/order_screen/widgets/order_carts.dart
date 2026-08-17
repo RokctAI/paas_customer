@@ -50,8 +50,9 @@ class _OrderCartsState extends State<OrderCarts> {
                           children: [
                             const Divider(),
                             Theme(
-                              data: Theme.of(context)
-                                  .copyWith(dividerColor: AppStyle.transparent),
+                              data: Theme.of(
+                                context,
+                              ).copyWith(dividerColor: AppStyle.transparent),
                               child: ExpansionTile(
                                 title: TitleAndIcon(
                                   title:

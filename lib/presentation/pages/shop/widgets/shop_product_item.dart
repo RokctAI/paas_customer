@@ -149,8 +149,9 @@ class ShopProductItem extends StatelessWidget {
                               child: InkWell(
                                 onTap: () {
                                   AppHelpers.showCustomModalBottomSheet(
-                                    paddingTop: MediaQuery.paddingOf(context)
-                                        .top,
+                                    paddingTop: MediaQuery.paddingOf(
+                                      context,
+                                    ).top,
                                     context: context,
                                     modal: BonusScreen(
                                       bonus: product.stock?.bonus,

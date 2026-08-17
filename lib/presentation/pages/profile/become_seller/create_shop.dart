@@ -334,8 +334,9 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                               ),
                                               SizedBox(
                                                 width:
-                                                    MediaQuery.sizeOf(context)
-                                                        .width /
+                                                    MediaQuery.sizeOf(
+                                                      context,
+                                                    ).width /
                                                     2,
                                                 child: Text(
                                                   "${state.addressModel?.title ?? ""}, ${state.addressModel?.address?.address ?? ""}",

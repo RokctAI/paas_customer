@@ -228,12 +228,13 @@ class _TimeDeliveryState extends ConsumerState<TimeDelivery>
                                                   ? DateTime.now().add(
                                                       Duration(days: 1),
                                                     )
-                                                  : DateFormat("EEEE, MMM dd")
-                                                        .parse(
-                                                          _tabs[indexTab + 1]
-                                                                  .text ??
-                                                              "",
-                                                        );
+                                                  : DateFormat(
+                                                      "EEEE, MMM dd",
+                                                    ).parse(
+                                                      _tabs[indexTab + 1]
+                                                              .text ??
+                                                          "",
+                                                    );
                                               event.selectIndex(index);
                                               ref
                                                   .read(orderProvider.notifier)

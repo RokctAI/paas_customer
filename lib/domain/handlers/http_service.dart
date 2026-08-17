@@ -14,7 +14,8 @@ class HttpService {
             receiveTimeout: const Duration(seconds: 30),
             sendTimeout: const Duration(seconds: 30),
             headers: {
-              'Accept': 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8',
+              'Accept':
+                  'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8',
               'Content-type': 'application/json',
             },
           ),

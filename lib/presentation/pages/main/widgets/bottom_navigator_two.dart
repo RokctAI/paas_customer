@@ -56,11 +56,8 @@ class BottomNavigatorTwo extends StatelessWidget {
   }
 }
 
-typedef ItemBuilder = Widget Function(
-  BuildContext context,
-  int index,
-  FloatingNavbarItem items,
-);
+typedef ItemBuilder =
+    Widget Function(BuildContext context, int index, FloatingNavbarItem items);
 
 class FloatingNavbar extends StatefulWidget {
   final List<FloatingNavbarItem> items;

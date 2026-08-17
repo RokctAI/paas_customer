@@ -196,8 +196,9 @@ class BonusDiscountPopular extends StatelessWidget {
                                 ),
                                 4.horizontalSpace,
                                 Text(
-                                  AppHelpers.getTranslation(TrKeys.discount)
-                                      .toUpperCase(),
+                                  AppHelpers.getTranslation(
+                                    TrKeys.discount,
+                                  ).toUpperCase(),
                                   style: AppStyle.interNoSemi(
                                     size: 10.sp,
                                     color: AppStyle.white,
@@ -230,8 +231,9 @@ class BonusDiscountPopular extends StatelessWidget {
                                 ),
                                 4.horizontalSpace,
                                 Text(
-                                  AppHelpers.getTranslation(TrKeys.bonus)
-                                      .toUpperCase(),
+                                  AppHelpers.getTranslation(
+                                    TrKeys.bonus,
+                                  ).toUpperCase(),
                                   style: AppStyle.interNoSemi(
                                     size: 10.sp,
                                     color: AppStyle.black,
@@ -264,8 +266,9 @@ class BonusDiscountPopular extends StatelessWidget {
                                 ),
                                 4.horizontalSpace,
                                 Text(
-                                  AppHelpers.getTranslation(TrKeys.popular)
-                                      .toUpperCase(),
+                                  AppHelpers.getTranslation(
+                                    TrKeys.popular,
+                                  ).toUpperCase(),
                                   style: AppStyle.interNoSemi(
                                     size: 10,
                                     color: AppStyle.white,
