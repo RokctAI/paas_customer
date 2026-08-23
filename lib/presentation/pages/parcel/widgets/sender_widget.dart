@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:foodyman/application/parcel/parcel_notifier.dart';
-import 'package:foodyman/application/parcel/parcel_state.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/animation_button_effect.dart';
-import 'package:foodyman/presentation/components/text_fields/outline_bordered_text_field.dart';
-import 'package:foodyman/presentation/routes/app_router.dart';
-import 'package:foodyman/presentation/theme/app_style.dart';
+import 'package:paas_customer/application/parcel/parcel_notifier.dart';
+import 'package:paas_customer/application/parcel/parcel_state.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/components/buttons/animation_button_effect.dart';
+import 'package:paas_customer/presentation/components/text_fields/outline_bordered_text_field.dart';
+import 'package:paas_customer/presentation/routes/app_router.dart';
+import 'package:paas_customer/presentation/theme/app_style.dart';
 
-import 'package:foodyman/infrastructure/models/models.dart';
+import 'package:paas_customer/infrastructure/models/models.dart';
 
 import 'custom_expanded.dart';
 

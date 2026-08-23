@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
 
 import '../../app_constants.dart';
 import 'main_state.dart';

@@ -13,7 +13,7 @@ import '../../../infrastructure/services/app_helpers.dart';
 import '../../../infrastructure/services/tr_keys.dart';
 import '../../theme/app_style.dart';
 
-//import 'package:foodyman/application/shop/shop_provider.dart';
+//import 'package:paas_customer/application/shop/shop_provider.dart';
 //import '../../../infrastructure/services/local_storage.dart';
 //import '../../../utils/utils.dart';
 

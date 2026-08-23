@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:foodyman/domain/di/dependency_manager.dart';
-import 'package:foodyman/domain/interface/settings.dart';
-import 'package:foodyman/infrastructure/models/data/help_data.dart';
-import 'package:foodyman/infrastructure/models/data/notification_list_data.dart';
-import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/domain/handlers/handlers.dart';
+import 'package:paas_customer/domain/di/dependency_manager.dart';
+import 'package:paas_customer/domain/interface/settings.dart';
+import 'package:paas_customer/infrastructure/models/data/help_data.dart';
+import 'package:paas_customer/infrastructure/models/data/notification_list_data.dart';
+import 'package:paas_customer/infrastructure/models/models.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/domain/handlers/handlers.dart';
 
 import '../models/data/translation.dart';
 

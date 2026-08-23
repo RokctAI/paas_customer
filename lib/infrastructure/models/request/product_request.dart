@@ -1,4 +1,4 @@
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
 
 class ProductRequest {
   final String shopId;

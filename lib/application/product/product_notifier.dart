@@ -2,16 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:foodyman/domain/interface/products.dart';
-import 'package:foodyman/infrastructure/models/data/addons_data.dart';
-import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/services/app_connectivity.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/domain/interface/products.dart';
+import 'package:paas_customer/infrastructure/models/data/addons_data.dart';
+import 'package:paas_customer/infrastructure/models/models.dart';
+import 'package:paas_customer/infrastructure/services/app_connectivity.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/enums.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
 import 'package:http/http.dart' as http;
-import 'package:foodyman/domain/interface/cart.dart';
-import 'package:foodyman/infrastructure/models/request/cart_request.dart';
+import 'package:paas_customer/domain/interface/cart.dart';
+import 'package:paas_customer/infrastructure/models/request/cart_request.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../app_constants.dart';

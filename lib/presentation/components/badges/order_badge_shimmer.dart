@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
 
 class OrderBadge extends StatelessWidget {
   final Color? imageColor;
@@ -22,7 +22,6 @@ class OrderBadge extends StatelessWidget {
     return Row(
       children: [
         SvgPicture.asset(
-          //'assets/svgs/foodyman.svg', // Path to your updated SVG asset
           'assets/svgs/brand_logo_rounded.svg',
           height: 24.h, // Adjust height as needed using ScreenUtil
           width: 24.w, // Adjust width as needed using ScreenUtil

@@ -4,23 +4,23 @@ import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:foodyman/application/edit_profile/edit_profile_provider.dart';
-import 'package:foodyman/application/order/order_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/app_validators.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/time_service.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/custom_checkbox.dart';
-import 'package:foodyman/presentation/components/text_fields/outline_bordered_text_field.dart';
-import 'package:foodyman/presentation/pages/profile/phone_verify.dart';
-import 'package:foodyman/presentation/routes/app_router.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:paas_customer/application/edit_profile/edit_profile_provider.dart';
+import 'package:paas_customer/application/order/order_provider.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/app_validators.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/infrastructure/services/time_service.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/components/custom_checkbox.dart';
+import 'package:paas_customer/presentation/components/text_fields/outline_bordered_text_field.dart';
+import 'package:paas_customer/presentation/pages/profile/phone_verify.dart';
+import 'package:paas_customer/presentation/routes/app_router.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
 
 import '../../order_check/widgets/time_delivery.dart';
 import 'order_container.dart';
 
-import 'package:foodyman/presentation/components/sellect_address_screen.dart';
+import 'package:paas_customer/presentation/components/sellect_address_screen.dart';
 
 class OrderDelivery extends StatefulWidget {
   final ValueChanged<bool> onChange;

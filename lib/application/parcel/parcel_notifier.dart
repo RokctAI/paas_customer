@@ -2,18 +2,18 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:foodyman/domain/interface/parcel.dart';
-import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/services/app_connectivity.dart';
-import 'package:foodyman/app_constants.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/marker_image_cropper.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/routes/app_router.dart';
+import 'package:paas_customer/domain/interface/parcel.dart';
+import 'package:paas_customer/infrastructure/models/models.dart';
+import 'package:paas_customer/infrastructure/services/app_connectivity.dart';
+import 'package:paas_customer/app_constants.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/infrastructure/services/marker_image_cropper.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/routes/app_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:foodyman/domain/interface/draw.dart';
+import 'package:paas_customer/domain/interface/draw.dart';
 
 import 'parcel_state.dart';
 

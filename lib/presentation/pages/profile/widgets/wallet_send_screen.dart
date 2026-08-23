@@ -3,15 +3,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/domain/di/dependency_manager.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/infrastructure/models/data/user.dart';
-import 'package:foodyman/infrastructure/services/app_validators.dart';
-import 'package:foodyman/presentation/components/keyboard_dismisser.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:paas_customer/domain/di/dependency_manager.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/infrastructure/models/data/user.dart';
+import 'package:paas_customer/infrastructure/services/app_validators.dart';
+import 'package:paas_customer/presentation/components/keyboard_dismisser.dart';
+import 'package:paas_customer/presentation/components/title_icon.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
 
 // Provider for search results
 final userSearchProvider = StateProvider<List<UserModel>>((ref) => []);

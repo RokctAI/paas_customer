@@ -3,11 +3,11 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/app_constants.dart';
-import 'package:foodyman/infrastructure/services/time_service.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:paas_customer/app_constants.dart';
+import 'package:paas_customer/infrastructure/services/time_service.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
 
 class CustomTimePicker {
   static void getTimePicker(

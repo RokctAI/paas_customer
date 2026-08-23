@@ -1,6 +1,6 @@
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
 import 'package:flutter_remix/flutter_remix.dart';
-import 'package:foodyman/presentation/app_assets.dart';
+import 'package:paas_customer/presentation/app_assets.dart';
 
 import 'infrastructure/services/enums.dart';
 

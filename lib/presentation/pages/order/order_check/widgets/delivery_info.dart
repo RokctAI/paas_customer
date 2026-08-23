@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/application/order/order_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/custom_network_image.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:paas_customer/application/order/order_provider.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/components/custom_network_image.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
 
 class DeliveryInfo extends StatelessWidget {
   const DeliveryInfo({super.key});

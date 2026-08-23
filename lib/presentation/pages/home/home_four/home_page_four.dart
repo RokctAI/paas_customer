@@ -3,7 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:foodyman/app_constants.dart';
+import 'package:paas_customer/app_constants.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import '../../../../application/currency/currency_provider.dart';

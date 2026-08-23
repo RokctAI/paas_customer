@@ -9,8 +9,8 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/app_constants.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/app_constants.dart';
 
 class AppUsageService {
   static Future<Map<String, dynamic>> recordAppUsage() async {

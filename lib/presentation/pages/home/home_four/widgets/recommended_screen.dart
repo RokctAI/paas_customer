@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
 
 import '../../../../../application/home/home_notifier.dart';
 import '../../../../../application/home/home_provider.dart';

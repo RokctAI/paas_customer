@@ -1,4 +1,4 @@
-import 'package:foodyman/infrastructure/services/enums.dart';
+import 'package:paas_customer/infrastructure/services/enums.dart';
 
 class UiExtra {
   final int index;

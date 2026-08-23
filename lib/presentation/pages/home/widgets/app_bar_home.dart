@@ -2,15 +2,15 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:foodyman/application/home/home_notifier.dart';
-import 'package:foodyman/application/home/home_state.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/common_app_bar.dart';
-import 'package:foodyman/presentation/components/sellect_address_screen.dart';
-import 'package:foodyman/presentation/routes/app_router.dart';
-import 'package:foodyman/presentation/theme/app_style.dart';
+import 'package:paas_customer/application/home/home_notifier.dart';
+import 'package:paas_customer/application/home/home_state.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/components/app_bars/common_app_bar.dart';
+import 'package:paas_customer/presentation/components/sellect_address_screen.dart';
+import 'package:paas_customer/presentation/routes/app_router.dart';
+import 'package:paas_customer/presentation/theme/app_style.dart';
 
 class AppBarHome extends StatelessWidget {
   final HomeState state;

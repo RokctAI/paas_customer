@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:foodyman/infrastructure/models/data/saved_card.dart';
+import 'package:paas_customer/infrastructure/models/data/saved_card.dart';
 
 part 'saved_cards_state.freezed.dart';
 

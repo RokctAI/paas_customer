@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/presentation/theme/app_style.dart';
+import 'package:paas_customer/infrastructure/models/models.dart';
+import 'package:paas_customer/presentation/theme/app_style.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/application/home/home_provider.dart';
-import 'package:foodyman/application/shop/shop_provider.dart';
+import 'package:paas_customer/application/home/home_provider.dart';
+import 'package:paas_customer/application/shop/shop_provider.dart';
 
 class BrandUtils {
   /// Get brand from product using brand ID and provider references

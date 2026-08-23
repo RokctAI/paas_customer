@@ -1,8 +1,8 @@
-import 'package:foodyman/domain/handlers/api_result.dart';
-import 'package:foodyman/domain/interface/categories.dart';
-// import 'package:foodyman/infrastructure/models/data/category_data.dart'; // Removed invalid import
-import 'package:foodyman/infrastructure/models/response/categories_paginate_response.dart';
-import 'package:foodyman/infrastructure/models/data/translation.dart';
+import 'package:paas_customer/domain/handlers/api_result.dart';
+import 'package:paas_customer/domain/interface/categories.dart';
+// import 'package:paas_customer/infrastructure/models/data/category_data.dart'; // Removed invalid import
+import 'package:paas_customer/infrastructure/models/response/categories_paginate_response.dart';
+import 'package:paas_customer/infrastructure/models/data/translation.dart';
 
 class MockCategoriesRepository implements CategoriesRepositoryFacade {
   final CategoryData _demoCategory = CategoryData(

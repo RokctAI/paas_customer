@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:foodyman/domain/handlers/api_result.dart';
-import 'package:foodyman/domain/interface/cart.dart';
-import 'package:foodyman/infrastructure/models/data/cart_data.dart';
-import 'package:foodyman/domain/di/dependency_manager.dart';
-import 'package:foodyman/domain/handlers/network_exceptions.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/domain/handlers/api_result.dart';
+import 'package:paas_customer/domain/interface/cart.dart';
+import 'package:paas_customer/infrastructure/models/data/cart_data.dart';
+import 'package:paas_customer/domain/di/dependency_manager.dart';
+import 'package:paas_customer/domain/handlers/network_exceptions.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
 
 import 'dart:convert';
 
-import 'package:foodyman/infrastructure/models/request/cart_request.dart';
+import 'package:paas_customer/infrastructure/models/request/cart_request.dart';
 
 class CartRepository implements CartRepositoryFacade {
   @override

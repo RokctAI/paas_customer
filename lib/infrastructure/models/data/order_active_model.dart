@@ -1,4 +1,4 @@
-import 'package:foodyman/infrastructure/models/data/repeat_data.dart';
+import 'package:paas_customer/infrastructure/models/data/repeat_data.dart';
 
 import '../models.dart';
 import 'addons_data.dart';

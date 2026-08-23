@@ -16,12 +16,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:foodyman/app_constants.dart';
-import 'package:foodyman/domain/di/dependency_manager.dart';
-import 'package:foodyman/infrastructure/models/data/loans/loan_contract_model.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/domain/handlers/handlers.dart';
+import 'package:paas_customer/app_constants.dart';
+import 'package:paas_customer/domain/di/dependency_manager.dart';
+import 'package:paas_customer/infrastructure/models/data/loans/loan_contract_model.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/domain/handlers/handlers.dart';
 
 import 'dart:math';
 

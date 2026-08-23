@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/models/data/bonus_data.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/models/data/bonus_data.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
 
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/theme/app_style.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/theme/app_style.dart';
 
 class BonusDiscountPopular extends StatelessWidget {
   final bool isPopular;

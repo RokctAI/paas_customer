@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:foodyman/domain/interface/delivery_points.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/domain/interface/delivery_points.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
 
 import 'delivery_points_state.dart';
 

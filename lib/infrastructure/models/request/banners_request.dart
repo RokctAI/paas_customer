@@ -1,5 +1,5 @@
-import 'package:foodyman/app_constants.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/app_constants.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
 
 class BannersRequest {
   final int page;

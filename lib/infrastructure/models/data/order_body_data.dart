@@ -1,7 +1,7 @@
-import 'package:foodyman/infrastructure/models/data/order_data.dart';
-import 'package:foodyman/infrastructure/models/data/shop_data.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/infrastructure/models/data/order_data.dart';
+import 'package:paas_customer/infrastructure/models/data/shop_data.dart';
+import 'package:paas_customer/infrastructure/services/enums.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
 
 class OrderBodyData {
   final String cartId;

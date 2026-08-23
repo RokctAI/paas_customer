@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/presentation/components/buttons/animation_button_effect.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:paas_customer/presentation/components/buttons/animation_button_effect.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
 
 class ProfileItem extends StatelessWidget {
   final String title;

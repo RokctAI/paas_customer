@@ -1,13 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/models/data/shop_data.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/custom_network_image.dart';
-import 'package:foodyman/presentation/components/shop_avarat.dart';
-import 'package:foodyman/presentation/routes/app_router.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:paas_customer/infrastructure/models/data/shop_data.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/components/custom_network_image.dart';
+import 'package:paas_customer/presentation/components/shop_avarat.dart';
+import 'package:paas_customer/presentation/routes/app_router.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
 
 class RecommendedItem extends StatelessWidget {
   final ShopData shop;

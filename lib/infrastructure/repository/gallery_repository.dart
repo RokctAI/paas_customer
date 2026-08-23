@@ -15,12 +15,12 @@
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:foodyman/domain/di/dependency_manager.dart';
-import 'package:foodyman/domain/interface/gallery.dart';
-import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/domain/handlers/handlers.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
+import 'package:paas_customer/domain/di/dependency_manager.dart';
+import 'package:paas_customer/domain/interface/gallery.dart';
+import 'package:paas_customer/infrastructure/models/models.dart';
+import 'package:paas_customer/domain/handlers/handlers.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/enums.dart';
 
 class GalleryRepository implements GalleryRepositoryFacade {
   @override

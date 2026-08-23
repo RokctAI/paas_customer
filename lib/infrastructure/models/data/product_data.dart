@@ -1,6 +1,6 @@
-import 'package:foodyman/infrastructure/models/data/addons_data.dart';
-import 'package:foodyman/infrastructure/models/data/bonus_data.dart';
-import 'package:foodyman/infrastructure/models/models.dart';
+import 'package:paas_customer/infrastructure/models/data/addons_data.dart';
+import 'package:paas_customer/infrastructure/models/data/bonus_data.dart';
+import 'package:paas_customer/infrastructure/models/models.dart';
 
 import 'translation.dart';
 

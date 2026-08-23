@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:foodyman/infrastructure/models/models.dart';
+import 'package:paas_customer/infrastructure/models/models.dart';
 
-import 'package:foodyman/infrastructure/models/data/translation.dart';
+import 'package:paas_customer/infrastructure/models/data/translation.dart';
 
 part 'profile_state.freezed.dart';
 

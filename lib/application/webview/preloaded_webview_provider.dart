@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:foodyman/app_constants.dart';
+import 'package:paas_customer/app_constants.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../presentation/theme/theme.dart';

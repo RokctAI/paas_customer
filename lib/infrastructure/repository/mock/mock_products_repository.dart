@@ -1,12 +1,12 @@
-import 'package:foodyman/domain/handlers/api_result.dart';
-import 'package:foodyman/domain/interface/products.dart';
-import 'package:foodyman/infrastructure/models/data/product_data.dart';
-import 'package:foodyman/infrastructure/models/data/translation.dart';
-import 'package:foodyman/infrastructure/models/response/products_paginate_response.dart';
-import 'package:foodyman/infrastructure/models/response/single_product_response.dart';
-import 'package:foodyman/infrastructure/models/response/product_calculate_response.dart';
-import 'package:foodyman/infrastructure/models/response/all_products_response.dart';
-import 'package:foodyman/infrastructure/models/data/cart_product_data.dart';
+import 'package:paas_customer/domain/handlers/api_result.dart';
+import 'package:paas_customer/domain/interface/products.dart';
+import 'package:paas_customer/infrastructure/models/data/product_data.dart';
+import 'package:paas_customer/infrastructure/models/data/translation.dart';
+import 'package:paas_customer/infrastructure/models/response/products_paginate_response.dart';
+import 'package:paas_customer/infrastructure/models/response/single_product_response.dart';
+import 'package:paas_customer/infrastructure/models/response/product_calculate_response.dart';
+import 'package:paas_customer/infrastructure/models/response/all_products_response.dart';
+import 'package:paas_customer/infrastructure/models/data/cart_product_data.dart';
 
 class MockProductsRepository implements ProductsRepositoryFacade {
   final ProductData _demoProduct = ProductData(
