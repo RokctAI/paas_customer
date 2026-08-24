@@ -16,3 +16,4 @@
 -dontwarn com.huawei.hianalytics.**
 -dontwarn com.huawei.libcore.io.**
 -dontwarn org.bouncycastle.**
+-dontwarn com.huawei.hms.availableupdate.**
