@@ -94,7 +94,9 @@
       "source": "git",
       "path": "../zones/delivery/dart",
       "git": "https://github.com/RokctAI/zones",
-      "ref": "main"
+      "ref": "main",
+      "sha256": "67474b198bb30a17c563cac6e1faa3c1db7506c47d654c2e74510c1d8bd3c474",
+      "_sha256_comment": "SHA-256 of delivery/dart/install.py at zones@38729c4 (delivery_sdk 1.10.0); required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "comms_sdk",
