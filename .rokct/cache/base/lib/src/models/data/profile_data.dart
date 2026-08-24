@@ -1,3 +1,24 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
 import 'package:base_sdk/src/models/data/address_new_data.dart';
 
 import 'package:base_sdk/src/models/data/notification_data.dart';
@@ -32,6 +53,7 @@ class ProfileData {
     ShopData? shop,
     Wallet? wallet,
     num? ringfencedBalance,
+    num? rate,
   }) {
     _notifications = notifications;
     _id = id;
@@ -57,6 +79,7 @@ class ProfileData {
     _shop = shop;
     _wallet = wallet;
     _ringfencedBalance = ringfencedBalance;
+    _rate = rate;
   }
 
   ProfileData.fromJson(dynamic json) {
@@ -71,7 +94,7 @@ class ProfileData {
     _referralFromWithdrawPrice = json["referral_from_withdraw_price"];
     _email = json['email'];
     _phone = json['phone'];
-    _birthday = json['birthday'];
+    _birthday = json['birthday'] ?? json['birth_date'];
     _gender = json['gender'];
     _emailVerifiedAt = json['email_verified_at'];
     _registeredAt = json['registered_at'];
@@ -98,6 +121,7 @@ class ProfileData {
     _shop = json['shop'] != null ? ShopData.fromJson(json['shop']) : null;
     _wallet = json['wallet'] != null ? Wallet.fromJson(json['wallet']) : null;
     _ringfencedBalance = json['ringfenced_balance'];
+    _rate = json['rate'];
   }
 
   String? _id;
@@ -125,6 +149,7 @@ class ProfileData {
   ShopData? _shop;
   Wallet? _wallet;
   num? _ringfencedBalance;
+  num? _rate;
 
   ProfileData copyWith({
     String? id,
@@ -147,6 +172,7 @@ class ProfileData {
     ShopData? shop,
     Wallet? wallet,
     num? ringfencedBalance,
+    num? rate,
   }) =>
       ProfileData(
         id: id ?? _id,
@@ -169,6 +195,7 @@ class ProfileData {
         shop: shop ?? _shop,
         wallet: wallet ?? _wallet,
         ringfencedBalance: ringfencedBalance ?? _ringfencedBalance,
+        rate: rate ?? _rate,
       );
 
   String? get id => _id;
@@ -221,6 +248,8 @@ class ProfileData {
 
   num? get ringfencedBalance => _ringfencedBalance;
 
+  num? get rate => _rate;
+
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = _id;
@@ -260,6 +289,7 @@ class ProfileData {
       map['wallet'] = _wallet?.toJson();
     }
     map['ringfenced_balance'] = _ringfencedBalance;
+    map['rate'] = _rate;
     return map;
   }
 }

@@ -1,5 +1,26 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
 import 'package:flutter/material.dart';
-import 'package:flutter_remix/flutter_remix.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:base_sdk/src/models/data/bonus_data.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
@@ -38,7 +59,7 @@ class CustomTags extends StatelessWidget {
                       color: AppStyle.red,
                     ),
                     child: Icon(
-                      FlutterRemix.percent_fill,
+                      Remix.percent_fill,
                       size: 16.r,
                       color: AppStyle.white,
                     ),
@@ -47,12 +68,12 @@ class CustomTags extends StatelessWidget {
                   Container(
                     width: 22.w,
                     height: 22.h,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: AppStyle.primary,
                     ),
                     child: Icon(
-                      FlutterRemix.gift_2_fill,
+                      Remix.gift_2_fill,
                       size: 16.r,
                       color: AppStyle.white,
                     ),
@@ -70,7 +91,7 @@ class CustomTags extends StatelessWidget {
                           color: AppStyle.red,
                         ),
                         child: Icon(
-                          FlutterRemix.percent_fill,
+                          Remix.percent_fill,
                           size: 16.r,
                           color: AppStyle.white,
                         ),
@@ -84,7 +105,7 @@ class CustomTags extends StatelessWidget {
                           color: AppStyle.blueBonus,
                         ),
                         child: Icon(
-                          FlutterRemix.flashlight_fill,
+                          Remix.flashlight_fill,
                           size: 16.r,
                           color: AppStyle.white,
                         ),
@@ -102,7 +123,7 @@ class CustomTags extends StatelessWidget {
                               color: AppStyle.red,
                             ),
                             child: Icon(
-                              FlutterRemix.percent_fill,
+                              Remix.percent_fill,
                               size: 16.r,
                               color: AppStyle.white,
                             ),
@@ -116,7 +137,7 @@ class CustomTags extends StatelessWidget {
                               color: AppStyle.blueBonus,
                             ),
                             child: Icon(
-                              FlutterRemix.flashlight_fill,
+                              Remix.flashlight_fill,
                               size: 16.r,
                               color: AppStyle.white,
                             ),
@@ -125,12 +146,12 @@ class CustomTags extends StatelessWidget {
                           Container(
                             width: 22.w,
                             height: 22.h,
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: AppStyle.primary,
                             ),
                             child: Icon(
-                              FlutterRemix.gift_2_fill,
+                              Remix.gift_2_fill,
                               size: 16.r,
                               color: AppStyle.white,
                             ),
@@ -143,12 +164,12 @@ class CustomTags extends StatelessWidget {
                               Container(
                                 width: 22.w,
                                 height: 22.h,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: AppStyle.primary,
                                 ),
                                 child: Icon(
-                                  FlutterRemix.gift_2_fill,
+                                  Remix.gift_2_fill,
                                   size: 16.r,
                                   color: AppStyle.white,
                                 ),
@@ -162,7 +183,7 @@ class CustomTags extends StatelessWidget {
                                   color: AppStyle.blueBonus,
                                 ),
                                 child: Icon(
-                                  FlutterRemix.flashlight_fill,
+                                  Remix.flashlight_fill,
                                   size: 16.r,
                                   color: AppStyle.white,
                                 ),
@@ -191,7 +212,7 @@ class CustomTags extends StatelessWidget {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 Icon(
-                                                  FlutterRemix.percent_fill,
+                                                  Remix.percent_fill,
                                                   size: 14.r,
                                                   color: AppStyle.white,
                                                 ),
@@ -227,7 +248,7 @@ class CustomTags extends StatelessWidget {
                                                       MainAxisAlignment.center,
                                                   children: [
                                                     Icon(
-                                                      FlutterRemix.gift_2_fill,
+                                                      Remix.gift_2_fill,
                                                       size: 14.r,
                                                       color: AppStyle.white,
                                                     ),
@@ -267,8 +288,7 @@ class CustomTags extends StatelessWidget {
                                                               .center,
                                                       children: [
                                                         Icon(
-                                                          FlutterRemix
-                                                              .flashlight_fill,
+                                                          Remix.flashlight_fill,
                                                           size: 14.r,
                                                           color: AppStyle.white,
                                                         ),
@@ -308,7 +328,7 @@ class CustomTags extends StatelessWidget {
                   color: AppStyle.red,
                 ),
                 child: Icon(
-                  FlutterRemix.percent_fill,
+                  Remix.percent_fill,
                   size: 16.r,
                   color: AppStyle.white,
                 ),
@@ -317,12 +337,12 @@ class CustomTags extends StatelessWidget {
                 ? Container(
                     width: 22.w,
                     height: 22.h,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: AppStyle.primary,
                     ),
                     child: Icon(
-                      FlutterRemix.gift_2_fill,
+                      Remix.gift_2_fill,
                       size: 16.r,
                       color: AppStyle.white,
                     ),
@@ -336,7 +356,7 @@ class CustomTags extends StatelessWidget {
                           color: AppStyle.blueBonus,
                         ),
                         child: Icon(
-                          FlutterRemix.flashlight_fill,
+                          Remix.flashlight_fill,
                           size: 16.r,
                           color: AppStyle.white,
                         ),
@@ -352,7 +372,7 @@ class CustomTags extends StatelessWidget {
                                   color: AppStyle.red,
                                 ),
                                 child: Icon(
-                                  FlutterRemix.percent_fill,
+                                  Remix.percent_fill,
                                   size: 16.r,
                                   color: AppStyle.white,
                                 ),
@@ -366,7 +386,7 @@ class CustomTags extends StatelessWidget {
                                   color: AppStyle.blueBonus,
                                 ),
                                 child: Icon(
-                                  FlutterRemix.flashlight_fill,
+                                  Remix.flashlight_fill,
                                   size: 16.r,
                                   color: AppStyle.white,
                                 ),
@@ -375,12 +395,12 @@ class CustomTags extends StatelessWidget {
                               Container(
                                 width: 22.w,
                                 height: 22.h,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   color: AppStyle.primary,
                                 ),
                                 child: Icon(
-                                  FlutterRemix.gift_2_fill,
+                                  Remix.gift_2_fill,
                                   size: 16.r,
                                   color: AppStyle.white,
                                 ),

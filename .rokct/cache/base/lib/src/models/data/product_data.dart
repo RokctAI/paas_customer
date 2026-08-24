@@ -1,3 +1,24 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
 import 'package:base_sdk/src/models/data/addons_data.dart';
 import 'package:base_sdk/src/models/data/bonus_data.dart';
 import 'package:base_sdk/src/models/models.dart';
@@ -16,6 +37,7 @@ class ProductData {
     int? minQty,
     int? maxQty,
     bool? active,
+    bool? isAdult,
     String? img,
     String? createdAt,
     String? updatedAt,
@@ -45,6 +67,7 @@ class ProductData {
     _minQty = minQty;
     _maxQty = maxQty;
     _active = active;
+    _isAdult = isAdult;
     _img = img;
     _createdAt = createdAt;
     _updatedAt = updatedAt;
@@ -75,6 +98,9 @@ class ProductData {
     _interval = json['interval'];
     _minQty = json['min_qty'];
     _maxQty = json['max_qty'];
+    _isAdult = json['is_adult'] == 1 ||
+        json['is_adult'] == true ||
+        json['is_adult'] == '1';
     _img = json['img'] ?? json['image'];
     _createdAt = json['created_at'];
     _updatedAt = json['updated_at'];
@@ -117,6 +143,7 @@ class ProductData {
   int? _minQty;
   int? _maxQty;
   bool? _active;
+  bool? _isAdult;
   String? _img;
   String? _createdAt;
   String? _updatedAt;
@@ -148,6 +175,7 @@ class ProductData {
     int? minQty,
     int? maxQty,
     bool? active,
+    bool? isAdult,
     String? img,
     String? createdAt,
     String? updatedAt,
@@ -177,6 +205,7 @@ class ProductData {
         minQty: minQty ?? _minQty,
         maxQty: maxQty ?? _maxQty,
         active: active ?? _active,
+        isAdult: isAdult ?? _isAdult,
         img: img ?? _img,
         createdAt: createdAt ?? _createdAt,
         updatedAt: updatedAt ?? _updatedAt,
@@ -214,6 +243,9 @@ class ProductData {
   int? get maxQty => _maxQty;
 
   bool? get active => _active;
+
+  /// Whether the product is age-restricted (18+). Defaults to false.
+  bool get isAdult => _isAdult ?? false;
 
   String? get img => _img;
 
@@ -262,6 +294,7 @@ class ProductData {
     map['min_qty'] = _minQty;
     map['max_qty'] = _maxQty;
     map['active'] = _active;
+    map['is_adult'] = _isAdult;
     map['img'] = _img;
     map['created_at'] = _createdAt;
     map['updated_at'] = _updatedAt;

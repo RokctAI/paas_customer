@@ -1,3 +1,24 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
 import 'package:auto_route/auto_route.dart';
 import 'package:base_sdk/src/navigation/app_routes.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +62,7 @@ class MarketItem extends StatelessWidget {
               width: 268.w,
               height: 260.h,
               decoration: BoxDecoration(
-                color: AppStyle.white,
+                color: AppStyle.cardDark,
                 borderRadius: BorderRadius.circular(10.r),
               ),
               child: Stack(
@@ -78,7 +99,7 @@ class MarketItem extends StatelessWidget {
                                       : shop.translation?.title ?? "",
                                   style: AppStyle.interSemi(
                                     size: 15,
-                                    color: AppStyle.black,
+                                    color: AppStyle.textPrimary,
                                   ),
                                 ),
                                 if (shop.verify ?? false)
@@ -99,13 +120,13 @@ class MarketItem extends StatelessWidget {
                                   : shop.translation?.description ?? "",
                               style: AppStyle.interNormal(
                                 size: 12,
-                                color: AppStyle.black,
+                                color: AppStyle.textPrimary,
                               ),
                               maxLines: 2,
                             ),
                           ),
                           8.verticalSpace,
-                          Divider(color: AppStyle.black.withOpacity(0.3)),
+                          Divider(color: AppStyle.textPrimary.withOpacity(0.3)),
                           Padding(
                             padding: EdgeInsets.only(
                               top: 8.h,
@@ -122,7 +143,7 @@ class MarketItem extends StatelessWidget {
                                   "${shop.deliveryTime?.from ?? 0} - ${shop.deliveryTime?.to ?? 0} ${shop.deliveryTime?.type ?? "min"}",
                                   style: AppStyle.interNormal(
                                     size: 14,
-                                    color: AppStyle.black,
+                                    color: AppStyle.textPrimary,
                                   ),
                                 ),
                                 10.horizontalSpace,
@@ -141,7 +162,7 @@ class MarketItem extends StatelessWidget {
                                   (shop.avgRate ?? ""),
                                   style: AppStyle.interNormal(
                                     size: 14,
-                                    color: AppStyle.black,
+                                    color: AppStyle.textPrimary,
                                   ),
                                 ),
                               ],
@@ -193,7 +214,7 @@ class MarketItem extends StatelessWidget {
       height: 140.r,
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: AppStyle.white,
+        color: AppStyle.cardDark,
         borderRadius: BorderRadius.circular(10.r),
         border: Border.all(color: AppStyle.borderColor),
       ),
@@ -217,7 +238,7 @@ class MarketItem extends StatelessWidget {
                   (shop.translation?.title?.length ?? 0) > 12
                       ? "${shop.translation?.title?.substring(0, 12) ?? " "}.."
                       : shop.translation?.title ?? "",
-                  style: AppStyle.interSemi(size: 15, color: AppStyle.black),
+                  style: AppStyle.interSemi(size: 15, color: AppStyle.textPrimary),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -236,7 +257,7 @@ class MarketItem extends StatelessWidget {
                     ? "${AppHelpers.getTranslation(TrKeys.under)} ${AppHelpers.numberFormat(number: shop.bonus?.value)} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
                     : "${AppHelpers.getTranslation(TrKeys.under)} ${shop.bonus?.value ?? 0} + ${shop.bonus?.bonusStock?.product?.translation?.title ?? ""}"
                 : shop.translation?.description ?? "",
-            style: AppStyle.interNormal(size: 12, color: AppStyle.black),
+            style: AppStyle.interNormal(size: 12, color: AppStyle.textPrimary),
             maxLines: 1,
           ),
         ],

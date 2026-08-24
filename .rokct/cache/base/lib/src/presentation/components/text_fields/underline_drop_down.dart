@@ -1,3 +1,24 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
@@ -29,7 +50,7 @@ class UnderlineDropDown extends StatelessWidget {
         AppHelpers.getTranslation(hint ?? ''),
         style: AppStyle.interNormal(
           size: 14,
-          color: AppStyle.black.withOpacity(0.7),
+          color: AppStyle.textPrimary.withOpacity(0.7),
         ),
       ),
       value: value,
@@ -42,8 +63,8 @@ class UnderlineDropDown extends StatelessWidget {
       }).toList(),
       onChanged: (s) => onChanged.call(s.toString()),
       elevation: 0,
-      dropdownColor: AppStyle.white,
-      iconEnabledColor: AppStyle.black,
+      dropdownColor: AppStyle.cardDark,
+      iconEnabledColor: AppStyle.textPrimary,
       borderRadius: BorderRadius.circular(8.r),
       style: AppStyle.interNormal(),
       decoration: InputDecoration(
@@ -52,7 +73,7 @@ class UnderlineDropDown extends StatelessWidget {
             label != null ? "${AppHelpers.getTranslation(label!)}*" : null,
         labelStyle: AppStyle.interNormal(
           size: 14,
-          color: AppStyle.black.withOpacity(0.9),
+          color: AppStyle.textPrimary.withOpacity(0.9),
         ),
         enabledBorder: UnderlineInputBorder(
           borderSide: BorderSide.merge(

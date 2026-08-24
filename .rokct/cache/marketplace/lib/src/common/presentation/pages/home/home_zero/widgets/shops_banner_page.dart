@@ -1,0 +1,156 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+import 'package:base_sdk/src/presentation/theme/app_style.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:base_sdk/src/application/home/home_provider.dart';
+import 'package:base_sdk/src/services/app_helpers.dart';
+import 'package:base_sdk/src/services/tr_keys.dart';
+import 'package:base_sdk/src/presentation/components/app_bars/common_app_bar.dart';
+import 'package:base_sdk/src/presentation/components/buttons/pop_button.dart';
+import 'package:base_sdk/src/presentation/components/loading.dart';
+import 'package:marketplace_sdk/src/common/presentation/pages/home/home_zero/widgets/market_one_item.dart';
+import 'package:marketplace_sdk/src/common/presentation/pages/home/home_zero/widgets/market_three_item.dart';
+import 'package:base_sdk/src/models/data/shop_data.dart';
+import 'package:base_sdk/src/services/local_storage.dart';
+import 'package:base_sdk/src/presentation/components/market_item.dart';
+import 'package:marketplace_sdk/src/common/presentation/pages/home/home_zero/widgets/market_two_item.dart';
+
+// // // @RoutePage()
+class ShopsBannerPage extends ConsumerStatefulWidget {
+  final int bannerId;
+  final bool isAds;
+  final String title;
+
+  const ShopsBannerPage({
+    super.key,
+    required this.bannerId,
+    required this.title,
+    this.isAds = false,
+  });
+
+  @override
+  ConsumerState<ShopsBannerPage> createState() => _ShopsBannerPageState();
+}
+
+class _ShopsBannerPageState extends ConsumerState<ShopsBannerPage> {
+  final bool isLtr = LocalStorage.getLangLtr();
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      widget.isAds
+          ? ref
+                .read(homeProvider.notifier)
+                .fetchAdsById(context, widget.bannerId)
+          : ref
+                .read(homeProvider.notifier)
+                .fetchBannerById(context, widget.bannerId);
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(homeProvider);
+    return Directionality(
+      textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
+      child: Scaffold(
+        body: Column(
+          children: [
+            CommonAppBar(
+              child: Text(
+                widget.title,
+                style: AppStyle.interNoSemi(size: 18.sp),
+                maxLines: 2,
+              ),
+            ),
+            state.isBannerLoading
+                ? Padding(
+                    padding: EdgeInsets.only(top: 200.h),
+                    child: const Loading(),
+                  )
+                : Expanded(
+                    child: (state.banner?.shops?.isNotEmpty ?? false)
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: state.banner?.shops?.length,
+                            padding: AppHelpers.getType() == 2
+                                ? EdgeInsets.all(16.r)
+                                : EdgeInsets.symmetric(vertical: 24.h),
+                            itemBuilder: (context, index) =>
+                                AppHelpers.getType() == 0
+                                ? MarketItem(
+                                    shop:
+                                        state.banner?.shops?[index] ??
+                                        ShopData(),
+                                    isSimpleShop: true,
+                                  )
+                                : AppHelpers.getType() == 1
+                                ? MarketOneItem(
+                                    shop:
+                                        state.banner?.shops?[index] ??
+                                        ShopData(),
+                                    isSimpleShop: true,
+                                  )
+                                : AppHelpers.getType() == 2
+                                ? MarketTwoItem(
+                                    shop:
+                                        state.banner?.shops?[index] ??
+                                        ShopData(),
+                                    isSimpleShop: true,
+                                  )
+                                : MarketThreeItem(
+                                    shop:
+                                        state.banner?.shops?[index] ??
+                                        ShopData(),
+                                    isSimpleShop: true,
+                                  ),
+                          )
+                        : Column(
+                            children: [
+                              16.verticalSpace,
+                              SizedBox(
+                                height: MediaQuery.sizeOf(context).height / 3,
+                                child: SvgPicture.asset(
+                                  "assets/svgs/empty.svg",
+                                ),
+                              ),
+                              16.verticalSpace,
+                              Text(
+                                AppHelpers.getTranslation(TrKeys.noRestaurant),
+                              ),
+                            ],
+                          ),
+                  ),
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
+        floatingActionButton: Padding(
+          padding: EdgeInsets.only(left: 16.w),
+          child: const PopButton(),
+        ),
+      ),
+    );
+  }
+}

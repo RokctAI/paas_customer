@@ -5,6 +5,24 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+// HMS wave (hms_sdk): apply the AGConnect plugin ONLY when the build
+// environment exports BUILD_HMS=true (fixed contract with the CI workflow;
+// `flutter build` forwards the environment to Gradle). The plugins{} DSL
+// above cannot be gated, so this uses the imperative apply form - the
+// plugin class comes from the root build.gradle's equally-gated
+// `com.huawei.agconnect:agcp` buildscript classpath. Guarded against the
+// agconnect-services.json secret being absent even when BUILD_HMS=true:
+// warn and skip instead of hard-failing the build on a missing secret
+// file. With BUILD_HMS unset this block is inert and the build behaves
+// exactly as before.
+if (System.getenv("BUILD_HMS") == "true") {
+    if (file('agconnect-services.json').exists()) {
+        apply plugin: 'com.huawei.agconnect'
+    } else {
+        logger.warn("[hms] BUILD_HMS=true but android/app/agconnect-services.json is missing; skipping the com.huawei.agconnect plugin apply. The APK still builds, but HMS push will not be configured in it.")
+    }
+}
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
@@ -57,13 +75,14 @@ if (project.hasProperty('flutter.dart-defines')) {
 }
 
 android {
-    namespace "com.foodyman.demo"
-    compileSdkVersion 35
-    ndkVersion "26.1.10909125"
+    namespace "com.app.demo"
+    compileSdkVersion 36
+    ndkVersion "28.2.13676358"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -80,7 +99,7 @@ android {
 
     defaultConfig {
         applicationId dartDefines.CUSTOMER_ANDROID_PACKAGE_NAME
-        minSdkVersion 23
+        minSdkVersion flutter.minSdkVersion
         multiDexEnabled true
         targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
@@ -107,23 +126,20 @@ android {
         debug {
             signingConfig signingConfigs.debug
             minifyEnabled false
+            shrinkResources false
             debuggable true
         }
-        
+
         release {
             signingConfig signingConfigs.release
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
 
             // Add debug symbols
             ndk {
                 debugSymbolLevel 'SYMBOL_TABLE'
             }
-        }
-        debug {
-            minifyEnabled false
-            shrinkResources false
-            debuggable true
         }
     }
 }
@@ -135,6 +151,9 @@ flutter {
 dependencies {
     // Common dependencies for all build types
     implementation 'androidx.multidex:multidex:2.0.1'
+
+    // Java 8+ API desugaring (required by flutter_local_notifications)
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
 
     // Release-only dependencies
     releaseImplementation platform('com.google.firebase:firebase-bom:32.7.2')

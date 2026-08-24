@@ -1,3 +1,24 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
 // Copyright (c) 2024 RokctAI
 //
 // This program is free software: you can redistribute it and/or modify
@@ -36,8 +57,11 @@ import 'package:base_sdk/src/models/models.dart';
 import 'package:base_sdk/src/models/request/cart_request.dart';
 import 'package:base_sdk/src/services/app_connectivity.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
+import 'package:base_sdk/src/services/customer_cart_store.dart';
+import 'package:base_sdk/src/sync/sync_engine.dart';
 import 'package:intl/intl.dart';
 import 'package:base_sdk/src/application/order/order_state.dart';
+import 'package:base_sdk/src/handlers/api_result.dart';
 
 class OrderNotifier extends StateNotifier<OrderState> {
   final OrdersRepositoryFacade _orderRepository;
@@ -442,6 +466,21 @@ class OrderNotifier extends StateNotifier<OrderState> {
     VoidCallback? onSuccess,
     Function(String, bool)? onWebview,
   }) async {
+    // Drain gate: the server cart is where price/stock validation happens,
+    // so a queued cart.sync (local changes the server has not seen yet)
+    // must land before the order may be placed.
+    if (await SyncEngine().hasPending(kCartSyncOpType)) {
+      final cartSyncConnected = await AppConnectivity.connectivity();
+      if (cartSyncConnected) {
+        await SyncEngine().kick();
+      }
+      if (await SyncEngine().hasPending(kCartSyncOpType)) {
+        if (context.mounted) {
+          AppHelpers.showNoConnectionSnackBar(context);
+        }
+        return;
+      }
+    }
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isButtonLoading: true);

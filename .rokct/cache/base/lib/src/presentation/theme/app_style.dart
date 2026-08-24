@@ -1,12 +1,130 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 abstract class AppStyle {
   AppStyle._();
 
-  static const Color primary = Color(0xFFFF6600); //changed
+  /// The app's brand primary, injectable via [injectBrandColors].
+  ///
+  /// Deliberately NOT `const`: base_sdk must not own an app's brand colour.
+  /// The default is Juvo orange, which every Juvo app (customer, driver,
+  /// manager, pos) shares — so nothing changes visually until an app
+  /// injects. The point of making it injectable is that a per-app change
+  /// then happens in that app's HOME SDK (a manager-specific primary is set
+  /// from merchants_sdk) rather than by editing the shared kernel.
+  ///
+  /// Because this is now a getter rather than a compile-time constant, it
+  /// cannot appear inside a `const` expression — use the non-const form
+  /// (e.g. `CircularProgressIndicator(color: AppStyle.primary)`, not
+  /// `const CircularProgressIndicator(...)`).
+  static Color _primary = const Color(0xFFFF6600);
+  static Color get primary => _primary;
+
+  /// Brand fade used by chart/graph fills (e.g. revenue's income chart):
+  /// tracks the injected [primary], so it re-brands with the palette.
+  /// Getter, not const - [primary] is brand-mutable.
+  static List<Color> get primaryGradient => [
+        primary.withOpacity(0.5),
+        transparent,
+      ];
   static const Color bottomNavigationBarColor = Color(0xFF191919);
+
+  // Dark-surface tokens (page background, raised card surfaces, hairline
+  // strokes, secondary text greys). Pages use these — never raw hex — and
+  // the values are INJECTED per composed app: the kernel ships neutral
+  // defaults only, and each app's brand palette arrives at boot through
+  // [injectBrandColors], called from the app's SDK-installed theme shim
+  // (lib/presentation/theme/). Mutable statics by design — same
+  // pattern as [shimmerBase]/[shimmerHighlight] above.
+  // Mode flag — dark-first. The host sets this once per build from the app's
+  // themeMode (see app_widget). Every surface token below resolves against it,
+  // so pages keep their historical *Dark token names but get the light value
+  // in light mode. `context` isn't needed: it's a single app-wide mode.
+  static bool isDark = true;
+
+  static void setBrightness(Brightness b) => isDark = b == Brightness.dark;
+
+  // Dark backing values (injectable per composed app via injectBrandColors).
+  static Color _surfaceDark = const Color(0xFF101010);
+  static Color _cardDark = const Color(0xFF1C1C1C);
+  static Color _cardDarkAlt = const Color(0xFF181818);
+  static Color _strokeDark = const Color(0xFF2E2E2E);
+  static Color _strokeDarkSubtle = const Color(0xFF282828);
+  static Color _textDarkSecondary = const Color(0xFF8C8C8C);
+  static Color _textDarkFaint = const Color(0xFF7C7C7C);
+
+  // Light counterparts — a soft, warm-neutral light theme (no pure-white
+  // glare): the page sits a touch grey, cards a hair brighter for lift.
+  static Color _surfaceLight = const Color(0xFFECECEF);
+  static Color _cardLight = const Color(0xFFF9F9FB);
+  static Color _cardLightAlt = const Color(0xFFF1F1F4);
+  static Color _strokeLight = const Color(0xFFD9D9DE);
+  static Color _strokeLightSubtle = const Color(0xFFE4E4E9);
+  static Color _textLightSecondary = const Color(0xFF5B5B62);
+  static Color _textLightFaint = const Color(0xFF8C8C94);
+
+  // Foreground ink that flips with mode. Pages that used [white] for text now
+  // use [textPrimary] so labels read on both the dark and light surfaces.
+  static const Color _inkDark = Color(0xFFFFFFFF);
+  static const Color _inkLight = Color(0xFF1B1B20);
+
+  // Mode-resolving surface tokens.
+  static Color get surfaceDark => isDark ? _surfaceDark : _surfaceLight;
+  static Color get cardDark => isDark ? _cardDark : _cardLight;
+  static Color get cardDarkAlt => isDark ? _cardDarkAlt : _cardLightAlt;
+  static Color get strokeDark => isDark ? _strokeDark : _strokeLight;
+  static Color get strokeDarkSubtle =>
+      isDark ? _strokeDarkSubtle : _strokeLightSubtle;
+  static Color get textDarkSecondary =>
+      isDark ? _textDarkSecondary : _textLightSecondary;
+  static Color get textDarkFaint => isDark ? _textDarkFaint : _textLightFaint;
+  static Color get textPrimary => isDark ? _inkDark : _inkLight;
+
+  /// Brand-palette injection seam: a composed app overrides the DARK backing
+  /// values at boot (before the first frame). Only the parameters an app
+  /// passes change; the light counterparts keep the kernel's neutral defaults.
+  static void injectBrandColors({
+    Color? primary,
+    Color? surfaceDark,
+    Color? cardDark,
+    Color? cardDarkAlt,
+    Color? strokeDark,
+    Color? strokeDarkSubtle,
+    Color? textDarkSecondary,
+    Color? textDarkFaint,
+  }) {
+    _primary = primary ?? _primary;
+    _surfaceDark = surfaceDark ?? _surfaceDark;
+    _cardDark = cardDark ?? _cardDark;
+    _cardDarkAlt = cardDarkAlt ?? _cardDarkAlt;
+    _strokeDark = strokeDark ?? _strokeDark;
+    _strokeDarkSubtle = strokeDarkSubtle ?? _strokeDarkSubtle;
+    _textDarkSecondary = textDarkSecondary ?? _textDarkSecondary;
+    _textDarkFaint = textDarkFaint ?? _textDarkFaint;
+  }
   static const Color enterOrderButton = Color(0xFFF4F8F7);
   static const Color tabBarBorderColor = Color(0xFFDEDFE1);
   static const Color orderButtonColor = Color(0xFF323232);
@@ -14,6 +132,28 @@ abstract class AppStyle {
   static const Color switchBg = Color(0xFFD3D3D3);
   static const Color white = Color(0xFFFFFFFF);
   static const Color transparent = Color(0x00FFFFFF);
+
+  /// The ONE system-chrome style every composed app runs under: both bars
+  /// fully transparent (the app draws full frame behind them — no OS scrim
+  /// either), with white status/nav icons, because these apps' top and
+  /// bottom regions are dark-on-dark by design (dark theme + brand
+  /// primaries), so light icons are what keeps the clock/battery visible.
+  /// Referenced by the composed main.dart (boot default), the shell theme's
+  /// AppBarTheme.systemOverlayStyle (Material AppBars otherwise repaint the
+  /// navigation bar opaque black via SystemUiOverlayStyle.light) and the
+  /// splash's edge-to-edge re-assert. A screen with a genuinely light top
+  /// region can still override locally with an
+  /// AnnotatedRegion<SystemUiOverlayStyle>.
+  static const SystemUiOverlayStyle systemUiOverlay = SystemUiOverlayStyle(
+    statusBarColor: transparent,
+    statusBarIconBrightness: Brightness.light,
+    statusBarBrightness: Brightness.dark,
+    systemStatusBarContrastEnforced: false,
+    systemNavigationBarColor: transparent,
+    systemNavigationBarDividerColor: transparent,
+    systemNavigationBarIconBrightness: Brightness.light,
+    systemNavigationBarContrastEnforced: false,
+  );
   static const Color black = Color(0xFF232B2F);
   static const Color blackWithOpacity = Color(0x20232B2F);
   static const Color whiteWithOpacity = Color(0x90FFFFFF);
@@ -48,6 +188,10 @@ abstract class AppStyle {
   static const Color rate = Color(0xFFFFB800);
   static const Color red = Color(0xFFFF3D00);
   static const Color redBg = Color(0xFFFFF2EE);
+  // Pending-status pair (tint background + strong foreground) used by the
+  // manager food cards installed from orders_sdk/products_sdk templates.
+  static const Color pending = Color(0xFFFEFAF2);
+  static const Color pendingDark = Color(0xFFF19204);
   static const Color blue = Color(0xFF03758E);
   static const Color blueBonus = Color(0xFF0D5FFF);
   static const Color divider = Color.fromRGBO(0, 0, 0, 0.04);

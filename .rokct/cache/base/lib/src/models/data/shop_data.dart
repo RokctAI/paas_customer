@@ -1,3 +1,24 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
 import 'package:base_sdk/src/models/data/bonus_data.dart';
 import 'package:base_sdk/src/models/data/translation.dart';
 
@@ -100,7 +121,7 @@ class ShopData {
       pricePerKm: json["price_per_km"] ?? 0,
       minPrice: json["price"] ?? 0,
       percentage: json["percentage"] ?? 0,
-      phone: json["phone"].toString(),
+      phone: json["phone"]?.toString(),
       visibility: json["visibility"],
       //open: (json["open"].runtimeType == int ? (json["open"] == 1) : json["open"]) ?? true,
       open: openValue,
@@ -141,7 +162,9 @@ class ShopData {
               json["tags"].map((x) => TagsModel.fromJson(x)),
             ),
       seller: json["seller"] == null ? null : Seller.fromJson(json["seller"]),
-      avgRate: (double.tryParse(json["rating_avg"].toString()) ?? 0.0)
+      avgRate:
+          (double.tryParse((json["rating_avg"] ?? json["avg_rate"]).toString()) ??
+                  0.0)
           .toStringAsFixed(1),
       rateCount: (double.tryParse(json["reviews_count"].toString()) ?? 0.0)
           .toStringAsFixed(0),
@@ -160,7 +183,8 @@ class ShopData {
           ? []
           : List<ShopPayment?>.from(
               json["shop_payments"]!.map((x) {
-                if (x["payment"]["active"]) {
+                final active = x["payment"]?["active"];
+                if (active == true || active == 1) {
                   return ShopPayment.fromJson(x);
                 }
               }),
@@ -370,7 +394,9 @@ class Payment {
   factory Payment.fromJson(Map<String, dynamic> json) => Payment(
         id: json["id"],
         tag: json["tag"],
-        active: json["active"],
+        active: json["active"].runtimeType == int
+            ? (json["active"] != 0)
+            : json["active"],
         translation: json["translation"],
       );
 

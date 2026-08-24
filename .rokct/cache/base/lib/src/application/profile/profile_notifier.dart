@@ -1,6 +1,28 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
 import 'package:auto_route/auto_route.dart';
 import 'package:base_sdk/src/navigation/app_routes.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -18,6 +40,7 @@ import 'package:base_sdk/src/domain/interface/gallery.dart';
 import 'package:base_sdk/src/domain/interface/shops.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:base_sdk/src/application/profile/profile_state.dart';
+import 'package:base_sdk/src/handlers/api_result.dart';
 
 class ProfileNotifier extends StateNotifier<ProfileState> {
   final UserRepositoryFacade _userRepository;
@@ -248,8 +271,23 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
   }
 
   Future<void> logOut() async {
-    final fcm = await FirebaseMessaging.instance.getToken();
-    _userRepository.logoutAccount(fcm: fcm ?? "");
+    // firebase_messaging has no Windows/Linux implementation — on desktop
+    // getToken() throws [core/no-app] and the backend logout call below
+    // never fired. Same platform guard + fail-open idiom as comms'
+    // firebase boot hook: skip the token sync where FCM does not exist and
+    // proceed straight to the backend call.
+    String fcm = "";
+    if (!kIsWeb &&
+        (defaultTargetPlatform == TargetPlatform.android ||
+            defaultTargetPlatform == TargetPlatform.iOS ||
+            defaultTargetPlatform == TargetPlatform.macOS)) {
+      try {
+        fcm = await FirebaseMessaging.instance.getToken() ?? "";
+      } catch (e) {
+        debugPrint('==> logout fcm token skipped: $e');
+      }
+    }
+    _userRepository.logoutAccount(fcm: fcm);
   }
 
   Future<void> deleteAccount(BuildContext context) async {

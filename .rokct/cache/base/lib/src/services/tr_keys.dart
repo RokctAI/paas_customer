@@ -1,5 +1,36 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
 class TrKeys {
   TrKeys._();
+
+  // @sdk-tr-keys-start
+  static const String ageVerification = 'age_verification';
+  static const String ageVerificationRequiredForAdultsOnly = 'age_verification_is_required_to_order_adults_only_items';
+  static const String adultsOnlyBirthDateNeeded = 'this_order_includes_an_adults_only_item_please_confirm_your_date_of_birth';
+  static const String cashToCollectFromRecipient = 'cash_to_collect_from_recipient';
+  static const String driverCollectsCashFromRecipient = 'driver_collects_cash_from_recipient';
+  static const String enterCashAmountGreaterThanZero = 'enter_cash_amount_greater_than_zero';
+  static const String underagePurchaseBlocked = 'you_must_be_18_or_older_to_order_adults_only_items';
+  // @sdk-tr-keys-end
 
   static const String bgPicture = 'bg_picture';
   static const String documents = 'documents';
@@ -123,6 +154,7 @@ class TrKeys {
   static const String openUntil = 'open_until';
   static const String notEnoughMoney = 'not_enough_money';
   static const String signUpToDeliver = 'sign_up_to_deliver';
+  static const String open = 'open';
   static const String close = 'close';
   static const String terms = 'terms';
   static const String privacyPolicy = 'privacy_policy';
@@ -284,7 +316,6 @@ class TrKeys {
   static const String county = 'country';
   static const String orAccessQuickly = 'or_access_quickly';
   static const String keepLogged = 'keep_me_logged_in';
-  static const String foodyman = 'foodyman';
   static const String shopList = 'shop_list';
   static const String viewMap = 'view_map';
   static const String address = 'address';
@@ -385,6 +416,7 @@ class TrKeys {
   static const String delivery = 'delivery';
   static const String deliveryAddress = 'delivery_address';
   static const String deliveryTime = 'delivery_time';
+  static const String selectDeliveryDate = 'select_delivery_date';
   static const String noSearchResults = 'no_search_results';
   static const String banner = 'banner';
   static const String currencies = 'currencies';
@@ -454,8 +486,8 @@ class TrKeys {
   static const String introbriefslide4 = 'introbrief_slide4';
   static const String introbriefslide5 = 'introbrief_slide5';
 
-  static const String closedslide1 = 'closed_slide1';
-  static const String closedbriefslide1 = 'closedbrief_slide1';
+  static const String maintenanceTitle = 'maintenance_title';
+  static const String maintenanceBrief = 'maintenance_brief';
   static const String hello = 'hello';
   static const String hey = 'hey';
   static const String there = 'there';
@@ -470,7 +502,7 @@ class TrKeys {
   static const String paymentMethodPrefix = 'paymentMethod_';
   static const String isAd = 'isAd';
   static const String searchUser = 'searchUser';
-  static String thisFieldIsNotMinusOrZero = 'thisFieldIsNotMinusOrZero';
+  static const String thisFieldIsNotMinusOrZero = 'thisFieldIsNotMinusOrZero';
   static const String members = 'members';
   static const String thereAreNoPaymentTypesHere = 'thereAreNoPaymentTypesHere';
   static const String fillWallet = 'fillWallet';
@@ -485,8 +517,8 @@ class TrKeys {
   static const String veryGood = 'veryGood';
   static const String exceptional = 'exceptional';
   static const String km = 'km';
-  static String comingSoon = 'comingSoon';
-  static String featureNotAvailable = 'featureNotAvailable';
+  static const String comingSoon = 'comingSoon';
+  static const String featureNotAvailable = 'featureNotAvailable';
   static const String ok = 'ok';
 
   static const String returnHome = 'return.home';
@@ -498,65 +530,70 @@ class TrKeys {
   static const String thankYouPurchase = 'thank.you.purchase';
   static const String yourOrderShipping = 'your.order.shipping';
 
-  static String enterEmailOrPhone = 'enterEmailOrPhone';
+  static const String enterEmailOrPhone = 'enterEmailOrPhone';
 
-  static String emailOrPhone = 'emailOrPhone';
+  static const String emailOrPhone = 'emailOrPhone';
 
-  static String enterValidEmailOrPhone = 'enterValidEmailOrPhone';
+  static const String enterValidEmailOrPhone = 'enterValidEmailOrPhone';
 
-  static String pleaseSelectUser = 'pleaseSelectUser';
+  static const String pleaseSelectUser = 'pleaseSelectUser';
 
-  static String shopping = 'you.are.shopping.at';
+  static const String shopping = 'you.are.shopping.at';
 
-  static String weAreDelivering = 'Note:.We.will.be.delivering.to.this.address';
+  static const String weAreDelivering = 'Note:.We.will.be.delivering.to.this.address';
 
   static const String usingDefaultLocation =
       'using_default_location,_set_address';
 
-  static String selectCard = 'select.card';
+  static const String selectCard = 'select.card';
 
-  static String selectSavedCard = 'select.saved.card';
+  static const String selectSavedCard = 'select.saved.card';
 
-  static String deleteSavedCard = 'delete.saved.card';
+  static const String deleteSavedCard = 'delete.saved.card';
 
-  static String noSavedCard = 'no.saved.card';
+  static const String noSavedCard = 'no.saved.card';
 
-  static String payWithCard = 'pay.with.card';
+  static const String payWithCard = 'pay.with.card';
 
-  static String completeCardDetails = 'complete.card.details';
+  static const String completeCardDetails = 'complete.card.details';
 
-  static String payWithSavedCard = 'pay.with.saved.card';
+  static const String payWithSavedCard = 'pay.with.saved.card';
 
-  static String payWithNewCard = 'pay.with.new.card';
+  static const String payWithNewCard = 'pay.with.new.card';
 
-  static String useYourSavedCards = 'use.you.saved.cards';
+  static const String useYourSavedCards = 'use.you.saved.cards';
 
-  static String payNow = 'pay.now';
+  static const String payNow = 'pay.now';
 
-  static String payment = 'payment';
+  // NOTE: no `payment` constant here on purpose. orders_sdk declares
+  // `payment` in its manifest tr_keys, and the composer injects every
+  // SDK-declared key into the @sdk-tr-keys block above; keeping a copy here
+  // too makes the composed file declare `payment` twice ("already declared
+  // in this scope"). The installer's collision guard only dedupes SDK vs
+  // SDK, not SDK vs base, so base must not shadow SDK-declared keys.
 
-  static String expires = 'expires';
+  static const String expires = 'expires';
 
-  static String stay = 'stay';
+  static const String stay = 'stay';
 
-  static String successfullyDeleted = 'successfully.Deleted';
+  static const String successfullyDeleted = 'successfully.Deleted';
 
-  static String delete = 'delete';
+  static const String delete = 'delete';
 
-  static String addNewCardDescription =
+  static const String addNewCardDescription =
       'pay.with.card.to.save.it.for.future.orders';
 
-  static String cardWillBeSaved = 'your.card.will.be.saved.for.future.payments';
+  static const String cardWillBeSaved = 'your.card.will.be.saved.for.future.payments';
 
-  static String enterCardDirectly = 'enter.Card.Directly';
+  static const String enterCardDirectly = 'enter.Card.Directly';
 
-  static String cardAddedSuccessfully = 'card.Added.Successfully';
+  static const String cardAddedSuccessfully = 'card.Added.Successfully';
 
-  static String useThisCard = 'use.This.Card';
+  static const String useThisCard = 'use.This.Card';
 
-  static String cards = 'Saved.Cards';
+  static const String cards = 'Saved.Cards';
 
-  static String addNewCard = 'add.New.Card';
+  static const String addNewCard = 'add.New.Card';
 
   ///wallet sends
   static const String topUpWallet = 'top_up_wallet';
@@ -612,9 +649,9 @@ class TrKeys {
   static const String withdraw = 'withdraw';
 
   static const String daysInAppThisYear = 'daysInAppThisYear';
-  static String goodMorning = 'good.Morning';
-  static String goodAfternoon = 'goodAfternoon';
-  static String goodEvening = 'good.Evening';
+  static const String goodMorning = 'good.Morning';
+  static const String goodAfternoon = 'goodAfternoon';
+  static const String goodEvening = 'good.Evening';
 
   static const String period = 'period';
   static const String pause = 'pause';
@@ -639,4 +676,62 @@ class TrKeys {
   static const String noData = 'no.data';
   static const String duration = 'duration';
   static const String selectTime = 'select.time';
+
+  // --- Shared by the paas_manager and paas_driver forks (added 2026-08-02).
+  // Hand-written here rather than declared in either SDK's manifest tr_keys:
+  // the installer resolves a double declaration by silently keeping whichever
+  // SDK it sees first, so keys two or more consumers need belong in base_sdk.
+  // Values follow base_sdk's dominant convention (snake_case / lowercase,
+  // 476 of 532), which is what paas_manager already used; where paas_driver's
+  // local copy disagreed it was Title-Case display text - the outlier style
+  // here at 7 of 532.
+  static const String acceptedOrders = 'accepted_orders';
+  static const String active = 'active';
+  static const String addComment = 'add_comment';
+  static const String amount = 'amount';
+  static const String customerOrder = 'customer_order';
+  static const String deletedUser = 'deleted.user';
+  static const String deliveryZone = 'delivery_zone';
+  static const String demoLoginPassword = 'demo_login_password';
+  static const String doYouReallyWantToLogout = 'do_you_really_want_to_logout';
+  static const String earningsChart = 'earnings_chart';
+  static const String earningsRestaurant = 'earnings_of_the_restaurant';
+  static const String editProduct = 'edit_product';
+  static const String enterOpeningHours = 'enter_the_restaurant_opening_hours';
+  static const String fm = 'fm';
+  static const String foods = 'foods';
+  static const String juvoBenefit = 'juvo_benefit';
+  static const String inactiveTime = 'choose_inactive_meal_time';
+  static const String income = 'income';
+  static const String keepMeLoggedIn = 'keep_me_logged_in';
+  static const String lastIncome = 'last_income';
+  static const String lastname = 'lastname';
+  static const String locationConfirmation = 'location_confirmation';
+  static const String loginCredentialsAreNotValid = 'login_credentials_are_not_valid';
+  static const String monthly = 'monthly';
+  static const String moreOrders = 'more_details_about_all_orders';
+  static const String myOrderHistory = 'my_order_history';
+  static const String newOrders = 'new_orders';
+  static const String noNotices = 'no_notices';
+  static const String orderPrice = 'order_price';
+  static const String ordering = 'ordering';
+  static const String orders = 'orders';
+  static const String overall = 'overall';
+  static const String parameters = 'parameters';
+  static const String passwordShouldContainMinimum6Characters = 'password_should_contain_minimum_6_characters';
+  static const String rejectedOrders = 'rejected_orders';
+  static const String restaurantSettings = 'restaurant_settings';
+  static const String sections = 'sections';
+  static const String selectDesiredOrderHistory = 'select_desired_order_history';
+  static const String setBusinessDay = 'set_as_a_business_day';
+  static const String settings = 'settings';
+  static const String sideDish = 'side_dish';
+  static const String smsDidntSend = 'sms_didnt_send';
+  static const String statistics = 'statistics';
+  static const String toBuy = 'to_buy';
+  static const String totalOrders = 'total.orders';
+  static const String userAlready = 'user.already';
+  static const String weekly = 'weekly';
+  static const String withdrawMoney = 'withdraw_money';
+  static const String yourBenefit = 'your_benefit';
 }

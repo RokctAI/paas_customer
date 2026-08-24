@@ -1,1 +1,0 @@
-enum RecurringPaymentType { subscription, tokenization }

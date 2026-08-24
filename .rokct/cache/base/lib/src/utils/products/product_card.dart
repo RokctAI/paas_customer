@@ -1,3 +1,24 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -84,6 +105,17 @@ class ProductCard extends ConsumerWidget {
       description,
     );
 
+    // Age-restricted (18+) flag from the backend `is_adult` field, with the
+    // legacy keyword detection kept as a fallback.
+    bool isAdultProduct = keywords.isAdult;
+    if (!isAdultProduct) {
+      try {
+        isAdultProduct = product.isAdult == true;
+      } catch (_) {
+        // Model without an isAdult member; keyword fallback already applied.
+      }
+    }
+
     // Calculate price per unit if needed
     String? pricePerUnit;
     if (showPerUnitPrice && !isLowStock) {
@@ -105,7 +137,7 @@ class ProductCard extends ConsumerWidget {
     return Container(
       margin: EdgeInsets.all(4.r),
       decoration: BoxDecoration(
-        color: AppStyle.white,
+        color: AppStyle.cardDark,
         borderRadius: BorderRadius.circular(10.r),
       ),
       child: Stack(
@@ -151,7 +183,7 @@ class ProductCard extends ConsumerWidget {
                               : (title ?? ""),
                           style: AppStyle.interNoSemi(
                             size: 12,
-                            color: AppStyle.black,
+                            color: AppStyle.textPrimary,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
@@ -347,7 +379,7 @@ class ProductCard extends ConsumerWidget {
             ),
 
           // Adult content badge (18+)
-          if (keywords.isAdult)
+          if (isAdultProduct)
             Positioned(
               top: 40.r,
               right: 8.r,

@@ -1,3 +1,24 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -7,8 +28,13 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'kv_tables.dart';
+import '../sync/id_mappings_table.dart';
+import '../sync/outbox_table.dart';
 
-// @sdk-database-table-imports
+// @sdk-database-imports-start
+import 'injected/auth_sdk__offline_user_table.dart';
+import 'injected/fav_sdk__drift_tables.dart';
+// @sdk-database-imports-end
 
 part 'app_database.g.dart';
 
@@ -22,7 +48,12 @@ part 'app_database.g.dart';
 @DriftDatabase(
   tables: [
     KeyValueTable,
-    // @sdk-database-tables
+    OutboxTable,
+    IdMappingsTable,
+    // @sdk-database-tables-start
+    OfflineUsersTable,
+    ShopTable,
+    // @sdk-database-tables-end
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -34,8 +65,11 @@ class AppDatabase extends _$AppDatabase {
   factory AppDatabase() => _instance ??= AppDatabase._internal();
   static AppDatabase? _instance;
 
+  /// Base-owned schema versions stay low (< 10); SDK manifests claim higher
+  /// numbers through the composer's migration injection (auth is around 16),
+  /// and the composer raises this getter in the cached copy accordingly.
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 16;
 
   @override
   MigrationStrategy get migration {
@@ -44,7 +78,26 @@ class AppDatabase extends _$AppDatabase {
         await m.createAll();
       },
       onUpgrade: (Migrator m, int from, int to) async {
-        // @sdk-database-migrations
+        // Base-owned steps run before SDK-injected ones and guard on their
+        // own low version numbers only.
+        if (from < 2) {
+          await m.createTable(outboxTable);
+          await m.createTable(idMappingsTable);
+        }
+        // @sdk-database-migrations-start
+        if (from < 16) { await m.createTable(offlineUsersTable); }
+        if (from < 6) { await m.createTable(shopTable); }
+        // @sdk-database-migrations-end
+      },
+      beforeOpen: (details) async {
+        // Safety net for composed apps: injected SDK migrations own the
+        // effective schemaVersion there, so a database already past base's
+        // own version numbers would skip the onUpgrade step above. Drift's
+        // createTable emits CREATE TABLE IF NOT EXISTS, making this
+        // idempotent and a no-op once the tables exist.
+        final m = createMigrator();
+        await m.createTable(outboxTable);
+        await m.createTable(idMappingsTable);
       },
     );
   }
