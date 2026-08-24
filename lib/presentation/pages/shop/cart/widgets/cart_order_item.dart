@@ -3,15 +3,15 @@ import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:foodyman/application/order/order_provider.dart';
-import 'package:foodyman/infrastructure/models/data/addons_data.dart';
-import 'package:foodyman/infrastructure/models/data/order_active_model.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/custom_network_image.dart';
-import 'package:foodyman/presentation/pages/shop/cart/widgets/note_product.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
-import 'package:foodyman/infrastructure/models/data/cart_data.dart';
+import 'package:paas_customer/application/order/order_provider.dart';
+import 'package:paas_customer/infrastructure/models/data/addons_data.dart';
+import 'package:paas_customer/infrastructure/models/data/order_active_model.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/components/custom_network_image.dart';
+import 'package:paas_customer/presentation/pages/shop/cart/widgets/note_product.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
+import 'package:paas_customer/infrastructure/models/data/cart_data.dart';
 
 class CartOrderItem extends StatelessWidget {
   final CartDetail? cart;

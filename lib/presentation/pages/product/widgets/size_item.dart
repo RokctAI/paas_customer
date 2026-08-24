@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/vibration.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:paas_customer/infrastructure/services/vibration.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
 
 class SizeItem extends StatelessWidget {
   final VoidCallback onTap;

@@ -12,7 +12,7 @@ import '../app_constants.dart';
 import '../application/poidata/poi_data_provider.dart';
 import '../infrastructure/models/data/poi_data.dart';
 
-//import 'package:foodyman/utils/excluded_product_ids.dart';
+//import 'package:paas_customer/utils/excluded_product_ids.dart';
 
 class AppInitializer extends StatefulWidget {
   final ProviderContainer providerContainer;

@@ -1,7 +1,7 @@
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
 
-import 'package:foodyman/app_constants.dart';
+import 'package:paas_customer/app_constants.dart';
 
 class ShopRequest {
   final int page;

@@ -3,32 +3,32 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/application/shop/shop_notifier.dart';
-import 'package:foodyman/infrastructure/models/data/shop_data.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/time_service.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-import 'package:foodyman/presentation/components/loading.dart';
-import 'package:foodyman/application/like/like_notifier.dart';
-import 'package:foodyman/application/like/like_provider.dart';
-import 'package:foodyman/presentation/components/text_fields/outline_bordered_text_field.dart';
-import 'package:foodyman/presentation/pages/product/product_page.dart';
-import 'package:foodyman/presentation/pages/shop/widgets/category_tab_bar.widget.dart';
-import 'package:foodyman/presentation/pages/shop/widgets/product_list.dart';
-import 'package:foodyman/presentation/pages/shop/widgets/shimmer_product_list.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:paas_customer/application/shop/shop_notifier.dart';
+import 'package:paas_customer/infrastructure/models/data/shop_data.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/time_service.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/components/buttons/custom_button.dart';
+import 'package:paas_customer/presentation/components/buttons/pop_button.dart';
+import 'package:paas_customer/presentation/components/loading.dart';
+import 'package:paas_customer/application/like/like_notifier.dart';
+import 'package:paas_customer/application/like/like_provider.dart';
+import 'package:paas_customer/presentation/components/text_fields/outline_bordered_text_field.dart';
+import 'package:paas_customer/presentation/pages/product/product_page.dart';
+import 'package:paas_customer/presentation/pages/shop/widgets/category_tab_bar.widget.dart';
+import 'package:paas_customer/presentation/pages/shop/widgets/product_list.dart';
+import 'package:paas_customer/presentation/pages/shop/widgets/shimmer_product_list.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-import 'package:foodyman/application/shop/shop_provider.dart';
-import 'package:foodyman/application/shop_order/shop_order_provider.dart';
-import 'package:foodyman/infrastructure/models/response/all_products_response.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/application/shop/shop_provider.dart';
+import 'package:paas_customer/application/shop_order/shop_order_provider.dart';
+import 'package:paas_customer/infrastructure/models/response/all_products_response.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
 
-import 'package:foodyman/presentation/components/buttons/animation_button_effect.dart';
-import 'package:foodyman/presentation/components/blur_wrap.dart';
+import 'package:paas_customer/presentation/components/buttons/animation_button_effect.dart';
+import 'package:paas_customer/presentation/components/blur_wrap.dart';
 
 import '../../../app_constants.dart';
 import '../../../application/home/home_provider.dart';
@@ -36,7 +36,7 @@ import '../../../infrastructure/models/data/cart_data.dart';
 import 'cart/cart_order_page.dart';
 import 'widgets/shop_page_avatar.dart';
 
-import 'package:foodyman/presentation/routes/app_router.dart';
+import 'package:paas_customer/presentation/routes/app_router.dart';
 
 @RoutePage()
 class ShopPage extends ConsumerStatefulWidget {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:foodyman/domain/interface/products.dart';
-import 'package:foodyman/domain/interface/shops.dart';
-import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/services/app_connectivity.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/domain/interface/products.dart';
+import 'package:paas_customer/domain/interface/shops.dart';
+import 'package:paas_customer/infrastructure/models/models.dart';
+import 'package:paas_customer/infrastructure/services/app_connectivity.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
 
 import 'search_state.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
 import 'package:geolocator/geolocator.dart';
 
 class LocationService {

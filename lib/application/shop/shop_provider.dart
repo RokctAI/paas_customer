@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:foodyman/domain/di/dependency_manager.dart';
+import 'package:paas_customer/domain/di/dependency_manager.dart';
 
 import 'shop_notifier.dart';
 import 'shop_state.dart';

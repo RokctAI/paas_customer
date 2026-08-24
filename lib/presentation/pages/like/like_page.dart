@@ -4,22 +4,22 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-//import 'package:foodyman/application/home/home_provider.dart';
-import 'package:foodyman/application/like/like_notifier.dart';
-import 'package:foodyman/application/like/like_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/common_app_bar.dart';
-import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-import 'package:foodyman/presentation/components/market_item.dart';
-import 'package:foodyman/presentation/pages/home/shimmer/all_shop_shimmer.dart';
+//import 'package:paas_customer/application/home/home_provider.dart';
+import 'package:paas_customer/application/like/like_notifier.dart';
+import 'package:paas_customer/application/like/like_provider.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/components/app_bars/common_app_bar.dart';
+import 'package:paas_customer/presentation/components/buttons/pop_button.dart';
+import 'package:paas_customer/presentation/components/market_item.dart';
+import 'package:paas_customer/presentation/pages/home/shimmer/all_shop_shimmer.dart';
 
 import '../home/home_four/widgets/market_one_item.dart';
 import '../home/home_four/widgets/market_three_item.dart';
 import '../home/home_four/widgets/market_two_item.dart';
 
-import 'package:foodyman/presentation/theme/theme.dart';
-import 'package:foodyman/presentation/components/badges/empty_badge.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
+import 'package:paas_customer/presentation/components/badges/empty_badge.dart';
 
 import '../../../application/main/main_provider.dart';
 

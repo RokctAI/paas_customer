@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:foodyman/domain/di/dependency_manager.dart';
-import 'package:foodyman/domain/interface/orders.dart';
-import 'package:foodyman/infrastructure/models/data/order_active_model.dart';
-import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/domain/handlers/handlers.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
+import 'package:paas_customer/domain/di/dependency_manager.dart';
+import 'package:paas_customer/domain/interface/orders.dart';
+import 'package:paas_customer/infrastructure/models/data/order_active_model.dart';
+import 'package:paas_customer/infrastructure/models/models.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/domain/handlers/handlers.dart';
+import 'package:paas_customer/infrastructure/services/enums.dart';
 
 class OrdersRepository implements OrdersRepositoryFacade {
   @override

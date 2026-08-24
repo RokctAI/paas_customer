@@ -2,16 +2,16 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/application/order/order_provider.dart';
-import 'package:foodyman/application/shop_order/shop_order_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
-import 'package:foodyman/infrastructure/services/tpying_delay.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
-import 'package:foodyman/presentation/pages/shop/cart/widgets/cart_clear_dialog.dart';
-import 'package:foodyman/presentation/pages/shop/cart/widgets/cart_order_item.dart';
-import 'package:foodyman/presentation/theme/app_style.dart';
+import 'package:paas_customer/application/order/order_provider.dart';
+import 'package:paas_customer/application/shop_order/shop_order_provider.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/enums.dart';
+import 'package:paas_customer/infrastructure/services/tpying_delay.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/components/title_icon.dart';
+import 'package:paas_customer/presentation/pages/shop/cart/widgets/cart_clear_dialog.dart';
+import 'package:paas_customer/presentation/pages/shop/cart/widgets/cart_order_item.dart';
+import 'package:paas_customer/presentation/theme/app_style.dart';
 
 class OrderCarts extends StatefulWidget {
   final double lat;

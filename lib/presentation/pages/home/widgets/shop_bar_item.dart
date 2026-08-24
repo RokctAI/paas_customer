@@ -4,11 +4,11 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:foodyman/infrastructure/models/data/story_data.dart';
-import 'package:foodyman/presentation/components/custom_network_image.dart';
-import 'package:foodyman/presentation/components/shop_avarat.dart';
-import 'package:foodyman/presentation/routes/app_router.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:paas_customer/infrastructure/models/data/story_data.dart';
+import 'package:paas_customer/presentation/components/custom_network_image.dart';
+import 'package:paas_customer/presentation/components/shop_avarat.dart';
+import 'package:paas_customer/presentation/routes/app_router.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
 
 class ShopBarItem extends StatelessWidget {
   final RefreshController controller;

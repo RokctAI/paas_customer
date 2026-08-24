@@ -4,20 +4,20 @@ import 'package:flutter/services.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
+import 'package:paas_customer/infrastructure/services/enums.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:foodyman/infrastructure/models/data/user.dart';
-import 'package:foodyman/app_constants.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/app_bar_bottom_sheet.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/keyboard_dismisser.dart';
-import 'package:foodyman/presentation/components/text_fields/outline_bordered_text_field.dart';
-import 'package:foodyman/presentation/pages/auth/confirmation/register_confirmation_page.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
-import 'package:foodyman/application/auth/auth.dart';
+import 'package:paas_customer/infrastructure/models/data/user.dart';
+import 'package:paas_customer/app_constants.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/components/app_bars/app_bar_bottom_sheet.dart';
+import 'package:paas_customer/presentation/components/buttons/custom_button.dart';
+import 'package:paas_customer/presentation/components/keyboard_dismisser.dart';
+import 'package:paas_customer/presentation/components/text_fields/outline_bordered_text_field.dart';
+import 'package:paas_customer/presentation/pages/auth/confirmation/register_confirmation_page.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
+import 'package:paas_customer/application/auth/auth.dart';
 
 @RoutePage()
 class ResetPasswordPage extends ConsumerWidget {

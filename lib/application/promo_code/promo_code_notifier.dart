@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:foodyman/domain/interface/orders.dart';
-import 'package:foodyman/infrastructure/services/app_connectivity.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/domain/interface/orders.dart';
+import 'package:paas_customer/infrastructure/services/app_connectivity.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
 
 import 'promo_code_state.dart';
 

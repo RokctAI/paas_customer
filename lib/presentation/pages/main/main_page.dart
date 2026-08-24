@@ -21,28 +21,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/application/main/main_notifier.dart';
-import 'package:foodyman/application/profile/profile_provider.dart';
-import 'package:foodyman/application/shop_order/shop_order_provider.dart';
-import 'package:foodyman/infrastructure/models/data/cart_data.dart';
-import 'package:foodyman/infrastructure/models/data/profile_data.dart';
-import 'package:foodyman/infrastructure/models/data/remote_message_data.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/animation_button_effect.dart';
-import 'package:foodyman/presentation/components/custom_network_image.dart';
-import 'package:foodyman/presentation/components/keyboard_dismisser.dart';
-import 'package:foodyman/presentation/pages/home/home_page.dart';
+import 'package:paas_customer/application/main/main_notifier.dart';
+import 'package:paas_customer/application/profile/profile_provider.dart';
+import 'package:paas_customer/application/shop_order/shop_order_provider.dart';
+import 'package:paas_customer/infrastructure/models/data/cart_data.dart';
+import 'package:paas_customer/infrastructure/models/data/profile_data.dart';
+import 'package:paas_customer/infrastructure/models/data/remote_message_data.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/components/buttons/animation_button_effect.dart';
+import 'package:paas_customer/presentation/components/custom_network_image.dart';
+import 'package:paas_customer/presentation/components/keyboard_dismisser.dart';
+import 'package:paas_customer/presentation/pages/home/home_page.dart';
 
 import '../../../app_constants.dart';
 
-import 'package:foodyman/presentation/pages/like/like_page.dart';
-import 'package:foodyman/presentation/pages/main/widgets/bottom_navigator_three.dart';
-import 'package:foodyman/presentation/pages/profile/profile_page.dart';
-import 'package:foodyman/presentation/pages/search/search_page.dart';
-import 'package:foodyman/presentation/pages/service/service_page.dart';
-import 'package:foodyman/presentation/routes/app_router.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:paas_customer/presentation/pages/like/like_page.dart';
+import 'package:paas_customer/presentation/pages/main/widgets/bottom_navigator_three.dart';
+import 'package:paas_customer/presentation/pages/profile/profile_page.dart';
+import 'package:paas_customer/presentation/pages/search/search_page.dart';
+import 'package:paas_customer/presentation/pages/service/service_page.dart';
+import 'package:paas_customer/presentation/routes/app_router.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../application/home/home_provider.dart';
@@ -63,8 +63,8 @@ import 'widgets/bottom_navigator_one.dart';
 import 'widgets/bottom_navigator_two.dart';
 
 import 'package:remixicon/remixicon.dart';
-import 'package:foodyman/presentation/pages/parcel/parcel_page.dart';
-import 'package:foodyman/presentation/pages/profile/wallet_history.dart';
+import 'package:paas_customer/presentation/pages/parcel/parcel_page.dart';
+import 'package:paas_customer/presentation/pages/profile/wallet_history.dart';
 
 @RoutePage()
 class MainPage extends StatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:foodyman/domain/di/dependency_manager.dart';
-import 'package:foodyman/domain/handlers/handlers.dart';
-import 'package:foodyman/domain/interface/auth.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/domain/di/dependency_manager.dart';
+import 'package:paas_customer/domain/handlers/handlers.dart';
+import 'package:paas_customer/domain/interface/auth.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
 
 import '../models/models.dart';
 

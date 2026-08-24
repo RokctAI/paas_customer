@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/app_bar_bottom_sheet.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/text_fields/outline_bordered_text_field.dart';
-import 'package:foodyman/presentation/theme/app_style.dart';
-import 'package:foodyman/application/auth/auth.dart';
-import 'package:foodyman/presentation/components/keyboard_dismisser.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/components/app_bars/app_bar_bottom_sheet.dart';
+import 'package:paas_customer/presentation/components/buttons/custom_button.dart';
+import 'package:paas_customer/presentation/components/text_fields/outline_bordered_text_field.dart';
+import 'package:paas_customer/presentation/theme/app_style.dart';
+import 'package:paas_customer/application/auth/auth.dart';
+import 'package:paas_customer/presentation/components/keyboard_dismisser.dart';
 
 class SetPasswordPage extends ConsumerWidget {
   const SetPasswordPage({super.key});

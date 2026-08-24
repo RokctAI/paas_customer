@@ -3,17 +3,17 @@ import 'dart:convert';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:foodyman/domain/interface/cart.dart';
-import 'package:foodyman/infrastructure/models/data/addons_data.dart';
-import 'package:foodyman/infrastructure/models/data/cart_data.dart';
-import 'package:foodyman/infrastructure/models/request/cart_request.dart';
-import 'package:foodyman/app_constants.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/routes/app_router.dart';
-import 'package:foodyman/infrastructure/services/app_connectivity.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tpying_delay.dart';
+import 'package:paas_customer/domain/interface/cart.dart';
+import 'package:paas_customer/infrastructure/models/data/addons_data.dart';
+import 'package:paas_customer/infrastructure/models/data/cart_data.dart';
+import 'package:paas_customer/infrastructure/models/request/cart_request.dart';
+import 'package:paas_customer/app_constants.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/routes/app_router.dart';
+import 'package:paas_customer/infrastructure/services/app_connectivity.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/tpying_delay.dart';
 
 import 'shop_order_state.dart';
 

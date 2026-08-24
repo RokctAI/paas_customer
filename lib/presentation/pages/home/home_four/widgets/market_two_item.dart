@@ -1,15 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/models/data/shop_data.dart';
-import 'package:foodyman/presentation/components/custom_network_image.dart';
-import 'package:foodyman/presentation/routes/app_router.dart';
-import 'package:foodyman/presentation/components/badges.dart';
+import 'package:paas_customer/infrastructure/models/data/shop_data.dart';
+import 'package:paas_customer/presentation/components/custom_network_image.dart';
+import 'package:paas_customer/presentation/routes/app_router.dart';
+import 'package:paas_customer/presentation/components/badges.dart';
 
 import '../../../../../app_constants.dart';
 import '../../../../theme/theme.dart';
 
-//import 'package:foodyman/presentation/pages/home_two/widget/two_bonus_discount.dart';
+//import 'package:paas_customer/presentation/pages/home_two/widget/two_bonus_discount.dart';
 
 class MarketTwoItem extends StatelessWidget {
   final ShopData shop;

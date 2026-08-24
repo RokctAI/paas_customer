@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/extension.dart';
-import 'package:foodyman/infrastructure/services/time_service.dart';
+import 'package:paas_customer/infrastructure/services/extension.dart';
+import 'package:paas_customer/infrastructure/services/time_service.dart';
 import 'package:intl/intl.dart';
-import 'package:foodyman/application/order/order_provider.dart';
-import 'package:foodyman/application/order/order_state.dart';
-import 'package:foodyman/application/order_time/time_state.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/custom_tab_bar.dart';
-import 'package:foodyman/presentation/components/select_item.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:paas_customer/application/order/order_provider.dart';
+import 'package:paas_customer/application/order/order_state.dart';
+import 'package:paas_customer/application/order_time/time_state.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/components/custom_tab_bar.dart';
+import 'package:paas_customer/presentation/components/select_item.dart';
+import 'package:paas_customer/presentation/components/title_icon.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
 
-import 'package:foodyman/application/order_time/time_notifier.dart';
-import 'package:foodyman/application/order_time/time_provider.dart';
+import 'package:paas_customer/application/order_time/time_notifier.dart';
+import 'package:paas_customer/application/order_time/time_provider.dart';
 
 class TimeDelivery extends ConsumerStatefulWidget {
   const TimeDelivery({super.key});

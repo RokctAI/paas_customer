@@ -1,4 +1,4 @@
-import 'package:foodyman/infrastructure/models/data/product_data.dart';
+import 'package:paas_customer/infrastructure/models/data/product_data.dart';
 
 class BonusModel {
   BonusModel({

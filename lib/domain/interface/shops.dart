@@ -1,8 +1,8 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:foodyman/infrastructure/models/data/filter_model.dart';
+import 'package:paas_customer/infrastructure/models/data/filter_model.dart';
 
-import 'package:foodyman/domain/handlers/handlers.dart';
-import 'package:foodyman/infrastructure/models/models.dart';
+import 'package:paas_customer/domain/handlers/handlers.dart';
+import 'package:paas_customer/infrastructure/models/models.dart';
 
 abstract class ShopsRepositoryFacade {
   Future<ApiResult<ShopsPaginateResponse>> getShopFilter({

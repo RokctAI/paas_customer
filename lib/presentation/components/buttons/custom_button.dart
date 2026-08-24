@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
 
 import 'animation_button_effect.dart';
 

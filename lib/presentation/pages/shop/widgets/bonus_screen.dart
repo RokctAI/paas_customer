@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/models/data/bonus_data.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/models/data/bonus_data.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
 
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/title_icon.dart';
-import 'package:foodyman/presentation/theme/app_style.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/components/buttons/custom_button.dart';
+import 'package:paas_customer/presentation/components/title_icon.dart';
+import 'package:paas_customer/presentation/theme/app_style.dart';
 
 class BonusScreen extends StatelessWidget {
   final BonusModel? bonus;

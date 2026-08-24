@@ -1,6 +1,6 @@
-import 'package:foodyman/infrastructure/models/models.dart';
-import 'package:foodyman/infrastructure/services/enums.dart';
-import 'package:foodyman/domain/handlers/handlers.dart';
+import 'package:paas_customer/infrastructure/models/models.dart';
+import 'package:paas_customer/infrastructure/services/enums.dart';
+import 'package:paas_customer/domain/handlers/handlers.dart';
 
 abstract class GalleryRepositoryFacade {
   Future<ApiResult<GalleryUploadResponse>> uploadImage(

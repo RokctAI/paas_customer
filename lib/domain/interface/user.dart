@@ -1,6 +1,6 @@
-import 'package:foodyman/infrastructure/models/request/edit_profile.dart';
-import 'package:foodyman/domain/handlers/handlers.dart';
-import 'package:foodyman/infrastructure/models/models.dart';
+import 'package:paas_customer/infrastructure/models/request/edit_profile.dart';
+import 'package:paas_customer/domain/handlers/handlers.dart';
+import 'package:paas_customer/infrastructure/models/models.dart';
 
 abstract class UserRepositoryFacade {
   Future<ApiResult<ProfileResponse>> getProfileDetails();

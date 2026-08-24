@@ -1,5 +1,5 @@
-import 'package:foodyman/domain/handlers/handlers.dart';
-import 'package:foodyman/infrastructure/models/models.dart';
+import 'package:paas_customer/domain/handlers/handlers.dart';
+import 'package:paas_customer/infrastructure/models/models.dart';
 
 import '../../infrastructure/models/data/user.dart';
 import '../../infrastructure/models/data/wallet_data.dart';

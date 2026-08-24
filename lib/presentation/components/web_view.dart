@@ -14,13 +14,13 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:foodyman/app_constants.dart';
+import 'package:paas_customer/app_constants.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
 
 import '../../application/webview/preloaded_webview_provider.dart';
 
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
 
 class WebViewPage extends StatefulWidget {
   final String url;

@@ -1,11 +1,11 @@
-import 'package:foodyman/domain/handlers/api_result.dart';
-import 'package:foodyman/domain/interface/settings.dart';
-import 'package:foodyman/infrastructure/models/data/help_data.dart';
-import 'package:foodyman/infrastructure/models/data/notification_list_data.dart';
-import 'package:foodyman/infrastructure/models/data/translation.dart';
-import 'package:foodyman/infrastructure/models/response/global_settings_response.dart';
-import 'package:foodyman/infrastructure/models/response/languages_response.dart';
-import 'package:foodyman/infrastructure/models/response/mobile_translations_response.dart';
+import 'package:paas_customer/domain/handlers/api_result.dart';
+import 'package:paas_customer/domain/interface/settings.dart';
+import 'package:paas_customer/infrastructure/models/data/help_data.dart';
+import 'package:paas_customer/infrastructure/models/data/notification_list_data.dart';
+import 'package:paas_customer/infrastructure/models/data/translation.dart';
+import 'package:paas_customer/infrastructure/models/response/global_settings_response.dart';
+import 'package:paas_customer/infrastructure/models/response/languages_response.dart';
+import 'package:paas_customer/infrastructure/models/response/mobile_translations_response.dart';
 
 class MockSettingsRepository implements SettingsRepositoryFacade {
   @override

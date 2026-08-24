@@ -6,24 +6,24 @@ import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-import 'package:foodyman/application/profile/profile_notifier.dart';
-import 'package:foodyman/application/profile/profile_provider.dart';
-import 'package:foodyman/application/profile/profile_state.dart';
-import 'package:foodyman/app_constants.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/img_service.dart';
-import 'package:foodyman/infrastructure/services/input_formatter.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/common_app_bar.dart';
-import 'package:foodyman/presentation/components/keyboard_dismisser.dart';
-import 'package:foodyman/presentation/routes/app_router.dart';
+import 'package:paas_customer/application/profile/profile_notifier.dart';
+import 'package:paas_customer/application/profile/profile_provider.dart';
+import 'package:paas_customer/application/profile/profile_state.dart';
+import 'package:paas_customer/app_constants.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/img_service.dart';
+import 'package:paas_customer/infrastructure/services/input_formatter.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/components/app_bars/common_app_bar.dart';
+import 'package:paas_customer/presentation/components/keyboard_dismisser.dart';
+import 'package:paas_customer/presentation/routes/app_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:foodyman/presentation/components/blur_wrap.dart';
-import 'package:foodyman/presentation/components/buttons/custom_button.dart';
-import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-import 'package:foodyman/presentation/components/text_fields/outline_bordered_text_field.dart';
-import 'package:foodyman/presentation/theme/app_style.dart';
+import 'package:paas_customer/presentation/components/blur_wrap.dart';
+import 'package:paas_customer/presentation/components/buttons/custom_button.dart';
+import 'package:paas_customer/presentation/components/buttons/pop_button.dart';
+import 'package:paas_customer/presentation/components/text_fields/outline_bordered_text_field.dart';
+import 'package:paas_customer/presentation/theme/app_style.dart';
 
 @RoutePage()
 class CreateShopPage extends ConsumerStatefulWidget {

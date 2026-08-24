@@ -1,10 +1,10 @@
-import 'package:foodyman/domain/handlers/api_result.dart';
-import 'package:foodyman/domain/interface/address.dart';
-import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
-import 'package:foodyman/infrastructure/models/data/address_information.dart';
-import 'package:foodyman/infrastructure/models/data/local_address_data.dart';
-import 'package:foodyman/infrastructure/models/response/addresses_response.dart';
-import 'package:foodyman/infrastructure/models/response/single_address_response.dart';
+import 'package:paas_customer/domain/handlers/api_result.dart';
+import 'package:paas_customer/domain/interface/address.dart';
+import 'package:paas_customer/infrastructure/models/data/address_new_data.dart';
+import 'package:paas_customer/infrastructure/models/data/address_information.dart';
+import 'package:paas_customer/infrastructure/models/data/local_address_data.dart';
+import 'package:paas_customer/infrastructure/models/response/addresses_response.dart';
+import 'package:paas_customer/infrastructure/models/response/single_address_response.dart';
 
 class MockAddressRepository implements AddressRepositoryFacade {
   final AddressNewModel _demoAddress = AddressNewModel(

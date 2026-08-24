@@ -1,14 +1,14 @@
-import 'package:foodyman/domain/handlers/api_result.dart';
-import 'package:foodyman/domain/interface/shops.dart';
-import 'package:foodyman/infrastructure/models/data/shop_data.dart';
-import 'package:foodyman/infrastructure/models/data/translation.dart';
-import 'package:foodyman/infrastructure/models/response/shops_paginate_response.dart';
-import 'package:foodyman/infrastructure/models/response/single_shop_response.dart';
-import 'package:foodyman/infrastructure/models/data/filter_model.dart';
-import 'package:foodyman/infrastructure/models/response/branches_response.dart';
-import 'package:foodyman/infrastructure/models/data/address_new_data.dart';
-import 'package:foodyman/infrastructure/models/data/story_data.dart';
-import 'package:foodyman/infrastructure/models/response/tag_response.dart';
+import 'package:paas_customer/domain/handlers/api_result.dart';
+import 'package:paas_customer/domain/interface/shops.dart';
+import 'package:paas_customer/infrastructure/models/data/shop_data.dart';
+import 'package:paas_customer/infrastructure/models/data/translation.dart';
+import 'package:paas_customer/infrastructure/models/response/shops_paginate_response.dart';
+import 'package:paas_customer/infrastructure/models/response/single_shop_response.dart';
+import 'package:paas_customer/infrastructure/models/data/filter_model.dart';
+import 'package:paas_customer/infrastructure/models/response/branches_response.dart';
+import 'package:paas_customer/infrastructure/models/data/address_new_data.dart';
+import 'package:paas_customer/infrastructure/models/data/story_data.dart';
+import 'package:paas_customer/infrastructure/models/response/tag_response.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MockShopsRepository implements ShopsRepositoryFacade {

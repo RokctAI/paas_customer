@@ -1,6 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
 
 abstract class AppConnectivity {
   AppConnectivity._();

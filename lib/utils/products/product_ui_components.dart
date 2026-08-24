@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/presentation/theme/app_style.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/presentation/theme/app_style.dart';
 import 'package:remixicon/remixicon.dart';
-import 'package:foodyman/application/shop_order/shop_order_provider.dart';
+import 'package:paas_customer/application/shop_order/shop_order_provider.dart';
 
 import 'product_utils.dart';
 

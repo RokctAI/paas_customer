@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:foodyman/application/order/order_provider.dart';
-import 'package:foodyman/application/payment_methods/payment_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/pages/order/order_check/widgets/promo_code.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:paas_customer/application/order/order_provider.dart';
+import 'package:paas_customer/application/payment_methods/payment_provider.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/pages/order/order_check/widgets/promo_code.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
 
 import 'payment_method.dart';
 import 'order_payment_container.dart';

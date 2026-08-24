@@ -3,23 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:foodyman/application/orders_list/orders_list_notifier.dart';
-import 'package:foodyman/application/orders_list/orders_list_provider.dart';
-import 'package:foodyman/application/parcels_list/parcel_list_notifier.dart';
-import 'package:foodyman/application/parcels_list/parcel_list_provider.dart';
-import 'package:foodyman/infrastructure/services/app_helpers.dart';
-import 'package:foodyman/infrastructure/services/local_storage.dart';
-import 'package:foodyman/infrastructure/services/tr_keys.dart';
-import 'package:foodyman/presentation/components/app_bars/common_app_bar2.dart';
-//import 'package:foodyman/presentation/components/buttons/pop_button.dart';
-import 'package:foodyman/presentation/components/custom_tab_bar.dart';
-import 'package:foodyman/presentation/components/loading.dart';
-import 'package:foodyman/presentation/theme/theme.dart';
+import 'package:paas_customer/application/orders_list/orders_list_notifier.dart';
+import 'package:paas_customer/application/orders_list/orders_list_provider.dart';
+import 'package:paas_customer/application/parcels_list/parcel_list_notifier.dart';
+import 'package:paas_customer/application/parcels_list/parcel_list_provider.dart';
+import 'package:paas_customer/infrastructure/services/app_helpers.dart';
+import 'package:paas_customer/infrastructure/services/local_storage.dart';
+import 'package:paas_customer/infrastructure/services/tr_keys.dart';
+import 'package:paas_customer/presentation/components/app_bars/common_app_bar2.dart';
+//import 'package:paas_customer/presentation/components/buttons/pop_button.dart';
+import 'package:paas_customer/presentation/components/custom_tab_bar.dart';
+import 'package:paas_customer/presentation/components/loading.dart';
+import 'package:paas_customer/presentation/theme/theme.dart';
 
 import 'widgets/orders_item.dart';
 
-import 'package:foodyman/presentation/pages/parcel/parcel_item.dart';
-import 'package:foodyman/presentation/components/badges/empty_badge.dart';
+import 'package:paas_customer/presentation/pages/parcel/parcel_item.dart';
+import 'package:paas_customer/presentation/components/badges/empty_badge.dart';
 
 @RoutePage()
 class OrdersMainPage extends ConsumerStatefulWidget {

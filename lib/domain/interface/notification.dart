@@ -1,6 +1,6 @@
-import 'package:foodyman/domain/handlers/api_result.dart';
-import 'package:foodyman/infrastructure/models/data/count_of_notifications_data.dart';
-import 'package:foodyman/infrastructure/models/response/notification_response.dart';
+import 'package:paas_customer/domain/handlers/api_result.dart';
+import 'package:paas_customer/infrastructure/models/data/count_of_notifications_data.dart';
+import 'package:paas_customer/infrastructure/models/response/notification_response.dart';
 
 abstract class NotificationRepositoryFacade {
   Future<ApiResult<NotificationResponse>> getNotifications({int? page});
