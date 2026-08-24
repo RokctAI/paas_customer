@@ -14,7 +14,7 @@ class SearchNotifier extends StateNotifier<SearchState> {
   final ProductsRepositoryFacade _productsRepository;
 
   SearchNotifier(this._shopsRepository, this._productsRepository)
-    : super(const SearchState());
+      : super(const SearchState());
   int productIndex = 1;
 
   init() {

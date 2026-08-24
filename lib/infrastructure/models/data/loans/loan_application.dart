@@ -22,7 +22,7 @@ class LoanApplicationModel {
   final bool skipDocuments;
   final String? savedApplicationId;
   final Map<String, dynamic>
-  documents; // Changed from List<File> to Map<String, dynamic>
+      documents; // Changed from List<File> to Map<String, dynamic>
 
   LoanApplicationModel({
     required this.idNumber,

@@ -33,12 +33,13 @@ class LanguagesResponse {
     bool? status,
     String? message,
     List<LanguageData>? data,
-  }) => LanguagesResponse(
-    timestamp: timestamp ?? _timestamp,
-    status: status ?? _status,
-    message: message ?? _message,
-    data: data ?? _data,
-  );
+  }) =>
+      LanguagesResponse(
+        timestamp: timestamp ?? _timestamp,
+        status: status ?? _status,
+        message: message ?? _message,
+        data: data ?? _data,
+      );
 
   String? get timestamp => _timestamp;
 
@@ -105,15 +106,16 @@ class LanguageData {
     bool? isDefault,
     bool? active,
     String? img,
-  }) => LanguageData(
-    id: id ?? _id,
-    title: title ?? _title,
-    locale: locale ?? _locale,
-    backward: backward ?? _backward,
-    isDefault: isDefault ?? _default,
-    active: active ?? _active,
-    img: img ?? _img,
-  );
+  }) =>
+      LanguageData(
+        id: id ?? _id,
+        title: title ?? _title,
+        locale: locale ?? _locale,
+        backward: backward ?? _backward,
+        isDefault: isDefault ?? _default,
+        active: active ?? _active,
+        img: img ?? _img,
+      );
 
   int? get id => _id;
 

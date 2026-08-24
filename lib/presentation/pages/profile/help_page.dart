@@ -98,18 +98,15 @@ class _HelpPageState extends ConsumerState<HelpPage> {
                                                   color: AppStyle.dragElement,
                                                   borderRadius:
                                                       BorderRadius.all(
-                                                        Radius.circular(40.r),
-                                                      ),
+                                                    Radius.circular(40.r),
+                                                  ),
                                                 ),
                                               ),
                                             ),
                                             18.verticalSpace,
                                             Text(
-                                              state
-                                                      .data
-                                                      ?.data?[index]
-                                                      .translation
-                                                      ?.question ??
+                                              state.data?.data?[index]
+                                                      .translation?.question ??
                                                   "",
                                               style: AppStyle.interSemi(
                                                 size: 18.sp,
@@ -117,11 +114,8 @@ class _HelpPageState extends ConsumerState<HelpPage> {
                                             ),
                                             14.verticalSpace,
                                             Text(
-                                              state
-                                                      .data
-                                                      ?.data?[index]
-                                                      .translation
-                                                      ?.answer ??
+                                              state.data?.data?[index]
+                                                      .translation?.answer ??
                                                   "",
                                               style: AppStyle.interRegular(
                                                 size: 14.sp,
@@ -153,10 +147,7 @@ class _HelpPageState extends ConsumerState<HelpPage> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            state
-                                                    .data
-                                                    ?.data?[index]
-                                                    .translation
+                                            state.data?.data?[index].translation
                                                     ?.question ??
                                                 "",
                                             style: AppStyle.interNormal(
@@ -171,10 +162,7 @@ class _HelpPageState extends ConsumerState<HelpPage> {
                                       ),
                                       10.verticalSpace,
                                       Text(
-                                        state
-                                                .data
-                                                ?.data?[index]
-                                                .translation
+                                        state.data?.data?[index].translation
                                                 ?.answer ??
                                             "",
                                         style: AppStyle.interRegular(
@@ -218,7 +206,7 @@ class _HelpPageState extends ConsumerState<HelpPage> {
                                         SizedBox(
                                           width:
                                               MediaQuery.sizeOf(context).width /
-                                              1.5,
+                                                  1.5,
                                           child: Text(
                                             AppHelpers.getTranslation(
                                               TrKeys.cantFindTheAnswer,

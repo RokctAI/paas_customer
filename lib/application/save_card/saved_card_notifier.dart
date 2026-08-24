@@ -75,9 +75,8 @@ class SavedCardsNotifier extends StateNotifier<SavedCardsState> {
       result.when(
         success: (data) {
           // Remove card from state
-          final updatedCards = state.cards
-              .where((card) => card.id != cardId)
-              .toList();
+          final updatedCards =
+              state.cards.where((card) => card.id != cardId).toList();
           state = state.copyWith(cards: updatedCards, isLoading: false);
           success = true;
         },

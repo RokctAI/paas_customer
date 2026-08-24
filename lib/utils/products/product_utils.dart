@@ -281,8 +281,7 @@ class ProductUtils {
     final double discountedPrice = product.stock?.totalPrice?.toDouble() ?? 0;
 
     // Set discount threshold to 5% (0.95 of original price)
-    bool hasPriceDiscount =
-        originalPrice > 0 &&
+    bool hasPriceDiscount = originalPrice > 0 &&
         discountedPrice > 0 &&
         discountedPrice <= (originalPrice * 0.95);
 

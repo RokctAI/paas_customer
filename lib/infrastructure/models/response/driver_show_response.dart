@@ -87,9 +87,8 @@ class Data {
     online = json['online'].runtimeType == int
         ? json['online'] == 1
         : json['online'];
-    location = json['location'] != null
-        ? Location.fromJson(json['location'])
-        : null;
+    location =
+        json['location'] != null ? Location.fromJson(json['location']) : null;
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deliveryMan = json['deliveryMan'] != null

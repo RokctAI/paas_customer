@@ -6,11 +6,11 @@ import 'order_state.dart';
 
 final orderProvider =
     StateNotifierProvider.autoDispose<OrderNotifier, OrderState>(
-      (ref) => OrderNotifier(
-        ordersRepository,
-        shopsRepository,
-        paymentsRepository,
-        cartRepository,
-        drawRepository,
-      ),
-    );
+  (ref) => OrderNotifier(
+    ordersRepository,
+    shopsRepository,
+    paymentsRepository,
+    cartRepository,
+    drawRepository,
+  ),
+);

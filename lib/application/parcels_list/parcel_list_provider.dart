@@ -6,5 +6,5 @@ import 'parcel_list_state.dart';
 
 final parcelListProvider =
     StateNotifierProvider<ParcelListNotifier, ParcelListState>(
-      (ref) => ParcelListNotifier(parcelRepository),
-    );
+  (ref) => ParcelListNotifier(parcelRepository),
+);

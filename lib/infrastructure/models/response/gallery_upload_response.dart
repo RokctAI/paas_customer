@@ -28,12 +28,13 @@ class GalleryUploadResponse {
     bool? status,
     String? message,
     ImageData? imageData,
-  }) => GalleryUploadResponse(
-    timestamp: timestamp ?? _timestamp,
-    status: status ?? _status,
-    message: message ?? _message,
-    imageData: imageData ?? _imageData,
-  );
+  }) =>
+      GalleryUploadResponse(
+        timestamp: timestamp ?? _timestamp,
+        status: status ?? _status,
+        message: message ?? _message,
+        imageData: imageData ?? _imageData,
+      );
 
   String? get timestamp => _timestamp;
 

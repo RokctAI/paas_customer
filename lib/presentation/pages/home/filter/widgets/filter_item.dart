@@ -68,10 +68,9 @@ class FilterItem extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.r),
-                        color:
-                            ((e.runtimeType == TakeModel)
+                        color: ((e.runtimeType == TakeModel)
                                 ? (currentItem == (e as TakeModel).id ||
-                                      currentItemTwo == e.id)
+                                    currentItemTwo == e.id)
                                 : (currentItem == e || currentItemTwo == e))
                             ? AppStyle.primary
                             : AppStyle.bgGrey,
@@ -90,31 +89,34 @@ class FilterItem extends StatelessWidget {
                                   ],
                                 )
                               : isOffer
-                              ? Row(
-                                  children: [
-                                    Icon(FlutterRemix.leaf_fill, size: 16.r),
-                                    6.horizontalSpace,
-                                  ],
-                                )
-                              : isSort
-                              ? Row(
-                                  children: [
-                                    Container(
-                                      width: 14.w,
-                                      height: 14.h,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          width: currentItem == e ? 4.r : 2.r,
-                                          color: AppStyle.black,
-                                        ),
-                                        color: AppStyle.transparent,
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                    6.horizontalSpace,
-                                  ],
-                                )
-                              : const SizedBox.shrink(),
+                                  ? Row(
+                                      children: [
+                                        Icon(FlutterRemix.leaf_fill,
+                                            size: 16.r),
+                                        6.horizontalSpace,
+                                      ],
+                                    )
+                                  : isSort
+                                      ? Row(
+                                          children: [
+                                            Container(
+                                              width: 14.w,
+                                              height: 14.h,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  width: currentItem == e
+                                                      ? 4.r
+                                                      : 2.r,
+                                                  color: AppStyle.black,
+                                                ),
+                                                color: AppStyle.transparent,
+                                                shape: BoxShape.circle,
+                                              ),
+                                            ),
+                                            6.horizontalSpace,
+                                          ],
+                                        )
+                                      : const SizedBox.shrink(),
                           isPrice
                               ? Text(
                                   AppHelpers.numberFormat(
@@ -126,20 +128,20 @@ class FilterItem extends StatelessWidget {
                                   ),
                                 )
                               : isOffer
-                              ? Text(
-                                  (e as TakeModel).translation?.title ?? "",
-                                  style: AppStyle.interNormal(
-                                    size: 14,
-                                    color: AppStyle.black,
-                                  ),
-                                )
-                              : Text(
-                                  e,
-                                  style: AppStyle.interNormal(
-                                    size: 14,
-                                    color: AppStyle.black,
-                                  ),
-                                ),
+                                  ? Text(
+                                      (e as TakeModel).translation?.title ?? "",
+                                      style: AppStyle.interNormal(
+                                        size: 14,
+                                        color: AppStyle.black,
+                                      ),
+                                    )
+                                  : Text(
+                                      e,
+                                      style: AppStyle.interNormal(
+                                        size: 14,
+                                        color: AppStyle.black,
+                                      ),
+                                    ),
                         ],
                       ),
                     ),

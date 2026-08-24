@@ -93,104 +93,112 @@ abstract class AppStyle {
     double size = 18,
     Color color = AppStyle.black,
     double letterSpacing = 0,
-  }) => GoogleFonts.inter(
-    fontSize: size.sp,
-    fontWeight: FontWeight.bold,
-    color: color,
-    letterSpacing: letterSpacing.sp,
-    decoration: TextDecoration.none,
-  );
+  }) =>
+      GoogleFonts.inter(
+        fontSize: size.sp,
+        fontWeight: FontWeight.bold,
+        color: color,
+        letterSpacing: letterSpacing.sp,
+        decoration: TextDecoration.none,
+      );
 
   static interSemi({
     double size = 18,
     Color color = AppStyle.black,
     TextDecoration decoration = TextDecoration.none,
     double letterSpacing = 0,
-  }) => GoogleFonts.inter(
-    fontSize: size.sp,
-    fontWeight: FontWeight.w700,
-    color: color,
-    letterSpacing: letterSpacing.sp,
-    decoration: decoration,
-  );
+  }) =>
+      GoogleFonts.inter(
+        fontSize: size.sp,
+        fontWeight: FontWeight.w700,
+        color: color,
+        letterSpacing: letterSpacing.sp,
+        decoration: decoration,
+      );
 
   static interNoSemi({
     double size = 18,
     Color color = AppStyle.black,
     TextDecoration decoration = TextDecoration.none,
     double letterSpacing = 0,
-  }) => GoogleFonts.inter(
-    fontSize: size.sp,
-    fontWeight: FontWeight.w600,
-    color: color,
-    letterSpacing: letterSpacing.sp,
-    decoration: decoration,
-  );
+  }) =>
+      GoogleFonts.inter(
+        fontSize: size.sp,
+        fontWeight: FontWeight.w600,
+        color: color,
+        letterSpacing: letterSpacing.sp,
+        decoration: decoration,
+      );
 
   static interNormal({
     double size = 16,
     Color color = AppStyle.black,
     TextDecoration textDecoration = TextDecoration.none,
     double letterSpacing = 0,
-  }) => GoogleFonts.inter(
-    fontSize: size.sp,
-    fontWeight: FontWeight.w500,
-    color: color,
-    letterSpacing: letterSpacing.sp,
-    decoration: textDecoration,
-  );
+  }) =>
+      GoogleFonts.inter(
+        fontSize: size.sp,
+        fontWeight: FontWeight.w500,
+        color: color,
+        letterSpacing: letterSpacing.sp,
+        decoration: textDecoration,
+      );
 
   static interRegular({
     double size = 16,
     Color color = AppStyle.black,
     TextDecoration textDecoration = TextDecoration.none,
     double letterSpacing = 0,
-  }) => GoogleFonts.inter(
-    fontSize: size,
-    fontWeight: FontWeight.w400,
-    color: color,
-    letterSpacing: letterSpacing.sp,
-    decoration: textDecoration,
-  );
+  }) =>
+      GoogleFonts.inter(
+        fontSize: size,
+        fontWeight: FontWeight.w400,
+        color: color,
+        letterSpacing: letterSpacing.sp,
+        decoration: textDecoration,
+      );
 
   ///Juvo Font Styles - Using Montserrat
   static logoFontBold({
     double size = 18,
     Color color = AppStyle.black,
     double letterSpacing = 0,
-  }) => GoogleFonts.montserrat(
-    fontSize: size.sp,
-    fontWeight: FontWeight.w700, // Bold 700
-    color: color,
-    letterSpacing: letterSpacing.sp,
-    decoration: TextDecoration.none,
-  );
+  }) =>
+      GoogleFonts.montserrat(
+        fontSize: size.sp,
+        fontWeight: FontWeight.w700, // Bold 700
+        color: color,
+        letterSpacing: letterSpacing.sp,
+        decoration: TextDecoration.none,
+      );
 
   static logoFontBoldItalic({
     double size = 18,
     Color color = AppStyle.black,
     double letterSpacing = 0,
-  }) => GoogleFonts.montserrat(
-    fontSize: size.sp,
-    fontWeight: FontWeight.w700, // Bold 700
-    fontStyle: FontStyle.italic,
-    color: color,
-    letterSpacing: letterSpacing.sp,
-    decoration: TextDecoration.none,
-  );
+  }) =>
+      GoogleFonts.montserrat(
+        fontSize: size.sp,
+        fontWeight: FontWeight.w700, // Bold 700
+        fontStyle: FontStyle.italic,
+        color: color,
+        letterSpacing: letterSpacing.sp,
+        decoration: TextDecoration.none,
+      );
 
   static logoFontBlackItalic({
     double size = 18,
     Color color = AppStyle.black,
     double letterSpacing = 0,
-  }) => GoogleFonts.montserrat(
-    fontSize: size.sp,
-    fontWeight: FontWeight.w900, // Black 900
-    fontStyle: FontStyle.italic,
-    color: color,
-    letterSpacing: letterSpacing.sp,
-    decoration: TextDecoration.none,
-  );
+  }) =>
+      GoogleFonts.montserrat(
+        fontSize: size.sp,
+        fontWeight: FontWeight.w900, // Black 900
+        fontStyle: FontStyle.italic,
+        color: color,
+        letterSpacing: letterSpacing.sp,
+        decoration: TextDecoration.none,
+      );
 
   // Logo Motto styles - Using Montserrat
   static logoMottoRegular({
@@ -198,25 +206,27 @@ abstract class AppStyle {
     Color color = AppStyle.black,
     TextDecoration textDecoration = TextDecoration.none,
     double letterSpacing = 0,
-  }) => GoogleFonts.montserrat(
-    fontSize: size.sp,
-    fontWeight: FontWeight.w400, // Regular 400
-    color: color,
-    letterSpacing: letterSpacing.sp,
-    decoration: textDecoration,
-  );
+  }) =>
+      GoogleFonts.montserrat(
+        fontSize: size.sp,
+        fontWeight: FontWeight.w400, // Regular 400
+        color: color,
+        letterSpacing: letterSpacing.sp,
+        decoration: textDecoration,
+      );
 
   static logoMottoRegularItalic({
     double size = 16,
     Color color = AppStyle.black,
     TextDecoration textDecoration = TextDecoration.none,
     double letterSpacing = 0,
-  }) => GoogleFonts.montserrat(
-    fontSize: size.sp,
-    fontWeight: FontWeight.w400, // Regular 400
-    fontStyle: FontStyle.italic,
-    color: color,
-    letterSpacing: letterSpacing.sp,
-    decoration: textDecoration,
-  );
+  }) =>
+      GoogleFonts.montserrat(
+        fontSize: size.sp,
+        fontWeight: FontWeight.w400, // Regular 400
+        fontStyle: FontStyle.italic,
+        color: color,
+        letterSpacing: letterSpacing.sp,
+        decoration: textDecoration,
+      );
 }

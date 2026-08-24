@@ -60,17 +60,18 @@ class ReviewData {
     String? updatedAt,
     List<Galleries>? galleries,
     UserModel? user,
-  }) => ReviewData(
-    id: id ?? _id,
-    reviewableId: reviewableId ?? _reviewableId,
-    rating: rating ?? _rating,
-    comment: comment ?? _comment,
-    img: img ?? _img,
-    createdAt: createdAt ?? _createdAt,
-    updatedAt: updatedAt ?? _updatedAt,
-    galleries: galleries ?? _galleries,
-    user: user ?? _user,
-  );
+  }) =>
+      ReviewData(
+        id: id ?? _id,
+        reviewableId: reviewableId ?? _reviewableId,
+        rating: rating ?? _rating,
+        comment: comment ?? _comment,
+        img: img ?? _img,
+        createdAt: createdAt ?? _createdAt,
+        updatedAt: updatedAt ?? _updatedAt,
+        galleries: galleries ?? _galleries,
+        user: user ?? _user,
+      );
 
   int? get id => _id;
 
@@ -149,14 +150,15 @@ class Galleries {
     int? loadableId,
     String? path,
     String? basePath,
-  }) => Galleries(
-    id: id ?? _id,
-    title: title ?? _title,
-    type: type ?? _type,
-    loadableId: loadableId ?? _loadableId,
-    path: path ?? _path,
-    basePath: basePath ?? _basePath,
-  );
+  }) =>
+      Galleries(
+        id: id ?? _id,
+        title: title ?? _title,
+        type: type ?? _type,
+        loadableId: loadableId ?? _loadableId,
+        path: path ?? _path,
+        basePath: basePath ?? _basePath,
+      );
 
   int? get id => _id;
 

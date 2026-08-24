@@ -51,9 +51,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
       ref
           .read(editProfileProvider.notifier)
           .setPhone(ref.read(profileProvider).userData?.phone ?? "");
-      ref
-          .read(editProfileProvider.notifier)
-          .setBirth(
+      ref.read(editProfileProvider.notifier).setBirth(
             intl.DateFormat("yyyy-MM-dd").format(
               DateTime.tryParse(
                     ref.read(profileProvider).userData?.birthday ?? "",
@@ -145,27 +143,27 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                       borderRadius: BorderRadius.circular(42.r),
                                       child:
                                           ((user?.img?.isNotEmpty ?? false) &&
-                                              state.imagePath.isEmpty)
-                                          ? CustomNetworkImage(
-                                              profile: true,
-                                              url: user!.img ?? "",
-                                              height: 84.r,
-                                              width: 84.r,
-                                              radius: 42.r,
-                                            )
-                                          : state.imagePath.isNotEmpty
-                                          ? Image.file(
-                                              File(state.imagePath),
-                                              width: 84.r,
-                                              height: 84.r,
-                                            )
-                                          : CustomNetworkImage(
-                                              profile: true,
-                                              url: state.url,
-                                              height: 84.r,
-                                              width: 84.r,
-                                              radius: 42.r,
-                                            ),
+                                                  state.imagePath.isEmpty)
+                                              ? CustomNetworkImage(
+                                                  profile: true,
+                                                  url: user!.img ?? "",
+                                                  height: 84.r,
+                                                  width: 84.r,
+                                                  radius: 42.r,
+                                                )
+                                              : state.imagePath.isNotEmpty
+                                                  ? Image.file(
+                                                      File(state.imagePath),
+                                                      width: 84.r,
+                                                      height: 84.r,
+                                                    )
+                                                  : CustomNetworkImage(
+                                                      profile: true,
+                                                      url: state.url,
+                                                      height: 84.r,
+                                                      width: 84.r,
+                                                      radius: 42.r,
+                                                    ),
                                     ),
                                   ),
                                   Padding(
@@ -213,8 +211,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   SizedBox(
-                                    width:
-                                        (MediaQuery.sizeOf(context).width -
+                                    width: (MediaQuery.sizeOf(context).width -
                                             88) /
                                         2,
                                     child: OutlinedBorderTextField(
@@ -230,8 +227,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                     ),
                                   ),
                                   SizedBox(
-                                    width:
-                                        (MediaQuery.sizeOf(context).width -
+                                    width: (MediaQuery.sizeOf(context).width -
                                             40) /
                                         2,
                                     child: OutlinedBorderTextField(
@@ -286,8 +282,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                       child: SafeArea(
                                         top: false,
                                         child: CupertinoDatePicker(
-                                          initialDateTime:
-                                              DateTime.tryParse(
+                                          initialDateTime: DateTime.tryParse(
                                                 birthDay.text,
                                               )?.toLocal() ??
                                               DateTime.now(),
@@ -296,13 +291,13 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                           use24hFormat: true,
                                           onDateTimeChanged:
                                               (DateTime newDate) {
-                                                birthDay.text = intl.DateFormat(
-                                                  "yyyy-MM-dd",
-                                                ).format(newDate);
-                                                event.setBirth(
-                                                  newDate.toString(),
-                                                );
-                                              },
+                                            birthDay.text = intl.DateFormat(
+                                              "yyyy-MM-dd",
+                                            ).format(newDate);
+                                            event.setBirth(
+                                              newDate.toString(),
+                                            );
+                                          },
                                         ),
                                       ),
                                     ),

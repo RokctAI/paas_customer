@@ -185,15 +185,13 @@ class _PayFastWebViewState extends State<PayFastWebView> {
     debugPrint('PayFast token value: ${params['token']}');
 
     // Match patterns for success
-    bool isSuccess =
-        url.contains('order-stripe-success') ||
+    bool isSuccess = url.contains('order-stripe-success') ||
         url.contains('payment-success') ||
         url.contains('redirect-success') ||
         url.contains(AppConstants.baseUrl);
 
     // Match patterns for cancellation or failure
-    bool isFailure =
-        url.contains('payment-cancel') ||
+    bool isFailure = url.contains('payment-cancel') ||
         url.contains('payment-failed') ||
         url.contains('redirect-cancel');
 
@@ -207,8 +205,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
 
       // Extract card details
       final cardData = {
-        'last_four':
-            params['card_last_digits'] ??
+        'last_four': params['card_last_digits'] ??
             params['last_four'] ??
             params['cardlastfour'] ??
             '••••',

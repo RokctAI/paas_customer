@@ -6,5 +6,5 @@ import 'notification_state.dart';
 
 final notificationProvider =
     StateNotifierProvider<NotificationNotifier, NotificationState>(
-      (ref) => NotificationNotifier(notificationRepo),
-    );
+  (ref) => NotificationNotifier(notificationRepo),
+);

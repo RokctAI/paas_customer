@@ -18,8 +18,8 @@ class Vibrate {
   static const Duration defaultVibrationDuration = Duration(milliseconds: 500);
 
   static Future vibrate() => _channel.invokeMethod('vibrate', {
-    'duration': defaultVibrationDuration.inMilliseconds,
-  });
+        'duration': defaultVibrationDuration.inMilliseconds,
+      });
 
   static Future<bool> get canVibrate async {
     final bool isOn = await _channel.invokeMethod('canVibrate');

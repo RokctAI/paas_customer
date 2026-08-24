@@ -20,9 +20,8 @@ class DeliveryPointsRepository implements DeliveryPointsRepositoryFacade {
         queryParameters: {'latitude': latitude, 'longitude': longitude},
       );
       final List<dynamic> data = response.data['message'];
-      final List<DeliveryPointData> deliveryPoints = data
-          .map((e) => DeliveryPointData.fromJson(e))
-          .toList();
+      final List<DeliveryPointData> deliveryPoints =
+          data.map((e) => DeliveryPointData.fromJson(e)).toList();
       return ApiResult.success(data: deliveryPoints);
     } catch (e) {
       debugPrint('==> get delivery points failure: $e');
@@ -42,9 +41,8 @@ class DeliveryPointsRepository implements DeliveryPointsRepositoryFacade {
         '/api/method/paas.api.get_delivery_points',
       );
       final List<dynamic> data = response.data['message'];
-      final List<DeliveryPointData> deliveryPoints = data
-          .map((e) => DeliveryPointData.fromJson(e))
-          .toList();
+      final List<DeliveryPointData> deliveryPoints =
+          data.map((e) => DeliveryPointData.fromJson(e)).toList();
       return ApiResult.success(data: deliveryPoints);
     } catch (e) {
       debugPrint('==> get all delivery points failure: $e');

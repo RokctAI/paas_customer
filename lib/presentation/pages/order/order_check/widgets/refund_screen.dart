@@ -87,9 +87,7 @@ class _RefundScreenState extends State<RefundScreen> {
                           isLoading: ref.watch(orderProvider).isButtonLoading,
                           title: AppHelpers.getTranslation(TrKeys.send),
                           onPressed: () {
-                            ref
-                                .read(orderProvider.notifier)
-                                .refundOrder(
+                            ref.read(orderProvider.notifier).refundOrder(
                                   context,
                                   textEditingController.text,
                                 );

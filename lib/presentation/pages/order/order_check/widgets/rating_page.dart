@@ -233,12 +233,10 @@ class _RatingPageState extends ConsumerState<RatingPage> {
                           modal: PaymentMethods(
                             shopEnableCod:
                                 ref.watch(orderProvider).shopData?.enableCod ??
-                                true,
+                                    true,
                             tipPrice: price,
                             tips: (payment, price) {
-                              ref
-                                  .read(orderProvider.notifier)
-                                  .sendTips(
+                              ref.read(orderProvider.notifier).sendTips(
                                     context: context,
                                     payment: payment,
                                     price: price,
@@ -283,17 +281,13 @@ class _RatingPageState extends ConsumerState<RatingPage> {
                         );
                       } else {
                         if (widget.parcel) {
-                          ref
-                              .read(parcelProvider.notifier)
-                              .addReview(
+                          ref.read(parcelProvider.notifier).addReview(
                                 context,
                                 textEditingController.text,
                                 rating,
                               );
                         } else {
-                          ref
-                              .read(orderProvider.notifier)
-                              .addReview(
+                          ref.read(orderProvider.notifier).addReview(
                                 context,
                                 textEditingController.text,
                                 rating,

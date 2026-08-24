@@ -37,8 +37,7 @@ class ProductMainButton extends StatelessWidget {
     num sumTotalPrice = 0;
     state.selectedStock?.addons?.forEach((element) {
       if (element.active ?? false) {
-        sumTotalPrice +=
-            ((element.product?.stock?.totalPrice ?? 0) *
+        sumTotalPrice += ((element.product?.stock?.totalPrice ?? 0) *
             (element.quantity ?? 1));
       }
     });

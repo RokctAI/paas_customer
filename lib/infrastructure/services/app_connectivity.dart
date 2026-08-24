@@ -20,8 +20,8 @@ abstract class AppConnectivity {
     var connectivityResult = await (Connectivity().checkConnectivity());
     bool hasConnection =
         connectivityResult.contains(ConnectivityResult.mobile) ||
-        connectivityResult.contains(ConnectivityResult.ethernet) ||
-        connectivityResult.contains(ConnectivityResult.wifi);
+            connectivityResult.contains(ConnectivityResult.ethernet) ||
+            connectivityResult.contains(ConnectivityResult.wifi);
 
     if (!hasConnection) {
       // Automatically show dialog when no connection
@@ -36,8 +36,8 @@ abstract class AppConnectivity {
     var connectivityResult = await (Connectivity().checkConnectivity());
     bool hasConnection =
         connectivityResult.contains(ConnectivityResult.mobile) ||
-        connectivityResult.contains(ConnectivityResult.ethernet) ||
-        connectivityResult.contains(ConnectivityResult.wifi);
+            connectivityResult.contains(ConnectivityResult.ethernet) ||
+            connectivityResult.contains(ConnectivityResult.wifi);
 
     if (!hasConnection) {
       if (context.mounted) AppHelpers.showNoConnectionDialog(context);

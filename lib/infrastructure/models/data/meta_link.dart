@@ -16,10 +16,10 @@ class MetaLinks {
   bool? _active;
 
   MetaLinks copyWith({String? url, String? label, bool? active}) => MetaLinks(
-    url: url ?? _url,
-    label: label ?? _label,
-    active: active ?? _active,
-  );
+        url: url ?? _url,
+        label: label ?? _label,
+        active: active ?? _active,
+      );
 
   String? get url => _url;
 

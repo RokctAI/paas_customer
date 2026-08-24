@@ -46,11 +46,9 @@ class ProductUIComponents {
 
                   if (shopOrderState.cart != null && cartQuantity > 0) {
                     for (var userCart in shopOrderState.cart!.userCarts ?? []) {
-                      for (
-                        int i = 0;
-                        i < (userCart.cartDetails?.length ?? 0);
-                        i++
-                      ) {
+                      for (int i = 0;
+                          i < (userCart.cartDetails?.length ?? 0);
+                          i++) {
                         final cartDetail = userCart.cartDetails?[i];
                         if (cartDetail?.stock?.id == stockId) {
                           shopOrderNotifier.removeCount(context, i);
@@ -90,11 +88,9 @@ class ProductUIComponents {
 
                   if (shopOrderState.cart != null) {
                     for (var userCart in shopOrderState.cart!.userCarts ?? []) {
-                      for (
-                        int i = 0;
-                        i < (userCart.cartDetails?.length ?? 0);
-                        i++
-                      ) {
+                      for (int i = 0;
+                          i < (userCart.cartDetails?.length ?? 0);
+                          i++) {
                         final cartDetail = userCart.cartDetails?[i];
                         if (cartDetail?.stock?.id == stockId) {
                           shopOrderNotifier.addCount(context, i);

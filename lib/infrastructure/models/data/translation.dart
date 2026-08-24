@@ -47,15 +47,16 @@ class Translation {
     String? shortDesc,
     String? address,
     String? buttonText,
-  }) => Translation(
-    id: id ?? _id,
-    locale: locale ?? _locale,
-    title: title ?? _title,
-    description: description ?? _description,
-    shortDesc: shortDesc ?? _shortDesc,
-    address: address ?? _address,
-    buttonText: buttonText ?? _buttonText,
-  );
+  }) =>
+      Translation(
+        id: id ?? _id,
+        locale: locale ?? _locale,
+        title: title ?? _title,
+        description: description ?? _description,
+        shortDesc: shortDesc ?? _shortDesc,
+        address: address ?? _address,
+        buttonText: buttonText ?? _buttonText,
+      );
 
   int? get id => _id;
   String? get locale => _locale;

@@ -18,10 +18,10 @@ class NotificationResponse {
       );
 
   Map<String, dynamic> toJson() => {
-    "data": data == null
-        ? []
-        : List<dynamic>.from(data!.map((x) => x.toJson())),
-  };
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
 }
 
 class NotificationModel {
@@ -66,20 +66,21 @@ class NotificationModel {
     Client? client,
     OrderData? orderData,
     BlogData? blogData,
-  }) => NotificationModel(
-    id: id ?? this.id,
-    type: type ?? this.type,
-    title: title ?? this.title,
-    body: body ?? this.body,
-    data: data ?? this.data,
-    userId: userId ?? this.userId,
-    createdAt: createdAt ?? this.createdAt,
-    updatedAt: updatedAt ?? this.updatedAt,
-    readAt: readAt ?? this.readAt,
-    client: client ?? this.client,
-    orderData: orderData ?? this.orderData,
-    blogData: blogData ?? this.blogData,
-  );
+  }) =>
+      NotificationModel(
+        id: id ?? this.id,
+        type: type ?? this.type,
+        title: title ?? this.title,
+        body: body ?? this.body,
+        data: data ?? this.data,
+        userId: userId ?? this.userId,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
+        readAt: readAt ?? this.readAt,
+        client: client ?? this.client,
+        orderData: orderData ?? this.orderData,
+        blogData: blogData ?? this.blogData,
+      );
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) =>
       NotificationModel(
@@ -99,25 +100,24 @@ class NotificationModel {
             ? null
             : DateTime.tryParse(json["read_at"])?.toUtc().toLocal(),
         client: json["client"] == null ? null : Client.fromJson(json["client"]),
-        orderData: json["order"] == null
-            ? null
-            : OrderData.fromJson(json["order"]),
+        orderData:
+            json["order"] == null ? null : OrderData.fromJson(json["order"]),
         blogData: json["blog"] == null ? null : BlogData.fromJson(json["blog"]),
       );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "type": type,
-    "title": title,
-    "body": body,
-    "data": data?.toJson(),
-    "user_id": userId,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
-    "read_at": readAt?.toIso8601String(),
-    "client": client?.toJson(),
-    "order": orderData?.toJson(),
-  };
+        "id": id,
+        "type": type,
+        "title": title,
+        "body": body,
+        "data": data?.toJson(),
+        "user_id": userId,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "read_at": readAt?.toIso8601String(),
+        "client": client?.toJson(),
+        "order": orderData?.toJson(),
+      };
 }
 
 class Client {
@@ -147,35 +147,36 @@ class Client {
     int? active,
     String? role,
     String? img,
-  }) => Client(
-    id: id ?? this.id,
-    firstname: firstname ?? this.firstname,
-    lastname: lastname ?? this.lastname,
-    emptyP: emptyP ?? this.emptyP,
-    active: active ?? this.active,
-    role: role ?? this.role,
-    img: img ?? this.img,
-  );
+  }) =>
+      Client(
+        id: id ?? this.id,
+        firstname: firstname ?? this.firstname,
+        lastname: lastname ?? this.lastname,
+        emptyP: emptyP ?? this.emptyP,
+        active: active ?? this.active,
+        role: role ?? this.role,
+        img: img ?? this.img,
+      );
 
   factory Client.fromJson(Map<String, dynamic> json) => Client(
-    id: json["id"],
-    firstname: json["firstname"],
-    lastname: json["lastname"],
-    emptyP: json["empty_p"],
-    active: json["active"],
-    role: json["role"],
-    img: json["img"],
-  );
+        id: json["id"],
+        firstname: json["firstname"],
+        lastname: json["lastname"],
+        emptyP: json["empty_p"],
+        active: json["active"],
+        role: json["role"],
+        img: json["img"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "firstname": firstname,
-    "lastname": lastname,
-    "empty_p": emptyP,
-    "active": active,
-    "role": role,
-    "img": img,
-  };
+        "id": id,
+        "firstname": firstname,
+        "lastname": lastname,
+        "empty_p": emptyP,
+        "active": active,
+        "role": role,
+        "img": img,
+      };
 }
 
 class Data {
@@ -186,10 +187,10 @@ class Data {
   Data({this.id, this.type, this.status});
 
   Data copyWith({int? id, String? type, String? status}) => Data(
-    id: id ?? this.id,
-    type: type ?? this.type,
-    status: status ?? this.status,
-  );
+        id: id ?? this.id,
+        type: type ?? this.type,
+        status: status ?? this.status,
+      );
 
   factory Data.fromJson(Map<String, dynamic> json) =>
       Data(id: json["id"], type: json["type"], status: json["status"]);

@@ -236,11 +236,11 @@ class _AppBarHomeState extends ConsumerState<AppBarHome>
                                                 ?.isEmpty ??
                                             true)
                                         ? LocalStorage.getAddressSelected()
-                                                  ?.address ??
-                                              ''
+                                                ?.address ??
+                                            ''
                                         : LocalStorage.getAddressSelected()
-                                                  ?.title ??
-                                              "",
+                                                ?.title ??
+                                            "",
                                     style: AppStyle.interBold(
                                       size: 14,
                                       color: AppStyle.black,

@@ -48,9 +48,8 @@ class UnderlineDropDown extends StatelessWidget {
       style: AppStyle.interNormal(),
       decoration: InputDecoration(
         contentPadding: REdgeInsets.symmetric(horizontal: 2),
-        labelText: label != null
-            ? "${AppHelpers.getTranslation(label!)}*"
-            : null,
+        labelText:
+            label != null ? "${AppHelpers.getTranslation(label!)}*" : null,
         labelStyle: AppStyle.interNormal(
           size: 14,
           color: AppStyle.black.withOpacity(0.9),

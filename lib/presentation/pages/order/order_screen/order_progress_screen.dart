@@ -166,7 +166,7 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
                     shrinkWrap: true,
                     itemCount:
                         ref.watch(orderProvider).orderData?.details?.length ??
-                        0,
+                            0,
                     itemBuilder: (context, index) {
                       return CartOrderItem(
                         isAddComment: true,
@@ -174,10 +174,8 @@ class _OrderProgressPageState extends ConsumerState<OrderProgressPage> {
                         isActive: false,
                         add: () {},
                         remove: () {},
-                        cartTwo: ref
-                            .watch(orderProvider)
-                            .orderData
-                            ?.details?[index],
+                        cartTwo:
+                            ref.watch(orderProvider).orderData?.details?[index],
                         cart: null,
                       );
                     },

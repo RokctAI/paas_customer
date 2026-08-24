@@ -40,9 +40,7 @@ class _GroupOrderPageState extends ConsumerState<GroupOrderScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
-          .read(shopOrderProvider.notifier)
-          .getCart(
+      ref.read(shopOrderProvider.notifier).getCart(
             context,
             () {},
             isShowLoading: false,
@@ -50,9 +48,7 @@ class _GroupOrderPageState extends ConsumerState<GroupOrderScreen> {
             cartId: widget.cartId,
             shopId: (widget.shop.id ?? "").toString(),
           );
-      ref
-          .read(shopOrderProvider.notifier)
-          .generateShareLink(
+      ref.read(shopOrderProvider.notifier).generateShareLink(
             widget.shop.translation?.title ?? "",
             widget.shop.logoImg ?? "",
             widget.shop.type,
@@ -60,9 +56,7 @@ class _GroupOrderPageState extends ConsumerState<GroupOrderScreen> {
     });
 
     timer = Timer.periodic(const Duration(seconds: 5), (Timer t) {
-      ref
-          .read(shopOrderProvider.notifier)
-          .getCart(
+      ref.read(shopOrderProvider.notifier).getCart(
             context,
             () {},
             isShowLoading: false,
@@ -259,8 +253,8 @@ class _GroupOrderPageState extends ConsumerState<GroupOrderScreen> {
                           },
                           isDeleteButton:
                               LocalStorage.getUser()?.id == state.cart?.ownerId
-                              ? index != 0
-                              : false,
+                                  ? index != 0
+                                  : false,
                         );
                       },
                     ),
@@ -271,8 +265,7 @@ class _GroupOrderPageState extends ConsumerState<GroupOrderScreen> {
                     ? Padding(
                         padding: EdgeInsets.only(bottom: 16.h),
                         child: CustomButton(
-                          title:
-                              (state.cart?.userCarts
+                          title: (state.cart?.userCarts
                                       ?.where(
                                         (element) =>
                                             element.userId ==
@@ -281,16 +274,16 @@ class _GroupOrderPageState extends ConsumerState<GroupOrderScreen> {
                                       .isNotEmpty ??
                                   false)
                               ? (state.cart?.userCarts
-                                            ?.where(
-                                              (element) =>
-                                                  element.userId ==
-                                                  state.cart?.ownerId,
-                                            )
-                                            .single
-                                            .status ??
-                                        true)
-                                    ? AppHelpers.getTranslation(TrKeys.done)
-                                    : AppHelpers.getTranslation(TrKeys.order)
+                                          ?.where(
+                                            (element) =>
+                                                element.userId ==
+                                                state.cart?.ownerId,
+                                          )
+                                          .single
+                                          .status ??
+                                      true)
+                                  ? AppHelpers.getTranslation(TrKeys.done)
+                                  : AppHelpers.getTranslation(TrKeys.order)
                               : AppHelpers.getTranslation(TrKeys.order),
                           onPressed: () {
                             if ((state.cart?.userCarts

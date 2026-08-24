@@ -42,15 +42,13 @@ class CartOrderItem extends StatelessWidget {
     for (Addons e in (isActive ? cart?.addons ?? [] : cartTwo?.addons ?? [])) {
       sumPrice += (e.price ?? 0);
     }
-    disSumPrice =
-        (isActive
+    disSumPrice = (isActive
                 ? (cart?.stock?.totalPrice ?? 0)
                 : (cartTwo?.stock?.totalPrice ?? 0)) *
             (cart?.quantity ?? 1) +
         sumPrice +
         (isActive ? (cart?.discount ?? 0) : (cartTwo?.discount ?? 0));
-    sumPrice +=
-        (isActive
+    sumPrice += (isActive
             ? (cart?.stock?.totalPrice ?? 0)
             : (cartTwo?.stock?.totalPrice ?? 0)) *
         (isActive ? (cart?.quantity ?? 1) : (cartTwo?.quantity ?? 1));
@@ -139,10 +137,9 @@ class CartOrderItem extends StatelessWidget {
                           maxLines: 2,
                         ),
                   8.verticalSpace,
-                  for (Addons e
-                      in (isActive
-                          ? cart?.addons ?? []
-                          : cartTwo?.addons ?? []))
+                  for (Addons e in (isActive
+                      ? cart?.addons ?? []
+                      : cartTwo?.addons ?? []))
                     Text(
                       "${e.stocks?.product?.translation?.title ?? ""} ${AppHelpers.numberFormat(symbol: symbol, isOrder: symbol != null, number: (e.price ?? 0) / (e.quantity ?? 1))} x ${(e.quantity ?? 1)}",
                       style: AppStyle.interNormal(
@@ -285,25 +282,62 @@ class CartOrderItem extends StatelessWidget {
                           ],
                         )
                       : !(cartTwo?.bonus ?? false)
-                      ? Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      AppHelpers.numberFormat(
+                                        isOrder: symbol != null,
+                                        symbol: symbol,
+                                        number: cartTwo?.stock?.totalPrice,
+                                      ),
+                                      style: AppStyle.interSemi(
+                                        size: 16,
+                                        color: AppStyle.black,
+                                      ),
+                                    ),
+                                    Text(
+                                      " X ${(cartTwo?.quantity ?? 1)}",
+                                      style: AppStyle.interSemi(
+                                        size: 16,
+                                        color: AppStyle.black,
+                                      ),
+                                    ),
+                                    Text(
+                                      " (${(cartTwo?.quantity ?? 1) * (cartTwo?.stock?.product?.interval ?? 1)} ${cartTwo?.stock?.product?.unit?.translation?.title})",
+                                      style: AppStyle.interNormal(
+                                        size: 12,
+                                        color: AppStyle.textGrey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                8.verticalSpace,
                                 Text(
                                   AppHelpers.numberFormat(
                                     isOrder: symbol != null,
                                     symbol: symbol,
-                                    number: cartTwo?.stock?.totalPrice,
+                                    number: sumPrice,
                                   ),
                                   style: AppStyle.interSemi(
                                     size: 16,
                                     color: AppStyle.black,
                                   ),
                                 ),
+                                8.horizontalSpace,
+                              ],
+                            )
+                          : Row(
+                              children: [
                                 Text(
-                                  " X ${(cartTwo?.quantity ?? 1)}",
+                                  AppHelpers.getTranslation(
+                                    (cartTwo?.bonusShop ?? false)
+                                        ? TrKeys.shopBonus
+                                        : TrKeys.bonus,
+                                  ),
                                   style: AppStyle.interSemi(
                                     size: 16,
                                     color: AppStyle.black,
@@ -318,43 +352,6 @@ class CartOrderItem extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            8.verticalSpace,
-                            Text(
-                              AppHelpers.numberFormat(
-                                isOrder: symbol != null,
-                                symbol: symbol,
-                                number: sumPrice,
-                              ),
-                              style: AppStyle.interSemi(
-                                size: 16,
-                                color: AppStyle.black,
-                              ),
-                            ),
-                            8.horizontalSpace,
-                          ],
-                        )
-                      : Row(
-                          children: [
-                            Text(
-                              AppHelpers.getTranslation(
-                                (cartTwo?.bonusShop ?? false)
-                                    ? TrKeys.shopBonus
-                                    : TrKeys.bonus,
-                              ),
-                              style: AppStyle.interSemi(
-                                size: 16,
-                                color: AppStyle.black,
-                              ),
-                            ),
-                            Text(
-                              " (${(cartTwo?.quantity ?? 1) * (cartTwo?.stock?.product?.interval ?? 1)} ${cartTwo?.stock?.product?.unit?.translation?.title})",
-                              style: AppStyle.interNormal(
-                                size: 12,
-                                color: AppStyle.textGrey,
-                              ),
-                            ),
-                          ],
-                        ),
                 ],
               ),
             ),

@@ -19,11 +19,12 @@ class AddressInformation {
     String? address,
     String? house,
     String? floor,
-  }) => AddressInformation(
-    address: address ?? _address,
-    house: house ?? _house,
-    floor: floor ?? _floor,
-  );
+  }) =>
+      AddressInformation(
+        address: address ?? _address,
+        house: house ?? _house,
+        floor: floor ?? _floor,
+      );
 
   String? get address => _address;
 

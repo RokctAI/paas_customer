@@ -6,6 +6,5 @@ import 'login_state.dart';
 
 final loginProvider =
     StateNotifierProvider.autoDispose<LoginNotifier, LoginState>(
-      (ref) =>
-          LoginNotifier(authRepository, settingsRepository, userRepository),
-    );
+  (ref) => LoginNotifier(authRepository, settingsRepository, userRepository),
+);

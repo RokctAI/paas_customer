@@ -8,7 +8,7 @@ import '../theme/theme.dart';
 class TitleAndIcon extends StatelessWidget {
   final String? title;
   final dynamic
-  secondTitle; // Changed to dynamic to support both String and IconData
+      secondTitle; // Changed to dynamic to support both String and IconData
   final double titleSize;
   final String? rightTitle;
   final bool isIcon;
@@ -71,15 +71,15 @@ class TitleAndIcon extends StatelessWidget {
                                   ),
                                 )
                               : secondTitle is IconData
-                              ? Padding(
-                                  padding: EdgeInsets.only(left: 4.w),
-                                  child: Icon(
-                                    secondTitle,
-                                    color: secondTitleColor,
-                                    size: titleSize.sp,
-                                  ),
-                                )
-                              : const SizedBox.shrink(),
+                                  ? Padding(
+                                      padding: EdgeInsets.only(left: 4.w),
+                                      child: Icon(
+                                        secondTitle,
+                                        color: secondTitleColor,
+                                        size: titleSize.sp,
+                                      ),
+                                    )
+                                  : const SizedBox.shrink(),
                         ),
                     ],
                   ),

@@ -91,8 +91,8 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                   TitleAndIcon(
                     title: AppHelpers.getTranslation(TrKeys.autoOrder),
                     paddingHorizontalSize: 0,
-                    rightTitle:
-                        (widget.repeatData?.updatedAt?.isNotEmpty ?? false)
+                    rightTitle: (widget.repeatData?.updatedAt?.isNotEmpty ??
+                            false)
                         ? "${AppHelpers.getTranslation(TrKeys.started)} ${Jiffy.parseFromDateTime(DateTime.parse(widget.repeatData?.updatedAt ?? '')).from(Jiffy.now())}"
                         : "",
                   ),
@@ -349,21 +349,19 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                             children: [
                               Expanded(
                                 child: CustomButton(
-                                  title:
-                                      (widget.repeatData?.to != null &&
+                                  title: (widget.repeatData?.to != null &&
                                           DateTime.parse(
                                             widget.repeatData!.to!,
                                           ).isBefore(DateTime.now()))
                                       ? AppHelpers.getTranslation(TrKeys.ended)
                                       : (widget.repeatData?.isActive == 1
-                                            ? AppHelpers.getTranslation(
-                                                TrKeys.pause,
-                                              )
-                                            : AppHelpers.getTranslation(
-                                                TrKeys.resume,
-                                              )),
-                                  onPressed:
-                                      (widget.repeatData?.to != null &&
+                                          ? AppHelpers.getTranslation(
+                                              TrKeys.pause,
+                                            )
+                                          : AppHelpers.getTranslation(
+                                              TrKeys.resume,
+                                            )),
+                                  onPressed: (widget.repeatData?.to != null &&
                                           DateTime.parse(
                                             widget.repeatData!.to!,
                                           ).isBefore(DateTime.now()))
@@ -396,9 +394,7 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
                               if (event.isValidDates()) {
                                 event.startAutoOrder(
                                   onSuccess: () {
-                                    ref
-                                        .read(orderProvider.notifier)
-                                        .showOrder(
+                                    ref.read(orderProvider.notifier).showOrder(
                                           context,
                                           widget.orderId,
                                           true,
