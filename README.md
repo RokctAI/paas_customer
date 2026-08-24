@@ -138,3 +138,21 @@ a popup window with two input boxes. In first box you have to put existing
 package name that you saw in `AndroidManifest.xml` file previously and
 then write down your preferred package name in second box and then click
 on **Replace All** button.
+
+<!-- @generated-recompose-start -->
+## Recomposing this app
+
+`lib/` is fully installer-generated and disposable - it is safe to delete
+and is gitignored. Anything app-specific lives in tracked manifests
+(`app_routes`, or `host_routes` in `composer.json`), never in `lib/` itself.
+
+To regenerate it:
+
+```sh
+python3 .rokct/initiate.py   # provisions the composer under .rokct/skills/
+python3 .rokct/skills/.rok/flutter/scripts/compose.py
+```
+
+Session cleanup (`python3 .rokct/end_protocol.py`) wipes the provisioned
+tools again.
+<!-- @generated-recompose-end -->
