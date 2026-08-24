@@ -66,7 +66,7 @@ class ButtonItem extends StatelessWidget {
                 isLtr
                     ? FlutterRemix.arrow_right_line
                     : FlutterRemix
-                          .arrow_left_line, // Use the correct IconData from flutter_remix
+                        .arrow_left_line, // Use the correct IconData from flutter_remix
                 color: AppStyle.black, // Use the imported AppStyle class
               ),
             if (value != null)

@@ -15,10 +15,10 @@ class RefundOrdersModel {
       );
 
   Map<String, dynamic> toJson() => {
-    "data": data == null
-        ? []
-        : List<dynamic>.from(data!.map((x) => x.toJson())),
-  };
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
 }
 
 class RefundModel {
@@ -41,24 +41,24 @@ class RefundModel {
   Order? order;
 
   factory RefundModel.fromJson(Map<String, dynamic> json) => RefundModel(
-    id: json["id"]?.toString(),
-    status: json["status"],
-    cause: json["cause"],
-    answer: json["answer"],
-    createdAt: DateTime.tryParse(json["created_at"])?.toLocal(),
-    updatedAt: DateTime.tryParse(json["updated_at"])?.toLocal(),
-    order: json["order"] != null ? Order.fromJson(json["order"]) : null,
-  );
+        id: json["id"]?.toString(),
+        status: json["status"],
+        cause: json["cause"],
+        answer: json["answer"],
+        createdAt: DateTime.tryParse(json["created_at"])?.toLocal(),
+        updatedAt: DateTime.tryParse(json["updated_at"])?.toLocal(),
+        order: json["order"] != null ? Order.fromJson(json["order"]) : null,
+      );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "status": status,
-    "cause": cause,
-    "answer": answer,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
-    "order": order!.toJson(),
-  };
+        "id": id,
+        "status": status,
+        "cause": cause,
+        "answer": answer,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "order": order!.toJson(),
+      };
 }
 
 class Order {
@@ -68,9 +68,9 @@ class Order {
   ShopData? shop;
 
   factory Order.fromJson(Map<String, dynamic> json) => Order(
-    id: json["id"]?.toString(),
-    shop: json["shop"] != null ? ShopData.fromJson(json["shop"]) : null,
-  );
+        id: json["id"]?.toString(),
+        shop: json["shop"] != null ? ShopData.fromJson(json["shop"]) : null,
+      );
 
   Map<String, dynamic> toJson() => {"id": id};
 }

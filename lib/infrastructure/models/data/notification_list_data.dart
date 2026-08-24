@@ -21,10 +21,10 @@ class NotificationsListModel {
       );
 
   Map<String, dynamic> toJson() => {
-    "data": data == null
-        ? []
-        : List<dynamic>.from(data!.map((x) => x.toJson())),
-  };
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
 }
 
 class NotificationData {
@@ -54,19 +54,19 @@ class NotificationData {
         payload: json["payload"] == null
             ? []
             : json["payload"] == null
-            ? []
-            : List<String?>.from(json["payload"]!.map((x) => x)),
+                ? []
+                : List<String?>.from(json["payload"]!.map((x) => x)),
       );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "type": type,
-    "created_at": createdAt?.toIso8601String(),
-    "updated_at": updatedAt?.toIso8601String(),
-    "payload": payload == null
-        ? []
-        : payload == null
-        ? []
-        : List<dynamic>.from(payload!.map((x) => x)),
-  };
+        "id": id,
+        "type": type,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "payload": payload == null
+            ? []
+            : payload == null
+                ? []
+                : List<dynamic>.from(payload!.map((x) => x)),
+      };
 }

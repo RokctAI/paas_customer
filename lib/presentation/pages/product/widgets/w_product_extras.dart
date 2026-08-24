@@ -21,9 +21,8 @@ class WProductExtras extends ConsumerWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: state.typedExtras.isEmpty
-            ? AppStyle.transparent
-            : AppStyle.white,
+        color:
+            state.typedExtras.isEmpty ? AppStyle.transparent : AppStyle.white,
         borderRadius: BorderRadius.circular(10.r),
       ),
       padding: REdgeInsets.all(18),
@@ -70,31 +69,31 @@ class WProductExtras extends ConsumerWidget {
                             },
                           )
                         : typedExtra.type == ExtrasType.color
-                        ? ColorExtras(
-                            uiExtras: typedExtra.uiExtras,
-                            groupIndex: typedExtra.groupIndex,
-                            onUpdate: (uiExtra) {
-                              notifier.updateSelectedIndexes(
-                                context,
-                                typedExtra.groupIndex,
-                                uiExtra.index,
-                              );
-                            },
-                          )
-                        : typedExtra.type == ExtrasType.image
-                        ? ImageExtras(
-                            uiExtras: typedExtra.uiExtras,
-                            groupIndex: typedExtra.groupIndex,
-                            updateImage: notifier.changeActiveImageUrl,
-                            onUpdate: (uiExtra) {
-                              notifier.updateSelectedIndexes(
-                                context,
-                                typedExtra.groupIndex,
-                                uiExtra.index,
-                              );
-                            },
-                          )
-                        : const SizedBox(),
+                            ? ColorExtras(
+                                uiExtras: typedExtra.uiExtras,
+                                groupIndex: typedExtra.groupIndex,
+                                onUpdate: (uiExtra) {
+                                  notifier.updateSelectedIndexes(
+                                    context,
+                                    typedExtra.groupIndex,
+                                    uiExtra.index,
+                                  );
+                                },
+                              )
+                            : typedExtra.type == ExtrasType.image
+                                ? ImageExtras(
+                                    uiExtras: typedExtra.uiExtras,
+                                    groupIndex: typedExtra.groupIndex,
+                                    updateImage: notifier.changeActiveImageUrl,
+                                    onUpdate: (uiExtra) {
+                                      notifier.updateSelectedIndexes(
+                                        context,
+                                        typedExtra.groupIndex,
+                                        uiExtra.index,
+                                      );
+                                    },
+                                  )
+                                : const SizedBox(),
                   ],
                 ),
               );

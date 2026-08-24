@@ -233,17 +233,17 @@ class _ClosedPageState extends ConsumerState<ClosedPage>
                               ),
                             )
                           : state.currentIndex > index
-                          ? ClipRRect(
-                              borderRadius: BorderRadius.circular(122),
-                              child: const LinearProgressIndicator(
-                                value: 1,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  AppStyle.primary,
-                                ),
-                                backgroundColor: AppStyle.white,
-                              ),
-                            )
-                          : SizedBox.shrink(),
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(122),
+                                  child: const LinearProgressIndicator(
+                                    value: 1,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      AppStyle.primary,
+                                    ),
+                                    backgroundColor: AppStyle.white,
+                                  ),
+                                )
+                              : SizedBox.shrink(),
                     );
                   },
                 ),

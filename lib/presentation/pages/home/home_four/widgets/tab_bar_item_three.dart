@@ -27,8 +27,8 @@ class TabBarItemThree extends StatelessWidget {
         decoration: BoxDecoration(
           color: isShopTabBar
               ? (currentIndex == index
-                    ? AppStyle.primary
-                    : AppStyle.primary.withOpacity(0.07))
+                  ? AppStyle.primary
+                  : AppStyle.primary.withOpacity(0.07))
               : AppStyle.primary.withOpacity(0.07),
           borderRadius: BorderRadius.all(Radius.circular(10.r)),
           boxShadow: [

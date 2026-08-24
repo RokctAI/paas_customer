@@ -181,8 +181,8 @@ class OrdersItem extends StatelessWidget {
                                 number: isRefund
                                     ? 0
                                     : (order?.totalPrice?.isNegative ?? true)
-                                    ? 0
-                                    : (order?.totalPrice ?? 0),
+                                        ? 0
+                                        : (order?.totalPrice ?? 0),
                               ),
                         style: AppStyle.interBold(size: 14),
                         maxLines: 1,

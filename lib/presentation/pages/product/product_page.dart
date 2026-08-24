@@ -58,9 +58,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
     controller = PageController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (widget.productId != null) {
-        ref
-            .read(productProvider.notifier)
-            .getProductDetailsById(
+        ref.read(productProvider.notifier).getProductDetailsById(
               context,
               widget.productId ?? "",
               ref.watch(shopProvider).shopData?.type,
@@ -68,9 +66,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
               isLoading: true,
             );
       } else {
-        ref
-            .read(productProvider.notifier)
-            .getProductDetails(
+        ref.read(productProvider.notifier).getProductDetails(
               context,
               widget.data!,
               ref.watch(shopProvider).shopData?.type,
@@ -228,7 +224,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                                 child: TitleAndIcon(
                                   title:
                                       state.productData?.translation?.title ??
-                                      "",
+                                          "",
                                   paddingHorizontalSize: 0,
                                 ),
                               ),
@@ -266,8 +262,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                                   },
                                   itemBuilder: (context, index) {
                                     return CustomNetworkImage(
-                                      url:
-                                          state.selectImage?.path ??
+                                      url: state.selectImage?.path ??
                                           state.activeImageUrl,
                                       height: 200,
                                       fit: BoxFit.contain,
@@ -296,7 +291,8 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                                       AnimationButtonEffect(
                                         child: InkWell(
                                           onTap: () {
-                                            AppHelpers.showCustomModalBottomSheet(
+                                            AppHelpers
+                                                .showCustomModalBottomSheet(
                                               context: context,
                                               modal: BonusScreen(
                                                 bonus:
@@ -347,9 +343,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                               children: [
                                 Expanded(
                                   child: Text(
-                                    state
-                                            .productData
-                                            ?.translation
+                                    state.productData?.translation
                                             ?.description ??
                                         "",
                                     style: AppStyle.interRegular(
@@ -364,16 +358,16 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                                       AppHelpers.numberFormat(
                                         number:
                                             (state.selectedStock?.price ?? 0) +
-                                            (state.selectedStock?.tax ?? 0),
+                                                (state.selectedStock?.tax ?? 0),
                                       ),
                                       style: AppStyle.interRegular(
                                         size: 14.sp,
                                         color: AppStyle.black,
                                         textDecoration:
                                             state.selectedStock?.discount ==
-                                                null
-                                            ? TextDecoration.none
-                                            : TextDecoration.lineThrough,
+                                                    null
+                                                ? TextDecoration.none
+                                                : TextDecoration.lineThrough,
                                       ),
                                     ),
                                     state.selectedStock?.discount == null
@@ -394,8 +388,7 @@ class _ProductScreenState extends ConsumerState<ProductScreen> {
                                                 8.horizontalSpace,
                                                 Text(
                                                   AppHelpers.numberFormat(
-                                                    number: state
-                                                        .selectedStock
+                                                    number: state.selectedStock
                                                         ?.totalPrice,
                                                   ),
                                                   style: AppStyle.interNoSemi(

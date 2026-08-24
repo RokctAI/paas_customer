@@ -4,8 +4,8 @@ import 'tr_keys.dart';
 abstract class AppValidators {
   AppValidators._();
   static bool isValidEmail(String email) => RegExp(
-    "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*\$",
-  ).hasMatch(email);
+        "^[a-zA-Z0-9.!#\$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*\$",
+      ).hasMatch(email);
 
   static bool checkEmail(String email) =>
       RegExp("/^[0-9 ()+-]+\$/").hasMatch(email);

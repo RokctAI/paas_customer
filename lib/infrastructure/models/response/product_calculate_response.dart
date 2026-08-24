@@ -28,12 +28,13 @@ class ProductCalculateResponse {
     bool? status,
     String? message,
     CalculatedData? data,
-  }) => ProductCalculateResponse(
-    timestamp: timestamp ?? _timestamp,
-    status: status ?? _status,
-    message: message ?? _message,
-    data: data ?? _data,
-  );
+  }) =>
+      ProductCalculateResponse(
+        timestamp: timestamp ?? _timestamp,
+        status: status ?? _status,
+        message: message ?? _message,
+        data: data ?? _data,
+      );
 
   String? get timestamp => _timestamp;
 
@@ -95,13 +96,14 @@ class CalculatedData {
     num? productTotal,
     num? orderTax,
     num? orderTotal,
-  }) => CalculatedData(
-    products: products ?? _products,
-    productTax: productTax ?? _productTax,
-    productTotal: productTotal ?? _productTotal,
-    orderTax: orderTax ?? _orderTax,
-    orderTotal: orderTotal ?? _orderTotal,
-  );
+  }) =>
+      CalculatedData(
+        products: products ?? _products,
+        productTax: productTax ?? _productTax,
+        productTotal: productTotal ?? _productTotal,
+        orderTax: orderTax ?? _orderTax,
+        orderTotal: orderTotal ?? _orderTotal,
+      );
 
   List<CalculatedProduct>? get products => _products;
 
@@ -176,16 +178,17 @@ class CalculatedProduct {
     num? discount,
     num? priceWithoutTax,
     num? totalPrice,
-  }) => CalculatedProduct(
-    id: id ?? _id,
-    price: price ?? _price,
-    qty: qty ?? _qty,
-    tax: tax ?? _tax,
-    shopTax: shopTax ?? _shopTax,
-    discount: discount ?? _discount,
-    priceWithoutTax: priceWithoutTax ?? _priceWithoutTax,
-    totalPrice: totalPrice ?? _totalPrice,
-  );
+  }) =>
+      CalculatedProduct(
+        id: id ?? _id,
+        price: price ?? _price,
+        qty: qty ?? _qty,
+        tax: tax ?? _tax,
+        shopTax: shopTax ?? _shopTax,
+        discount: discount ?? _discount,
+        priceWithoutTax: priceWithoutTax ?? _priceWithoutTax,
+        totalPrice: totalPrice ?? _totalPrice,
+      );
 
   int? get id => _id;
 

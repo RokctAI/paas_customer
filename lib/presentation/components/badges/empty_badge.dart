@@ -20,9 +20,9 @@ class EmptyBadge extends StatelessWidget {
     String? subtitleText,
     this.linkText,
     this.onLinkTap,
-  }) : titleText = titleText ?? AppHelpers.getTranslation(TrKeys.nothingFound),
-       subtitleText =
-           subtitleText ?? AppHelpers.getTranslation(TrKeys.trySearchingAgain);
+  })  : titleText = titleText ?? AppHelpers.getTranslation(TrKeys.nothingFound),
+        subtitleText =
+            subtitleText ?? AppHelpers.getTranslation(TrKeys.trySearchingAgain);
 
   @override
   Widget build(BuildContext context) {

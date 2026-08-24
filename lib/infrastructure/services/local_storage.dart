@@ -118,8 +118,8 @@ abstract class LocalStorage {
             .map((part) => part.trim())
             .toList(); // Use null-aware operator
         if (addressParts.length >= 3) {
-          String postalCode = addressParts
-              .removeLast(); // Remove and store postal code
+          String postalCode =
+              addressParts.removeLast(); // Remove and store postal code
           addressParts.insert(
             0,
             postalCode,
@@ -217,9 +217,8 @@ abstract class LocalStorage {
       _preferences?.remove(StorageKeys.keyWalletData);
 
   static Future<void> setSettingsList(List<SettingsData> settings) async {
-    final List<String> strings = settings
-        .map((setting) => jsonEncode(setting.toJson()))
-        .toList();
+    final List<String> strings =
+        settings.map((setting) => jsonEncode(setting.toJson())).toList();
     await _preferences?.setStringList(StorageKeys.keyGlobalSettings, strings);
   }
 

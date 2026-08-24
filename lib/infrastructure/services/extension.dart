@@ -46,8 +46,7 @@ extension StringDate on String? {
 
   TimeOfDay get toNextTime {
     return TimeOfDay(
-      hour:
-          int.tryParse(
+      hour: int.tryParse(
             this?.substring(
                   (this?.indexOf("-") ?? 0) + 2,
                   (this?.lastIndexOf(":") ?? 0),
@@ -55,8 +54,7 @@ extension StringDate on String? {
                 '',
           ) ??
           0,
-      minute:
-          int.tryParse(
+      minute: int.tryParse(
             this?.substring((this?.lastIndexOf(":") ?? 0) + 1) ?? '',
           ) ??
           0,
@@ -73,11 +71,9 @@ extension StringDate on String? {
 
   TimeOfDay get toStartTime {
     return TimeOfDay(
-      hour:
-          int.tryParse(this?.substring(0, (this?.indexOf(":") ?? 0)) ?? '') ??
+      hour: int.tryParse(this?.substring(0, (this?.indexOf(":") ?? 0)) ?? '') ??
           0,
-      minute:
-          int.tryParse(
+      minute: int.tryParse(
             this?.substring(
                   (this?.indexOf(":") ?? 0) + 1,
                   (this?.indexOf(" ") ?? 0),
@@ -94,7 +90,7 @@ extension StringDate on String? {
           int.tryParse(this?.substring(0, this?.indexOf("-") ?? 0) ?? "") ?? 0,
       minute:
           int.tryParse(this?.substring((this?.indexOf("-") ?? 0) + 1) ?? "") ??
-          0,
+              0,
     );
   }
 }

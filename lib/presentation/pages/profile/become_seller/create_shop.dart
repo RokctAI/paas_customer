@@ -127,15 +127,15 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                             width: 50.r,
                                             height: 50.r,
                                             padding: EdgeInsets.all(6.r),
-                                            decoration:
-                                                state.logoImage.isNotEmpty
+                                            decoration: state
+                                                    .logoImage.isNotEmpty
                                                 ? BoxDecoration(
                                                     color: AppStyle.black
                                                         .withOpacity(0.27),
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                          16.r,
-                                                        ),
+                                                      16.r,
+                                                    ),
                                                     image: DecorationImage(
                                                       image: FileImage(
                                                         File(state.logoImage),
@@ -148,8 +148,8 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                                         .withOpacity(0.27),
                                                     borderRadius:
                                                         BorderRadius.circular(
-                                                          16.r,
-                                                        ),
+                                                      16.r,
+                                                    ),
                                                   ),
                                             child: const Center(
                                               child: Icon(
@@ -333,8 +333,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                                 ),
                                               ),
                                               SizedBox(
-                                                width:
-                                                    MediaQuery.sizeOf(
+                                                width: MediaQuery.sizeOf(
                                                       context,
                                                     ).width /
                                                     2,
@@ -392,30 +391,31 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                     ),
                   )
                 : state.userData?.shop?.status == "new"
-                ? Column(
-                    children: [
-                      Lottie.asset('assets/lottie/processing.json'),
-                      Text(
-                        AppHelpers.getTranslation(TrKeys.yourRequest),
-                        style: AppStyle.interNoSemi(
-                          size: 18,
-                          color: AppStyle.black,
+                    ? Column(
+                        children: [
+                          Lottie.asset('assets/lottie/processing.json'),
+                          Text(
+                            AppHelpers.getTranslation(TrKeys.yourRequest),
+                            style: AppStyle.interNoSemi(
+                              size: 18,
+                              color: AppStyle.black,
+                            ),
+                          ),
+                        ],
+                      )
+                    : Padding(
+                        padding: EdgeInsets.all(24.r),
+                        child: CustomButton(
+                          title:
+                              AppHelpers.getTranslation(TrKeys.goToAdminPanel),
+                          onPressed: () async {
+                            final Uri launchUri = Uri.parse(
+                              AppConstants.adminPageUrl,
+                            );
+                            await launchUrl(launchUri);
+                          },
                         ),
                       ),
-                    ],
-                  )
-                : Padding(
-                    padding: EdgeInsets.all(24.r),
-                    child: CustomButton(
-                      title: AppHelpers.getTranslation(TrKeys.goToAdminPanel),
-                      onPressed: () async {
-                        final Uri launchUri = Uri.parse(
-                          AppConstants.adminPageUrl,
-                        );
-                        await launchUrl(launchUri);
-                      },
-                    ),
-                  ),
           ],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,

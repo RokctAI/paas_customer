@@ -24,7 +24,7 @@ class RegisterConfirmationNotifier
   final UserRepositoryFacade _userRepositoryFacade;
 
   RegisterConfirmationNotifier(this._authRepository, this._userRepositoryFacade)
-    : super(const RegisterConfirmationState());
+      : super(const RegisterConfirmationState());
 
   Timer? _timer;
   int _initialTime = 30;
@@ -94,18 +94,14 @@ class RegisterConfirmationNotifier
             LocalStorage.setToken(data.data?.token);
             LocalStorage.setAddressSelected(
               AddressData(
-                title:
-                    data.data?.user?.addresses
-                        ?.firstWhere(
-                          (element) => element.active ?? false,
-                          orElse: () {
-                            return AddressNewModel();
-                          },
-                        )
-                        .title ??
+                title: data.data?.user?.addresses?.firstWhere(
+                      (element) => element.active ?? false,
+                      orElse: () {
+                        return AddressNewModel();
+                      },
+                    ).title ??
                     "",
-                address:
-                    data.data?.user?.addresses
+                address: data.data?.user?.addresses
                         ?.firstWhere(
                           (element) => element.active ?? false,
                           orElse: () {
@@ -304,18 +300,14 @@ class RegisterConfirmationNotifier
             LocalStorage.setToken(data.data?.token);
             LocalStorage.setAddressSelected(
               AddressData(
-                title:
-                    data.data?.user?.addresses
-                        ?.firstWhere(
-                          (element) => element.active ?? false,
-                          orElse: () {
-                            return AddressNewModel();
-                          },
-                        )
-                        .title ??
+                title: data.data?.user?.addresses?.firstWhere(
+                      (element) => element.active ?? false,
+                      orElse: () {
+                        return AddressNewModel();
+                      },
+                    ).title ??
                     "",
-                address:
-                    data.data?.user?.addresses
+                address: data.data?.user?.addresses
                         ?.firstWhere(
                           (element) => element.active ?? false,
                           orElse: () {

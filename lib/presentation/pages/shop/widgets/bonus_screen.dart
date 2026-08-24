@@ -54,8 +54,8 @@ class BonusScreen extends StatelessWidget {
               Text(
                 bonus != null
                     ? ((bonus?.type ?? "sum") == "sum")
-                          ? "${bonus?.bonusStock?.product?.translation?.title ?? ""} ${AppHelpers.getTranslation(TrKeys.giftBuy)} ${AppHelpers.numberFormat(number: bonus?.value)}"
-                          : "${bonus?.bonusStock?.product?.translation?.title ?? ""} ${AppHelpers.getTranslation(TrKeys.giftBuy)} ${bonus?.value ?? 0} ${AppHelpers.getTranslation(TrKeys.count)} "
+                        ? "${bonus?.bonusStock?.product?.translation?.title ?? ""} ${AppHelpers.getTranslation(TrKeys.giftBuy)} ${AppHelpers.numberFormat(number: bonus?.value)}"
+                        : "${bonus?.bonusStock?.product?.translation?.title ?? ""} ${AppHelpers.getTranslation(TrKeys.giftBuy)} ${bonus?.value ?? 0} ${AppHelpers.getTranslation(TrKeys.count)} "
                     : AppHelpers.getTranslation(TrKeys.bonus),
                 style: AppStyle.interRegular(size: 14, color: AppStyle.black),
               ),

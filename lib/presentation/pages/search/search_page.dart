@@ -108,9 +108,9 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                           s,
                           categoryId: state.selectIndexCategory >= 0
                               ? ref
-                                    .watch(homeProvider)
-                                    .categories[state.selectIndexCategory]
-                                    .id
+                                  .watch(homeProvider)
+                                  .categories[state.selectIndexCategory]
+                                  .id
                               : null,
                         )
                         ..searchProduct(context, s);
@@ -120,8 +120,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
               ),
             ),
             SizedBox(
-              height:
-                  MediaQuery.sizeOf(context).height -
+              height: MediaQuery.sizeOf(context).height -
                   76.h -
                   ((MediaQuery.paddingOf(context).top > 34)
                       ? 34.h
@@ -174,59 +173,60 @@ class _SearchPageState extends ConsumerState<SearchPage> {
           ref.watch(homeProvider).isCategoryLoading
               ? const SearchCategoryShimmer()
               : ref.watch(homeProvider).categories.isNotEmpty
-              ? Column(
-                  children: [
-                    SizedBox(
-                      height: 36.h,
-                      child: SmartRefresher(
-                        scrollDirection: Axis.horizontal,
-                        enablePullDown: false,
-                        enablePullUp: true,
-                        controller: _categoryController,
-                        onLoading: () async {
-                          await ref
-                              .read(homeProvider.notifier)
-                              .fetchCategoriesPage(
-                                context,
-                                _categoryController,
-                              );
-                        },
-                        child: ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: ref.watch(homeProvider).categories.length,
-                          padding: EdgeInsets.only(left: 16.w),
-                          itemBuilder: (context, index) {
-                            return TabBarItem(
-                              isShopTabBar: true,
-                              title:
-                                  ref
-                                      .watch(homeProvider)
-                                      .categories[index]
-                                      .translation
-                                      ?.title ??
-                                  "",
-                              currentIndex: state.selectIndexCategory,
-                              index: index,
-                              onTap: () => event.setSelectCategory(
-                                index,
-                                context,
-                                categoryId: state.selectIndexCategory >= 0
-                                    ? ref
+                  ? Column(
+                      children: [
+                        SizedBox(
+                          height: 36.h,
+                          child: SmartRefresher(
+                            scrollDirection: Axis.horizontal,
+                            enablePullDown: false,
+                            enablePullUp: true,
+                            controller: _categoryController,
+                            onLoading: () async {
+                              await ref
+                                  .read(homeProvider.notifier)
+                                  .fetchCategoriesPage(
+                                    context,
+                                    _categoryController,
+                                  );
+                            },
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount:
+                                  ref.watch(homeProvider).categories.length,
+                              padding: EdgeInsets.only(left: 16.w),
+                              itemBuilder: (context, index) {
+                                return TabBarItem(
+                                  isShopTabBar: true,
+                                  title: ref
                                           .watch(homeProvider)
-                                          .categories[state.selectIndexCategory]
-                                          .id
-                                    : null,
-                              ),
-                            );
-                          },
+                                          .categories[index]
+                                          .translation
+                                          ?.title ??
+                                      "",
+                                  currentIndex: state.selectIndexCategory,
+                                  index: index,
+                                  onTap: () => event.setSelectCategory(
+                                    index,
+                                    context,
+                                    categoryId: state.selectIndexCategory >= 0
+                                        ? ref
+                                            .watch(homeProvider)
+                                            .categories[
+                                                state.selectIndexCategory]
+                                            .id
+                                        : null,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    30.verticalSpace,
-                  ],
-                )
-              : const SizedBox.shrink(),
+                        30.verticalSpace,
+                      ],
+                    )
+                  : const SizedBox.shrink(),
           state.isShopLoading
               ? const SearchShopShimmer()
               : Column(
@@ -319,71 +319,72 @@ class _SearchPageState extends ConsumerState<SearchPage> {
         ref.watch(homeProvider).isCategoryLoading
             ? const SearchCategoryShimmer()
             : ref.watch(homeProvider).categories.isNotEmpty
-            ? Column(
-                children: [
-                  SizedBox(
-                    height: 36.h,
-                    child: SmartRefresher(
-                      scrollDirection: Axis.horizontal,
-                      enablePullDown: false,
-                      enablePullUp: true,
-                      controller: _categoryControllerTwo,
-                      onLoading: () async {
-                        await ref
-                            .read(homeProvider.notifier)
-                            .fetchCategoriesPage(
-                              context,
-                              _categoryControllerTwo,
-                            );
-                      },
-                      child: AnimationLimiter(
-                        child: ListView.builder(
-                          shrinkWrap: true,
+                ? Column(
+                    children: [
+                      SizedBox(
+                        height: 36.h,
+                        child: SmartRefresher(
                           scrollDirection: Axis.horizontal,
-                          itemCount: ref.watch(homeProvider).categories.length,
-                          padding: EdgeInsets.only(left: 16.w),
-                          itemBuilder: (context, index) {
-                            return AnimationConfiguration.staggeredList(
-                              position: index,
-                              duration: const Duration(milliseconds: 375),
-                              child: SlideAnimation(
-                                verticalOffset: 50.0,
-                                child: FadeInAnimation(
-                                  child: TabBarItem(
-                                    isShopTabBar: true,
-                                    title:
-                                        ref
-                                            .watch(homeProvider)
-                                            .categories[index]
-                                            .translation
-                                            ?.title ??
-                                        "",
-                                    index: index,
-                                    currentIndex: state.selectIndexCategory,
-                                    onTap: () => event.setSelectCategory(
-                                      index,
-                                      context,
-                                      categoryId: state.selectIndexCategory >= 0
-                                          ? ref
+                          enablePullDown: false,
+                          enablePullUp: true,
+                          controller: _categoryControllerTwo,
+                          onLoading: () async {
+                            await ref
+                                .read(homeProvider.notifier)
+                                .fetchCategoriesPage(
+                                  context,
+                                  _categoryControllerTwo,
+                                );
+                          },
+                          child: AnimationLimiter(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount:
+                                  ref.watch(homeProvider).categories.length,
+                              padding: EdgeInsets.only(left: 16.w),
+                              itemBuilder: (context, index) {
+                                return AnimationConfiguration.staggeredList(
+                                  position: index,
+                                  duration: const Duration(milliseconds: 375),
+                                  child: SlideAnimation(
+                                    verticalOffset: 50.0,
+                                    child: FadeInAnimation(
+                                      child: TabBarItem(
+                                        isShopTabBar: true,
+                                        title: ref
                                                 .watch(homeProvider)
-                                                .categories[state
-                                                    .selectIndexCategory]
-                                                .id
-                                          : null,
+                                                .categories[index]
+                                                .translation
+                                                ?.title ??
+                                            "",
+                                        index: index,
+                                        currentIndex: state.selectIndexCategory,
+                                        onTap: () => event.setSelectCategory(
+                                          index,
+                                          context,
+                                          categoryId:
+                                              state.selectIndexCategory >= 0
+                                                  ? ref
+                                                      .watch(homeProvider)
+                                                      .categories[state
+                                                          .selectIndexCategory]
+                                                      .id
+                                                  : null,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            );
-                          },
+                                );
+                              },
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  30.verticalSpace,
-                ],
-              )
-            : const SizedBox.shrink(),
+                      30.verticalSpace,
+                    ],
+                  )
+                : const SizedBox.shrink(),
         TitleAndIcon(
           title: AppHelpers.getTranslation(TrKeys.recently),
           rightTitle: AppHelpers.getTranslation(TrKeys.clear),
@@ -424,9 +425,9 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                             state.searchHistory[index],
                             categoryId: state.selectIndexCategory >= 0
                                 ? ref
-                                      .watch(homeProvider)
-                                      .categories[state.selectIndexCategory]
-                                      .id
+                                    .watch(homeProvider)
+                                    .categories[state.selectIndexCategory]
+                                    .id
                                 : null,
                           )
                           ..searchProduct(context, state.searchHistory[index]);

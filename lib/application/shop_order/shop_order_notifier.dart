@@ -73,7 +73,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
             quantity: element.quantity,
             parentId:
                 state.cart?.userCarts?.first.cartDetails?[index].stock?.id ??
-                "",
+                    "",
           ),
         );
       }
@@ -129,7 +129,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
           CartRequest(
             stockId:
                 state.cart?.userCarts?.first.cartDetails?[index].stock?.id ??
-                "",
+                    "",
             quantity:
                 state.cart?.userCarts?.first.cartDetails?[index].quantity ?? 1,
           ),
@@ -142,7 +142,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
               quantity: element.quantity,
               parentId:
                   state.cart?.userCarts?.first.cartDetails?[index].stock?.id ??
-                  "",
+                      "",
             ),
           );
         }
@@ -151,7 +151,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
             shopId: state.cart?.shopId ?? "",
             stockId:
                 state.cart?.userCarts?.first.cartDetails?[index].stock?.id ??
-                "",
+                    "",
             quantity:
                 state.cart?.userCarts?.first.cartDetails?[index].quantity ?? 1,
             carts: list,
@@ -243,7 +243,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
     if (connected) {
       CartDetail oldDetail =
           state.cart?.userCarts?[userIndex].cartDetails?[productIndex] ??
-          CartDetail();
+              CartDetail();
       CartDetail newDetail = oldDetail.copyWith(
         quantity: 1 + (oldDetail.quantity ?? 1),
       );
@@ -263,41 +263,23 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
         state = state.copyWith(isAddAndRemoveLoading: true);
         List<CartRequest> list = [
           CartRequest(
-            stockId:
-                state
-                    .cart
-                    ?.userCarts?[userIndex]
-                    .cartDetails?[productIndex]
-                    .stock
-                    ?.id ??
+            stockId: state.cart?.userCarts?[userIndex]
+                    .cartDetails?[productIndex].stock?.id ??
                 "",
-            quantity:
-                state
-                    .cart
-                    ?.userCarts?[userIndex]
-                    .cartDetails?[productIndex]
-                    .quantity ??
+            quantity: state.cart?.userCarts?[userIndex]
+                    .cartDetails?[productIndex].quantity ??
                 1,
           ),
         ];
-        for (Addons element
-            in state
-                    .cart
-                    ?.userCarts?[userIndex]
-                    .cartDetails?[productIndex]
-                    .addons ??
-                []) {
+        for (Addons element in state.cart?.userCarts?[userIndex]
+                .cartDetails?[productIndex].addons ??
+            []) {
           list.add(
             CartRequest(
               stockId: element.stocks?.id,
               quantity: element.quantity,
-              parentId:
-                  state
-                      .cart
-                      ?.userCarts?[userIndex]
-                      .cartDetails?[productIndex]
-                      .stock
-                      ?.id ??
+              parentId: state.cart?.userCarts?[userIndex]
+                      .cartDetails?[productIndex].stock?.id ??
                   "",
             ),
           );
@@ -307,20 +289,11 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
             cartId: state.cart?.id.toString(),
             userUuid: state.cart?.userCarts?[userIndex].uuid,
             shopId: state.cart?.shopId ?? "",
-            stockId:
-                state
-                    .cart
-                    ?.userCarts?[userIndex]
-                    .cartDetails?[productIndex]
-                    .stock
-                    ?.id ??
+            stockId: state.cart?.userCarts?[userIndex]
+                    .cartDetails?[productIndex].stock?.id ??
                 "",
-            quantity:
-                state
-                    .cart
-                    ?.userCarts?[userIndex]
-                    .cartDetails?[productIndex]
-                    .quantity ??
+            quantity: state.cart?.userCarts?[userIndex]
+                    .cartDetails?[productIndex].quantity ??
                 1,
             carts: list,
           ),
@@ -353,10 +326,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
     required int productIndex,
     required int userIndex,
   }) async {
-    if ((state
-                .cart
-                ?.userCarts?[userIndex]
-                .cartDetails?[productIndex]
+    if ((state.cart?.userCarts?[userIndex].cartDetails?[productIndex]
                 .quantity ??
             1) >
         1) {
@@ -364,7 +334,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
       if (connected) {
         CartDetail oldDetail =
             state.cart?.userCarts?[userIndex].cartDetails?[productIndex] ??
-            CartDetail();
+                CartDetail();
         CartDetail newDetail = oldDetail.copyWith(
           quantity: (oldDetail.quantity ?? 1) - 1,
         );
@@ -384,41 +354,23 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
           state = state.copyWith(isAddAndRemoveLoading: true);
           List<CartRequest> list = [
             CartRequest(
-              stockId:
-                  state
-                      .cart
-                      ?.userCarts?[userIndex]
-                      .cartDetails?[productIndex]
-                      .stock
-                      ?.id ??
+              stockId: state.cart?.userCarts?[userIndex]
+                      .cartDetails?[productIndex].stock?.id ??
                   "",
-              quantity:
-                  state
-                      .cart
-                      ?.userCarts?[userIndex]
-                      .cartDetails?[productIndex]
-                      .quantity ??
+              quantity: state.cart?.userCarts?[userIndex]
+                      .cartDetails?[productIndex].quantity ??
                   1,
             ),
           ];
-          for (Addons element
-              in state
-                      .cart
-                      ?.userCarts?[userIndex]
-                      .cartDetails?[productIndex]
-                      .addons ??
-                  []) {
+          for (Addons element in state.cart?.userCarts?[userIndex]
+                  .cartDetails?[productIndex].addons ??
+              []) {
             list.add(
               CartRequest(
                 stockId: element.stocks?.id,
                 quantity: element.quantity,
-                parentId:
-                    state
-                        .cart
-                        ?.userCarts?[userIndex]
-                        .cartDetails?[productIndex]
-                        .stock
-                        ?.id ??
+                parentId: state.cart?.userCarts?[userIndex]
+                        .cartDetails?[productIndex].stock?.id ??
                     "",
               ),
             );
@@ -428,20 +380,11 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
               cartId: state.cart?.id.toString(),
               userUuid: state.cart?.userCarts?[userIndex].uuid,
               shopId: state.cart?.shopId ?? "",
-              stockId:
-                  state
-                      .cart
-                      ?.userCarts?[userIndex]
-                      .cartDetails?[productIndex]
-                      .stock
-                      ?.id ??
+              stockId: state.cart?.userCarts?[userIndex]
+                      .cartDetails?[productIndex].stock?.id ??
                   "",
-              quantity:
-                  state
-                      .cart
-                      ?.userCarts?[userIndex]
-                      .cartDetails?[productIndex]
-                      .quantity ??
+              quantity: state.cart?.userCarts?[userIndex]
+                      .cartDetails?[productIndex].quantity ??
                   1,
               carts: list,
             ),
@@ -475,7 +418,7 @@ class ShopOrderNotifier extends StateNotifier<ShopOrderState> {
         final cartId = state.cart?.id ?? "";
         final cartDetailId =
             state.cart?.userCarts?[userIndex].cartDetails?[productIndex].id ??
-            "";
+                "";
         List<CartDetail> newCartList =
             state.cart?.userCarts?[userIndex].cartDetails ?? [];
         newCartList.removeAt(productIndex);

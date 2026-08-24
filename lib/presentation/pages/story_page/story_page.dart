@@ -179,8 +179,7 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                           return AnimatedContainer(
                             margin: EdgeInsets.only(right: 8.w),
                             height: 4.h,
-                            width:
-                                (MediaQuery.sizeOf(context).width -
+                            width: (MediaQuery.sizeOf(context).width -
                                     (36.w +
                                         ((widget.story!.length == 1
                                                 ? widget.story!.length
@@ -205,25 +204,26 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                                       value: controller.value,
                                       valueColor:
                                           const AlwaysStoppedAnimation<Color>(
-                                            AppStyle.primary,
-                                          ),
-                                      backgroundColor: AppStyle.white,
-                                    ),
-                                  )
-                                : currentIndex > index
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(122.r),
-                                    ),
-                                    child: const LinearProgressIndicator(
-                                      value: 1,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
                                         AppStyle.primary,
                                       ),
                                       backgroundColor: AppStyle.white,
                                     ),
                                   )
-                                : const SizedBox.shrink(),
+                                : currentIndex > index
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(122.r),
+                                        ),
+                                        child: const LinearProgressIndicator(
+                                          value: 1,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            AppStyle.primary,
+                                          ),
+                                          backgroundColor: AppStyle.white,
+                                        ),
+                                      )
+                                    : const SizedBox.shrink(),
                           );
                         },
                       ),
@@ -276,8 +276,7 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                           return AnimatedContainer(
                             margin: EdgeInsets.only(right: 8.w),
                             height: 4.h,
-                            width:
-                                (MediaQuery.sizeOf(context).width -
+                            width: (MediaQuery.sizeOf(context).width -
                                     (36.w +
                                         ((widget.story!.length == 1
                                                 ? widget.story!.length
@@ -302,25 +301,26 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                                       value: controller.value,
                                       valueColor:
                                           const AlwaysStoppedAnimation<Color>(
-                                            AppStyle.primary,
-                                          ),
-                                      backgroundColor: AppStyle.white,
-                                    ),
-                                  )
-                                : currentIndex > index
-                                ? ClipRRect(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(122.r),
-                                    ),
-                                    child: const LinearProgressIndicator(
-                                      value: 1,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
                                         AppStyle.primary,
                                       ),
                                       backgroundColor: AppStyle.white,
                                     ),
                                   )
-                                : const SizedBox.shrink(),
+                                : currentIndex > index
+                                    ? ClipRRect(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(122.r),
+                                        ),
+                                        child: const LinearProgressIndicator(
+                                          value: 1,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            AppStyle.primary,
+                                          ),
+                                          backgroundColor: AppStyle.white,
+                                        ),
+                                      )
+                                    : const SizedBox.shrink(),
                           );
                         },
                       ),
@@ -460,8 +460,8 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                 onPressed: () {
                   context.pushRoute(
                     ShopRoute(
-                      shopId: (widget.story?[currentIndex]?.shopId ?? 0)
-                          .toString(),
+                      shopId:
+                          (widget.story?[currentIndex]?.shopId ?? 0).toString(),
                       productId: widget.story?[currentIndex]?.productUuid ?? "",
                     ),
                   );

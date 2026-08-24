@@ -12,11 +12,12 @@ class SearchUserResponse {
     List<UserModel>? data,
     Links? links,
     Meta? meta,
-  }) => SearchUserResponse(
-    data: data ?? this.data,
-    links: links ?? this.links,
-    meta: meta ?? this.meta,
-  );
+  }) =>
+      SearchUserResponse(
+        data: data ?? this.data,
+        links: links ?? this.links,
+        meta: meta ?? this.meta,
+      );
 
   factory SearchUserResponse.fromJson(Map<String, dynamic> json) =>
       SearchUserResponse(
@@ -30,10 +31,10 @@ class SearchUserResponse {
       );
 
   Map<String, dynamic> toJson() => {
-    "data": data == null
-        ? []
-        : List<dynamic>.from(data!.map((x) => x.toJson())),
-    "links": links?.toJson(),
-    "meta": meta?.toJson(),
-  };
+        "data": data == null
+            ? []
+            : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "links": links?.toJson(),
+        "meta": meta?.toJson(),
+      };
 }

@@ -14,7 +14,7 @@ class SettingNotifier extends StateNotifier<SettingState> {
   final UserRepositoryFacade _userRepository;
 
   SettingNotifier(this._settingsRepository, this._userRepository)
-    : super(const SettingState());
+      : super(const SettingState());
 
   void changeIndex(bool isChange) {
     state = state.copyWith(isLoading: isChange);

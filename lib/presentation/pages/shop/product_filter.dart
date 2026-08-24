@@ -28,9 +28,8 @@ class ProductFilter extends ConsumerWidget {
     final event = ref.read(shopProvider.notifier);
     final state = ref.watch(shopProvider);
     return Directionality(
-      textDirection: LocalStorage.getLangLtr()
-          ? TextDirection.ltr
-          : TextDirection.rtl,
+      textDirection:
+          LocalStorage.getLangLtr() ? TextDirection.ltr : TextDirection.rtl,
       child: Container(
         decoration: BoxDecoration(
           color: AppStyle.bgGrey,
@@ -103,8 +102,8 @@ class ProductFilter extends ConsumerWidget {
                                       border: Border.all(
                                         width:
                                             state.sortIndex == sort.indexOf(e)
-                                            ? 4.r
-                                            : 2.r,
+                                                ? 4.r
+                                                : 2.r,
                                         color: AppStyle.black,
                                       ),
                                       color: AppStyle.transparent,
@@ -135,8 +134,7 @@ class ProductFilter extends ConsumerWidget {
               ),
               18.verticalSpace,
               Wrap(
-                children:
-                    state.brands
+                children: state.brands
                         ?.map(
                           (e) => GestureDetector(
                             onTap: () {
