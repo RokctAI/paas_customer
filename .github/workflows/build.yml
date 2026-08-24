@@ -95,9 +95,6 @@ jobs:
       # Deployment Configuration (Immediate release on Main)
       release_strategy: 'weekly'
       build_android: true
-      # TEMPORARY (desktop test wave): build the Windows desktop app from the
-      # committed windows/ runner so the app can be desktop-tested. Revert candidate.
-      build_windows: true
       # Environment configuration
       node-version: ${{ inputs.node-version || '24' }}
       python-version: ${{ inputs.python-version || '3.14' }}

@@ -89,13 +89,13 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "Rokct" "\0"
-            VALUE "FileDescription", "foodyman" "\0"
+            VALUE "CompanyName", "com.example" "\0"
+            VALUE "FileDescription", "customer" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "foodyman" "\0"
-            VALUE "LegalCopyright", "Copyright (C) 2026 Rokct. All rights reserved." "\0"
-            VALUE "OriginalFilename", "foodyman.exe" "\0"
-            VALUE "ProductName", "foodyman" "\0"
+            VALUE "InternalName", "customer" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 com.example. All rights reserved." "\0"
+            VALUE "OriginalFilename", "customer.exe" "\0"
+            VALUE "ProductName", "customer" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

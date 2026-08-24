@@ -1,0 +1,78 @@
+{
+  "name": "base_sdk",
+  "version": "1.0.0",
+  "home_page": "templates/routes/route_pages.dart",
+  "installs": [
+    {
+      "from": "templates/main.dart",
+      "to": "lib/main.dart"
+    },
+    {
+      "from": "templates/app_widget.dart",
+      "to": "lib/core/presentation/app_widget.dart"
+    },
+    {
+      "from": "templates/routes/app_router.dart",
+      "to": "lib/core/presentation/routes/app_router.dart"
+    },
+    {
+      "from": "templates/routes/route_pages.dart",
+      "to": "lib/core/presentation/routes/route_pages.dart"
+    },
+    {
+      "from": "templates/pubspec.yaml",
+      "to": "pubspec.yaml"
+    },
+    {
+      "from": "templates/analysis_options.yaml",
+      "to": "analysis_options.yaml"
+    },
+    {
+      "from": "templates/flutter_native_splash.yaml",
+      "to": "flutter_native_splash.yaml"
+    },
+    {
+      "from": "templates/android",
+      "to": "android"
+    },
+    {
+      "from": "templates/ios",
+      "to": "ios"
+    },
+    {
+      "from": "templates/assets",
+      "to": "assets"
+    },
+    {
+      "from": "templates/theme",
+      "to": "lib/core/presentation/theme"
+    }
+  ],
+  "routes": [
+    {
+      "path": "/",
+      "page": "SplashRoute.page",
+      "type": "MaterialRoute",
+      "import": "package:${package}/core/presentation/routes/route_pages.dart"
+    },
+    {
+      "path": "/no-connection",
+      "page": "NoConnectionRoute.page",
+      "type": "MaterialRoute",
+      "import": "package:${package}/core/presentation/routes/route_pages.dart"
+    },
+    {
+      "path": "/closed",
+      "page": "ClosedRoute.page",
+      "type": "MaterialRoute",
+      "import": "package:${package}/core/presentation/routes/route_pages.dart"
+    },
+    {
+      "path": "/ui-type",
+      "page": "UiTypeRoute.page",
+      "type": "MaterialRoute",
+      "import": "package:${package}/core/presentation/routes/route_pages.dart"
+    }
+  ],
+  "integrations": []
+}

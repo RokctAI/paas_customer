@@ -1,0 +1,147 @@
+# SDK Refork: Rebuild from paas_customer, targeting Supacharge next
+
+## Context and why
+
+The current SDK set was extracted from `paas_customer` (the original Foodyman customer app,
+also merged with `paas_driver`/`paas_manager` into `RokctApp/lib_backup` at one point) years ago,
+but the extraction was never finished. An audit found `core_sdk` alone has 242 unique imported
+paths across the workspace, of which only 40 actually resolve — 202 are "phantom" imports that
+were rewritten to point at `core_sdk/src/...` locations that were never actually populated. A
+sample check found phantom paths match `paas_customer/lib/...` (with the `src/` prefix stripped)
+at a 100% rate. This is not a few bugs — the foundation itself doesn't contain most of what
+consumers assume it contains.
+
+Decision: rather than patch this, rebuild from `paas_customer` as the real source of truth,
+**moving** files into their correct new SDK homes (not copying) — `paas_customer/lib/` should
+end up thin after this, since its content has actually relocated, not been duplicated.
+
+**Sequencing — this matters, do not deviate**: work on `paas_customer` only in this pass. Do
+**not** touch `paas_driver` or `paas_manager` — attempting all three risks running out of budget
+before reaching the actual priority, which is getting Supacharge built on the new SDK set. Once
+`paas_customer`'s SDKs are extracted and `paas_customer` itself builds and runs correctly against
+them, stop and report — the next phase (building Supacharge on this foundation) is a separate,
+later task.
+
+Also **disregard `paas_customer/frappe/` backend code entirely** in this pass — Dart/Flutter
+extraction only.
+
+## SDK disposition — three categories, be precise about which applies to what
+
+**1. Untouched — real, verified work, do not modify:**
+`agent_sdk`, `replay_sdk`, `productivity_sdk`, `hardware_sdk`, `desktop_sdk`, `telephony_sdk`,
+`launch_sdk`, `weather_sdk`, `betassist_sdk`. These are not part of the `paas_customer` lineage,
+have no phantom-import problem (verified this session), and should not be touched by this task at
+all.
+
+**2. Empty and rebuild fresh — not because the code was wrong (it was verified correct), purely
+for build consistency across this refork:**
+`subscriptions_sdk`, `fav_sdk`, `processing_sdk`, `loyalty_sdk`. These are not present in
+`paas_customer` either (they're Supacharge/Betassist-specific, not marketplace-domain) — "empty
+and rebuild" here does not mean "extract from paas_customer," it means clear the SDK's own `lib/`
+content and let it be rebuilt fresh as its own task (in practice this may mean re-deriving
+similar functionality to what's there now, or evolving it once dependent pieces like `base_sdk`
+exist — use judgment, this is not a strict "delete and start from nothing" if the existing design
+is still sound; it's "don't assume today's file layout is final").
+
+**3. Empty and rebuild by moving files from `paas_customer/lib/`:**
+`core_sdk` (retired entirely — replaced by `base_sdk` + `marketplace_sdk`, see below), `users_sdk`,
+`merchants_sdk`, `delivery_sdk`, `orders_sdk`, `products_sdk`, `auth_sdk`, `comms_sdk`,
+`corporate_sdk`, `map_sdk`, `booking_sdk`, `kitchen_sdk`, `promotions_sdk`, `revenue_sdk`,
+`payments_sdk`, `wallet_sdk`, `zones_sdk`, `polaris_sdk`, `onboarding_sdk`.
+
+For "empty," clear the SDK's `lib/` contents (keep `pubspec.yaml`/`manifest.json` scaffolding —
+adjust as needed for the new architecture below) so it's a clean slate to move real code into,
+not a folder deletion.
+
+## The base_sdk / marketplace_sdk split (replaces core_sdk)
+
+`core_sdk` mixed truly universal foundation code with Foodyman-marketplace-specific customer-UI
+code that should have had its own SDK all along — `merchants_sdk` already owns the manager/seller
+persona, `delivery_sdk` already owns the driver persona, but the customer persona's
+marketplace-specific code (search, wallet, become_seller, etc.) never got its own equivalent SDK.
+
+- **`base_sdk`** (new): the true foundation. `AppDatabase`, theme/`AppStyle`, `TokenInterceptor`/
+  `HttpService`, routing scaffold, the `UserData`/session model, generic UI primitives (buttons,
+  modals, text fields — anything not tied to marketplace concepts), `LocalStorage`/`AppHelpers`/
+  `TrKeys`/`DateService` (the persona-neutral versions already identified as the real generic API
+  consumed by agent/replay/subscriptions/fav — do not move these to `merchants_sdk`, that would
+  recreate coupling already removed this session). Everyone depends on `base_sdk`: `merchants_sdk`,
+  `delivery_sdk`, `marketplace_sdk`, `agent_sdk`, `replay_sdk`, and later `lms_sdk`.
+- **`marketplace_sdk`** (new): customer-persona marketplace UI — search, wallet, become_seller,
+  like/favorites integration, customer home/profile pages. Same tier as `merchants_sdk`/
+  `delivery_sdk`. Depends only on `base_sdk`.
+
+A prior audit (before this refork was decided) already produced a detailed file-by-file
+categorization proposal for the old `core_sdk`'s contents into base/marketplace/misplaced-persona
+buckets, including a specific breakdown of `dependency_manager.dart`'s 191 errors (mostly phantom
+imports) and a recommendation to stop centralizing DI there — each persona SDK should register its
+own repos via the installer's existing `<Name>SdkDependencies.register()` auto-injection, leaving
+a thin base-level bootstrap. Use that reasoning as a starting point, but source real code from
+`paas_customer` now that the phantom-vs-real picture is fully known, not from the old `core_sdk`
+(most of which doesn't actually exist).
+
+## Local storage / offline-cache decisions already made — apply these when rebuilding LocalStorage-equivalent code
+
+`paas_customer/lib/infrastructure/services/local_storage.dart` was audited. Findings to carry
+into the rebuild:
+
+- **Fine to keep cached as-is**: token, `uiType`, own user profile, search history, saved/favorite
+  shop IDs, selected address, language/locale settings (including `langLtr`), selected currency,
+  translations, theme mode (dark/light), settings list/fetched flag.
+- **Real bug to fix, not carry forward**: `walletData` (`Wallet`) is cached as the apparent primary
+  read path for a **financial balance**. This is exactly the anti-pattern the offline-cache
+  principle (retention/read-order — see `agent/SDK_README.md`'s Offline Persistence section, ADR-004
+  in `occultation/.rokct/decision_log.md`) warns against: a stale wallet balance could make a
+  customer think a topup succeeded when it didn't, or that they have more money than they do.
+  Wallet balance must always be fetched live; local storage at most as a "last known, may be
+  stale" fallback display, never the primary source, in whatever SDK ends up owning wallet
+  concerns (`wallet_sdk` or `marketplace_sdk`, your call based on what's actually there).
+- **Check, don't assume**: `getDeliveryInfo()` reads a key literally named `carInfo` but returns a
+  `DeliveryResponse` — driver-app vocabulary sitting inside the customer app's LocalStorage.
+  Determine whether this is dead code (likely residue from the `paas_customer`+`paas_driver`+
+  `paas_manager` merge attempt that produced `RokctApp/lib_backup` — do not reference or touch that
+  folder, it's an inert backup) or something real, and place it correctly (`delivery_sdk`?
+  genuinely unused?) rather than carrying the confusing naming forward.
+
+## templates/ pattern — mostly retired, understand why before you touch any manifest.json
+
+The `templates/` copy-out-to-host-app-`lib/` pattern existed because of an assumption that turned
+out not to hold in this system: it was built assuming Flutter's own pub-cache (fetched via
+`flutter pub`, immutable, hidden from the developer) would hold SDK code, so anything a developer
+needed to edit had to be physically copied out into the host app's own `lib/` at install time.
+That's not how this system actually works — `sdk_composer.py`'s git-based compose flow caches
+everything in a fully-editable local `.rokct/cache/<name>/`, so there's no immutability problem to
+work around.
+
+New rule for this rebuild:
+- **Default: code stays inside the owning SDK's own `lib/`**, imported normally via
+  `package:<sdk_name>/...`. This includes theme — `base_sdk` should own its theme files directly,
+  not install them out to `lib/core/presentation/theme/` in every host app.
+- **Exception — `main.dart`**: Flutter requires exactly one at the app root; it can't live inside
+  a package. This gets injected by whichever SDK is `home_sdk` for a given composed app (matching
+  the existing installer mechanism), not copied via `templates/`.
+- **Exception — the home/main page**: likely needs the same `home_sdk`-injection treatment as
+  `main.dart`, for the same reason (inherently per-app/product-specific at the top level, even
+  though it's not a native platform file).
+- **Exception — native platform files**: `android/`, `ios/`, `res/`, app icons, and similar
+  platform-project-structure files stay in `templates/` since a Dart package genuinely cannot
+  contain them.
+
+Update each rebuilt SDK's `manifest.json` accordingly — most `installs`/`routes` entries that
+exist purely to copy Dart source out to the host app should disappear; only the `main.dart`/
+home-page injection and native platform file installs should remain as `templates/`-based.
+
+## What to report back before proceeding to Supacharge
+
+1. Confirmation `paas_customer` itself still builds and runs correctly once its code has been
+   moved out into the new SDK set (it should be consuming the SDKs it now uses, not its own
+   duplicated copies).
+2. The final `base_sdk`/`marketplace_sdk` file disposition actually used (the prior audit's
+   categorization was a proposal — real `paas_customer` source may differ from what the phantom
+   `core_sdk` imports implied).
+3. Resolution of the `carInfo`/`DeliveryResponse` and `walletData` items above.
+4. Any place `paas_customer`'s real code revealed something materially different from what the
+   phantom `core_sdk` imports assumed (this is expected and worth surfacing, not a problem to
+   hide).
+
+Do not start on Supacharge until this phase is confirmed working and reported.
