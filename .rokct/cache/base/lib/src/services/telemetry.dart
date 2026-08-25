@@ -77,6 +77,12 @@ class TelemetryClient {
   /// is a `POST` to [kPlatformGatewayPath] carrying this cmd.
   static const String cmd = 'tenant.api.log_frontend_error';
 
+  /// Gateway cmd (prefix-free) for the telemetry manifest's
+  /// `tenant.api.track_event` whitelisted_methods mapping — the usage
+  /// tracking lane. Same delivery door as [cmd]: a `POST` to
+  /// [kPlatformGatewayPath] carrying this cmd.
+  static const String trackCmd = 'tenant.api.track_event';
+
   /// Fire-and-forget structured event: {type, context, session_id,
   /// timestamp}. [type] is a stable machine-readable class (snake_case);
   /// [context] carries whatever is needed to debug without reproducing.
@@ -119,6 +125,57 @@ class TelemetryClient {
       );
     } catch (e) {
       debugPrint('==> telemetry delivery failed ($type): $e');
+    }
+  }
+
+  /// Fire-and-forget usage event (the tracking lane, distinct from the
+  /// error lane above). Wire contract (fixed — consumers code against it):
+  /// gateway payload `{"event": <event>, "context": <JSON-encoded string of
+  /// {"properties": {...}, "session_id": ..., "timestamp": ...}>}` under
+  /// [trackCmd]. [event] is a stable machine-readable name (snake_case);
+  /// [properties] carries optional structured detail.
+  ///
+  /// Same contract as [logError]: telemetry must never break the app —
+  /// failures are swallowed (logged locally), and every event debugPrints
+  /// its full payload so debug builds leave a usable trail even offline.
+  Future<void> track(
+    String event, {
+    Map<String, dynamic>? properties,
+    String? sessionId,
+  }) async {
+    try {
+      final payload = <String, dynamic>{
+        'properties': properties ?? const <String, dynamic>{},
+        'session_id': sessionId,
+        'timestamp': DateTime.now().toUtc().toIso8601String(),
+      };
+      // Encode once, up front, INSIDE the try: a non-JSON-encodable value in
+      // [properties] must degrade to a stub event, never throw out of an
+      // unawaited track call.
+      String encoded;
+      try {
+        encoded = jsonEncode(payload);
+      } catch (e) {
+        payload['properties'] = {'encode_error': e.toString()};
+        encoded = jsonEncode(payload);
+      }
+      // Local trail first — real even when the endpoint is unreachable.
+      // Debug builds only: release logs must not carry full payloads.
+      if (kDebugMode) debugPrint('==> telemetry track $event $encoded');
+      final getIt = GetIt.instance;
+      if (!getIt.isRegistered<HttpService>()) return;
+      await getIt.get<HttpService>().client(requireAuth: true).post(
+        kPlatformGatewayPath,
+        data: {
+          'cmd': trackCmd,
+          'payload': {
+            'event': event,
+            'context': encoded,
+          },
+        },
+      );
+    } catch (e) {
+      debugPrint('==> telemetry track delivery failed ($event): $e');
     }
   }
 }
