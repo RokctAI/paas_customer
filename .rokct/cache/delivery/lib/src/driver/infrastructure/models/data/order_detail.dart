@@ -41,7 +41,7 @@ class OrderDetailModel {
 }
 
 class OrderDetailData {
-  int? id;
+  String? id;
   int? userId;
   num? totalPrice;
   num? rate;
@@ -113,10 +113,11 @@ class OrderDetailData {
       this.containsAdultItems});
 
   OrderDetailData.fromJson(Map<String, dynamic> json) {
-    // Frappe order names are strings; the working list endpoint sends
-    // `id` only when the name is numeric, so parse tolerantly instead of
-    // assuming an int.
-    id = json['id'] is int ? json['id'] : int.tryParse('${json['id']}');
+    // Frappe order docnames are strings (default hash autoname). The
+    // working endpoints always send `name` and only send the legacy
+    // numeric `id` when the name happens to be numeric, so prefer `name`
+    // and fall back to `id` for older payloads.
+    id = (json['name'] ?? json['id'])?.toString();
     userId = json['user_id'];
     totalPrice = json['total_price'];
     serviceFee = json['service_fee'];
@@ -493,7 +494,7 @@ class User {
 class Details {
   String? note;
   int? id;
-  int? orderId;
+  String? orderId;
   int? stockId;
   num? originPrice;
   num? totalPrice;
@@ -522,7 +523,8 @@ class Details {
 
   Details.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    orderId = json['order_id'];
+    // Order docnames are strings (see OrderDetailData.fromJson).
+    orderId = json['order_id']?.toString();
     stockId = json['stock_id'];
     originPrice = json['origin_price'];
     totalPrice = json['total_price'];

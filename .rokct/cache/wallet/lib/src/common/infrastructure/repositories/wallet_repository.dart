@@ -35,6 +35,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:base_sdk/src/handlers/handlers.dart';
+import 'package:base_sdk/src/handlers/platform_gateway.dart';
 import 'package:base_sdk/src/domain/interface/wallet.dart';
 import 'package:base_sdk/src/di/injection.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
@@ -44,6 +45,12 @@ import 'package:base_sdk/src/models/data/wallet_data.dart';
 import 'package:base_sdk/src/models/models.dart';
 
 class WalletRepository implements WalletRepositoryFacade {
+  /// Universal platform gateway (project ruling: every client-facing call
+  /// POSTs `{"cmd", "payload"}` to the one gateway path). `cmd` is the
+  /// wallet frappe manifest's whitelisted-method key with the app prefix
+  /// stripped: `{app_name}.api.payment.*` -> `api.payment.*`.
+  static const _gateway = PlatformGateway();
+
   @override
   Future<ApiResult<List<UserModel>>> searchSending(
     Map<String, dynamic> params,
@@ -139,20 +146,27 @@ class WalletRepository implements WalletRepositoryFacade {
     String? token,
   }) async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.post(
-        '/api/method/paas.api.payment.process_wallet_top_up',
-        data: {'amount': amount, 'token': token},
-      );
-      // Return message (URL) or data (Transaction) depending on backend response.
-      // Assuming backend returns 'message' string for URL and 'data' obj for transaction.
-      if (response.data['message'] is String) {
-        return ApiResult.success(data: response.data['message']);
-      } else {
+      // Manifest key: {app_name}.api.payment.process_wallet_top_up.
+      final body = await _gateway.tenant('api.payment.process_wallet_top_up', {
+        'amount': amount,
+        if (token != null) 'token': token,
+      });
+      // FrappeResponseInterceptor already unwraps the top-level `message`
+      // envelope on 2xx; tolerate both shapes for overridden clients. A
+      // String answer is a redirect URL (gateway-hosted card capture); a
+      // map is the completed transaction.
+      final data = body is Map && body.containsKey('message')
+          ? body['message']
+          : body;
+      if (data is String) {
+        return ApiResult.success(data: data);
+      }
+      if (data is Map) {
         return ApiResult.success(
-          data: TransactionsResponse.fromJson(response.data),
+          data: TransactionsResponse.fromJson(Map<String, dynamic>.from(data)),
         );
       }
+      return ApiResult.success(data: data);
     } catch (e) {
       debugPrint('==> wallet top up failure: $e');
       return ApiResult.failure(

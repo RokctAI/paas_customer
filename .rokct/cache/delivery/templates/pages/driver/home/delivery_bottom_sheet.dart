@@ -484,9 +484,7 @@ class _DeliverBottomSheetScreenState extends State<DeliverBottomSheetScreen> {
                                                                 context:
                                                                     context,
                                                                 orderId: widget
-                                                                        .order
-                                                                        .id ??
-                                                                    0,
+                                                                    .order.id!,
                                                                 note: noteCon
                                                                     .text);
                                                         Navigator.pop(context);

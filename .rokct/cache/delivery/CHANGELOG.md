@@ -1,3 +1,31 @@
+## 1.10.0
+
+* Driver order ids migrated int -> String (the fleet-wide docname
+  migration's last straggler; the customer path was already done).
+  Order docnames are Frappe default hash strings (the commerce Order
+  doctype has no autoname), so the driver flavor's `int? orderId`
+  surface could only ever address numerically-named orders:
+  * `OrderDetailData.id`, `Details.orderId` and `PushModel.orderId` are
+    now `String?`; `fromJson` prefers the always-present `name` key and
+    falls back to the legacy numeric `id` for older payloads.
+  * `CourierOrdersRepositoryFacade` / `CourierParcelRepositoryFacade`
+    and their HTTP + demo implementations now take String order/parcel
+    ids throughout (base_sdk's `ParcelOrder.id` was already a String —
+    the parcel templates were round-tripping it through `int.tryParse`,
+    which nulled out every hash docname).
+  * FIXED silent delivered no-op: `deliveredFinish` (and the parcel
+    twin) used to send `orderId ?? 0` — on a hash docname the serializer
+    emits `id: null`, so the driver marked the order delivered while the
+    backend updated nothing. A null id now aborts with a logged error
+    instead of sending 0, and the delivered status update's result is
+    checked, surfacing backend failures to the courier.
+  * Wire-compatible: the backend endpoints are untyped and
+    `serialize_deliveryman_order` already always emits `name` (its
+    numeric-only legacy `id` emission is kept for old builds) — no
+    frappe changes.
+  * Demo seed order ids became strings ("900001"), matching real
+    docnames end-to-end in demo mode.
+
 ## 1.9.2
 
 * Driver ID verification for 18+ orders (`contains_adult_items`, the

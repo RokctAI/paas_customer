@@ -67,7 +67,7 @@ class DemoCourierParcelRepository implements CourierParcelRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<ParcelOrder>> showParcel(int id) async {
+  Future<ApiResult<ParcelOrder>> showParcel(String id) async {
     final parcel = DemoDeliverySeed.parcelById(id);
     if (parcel == null) {
       return const ApiResult.failure(
@@ -78,24 +78,24 @@ class DemoCourierParcelRepository implements CourierParcelRepositoryFacade {
 
   @override
   Future<ApiResult<ParcelOrder>> setParcel(String orderId) async {
-    final id = int.tryParse(orderId);
-    final parcel = id == null ? null : DemoDeliverySeed.parcelById(id);
+    final parcel = DemoDeliverySeed.parcelById(orderId);
     if (parcel == null) {
       return const ApiResult.failure(
           error: 'Parcel not found', statusCode: 404);
     }
-    DemoDeliverySeed.currentParcelId = id;
+    DemoDeliverySeed.currentParcelId = orderId;
     return ApiResult.success(data: ParcelOrder.fromJson(parcel));
   }
 
   @override
-  Future<ApiResult<dynamic>> setCurrentOrder(int? orderId) async {
+  Future<ApiResult<dynamic>> setCurrentOrder(String? orderId) async {
     DemoDeliverySeed.currentParcelId = orderId;
     return const ApiResult.success(data: true);
   }
 
   @override
-  Future<ApiResult<dynamic>> updateParcel(int? parcelId, String? status) async {
+  Future<ApiResult<dynamic>> updateParcel(
+      String? parcelId, String? status) async {
     if (parcelId != null && status != null) {
       DemoDeliverySeed.parcelStatusOverlay[parcelId] = status;
     }
@@ -104,13 +104,13 @@ class DemoCourierParcelRepository implements CourierParcelRepositoryFacade {
 
   @override
   Future<ApiResult<dynamic>> confirmParcelCodCollection(
-      int? parcelId, num amountReceived) async {
+      String? parcelId, num amountReceived) async {
     return const ApiResult.success(data: true);
   }
 
   @override
   Future<ApiResult<void>> addReviewParcel(
-    num orderId, {
+    String orderId, {
     required double rating,
     required String comment,
   }) async {

@@ -36,10 +36,17 @@ class BannerItemThree extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        // Banner ids are Frappe docnames (hash strings); a banner without
+        // one cannot be opened — skip instead of sending a sentinel.
+        final String? bannerId = banner.id;
+        if (bannerId == null) {
+          debugPrint('==> banner tap skipped: banner has no id');
+          return;
+        }
         AppHelpers.showCustomModalBottomSheet(
           context: context,
           modal: BannerScreen(
-            bannerId: banner.id ?? 0,
+            bannerId: bannerId,
             image: banner.img ?? "",
             desc: banner.translation?.description ?? "",
             list: banner.shops ?? [],

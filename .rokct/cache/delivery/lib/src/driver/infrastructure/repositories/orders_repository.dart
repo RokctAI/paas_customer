@@ -112,7 +112,7 @@ class CourierOrdersRepository implements CourierOrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<OrderDetailModel>> showOrders(int id) async {
+  Future<ApiResult<OrderDetailModel>> showOrders(String id) async {
     final data = {
       'currency_id': LocalStorage.getSelectedCurrency()?.id,
       'lang': LocalStorage.getLanguage()?.locale ?? 'en',
@@ -165,7 +165,7 @@ class CourierOrdersRepository implements CourierOrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<dynamic>> setCurrentOrder(int? orderId) async {
+  Future<ApiResult<dynamic>> setCurrentOrder(String? orderId) async {
     try {
       // Repointed from the dead legacy
       // `/api/v1/dashboard/deliveryman/orders/{id}/current` path to the
@@ -207,7 +207,7 @@ class CourierOrdersRepository implements CourierOrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<dynamic>> updateOrder(int? orderId, String? status,
+  Future<ApiResult<dynamic>> updateOrder(String? orderId, String? status,
       {bool recipientAgeVerified = false}) async {
     try {
       // Rewired from the dead legacy
@@ -239,7 +239,7 @@ class CourierOrdersRepository implements CourierOrdersRepositoryFacade {
 
   @override
   Future<ApiResult<dynamic>> confirmCodCollection(
-      int? orderId, num amountReceived) async {
+      String? orderId, num amountReceived) async {
     try {
       // FrappeResponseInterceptor already unwraps the top-level `message`
       // key, so the gateway answer is the endpoint's payload itself.
@@ -257,7 +257,7 @@ class CourierOrdersRepository implements CourierOrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<dynamic>> convertCodToCredit(int? orderId) async {
+  Future<ApiResult<dynamic>> convertCodToCredit(String? orderId) async {
     try {
       final response = await _gateway.tenant(
         '$_cmd.convert_cod_to_credit',
@@ -300,7 +300,8 @@ class CourierOrdersRepository implements CourierOrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<dynamic>> uploadImage(int? orderId, String? image) async {
+  Future<ApiResult<dynamic>> uploadImage(
+      String? orderId, String? image) async {
     try {
       // Repointed from the dead legacy
       // `/api/v1/dashboard/deliveryman/orders/{id}/image` path (pre-fork
@@ -327,7 +328,7 @@ class CourierOrdersRepository implements CourierOrdersRepositoryFacade {
 
   @override
   Future<ApiResult<void>> addReview(
-    num orderId, {
+    String orderId, {
     required double rating,
     required String comment,
   }) async {
@@ -386,7 +387,7 @@ class CourierOrdersRepository implements CourierOrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<void>> cancelOrder(int orderId, String note) async {
+  Future<ApiResult<void>> cancelOrder(String orderId, String note) async {
     try {
       // Repointed from the dead legacy
       // `/api/v1/dashboard/deliveryman/order/{id}/status/update` path to
