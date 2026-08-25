@@ -10,6 +10,7 @@ dependencies:
     sdk: flutter
   base_sdk:
     path: ../base
+  flutter_screenutil: ^5.9.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -21,4 +22,4 @@ dev_dependencies:
 # codegen/analysis. Ignored when a host app is the resolution root.
 dependency_overrides:
   base_sdk:
-    path: ../../../core/base/dart
+    path: ../base

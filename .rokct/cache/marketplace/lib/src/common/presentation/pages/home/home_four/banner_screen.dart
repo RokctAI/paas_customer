@@ -30,7 +30,7 @@ import 'package:base_sdk/src/navigation/app_routes.dart';
 
 class BannerScreen extends StatelessWidget {
   final String image;
-  final int bannerId;
+  final String bannerId;
   final String desc;
   final bool isAds;
   final List<ShopData> list;

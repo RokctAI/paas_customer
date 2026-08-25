@@ -85,7 +85,7 @@ class DemoCourierOrdersRepository implements CourierOrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<OrderDetailModel>> showOrders(int id) async {
+  Future<ApiResult<OrderDetailModel>> showOrders(String id) async {
     final order = DemoDeliverySeed.orderById(id);
     if (order == null) {
       return const ApiResult.failure(error: 'Order not found', statusCode: 404);
@@ -109,23 +109,22 @@ class DemoCourierOrdersRepository implements CourierOrdersRepositoryFacade {
 
   @override
   Future<ApiResult<OrderDetailModel>> setOrder(String orderId) async {
-    final id = int.tryParse(orderId);
-    final order = id == null ? null : DemoDeliverySeed.orderById(id);
+    final order = DemoDeliverySeed.orderById(orderId);
     if (order == null) {
       return const ApiResult.failure(error: 'Order not found', statusCode: 404);
     }
-    DemoDeliverySeed.currentOrderId = id;
+    DemoDeliverySeed.currentOrderId = orderId;
     return ApiResult.success(data: OrderDetailModel.fromJson({'data': order}));
   }
 
   @override
-  Future<ApiResult<dynamic>> setCurrentOrder(int? orderId) async {
+  Future<ApiResult<dynamic>> setCurrentOrder(String? orderId) async {
     DemoDeliverySeed.currentOrderId = orderId;
     return const ApiResult.success(data: true);
   }
 
   @override
-  Future<ApiResult<dynamic>> updateOrder(int? orderId, String? status,
+  Future<ApiResult<dynamic>> updateOrder(String? orderId, String? status,
       {bool recipientAgeVerified = false}) async {
     // recipientAgeVerified is accepted to satisfy the facade's 18+ ID
     // verification contract; demo mode has no backend gate, so the flag is
@@ -138,23 +137,24 @@ class DemoCourierOrdersRepository implements CourierOrdersRepositoryFacade {
 
   @override
   Future<ApiResult<dynamic>> confirmCodCollection(
-      int? orderId, num amountReceived) async {
+      String? orderId, num amountReceived) async {
     return const ApiResult.success(data: true);
   }
 
   @override
-  Future<ApiResult<dynamic>> convertCodToCredit(int? orderId) async {
+  Future<ApiResult<dynamic>> convertCodToCredit(String? orderId) async {
     return const ApiResult.success(data: true);
   }
 
   @override
-  Future<ApiResult<dynamic>> uploadImage(int? orderId, String? image) async {
+  Future<ApiResult<dynamic>> uploadImage(
+      String? orderId, String? image) async {
     return const ApiResult.success(data: true);
   }
 
   @override
   Future<ApiResult<void>> addReview(
-    num orderId, {
+    String orderId, {
     required double rating,
     required String comment,
   }) async {
@@ -162,7 +162,7 @@ class DemoCourierOrdersRepository implements CourierOrdersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<void>> cancelOrder(int orderId, String note) async {
+  Future<ApiResult<void>> cancelOrder(String orderId, String note) async {
     DemoDeliverySeed.orderStatusOverlay[orderId] = 'canceled';
     if (DemoDeliverySeed.currentOrderId == orderId) {
       DemoDeliverySeed.currentOrderId = null;

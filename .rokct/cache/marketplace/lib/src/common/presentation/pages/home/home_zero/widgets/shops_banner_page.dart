@@ -38,7 +38,7 @@ import 'package:marketplace_sdk/src/common/presentation/pages/home/home_zero/wid
 
 // // // @RoutePage()
 class ShopsBannerPage extends ConsumerStatefulWidget {
-  final int bannerId;
+  final String bannerId;
   final bool isAds;
   final String title;
 

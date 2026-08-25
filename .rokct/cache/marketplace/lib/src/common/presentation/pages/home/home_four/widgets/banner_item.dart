@@ -55,11 +55,18 @@ class BannerItem extends StatelessWidget {
             "MODAL DEBUG: About to create BannerScreen with buttonText: '${banner.buttonText}'",
           );
         }
+        // Banner ids are Frappe docnames (hash strings); a banner without
+        // one cannot be opened — skip instead of sending a sentinel.
+        final String? bannerId = banner.id;
+        if (bannerId == null) {
+          debugPrint('==> banner tap skipped: banner has no id');
+          return;
+        }
         AppHelpers.showCustomModalBottomSheet(
           context: context,
           modal: BannerScreen(
             isAds: isAds,
-            bannerId: banner.id ?? 0,
+            bannerId: bannerId,
             image: banner.img ?? "",
             desc: banner.translation?.description ?? "",
             buttonText: banner.buttonText,
