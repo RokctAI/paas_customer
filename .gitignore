@@ -57,3 +57,7 @@ migrate_working_dir/
 
 # Python bytecode from running the .rokct compose/install scripts.
 .rokct/__pycache__/
+
+# Environment configuration lives outside version control.
+# Anchored to the repo root; covers the .env file/directory there.
+/.env
