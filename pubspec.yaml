@@ -46,6 +46,10 @@ dependencies:
     path: .rokct/cache/promotions
   loyalty_sdk:
     path: .rokct/cache/loyalty
+  desktop_sdk:
+    path: .rokct/cache/desktop
+  hms_sdk:
+    path: .rokct/cache/hms
 dev_dependencies:
   flutter_test:
     sdk: flutter

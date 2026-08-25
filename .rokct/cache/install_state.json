@@ -711,6 +711,39 @@
       "embedded_widgets": [],
       "di_hooks": [],
       "boot_hooks": []
+    },
+    "desktop_sdk": {
+      "version": "1.1.1",
+      "files": {},
+      "routes": [],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": [],
+      "di_hooks": [],
+      "boot_hooks": []
+    },
+    "hms_sdk": {
+      "version": "1.0.0",
+      "files": {},
+      "routes": [],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": [],
+      "di_hooks": [],
+      "boot_hooks": [
+        {
+          "id": "hms-push-boot",
+          "order": 30,
+          "body": "if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {\n  try {\n    await HmsPushBootstrap.instance.initialize();\n  } catch (e) {\n    debugPrint('HMS push boot skipped: $e');\n  }\n}",
+          "imports": [
+            "import 'package:flutter/foundation.dart';",
+            "import 'package:hms_sdk/src/services/hms_push_bootstrap.dart';"
+          ],
+          "_comment": "Order 30: after comms' Firebase/FCM boot (10) and its desktop notification poller (20) - order 20 is already taken and duplicate orders draw a composer warning. Android-only and fail-open like comms' hooks. The initialize() call itself is a strict no-op unless DeviceServices proves the device GMS-free AND HMS-capable, so GMS devices and detection errors keep comms_sdk's FCM path as the sole push owner. The await is cheap: initialize() only awaits the availability probe and turnOnPush - the push token arrives asynchronously on Push Kit's token stream, so runApp is never delayed by a token round-trip."
+        }
+      ]
     }
   },
   "sdk_cache": {
@@ -781,6 +814,14 @@
     "processing": {
       "version": "1.0.1",
       "hash": "7649ab091a676505"
+    },
+    "desktop": {
+      "version": "1.1.1",
+      "hash": "a472fec135edfe2c"
+    },
+    "hms": {
+      "version": "1.0.0",
+      "hash": "b5a3b97ef5f282d4"
     }
   }
 }

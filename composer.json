@@ -12,7 +12,7 @@
       "path": "../core/base/dart",
       "ref": "main",
       "sha256": "f2278305c3df1bbf65124c334f2b05270d54069e61b52ab1502848d36f62e946",
-      "_sha256_comment": "SHA-256 of base/dart/install.py at core@d896a13; required by the composer's unpinned-installer gate. Update when upstream install.py changes.",
+      "_sha256_comment": "SHA-256 of base/dart/install.py at core@7facace; required by the composer's unpinned-installer gate. Update when upstream install.py changes.",
       "home_sdk": false,
       "_comment": "Shared kernel (replaces retired core_sdk); provides the app shell templates."
     },
@@ -36,7 +36,7 @@
       "git": "https://github.com/RokctAI/Users",
       "ref": "main",
       "sha256": "638ff6a945cdf8ab8713b6f7d3627dc6834cfa4400b473e801d8793a0e9038ea",
-      "_sha256_comment": "SHA-256 of auth/dart/install.py at Users@eb64715; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of auth/dart/install.py at Users@3d8b1a1; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "users_sdk",
@@ -46,7 +46,7 @@
       "git": "https://github.com/RokctAI/Users",
       "ref": "main",
       "sha256": "c8d07afa7d8a526f3fb5570f639f89adbfe8cb0ff32c106ff5696a1f1e9dd38d",
-      "_sha256_comment": "SHA-256 of users/dart/install.py at Users@eb64715; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of users/dart/install.py at Users@3d8b1a1; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "merchants_sdk",
@@ -86,7 +86,7 @@
       "path": "../agent/fav/dart",
       "ref": "main",
       "sha256": "f1683f7a6d376922ad1db443a1e11bb485281f05cd0365697c66f5fb30da2a06",
-      "_sha256_comment": "SHA-256 of fav/dart/install.py at agent@4ea4ba40; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of fav/dart/install.py at agent@4ea4ba4; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "wallet_sdk",
@@ -96,7 +96,7 @@
       "path": "../pay/wallet/dart",
       "ref": "main",
       "sha256": "f41f54c24761af8e1bad01de5b8dc6c2d30bcc8a19a7cb0a2ad01d8a2901137f",
-      "_sha256_comment": "SHA-256 of wallet/dart/install.py at pay@154f926; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of wallet/dart/install.py at pay@59bd4f8; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "payments_sdk",
@@ -106,7 +106,7 @@
       "path": "../pay/payments/dart",
       "ref": "main",
       "sha256": "537b6c25cf48c2c9c64c7ab3df30ea857f3ad22d11857b0b0819a39bd24e32cb",
-      "_sha256_comment": "SHA-256 of payments/dart/install.py at pay@154f926; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of payments/dart/install.py at pay@59bd4f8; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "delivery_sdk",
@@ -116,7 +116,7 @@
       "git": "https://github.com/RokctAI/zones",
       "ref": "main",
       "sha256": "67474b198bb30a17c563cac6e1faa3c1db7506c47d654c2e74510c1d8bd3c474",
-      "_sha256_comment": "SHA-256 of delivery/dart/install.py at zones@38729c4 (delivery_sdk 1.10.0); required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of delivery/dart/install.py at zones@38729c4; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "comms_sdk",
@@ -126,7 +126,7 @@
       "path": "../core/comms/dart",
       "ref": "main",
       "sha256": "387afceb37a60acd984cf19571a183c1a31c19696e57de1b387dd202209fb9f9",
-      "_sha256_comment": "SHA-256 of comms/dart/install.py at core@d896a13; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of comms/dart/install.py at core@7facace; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "corporate_sdk",
@@ -186,8 +186,28 @@
       "path": "../agent/agent/dart",
       "ref": "main",
       "sha256": "ea30e6fa45f6042e22e15d262f88eb5d02165adf6ef5365c93e3d656ee71a91e",
-      "_sha256_comment": "SHA-256 of agent/dart/install.py at agent@4ea4ba40; required by the composer's unpinned-installer gate. Update when upstream install.py changes.",
+      "_sha256_comment": "SHA-256 of agent/dart/install.py at agent@4ea4ba4; required by the composer's unpinned-installer gate. Update when upstream install.py changes.",
       "_comment": "Disabled as per requirements"
+    },
+    {
+      "name": "desktop_sdk",
+      "enabled": true,
+      "source": "git",
+      "git": "https://github.com/RokctAI/hardware",
+      "path": "../hardware/desktop/dart",
+      "ref": "main",
+      "sha256": "188774abbcb8de7dee95dba1444f2c1913a37241826453a987b283646ba756de",
+      "_comment": "TEMPORARY (desktop testing convenience, revert candidate): added to every app profile so all composed apps pull desktop support and can be viewed/tested on desktop. Pin = sha256 of hardware desktop/dart/install.py at main head 84aa6ed, same value as supacharge.json's entry."
+    },
+    {
+      "name": "hms_sdk",
+      "enabled": true,
+      "source": "git",
+      "git": "https://github.com/RokctAI/hardware",
+      "path": "../hardware/hms/dart",
+      "ref": "main",
+      "sha256": "197261eff5adae8a5bcbb42ce2dd1f7b16ad15716c4ff4268f9b9a77b3e9517c",
+      "_comment": "Huawei Mobile Services support, built like desktop_sdk (SDK module, not productFlavors). Dart-side: DeviceServices ({gms, hms, neither} detection, cached, fail-open to gms) and an order-30 boot hook that, ONLY on GMS-free HMS-capable devices, boots Push Kit and registers the HMS push token through the same api.user.register_device_token gateway cmd the FCM token uses (provider 'hms'). No installs - the BUILD_HMS-gated AGConnect Gradle wiring lives statically in core's android template, default-off. Strict no-op in every plain GMS build."
     }
   ]
 }
