@@ -206,7 +206,11 @@ class TimingInterceptor extends Interceptor {
       // back into the next report. Delivery rides the shared gateway path,
       // so telemetry's own calls are identified by cmd, not by path.
       final dynamic data = options.data;
-      if (data is Map && data['cmd'] == TelemetryClient.cmd) return;
+      if (data is Map &&
+          (data['cmd'] == TelemetryClient.cmd ||
+              data['cmd'] == TelemetryClient.trackCmd)) {
+        return;
+      }
       TimingTelemetry.I.recordRequest(
         options.uri.path,
         start.elapsed,
