@@ -22,3 +22,4 @@ library wallet_sdk;
 
 // Import concrete files via package:wallet_sdk/src/...
 export 'src/common/di/wallet_di.dart';
+export 'src/common/presentation/pages/topup/wallet_topup_page.dart';

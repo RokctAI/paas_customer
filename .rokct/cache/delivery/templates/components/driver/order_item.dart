@@ -526,10 +526,10 @@ class OrderItem extends StatelessWidget {
                         isOrder: true,
                         isOnline: order.current ?? false,
                         onChange: (bool value) {
-                          if (value) {
+                          if (value && order.id != null) {
                             ref.read(orderProvider.notifier).setCurrentOrder(
                               context,
-                              order.id ?? 0,
+                              order.id!,
                               () {
                                 ref
                                     .read(homeProvider.notifier)

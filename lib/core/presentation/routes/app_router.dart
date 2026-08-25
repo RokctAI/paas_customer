@@ -19,10 +19,10 @@ class AppRouter extends RootStackRouter {
   @override
   List<AutoRoute> get routes => [
 // @generated-routes-start
-    MaterialRoute(path: '/', page: SplashRoute.page),
-    MaterialRoute(path: '/no-connection', page: NoConnectionRoute.page),
-    MaterialRoute(path: '/closed', page: ClosedRoute.page),
-    MaterialRoute(path: '/ui-type', page: UiTypeRoute.page),
+        MaterialRoute(path: '/', page: SplashRoute.page),
+        MaterialRoute(path: '/no-connection', page: NoConnectionRoute.page),
+        MaterialRoute(path: '/closed', page: ClosedRoute.page),
+        MaterialRoute(path: '/ui-type', page: UiTypeRoute.page),
 // @generated-routes-end
       ];
 }

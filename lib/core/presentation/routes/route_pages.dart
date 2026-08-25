@@ -14,10 +14,14 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 
-import 'package:base_sdk/src/presentation/pages/initial/closed/closed_page.dart' as pages;
-import 'package:base_sdk/src/presentation/pages/initial/no_connection/no_connection_page.dart' as pages;
-import 'package:base_sdk/src/presentation/pages/initial/splash/splash_page.dart' as pages;
-import 'package:base_sdk/src/presentation/pages/initial/ui_type/ui_type_page.dart' as pages;
+import 'package:base_sdk/src/presentation/pages/initial/closed/closed_page.dart'
+    as pages;
+import 'package:base_sdk/src/presentation/pages/initial/no_connection/no_connection_page.dart'
+    as pages;
+import 'package:base_sdk/src/presentation/pages/initial/splash/splash_page.dart'
+    as pages;
+import 'package:base_sdk/src/presentation/pages/initial/ui_type/ui_type_page.dart'
+    as pages;
 
 /// Host route shell for [pages.SplashPage] (base_sdk-resident page).
 @RoutePage(name: 'SplashRoute')

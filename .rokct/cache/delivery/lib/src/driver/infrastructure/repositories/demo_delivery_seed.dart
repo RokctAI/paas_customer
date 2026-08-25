@@ -65,17 +65,18 @@ class DemoDeliverySeed {
   // Session-local status overlays (order id -> status). Seed statuses live
   // in _orders/_parcels below; demo actions mutate these maps only.
   // ---------------------------------------------------------------------
-  static final Map<int, String> orderStatusOverlay = {};
-  static final Map<int, String> parcelStatusOverlay = {};
+  static final Map<String, String> orderStatusOverlay = {};
+  static final Map<String, String> parcelStatusOverlay = {};
 
   /// The order the driver is currently working (home-map bottom sheet).
-  static int? currentOrderId = 900001;
-  static int? currentParcelId;
+  /// Ids are strings, like real Frappe Order docnames.
+  static String? currentOrderId = '900001';
+  static String? currentParcelId;
 
   static void reset() {
     orderStatusOverlay.clear();
     parcelStatusOverlay.clear();
-    currentOrderId = 900001;
+    currentOrderId = '900001';
     currentParcelId = null;
   }
 
@@ -192,7 +193,8 @@ class DemoDeliverySeed {
   }) =>
       {
         'id': id,
-        'order_id': orderId,
+        // Order docnames are strings on the wire.
+        'order_id': '$orderId',
         'stock_id': id,
         'origin_price': price,
         'total_price': price * quantity,
@@ -249,7 +251,7 @@ class DemoDeliverySeed {
         // The driver's current job: collected from Demo Diner, cash on
         // delivery so the COD confirmation flow has something to show.
         {
-          'id': 900001,
+          'id': '900001',
           'user_id': 8101,
           'total_price': 189.90,
           'origin_price': 164.90,
@@ -295,7 +297,7 @@ class DemoDeliverySeed {
               orderId: 900001, price: 189.90, tag: 'cash', status: 'progress'),
         },
         {
-          'id': 900002,
+          'id': '900002',
           'user_id': 8102,
           'total_price': 74.50,
           'origin_price': 59.50,
@@ -341,7 +343,7 @@ class DemoDeliverySeed {
         },
         // Available: ready, no deliveryman assigned yet.
         {
-          'id': 900101,
+          'id': '900101',
           'user_id': 8103,
           'total_price': 129.00,
           'origin_price': 109.00,
@@ -379,7 +381,7 @@ class DemoDeliverySeed {
               orderId: 900101, price: 129.00, tag: 'cash', status: 'progress'),
         },
         {
-          'id': 900102,
+          'id': '900102',
           'user_id': 8101,
           'total_price': 245.40,
           'origin_price': 215.40,
@@ -418,7 +420,7 @@ class DemoDeliverySeed {
         },
         // History: delivered earlier this week.
         {
-          'id': 899901,
+          'id': '899901',
           'user_id': 8102,
           'total_price': 96.00,
           'origin_price': 84.00,
@@ -448,7 +450,7 @@ class DemoDeliverySeed {
               orderId: 899901, price: 96.00, tag: 'cash', status: 'paid'),
         },
         {
-          'id': 899902,
+          'id': '899902',
           'user_id': 8103,
           'total_price': 158.75,
           'origin_price': 138.75,
@@ -481,14 +483,14 @@ class DemoDeliverySeed {
 
   /// All order maps with the session overlay applied.
   static List<Map<String, dynamic>> orders() => _orders().map((o) {
-        final id = o['id'] as int;
+        final id = o['id'] as String;
         final overlay = orderStatusOverlay[id];
         if (overlay != null) o['status'] = overlay;
         o['current'] = id == currentOrderId;
         return o;
       }).toList();
 
-  static Map<String, dynamic>? orderById(int id) {
+  static Map<String, dynamic>? orderById(String id) {
     for (final o in orders()) {
       if (o['id'] == id) return o;
     }
@@ -606,16 +608,16 @@ class DemoDeliverySeed {
       ];
 
   static List<Map<String, dynamic>> parcels() => _parcels().map((p) {
-        final id = int.tryParse('${p['id']}');
-        final overlay = id == null ? null : parcelStatusOverlay[id];
+        final id = p['id'] as String;
+        final overlay = parcelStatusOverlay[id];
         if (overlay != null) p['status'] = overlay;
-        p['current'] = id != null && id == currentParcelId;
+        p['current'] = id == currentParcelId;
         return p;
       }).toList();
 
-  static Map<String, dynamic>? parcelById(int id) {
+  static Map<String, dynamic>? parcelById(String id) {
     for (final p in parcels()) {
-      if ('${p['id']}' == '$id') return p;
+      if (p['id'] == id) return p;
     }
     return null;
   }

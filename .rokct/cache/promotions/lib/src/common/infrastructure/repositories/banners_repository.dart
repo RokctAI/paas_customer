@@ -61,7 +61,9 @@ class BannersRepository implements BannersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<BannerData>> getBannerById(int? bannerId) async {
+  Future<ApiResult<BannerData>> getBannerById(String bannerId) async {
+    // Banner ids are Frappe docnames (hash strings) served from `name`;
+    // callers guard against missing ids instead of sending a sentinel.
     try {
       final response = await _gateway.call(
         'api.banner.get_banner',
@@ -115,7 +117,7 @@ class BannersRepository implements BannersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<BannerData>> getAdsById(int? bannerId) async {
+  Future<ApiResult<BannerData>> getAdsById(String bannerId) async {
     try {
       final response = await _gateway.call(
         'api.banner.get_ad',
@@ -136,7 +138,7 @@ class BannersRepository implements BannersRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<void>> likeBanner(int? bannerId) async {
+  Future<ApiResult<void>> likeBanner(String bannerId) async {
     try {
       await _gateway.tenant(
         'api.banner.like_banner',
