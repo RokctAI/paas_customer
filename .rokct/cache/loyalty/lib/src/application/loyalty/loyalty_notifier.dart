@@ -1,3 +1,8 @@
+// Also brings ApiResult's pattern-matching helpers into scope: freezed >=3.1
+// generates when/map as an EXTENSION (ApiResultPatterns) in base_sdk's
+// api_result.freezed.dart, and extensions are only usable in libraries that
+// import the declaring library - importing the facade alone is not enough.
+import 'package:base_sdk/base_sdk.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/interface/loyalty_repository_facade.dart';
