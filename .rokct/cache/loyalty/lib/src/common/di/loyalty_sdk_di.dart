@@ -18,12 +18,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-library loyalty_sdk;
+import 'package:get_it/get_it.dart';
 
-export 'src/common/application/loyalty/loyalty_notifier.dart';
-export 'src/common/application/loyalty/loyalty_provider.dart';
-export 'src/common/application/loyalty/loyalty_state.dart';
-export 'src/common/di/loyalty_sdk_di.dart';
-export 'src/common/domain/interface/loyalty_repository_facade.dart';
-export 'src/common/domain/models/loyalty_models.dart';
-export 'src/common/infrastructure/repositories/local_loyalty_repository.dart';
+import '../domain/interface/loyalty_repository_facade.dart';
+import '../infrastructure/repositories/local_loyalty_repository.dart';
+
+class LoyaltySdkDependencies {
+  /// Registers the offline default. Hosts backed by a loyalty service
+  /// register their own [LoyaltyRepositoryFacade] BEFORE calling this (an
+  /// existing registration is left untouched).
+  static void register(GetIt getIt) {
+    if (!getIt.isRegistered<LoyaltyRepositoryFacade>()) {
+      getIt.registerLazySingleton<LoyaltyRepositoryFacade>(
+        () => LocalLoyaltyRepository(),
+      );
+    }
+  }
+}

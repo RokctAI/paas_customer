@@ -18,12 +18,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-library loyalty_sdk;
+import 'package:base_sdk/base_sdk.dart';
 
-export 'src/common/application/loyalty/loyalty_notifier.dart';
-export 'src/common/application/loyalty/loyalty_provider.dart';
-export 'src/common/application/loyalty/loyalty_state.dart';
-export 'src/common/di/loyalty_sdk_di.dart';
-export 'src/common/domain/interface/loyalty_repository_facade.dart';
-export 'src/common/domain/models/loyalty_models.dart';
-export 'src/common/infrastructure/repositories/local_loyalty_repository.dart';
+import '../models/loyalty_models.dart';
+
+/// Consumer-owned boundary for loyalty persistence/transport.
+///
+/// The host app registers a backend-backed implementation when the platform
+/// exposes loyalty endpoints; a local offline implementation over base_sdk's
+/// shared database ships with this SDK as the default.
+abstract class LoyaltyRepositoryFacade {
+  Future<ApiResult<LoyaltyAccount>> getAccount({
+    required String ownerId,
+    String program,
+  });
+
+  Future<ApiResult<List<LoyaltyTransaction>>> getTransactions(
+    String accountId,
+  );
+
+  /// Records a transaction and returns the account with its updated balance.
+  Future<ApiResult<LoyaltyAccount>> record(LoyaltyTransaction transaction);
+}

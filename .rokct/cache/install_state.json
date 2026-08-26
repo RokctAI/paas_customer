@@ -716,7 +716,7 @@
       "boot_hooks": []
     },
     "loyalty_sdk": {
-      "version": "1.0.0",
+      "version": "1.0.1",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -801,8 +801,8 @@
       "hash": "bd6dbf2ebb875f18"
     },
     "loyalty": {
-      "version": "1.0.0",
-      "hash": "f74b8bdbace2f78c"
+      "version": "1.0.1",
+      "hash": "8884f789aeb25984"
     },
     "auth": {
       "version": "1.8.8",
