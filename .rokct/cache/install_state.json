@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.21.0",
+      "version": "1.22.0",
       "files": {
         "lib/main.dart": "c2e7f6043032b936b0e953693a10f2df040ba4be00d0d3696d7bf4e0bbc14cd2",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -373,7 +373,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.8.7",
+      "version": "1.8.8",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "b60ed373f6a05450509b55bf94c8620dc750266fecf34e3255d35ae3f84897c8",
         "lib/presentation/routes/registration_step_pages.dart": "73e43c48ad35f5681c9d089dad9c48fbb9094b0bb77e9026f91fce6ce1cfdd0f",
@@ -568,7 +568,7 @@
       "boot_hooks": []
     },
     "delivery_sdk": {
-      "version": "1.10.0",
+      "version": "1.10.1",
       "files": {
         "assets/svg/balance.svg": "6f17d12b29de8e5500bc445ee89eec5c1fc8830cea42711af9bf80975e6b79ce",
         "assets/image/my_location.png": "0e6b49eb78d1f74ac96ac24ce39f834105ce68e361c302038ba9cefdcd926126"
@@ -744,12 +744,23 @@
           "_comment": "Order 30: after comms' Firebase/FCM boot (10) and its desktop notification poller (20) - order 20 is already taken and duplicate orders draw a composer warning. Android-only and fail-open like comms' hooks. The initialize() call itself is a strict no-op unless DeviceServices proves the device GMS-free AND HMS-capable, so GMS devices and detection errors keep comms_sdk's FCM path as the sole push owner. The await is cheap: initialize() only awaits the availability probe and turnOnPush - the push token arrives asynchronously on Push Kit's token stream, so runApp is never delayed by a token round-trip."
         }
       ]
+    },
+    "telemetry_sdk": {
+      "version": "1.0.0",
+      "files": {},
+      "routes": [],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": [],
+      "di_hooks": [],
+      "boot_hooks": []
     }
   },
   "sdk_cache": {
     "base": {
-      "version": "1.21.0",
-      "hash": "8dcfab0f4af75dda"
+      "version": "1.22.0",
+      "hash": "128ba12d80ad471e"
     },
     "comms": {
       "version": "1.10.3",
@@ -780,8 +791,8 @@
       "hash": "307e732016ef0948"
     },
     "auth": {
-      "version": "1.8.7",
-      "hash": "b4f4f66d597b61c7"
+      "version": "1.8.8",
+      "hash": "345a23b6d2915a0d"
     },
     "users": {
       "version": "1.3.1",
@@ -800,8 +811,8 @@
       "hash": "c4cf84adf6acc8c0"
     },
     "delivery": {
-      "version": "1.10.0",
-      "hash": "70fed341c695a55c"
+      "version": "1.10.1",
+      "hash": "9a02a747d3d86bbb"
     },
     "map": {
       "version": "1.1.0",
@@ -822,6 +833,10 @@
     "hms": {
       "version": "1.0.0",
       "hash": "b5a3b97ef5f282d4"
+    },
+    "telemetry": {
+      "version": "1.0.0",
+      "hash": "3bba74070c266db1"
     }
   }
 }
