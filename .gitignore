@@ -34,6 +34,10 @@ android/app/release
 *.freezed.dart
 *.g.dart
 *.gr.dart
+# Guided-tour exception to *.g.dart above: the generated steps file is
+# committed on purpose so the repo analyzes without running the merge
+# (CI regenerates it in-place on every guided-tour run).
+!integration_test/tour_steps.g.dart
 
 npm-debug.log*
 yarn-debug.log*
