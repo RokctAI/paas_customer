@@ -1,9 +1,29 @@
+// Copyright (c) 2026 RokctAI
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 library loyalty_sdk;
 
-export 'src/application/loyalty/loyalty_notifier.dart';
-export 'src/application/loyalty/loyalty_provider.dart';
-export 'src/application/loyalty/loyalty_state.dart';
-export 'src/di/loyalty_sdk_di.dart';
-export 'src/domain/interface/loyalty_repository_facade.dart';
-export 'src/domain/models/loyalty_models.dart';
-export 'src/infrastructure/repositories/local_loyalty_repository.dart';
+export 'src/common/application/loyalty/loyalty_notifier.dart';
+export 'src/common/application/loyalty/loyalty_provider.dart';
+export 'src/common/application/loyalty/loyalty_state.dart';
+export 'src/common/di/loyalty_sdk_di.dart';
+export 'src/common/domain/interface/loyalty_repository_facade.dart';
+export 'src/common/domain/models/loyalty_models.dart';
+export 'src/common/infrastructure/repositories/local_loyalty_repository.dart';

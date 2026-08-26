@@ -19,8 +19,18 @@
 // SOFTWARE.
 
 
-export 'src/common/domain/interface/favoritable.dart';
-export 'src/common/di/fav_di.dart';
-export 'src/common/application/favorites/favorites_provider.dart';
-export 'src/common/application/favorites/favorites_notifier.dart';
-export 'src/common/application/favorites/favorites_state.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:base_sdk/base_sdk.dart';
+
+part 'favorites_state.freezed.dart';
+
+@freezed
+sealed class FavoritesState with _$FavoritesState {
+  const factory FavoritesState({
+    @Default(true) bool isShopLoading,
+    @Default([]) List<ShopData> shops,
+  }) = _FavoritesState;
+
+  const FavoritesState._();
+}
+

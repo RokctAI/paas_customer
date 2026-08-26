@@ -185,6 +185,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final bool isDarkMode = LocalStorage.getAppThemeMode();
     final bool isLtr = LocalStorage.getLangLtr();
     final bool isWideWindow = windowSizeOf(context).isAtLeastMedium;
+    // Wide windows drop the photo background (see the Container below), so
+    // the white-on-photo foreground (logo text, outlined Register button)
+    // would vanish on the light surface. Pick the contrast color to match
+    // the surface actually behind it; compact keeps the image and therefore
+    // the original white foreground, unchanged.
+    final Color onSurfaceColor =
+        isWideWindow && !isDarkMode ? AppStyle.black : AppStyle.white;
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
@@ -194,16 +201,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         body: _showIntro && _introPage != null
             ? _introPage! // Show preloaded IntroPage if _showIntro is true
             : Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(splashImage),
-                    // fill matches the phone look the portrait asset was
-                    // drawn for; on wider windows it stretches the art out
-                    // of shape, so cover-crop from the center instead.
-                    fit: isWideWindow ? BoxFit.cover : BoxFit.fill,
-                    alignment: Alignment.center,
-                  ),
-                ),
+                // Same treatment as the splash on large screens: the
+                // phone-shaped artwork doesn't belong on a wide
+                // (unfolded/tablet/desktop) window at all, so wide windows
+                // render no image — just the Scaffold's plain surface, the
+                // way the wide splash is imageless. Compact keeps the
+                // full-bleed image exactly as before.
+                decoration: isWideWindow
+                    ? null
+                    : BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(splashImage),
+                          // fill matches the phone look the portrait asset
+                          // was drawn for.
+                          fit: BoxFit.fill,
+                          alignment: Alignment.center,
+                        ),
+                      ),
                 child: SafeArea(
                   child: Padding(
                     padding: REdgeInsets.symmetric(horizontal: 16.w),
@@ -236,7 +250,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                               text: AppHelpers.getAppName(),
                                               style:
                                                   AppStyle.logoFontBoldItalic(
-                                                color: AppStyle.white,
+                                                color: onSurfaceColor,
                                                 size: 35.sp,
                                               ),
                                             ),
@@ -258,7 +272,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                                         .getTrademarkSymbol(),
                                                     style: AppStyle
                                                         .logoFontBoldItalic(
-                                                      color: AppStyle.white,
+                                                      color: onSurfaceColor,
                                                       size: 12.sp,
                                                     ),
                                                   ),
@@ -294,11 +308,24 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           child: SingleChildScrollView(
                             // Cap the action column: on desktop windows the
                             // full-width CustomButtons and the terms card
-                            // used to span the entire window. Phones are
-                            // narrower than the cap, so compact rendering is
-                            // unchanged.
-                            child: Center(
-                              child: ConstrainedBox(
+                            // used to span the entire window. On wide
+                            // (unfolded/tablet) windows the capped column
+                            // anchors to the END side of the screen instead
+                            // of floating centered — AlignmentDirectional so
+                            // RTL locales anchor to their end — with edge
+                            // padding so it doesn't touch the screen edge.
+                            // Phones are narrower than the cap, so compact
+                            // rendering is unchanged.
+                            child: Align(
+                              alignment: isWideWindow
+                                  ? AlignmentDirectional.centerEnd
+                                  : Alignment.center,
+                              child: Padding(
+                                padding: isWideWindow
+                                    ? const EdgeInsetsDirectional.only(
+                                        end: 24)
+                                    : EdgeInsets.zero,
+                                child: ConstrainedBox(
                                 constraints:
                                     const BoxConstraints(maxWidth: 440),
                                 child: Column(
@@ -326,8 +353,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 );
                               },
                               background: AppStyle.transparent,
-                              textColor: AppStyle.white,
-                              borderColor: AppStyle.white,
+                              textColor: onSurfaceColor,
+                              borderColor: onSurfaceColor,
                             ),
                             5.verticalSpace,
                             Container(
@@ -400,6 +427,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             ),
                             20.verticalSpace,
                           ],
+                                ),
                                 ),
                               ),
                             ),

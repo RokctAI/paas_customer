@@ -19,8 +19,10 @@
 // SOFTWARE.
 
 
-export 'src/common/domain/interface/favoritable.dart';
-export 'src/common/di/fav_di.dart';
-export 'src/common/application/favorites/favorites_provider.dart';
-export 'src/common/application/favorites/favorites_notifier.dart';
-export 'src/common/application/favorites/favorites_state.dart';
+import 'package:get_it/get_it.dart';
+
+class FavSdkDependencies {
+  static void register(GetIt getIt) {
+    // TODO: Register dependencies for fav_sdk
+  }
+}
