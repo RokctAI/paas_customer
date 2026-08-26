@@ -83,6 +83,8 @@ export 'src/services/app_helpers.dart';
 export 'src/services/local_storage.dart';
 export 'src/services/storage_keys.dart';
 export 'src/services/tr_keys.dart';
+export 'src/services/bundled_translations.dart';
+export 'src/services/bundled_af_translations.dart';
 
 // Offline database (shared Drift instance + generic JSON document store)
 export 'src/database/app_database.dart';
