@@ -1,0 +1,86 @@
+# Guided-tour manifest for the Juvo customer app shell (paas_customer).
+#
+# This file is the ONLY place the tour carries Juvo branding: SDK tour
+# fragments (each SDK's templates/tour/<sdk>.tour.yaml) stay brand-neutral
+# and receive {app_name}/{app_tagline} by substitution at merge time.
+# The merge, capture and assembly all run in CI via
+# RokctAI/shared-workflows .github/workflows/universal-guided-tour.yml;
+# format documentation lives in that repo at scripts/tour/README.md.
+#
+# The tour walks a single role - the customer - because that is
+# MockAuthRepository's DEFAULT: in demo builds (--dart-define=IS_DEMO=true)
+# any email signs in as a customer, so no role-chaining sign-out/sign-in
+# steps are needed (contrast supacharge's three-role manifest).
+#
+# Video colours are intentionally NOT declared here: the assembler derives
+# brand/accent colours from the composed AppStyle when the manifest carries
+# no colour keys, so the video always matches the app's real theme.
+#
+# Outputs land in marketing/tour/ (screenshots + feature-guide.md required,
+# per-chapter videos best-effort).
+app:
+  name: Juvo
+  tagline: The multi-store marketplace
+  # Committed app logo (transparent background), shown on the video end card.
+  logo: assets/images/logo.png
+video:
+  hook: "Every store. One app."
+  offer: "Start shopping today."
+  # The auth chapter's key content is bottom sheets, so its phone hangs
+  # top-cropped from the top canvas edge (keeping the sheet fully
+  # visible); every other chapter keeps the default bottom-cropped
+  # WhatsApp-ad framing.
+  chapter_frame_anchor:
+    auth: top
+setup:
+  imports:
+    - "import 'package:base_sdk/src/models/response/languages_response.dart';"
+    - "import 'package:base_sdk/src/services/local_storage.dart';"
+  dart: |
+    // Pre-seed the language so the first-run language picker can never
+    // block the tour behind a non-dismissible modal (the backend may
+    // advertise several languages). LocalStorage.init() is idempotent -
+    // app.main() calls it again.
+    await LocalStorage.init();
+    if (LocalStorage.getLanguage() == null) {
+      await LocalStorage.setLanguageData(LanguageData(
+        id: '1',
+        title: 'English',
+        locale: 'en',
+        backward: false,
+        isDefault: true,
+        active: true,
+      ));
+      await LocalStorage.setLanguageSelected(true);
+      await LocalStorage.setLangLtr(false);
+    }
+tour:
+  # Splash settles onto the sign-in screen (demo builds show the demo hint).
+  - step:
+      key: welcome
+      title: "Welcome to Juvo"
+      caption: "{app_name} is *every store in one app* - and in this demo build, any sign-in details work."
+      action: wait
+      settle: 12
+  # auth_sdk captures the auth sheets, then performs the customer demo
+  # sign-in (action only, no still); any email maps to the customer role.
+  - fragment: auth
+  # marketplace_sdk is this shell's home SDK (composer.json home_sdk) and
+  # owns the customer shopping surface. Its fragment is being authored in
+  # RokctAI/commerce right now; until it ships in the composed cache the
+  # merge skips it with a warning - never a failure - and the tour picks it
+  # up automatically once the commerce PR merges and the compose refreshes.
+  - fragment: marketplace
+  # comms_sdk's language sheet - opened via the same AppHelpers modal the
+  # app's own screens use, so it works from whatever screen the marketplace
+  # chapter (or, until that lands, the demo sign-in) leaves us on.
+  - fragment: comms
+  # NOT listed (deliberately):
+  # - users: its fragment routes to /profile, and this compose exposes no
+  #   /profile route (the customer account surface is a tab inside the
+  #   marketplace home shell). The fragment's own header says to prefer the
+  #   home SDK's fragment in exactly this case.
+  # - merchants/products/orders (manager role), delivery (driver role):
+  #   wrong persona for the customer shell.
+  # - promotions: registered empty upstream (no navigable promotions-owned
+  #   screen yet).
