@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.22.0",
+      "version": "1.23.0",
       "files": {
         "lib/main.dart": "c2e7f6043032b936b0e953693a10f2df040ba4be00d0d3696d7bf4e0bbc14cd2",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -234,7 +234,7 @@
         "lib/core/presentation/theme/theme.dart": "0d3a0e59c133fccfd32dd80bf649e99d580d56605936fd8bd63e5d6301c7091e",
         "lib/presentation/app_widget.dart": "d6667beaed81f5b8a18b9acb3d97c9c0837e5ea8f5ac9ec9930f859480ff1ccf",
         "lib/presentation/routes/app_router.dart": "5cfd98f48dc1ff7d6cff21a1fa878153f3064bca27bae5031297593c3f1616f9",
-        "lib/presentation/routes/route_pages.dart": "dcaefd44480b9fe04075bad4c8855a798c810a24d0502385f55d0a281ec8afd2",
+        "lib/presentation/routes/route_pages.dart": "109bf00d8d78ea1cbc7994ef71bf1c39ecd066212d57a5e24609ce6f03875b88",
         "lib/presentation/theme/theme.dart": "783392447627f1bbef343a96c2b095a055341a62df01f8360d24cf59db60f81c",
         "lib/presentation/theme/app_style.dart": "60b7bbe880e2686fc2533cc9d2e99d0ece80823caf107ecf5c04b960eea27aec"
       },
@@ -260,6 +260,12 @@
         {
           "path": "/ui-type",
           "page": "UiTypeRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/route_pages.dart"
+        },
+        {
+          "path": "/generic-profile",
+          "page": "GenericProfileRoute.page",
           "type": "MaterialRoute",
           "import": "package:${package}/presentation/routes/route_pages.dart"
         }
@@ -292,6 +298,14 @@
         {
           "method": "replaceUiTypeRoute",
           "body": "context.router.replace(UiTypeRoute());",
+          "imports": [
+            "import 'package:auto_route/auto_route.dart';",
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushGenericProfileRoute",
+          "body": "context.router.push(GenericProfileRoute());",
           "imports": [
             "import 'package:auto_route/auto_route.dart';",
             "import 'package:${package}/presentation/routes/app_router.dart';"
@@ -759,8 +773,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.22.0",
-      "hash": "128ba12d80ad471e"
+      "version": "1.23.0",
+      "hash": "410e9284ad1a4feb"
     },
     "comms": {
       "version": "1.10.3",
@@ -800,7 +814,7 @@
     },
     "fav": {
       "version": "1.0.0",
-      "hash": "5e719f3932a44d3c"
+      "hash": "49a07c9df9f8ef29"
     },
     "wallet": {
       "version": "1.1.0",
