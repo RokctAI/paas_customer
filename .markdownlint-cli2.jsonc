@@ -8,6 +8,12 @@
     // these files to match the composer's output byte-for-byte, so they can
     // never be hand-edited to satisfy authoring rules (e.g. MD022 blanks
     // around headings emitted by the docs generator).
-    "docs/api/**"
+    "docs/api/**",
+    // Protocol-managed workspace files. The protocol lifecycle
+    // (initiate.py / end_protocol.py) deletes .rokct/.markdownlint.json,
+    // so without this ignore the default 80-column rules fail on
+    // protocol-owned and composer-cached markdown that must not be
+    // hand-edited (same precedent as radio's config).
+    ".rokct/**"
   ]
 }
