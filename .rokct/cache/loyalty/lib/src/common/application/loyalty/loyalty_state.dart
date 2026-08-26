@@ -18,9 +18,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import '../../domain/models/loyalty_models.dart';
 
-export 'src/common/domain/interface/favoritable.dart';
-export 'src/common/di/fav_di.dart';
-export 'src/common/application/favorites/favorites_provider.dart';
-export 'src/common/application/favorites/favorites_notifier.dart';
-export 'src/common/application/favorites/favorites_state.dart';
+class LoyaltyState {
+  final bool isLoading;
+  final LoyaltyAccount? account;
+  final List<LoyaltyTransaction> transactions;
+  final String? error;
+
+  const LoyaltyState({
+    this.isLoading = false,
+    this.account,
+    this.transactions = const [],
+    this.error,
+  });
+
+  LoyaltyState copyWith({
+    bool? isLoading,
+    LoyaltyAccount? account,
+    List<LoyaltyTransaction>? transactions,
+    String? error,
+  }) {
+    return LoyaltyState(
+      isLoading: isLoading ?? this.isLoading,
+      account: account ?? this.account,
+      transactions: transactions ?? this.transactions,
+      error: error,
+    );
+  }
+}

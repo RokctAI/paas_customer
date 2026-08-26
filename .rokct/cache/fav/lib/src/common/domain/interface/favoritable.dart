@@ -19,8 +19,9 @@
 // SOFTWARE.
 
 
-export 'src/common/domain/interface/favoritable.dart';
-export 'src/common/di/fav_di.dart';
-export 'src/common/application/favorites/favorites_provider.dart';
-export 'src/common/application/favorites/favorites_notifier.dart';
-export 'src/common/application/favorites/favorites_state.dart';
+abstract class Favoritable {
+  int get id;
+  String get title;
+  String? get imageUrl;
+  String get favoriteType;
+}

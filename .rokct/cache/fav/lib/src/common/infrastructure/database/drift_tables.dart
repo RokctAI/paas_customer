@@ -19,8 +19,13 @@
 // SOFTWARE.
 
 
-export 'src/common/domain/interface/favoritable.dart';
-export 'src/common/di/fav_di.dart';
-export 'src/common/application/favorites/favorites_provider.dart';
-export 'src/common/application/favorites/favorites_notifier.dart';
-export 'src/common/application/favorites/favorites_state.dart';
+import 'package:drift/drift.dart';
+
+@DataClassName('ShopEntity')
+class ShopTable extends Table {
+  TextColumn get id => text()();
+  TextColumn get data => text()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}

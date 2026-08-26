@@ -18,9 +18,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 
-export 'src/common/domain/interface/favoritable.dart';
-export 'src/common/di/fav_di.dart';
-export 'src/common/application/favorites/favorites_provider.dart';
-export 'src/common/application/favorites/favorites_notifier.dart';
-export 'src/common/application/favorites/favorites_state.dart';
+import '../../domain/interface/loyalty_repository_facade.dart';
+import 'loyalty_notifier.dart';
+import 'loyalty_state.dart';
+
+final loyaltyProvider = StateNotifierProvider<LoyaltyNotifier, LoyaltyState>(
+  (ref) => LoyaltyNotifier(GetIt.I.get<LoyaltyRepositoryFacade>()),
+);

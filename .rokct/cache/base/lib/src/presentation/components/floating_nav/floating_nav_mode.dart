@@ -50,6 +50,58 @@ sealed class FloatingNavMode {
   const FloatingNavMode();
 }
 
+/// WHERE THE TAB BAR SITS IN A TABLET-MODE WINDOW (>= 600 logical px,
+/// `windowSizeOf(context).isAtLeastMedium`).
+///
+/// Compact (phone-shaped) windows are not part of this decision: the bar
+/// is ALWAYS the floating bottom pill there, and nothing here can change
+/// that. Placement only answers what happens once the window is tablet
+/// mode.
+///
+/// The fleet default is [bottomCenter] — exactly today's behaviour, the
+/// floating bottom pill in every window size. The side rail is OPT-IN:
+/// per app through the composed `AppConstants.tabletNavPlacement`
+/// (a manifest `constants.overrides` entry, the same seam that re-points
+/// `baseUrl`), or per page through
+/// [FloatingNavTabsMode.tabletPlacement]. An app that says nothing
+/// changes nothing.
+///
+/// Applies to [FloatingNavTabsMode] only. A controls bar (session or
+/// call) stays where the thumbs are regardless of window size, so
+/// [FloatingNavControlsMode] never consults placement.
+enum FloatingNavPlacement {
+  /// Today's behaviour and the fleet default: the floating bottom pill,
+  /// centered, in tablet-mode windows exactly as in compact ones.
+  bottomCenter,
+
+  /// A vertical rail hugging the START edge (left in LTR, right in RTL),
+  /// vertically centered — the same tabs in the same frosted housing,
+  /// turned on their side.
+  railStart,
+
+  /// The same rail on the END edge (right in LTR, left in RTL).
+  railEnd,
+
+  /// No tab bar at all in tablet-mode windows. The widget renders
+  /// nothing and intercepts nothing; the page owns the full canvas.
+  hidden,
+}
+
+/// How the active tab announces itself in [FloatingNavTabsMode].
+///
+/// Per-host, not per-app: each SDK that composes the pill says which mark
+/// its tab bar wears. Hosts that say nothing get [dash] — the original
+/// look, unchanged.
+enum FloatingNavIndicator {
+  /// The original mark: a small brand-coloured dash tucked under the
+  /// active tab's icon + label. The default.
+  dash,
+
+  /// A filled rounded rectangle in the host's brand primary colour behind
+  /// the active tab's icon + label (the radio tab bar's look).
+  rectangle,
+}
+
 /// One tab of the pill in [FloatingNavTabsMode].
 class FloatingNavTab {
   final IconData selectIcon;
@@ -64,12 +116,17 @@ class FloatingNavTab {
 }
 
 /// Mode 1 — the root tab bar. Unchanged behaviour: icon + label + the
-/// filled indicator on the active tab, every other tab icon-only, whole
-/// row collapsing while the page scrolls.
+/// active-tab indicator ([indicator] picks its shape, dash by default),
+/// every other tab icon-only, whole row collapsing while the page scrolls.
 class FloatingNavTabsMode extends FloatingNavMode {
   final List<FloatingNavTab> tabs;
   final int currentIndex;
   final ValueChanged<int> onSelect;
+
+  /// The mark the active tab wears. Defaults to
+  /// [FloatingNavIndicator.dash] — the original look — so every existing
+  /// host renders exactly as before without touching this.
+  final FloatingNavIndicator indicator;
 
   /// Controls pinned to the trailing edge that are NOT destinations.
   ///
@@ -84,11 +141,23 @@ class FloatingNavTabsMode extends FloatingNavMode {
   /// so leaving the page cannot strand the bar in the invoked mode.
   final List<FloatingNavAction> trailing;
 
+  /// Where this page's tab bar sits in a tablet-mode window.
+  ///
+  /// Null — the default — inherits the app-wide
+  /// `AppConstants.tabletNavPlacement`, which itself defaults to
+  /// [FloatingNavPlacement.bottomCenter] (today's behaviour). A page only
+  /// sets this to differ from its app, the same way it already passes
+  /// [currentIndex] down rather than storing it. Compact windows ignore
+  /// it entirely.
+  final FloatingNavPlacement? tabletPlacement;
+
   const FloatingNavTabsMode({
     required this.tabs,
     required this.currentIndex,
     required this.onSelect,
+    this.indicator = FloatingNavIndicator.dash,
     this.trailing = const [],
+    this.tabletPlacement,
   });
 }
 

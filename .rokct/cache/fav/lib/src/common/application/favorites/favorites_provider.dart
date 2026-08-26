@@ -1,4 +1,4 @@
-// Copyright (c) 2026 RokctAI
+﻿// Copyright (c) 2026 RokctAI
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -19,8 +19,11 @@
 // SOFTWARE.
 
 
-export 'src/common/domain/interface/favoritable.dart';
-export 'src/common/di/fav_di.dart';
-export 'src/common/application/favorites/favorites_provider.dart';
-export 'src/common/application/favorites/favorites_notifier.dart';
-export 'src/common/application/favorites/favorites_state.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'favorites_notifier.dart';
+import 'favorites_state.dart';
+
+final favoritesProvider = NotifierProvider<FavoritesNotifier, FavoritesState>(
+  () => FavoritesNotifier(),
+);
+

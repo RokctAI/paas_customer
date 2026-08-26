@@ -1,6 +1,6 @@
 {
   "name": "merchants_sdk",
-  "version": "1.9.6",
+  "version": "1.9.7",
   "_comment_requires": "merchants_sdk >= 1.6.0 requires base_sdk >= 1.5.0 (SyncEngine/SyncHandler APIs from the offline-first Phase 0, core PR #15); merchants_sdk >= 1.7.0 requires base_sdk >= 1.7.0 (SyncEngine.parkedOps/retryOp/deleteOp backing the sync-issues screen). The composer manifest schema has no machine-readable minimum-version field, so this is the declaration.",
   "home_sdk": true,
   "home_page": "templates/pages/manager/main/main_page.dart",
@@ -45,6 +45,13 @@
       }
     },
     "manager": {
+      "constants": {
+        "import": "package:base_sdk/src/presentation/components/floating_nav/floating_nav_mode.dart",
+        "overrides": {
+          "tabletNavPlacement": "FloatingNavPlacement.railStart"
+        }
+      },
+      "_comment_constants_tablet_nav": "Opts the manager app into the start-side nav rail in tablet mode (windows >= 600 logical px): the composed AppConstants.tabletNavPlacement is re-pointed at FloatingNavPlacement.railStart, which the manager main shell reads. Phones keep the floating bottom pill exactly as before, and the driver flavor is untouched (this block only merges when composing app_type manager). The import is already present in base_sdk's app_constants.dart, so the installer will find it and skip re-adding; it is declared here so the override stands on its own.",
       "installs": [
         {
           "from": "templates/pages/manager/main/main_page.dart",

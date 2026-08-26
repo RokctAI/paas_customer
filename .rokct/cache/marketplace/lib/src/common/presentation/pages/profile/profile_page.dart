@@ -66,6 +66,13 @@ import 'package:marketplace_sdk/src/common/presentation/pages/profile/reservatio
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/wallet_topup_screen.dart';
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/wallet_send_screen.dart';
 
+// Deprecated in favour of base_sdk's GenericProfilePage host fed by
+// MarketplaceProfileSections (marketplace_profile_sections.dart) and the
+// installed ProfileRouteView shell (templates/routes/
+// marketplace_route_pages.dart); kept until removal is explicitly approved
+// by the owner.
+@Deprecated('Superseded by GenericProfilePage + MarketplaceProfileSections '
+    '(marketplace_profile_sections.dart); removal pending owner approval.')
 @RoutePage()
 class ProfilePage extends ConsumerStatefulWidget {
   final bool isBackButton;
