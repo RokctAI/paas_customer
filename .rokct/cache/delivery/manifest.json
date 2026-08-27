@@ -1,6 +1,6 @@
 {
   "name": "delivery_sdk",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "home_sdk": true,
   "home_page": "templates/pages/driver/home/home_page.dart",
   "installs": [
@@ -28,6 +28,14 @@
   "integrations": [],
   "app_type": {
     "driver": {
+      "integrations": [
+        {
+          "target": "lib/presentation/routes/auth_route_pages.dart",
+          "placeholder": "// @auth-entry-config",
+          "replacement": "  // Driver app (home SDK contribution): the courier shell has no guest\n  // surface — every screen needs a signed-in courier account — so the\n  // login page's default-on guest Skip affordance is hidden here.\n  AuthEntryConfig.showsGuestSkip = false;",
+          "_comment": "Pairs with auth_sdk >= 1.9.0's @auth-entry-config placeholder (Users repo). Ray's rule: Skip (guest entry) lives in the shared login page and shows in ALL apps by default; a home SDK that doesn't need it opts out — 'delivery and merchants dont need it'. On older auth_sdk the marker is absent and the installer only warns (wiring NOT applied), leaving behavior unchanged."
+        }
+      ],
       "_comment_platform_permissions": "The courier tracker (courier_location_service.dart) reads GPS from a WorkManager background isolate, which on Android 10+ requires ACCESS_BACKGROUND_LOCATION on top of the fine/coarse pair every host already declares; the iOS side needs the combined Always-and-When-In-Use usage string for the same flow. Injected into the host platform files by update_platform_permissions(); driver-only via this flavor block.",
       "platform_permissions": {
         "android": [

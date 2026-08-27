@@ -46,6 +46,7 @@ class TrKeys {
   static const String offers = 'offers';
   static const String notValidDate = 'not.valid.date';
   static const String searchTheMenu = 'search.the.menu';
+  static const String tapAnywhereToFlipBack = 'tap_anywhere_to_flip_back';
   static const String tellThisCodeToDriver = 'tell.this.code.to.driver';
   static const String thisImageWasUploadDriver =
       'this.image.was.uploaded.by.driver';
@@ -649,6 +650,9 @@ class TrKeys {
   static const String withdraw = 'withdraw';
 
   static const String daysInAppThisYear = 'daysInAppThisYear';
+  // Dotted key so the humanized fallback reads "Days in app this week"
+  // when neither the served map nor a bundled map carries a row.
+  static const String daysInAppThisWeek = 'days.in.app.this.week';
   static const String goodMorning = 'good.Morning';
   static const String goodAfternoon = 'goodAfternoon';
   static const String goodEvening = 'good.Evening';

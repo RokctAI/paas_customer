@@ -31,6 +31,7 @@ import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:base_sdk/src/presentation/components/keyboard_dismisser.dart';
 import 'package:base_sdk/src/presentation/components/title_icon.dart';
 import 'package:base_sdk/src/presentation/theme/theme.dart';
+import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/wallet_receive_screen.dart';
 // [refork] embed via EmbeddedWidgets
 
 // [refork] embed via EmbeddedWidgets
@@ -108,6 +109,20 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
 
   void _navigateBack() {
     Navigator.of(context).pop();
+  }
+
+  // Opens the receive-from-a-friend sheet on top of this one (same modal
+  // pattern the profile entry points use for this sheet itself).
+  void _openReceiveFromFriend() {
+    AppHelpers.showCustomModalBottomSheet(
+      context: context,
+      modal: ProviderScope(
+        child: Consumer(
+          builder: (context, ref, _) => const WalletReceiveScreen(),
+        ),
+      ),
+      isDarkMode: false,
+    );
   }
 
   // Process top-up with saved card token
@@ -473,6 +488,38 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
                                   : AppStyle.white,
                             ),
                           ),
+                  ),
+
+                  16.verticalSpace,
+                  Row(
+                    children: [
+                      const Expanded(child: Divider(color: AppStyle.black)),
+                    ],
+                  ),
+                  16.verticalSpace,
+
+                  // Receive from a friend: mint a 6-digit claim code the
+                  // receiver hands to the sender out-of-band (CashSend-style).
+                  ElevatedButton.icon(
+                    onPressed: _isLoading ? null : _openReceiveFromFriend,
+                    icon: const Icon(Icons.call_received),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppStyle.transparent,
+                      foregroundColor: AppStyle.primary,
+                      minimumSize: Size(double.infinity, 50.h),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                        side: BorderSide(color: AppStyle.primary),
+                      ),
+                    ),
+                    label: Text(
+                      AppHelpers.getTranslation('receive_from_a_friend'),
+                      style: AppStyle.interSemi(
+                        size: 16.sp,
+                        color: AppStyle.primary,
+                      ),
+                    ),
                   ),
 
                   24.verticalSpace,

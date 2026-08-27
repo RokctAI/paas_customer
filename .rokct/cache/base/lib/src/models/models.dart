@@ -85,3 +85,4 @@ export 'package:base_sdk/src/models/data/story_data.dart';
 export 'package:base_sdk/src/models/response/tag_response.dart' hide Data;
 export 'package:base_sdk/src/models/data/cashback_model.dart';
 export 'package:base_sdk/src/models/response/multi_gallery_upload_response.dart';
+export 'package:base_sdk/src/models/data/wallet_transfer_data.dart';

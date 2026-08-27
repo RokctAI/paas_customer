@@ -1,7 +1,7 @@
 {
   "name": "marketplace_sdk",
-  "version": "1.4.0",
-  "_comment_requires": "marketplace_sdk >= 1.4.0 requires base_sdk >= 1.23.0 (the generic profile host: GenericProfilePage + ProfileSectionRegistry). The composer manifest schema has no machine-readable minimum-version field, so this is the declaration.",
+  "version": "1.6.0",
+  "_comment_requires": "marketplace_sdk >= 1.4.0 requires base_sdk >= 1.23.0 (the generic profile host: GenericProfilePage + ProfileSectionRegistry). marketplace_sdk >= 1.6.0 requires base_sdk >= 1.26.0 (AppUsageBadge, ProfileMetaRow and the base.footer default section moved into base_sdk). The composer manifest schema has no machine-readable minimum-version field, so this is the declaration.",
   "di_hooks": [
     {
       "id": "marketplace-profile-sections",
@@ -10,7 +10,7 @@
       "imports": [
         "import 'package:${package}/presentation/routes/marketplace_route_pages.dart';"
       ],
-      "_comment": "Registers every marketplace profile section (header badge actions, membership card, wallet card, icon-tile grid, footer) with base_sdk's ProfileSectionRegistry, plus the registry's onEditProfile (MyAccount settings hub) and onLogout callbacks - the sections base_sdk's GenericProfilePage renders on the customer profile route. Declared top-level, NOT in an app_type flavor block, mirroring lms_sdk: this SDK's manifest has no flavor blocks and marketplace_sdk only composes into customer-family apps. Requires base_sdk >= 1.23.0 (the profile host)."
+      "_comment": "Registers every marketplace profile section (header badge actions, membership card, wallet card, icon-tile grid, and the base.footer override composing the member links above base_sdk's shared ProfileMetaRow) with base_sdk's ProfileSectionRegistry, plus the registry's onEditProfile (MyAccount settings hub) and onLogout callbacks - the sections base_sdk's GenericProfilePage renders on the customer profile route. Declared top-level, NOT in an app_type flavor block, mirroring lms_sdk: this SDK's manifest has no flavor blocks and marketplace_sdk only composes into customer-family apps. Requires base_sdk >= 1.23.0 (the profile host)."
     }
   ],
   "installs": [
@@ -43,8 +43,25 @@
       "type": "MaterialRoute",
       "import": "package:${package}/presentation/routes/marketplace_route_pages.dart",
       "_comment": "First manifest-declared customer route (the rest of the customer route table is still host-owned; rule #59 follow-up in templates/tour/marketplace.tour.yaml). The installed shell carries @RoutePage(name: 'ProfileRoute') rendering base_sdk's GenericProfilePage, keeping the route name and the deprecated ProfilePage's constructor params so host navigation call-sites keep working - the same migration-window convention as merchants_sdk's /main: a host that still tracks its own ProfileRoute shell must delete that manual entry + shell when it recomposes, or auto_route sees the route name twice."
+    },
+    {
+      "path": "/main",
+      "page": "MainRoute.page",
+      "type": "MaterialRoute",
+      "import": "package:${package}/presentation/routes/marketplace_route_pages.dart",
+      "_comment": "The customer app's main destination (customer twin of merchants_sdk's manager /main). Before this entry the customer compose had NO main route: AppHelpers.goHome() -> AppRoutes.replaceMainRoute hit _HostAppRoutes' noSuchMethod StateError after every login/registration/guest-skip, stranding the user (after registering: on the registration-steps shell's spinner instead of the home page's shimmer placeholders). The installed shell renders marketplace_sdk's lean CustomerMainPage (home/search/like/profile tabs); the full legacy paas_customer shell keeps migrating separately."
     }
   ],
+  "app_routes": [
+    {
+      "method": "replaceMainRoute",
+      "body": "context.router.replace(MainRoute());",
+      "imports": [
+        "import 'package:${package}/presentation/routes/app_router.dart';"
+      ]
+    }
+  ],
+  "_comment_app_routes": "marketplace_sdk is the customer home SDK: it owns the app's main destination, so it implements AppRoutes.replaceMainRoute (what base_sdk's AppHelpers.goHome() calls after splash/login/registration and the login page's guest Skip). Without this, _HostAppRoutes' noSuchMethod throws a StateError the moment the shell tries to navigate home. Mirrors merchants_sdk's manager declaration.",
   "integrations": [],
   "asset_keys": {
     "pngMotto": "assets/images/motto.png",

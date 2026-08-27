@@ -58,7 +58,7 @@ import 'package:base_sdk/src/presentation/components/buttons/second_button.dart'
 // [refork] embed via EmbeddedWidgets
 // [refork] embed via EmbeddedWidgets
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/about_page.dart';
-import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/app_usage_badge.dart';
+import 'package:base_sdk/src/presentation/pages/profile/widgets/app_usage_badge.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/my_account.dart';
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/reservation_shops.dart';

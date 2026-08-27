@@ -1,9 +1,9 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.24.0",
+      "version": "1.27.0",
       "files": {
-        "lib/main.dart": "c2e7f6043032b936b0e953693a10f2df040ba4be00d0d3696d7bf4e0bbc14cd2",
+        "lib/main.dart": "b23322bf9bf953ecaa2d8ec0f1eea33bb6071a95f1d6bfa463da3b5ce9f7a44f",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
         "lib/core/presentation/routes/app_router.dart": "7e7c72675c4a414818d0bed611623aa3248fc2ae3d264fe8fbed6f64bfd7c82c",
         "lib/core/presentation/routes/route_pages.dart": "fa862244b5c0344a8e25a061d4957e5af4792cdd9483b4bf63d041fa4fda105e",
@@ -232,11 +232,11 @@
         "assets/temp/discount6.png": "784e1ff8e0b7ec4b57bd72daf84960837251f7c011029a7332c85a0bc38642c1",
         "lib/core/presentation/theme/app_style.dart": "a41cdea4c78180c66b26633ed79139d9e44555146b9a446184c36ac6b36a55ef",
         "lib/core/presentation/theme/theme.dart": "0d3a0e59c133fccfd32dd80bf649e99d580d56605936fd8bd63e5d6301c7091e",
-        "lib/presentation/app_widget.dart": "d6667beaed81f5b8a18b9acb3d97c9c0837e5ea8f5ac9ec9930f859480ff1ccf",
-        "lib/presentation/routes/app_router.dart": "5cfd98f48dc1ff7d6cff21a1fa878153f3064bca27bae5031297593c3f1616f9",
-        "lib/presentation/routes/route_pages.dart": "109bf00d8d78ea1cbc7994ef71bf1c39ecd066212d57a5e24609ce6f03875b88",
-        "lib/presentation/theme/theme.dart": "783392447627f1bbef343a96c2b095a055341a62df01f8360d24cf59db60f81c",
-        "lib/presentation/theme/app_style.dart": "60b7bbe880e2686fc2533cc9d2e99d0ece80823caf107ecf5c04b960eea27aec"
+        "lib/presentation/app_widget.dart": "393e710b1553ee2ccdb686b573de23efb74f3f63a1da114c802898d8c3414375",
+        "lib/presentation/routes/app_router.dart": "a3f4d5db5deab2ef09734b3d48a22957c96906a14368ea452c594ed92c6a0411",
+        "lib/presentation/routes/route_pages.dart": "49d80533970d4eec6fdc9e5e938f42cb9534a34e364ab0c5f00521dbea44ba46",
+        "lib/presentation/theme/theme.dart": "a2b2ac2e4e90abdcac4247ea6d29ced0e58922a99a1c65c3d12639bfb6949f27",
+        "lib/presentation/theme/app_style.dart": "c9dc27c1648d67478f2c4633753141715735c97773b775b3a215292071521e30"
       },
       "routes": [
         {
@@ -359,9 +359,9 @@
       ]
     },
     "marketplace_sdk": {
-      "version": "1.4.0",
+      "version": "1.6.0",
       "files": {
-        "lib/presentation/routes/marketplace_route_pages.dart": "6fc1b8c258874eb2dddfa9685481429b23e2f69098784a87b4c4a495ff6fd356"
+        "lib/presentation/routes/marketplace_route_pages.dart": "d6fe65b15d5f8fc965eef4fe3926b309c9b46eeeb11059e64b0866d2e67c23c3"
       },
       "routes": [
         {
@@ -370,9 +370,24 @@
           "type": "MaterialRoute",
           "import": "package:${package}/presentation/routes/marketplace_route_pages.dart",
           "_comment": "First manifest-declared customer route (the rest of the customer route table is still host-owned; rule #59 follow-up in templates/tour/marketplace.tour.yaml). The installed shell carries @RoutePage(name: 'ProfileRoute') rendering base_sdk's GenericProfilePage, keeping the route name and the deprecated ProfilePage's constructor params so host navigation call-sites keep working - the same migration-window convention as merchants_sdk's /main: a host that still tracks its own ProfileRoute shell must delete that manual entry + shell when it recomposes, or auto_route sees the route name twice."
+        },
+        {
+          "path": "/main",
+          "page": "MainRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/marketplace_route_pages.dart",
+          "_comment": "The customer app's main destination (customer twin of merchants_sdk's manager /main). Before this entry the customer compose had NO main route: AppHelpers.goHome() -> AppRoutes.replaceMainRoute hit _HostAppRoutes' noSuchMethod StateError after every login/registration/guest-skip, stranding the user (after registering: on the registration-steps shell's spinner instead of the home page's shimmer placeholders). The installed shell renders marketplace_sdk's lean CustomerMainPage (home/search/like/profile tabs); the full legacy paas_customer shell keeps migrating separately."
         }
       ],
-      "app_routes": [],
+      "app_routes": [
+        {
+          "method": "replaceMainRoute",
+          "body": "context.router.replace(MainRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        }
+      ],
       "onboarding_slides": [],
       "registration_steps": [],
       "embedded_widgets": [],
@@ -384,7 +399,7 @@
           "imports": [
             "import 'package:${package}/presentation/routes/marketplace_route_pages.dart';"
           ],
-          "_comment": "Registers every marketplace profile section (header badge actions, membership card, wallet card, icon-tile grid, footer) with base_sdk's ProfileSectionRegistry, plus the registry's onEditProfile (MyAccount settings hub) and onLogout callbacks - the sections base_sdk's GenericProfilePage renders on the customer profile route. Declared top-level, NOT in an app_type flavor block, mirroring lms_sdk: this SDK's manifest has no flavor blocks and marketplace_sdk only composes into customer-family apps. Requires base_sdk >= 1.23.0 (the profile host)."
+          "_comment": "Registers every marketplace profile section (header badge actions, membership card, wallet card, icon-tile grid, and the base.footer override composing the member links above base_sdk's shared ProfileMetaRow) with base_sdk's ProfileSectionRegistry, plus the registry's onEditProfile (MyAccount settings hub) and onLogout callbacks - the sections base_sdk's GenericProfilePage renders on the customer profile route. Declared top-level, NOT in an app_type flavor block, mirroring lms_sdk: this SDK's manifest has no flavor blocks and marketplace_sdk only composes into customer-family apps. Requires base_sdk >= 1.23.0 (the profile host)."
         }
       ],
       "boot_hooks": [],
@@ -407,11 +422,11 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.8.9",
+      "version": "1.9.0",
       "files": {
-        "lib/presentation/routes/auth_route_pages.dart": "b60ed373f6a05450509b55bf94c8620dc750266fecf34e3255d35ae3f84897c8",
-        "lib/presentation/routes/registration_step_pages.dart": "73e43c48ad35f5681c9d089dad9c48fbb9094b0bb77e9026f91fce6ce1cfdd0f",
-        "lib/presentation/routes/auth_session_policy.dart": "8809e5c797f7509b61a63251c4c93c8bbe2276e7fb26a59601d7921b1dd7b51d"
+        "lib/presentation/routes/auth_route_pages.dart": "05e658f5428f91cd08705b4baee224419d101e7cf67c869047647470a8ba89a2",
+        "lib/presentation/routes/registration_step_pages.dart": "0688256171defa4e5aadaa38b010cb754d0a4ca19bc517b9a6f192d4afdd4e6f",
+        "lib/presentation/routes/auth_session_policy.dart": "b2a880ddf4caf4a23b42a6fa4bca97b69a72f88fc58ba885e33f832bfb04d441"
       },
       "routes": [
         {
@@ -497,7 +512,7 @@
       "boot_hooks": []
     },
     "merchants_sdk": {
-      "version": "1.9.7",
+      "version": "1.9.8",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d"
       },
@@ -573,7 +588,7 @@
     "wallet_sdk": {
       "version": "1.1.0",
       "files": {
-        "lib/presentation/routes/wallet_route_pages.dart": "0045775be0aceb743beebc687781534c088854ae0aa5b4b8b6d2a3382a8bbfa5"
+        "lib/presentation/routes/wallet_route_pages.dart": "be8f8583fd05c152e9113110f8c9a1671650ab66e994efd6273a4c7cfb815b98"
       },
       "routes": [
         {
@@ -602,7 +617,7 @@
       "boot_hooks": []
     },
     "delivery_sdk": {
-      "version": "1.10.1",
+      "version": "1.10.2",
       "files": {
         "assets/svg/balance.svg": "6f17d12b29de8e5500bc445ee89eec5c1fc8830cea42711af9bf80975e6b79ce",
         "assets/image/my_location.png": "0e6b49eb78d1f74ac96ac24ce39f834105ce68e361c302038ba9cefdcd926126"
@@ -793,20 +808,20 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.24.0",
-      "hash": "4e06ebe04fbc65c9"
+      "version": "1.27.0",
+      "hash": "e806f072f78001c3"
     },
     "comms": {
       "version": "1.10.3",
       "hash": "8c20a3785a45c469"
     },
     "marketplace": {
-      "version": "1.4.0",
-      "hash": "479b55139d53726b"
+      "version": "1.6.0",
+      "hash": "3d60bdcfea0746de"
     },
     "merchants": {
-      "version": "1.9.7",
-      "hash": "b826d0c432839c17"
+      "version": "1.9.8",
+      "hash": "eda5d9847dfc29a3"
     },
     "products": {
       "version": "1.5.0",
@@ -825,8 +840,8 @@
       "hash": "8884f789aeb25984"
     },
     "auth": {
-      "version": "1.8.9",
-      "hash": "ae26ac05273e9df2"
+      "version": "1.9.0",
+      "hash": "a530daee289354c0"
     },
     "users": {
       "version": "1.3.1",
@@ -845,8 +860,8 @@
       "hash": "c4cf84adf6acc8c0"
     },
     "delivery": {
-      "version": "1.10.1",
-      "hash": "9a02a747d3d86bbb"
+      "version": "1.10.2",
+      "hash": "0c3d4b7f0a54aa6f"
     },
     "map": {
       "version": "1.1.0",

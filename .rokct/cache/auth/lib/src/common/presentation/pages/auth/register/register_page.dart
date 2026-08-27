@@ -346,13 +346,17 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                   )
                                 : const SizedBox.shrink(),
                             30.verticalSpace,
+                            // Split the row by the SHEET's width, not the
+                            // window's: the old half-of-window SizedBoxes
+                            // overflowed the width-clamped bottom sheet
+                            // (AppBreakpoints.sheetMaxWidth) on wide
+                            // windows, pushing the surname field out of
+                            // view. Expanded halves with the same 8px gap
+                            // are pixel-identical on phones, where the
+                            // sheet spans the window.
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(
-                                  width:
-                                      (MediaQuery.sizeOf(context).width - 40) /
-                                      2,
+                                Expanded(
                                   child: OutlinedBorderTextField(
                                     label: AppHelpers.getTranslation(
                                       TrKeys.firstname,
@@ -361,10 +365,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                         event.setFirstName(name),
                                   ),
                                 ),
-                                SizedBox(
-                                  width:
-                                      (MediaQuery.sizeOf(context).width - 40) /
-                                      2,
+                                const SizedBox(width: 8),
+                                Expanded(
                                   child: OutlinedBorderTextField(
                                     label: AppHelpers.getTranslation(
                                       TrKeys.surname,

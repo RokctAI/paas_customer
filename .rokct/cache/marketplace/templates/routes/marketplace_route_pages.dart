@@ -38,6 +38,7 @@ import 'package:base_sdk/src/presentation/components/buttons/pop_button.dart';
 import 'package:base_sdk/src/presentation/pages/profile/generic_profile_page.dart'
     as pages;
 import 'package:base_sdk/src/presentation/pages/profile/profile_section_registry.dart';
+import 'package:marketplace_sdk/src/common/presentation/pages/main/customer_main_page.dart';
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/marketplace_profile_sections.dart';
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/my_account.dart';
 
@@ -109,4 +110,20 @@ class ProfileRouteView extends StatelessWidget {
       ],
     );
   }
+}
+
+/// Host route shell for the customer app's main destination (the customer
+/// twin of merchants_sdk's manager MainRoute): marketplace_sdk is the
+/// customer home SDK, so it owns the surface `AppHelpers.goHome()` lands
+/// on. Declared as `/main` + `replaceMainRoute` in this SDK's manifest —
+/// before this shell the customer compose had no main route at all, and
+/// every post-login / post-registration / guest-skip goHome() threw
+/// _HostAppRoutes' noSuchMethod StateError, stranding the user (after
+/// registering: on the registration-steps shell's spinner).
+@RoutePage(name: 'MainRoute')
+class MainRouteView extends StatelessWidget {
+  const MainRouteView({super.key});
+
+  @override
+  Widget build(BuildContext context) => const CustomerMainPage();
 }

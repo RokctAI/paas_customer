@@ -20,11 +20,9 @@
 
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:package_info_plus/package_info_plus.dart';
 import 'package:remixicon/remixicon.dart';
 
 import 'package:base_sdk/src/application/home/home_provider.dart';
@@ -42,8 +40,8 @@ import 'package:base_sdk/src/presentation/components/badges/alert_dialog.dart';
 import 'package:base_sdk/src/presentation/components/buttons/second_button.dart';
 import 'package:base_sdk/src/presentation/pages/profile/profile_section.dart';
 import 'package:base_sdk/src/presentation/pages/profile/profile_section_registry.dart';
+import 'package:base_sdk/src/presentation/pages/profile/widgets/base_profile_footer.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
-import 'package:base_sdk/src/services/app_connectivity.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
@@ -52,7 +50,6 @@ import 'package:marketplace_sdk/src/common/presentation/pages/profile/delete_scr
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/help_page.dart';
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/reservation_shops.dart';
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/about_page.dart';
-import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/app_usage_badge.dart';
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/wallet_send_screen.dart';
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/wallet_topup_screen.dart';
 
@@ -110,8 +107,15 @@ class MarketplaceProfileSections {
       builder: (context) => const MarketplaceProfileTileGrid(),
     ));
 
+    // Registered under base_sdk's default-footer id, not a marketplace
+    // id: the host's ensureDefaultSections() fills 'base.footer' with the
+    // bare ProfileMetaRow at order 1000 when nothing claimed it, and this
+    // bootstrap registration wins the slot (duplicate id = first-wins).
+    // Overriding — rather than keeping a separate marketplace.footer and
+    // letting the default render too — preserves the old footer's exact
+    // layout: links above the meta row, clearance below it.
     registry.register(ProfileSection(
-      id: 'marketplace.footer',
+      id: BaseProfileFooter.sectionId,
       order: _base + 40,
       builder: (context) => const MarketplaceProfileFooter(),
     ));
@@ -759,9 +763,11 @@ class _MarketplaceProfileTileGridState
   }
 }
 
-/// The footer: member-only Help/Terms/Privacy text links, app name, version
-/// (with build number in debug), the backend-probe online/offline dot and
-/// the app-usage badge — plus the old page's bottom scroll clearance.
+/// The footer: member-only Help/Terms/Privacy text links above base_sdk's
+/// shared [ProfileMetaRow] (app name, version, online/offline dot, usage
+/// badge) — plus the old page's bottom scroll clearance. Registered under
+/// the `base.footer` id so it replaces, rather than duplicates, the
+/// host's default footer.
 class MarketplaceProfileFooter extends StatelessWidget {
   const MarketplaceProfileFooter({super.key});
 
@@ -865,73 +871,9 @@ class MarketplaceProfileFooter extends StatelessWidget {
                     ),
                   ],
                 ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    AppHelpers.getAppName() ?? "",
-                    style: AppStyle.interBold(color: AppStyle.primary),
-                  ),
-                  const SizedBox(width: 4),
-                  const Icon(
-                    Remix.checkbox_blank_circle_fill,
-                    size: 8,
-                    color: AppStyle.black,
-                  ),
-                  FutureBuilder<PackageInfo>(
-                    future: PackageInfo.fromPlatform(),
-                    builder: (context, packageSnapshot) {
-                      if (packageSnapshot.hasData) {
-                        String versionDisplay;
-                        if (kDebugMode) {
-                          versionDisplay =
-                              " App Version ${packageSnapshot.data!.version}+${packageSnapshot.data!.buildNumber}";
-                        } else {
-                          versionDisplay =
-                              " App Version ${packageSnapshot.data!.version}";
-                        }
-
-                        return Text(
-                          versionDisplay,
-                          style: AppStyle.interNormal(color: AppStyle.black),
-                        );
-                      } else {
-                        return const SizedBox.shrink();
-                      }
-                    },
-                  ),
-                  // Online/Offline dot backed by a real backend probe
-                  // (guest api_status via base_sdk).
-                  FutureBuilder<bool>(
-                    future: AppConnectivity.backendAvailability(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const SizedBox.shrink();
-                      }
-                      final isOnline = snapshot.data!;
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const SizedBox(width: 8),
-                          Icon(
-                            Remix.checkbox_blank_circle_fill,
-                            size: 20,
-                            color: isOnline ? Colors.green : Colors.red,
-                          ),
-                          Text(
-                            isOnline ? 'Online' : 'Offline',
-                            style: TextStyle(
-                              color: isOnline ? Colors.green : Colors.red,
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                  SizedBox(width: 16.w),
-                  const AppUsageBadge(),
-                ],
-              ),
+              // The shared meta row (app name, version, online/offline
+              // dot, week+year usage badge) now comes from base_sdk.
+              const ProfileMetaRow(),
             ],
           ),
         ),

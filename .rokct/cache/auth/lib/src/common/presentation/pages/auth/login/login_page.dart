@@ -36,6 +36,8 @@ import 'package:auth_sdk/src/common/presentation/pages/auth/register/register_pa
 import 'package:auth_sdk/src/common/application/auth/login/login_provider.dart';
 // [refork] embed via EmbeddedWidgets
 import 'package:auth_sdk/src/common/presentation/pages/auth/login/login_screen.dart';
+import 'package:auth_sdk/src/common/presentation/pages/auth/registration/registration_steps_page.dart';
+import 'package:auth_sdk/src/common/services/entry_config.dart';
 
 import 'package:base_sdk/src/presentation/theme/theme.dart';
 import 'package:base_sdk/src/presentation/components/buttons/second_button.dart';
@@ -158,6 +160,19 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     });
   }
 
+  /// Skip = guest entry. With a composed onboarding intro (supacharge) it
+  /// opens that intro, exactly as before; with none (e.g. the marketplace
+  /// customer app, which composes no onboarding SDK) it lands the guest on
+  /// the app's normal post-auth destination — the same default landing the
+  /// registration pipeline uses — instead of the affordance being hidden.
+  void _skip() {
+    if (_introPage != null) {
+      _showIntroPage();
+      return;
+    }
+    RegistrationFlow.defaultLanding(context);
+  }
+
   // ignore: unused_element
   void _closeIntroPage() {
     setState(() {
@@ -185,19 +200,22 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final bool isDarkMode = LocalStorage.getAppThemeMode();
     final bool isLtr = LocalStorage.getLangLtr();
     final bool isWideWindow = windowSizeOf(context).isAtLeastMedium;
-    // Wide windows drop the photo background (see the Container below), so
-    // the white-on-photo foreground (logo text, outlined Register button)
-    // would vanish on the light surface. Pick the contrast color to match
-    // the surface actually behind it; compact keeps the image and therefore
-    // the original white foreground, unchanged.
-    final Color onSurfaceColor =
-        isWideWindow && !isDarkMode ? AppStyle.black : AppStyle.white;
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor:
-            isDarkMode ? AppStyle.dontHaveAnAccBackDark : AppStyle.white,
+        // Wide windows are imageless (see the Container below), and the
+        // entry surface stays DARK there regardless of theme mode — the
+        // same dark this page's own dark-mode background uses — because it
+        // stands in for the dark splash artwork the compact login shows
+        // (which never changed with the theme either). That also keeps the
+        // white-on-photo foreground (logo text, outlined Register button)
+        // readable without a per-mode contrast flip. Compact keeps the
+        // full-bleed image over the original per-mode background,
+        // unchanged.
+        backgroundColor: isDarkMode || isWideWindow
+            ? AppStyle.dontHaveAnAccBackDark
+            : AppStyle.white,
         body: _showIntro && _introPage != null
             ? _introPage! // Show preloaded IntroPage if _showIntro is true
             : Container(
@@ -250,7 +268,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                               text: AppHelpers.getAppName(),
                                               style:
                                                   AppStyle.logoFontBoldItalic(
-                                                color: onSurfaceColor,
+                                                color: AppStyle.white,
                                                 size: 35.sp,
                                               ),
                                             ),
@@ -272,7 +290,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                                         .getTrademarkSymbol(),
                                                     style: AppStyle
                                                         .logoFontBoldItalic(
-                                                      color: onSurfaceColor,
+                                                      color: AppStyle.white,
                                                       size: 12.sp,
                                                     ),
                                                   ),
@@ -287,12 +305,18 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             8.horizontalSpace,
                             const Spacer(),
                             const Spacer(),
-                            // No composed intro -> no Skip: tapping it could
-                            // only land on a blank page.
-                            if (_introPage != null)
+                            // Skip = use the app without an account. Shown
+                            // by default in EVERY composed app; only a home
+                            // SDK that declares it has no guest surface
+                            // (delivery/merchants) hides it, via the
+                            // @auth-entry-config integrations placeholder
+                            // (see AuthEntryConfig.showsGuestSkip) — no
+                            // longer gated on an onboarding intro being
+                            // composed, which wrongly hid it in apps whose
+                            // guests skip straight to browsing (customer).
+                            if (AuthEntryConfig.showsGuestSkip)
                               SecondButton(
-                                onTap:
-                                    _showIntroPage, // Show IntroPage when Skip is tapped
+                                onTap: _skip,
                                 title: AppHelpers.getTranslation(TrKeys.skip),
                                 bgColor: AppStyle.primary,
                                 titleColor: AppStyle.white,
@@ -353,8 +377,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 );
                               },
                               background: AppStyle.transparent,
-                              textColor: onSurfaceColor,
-                              borderColor: onSurfaceColor,
+                              textColor: AppStyle.white,
+                              borderColor: AppStyle.white,
                             ),
                             5.verticalSpace,
                             Container(
