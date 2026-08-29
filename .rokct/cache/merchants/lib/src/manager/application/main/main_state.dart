@@ -34,7 +34,10 @@ class MainState {
     this.isScrolling = false,
   });
 
-  /// Which bottom-nav tab is showing: 0 orders, 1 foods, 2 restaurant.
+  /// Which bottom-nav tab is showing: 0 POS (billing), 1 orders, 2 foods,
+  /// 3 restaurant. The POS port (approved strip section 11) put the till
+  /// first — a store owner lands on the scanner; the queue moved to 1
+  /// (orders_sdk's tour fragment tracks the shift).
   final int selectedIndex;
 
   /// Collapses the nav pill while a tab's scroll view is moving.

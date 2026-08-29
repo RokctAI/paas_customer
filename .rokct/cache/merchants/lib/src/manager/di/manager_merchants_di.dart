@@ -19,9 +19,15 @@
 // SOFTWARE.
 
 import 'package:get_it/get_it.dart';
+import 'package:base_sdk/src/constants/app_constants.dart';
 import 'package:base_sdk/src/sync/sync_engine.dart';
+import 'package:merchants_sdk/src/manager/domain/interface/pos_catalog.dart';
+import 'package:merchants_sdk/src/manager/domain/interface/pos_orders.dart';
 import 'package:merchants_sdk/src/manager/domain/interface/seller_sections_tables.dart';
 import 'package:merchants_sdk/src/manager/domain/interface/seller_shop.dart';
+import 'package:merchants_sdk/src/manager/infrastructure/repositories/mock_pos_orders_repository.dart';
+import 'package:merchants_sdk/src/manager/infrastructure/repositories/mock_products_repository.dart';
+import 'package:merchants_sdk/src/manager/infrastructure/repositories/pos_catalog_repository.dart';
 import 'package:merchants_sdk/src/manager/infrastructure/repositories/seller_sections_tables_repository.dart';
 import 'package:merchants_sdk/src/manager/infrastructure/repositories/seller_shop_repository.dart';
 import 'package:merchants_sdk/src/manager/infrastructure/services/shop_create_sync_handler.dart';
@@ -52,6 +58,31 @@ class ManagerMerchantsDependencies {
       getIt.registerSingleton<SellerSectionsTablesRepositoryFacade>(
         SellerSectionsTablesRepository(),
       );
+    }
+    // The POS till's product-lookup seam (BillingPage barcode scans and
+    // the Add Items lane). Demo-gated like MerchantsSdkDependencies'
+    // ShopsRepositoryFacade: --dart-define=IS_DEMO=true routes lookups to
+    // this SDK's MockProductsRepository ("Demo Product", 150.00) so
+    // headless tours and the standalone POS test harness run with zero
+    // backend contact; otherwise the real repository delegates to the
+    // composed app's ProductsRepositoryFacade (products_sdk's, resolved
+    // lazily per call).
+    if (!getIt.isRegistered<PosCatalogRepositoryFacade>()) {
+      getIt.registerSingleton<PosCatalogRepositoryFacade>(
+        AppConstants.isDemo ? MockProductsRepository() : PosCatalogRepository(),
+      );
+    }
+    // The POS checkout's order seam (customer attach, credit outstanding,
+    // and the cart -> create-order handoff into the seller pipeline).
+    // Demo builds get this SDK's mock so tours and the standalone harness
+    // run the full checkout with zero backend contact. REAL registration
+    // is the HOST's: the installed ManagerPosOrdersAdapter
+    // (templates/adapters/manager/pos_orders_adapter.dart) delegates to
+    // orders_sdk, which this lib must not import (ADR-005). Unregistered,
+    // the checkout degrades honestly — no customer/credit surface, sales
+    // complete locally only.
+    if (AppConstants.isDemo && !getIt.isRegistered<PosOrdersFacade>()) {
+      getIt.registerSingleton<PosOrdersFacade>(MockPosOrdersRepository());
     }
     // Attach the shop.create push handler so offline shop creates drain to
     // the backend (auth_di's AuthSyncHandler pattern). Registered here rather

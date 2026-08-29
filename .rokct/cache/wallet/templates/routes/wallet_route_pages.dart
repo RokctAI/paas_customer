@@ -18,15 +18,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// Host-side route shell for wallet_sdk's top-up screen (#33). The
+// Host-side route shells + profile-host wiring for wallet_sdk (#33). The
 // `/wallet-topup` path this registers is the exact string lms_sdk's
 // subscribe surface pushes beside its insufficient-funds refusal
 // (agent PR #150: `context.router.pushNamed('/wallet-topup', ...)`), so
 // changing it there means changing it here in the same breath.
+// `/wallet-history` is the wallet card's history arrow target (pushed by
+// path from wallet_sdk's WalletProfileCard, same guarded idiom).
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:wallet_sdk/wallet_sdk.dart';
+
+/// Registers the 'wallet.card' profile section with base_sdk's
+/// ProfileSectionRegistry — called once at boot from this SDK's `di_hooks`
+/// manifest entry (the same pattern as marketplace_sdk's
+/// registerMarketplaceProfileSections). Configuration rides
+/// [WalletCardSection]'s static seam; a home SDK that wants to reconfigure
+/// the card (symbol, visibility, extra actions, display-only) sets those
+/// fields from its own di_hook.
+void registerWalletProfileSection() {
+  WalletCardSection.register();
+}
 
 /// Host route shell for [WalletTopUpPage] (wallet_sdk-resident page).
 @RoutePage(name: 'WalletTopUpRoute')
@@ -35,4 +48,18 @@ class WalletTopUpRouteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => const WalletTopUpPage();
+}
+
+/// Host route shell for [WalletHistoryPage] (wallet_sdk-resident page).
+/// Constructor keeps the donor page's `isBackButton` param so navigation
+/// call-sites that pushed marketplace's page keep working after recompose.
+@RoutePage(name: 'WalletHistoryRoute')
+class WalletHistoryRouteView extends StatelessWidget {
+  final bool isBackButton;
+
+  const WalletHistoryRouteView({super.key, this.isBackButton = true});
+
+  @override
+  Widget build(BuildContext context) =>
+      WalletHistoryPage(isBackButton: isBackButton);
 }

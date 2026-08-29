@@ -1,7 +1,7 @@
 {
   "name": "marketplace_sdk",
-  "version": "1.6.0",
-  "_comment_requires": "marketplace_sdk >= 1.4.0 requires base_sdk >= 1.23.0 (the generic profile host: GenericProfilePage + ProfileSectionRegistry). marketplace_sdk >= 1.6.0 requires base_sdk >= 1.26.0 (AppUsageBadge, ProfileMetaRow and the base.footer default section moved into base_sdk). The composer manifest schema has no machine-readable minimum-version field, so this is the declaration.",
+  "version": "1.10.0",
+  "_comment_requires": "marketplace_sdk >= 1.4.0 requires base_sdk >= 1.23.0 (the generic profile host: GenericProfilePage + ProfileSectionRegistry). marketplace_sdk >= 1.6.0 requires base_sdk >= 1.26.0 (AppUsageBadge, ProfileMetaRow and the base.footer default section moved into base_sdk). marketplace_sdk >= 1.7.0 requires base_sdk >= 1.27.0 (the unified profile header: registerTopRowAction and the plan/planBack/corner header slots). marketplace_sdk >= 1.8.0 requires base_sdk >= 1.32.0 (BaseWalletCard: the shared wallet card owning the balance line's hide-zero / green-positive / red-negative rule; MarketplaceWalletCard composed it). marketplace_sdk >= 1.9.0 no longer registers a 'marketplace.wallet' profile section (MarketplaceWalletCard removed): the profile wallet card is wallet_sdk's 'wallet.card' section (same order 120 slot), so customer-family apps must compose wallet_sdk >= 1.2.0 to keep a wallet card on the profile; the /wallet-topup top-up sheet (WalletTopUpScreen) stays marketplace-owned. The composer manifest schema has no machine-readable minimum-version field, so this is the declaration.",
   "di_hooks": [
     {
       "id": "marketplace-profile-sections",
@@ -10,7 +10,7 @@
       "imports": [
         "import 'package:${package}/presentation/routes/marketplace_route_pages.dart';"
       ],
-      "_comment": "Registers every marketplace profile section (header badge actions, membership card, wallet card, icon-tile grid, and the base.footer override composing the member links above base_sdk's shared ProfileMetaRow) with base_sdk's ProfileSectionRegistry, plus the registry's onEditProfile (MyAccount settings hub) and onLogout callbacks - the sections base_sdk's GenericProfilePage renders on the customer profile route. Declared top-level, NOT in an app_type flavor block, mirroring lms_sdk: this SDK's manifest has no flavor blocks and marketplace_sdk only composes into customer-family apps. Requires base_sdk >= 1.23.0 (the profile host)."
+      "_comment": "Registers every marketplace profile section (header badge actions, membership card, icon-tile grid, and the base.footer override composing the member links above base_sdk's shared ProfileMetaRow — the wallet card is wallet_sdk's 'wallet.card' section since 1.9.0) with base_sdk's ProfileSectionRegistry, plus the registry's onEditProfile (MyAccount settings hub) and onLogout callbacks - the sections base_sdk's GenericProfilePage renders on the customer profile route. Declared top-level, NOT in an app_type flavor block, mirroring lms_sdk: this SDK's manifest has no flavor blocks and marketplace_sdk only composes into customer-family apps. Requires base_sdk >= 1.23.0 (the profile host)."
     }
   ],
   "installs": [

@@ -36,8 +36,6 @@ import 'package:base_sdk/src/application/shop_order/shop_order_provider.dart';
 import 'package:base_sdk/src/constants/app_constants.dart';
 import 'package:base_sdk/src/navigation/app_routes.dart';
 import 'package:base_sdk/src/navigation/embedded_widgets.dart';
-import 'package:base_sdk/src/presentation/components/badges/alert_dialog.dart';
-import 'package:base_sdk/src/presentation/components/buttons/second_button.dart';
 import 'package:base_sdk/src/presentation/pages/profile/profile_section.dart';
 import 'package:base_sdk/src/presentation/pages/profile/profile_section_registry.dart';
 import 'package:base_sdk/src/presentation/pages/profile/widgets/base_profile_footer.dart';
@@ -50,8 +48,7 @@ import 'package:marketplace_sdk/src/common/presentation/pages/profile/delete_scr
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/help_page.dart';
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/reservation_shops.dart';
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/about_page.dart';
-import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/wallet_send_screen.dart';
-import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/wallet_topup_screen.dart';
+import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/my_account.dart';
 
 /// marketplace_sdk's sections for base_sdk's generic profile host
 /// ([GenericProfilePage] + [ProfileSectionRegistry]).
@@ -80,26 +77,60 @@ class MarketplaceProfileSections {
   static void register() {
     final registry = ProfileSectionRegistry.I;
 
-    // App-bar extras the host header does not carry: liked-shops and
-    // notifications icon buttons with count badges (plus the old page's
-    // periodic notification-count refresh and language-change relist).
-    registry.register(ProfileSection(
-      id: 'marketplace.header_actions',
-      order: _base,
-      builder: (context) => const MarketplaceProfileHeaderActions(),
-    ));
+    // The old identity strip's likes + notifications icon buttons (count
+    // badges included) now ride the host's top controls row, between the
+    // page title and the host-owned theme toggle / sign-out — the retired
+    // 'marketplace.header_actions' section. The notifications action also
+    // owns the old page's side effects: the periodic notification-count
+    // refresh and the language-change relist.
+    registry.registerTopRowAction(
+      id: 'marketplace.likes',
+      order: 10,
+      builder: (context) => const MarketplaceLikesAction(),
+    );
+    registry.registerTopRowAction(
+      id: 'marketplace.notifications',
+      order: 20,
+      builder: (context) => const MarketplaceNotificationsAction(),
+    );
 
-    registry.register(ProfileSection(
-      id: 'marketplace.membership',
-      order: _base + 10,
-      builder: (context) => const MarketplaceMembershipCard(),
-    ));
+    // The membership card's content moves into the header card, the
+    // retired 'marketplace.membership' section: the crown-led plan row
+    // ("Plan · <tier> Benefits ›" + expiry) fills the plan slot, and the
+    // planBack slot gives the row's tap its in-place card flip (the old
+    // card's benefits link only showed ComingSoonDialog — no benefits
+    // screen exists — so the back face renders tier + expiry + the
+    // member links). Same conditional as the old card: nothing without a
+    // stored membership.
+    Future<bool> hasMembership() async =>
+        LocalStorage.getUser()?.membership != null;
+    registry.registerHeaderSlot(
+      ProfileHeaderSlot.plan,
+      id: 'marketplace.plan',
+      visible: hasMembership,
+      builder: (context) => const MarketplacePlanRow(),
+    );
+    registry.registerHeaderSlot(
+      ProfileHeaderSlot.planBack,
+      id: 'marketplace.plan_back',
+      visible: hasMembership,
+      builder: (context) => const MarketplacePlanBackCard(),
+    );
 
-    registry.register(ProfileSection(
-      id: 'marketplace.wallet',
-      order: _base + 20,
-      builder: (context) => const MarketplaceWalletCard(),
-    ));
+    // The old identity strip's settings gear, re-homed to the header
+    // card's bottom-right corner with its original action: the MyAccount
+    // settings hub.
+    registry.registerHeaderSlot(
+      ProfileHeaderSlot.corner,
+      id: 'marketplace.settings',
+      builder: (context) => const MarketplaceSettingsCorner(),
+    );
+
+    // No 'marketplace.wallet' section any more: the profile wallet card is
+    // wallet_sdk's 'wallet.card' section now (registered by wallet_sdk at
+    // bootstrap, order 120 — the same slot this SDK's card used to fill).
+    // wallet_sdk's card pushes the /wallet-topup route, whose top-up sheet
+    // (WalletTopUpScreen) stays marketplace-owned.
 
     registry.register(ProfileSection(
       id: 'marketplace.tiles',
@@ -122,26 +153,51 @@ class MarketplaceProfileSections {
   }
 }
 
-/// Liked-shops + notifications icon buttons (count badges), carried over
-/// from the old page's CommonAppBar. Also owns the old page's side effects:
-/// the periodic notification-count timer and the language-change refetch.
-class MarketplaceProfileHeaderActions extends ConsumerStatefulWidget {
-  const MarketplaceProfileHeaderActions({super.key});
+/// The liked-shops icon button (count badge), carried over verbatim from
+/// the old page's CommonAppBar into the host's top controls row.
+class MarketplaceLikesAction extends ConsumerWidget {
+  const MarketplaceLikesAction({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return IconButton(
+      onPressed: () {
+        AppRoutes.I.pushLikeRoute(context);
+      },
+      icon: Badge(
+        label: Text(
+          (ref.watch(likeProvider).likedShopsCount).toString(),
+        ),
+        child: Icon(
+          Remix.heart_3_line,
+          color: AppStyle.textPrimary,
+          size: 20,
+        ),
+      ),
+    );
+  }
+}
+
+/// The notifications icon button (count badge) in the host's top controls
+/// row. Also owns the old page's side effects: the periodic
+/// notification-count timer and the language-change refetch.
+class MarketplaceNotificationsAction extends ConsumerStatefulWidget {
+  const MarketplaceNotificationsAction({super.key});
 
   /// Cancels the active notification poll — the old page cancelled its
   /// timer before logout/account deletion so no count fetch fires with a
   /// dead token.
   static void cancelNotificationTimer() =>
-      _MarketplaceProfileHeaderActionsState._active?._cancelTimer();
+      _MarketplaceNotificationsActionState._active?._cancelTimer();
 
   @override
-  ConsumerState<MarketplaceProfileHeaderActions> createState() =>
-      _MarketplaceProfileHeaderActionsState();
+  ConsumerState<MarketplaceNotificationsAction> createState() =>
+      _MarketplaceNotificationsActionState();
 }
 
-class _MarketplaceProfileHeaderActionsState
-    extends ConsumerState<MarketplaceProfileHeaderActions> {
-  static _MarketplaceProfileHeaderActionsState? _active;
+class _MarketplaceNotificationsActionState
+    extends ConsumerState<MarketplaceNotificationsAction> {
+  static _MarketplaceNotificationsActionState? _active;
   Timer? _timer;
 
   @override
@@ -188,265 +244,247 @@ class _MarketplaceProfileHeaderActionsState
       }
     });
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        IconButton(
-          onPressed: () {
-            AppRoutes.I.pushLikeRoute(context);
-          },
-          icon: Badge(
-            label: Text(
-              (ref.watch(likeProvider).likedShopsCount).toString(),
-            ),
-            child: const Icon(
-              Remix.heart_3_line,
-              color: AppStyle.black,
-              size: 20,
-            ),
-          ),
+    return IconButton(
+      onPressed: () {
+        AppRoutes.I.pushNotificationListRoute(context);
+      },
+      icon: Badge(
+        label: Text(
+          (ref
+                      .watch(notificationProvider)
+                      .countOfNotifications
+                      ?.notification ??
+                  0)
+              .toString(),
         ),
-        IconButton(
-          onPressed: () {
-            AppRoutes.I.pushNotificationListRoute(context);
-          },
-          icon: Badge(
-            label: Text(
-              (ref
-                          .watch(notificationProvider)
-                          .countOfNotifications
-                          ?.notification ??
-                      0)
-                  .toString(),
-            ),
-            child: const Icon(
-              Remix.notification_line,
-              color: AppStyle.black,
-              size: 20,
-            ),
-          ),
+        child: Icon(
+          Remix.notification_line,
+          color: AppStyle.textPrimary,
+          size: 20,
         ),
-      ],
+      ),
     );
   }
 }
 
-/// The membership plan card — renders nothing without a stored membership,
-/// the same conditional the old page evaluated per build.
-class MarketplaceMembershipCard extends StatelessWidget {
-  const MarketplaceMembershipCard({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    if (LocalStorage.getUser()?.membership == null) {
-      return const SizedBox.shrink();
-    }
-    return Column(
-      children: [
-        Container(
-          width: MediaQuery.sizeOf(context).width - 40.w,
-          decoration: BoxDecoration(
-            color: AppStyle.primary.withOpacity(0.3),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  AppHelpers.getTranslation(TrKeys.plan),
-                  style: AppStyle.interBold(
-                    size: 24,
-                    color: AppStyle.black,
-                  ),
-                ),
-                5.verticalSpace,
-                GestureDetector(
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return const ComingSoonDialog();
-                      },
-                    );
-                  },
-                  child: Row(
-                    children: [
-                      Text(
-                        '${LocalStorage.getUser()?.membership?.title ?? ''} ${AppHelpers.getTranslation(TrKeys.benefits)}',
-                        style: AppStyle.interNormal(
-                          size: 16,
-                          color: AppStyle.black,
-                        ),
-                      ),
-                      const Icon(Icons.keyboard_arrow_right_sharp),
-                    ],
-                  ),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      AppHelpers.getTranslation(TrKeys.expire),
-                      style: AppStyle.interNormal(
-                        size: 12,
-                        color: AppStyle.textGrey,
-                      ),
-                    ),
-                    Text(
-                      ' ${(LocalStorage.getUser()?.membership?.endDate ?? '').substring(0, 10)}',
-                      style: AppStyle.interNormal(
-                        size: 12,
-                        color: AppStyle.textGrey,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-        SizedBox(height: 10.h),
-      ],
-    );
-  }
-}
-
-/// The wallet balance card with its inline Top-up / Send (/ Loan, behind
-/// AppHelpers.getLendingEnabled) actions and the arrow to wallet history.
-class MarketplaceWalletCard extends ConsumerWidget {
-  const MarketplaceWalletCard({super.key});
+/// The membership card's content as the header card's plan-slot row:
+/// "Plan · <tier> Benefits ›" + expiry. The host leads the row with the
+/// crown glyph and flips the card to [MarketplacePlanBackCard] on tap
+/// (the planBack slot is claimed alongside this one). Registered behind a
+/// stored-membership gate — the old card's conditional.
+class MarketplacePlanRow extends ConsumerWidget {
+  const MarketplacePlanRow({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(profileProvider);
-    return Column(
+    // Same source as the old card, but watching the provider keeps the
+    // tier fresh after the host's fetchUser resolves.
+    final user =
+        ref.watch(profileProvider).userData ?? LocalStorage.getUser();
+    final membership = user?.membership;
+    final endDate = membership?.endDate ?? '';
+    return Wrap(
+      spacing: 6,
+      runSpacing: 2,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
-        Container(
-          width: MediaQuery.sizeOf(context).width - 40.w,
-          decoration: BoxDecoration(
-            color: AppStyle.primary.withOpacity(0.25),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Stack(
-            children: [
-              Positioned(
-                top: 5,
-                right: 5,
-                child: GestureDetector(
-                  onTap: () {
-                    AppRoutes.I.pushWalletHistoryRoute(context);
-                  },
-                  child: const Icon(Remix.arrow_right_up_line),
-                ),
+        Text(
+          AppHelpers.getTranslation(TrKeys.plan),
+          style: AppStyle.interSemi(size: 13, color: AppStyle.textPrimary),
+        ),
+        _PlanRowDot(),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '${membership?.title ?? ''} ${AppHelpers.getTranslation(TrKeys.benefits)}',
+              style: AppStyle.interNormal(
+                size: 13,
+                color: AppStyle.textPrimary,
               ),
-              Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      left: 16.0,
-                      right: 16.0,
-                      top: 16.0,
-                      bottom: 8.0,
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Remix.wallet_3_line),
-                        16.horizontalSpace,
-                        Text(
-                          "${AppHelpers.getTranslation(TrKeys.wallet)}: ${AppHelpers.numberFormat(number: state.userData?.wallet?.price)}",
-                          style: AppStyle.interNoSemi(size: 16),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppStyle.red.withOpacity(0.3),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(20.r),
-                        bottomRight: Radius.circular(20.r),
-                      ),
-                    ),
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12.0,
-                      horizontal: 16.0,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: SecondButton(
-                            title: AppHelpers.getTranslation(TrKeys.topup),
-                            bgColor: AppStyle.primary,
-                            titleColor: AppStyle.white,
-                            onTap: () {
-                              AppHelpers.showCustomModalBottomSheet(
-                                context: context,
-                                modal: ProviderScope(
-                                  child: Consumer(
-                                    builder: (context, ref, _) =>
-                                        const WalletTopUpScreen(),
-                                  ),
-                                ),
-                                isDarkMode: false,
-                              );
-                            },
-                          ),
-                        ),
-                        12.horizontalSpace,
-                        Expanded(
-                          child: SecondButton(
-                            title: AppHelpers.getTranslation(TrKeys.send),
-                            bgColor: AppStyle.primary,
-                            titleColor: AppStyle.white,
-                            onTap: () {
-                              AppHelpers.showCustomModalBottomSheet(
-                                context: context,
-                                modal: ProviderScope(
-                                  child: Consumer(
-                                    builder: (context, ref, _) =>
-                                        const WalletSendScreen(),
-                                  ),
-                                ),
-                                isDarkMode: false,
-                              );
-                            },
-                          ),
-                        ),
-                        if (AppHelpers.getLendingEnabled()) ...[
-                          12.horizontalSpace,
-                          Expanded(
-                            child: SecondButton(
-                              title: AppHelpers.getTranslation(TrKeys.loan),
-                              bgColor: AppStyle.primary,
-                              titleColor: AppStyle.white,
-                              onTap: () {
-                                AppHelpers.showCustomModalBottomSheet(
-                                  context: context,
-                                  modal: ProviderScope(
-                                    child: Consumer(
-                                      builder: (context, ref, _) =>
-                                          EmbeddedWidgets.I.loanScreen(),
-                                    ),
-                                  ),
-                                  isDarkMode: false,
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            ),
+            Icon(
+              Icons.keyboard_arrow_right_sharp,
+              size: 16,
+              color: AppStyle.textPrimary,
+            ),
+          ],
+        ),
+        _PlanRowDot(),
+        Text(
+          '${AppHelpers.getTranslation(TrKeys.expire)} ${endDate.length >= 10 ? endDate.substring(0, 10) : endDate}',
+          style: AppStyle.interNormal(
+            size: 11,
+            color: AppStyle.textDarkSecondary,
           ),
         ),
-        15.verticalSpace,
       ],
+    );
+  }
+}
+
+class _PlanRowDot extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) => Container(
+        width: 4,
+        height: 4,
+        decoration: BoxDecoration(
+          color: AppStyle.textDarkSecondary,
+          shape: BoxShape.circle,
+        ),
+      );
+}
+
+/// The header card's back face for the plan row's in-place flip. No
+/// benefits screen exists (the old card's benefits link only showed
+/// ComingSoonDialog), so the face renders what membership carries — tier
+/// + expiry — plus the member links the footer gates on membership
+/// (Help / Terms / Privacy). The host wraps this in the card chrome and
+/// flips back on any tap outside the links.
+class MarketplacePlanBackCard extends ConsumerWidget {
+  const MarketplacePlanBackCard({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user =
+        ref.watch(profileProvider).userData ?? LocalStorage.getUser();
+    final membership = user?.membership;
+    final endDate = membership?.endDate ?? '';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(
+              Remix.vip_crown_line,
+              size: 16,
+              color: AppStyle.primary,
+            ),
+            8.horizontalSpace,
+            Expanded(
+              child: Text(
+                '${membership?.title ?? ''} ${AppHelpers.getTranslation(TrKeys.benefits)}',
+                style: AppStyle.interSemi(
+                  size: 16,
+                  color: AppStyle.textPrimary,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Container(
+          width: double.infinity,
+          margin: const EdgeInsets.only(top: 12),
+          padding: const EdgeInsets.only(top: 12),
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(color: AppStyle.strokeDark, width: 0.5),
+            ),
+          ),
+          child: Text(
+            '${AppHelpers.getTranslation(TrKeys.expire)} ${endDate.length >= 10 ? endDate.substring(0, 10) : endDate}',
+            style: AppStyle.interNormal(
+              size: 12,
+              color: AppStyle.textDarkSecondary,
+            ),
+          ),
+        ),
+        8.verticalSpace,
+        Wrap(
+          spacing: 4,
+          children: [
+            _PlanBackLink(
+              label: AppHelpers.getTranslation(TrKeys.help),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HelpPage(),
+                  ),
+                );
+              },
+            ),
+            _PlanBackLink(
+              label: AppHelpers.getTranslation(TrKeys.terms),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EmbeddedWidgets.I.termPage(),
+                  ),
+                );
+              },
+            ),
+            _PlanBackLink(
+              label: AppHelpers.getTranslation(TrKeys.privacyPolicy),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EmbeddedWidgets.I.policyPage(),
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _PlanBackLink extends StatelessWidget {
+  final String label;
+  final VoidCallback onTap;
+
+  const _PlanBackLink({required this.label, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+        child: Text(
+          label,
+          style: AppStyle.interNormal(
+            size: 12,
+            color: AppStyle.textPrimary,
+            textDecoration: TextDecoration.underline,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The old identity strip's settings gear (Remix settings_3_line), pinned
+/// to the header card's bottom-right corner with its original action:
+/// pushing the MyAccount settings hub.
+class MarketplaceSettingsCorner extends StatelessWidget {
+  const MarketplaceSettingsCorner({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const MyAccount(isBackButton: false),
+          ),
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(4),
+        child: Icon(
+          Remix.settings_3_line,
+          size: 16,
+          color: AppStyle.textDarkSecondary,
+        ),
+      ),
     );
   }
 }
@@ -625,14 +663,17 @@ class _MarketplaceProfileTileGridState
                     ? _buildCardsButton(context, isDarkMode)
                     : _buildSquareButton(
                         context,
-                        borderColor: AppStyle.white,
+                        // Invisible spacer: a transparent border keeps the
+                        // slot's footprint without painting an outline in
+                        // either mode (a fixed white border glared on dark).
+                        borderColor: AppStyle.transparent,
                         backgroundColor: Colors.transparent,
                       ),
             AppHelpers.getReservationEnable()
                 ? _buildCardsButton(context, isDarkMode)
                 : _buildSquareButton(
                     context,
-                    borderColor: AppStyle.white,
+                    borderColor: AppStyle.transparent,
                     backgroundColor: Colors.transparent,
                   ),
             _buildSquareButton(
@@ -645,13 +686,18 @@ class _MarketplaceProfileTileGridState
                   child: DeleteScreen(
                     isDeleteAccount: true,
                     onDelete:
-                        MarketplaceProfileHeaderActions.cancelNotificationTimer,
+                        MarketplaceNotificationsAction.cancelNotificationTimer,
                   ),
                 );
               },
-              backgroundColor: Colors.pink[50],
-              iconColor: Colors.red,
-              textColor: Colors.pink[700],
+              // Danger tile: a translucent red tint reads over both the
+              // light and dark page surfaces, and AppStyle.red (the
+              // palette's only red token) keeps the accent legible in
+              // both modes — the old fixed pink[50]/pink[700] pair only
+              // worked on light.
+              backgroundColor: AppStyle.red.withValues(alpha: 0.15),
+              iconColor: AppStyle.red,
+              textColor: AppStyle.red,
             ),
           ],
         ),
@@ -719,7 +765,7 @@ class _MarketplaceProfileTileGridState
         width: width.w,
         height: height.w,
         decoration: BoxDecoration(
-          color: backgroundColor ?? AppStyle.white,
+          color: backgroundColor ?? AppStyle.cardDark,
           borderRadius: BorderRadius.circular(20.r),
           border: borderColor != null ? Border.all(color: borderColor) : null,
           boxShadow: [
@@ -742,7 +788,7 @@ class _MarketplaceProfileTileGridState
                       child: Icon(
                         icon,
                         size: 30.r,
-                        color: iconColor ?? AppStyle.black,
+                        color: iconColor ?? AppStyle.textPrimary,
                       ),
                     ),
                   if (icon != null && title != null) 8.verticalSpace,
@@ -751,7 +797,7 @@ class _MarketplaceProfileTileGridState
                       title,
                       style: AppStyle.interNormal(
                         size: 14.sp,
-                        color: textColor ?? AppStyle.black,
+                        color: textColor ?? AppStyle.textPrimary,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -804,15 +850,15 @@ class MarketplaceProfileFooter extends StatelessWidget {
                         children: [
                           Text(
                             AppHelpers.getTranslation(TrKeys.help),
-                            style: const TextStyle(
-                              color: AppStyle.black,
+                            style: TextStyle(
+                              color: AppStyle.textPrimary,
                               decoration: TextDecoration.underline,
                             ),
                           ),
                           const SizedBox(width: 12),
-                          const Icon(
+                          Icon(
                             Icons.circle_rounded,
-                            color: AppStyle.black,
+                            color: AppStyle.textDarkSecondary,
                             size: 7,
                           ),
                         ],
@@ -832,15 +878,15 @@ class MarketplaceProfileFooter extends StatelessWidget {
                         children: [
                           Text(
                             AppHelpers.getTranslation(TrKeys.terms),
-                            style: const TextStyle(
-                              color: AppStyle.black,
+                            style: TextStyle(
+                              color: AppStyle.textPrimary,
                               decoration: TextDecoration.underline,
                             ),
                           ),
                           const SizedBox(width: 12),
-                          const Icon(
+                          Icon(
                             Icons.circle_rounded,
-                            color: AppStyle.black,
+                            color: AppStyle.textDarkSecondary,
                             size: 7,
                           ),
                         ],
@@ -861,8 +907,8 @@ class MarketplaceProfileFooter extends StatelessWidget {
                         children: [
                           Text(
                             AppHelpers.getTranslation(TrKeys.privacyPolicy),
-                            style: const TextStyle(
-                              color: AppStyle.black,
+                            style: TextStyle(
+                              color: AppStyle.textPrimary,
                               decoration: TextDecoration.underline,
                             ),
                           ),

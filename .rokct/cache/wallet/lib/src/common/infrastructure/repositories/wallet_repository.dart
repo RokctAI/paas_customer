@@ -39,54 +39,44 @@ import 'package:base_sdk/src/handlers/platform_gateway.dart';
 import 'package:base_sdk/src/domain/interface/wallet.dart';
 import 'package:base_sdk/src/di/injection.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
-import 'package:base_sdk/src/services/local_storage.dart';
 
 import 'package:base_sdk/src/models/data/wallet_data.dart';
+import 'package:base_sdk/src/models/data/wallet_transfer_data.dart';
 import 'package:base_sdk/src/models/models.dart';
 
 class WalletRepository implements WalletRepositoryFacade {
   /// Universal platform gateway (project ruling: every client-facing call
   /// POSTs `{"cmd", "payload"}` to the one gateway path). `cmd` is the
   /// wallet frappe manifest's whitelisted-method key with the app prefix
-  /// stripped: `{app_name}.api.payment.*` -> `api.payment.*`.
+  /// stripped: `{app_name}.api.payment.*` -> `api.payment.*`,
+  /// `{app_name}.api.transfer.*` -> `api.transfer.*`.
   static const _gateway = PlatformGateway();
 
-  @override
-  Future<ApiResult<List<UserModel>>> searchSending(
-    Map<String, dynamic> params,
-  ) async {
-    try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.post(
-        '/api/method/paas.api.user.search_user',
-        data: {
-          'name': params['search'] ?? params['name'] ?? '',
-          'page': params['page'] ?? 1,
-          'lang': LocalStorage.getLanguage()?.locale,
-        },
-      );
+  /// FrappeResponseInterceptor already unwraps the top-level `message`
+  /// envelope on 2xx; tolerate both shapes for overridden clients (same
+  /// convention as [walletTopUp]).
+  static Map<String, dynamic> _asMap(dynamic body) {
+    final data =
+        body is Map && body.containsKey('message') ? body['message'] : body;
+    return data is Map ? Map<String, dynamic>.from(data) : <String, dynamic>{};
+  }
 
-      // search_user returns api_response(data=[{name, full_name, user_image}])
-      // wrapped in Frappe's top-level `message` key, which
-      // FrappeResponseInterceptor already unwraps — so response.data here is
-      // {data: [...], status_code: 200}. The backend only returns name,
-      // full_name and user_image; `name` (the Frappe User id) is the
-      // identifier the send-wallet-balance flow needs, so it fills both id
-      // and uuid, and full_name is surfaced as the display name.
+  @override
+  Future<ApiResult<WalletRecipientData>> confirmRecipient({
+    required String phone,
+  }) async {
+    try {
+      // Manifest key: {app_name}.api.transfer.confirm_recipient. Exact
+      // full-phone match; the backend answers with ONLY that one user's
+      // name fields (anti-enumeration contract — no list, no email).
+      final body = await _gateway.tenant('api.transfer.confirm_recipient', {
+        'phone': phone,
+      });
       return ApiResult.success(
-        data: (response.data['data'] as List)
-            .map(
-              (e) => UserModel(
-                id: e['name']?.toString(),
-                uuid: e['name']?.toString(),
-                firstname: e['full_name']?.toString(),
-                img: e['user_image']?.toString(),
-              ),
-            )
-            .toList(),
+        data: WalletRecipientData.fromJson(_asMap(body)),
       );
     } catch (e) {
-      debugPrint('==> search sending failure: $e');
+      debugPrint('==> confirm recipient failure: $e');
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
         statusCode: NetworkExceptions.getDioStatus(e),
@@ -95,22 +85,90 @@ class WalletRepository implements WalletRepositoryFacade {
   }
 
   @override
-  Future<ApiResult<WalletHistoryData>> sendWalletBalance(
-    String userUuid,
-    double amount,
-  ) async {
+  Future<ApiResult<WalletReceiveClaimData>> generateReceiveClaim({
+    required double amount,
+  }) async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.post(
-        '/api/method/paas.api.user.send_wallet_balance',
-        data: {'receiver': userUuid, 'amount': amount},
-      );
-
+      // Manifest key: {app_name}.api.transfer.generate_receive_claim.
+      // Mints a 6-digit code linked to the logged-in receiver + amount;
+      // the receiver hands it to the sender out-of-band.
+      final body =
+          await _gateway.tenant('api.transfer.generate_receive_claim', {
+        'amount': amount,
+      });
       return ApiResult.success(
-        data: WalletHistoryData.fromJson(response.data['data']),
+        data: WalletReceiveClaimData.fromJson(_asMap(body)),
       );
     } catch (e) {
-      debugPrint('==> send wallet balance failure: $e');
+      debugPrint('==> generate receive claim failure: $e');
+      return ApiResult.failure(
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
+    }
+  }
+
+  @override
+  Future<ApiResult<bool>> cancelReceiveClaim({required String code}) async {
+    try {
+      // Manifest key: {app_name}.api.transfer.cancel_receive_claim. Only
+      // the claim's own receiver may cancel.
+      final body =
+          await _gateway.tenant('api.transfer.cancel_receive_claim', {
+        'code': code,
+      });
+      return ApiResult.success(data: _asMap(body)['cancelled'] == true);
+    } catch (e) {
+      debugPrint('==> cancel receive claim failure: $e');
+      return ApiResult.failure(
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
+    }
+  }
+
+  @override
+  Future<ApiResult<WalletTransferData>> sendWalletToPhone({
+    required String phone,
+    required double amount,
+  }) async {
+    try {
+      // Manifest key: {app_name}.api.transfer.send_wallet_balance (phone
+      // mode). The sender is always the session user server-side; the
+      // backend enforces a strictly positive amount and an atomic
+      // debit+credit.
+      final body = await _gateway.tenant('api.transfer.send_wallet_balance', {
+        'phone': phone,
+        'amount': amount,
+      });
+      return ApiResult.success(
+        data: WalletTransferData.fromJson(_asMap(body)),
+      );
+    } catch (e) {
+      debugPrint('==> send wallet to phone failure: $e');
+      return ApiResult.failure(
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
+    }
+  }
+
+  @override
+  Future<ApiResult<WalletTransferData>> sendWalletByCode({
+    required String code,
+  }) async {
+    try {
+      // Manifest key: {app_name}.api.transfer.send_wallet_balance (code
+      // mode). The claim fixes both receiver and exact amount; the code is
+      // consumed single-use in the same transaction as the transfer.
+      final body = await _gateway.tenant('api.transfer.send_wallet_balance', {
+        'code': code,
+      });
+      return ApiResult.success(
+        data: WalletTransferData.fromJson(_asMap(body)),
+      );
+    } catch (e) {
+      debugPrint('==> send wallet by code failure: $e');
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
         statusCode: NetworkExceptions.getDioStatus(e),

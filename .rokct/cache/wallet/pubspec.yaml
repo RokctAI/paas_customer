@@ -11,6 +11,13 @@ dependencies:
   base_sdk:
     path: ../base
   flutter_screenutil: ^5.9.0
+  # Constraints match base_sdk's (these were already in the resolution
+  # transitively; declared here because wallet_sdk imports them directly
+  # since the profile wallet card / history / send surfaces moved in).
+  auto_route: ^9.2.0
+  flutter_riverpod: ^2.5.1
+  intl: ^0.19.0
+  pull_to_refresh: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

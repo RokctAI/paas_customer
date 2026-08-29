@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.27.0",
+      "version": "1.42.0",
       "files": {
         "lib/main.dart": "b23322bf9bf953ecaa2d8ec0f1eea33bb6071a95f1d6bfa463da3b5ce9f7a44f",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -232,7 +232,7 @@
         "assets/temp/discount6.png": "784e1ff8e0b7ec4b57bd72daf84960837251f7c011029a7332c85a0bc38642c1",
         "lib/core/presentation/theme/app_style.dart": "a41cdea4c78180c66b26633ed79139d9e44555146b9a446184c36ac6b36a55ef",
         "lib/core/presentation/theme/theme.dart": "0d3a0e59c133fccfd32dd80bf649e99d580d56605936fd8bd63e5d6301c7091e",
-        "lib/presentation/app_widget.dart": "393e710b1553ee2ccdb686b573de23efb74f3f63a1da114c802898d8c3414375",
+        "lib/presentation/app_widget.dart": "660810720a83a8ade894fb47220b0f5ebacf4bcc43997b0a79a7eaacacb2e712",
         "lib/presentation/routes/app_router.dart": "a3f4d5db5deab2ef09734b3d48a22957c96906a14368ea452c594ed92c6a0411",
         "lib/presentation/routes/route_pages.dart": "49d80533970d4eec6fdc9e5e938f42cb9534a34e364ab0c5f00521dbea44ba46",
         "lib/presentation/theme/theme.dart": "a2b2ac2e4e90abdcac4247ea6d29ced0e58922a99a1c65c3d12639bfb6949f27",
@@ -359,9 +359,9 @@
       ]
     },
     "marketplace_sdk": {
-      "version": "1.6.0",
+      "version": "1.10.0",
       "files": {
-        "lib/presentation/routes/marketplace_route_pages.dart": "d6fe65b15d5f8fc965eef4fe3926b309c9b46eeeb11059e64b0866d2e67c23c3"
+        "lib/presentation/routes/marketplace_route_pages.dart": "478eaa37fcdf1889cc102db8a9c6ce83061174e60f3ae772ffb7c7e8b1a4a0dd"
       },
       "routes": [
         {
@@ -399,7 +399,7 @@
           "imports": [
             "import 'package:${package}/presentation/routes/marketplace_route_pages.dart';"
           ],
-          "_comment": "Registers every marketplace profile section (header badge actions, membership card, wallet card, icon-tile grid, and the base.footer override composing the member links above base_sdk's shared ProfileMetaRow) with base_sdk's ProfileSectionRegistry, plus the registry's onEditProfile (MyAccount settings hub) and onLogout callbacks - the sections base_sdk's GenericProfilePage renders on the customer profile route. Declared top-level, NOT in an app_type flavor block, mirroring lms_sdk: this SDK's manifest has no flavor blocks and marketplace_sdk only composes into customer-family apps. Requires base_sdk >= 1.23.0 (the profile host)."
+          "_comment": "Registers every marketplace profile section (header badge actions, membership card, icon-tile grid, and the base.footer override composing the member links above base_sdk's shared ProfileMetaRow \u2014 the wallet card is wallet_sdk's 'wallet.card' section since 1.9.0) with base_sdk's ProfileSectionRegistry, plus the registry's onEditProfile (MyAccount settings hub) and onLogout callbacks - the sections base_sdk's GenericProfilePage renders on the customer profile route. Declared top-level, NOT in an app_type flavor block, mirroring lms_sdk: this SDK's manifest has no flavor blocks and marketplace_sdk only composes into customer-family apps. Requires base_sdk >= 1.23.0 (the profile host)."
         }
       ],
       "boot_hooks": [],
@@ -422,7 +422,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.9.0",
+      "version": "1.9.1",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "05e658f5428f91cd08705b4baee224419d101e7cf67c869047647470a8ba89a2",
         "lib/presentation/routes/registration_step_pages.dart": "0688256171defa4e5aadaa38b010cb754d0a4ca19bc517b9a6f192d4afdd4e6f",
@@ -512,7 +512,7 @@
       "boot_hooks": []
     },
     "merchants_sdk": {
-      "version": "1.9.8",
+      "version": "1.13.1",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d"
       },
@@ -543,7 +543,7 @@
       "boot_hooks": []
     },
     "orders_sdk": {
-      "version": "1.9.0",
+      "version": "1.10.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -586,14 +586,20 @@
       "boot_hooks": []
     },
     "wallet_sdk": {
-      "version": "1.1.0",
+      "version": "1.3.0",
       "files": {
-        "lib/presentation/routes/wallet_route_pages.dart": "be8f8583fd05c152e9113110f8c9a1671650ab66e994efd6273a4c7cfb815b98"
+        "lib/presentation/routes/wallet_route_pages.dart": "9f83ea96f4f1261257031ddbaaa8579b9563c13862310a2c42dd1ec97f80bdc1"
       },
       "routes": [
         {
           "path": "/wallet-topup",
           "page": "WalletTopUpRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/wallet_route_pages.dart"
+        },
+        {
+          "path": "/wallet-history",
+          "page": "WalletHistoryRoute.page",
           "type": "MaterialRoute",
           "import": "package:${package}/presentation/routes/wallet_route_pages.dart"
         }
@@ -602,7 +608,17 @@
       "onboarding_slides": [],
       "registration_steps": [],
       "embedded_widgets": [],
-      "di_hooks": [],
+      "di_hooks": [
+        {
+          "id": "wallet-profile-section",
+          "order": 20,
+          "body": "registerWalletProfileSection();",
+          "imports": [
+            "import 'package:${package}/presentation/routes/wallet_route_pages.dart';"
+          ],
+          "_comment": "Registers the 'wallet.card' profile section (base_sdk's BaseWalletCard composed with this SDK's history/top-up routes and Send sheet) with base_sdk's ProfileSectionRegistry - the wallet card base_sdk's GenericProfilePage renders on any composed profile route. Declared top-level, NOT in an app_type flavor block, mirroring marketplace_sdk's marketplace-profile-sections hook. Configuration rides WalletCardSection's static seam (visible / symbol / extraActions / showActions), set by a home SDK's own di_hook. Order 20 leaves room for a lower-order home-SDK hook to configure the seam before registration - though the builder and gate also re-read the seam on every page mount, so a later hook still takes effect. Requires base_sdk >= 1.23.0 (the profile host) and >= 1.33.0 (BaseWalletCard `wallet` param)."
+        }
+      ],
       "boot_hooks": []
     },
     "payments_sdk": {
@@ -617,7 +633,7 @@
       "boot_hooks": []
     },
     "delivery_sdk": {
-      "version": "1.10.2",
+      "version": "1.12.0",
       "files": {
         "assets/svg/balance.svg": "6f17d12b29de8e5500bc445ee89eec5c1fc8830cea42711af9bf80975e6b79ce",
         "assets/image/my_location.png": "0e6b49eb78d1f74ac96ac24ce39f834105ce68e361c302038ba9cefdcd926126"
@@ -644,7 +660,7 @@
       ]
     },
     "comms_sdk": {
-      "version": "1.10.3",
+      "version": "1.12.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -726,7 +742,7 @@
       "boot_hooks": []
     },
     "map_sdk": {
-      "version": "1.1.0",
+      "version": "1.2.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -808,28 +824,28 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.27.0",
-      "hash": "e806f072f78001c3"
+      "version": "1.42.0",
+      "hash": "a444827ef833ce25"
     },
     "comms": {
-      "version": "1.10.3",
-      "hash": "8c20a3785a45c469"
+      "version": "1.12.0",
+      "hash": "0608f1252da820d4"
     },
     "marketplace": {
-      "version": "1.6.0",
-      "hash": "3d60bdcfea0746de"
+      "version": "1.10.0",
+      "hash": "1c1d5b047181b6b1"
     },
     "merchants": {
-      "version": "1.9.8",
-      "hash": "eda5d9847dfc29a3"
+      "version": "1.13.1",
+      "hash": "9962e6a59f7494bd"
     },
     "products": {
       "version": "1.5.0",
       "hash": "1a664bbfa87ed834"
     },
     "orders": {
-      "version": "1.9.0",
-      "hash": "49cd6d58acb207bf"
+      "version": "1.10.0",
+      "hash": "802e47d9858c30d2"
     },
     "promotions": {
       "version": "1.1.0",
@@ -840,8 +856,8 @@
       "hash": "8884f789aeb25984"
     },
     "auth": {
-      "version": "1.9.0",
-      "hash": "a530daee289354c0"
+      "version": "1.9.1",
+      "hash": "f537756d8e1fceea"
     },
     "users": {
       "version": "1.3.1",
@@ -852,20 +868,20 @@
       "hash": "4d60720260531a57"
     },
     "wallet": {
-      "version": "1.1.0",
-      "hash": "884cf672928cbd51"
+      "version": "1.3.0",
+      "hash": "3751ef47d08d4b66"
     },
     "payments": {
       "version": "1.1.1",
       "hash": "c4cf84adf6acc8c0"
     },
     "delivery": {
-      "version": "1.10.2",
-      "hash": "0c3d4b7f0a54aa6f"
+      "version": "1.12.0",
+      "hash": "cb942bd8463895e5"
     },
     "map": {
-      "version": "1.1.0",
-      "hash": "2ca6d6d44feb3383"
+      "version": "1.2.0",
+      "hash": "2b0284e0ce799521"
     },
     "corporate": {
       "version": "1.1.2",

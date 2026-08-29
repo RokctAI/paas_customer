@@ -48,9 +48,12 @@ import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/my
 /// (AppRoutes / EmbeddedWidgets), so no generated route class is needed
 /// here beyond the shell below.
 void registerMarketplaceProfileSections() {
-  // Header settings affordance — the old app-bar gear icon, mapped onto the
-  // host's edit-profile slot: MyAccount is the settings hub that carries
-  // Edit account (plus password/addresses/notifications/language/currency).
+  // Header edit affordance (the in-card pencil): MyAccount is the settings
+  // hub that carries Edit account (plus password/addresses/notifications/
+  // language/currency) — the mapping that shipped with the host adoption.
+  // The old identity-strip settings gear itself is back as the header
+  // card's corner slot with the same MyAccount action (see
+  // MarketplaceSettingsCorner in marketplace_profile_sections.dart).
   ProfileSectionRegistry.I.onEditProfile = (context) {
     Navigator.push(
       context,
@@ -60,11 +63,11 @@ void registerMarketplaceProfileSections() {
     );
   };
 
-  // Header logout affordance — the confirmed branch of the old page's
+  // Top-row sign-out affordance — the confirmed branch of the old page's
   // DeleteScreen dialog, verbatim; the host page already ran its own
   // logout confirmation, so no second dialog.
   ProfileSectionRegistry.I.onLogout = (context) {
-    MarketplaceProfileHeaderActions.cancelNotificationTimer();
+    MarketplaceNotificationsAction.cancelNotificationTimer();
     final container = ProviderScope.containerOf(context, listen: false);
     container.read(profileProvider.notifier).logOut();
     container.refresh(shopOrderProvider);

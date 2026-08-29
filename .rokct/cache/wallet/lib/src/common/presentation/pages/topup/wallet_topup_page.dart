@@ -42,6 +42,9 @@
 //   * Student-facing errors are one friendly line; the detail goes to
 //     [TelemetryClient] (#56 standing rule). The donor put raw `$error`
 //     text on screen.
+//   * The donor's "receive from a friend" entry (below the new-card
+//     button) is restored with the profile-card re-home: it opens this
+//     SDK's ported WalletReceiveScreen claim-code sheet.
 
 import 'dart:async';
 
@@ -58,7 +61,10 @@ import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/telemetry.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+import 'package:wallet_sdk/src/common/presentation/pages/receive/wallet_receive_screen.dart';
 
 class WalletTopUpPage extends StatefulWidget {
   const WalletTopUpPage({super.key});
@@ -155,6 +161,20 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
 
   void _navigateBack() {
     Navigator.of(context).maybePop();
+  }
+
+  // Opens the receive-from-a-friend claim-code sheet on top of this page
+  // (the donor's modal pattern).
+  void _openReceiveFromFriend() {
+    AppHelpers.showCustomModalBottomSheet(
+      context: context,
+      modal: ProviderScope(
+        child: Consumer(
+          builder: (context, ref, _) => const WalletReceiveScreen(),
+        ),
+      ),
+      isDarkMode: false,
+    );
   }
 
   double? _validAmount() {
@@ -522,6 +542,39 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
                                     : AppStyle.white,
                               ),
                             ),
+                    ),
+
+                    16.verticalSpace,
+                    const Row(
+                      children: [
+                        Expanded(child: Divider(color: AppStyle.black)),
+                      ],
+                    ),
+                    16.verticalSpace,
+
+                    // Receive from a friend: mint a 6-digit claim code the
+                    // receiver hands to the sender out-of-band
+                    // (CashSend-style).
+                    ElevatedButton.icon(
+                      onPressed: _isLoading ? null : _openReceiveFromFriend,
+                      icon: const Icon(Icons.call_received),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppStyle.transparent,
+                        foregroundColor: AppStyle.primary,
+                        minimumSize: Size(double.infinity, 50.h),
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                          side: BorderSide(color: AppStyle.primary),
+                        ),
+                      ),
+                      label: Text(
+                        AppHelpers.getTranslation('receive_from_a_friend'),
+                        style: AppStyle.interSemi(
+                          size: 16.sp,
+                          color: AppStyle.primary,
+                        ),
+                      ),
                     ),
 
                     24.verticalSpace,

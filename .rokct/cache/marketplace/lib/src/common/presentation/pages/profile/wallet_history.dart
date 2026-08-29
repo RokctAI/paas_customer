@@ -122,7 +122,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                     const WalletTopUpScreen(),
                               ),
                             ),
-                            isDarkMode: false,
+                            isDarkMode: LocalStorage.getAppThemeMode(),
                           );
                         },
                       ),
@@ -141,7 +141,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                     const WalletSendScreen(),
                               ),
                             ),
-                            isDarkMode: false,
+                            isDarkMode: LocalStorage.getAppThemeMode(),
                           );
                         },
                       ),
@@ -161,7 +161,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                       EmbeddedWidgets.I.loanScreen(),
                                 ),
                               ),
-                              isDarkMode: false,
+                              isDarkMode: LocalStorage.getAppThemeMode(),
                             );
                           },
                         ),
