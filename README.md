@@ -2,6 +2,25 @@
 
 Juvo is a multi store marketplace.
 
+<!-- @generated-store-description-start -->
+<!-- @generated-store-description-end -->
+
+<!-- @generated-tour-gallery-start -->
+## App tour
+
+Styled stills from the committed guided tour - regenerated on every
+tour run, so new screens appear here automatically.
+
+| Welcome | | |
+| :---: | :---: | :---: |
+| ![Welcome][s01] | | |
+
+The full tour lives in the [feature guide](marketing/tour/feature-guide.md),
+with walkthrough videos alongside it in [`marketing/tour/`](marketing/tour).
+
+[s01]: marketing/tour/store/01-welcome.png
+<!-- @generated-tour-gallery-end -->
+
 ## Requirements
 
 * Flutter SDK setup (version 3.24.0 Stable)
