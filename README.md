@@ -2,18 +2,26 @@
 
 Juvo is a multi store marketplace.
 
+<!-- @generated-store-description-start -->
+<!-- @generated-store-description-end -->
+
+<!-- @generated-tour-gallery-start -->
 ## App tour
 
-| Welcome | Sign in | Create an account |
+Styled stills from the committed guided tour - regenerated on every
+tour run, so new screens appear here automatically.
+
+| Welcome | Auth Login | Auth Register |
 | :---: | :---: | :---: |
-| ![Welcome screen][t01] | ![Login screen][t02] | ![Register][t03] |
+| ![Welcome][s01] | ![Auth Login][s02] | ![Auth Register][s03] |
 
 The full tour lives in the [feature guide](marketing/tour/feature-guide.md),
 with walkthrough videos alongside it in [`marketing/tour/`](marketing/tour).
 
-[t01]: marketing/tour/screenshots/01-welcome.png
-[t02]: marketing/tour/screenshots/02-auth_login.png
-[t03]: marketing/tour/screenshots/03-auth_register.png
+[s01]: marketing/tour/store/01-welcome.png
+[s02]: marketing/tour/store/02-auth_login.png
+[s03]: marketing/tour/store/03-auth_register.png
+<!-- @generated-tour-gallery-end -->
 
 ## Requirements
 
