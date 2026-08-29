@@ -11,16 +11,14 @@ Juvo is a multi store marketplace.
 Styled stills from the committed guided tour - regenerated on every
 tour run, so new screens appear here automatically.
 
-| Welcome | Auth Login | Auth Register |
+| Welcome | | |
 | :---: | :---: | :---: |
-| ![Welcome][s01] | ![Auth Login][s02] | ![Auth Register][s03] |
+| ![Welcome][s01] | | |
 
 The full tour lives in the [feature guide](marketing/tour/feature-guide.md),
 with walkthrough videos alongside it in [`marketing/tour/`](marketing/tour).
 
 [s01]: marketing/tour/store/01-welcome.png
-[s02]: marketing/tour/store/02-auth_login.png
-[s03]: marketing/tour/store/03-auth_register.png
 <!-- @generated-tour-gallery-end -->
 
 ## Requirements
