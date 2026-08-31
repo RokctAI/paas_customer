@@ -16,12 +16,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:auth_sdk/src/common/application/auth/auth.dart';
+import 'package:base_sdk/src/models/data/address_old_data.dart';
+import 'package:base_sdk/src/models/data/location.dart';
 import 'package:base_sdk/src/models/response/languages_response.dart';
+import 'package:base_sdk/src/presentation/pages/profile/generic_profile_page.dart' as base_profile;
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:comms_sdk/src/common/presentation/pages/setting/language_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:marketplace_sdk/src/common/presentation/pages/home/home_zero/filter/result_filter.dart' as marketplace_filter;
+import 'package:marketplace_sdk/src/common/presentation/pages/home/home_zero/home_page.dart' as marketplace_home;
+import 'package:marketplace_sdk/src/common/presentation/pages/like/like_page.dart' as marketplace_like;
+import 'package:marketplace_sdk/src/common/presentation/pages/search/search_page.dart' as marketplace_search;
 
 typedef TourAction = Future<void> Function(
     WidgetTester tester, StackRouter router);
@@ -138,6 +145,84 @@ final List<TourStep> tourSteps = <TourStep>[
       subscription.close();
     }
   }),
+  TourStep('marketplace_home', 10000, true, (WidgetTester tester, StackRouter router) async {
+    // Seed the demo session state the customer screens key off:
+    //  - a selected address, so home's checkAddress() does not cover the
+    //    screen with the AddAddress dialog on a fresh install;
+    //  - one saved shop id ("1" = MockShopsRepository's Demo Shop), so
+    //    the favourites step later shows a stocked list.
+    await LocalStorage.setAddressSelected(AddressData(
+      id: 1,
+      title: 'Demo address',
+      address: '1 Demo Street',
+      location: LocationModel(latitude: -26.2041, longitude: 28.0473),
+    ));
+    await LocalStorage.setSavedShopsList(<String>['1']);
+    // marketplace_sdk declares no customer routes yet, so push its own
+    // page directly (see the header note); the pushed page inherits the
+    // app's ProviderScope, theme and localization.
+    final NavigatorState navigator =
+        tester.state(find.byType(Navigator).first);
+    navigator.push(MaterialPageRoute<void>(
+      builder: (_) => const marketplace_home.HomePage(),
+    ));
+  }),
+  TourStep('marketplace_category', 8000, true, (WidgetTester tester, StackRouter router) async {
+    final NavigatorState navigator =
+        tester.state(find.byType(Navigator).first);
+    // Bounded: pop the page the previous step pushed.
+    for (int i = 0; i < 3 && navigator.canPop(); i++) {
+      navigator.pop();
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+    }
+    // Category id "1" is MockCategoriesRepository's demo "Burgers"
+    // category; the shop list comes from MockShopsRepository.
+    navigator.push(MaterialPageRoute<void>(
+      builder: (_) =>
+          const marketplace_filter.ResultFilterPage(categoryId: '1'),
+    ));
+  }),
+  TourStep('marketplace_search', 8000, true, (WidgetTester tester, StackRouter router) async {
+    final NavigatorState navigator =
+        tester.state(find.byType(Navigator).first);
+    for (int i = 0; i < 3 && navigator.canPop(); i++) {
+      navigator.pop();
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+    }
+    navigator.push(MaterialPageRoute<void>(
+      builder: (_) => const marketplace_search.SearchPage(),
+    ));
+  }),
+  TourStep('marketplace_favourites', 8000, true, (WidgetTester tester, StackRouter router) async {
+    final NavigatorState navigator =
+        tester.state(find.byType(Navigator).first);
+    for (int i = 0; i < 3 && navigator.canPop(); i++) {
+      navigator.pop();
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+    }
+    // Renders the saved shop seeded in the first step via
+    // MockShopsRepository.getShopsByIds.
+    navigator.push(MaterialPageRoute<void>(
+      builder: (_) => const marketplace_like.LikePage(),
+    ));
+  }),
+  TourStep('marketplace_profile', 8000, true, (WidgetTester tester, StackRouter router) async {
+    final NavigatorState navigator =
+        tester.state(find.byType(Navigator).first);
+    for (int i = 0; i < 3 && navigator.canPop(); i++) {
+      navigator.pop();
+      await Future<void>.delayed(const Duration(milliseconds: 500));
+    }
+    // The account screen is base_sdk's generic profile host, composed
+    // from the sections marketplace_sdk registered at boot (its
+    // manifest's marketplace-profile-sections di hook) - the same page
+    // the /profile route shows since the GenericProfilePage migration.
+    // Without a token the profile fetches are guarded and the page
+    // renders its guest state - truthful for a signed-out browser.
+    navigator.push(MaterialPageRoute<void>(
+      builder: (_) => const base_profile.GenericProfilePage(),
+    ));
+  }),
   TourStep('comms_language', 6000, true, (WidgetTester tester, StackRouter router) async {
     // Open the language sheet the way the app's own screens do: the same
     // AppHelpers.showCustomModalBottomSheet call auth's login page and
@@ -165,5 +250,11 @@ final List<TourStep> tourSteps = <TourStep>[
         navigator.pop();
       }
     }
+  }),
+  TourStep('wallet_topup', 7000, true, (WidgetTester tester, StackRouter router) async {
+    router.replaceNamed('/wallet-topup');
+  }),
+  TourStep('wallet_history', 7000, true, (WidgetTester tester, StackRouter router) async {
+    router.replaceNamed('/wallet-history');
   }),
 ];

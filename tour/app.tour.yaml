@@ -81,6 +81,10 @@ tour:
   # app's own screens use, so it works from whatever screen the marketplace
   # chapter (or, until that lands, the demo sign-in) leaves us on.
   - fragment: comms
+  # wallet_sdk's top-up screen (/wallet-topup, WalletTopUpRoute - the
+  # customer wallet surface). Amount presets render locally; the saved-card
+  # picker degrades gracefully to its no-saved-cards state offline.
+  - fragment: wallet
   # NOT listed (deliberately):
   # - users: its fragment routes to /profile, and this compose exposes no
   #   /profile route (the customer account surface is a tab inside the
