@@ -1,9 +1,9 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.51.0",
+      "version": "1.52.0",
       "files": {
-        "lib/main.dart": "b23322bf9bf953ecaa2d8ec0f1eea33bb6071a95f1d6bfa463da3b5ce9f7a44f",
+        "lib/main.dart": "7b66d0bf6d647a00cfafac3fc499106789b83cddc3fd7e163c9afa662acf50a7",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
         "lib/core/presentation/routes/app_router.dart": "7e7c72675c4a414818d0bed611623aa3248fc2ae3d264fe8fbed6f64bfd7c82c",
         "lib/core/presentation/routes/route_pages.dart": "fa862244b5c0344a8e25a061d4957e5af4792cdd9483b4bf63d041fa4fda105e",
@@ -368,7 +368,7 @@
       ]
     },
     "marketplace_sdk": {
-      "version": "1.11.0",
+      "version": "1.12.0",
       "files": {
         "lib/presentation/routes/marketplace_route_pages.dart": "478eaa37fcdf1889cc102db8a9c6ce83061174e60f3ae772ffb7c7e8b1a4a0dd"
       },
@@ -431,7 +431,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.9.1",
+      "version": "1.9.2",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "05e658f5428f91cd08705b4baee224419d101e7cf67c869047647470a8ba89a2",
         "lib/presentation/routes/registration_step_pages.dart": "0688256171defa4e5aadaa38b010cb754d0a4ca19bc517b9a6f192d4afdd4e6f",
@@ -494,6 +494,11 @@
           "id": "auth_pending_otp_gate",
           "order": 0,
           "body": "PendingOtpGate.install();"
+        },
+        {
+          "id": "auth_restore_credential_gate",
+          "order": 1,
+          "body": "RestoreCredentialGate.install(); SessionEndHooks.register('restore_credentials', RestoreCredentialGate.clear);"
         }
       ],
       "database": {
@@ -521,7 +526,7 @@
       "boot_hooks": []
     },
     "merchants_sdk": {
-      "version": "1.20.0",
+      "version": "1.21.0",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d"
       },
@@ -552,7 +557,7 @@
       "boot_hooks": []
     },
     "orders_sdk": {
-      "version": "1.13.0",
+      "version": "1.14.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -833,28 +838,28 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.51.0",
-      "hash": "29888c63d53b9fb8"
+      "version": "1.52.0",
+      "hash": "a6a01fa31ec571cb"
     },
     "comms": {
       "version": "1.13.0",
       "hash": "d4cfe9139bb38af5"
     },
     "marketplace": {
-      "version": "1.11.0",
-      "hash": "f0412d854a1b2638"
+      "version": "1.12.0",
+      "hash": "ae0f7e8609196935"
     },
     "merchants": {
-      "version": "1.20.0",
-      "hash": "1c19c3a1b7d09b91"
+      "version": "1.21.0",
+      "hash": "c4e440f40b6e5fba"
     },
     "products": {
       "version": "1.6.0",
       "hash": "86dbce25d8f8062c"
     },
     "orders": {
-      "version": "1.13.0",
-      "hash": "0fdd2fdc39fc41ba"
+      "version": "1.14.0",
+      "hash": "e5eb268ff480b8d5"
     },
     "promotions": {
       "version": "1.1.0",
@@ -865,8 +870,8 @@
       "hash": "8884f789aeb25984"
     },
     "auth": {
-      "version": "1.9.1",
-      "hash": "f537756d8e1fceea"
+      "version": "1.9.2",
+      "hash": "0c3e3707df9e01b9"
     },
     "users": {
       "version": "1.3.1",

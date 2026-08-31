@@ -125,7 +125,7 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
     );
   }
 
-  // Process top-up with saved card token
+  // Process top-up with the selected saved card, named by its docname.
   Future<void> _processTokenTopUp() async {
     if (_selectedCard == null) {
       AppHelpers.showCheckTopSnackBarInfo(
@@ -149,10 +149,13 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
     });
 
     try {
-      // Process the token payment
+      // Charge the selected saved card. `walletTopUp`'s parameter keeps
+      // the name `token` because it overrides a base_sdk interface, but
+      // what travels is the Saved Card docname: the gateway reuse
+      // credential is server-side only and never reaches this device.
       final result = await _walletRepository.walletTopUp(
         amount: amount,
-        token: _selectedCard!.token,
+        token: _selectedCard!.id,
       );
 
       setState(() {
