@@ -46,6 +46,7 @@ import 'package:orders_sdk/src/manager/application/orders/new/new_orders_provide
 import 'package:orders_sdk/src/manager/application/orders/on_a_way/on_a_way_orders_provider.dart';
 import 'package:orders_sdk/src/manager/application/orders/ready/ready_orders_provider.dart';
 import 'package:orders_sdk/src/manager/domain/interface/order_receipt.dart';
+import 'package:orders_sdk/src/manager/presentation/collect/collect_in_person_section.dart';
 import 'package:orders_sdk/src/manager/utils/seller_order_status.dart';
 
 class OrderDetailsModal extends ConsumerStatefulWidget {
@@ -519,6 +520,32 @@ class _OrderDetailsModalState extends ConsumerState<OrderDetailsModal> {
                   // only when the host has actually wired a printer.
                   if (isHistoryOrder)
                     _ReceiptReprintAction(order: state.order ?? widget.order),
+                  // Section 43 — the customer turned up for an order she
+                  // placed for delivery. Directly under the price block,
+                  // because the fee's fate is the thing being decided;
+                  // it renders NOTHING unless this is a delivery order
+                  // still waiting to be handed over.
+                  if (!isHistoryOrder && state.order != null)
+                    CollectInPersonSection(
+                      order: state.order!,
+                      onConverted: () {
+                        Navigator.pop(context);
+                        ref
+                            .read(readyOrdersProvider.notifier)
+                            .fetchReadyOrders(
+                              isRefresh: true,
+                              refreshController:
+                                  widget.readyOrdersController,
+                            );
+                        ref
+                            .read(onAWayOrdersProvider.notifier)
+                            .fetchOnAWayOrders(
+                              isRefresh: true,
+                              refreshController:
+                                  widget.onAWayOrdersController,
+                            );
+                      },
+                    ),
                   isHistoryOrder
                       ? const SizedBox.shrink()
                       : Column(

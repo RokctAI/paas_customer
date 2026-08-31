@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.49.0",
+      "version": "1.51.0",
       "files": {
         "lib/main.dart": "b23322bf9bf953ecaa2d8ec0f1eea33bb6071a95f1d6bfa463da3b5ce9f7a44f",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -521,7 +521,7 @@
       "boot_hooks": []
     },
     "merchants_sdk": {
-      "version": "1.19.0",
+      "version": "1.20.0",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d"
       },
@@ -552,7 +552,7 @@
       "boot_hooks": []
     },
     "orders_sdk": {
-      "version": "1.12.0",
+      "version": "1.13.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -833,8 +833,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.49.0",
-      "hash": "c06a7faf47abfc44"
+      "version": "1.51.0",
+      "hash": "29888c63d53b9fb8"
     },
     "comms": {
       "version": "1.13.0",
@@ -845,16 +845,16 @@
       "hash": "f0412d854a1b2638"
     },
     "merchants": {
-      "version": "1.19.0",
-      "hash": "be46ec2f20359e15"
+      "version": "1.20.0",
+      "hash": "1c19c3a1b7d09b91"
     },
     "products": {
       "version": "1.6.0",
       "hash": "86dbce25d8f8062c"
     },
     "orders": {
-      "version": "1.12.0",
-      "hash": "db2fc405c9514c9f"
+      "version": "1.13.0",
+      "hash": "0fdd2fdc39fc41ba"
     },
     "promotions": {
       "version": "1.1.0",

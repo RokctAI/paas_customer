@@ -1,5 +1,81 @@
 # Changelog
 
+## 1.51.0
+
+* REGRESSION FIX: `main` did not compile after 1.49.0 (core#137), which
+  took 7 test files down with it. 1.49.0's tests were written but never
+  executed — no Dart/Flutter toolchain was available when it was authored
+  — so two compile errors shipped. This release only repairs them; no
+  memory-pressure or paging behaviour changes. Version note: 1.49.0 is
+  on `main` and core#138 declares 1.50.0, so this takes the next free
+  number above both.
+  * `services/memory_pressure_service.dart` did not import
+    `package:flutter/services.dart`. Its import comment asserted that
+    `package:flutter/widgets.dart` "re-exports painting.dart and
+    services.dart in full"; widgets.dart exports `src/widgets/*` only,
+    so `MethodChannel` and `MissingPluginException` were both undefined
+    and the library failed to compile:
+    `Error: Type 'MethodChannel' not found.` Because `base_sdk.dart`
+    exports the service, every test importing the barrel went down with
+    it — `app_usage_badge`, `base_wallet_card`, `floating_nav_back`,
+    `money_keypad` and `theme_mode_sync` — plus `memory_budget`, which
+    imports the file directly. The import is added and the comment
+    corrected to say what widgets.dart actually exports.
+  * `test/sync_engine_paging_test.dart` imported `package:drift/drift.dart`
+    unfiltered alongside `flutter_test`. drift exports `isNull` and
+    `isNotNull` as SQL expression builders, which collide with matcher's
+    identically-named ones that `expect` needs:
+    `Error: 'isNotNull' is imported from both ...`. The test was wrong,
+    not the paging code — it asserts real behaviour and now runs. drift's
+    two names are hidden at the import; neither is used in the file.
+  * Both new suites from 1.49.0 now actually execute: 9 `budgetFor` tier
+    tests and 12 outbox paging tests. The package suite is 194 passing,
+    0 failing, verified against Flutter 3.38.5 / Dart 3.10.4.
+
+## 1.50.0
+
+* `SavedCardModel` DROPS its `token` field. `Saved Card.token` is the
+  gateway reuse credential — presenting it to the gateway charges that
+  card again — and pay made it a Frappe `Password` field, so
+  `get_saved_cards` and `tokenize_card` stopped returning it. The field
+  was therefore always-empty from the moment that landed, and an
+  always-empty credential field is how a caller silently sends nothing
+  and gets a refused charge. Removing it makes the compiler catch that
+  instead: every consumer of `card.token` in the fleet now fails to
+  build until it is pointed at `card.id`.
+  * REQUIRES pay's saved-card confinement (pay#46) on the backend. The
+    charge endpoints key on the Saved Card docname; a client that still
+    sends a credential is refused WITHOUT being charged, so the failure
+    mode is a saved-card payment that stops working, never a wrong
+    charge.
+  * `fromJson` now reads the docname from `name` as well as `id`
+    (`json['id'] ?? json['name']`). `get_saved_cards` and `tokenize_card`
+    name it `name`; without the fallback `id` came back empty and every
+    charge keyed on it was refused. Callers that already normalise to
+    `id` are unaffected — `id` still wins.
+  * `toJson`, `copyWith` and `toString` lose `token` with it. `toString`
+    used to interpolate the credential, so a card printed into a log
+    carried it there too.
+  * `PaymentsRepositoryFacade.processTokenPayment` and
+    `WalletRepositoryFacade.walletTopUp` keep their parameter names for
+    source compatibility with the shipped implementations, but both are
+    documented for what they now carry: the Saved Card docname, i.e.
+    `SavedCardModel.id`. No signature changed, so no implementation
+    needs touching for this.
+
+* comms (whatsapp): the card checkout no longer reads
+  `Saved Card.token`. The button payload already encoded the docname as
+  `card_<name>`, so the lookup that turned it back into a credential was
+  overhead before the change and returns a mask after it. The docname is
+  passed straight to `process_token_payment(saved_card=...)` and the
+  lookup is deleted. Fail-closed is preserved and moves server-side: an
+  unknown card, or another user's card, refuses before any gateway call
+  rather than being reported as paid.
+  * New standalone suite
+    `comms/frappe/tests/test_whatsapp_saved_card_charge.py` (6 tests;
+    3 fail against the pre-change checkout). Needs Python 3.12+ —
+    checkout.py contains a PEP 701 multi-line f-string.
+
 ## 1.49.0
 
 * ANDROID PLAY QUALITY + RESTORE CREDENTIALS (the 2026-08-26 Play quality

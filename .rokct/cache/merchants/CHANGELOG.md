@@ -1,3 +1,45 @@
+## 1.20.0
+
+* DELIVERY COLLECTED IN PERSON — the server half (approved design strip
+  section 43). ONE new atomic seller endpoint,
+  `convert_delivery_to_collected(order_id)`, whose whole point is that it
+  is one call: a client-orchestrated sequence that fails half way leaves
+  an order that is half converted — a Pickup order still carrying a
+  driver, or a driver stood down on an order that never converted. Any
+  throw rolls the whole request back.
+  * Ray's policy rendered literally. **No driver had been dispatched** →
+    the delivery fee goes back to the customer's wallet (`deposit_to_wallet`,
+    which writes the Transaction audit row) and `delivery_fee` is zeroed,
+    so `calculate_totals` drops the order's total by it. **A driver HAD
+    been dispatched** → he still drove for it, so the fee is kept and paid
+    to HIM as a callout (a new `settle_delivery_callout` in orders'
+    settlement module, gross fee credited and delivery commission billed
+    back exactly as an ordinary settlement would), the total is unchanged,
+    and his task disappears from the driver app the moment `deliveryman`
+    is cleared. Either way the goods go over the counter.
+  * **THE ORDER OF THE WRITES IS THE POINT.** The Order controller settles
+    on every save once the order is Delivered + Paid, and `settle_order`
+    credits the deliveryman the FULL `delivery_fee` while he is still
+    assigned. So the callout is paid and the assignment cleared in the
+    FIRST save, with the order still short of Delivered; only the second
+    save moves it to Delivered, by which time it carries no driver and the
+    settlement pays him nothing. Reverse the two and he is paid twice.
+    `merchants/frappe/tests/test_collect_in_person.py` pins that on his
+    wallet balance — 35.00 in the right order, 70.00 in the wrong one.
+  * Idempotent (`already_converted`), which is what makes the till's
+    offline path safe: the hand-over happens immediately and the
+    conversion is replayed on reconnect without moving money twice.
+  * `get_seller_order_details` additively serves `deliveryman_name`, so
+    the detail can SAY who is on the order rather than showing a user id;
+    `get_seller_orders` additively serves `delivery_type`, `delivery_fee`
+    and the two new conversion fields the board card needs.
+  * Four new read-only Order fields carry it: `collected_in_person`,
+    `collect_fee_refunded`, and `callout_settled` / `callout_settled_at`
+    (the callout's own once-only flag). `deposit_to_wallet` gained an
+    additive `commit` flag so a credit that is part of a larger
+    all-or-nothing write is not committed out from under a later failure;
+    every existing caller keeps the old behaviour.
+
 ## 1.19.0
 
 * QUICK FLOW (approved design strip section 42, frames 42a tablet / 42b

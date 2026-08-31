@@ -20,7 +20,11 @@
 
 import 'dart:convert';
 
-import 'package:drift/drift.dart';
+// drift exports `isNull`/`isNotNull` as SQL expression builders, which
+// collide by name with matcher's `isNull`/`isNotNull` that `expect` needs
+// here. Neither drift name is used in this file, so hiding them resolves
+// the ambiguity without losing anything.
+import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 

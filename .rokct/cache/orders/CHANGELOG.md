@@ -1,3 +1,57 @@
+## 1.13.0
+
+* DELIVERY COLLECTED IN PERSON (approved design strip section 43, frames
+  43a tablet / 43b the confirm guard / 43c phone / 43d the card states /
+  43e offline). The customer turns up at the counter for an order she
+  placed for delivery. Ray's policy, unbent: the goods are NEVER
+  withheld and never forfeited — what changes is only where the delivery
+  fee ends up.
+  * A new **collected-in-person** block the manager order detail mounts
+    directly under its price block, and which renders NOTHING unless the
+    order is a delivery order still waiting to be handed over: the
+    deliveryman row (**811** dashed and faint when nobody has been
+    dispatched, **812** solid and cyan with an `ON A CALLOUT` tag when
+    somebody has — this row is what decides the branch), the single
+    primary action lane **813** ("Customer is here — convert to pickup",
+    one verb, a bag glyph and never a truck), the outcome named BEFORE
+    the tap (**814** green "the fee goes back to the customer's wallet" /
+    **815** amber "the fee is kept — it covers his callout"; ONE
+    component with two tints, never both on screen), and Ray's till line
+    **816** verbatim.
+  * The confirm guard **817**/**818**/**819** (the chip-768 pattern —
+    the consequence before the tap, never a snackbar after it): four
+    ledger rows, one per thing that actually moves — Goods, Delivery
+    type, Delivery fee, Driver task — so the two branches can never be
+    confused. The affirmative button is deliberately the WIDER one:
+    handing the goods over is never the risky choice.
+  * The delivery-type chip **810** lifted out of the board card into the
+    detail, and the two converted board-card states **820**/**821**: the
+    struck fee and the dropped total are the visible proof of the
+    conversion's money write, so fee-returned versus fee-kept is legible
+    from the card alone without opening the order. `get_seller_orders`
+    now serves `delivery_type` and `delivery_fee` (it did not, so the
+    board card's type chip had nothing to render) plus the two new
+    conversion fields.
+  * OFFLINE (43e) the lane stays **enabled** and is relabelled in place —
+    "Hand over now — convert when back online" — because refusing to give
+    the customer her goods is the one thing that must never happen. The
+    branch is undecidable offline (driver assignment and wallet balance
+    are both server state), so 814/815 are replaced by a neutral note and
+    the conversion is queued through a new `order.collect_in_person` sync
+    handler. The endpoint is idempotent, so the replay converts nothing
+    twice; a backend refusal parks in Sync issues rather than silently
+    reverting a hand-over that already happened.
+  * ONE call, never a client-orchestrated sequence:
+    `SellerOrdersRepositoryFacade.convertDeliveryToCollected` hits the one
+    new atomic seller endpoint (merchants `convert_delivery_to_collected`,
+    merchants_sdk 1.20.0). The settlement ordering that keeps the driver
+    from being paid the delivery fee twice lives inside that one
+    transaction, where a dropped connection cannot get between the two
+    writes.
+  * Pickup now reads as a BAG on the board card's type chip (it read as a
+    walker), so a converted card and the action that made it are
+    recognisably the same thing.
+
 ## 1.12.0
 
 * ORDER HISTORY adopts the standard list language (approved design strip

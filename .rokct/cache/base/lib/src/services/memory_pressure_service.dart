@@ -20,10 +20,12 @@
 
 import 'dart:async';
 
-// widgets.dart re-exports painting.dart and services.dart in full, so
-// PaintingBinding and MethodChannel arrive with it; foundation is exported
-// only with a show list, hence the separate import.
+// widgets.dart exports src/widgets/* only - it does NOT re-export
+// services.dart - so MethodChannel and MissingPluginException need their
+// own import. PaintingBinding does arrive with widgets.dart, and
+// foundation is exported only with a show list, hence its separate import.
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'package:base_sdk/src/database/app_database.dart';
