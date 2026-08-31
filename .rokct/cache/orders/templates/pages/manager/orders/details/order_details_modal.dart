@@ -45,6 +45,7 @@ import 'package:orders_sdk/src/manager/application/orders/appbar/home_appbar_pro
 import 'package:orders_sdk/src/manager/application/orders/new/new_orders_provider.dart';
 import 'package:orders_sdk/src/manager/application/orders/on_a_way/on_a_way_orders_provider.dart';
 import 'package:orders_sdk/src/manager/application/orders/ready/ready_orders_provider.dart';
+import 'package:orders_sdk/src/manager/domain/interface/order_receipt.dart';
 import 'package:orders_sdk/src/manager/utils/seller_order_status.dart';
 
 class OrderDetailsModal extends ConsumerStatefulWidget {
@@ -510,6 +511,14 @@ class _OrderDetailsModalState extends ConsumerState<OrderDetailsModal> {
                     order: state.order,
                     isHistoryOrder: widget.isHistoryOrder,
                   ),
+                  // Ray's amendment on approving frame 38a (2026-08-30
+                  // 12:23Z): "receipt reprint action in the order detail
+                  // (wired to the till receipt path)". A finished order
+                  // has no status-change button, so this is the one
+                  // action the history detail carries — and it appears
+                  // only when the host has actually wired a printer.
+                  if (isHistoryOrder)
+                    _ReceiptReprintAction(order: state.order ?? widget.order),
                   isHistoryOrder
                       ? const SizedBox.shrink()
                       : Column(
@@ -676,6 +685,64 @@ class _OrderDetailsModalState extends ConsumerState<OrderDetailsModal> {
           ),
         ),
       ),
+    );
+  }
+}
+
+/// The receipt REPRINT action (frame 38a amendment, Ray 2026-08-30
+/// 12:23Z). orders_sdk owns the order detail but not the printer, so it
+/// goes through its own narrow [OrderReceiptFacade] seam; the manager
+/// host binds that to merchants_sdk's till receipt path in
+/// `orders_adapters.dart` (ADR-005). No printer wired means no button —
+/// the detail never offers an action that cannot work.
+class _ReceiptReprintAction extends StatefulWidget {
+  final OrderData order;
+
+  const _ReceiptReprintAction({required this.order});
+
+  @override
+  State<_ReceiptReprintAction> createState() => _ReceiptReprintActionState();
+}
+
+class _ReceiptReprintActionState extends State<_ReceiptReprintAction> {
+  bool _printing = false;
+
+  Future<void> _reprint(OrderReceiptFacade receipts) async {
+    setState(() => _printing = true);
+    try {
+      await receipts.reprint(widget.order);
+      if (!mounted) return;
+      AppHelpers.showCheckTopSnackBar(
+        context,
+        AppHelpers.getTranslation(TrKeys.receiptReprinted),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      AppHelpers.showCheckTopSnackBar(
+        context,
+        AppHelpers.getTranslation(TrKeys.receiptReprintFailed),
+      );
+    } finally {
+      if (mounted) setState(() => _printing = false);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final receipts = resolveOrderReceiptFacade();
+    if (!receipts.isAvailable) return const SizedBox.shrink();
+    return Column(
+      children: [
+        20.verticalSpace,
+        CustomButton(
+          isLoading: _printing,
+          icon: Icon(Remix.printer_line, size: 18.r, color: AppStyle.black),
+          title: AppHelpers.getTranslation(TrKeys.reprintReceipt),
+          background: AppStyle.transparent,
+          borderColor: AppStyle.borderColor,
+          onPressed: _printing ? null : () => _reprint(receipts),
+        ),
+      ],
     );
   }
 }

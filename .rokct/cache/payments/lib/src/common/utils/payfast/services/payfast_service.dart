@@ -174,16 +174,17 @@ class PayFastService {
     }
   }
 
-  /// Process a payment for an order using a saved card token
+  /// Process a payment for an order using a saved card, named by its id.
+  /// The gateway reuse credential stays on the server.
   static Future<ApiResult<String>> processTokenPayment({
     required OrderBodyData orderData,
-    required String token,
+    required String savedCardId,
     required BuildContext context,
   }) async {
     try {
       final client = paymentsRepository;
 
-      return await client.processTokenPayment(orderData, token);
+      return await client.processTokenPayment(orderData, savedCardId);
     } catch (e) {
       debugPrint('==> token payment failure: $e');
       return ApiResult.failure(

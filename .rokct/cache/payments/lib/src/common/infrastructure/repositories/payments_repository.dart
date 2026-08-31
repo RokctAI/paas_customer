@@ -110,7 +110,10 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
           'cvc': cvc,
         },
       );
-      return ApiResult.success(data: response.data['data']['token']);
+      // The gateway reuse credential stays on the server. What comes
+      // back is the Saved Card docname, which is what the charge
+      // endpoints take.
+      return ApiResult.success(data: response.data['data']['name']);
     } catch (e) {
       debugPrint('==> tokenize card failure: $e');
       return ApiResult.failure(
@@ -132,7 +135,9 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
   ]) async {
     // Backend actually handles saving if save_card=True.
     // But we have a specific endpoint save_payfast_card (or generic)
-    // Let's use the tokenize_card endpoint which returns a token and saves it.
+    // Let's use the tokenize_card endpoint, which saves the card and
+    // returns its Saved Card docname. The gateway reuse credential stays
+    // on the server and never reaches this client.
     return tokenizeCard(
       cardNumber: cardNumber,
       cardName: cardName,
@@ -169,13 +174,16 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
   @override
   Future<ApiResult<String>> processTokenPayment(
     OrderBodyData orderData,
-    String token,
+    String savedCardId,
   ) async {
     try {
       final client = dioHttp.client(requireAuth: true);
+      // `saved_card`, not `token`: the gateway reuse credential is
+      // server-side only, so the card is named by its docname (the `name`
+      // that get_saved_cards / tokenize_card return).
       await client.post(
         '/api/method/paas.api.payment.process_token_payment',
-        data: {'order_id': orderData.cartId, 'token': token},
+        data: {'order_id': orderData.cartId, 'saved_card': savedCardId},
       );
       return const ApiResult.success(data: "Success");
     } catch (e) {

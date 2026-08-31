@@ -106,7 +106,8 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     }
   }
 
-  // Process payment with saved card token
+  // Process payment with a saved card, named by its id. The gateway
+  // reuse credential never reaches this client.
   Future<void> _processTokenPayment() async {
     if (_selectedCard == null) {
       AppHelpers.showCheckTopSnackBarInfo(
@@ -123,7 +124,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     try {
       final result = await _paymentsRepository.processTokenPayment(
         widget.orderData!,
-        _selectedCard!.token,
+        _selectedCard!.id,
       );
 
       result.when(

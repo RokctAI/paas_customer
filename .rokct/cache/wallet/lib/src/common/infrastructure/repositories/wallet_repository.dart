@@ -205,9 +205,13 @@ class WalletRepository implements WalletRepositoryFacade {
   }) async {
     try {
       // Manifest key: {app_name}.api.payment.process_wallet_top_up.
+      // The `token` parameter name is fixed by the base_sdk interface this
+      // overrides; what travels is the Saved Card docname on `saved_card`.
+      // The gateway reuse credential is server-side only and this client
+      // never sees it.
       final body = await _gateway.tenant('api.payment.process_wallet_top_up', {
         'amount': amount,
-        if (token != null) 'token': token,
+        if (token != null) 'saved_card': token,
       });
       // FrappeResponseInterceptor already unwraps the top-level `message`
       // envelope on 2xx; tolerate both shapes for overridden clients. A

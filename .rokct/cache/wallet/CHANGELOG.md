@@ -1,3 +1,12 @@
+## 1.4.0
+
+* Saved-card top-up no longer handles the gateway reuse credential.
+  `get_saved_cards` stopped returning it, so `WalletTopUpScreen` picks a
+  card by its docname and `walletTopUp` sends that on `saved_card`. The
+  credential is resolved server-side. Requires the matching wallet
+  backend: an older backend reads `token` and will reject the top-up
+  rather than charge the wrong thing.
+
 ## 1.3.0
 
 * Floating-nav back conversion (approved design strip section 12, "no

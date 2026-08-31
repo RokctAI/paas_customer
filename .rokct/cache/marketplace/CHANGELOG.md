@@ -1,3 +1,18 @@
+## 1.11.0
+
+* The customer edit-own-details sheet (`EditProfileScreen`,
+  edit_profile_page.dart) is PROMOTED verbatim to base_sdk 1.45.0
+  (approved frame 4d 2026-08-30) as the fleet's shared
+  `edit_profile_sheet.dart`, so every GenericProfilePage host — the
+  manager hub first — can wire the user-card pencil (chip 109) to the
+  one shipped flow. This package's copy becomes a thin re-export at the
+  same path, so the "Edit account" row (my_account.dart) and every other
+  import keep working; customer behavior is unchanged (same class name,
+  same drag-sheet contract, same base_sdk `editProfileProvider` save
+  path). Only shipped visual delta: the sheet chrome, previously
+  light-only bgGrey@96%, now resolves the dark surface in dark mode
+  (the promoted sheet's mode-resolving chrome).
+
 ## 1.10.0
 
 * Dark mode for the customer profile hub ("all sdks should have darkmode",

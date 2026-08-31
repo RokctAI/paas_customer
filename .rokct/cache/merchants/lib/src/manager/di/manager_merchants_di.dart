@@ -23,11 +23,14 @@ import 'package:base_sdk/src/constants/app_constants.dart';
 import 'package:base_sdk/src/sync/sync_engine.dart';
 import 'package:merchants_sdk/src/manager/domain/interface/pos_catalog.dart';
 import 'package:merchants_sdk/src/manager/domain/interface/pos_orders.dart';
+import 'package:merchants_sdk/src/manager/domain/interface/quick_flow.dart';
 import 'package:merchants_sdk/src/manager/domain/interface/seller_sections_tables.dart';
 import 'package:merchants_sdk/src/manager/domain/interface/seller_shop.dart';
 import 'package:merchants_sdk/src/manager/infrastructure/repositories/mock_pos_orders_repository.dart';
 import 'package:merchants_sdk/src/manager/infrastructure/repositories/mock_products_repository.dart';
+import 'package:merchants_sdk/src/manager/infrastructure/repositories/mock_quick_flow_repository.dart';
 import 'package:merchants_sdk/src/manager/infrastructure/repositories/pos_catalog_repository.dart';
+import 'package:merchants_sdk/src/manager/infrastructure/repositories/quick_flow_repository.dart';
 import 'package:merchants_sdk/src/manager/infrastructure/repositories/seller_sections_tables_repository.dart';
 import 'package:merchants_sdk/src/manager/infrastructure/repositories/seller_shop_repository.dart';
 import 'package:merchants_sdk/src/manager/infrastructure/services/shop_create_sync_handler.dart';
@@ -83,6 +86,20 @@ class ManagerMerchantsDependencies {
     // complete locally only.
     if (AppConstants.isDemo && !getIt.isRegistered<PosOrdersFacade>()) {
       getIt.registerSingleton<PosOrdersFacade>(MockPosOrdersRepository());
+    }
+    // Quick flow settings (design strip section 42): the shop's three
+    // order-automation switches and the till keypad's digit->product map,
+    // read by BOTH the Quick flow page and the till (the pad arms off the
+    // same provider). Demo-gated like the catalog seam: --dart-define=
+    // IS_DEMO=true serves the section-42 seed shop from memory so headless
+    // tours and the standalone harness drive the whole surface, and the
+    // till's autodial, with zero backend contact.
+    if (!getIt.isRegistered<QuickFlowRepositoryFacade>()) {
+      getIt.registerSingleton<QuickFlowRepositoryFacade>(
+        AppConstants.isDemo
+            ? MockQuickFlowRepository()
+            : QuickFlowRepository(),
+      );
     }
     // Attach the shop.create push handler so offline shop creates drain to
     // the backend (auth_di's AuthSyncHandler pattern). Registered here rather

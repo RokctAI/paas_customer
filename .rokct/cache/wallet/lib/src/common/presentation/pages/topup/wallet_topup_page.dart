@@ -117,8 +117,9 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
 
     try {
       // Manifest key: {app_name}.api.payment.get_saved_cards. The method
-      // returns a bare list of card rows (name/gateway/token/last_four/
-      // card_type/expiry_date/card_holder_name).
+      // returns a bare list of card rows (name/gateway/last_four/card_type/
+      // expiry_date/card_holder_name). No reuse credential: `name` is the
+      // handle the top-up charge takes.
       final body = await _gateway.tenant('api.payment.get_saved_cards');
       final data = body is Map && body.containsKey('message')
           ? body['message']
@@ -129,7 +130,7 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
                 .map(
                   (e) => SavedCardModel(
                     id: (e['id'] ?? e['name'])?.toString() ?? '',
-                    token: e['token']?.toString() ?? '',
+                    token: '',
                     lastFour: e['last_four']?.toString() ?? '',
                     cardType: e['card_type']?.toString() ?? 'Card',
                     expiryDate: e['expiry_date']?.toString() ?? '',
@@ -189,7 +190,8 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
     return amount;
   }
 
-  // Process top-up with saved card token.
+  // Process top-up with a saved card, named by its id. The gateway
+  // reuse credential stays on the server.
   Future<void> _processTokenTopUp() async {
     final card = _selectedCard;
     if (card == null) {
@@ -210,7 +212,7 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
     try {
       final result = await _walletRepository.walletTopUp(
         amount: amount,
-        token: card.token,
+        token: card.id,
       );
 
       if (!mounted) return;
