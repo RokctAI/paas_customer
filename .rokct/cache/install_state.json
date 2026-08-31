@@ -723,7 +723,7 @@
       }
     },
     "corporate_sdk": {
-      "version": "1.1.2",
+      "version": "1.1.3",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -898,8 +898,8 @@
       "hash": "2b0284e0ce799521"
     },
     "corporate": {
-      "version": "1.1.2",
-      "hash": "1a56d3b907707222"
+      "version": "1.1.3",
+      "hash": "3c6c146c9745f00f"
     },
     "processing": {
       "version": "1.0.1",
