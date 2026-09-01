@@ -26,6 +26,7 @@ import 'package:merchants_sdk/src/manager/domain/interface/pos_orders.dart';
 import 'package:merchants_sdk/src/manager/domain/interface/quick_flow.dart';
 import 'package:merchants_sdk/src/manager/domain/interface/seller_sections_tables.dart';
 import 'package:merchants_sdk/src/manager/domain/interface/seller_shop.dart';
+import 'package:merchants_sdk/src/manager/infrastructure/repositories/demo_seller_shop_repository.dart';
 import 'package:merchants_sdk/src/manager/infrastructure/repositories/mock_pos_orders_repository.dart';
 import 'package:merchants_sdk/src/manager/infrastructure/repositories/mock_products_repository.dart';
 import 'package:merchants_sdk/src/manager/infrastructure/repositories/mock_quick_flow_repository.dart';
@@ -52,9 +53,17 @@ import 'package:merchants_sdk/src/manager/infrastructure/services/sync_issues_se
 /// endpoint calls — register this before that adapter.
 class ManagerMerchantsDependencies {
   static void register(GetIt getIt) {
+    // The manager's own shop identity (restaurant hub header, shop-edit
+    // flow, open/closed switch). Demo-gated like the POS seams below:
+    // --dart-define=IS_DEMO=true serves MockShopsRepository's demoShop --
+    // the SAME shop the customer-facing ShopsRepositoryFacade serves in
+    // demo builds, not a second invention -- so the hub renders with a shop
+    // instead of a blank header, with zero backend contact.
     if (!getIt.isRegistered<SellerShopRepositoryFacade>()) {
       getIt.registerSingleton<SellerShopRepositoryFacade>(
-        SellerShopRepository(),
+        AppConstants.isDemo
+            ? DemoSellerShopRepository()
+            : SellerShopRepository(),
       );
     }
     if (!getIt.isRegistered<SellerSectionsTablesRepositoryFacade>()) {

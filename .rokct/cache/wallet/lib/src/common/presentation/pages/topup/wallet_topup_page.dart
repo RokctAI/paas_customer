@@ -130,7 +130,6 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
                 .map(
                   (e) => SavedCardModel(
                     id: (e['id'] ?? e['name'])?.toString() ?? '',
-                    token: '',
                     lastFour: e['last_four']?.toString() ?? '',
                     cardType: e['card_type']?.toString() ?? 'Card',
                     expiryDate: e['expiry_date']?.toString() ?? '',

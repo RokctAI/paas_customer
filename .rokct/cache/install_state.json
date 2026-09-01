@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.52.0",
+      "version": "1.55.0",
       "files": {
         "lib/main.dart": "7b66d0bf6d647a00cfafac3fc499106789b83cddc3fd7e163c9afa662acf50a7",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -431,7 +431,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.9.2",
+      "version": "1.9.4",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "05e658f5428f91cd08705b4baee224419d101e7cf67c869047647470a8ba89a2",
         "lib/presentation/routes/registration_step_pages.dart": "0688256171defa4e5aadaa38b010cb754d0a4ca19bc517b9a6f192d4afdd4e6f",
@@ -515,7 +515,7 @@
       }
     },
     "users_sdk": {
-      "version": "1.3.1",
+      "version": "1.3.2",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -526,7 +526,7 @@
       "boot_hooks": []
     },
     "merchants_sdk": {
-      "version": "1.21.0",
+      "version": "1.22.0",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d"
       },
@@ -546,7 +546,7 @@
       ]
     },
     "products_sdk": {
-      "version": "1.6.0",
+      "version": "1.7.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -557,7 +557,7 @@
       "boot_hooks": []
     },
     "orders_sdk": {
-      "version": "1.14.0",
+      "version": "1.15.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -577,7 +577,7 @@
       }
     },
     "fav_sdk": {
-      "version": "1.0.1",
+      "version": "1.0.2",
       "files": {},
       "routes": [],
       "database": {
@@ -600,7 +600,7 @@
       "boot_hooks": []
     },
     "wallet_sdk": {
-      "version": "1.4.0",
+      "version": "1.4.1",
       "files": {
         "lib/presentation/routes/wallet_route_pages.dart": "9f83ea96f4f1261257031ddbaaa8579b9563c13862310a2c42dd1ec97f80bdc1"
       },
@@ -636,7 +636,7 @@
       "boot_hooks": []
     },
     "payments_sdk": {
-      "version": "1.2.0",
+      "version": "1.2.1",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -647,7 +647,7 @@
       "boot_hooks": []
     },
     "delivery_sdk": {
-      "version": "1.13.0",
+      "version": "1.15.0",
       "files": {
         "assets/svg/balance.svg": "6f17d12b29de8e5500bc445ee89eec5c1fc8830cea42711af9bf80975e6b79ce",
         "assets/image/my_location.png": "0e6b49eb78d1f74ac96ac24ce39f834105ce68e361c302038ba9cefdcd926126"
@@ -674,7 +674,7 @@
       ]
     },
     "comms_sdk": {
-      "version": "1.13.0",
+      "version": "1.14.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -745,7 +745,7 @@
       "boot_hooks": []
     },
     "processing_sdk": {
-      "version": "1.0.1",
+      "version": "1.0.2",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -756,7 +756,7 @@
       "boot_hooks": []
     },
     "map_sdk": {
-      "version": "1.2.0",
+      "version": "1.2.1",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -770,7 +770,7 @@
       ]
     },
     "promotions_sdk": {
-      "version": "1.1.0",
+      "version": "1.1.1",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -781,7 +781,7 @@
       "boot_hooks": []
     },
     "loyalty_sdk": {
-      "version": "1.0.1",
+      "version": "1.0.2",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -792,7 +792,7 @@
       "boot_hooks": []
     },
     "desktop_sdk": {
-      "version": "1.2.0",
+      "version": "1.2.1",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -803,7 +803,7 @@
       "boot_hooks": []
     },
     "hms_sdk": {
-      "version": "1.0.0",
+      "version": "1.0.1",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -825,7 +825,7 @@
       ]
     },
     "telemetry_sdk": {
-      "version": "1.0.0",
+      "version": "1.0.1",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -838,84 +838,84 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.52.0",
-      "hash": "a6a01fa31ec571cb"
+      "version": "1.55.0",
+      "hash": "832c32a06c3eeb0e"
     },
     "comms": {
-      "version": "1.13.0",
-      "hash": "d4cfe9139bb38af5"
+      "version": "1.14.0",
+      "hash": "c566d302e8b27f19"
     },
     "marketplace": {
       "version": "1.12.0",
       "hash": "ae0f7e8609196935"
     },
     "merchants": {
-      "version": "1.21.0",
-      "hash": "c4e440f40b6e5fba"
+      "version": "1.22.0",
+      "hash": "f974c10d52da117a"
     },
     "products": {
-      "version": "1.6.0",
-      "hash": "86dbce25d8f8062c"
+      "version": "1.7.0",
+      "hash": "94855b8fb1f4b731"
     },
     "orders": {
-      "version": "1.14.0",
-      "hash": "e5eb268ff480b8d5"
+      "version": "1.15.0",
+      "hash": "c8f09f8c9cf38862"
     },
     "promotions": {
-      "version": "1.1.0",
-      "hash": "bd6dbf2ebb875f18"
+      "version": "1.1.1",
+      "hash": "f507beac62b6bc16"
     },
     "loyalty": {
-      "version": "1.0.1",
-      "hash": "8884f789aeb25984"
+      "version": "1.0.2",
+      "hash": "5ac9fa78ff6e1dfe"
     },
     "auth": {
-      "version": "1.9.2",
-      "hash": "0c3e3707df9e01b9"
+      "version": "1.9.4",
+      "hash": "4fbbbc6af3aacceb"
     },
     "users": {
-      "version": "1.3.1",
-      "hash": "53b6b5a46cb8187f"
+      "version": "1.3.2",
+      "hash": "551bd08b590090e8"
     },
     "fav": {
-      "version": "1.0.1",
-      "hash": "4d60720260531a57"
+      "version": "1.0.2",
+      "hash": "373721752683554f"
     },
     "wallet": {
-      "version": "1.4.0",
-      "hash": "d27bf11601032cb5"
+      "version": "1.4.1",
+      "hash": "a40337cdbfb85d8b"
     },
     "payments": {
-      "version": "1.2.0",
-      "hash": "d0ca1a60baf67ca5"
+      "version": "1.2.1",
+      "hash": "e0721789ba081cd0"
     },
     "delivery": {
-      "version": "1.13.0",
-      "hash": "619d64d2ae09dd0c"
+      "version": "1.15.0",
+      "hash": "2b83cb8358872141"
     },
     "map": {
-      "version": "1.2.0",
-      "hash": "2b0284e0ce799521"
+      "version": "1.2.1",
+      "hash": "1b19fced6c8f5072"
     },
     "corporate": {
       "version": "1.1.3",
       "hash": "3c6c146c9745f00f"
     },
     "processing": {
-      "version": "1.0.1",
-      "hash": "7649ab091a676505"
+      "version": "1.0.2",
+      "hash": "83864d75f80cd5e1"
     },
     "desktop": {
-      "version": "1.2.0",
-      "hash": "d3cb813ce7daee1e"
+      "version": "1.2.1",
+      "hash": "cdfba2160635b35c"
     },
     "hms": {
-      "version": "1.0.0",
-      "hash": "b5a3b97ef5f282d4"
+      "version": "1.0.1",
+      "hash": "b030c92b54f6fefd"
     },
     "telemetry": {
-      "version": "1.0.0",
-      "hash": "3bba74070c266db1"
+      "version": "1.0.1",
+      "hash": "d72bc5e07ff1124c"
     }
   }
 }
