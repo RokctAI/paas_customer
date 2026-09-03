@@ -1,26 +1,19 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:base_sdk/src/di/injection.dart';
 import 'package:base_sdk/src/domain/interface/parcel.dart';
 import 'package:base_sdk/src/models/models.dart';
 import 'package:base_sdk/src/models/response/parcel_paginate_response.dart';
@@ -32,8 +25,17 @@ import 'package:base_sdk/src/handlers/platform_gateway.dart';
 class ParcelRepository implements ParcelRepositoryFacade {
   /// Universal platform gateway (fleet rule 2026-08-15): parcel cmds are the
   /// zones delivery module's `manifest.json` whitelisted-method keys with the
-  /// app segment dropped (`api.parcel.*`).
+  /// app segment dropped (`api.parcel.*`), plus wallet's `api.payment.*`
+  /// for the hosted-checkout and transaction calls.
   static const _gateway = PlatformGateway();
+
+  /// The parcel-flavoured hosted-checkout initiators the wallet frappe half
+  /// whitelists (`api.payment.initiate_{flutterwave|paypal|paystack}_parcel_payment`).
+  static const Set<String> hostedCheckoutProviders = {
+    'flutterwave',
+    'paypal',
+    'paystack',
+  };
 
   @override
   Future<ApiResult<void>> addReview(
@@ -280,14 +282,24 @@ class ParcelRepository implements ParcelRepositoryFacade {
 
   @override
   Future<ApiResult<String>> process(String orderId, String name) async {
-    try {
-      final client = dioHttp.client(requireAuth: true);
-      var res = await client.get(
-        '/api/v1/dashboard/user/order-$name-process?parcel_id=$orderId',
+    final String provider = name.toLowerCase();
+    if (!hostedCheckoutProviders.contains(provider)) {
+      return ApiResult.failure(
+        error: 'No hosted checkout is available for "$name" on this backend',
+        statusCode: 400,
       );
-      return ApiResult.success(data: res.data["data"]["data"]["url"]);
+    }
+    try {
+      // wallet's payment.initiate_<provider>_parcel_payment(order_id) — the
+      // kwarg is named order_id even for a Parcel Order docname; it answers
+      // the same {redirect_url} envelope as the order variant.
+      final response = await _gateway.tenant(
+        'api.payment.initiate_${provider}_parcel_payment',
+        {'order_id': orderId},
+      );
+      return ApiResult.success(data: response['redirect_url']);
     } catch (e) {
-      debugPrint('==> add order review failure: $e');
+      debugPrint('==> parcel payment process failure: $e');
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
         statusCode: NetworkExceptions.getDioStatus(e),
@@ -300,15 +312,18 @@ class ParcelRepository implements ParcelRepositoryFacade {
     required String orderId,
     required String paymentId,
   }) async {
-    final data = {'payment_sys_id': paymentId};
+    // TODO(fix-wave 2026-09-02): wallet's create_order_transaction resolves
+    // order_id against the Order doctype only (payment.py:1667), so a Parcel
+    // Order docname is refused server-side until the method learns parcels.
+    // Routed through the gateway anyway so the refusal is a real server
+    // answer rather than a router 404 (fixplan M15).
     try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.post(
-        '/api/v1/payments/parcel-order/$orderId/transactions',
-        data: data,
+      final response = await _gateway.tenant(
+        'api.payment.create_order_transaction',
+        {'order_id': orderId, 'payment_sys_id': paymentId},
       );
       return ApiResult.success(
-        data: TransactionsResponse.fromJson(response.data),
+        data: TransactionsResponse.fromJson(response),
       );
     } catch (e) {
       debugPrint('==> create transaction failure: $e');

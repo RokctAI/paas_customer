@@ -1,25 +1,21 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -66,6 +62,15 @@ class CustomNetworkImage extends StatelessWidget {
   }
 
   Widget _buildImage() {
+    // Inline ("data:") images carry their own pixels: the demo seed data
+    // uses them so a demo build - which talks to no backend, and on the CI
+    // tour emulator has no dependable route to an image host either - shows
+    // real artwork instead of this widget's broken-image error state. Checked
+    // before checkIsSvg(), whose filename-extension test cannot see an SVG
+    // inside a data URI.
+    if (AppHelpers.isInlineImage(url)) {
+      return _buildInlineImage();
+    }
     return AppHelpers.checkIsSvg(url)
         ? SvgPicture.network(
             url ?? "",
@@ -113,4 +118,39 @@ class CustomNetworkImage extends StatelessWidget {
             },
           );
   }
+
+  /// Renders an inline `data:` image: SVG markup through [SvgPicture.string],
+  /// anything else (png/jpeg/webp payloads) through [Image.memory]. Falls
+  /// back to a plain tinted box when the payload cannot be decoded, so a
+  /// malformed URI degrades the same way an unreachable URL does.
+  Widget _buildInlineImage() {
+    if (AppHelpers.isInlineSvg(url)) {
+      final String svg = AppHelpers.inlineImagePayload(url);
+      if (svg.isEmpty) return _inlineFallback();
+      return SvgPicture.string(
+        svg,
+        width: width,
+        height: height,
+        fit: fit,
+      );
+    }
+    final Uint8List? bytes = AppHelpers.inlineImageBytes(url);
+    if (bytes == null || bytes.isEmpty) return _inlineFallback();
+    return Image.memory(
+      bytes,
+      width: width,
+      height: height,
+      fit: fit,
+      errorBuilder: (_, __, ___) => _inlineFallback(),
+    );
+  }
+
+  Widget _inlineFallback() => Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(radius),
+          color: bgColor,
+        ),
+      );
 }

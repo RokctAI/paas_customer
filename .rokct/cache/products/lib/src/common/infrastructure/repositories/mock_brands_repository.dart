@@ -1,23 +1,18 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:base_sdk/src/constants/demo_images.dart';
 import 'package:base_sdk/src/handlers/api_result.dart';
 import 'package:base_sdk/src/domain/interface/brands.dart';
 import 'package:base_sdk/src/models/data/brand_data.dart';
@@ -27,8 +22,8 @@ import 'package:base_sdk/src/models/response/single_brand_response.dart';
 class MockBrandsRepository implements BrandsRepositoryFacade {
   final BrandData _demoBrand = BrandData(
     id: "1",
-    title: "Demo Brand",
-    img: "https://via.placeholder.com/150",
+    title: "Karoo Grill Co.",
+    img: DemoImages.shopMark,
     active: true,
     createdAt: DateTime.now().toString(),
     updatedAt: DateTime.now().toString(),
@@ -43,7 +38,7 @@ class MockBrandsRepository implements BrandsRepositoryFacade {
       data: BrandsPaginateResponse(
         data: [
           _demoBrand,
-          _demoBrand.copyWith(id: "2", title: "Another Brand"),
+          _demoBrand.copyWith(id: "2", title: "Highveld Dairy"),
         ],
       ),
     );

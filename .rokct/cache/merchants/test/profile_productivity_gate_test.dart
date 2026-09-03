@@ -1,30 +1,27 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 // The PRODUCTIVITY gate's hub rows — Tasks (approved frame 7e, chip 391,
 // Ray 2026-08-29 15:41Z) and Calculator (approved frame 45b, chip 842):
 // SectionsItem pumped DIRECTLY from templates/ (the
 // widget carries no ${package} imports, so this harness is its compile
 // gate, same contract as the POS suites). Pins the row shapes the gate
-// relies on: the two-line glance row (title + seeded open/due counts) and
-// the untouched single-line shape every pre-7e hub row keeps.
+// relies on: the two-line glance row (title + an optional glance line) and
+// the untouched single-line shape every pre-7e hub row keeps - the shape
+// the hub's rows have since merchants_sdk 1.26.0, when the seeded demo
+// glances gave way to the composer markers test/hub_markers_test.dart
+// pins.
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -55,13 +52,13 @@ void main() {
     var tapped = 0;
     await tester.pumpWidget(_host(SectionsItem(
       title: 'Tasks',
-      subtitle: '3 open · 1 due today',
+      subtitle: 'a glance line',
       icon: Remix.task_line,
       onTap: () => tapped++,
     )));
 
     expect(find.text('Tasks'), findsOneWidget);
-    expect(find.text('3 open · 1 due today'), findsOneWidget);
+    expect(find.text('a glance line'), findsOneWidget);
     expect(find.byIcon(Remix.task_line), findsOneWidget);
 
     await tester.tap(find.text('Tasks'));
@@ -74,20 +71,20 @@ void main() {
     // Design strip frame 45b, GATE 1 of section 45: the PRODUCTIVITY
     // group gains a second row, in the same idiom as the Tasks row —
     // calculator glyph, title, and the earn-your-glance sub-line. The
-    // sub-line is SEEDED (frame 45b's persistence flag): calc_sdk's
-    // memory lives in an in-memory autoDispose StateNotifier, so there
-    // is nothing live for merchants_sdk to read, and ADR-005 forbids
-    // reaching for it anyway.
+    // hub row itself carries no sub-line (calc_sdk's memory lives in an
+    // in-memory autoDispose StateNotifier, nothing live for merchants_sdk
+    // to read, and ADR-005 forbids reaching for it anyway); this pins the
+    // shape the row takes once a glance is supplied.
     var tapped = 0;
     await tester.pumpWidget(_host(SectionsItem(
       title: 'Calculator',
-      subtitle: 'Memory holds 1 240.50',
+      subtitle: 'a glance line',
       icon: Remix.calculator_line,
       onTap: () => tapped++,
     )));
 
     expect(find.text('Calculator'), findsOneWidget);
-    expect(find.text('Memory holds 1 240.50'), findsOneWidget);
+    expect(find.text('a glance line'), findsOneWidget);
     expect(find.byIcon(Remix.calculator_line), findsOneWidget);
 
     await tester.tap(find.text('Calculator'));
@@ -102,13 +99,13 @@ void main() {
     await tester.pumpWidget(_host(Column(children: [
       SectionsItem(
         title: 'Tasks',
-        subtitle: '3 open · 1 due today',
+        subtitle: 'a glance line',
         icon: Remix.task_line,
         onTap: () {},
       ),
       SectionsItem(
         title: 'Calculator',
-        subtitle: 'Memory holds 1 240.50',
+        subtitle: 'a glance line',
         icon: Remix.calculator_line,
         onTap: () {},
       ),

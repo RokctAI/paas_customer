@@ -1,23 +1,18 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:base_sdk/src/constants/demo_images.dart';
 import 'package:base_sdk/src/handlers/api_result.dart';
 import 'package:base_sdk/src/domain/interface/products.dart';
 import 'package:base_sdk/src/models/data/product_data.dart';
@@ -34,21 +29,21 @@ class MockProductsRepository implements ProductsRepositoryFacade {
     uuid: "demo_product_uuid",
     shopId: "1",
     categoryId: "1",
-    keywords: "demo, product",
+    keywords: "burger, flame-grilled, beef",
     brandId: "1",
     tax: 5,
     interval: 1,
     minQty: 1,
     maxQty: 100,
     active: true,
-    img: "https://via.placeholder.com/150",
+    img: DemoImages.product,
     createdAt: DateTime.now().toString(),
     updatedAt: DateTime.now().toString(),
     ratingAvg: 4.5,
     ordersCount: 50,
     translation: Translation(
-      title: "Demo Product",
-      description: "This is a demo product description",
+      title: "Flame-grilled beef burger",
+      description: "Chargrilled patty, smoked cheddar and house sauce",
       locale: "en",
     ),
     stocks: [Stocks(id: "1", price: 150, quantity: 100, totalPrice: 150)],
@@ -68,7 +63,7 @@ class MockProductsRepository implements ProductsRepositoryFacade {
           _demoProduct,
           _demoProduct.copyWith(
             id: "2",
-            translation: Translation(title: "Another Product"),
+            translation: Translation(title: "Margherita pizza"),
           ),
           // Demo seed for the 18+ (adults only) feature: exercises the
           // customer-facing badge and the checkout age gate in demo builds.
@@ -76,8 +71,10 @@ class MockProductsRepository implements ProductsRepositoryFacade {
             id: "3",
             isAdult: true,
             translation: Translation(
-              title: "Adults Only Demo Product",
-              description: "Demo 18+ (adults only) product",
+              // Named for what it is: the 18+ badge and the checkout age
+              // gate need a seed item that is actually age-restricted.
+              title: "Craft lager 440ml",
+              description: "18+ only - proof of age required on delivery",
               locale: "en",
             ),
           ),

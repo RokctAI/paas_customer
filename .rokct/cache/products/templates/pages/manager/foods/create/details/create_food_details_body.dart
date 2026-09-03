@@ -1,22 +1,16 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
@@ -45,7 +39,17 @@ import 'package:${package}/presentation/components/foods/multi_image_picker.dart
 class CreateFoodDetailsBody extends StatefulWidget {
   final Function() onSave;
 
-  const CreateFoodDetailsBody({super.key, required this.onSave});
+  /// True when this body sits on the dark pushed page (the 35b add moment,
+  /// ProductEditPage): the picker chevrons and toggle labels take the
+  /// mode-resolving ink. False (the default) keeps the shipped bottom-sheet
+  /// look untouched.
+  final bool dark;
+
+  const CreateFoodDetailsBody({
+    super.key,
+    required this.onSave,
+    this.dark = false,
+  });
 
   @override
   State<CreateFoodDetailsBody> createState() => _CreateFoodDetailsBodyState();
@@ -53,6 +57,8 @@ class CreateFoodDetailsBody extends StatefulWidget {
 
 class _CreateFoodDetailsBodyState extends State<CreateFoodDetailsBody> {
   final _formKey = GlobalKey<FormState>();
+
+  Color get _ink => widget.dark ? AppStyle.textPrimary : AppStyle.blackColor;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +116,7 @@ class _CreateFoodDetailsBodyState extends State<CreateFoodDetailsBody> {
                               '${AppHelpers.getTranslation(TrKeys.productCategory)}*',
                           suffixIcon: Icon(
                             Remix.arrow_down_s_line,
-                            color: AppStyle.blackColor,
+                            color: _ink,
                             size: 18.r,
                           ),
                           readOnly: true,
@@ -133,7 +139,7 @@ class _CreateFoodDetailsBodyState extends State<CreateFoodDetailsBody> {
                           label: '${AppHelpers.getTranslation(TrKeys.units)}*',
                           suffixIcon: Icon(
                             Remix.arrow_down_s_line,
-                            color: AppStyle.blackColor,
+                            color: _ink,
                             size: 18.r,
                           ),
                           readOnly: true,
@@ -156,7 +162,7 @@ class _CreateFoodDetailsBodyState extends State<CreateFoodDetailsBody> {
                           label: AppHelpers.getTranslation(TrKeys.kitchen),
                           suffixIcon: Icon(
                             Remix.arrow_down_s_line,
-                            color: AppStyle.blackColor,
+                            color: _ink,
                             size: 18.r,
                           ),
                           readOnly: true,
@@ -238,7 +244,7 @@ class _CreateFoodDetailsBodyState extends State<CreateFoodDetailsBody> {
                           style: AppStyle.interNormal(
                             size: 14.sp,
                             letterSpacing: -0.3,
-                            color: AppStyle.blackColor,
+                            color: _ink,
                           ),
                         ),
                         CustomToggle(
@@ -256,7 +262,7 @@ class _CreateFoodDetailsBodyState extends State<CreateFoodDetailsBody> {
                           style: AppStyle.interNormal(
                             size: 14.sp,
                             letterSpacing: -0.3,
-                            color: AppStyle.blackColor,
+                            color: _ink,
                           ),
                         ),
                         CustomToggle(

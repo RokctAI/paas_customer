@@ -127,7 +127,7 @@ packages:
       path: ".rokct/cache/auth"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.0.1"
   auto_route:
     dependency: transitive
     description:
@@ -175,6 +175,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.2"
+  booking_sdk:
+    dependency: "direct main"
+    description:
+      path: ".rokct/cache/booking"
+      relative: true
+    source: path
+    version: "1.1.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -404,7 +411,7 @@ packages:
       path: ".rokct/cache/corporate"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.2.0"
   cross_file:
     dependency: transitive
     description:
@@ -459,14 +466,14 @@ packages:
       path: ".rokct/cache/delivery"
       relative: true
     source: path
-    version: "1.3.0"
+    version: "1.3.1"
   desktop_sdk:
     dependency: "direct main"
     description:
       path: ".rokct/cache/desktop"
       relative: true
     source: path
-    version: "1.1.0"
+    version: "1.2.2"
   dio:
     dependency: transitive
     description:
@@ -483,6 +490,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.0"
+  dotted_border:
+    dependency: transitive
+    description:
+      name: dotted_border
+      sha256: "108837e11848ca776c53b30bc870086f84b62ed6e01c503ed976e8f8c7df9c04"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.0"
   drift:
     dependency: "direct overridden"
     description:
@@ -956,6 +971,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.2"
+  flutter_slidable:
+    dependency: transitive
+    description:
+      name: flutter_slidable
+      sha256: ea369262929d3cc6ebf9d8a00c196127966f117fe433a5e5cb47fb08008ca203
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.3"
   flutter_staggered_animations:
     dependency: transitive
     description:
@@ -1580,14 +1603,14 @@ packages:
       path: ".rokct/cache/map"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.1.0"
   marketplace_sdk:
     dependency: "direct main"
     description:
       path: ".rokct/cache/marketplace"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.1.0"
   matcher:
     dependency: transitive
     description:
@@ -1610,7 +1633,7 @@ packages:
       path: ".rokct/cache/merchants"
       relative: true
     source: path
-    version: "1.2.0"
+    version: "1.5.0"
   meta:
     dependency: transitive
     description:
@@ -1665,7 +1688,7 @@ packages:
       path: ".rokct/cache/orders"
       relative: true
     source: path
-    version: "1.1.0"
+    version: "1.4.1"
   osm_nominatim:
     dependency: transitive
     description:
@@ -1706,6 +1729,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.9.1"
+  path_drawing:
+    dependency: transitive
+    description:
+      name: path_drawing
+      sha256: bbb1934c0cbb03091af082a6389ca2080345291ef07a5fa6d6e078ba8682f977
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.1"
   path_parsing:
     dependency: transitive
     description:
@@ -1902,14 +1933,14 @@ packages:
       path: ".rokct/cache/products"
       relative: true
     source: path
-    version: "1.2.0"
+    version: "1.5.0"
   promotions_sdk:
     dependency: "direct main"
     description:
       path: ".rokct/cache/promotions"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.1.0"
   proste_indexed_stack:
     dependency: transitive
     description:
@@ -2408,7 +2439,7 @@ packages:
       path: ".rokct/cache/users"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.0.1"
   uuid:
     dependency: transitive
     description:
@@ -2471,7 +2502,7 @@ packages:
       path: ".rokct/cache/wallet"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.6.0"
   watcher:
     dependency: transitive
     description:

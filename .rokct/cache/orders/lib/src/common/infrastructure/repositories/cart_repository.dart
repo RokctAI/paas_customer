@@ -1,22 +1,16 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
 import 'package:base_sdk/src/handlers/api_result.dart';
@@ -88,6 +82,10 @@ class CartRepository implements CartRepositoryFacade {
 
   @override
   Future<ApiResult<dynamic>> startGroupOrder({required String cartId}) async {
+    // TODO(fix-wave 2026-09-02): no server method — the orders frappe half
+    // whitelists get_cart_in_group / insert_cart_with_group / join_order only
+    // (join_order is itself a placeholder). Left on the dead per-method path
+    // so the failure stays visible; needs an owner decision (fixplan M11).
     try {
       final client = dioHttp.client(requireAuth: true);
       await client.post(
@@ -215,12 +213,13 @@ class CartRepository implements CartRepositoryFacade {
     required CartRequest cart,
   }) async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.post(
-        '/api/method/paas.api.add_to_cart_group',
-        data: cart.toJson(),
+      // orders' cart.insert_cart_with_group(cart, lang) — the cart body rides
+      // inside a single `cart` kwarg (fixplan M10).
+      final response = await _gateway.tenant(
+        'api.cart.insert_cart_with_group',
+        {'cart': cart.toJson()},
       );
-      return ApiResult.success(data: CartModel.fromJson(response.data));
+      return ApiResult.success(data: CartModel.fromJson(response));
     } catch (e) {
       debugPrint('==> insertCartWithGroup failure: $e');
       return ApiResult.failure(

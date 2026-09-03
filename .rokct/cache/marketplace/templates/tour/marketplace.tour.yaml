@@ -30,7 +30,7 @@
 #     (category id "1" is MockCategoriesRepository's "Burgers");
 #   - search: searchProvider -> MockShopsRepository.searchShops;
 #   - favourites: likeProvider -> MockShopsRepository.getShopsByIds, fed by
-#     the saved-shop id ("1", the mock's Demo Shop) seeded in the first
+#     the saved-shop id ("1", the mock's Corner Kitchen) seeded in the first
 #     step - LocalStorage.getSavedShopsList() is empty on a fresh install;
 #   - account: renders its guest state without a token (profile fetches are
 #     token-guarded), which is truthful for a signed-out browser.
@@ -67,13 +67,16 @@ steps:
     dart: |
       // Seed the demo session state the customer screens key off:
       //  - a selected address, so home's checkAddress() does not cover the
-      //    screen with the AddAddress dialog on a fresh install;
-      //  - one saved shop id ("1" = MockShopsRepository's Demo Shop), so
+      //    screen with the AddAddress dialog on a fresh install. It is
+      //    rendered verbatim in the home header, so it reads like a real
+      //    address rather than "Demo address" - these stills are published
+      //    to the app stores;
+      //  - one saved shop id ("1" = MockShopsRepository's Corner Kitchen), so
       //    the favourites step later shows a stocked list.
       await LocalStorage.setAddressSelected(AddressData(
         id: 1,
-        title: 'Demo address',
-        address: '1 Demo Street',
+        title: 'Home',
+        address: '14 Jacaranda Road, Melville',
         location: LocationModel(latitude: -26.2041, longitude: 28.0473),
       ));
       await LocalStorage.setSavedShopsList(<String>['1']);

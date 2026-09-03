@@ -1,6 +1,6 @@
 name: wallet_sdk
 description: "wallet_sdk - extracted from paas_customer (refork 2026-07-11)."
-version: 1.0.0
+version: 1.6.0
 publish_to: 'none'
 environment:
   sdk: '>=3.10.0 <4.0.0'
@@ -21,6 +21,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  # Test-only: the gateway wire test scripts Dio's HttpClientAdapter to
+  # capture the real request path/body. Same pin as base_sdk's, already in
+  # the resolution transitively.
+  dio: ^5.7.0
   build_runner: ^2.10.4
   freezed: ^3.2.3
   json_serializable: ^6.8.0

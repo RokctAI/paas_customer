@@ -1,43 +1,21 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-
-// Copyright (c) 2024 ROKCT INTELLIGENCE (PTY) LTD
-//
 // This program is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
 // This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// You should have received a copy of the GNU General Public License
-// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
 import 'package:base_sdk/src/handlers/handlers.dart';
 import 'package:base_sdk/src/handlers/platform_gateway.dart';
 import 'package:base_sdk/src/domain/interface/wallet.dart';
-import 'package:base_sdk/src/di/injection.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 
 import 'package:base_sdk/src/models/data/wallet_data.dart';
@@ -176,17 +154,35 @@ class WalletRepository implements WalletRepositoryFacade {
     }
   }
 
+  /// Pages the logged-in user's `Wallet History` rows, newest first.
+  ///
+  /// [start] / [limit] are the server's own kwargs (`start=0, limit=20`
+  /// defaults); the base_sdk facade signature has neither, so they are
+  /// optional here and facade callers get the first page.
   @override
-  Future<ApiResult<List<WalletHistoryData>>> getWalletHistory() async {
+  Future<ApiResult<List<WalletHistoryData>>> getWalletHistory({
+    int start = 0,
+    int limit = 20,
+  }) async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.get(
-        '/api/method/paas.api.user.get_wallet_history',
-      );
-
+      // Manifest key: {app_name}.api.user.get_wallet_history (whitelisted
+      // by the users frappe half, users.tenant.api.user.get_wallet_history).
+      // Replaces the legacy per-method GET
+      // `/api/method/paas.api.user.get_wallet_history`, which no composed
+      // backend serves (fix-wave 2026-09-02, P1).
+      final body = await _gateway.tenant('api.user.get_wallet_history', {
+        'start': start,
+        'limit': limit,
+      });
+      // The server answers api_response(data=rows) -> {data: [...],
+      // status_code: 200} inside Frappe's `message` envelope; the
+      // interceptor strips the envelope and _asMap tolerates a client
+      // that did not. A bare list is accepted too.
+      final data = body is List ? body : _asMap(body)['data'];
+      final rows = data is List ? data : const [];
       return ApiResult.success(
-        data: (response.data['data'] as List)
-            .map((e) => WalletHistoryData.fromJson(e))
+        data: rows
+            .map((e) => WalletHistoryData.fromJson(Map<String, dynamic>.from(e)))
             .toList(),
       );
     } catch (e) {

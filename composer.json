@@ -24,7 +24,7 @@
       "path": "../commerce/marketplace/dart",
       "ref": "main",
       "sha256": "92c0c95523f8181e3d2cb824b0b119b051604e73a8fcd608e8067a874d8d56ba",
-      "_sha256_comment": "SHA-256 of marketplace/dart/install.py at commerce@8023283; required by the composer's unpinned-installer gate. Update when upstream install.py changes.",
+      "_sha256_comment": "SHA-256 of marketplace/dart/install.py at commerce@71394ca8; required by the composer's unpinned-installer gate. Update when upstream install.py changes.",
       "home_sdk": true,
       "_comment": "Customer-persona marketplace UI; home SDK for paas_customer, parallel to merchants_sdk/delivery_sdk."
     },
@@ -36,7 +36,7 @@
       "git": "https://github.com/RokctAI/Users",
       "ref": "main",
       "sha256": "da93bdfbb0265deda5f22f3199097a9af2c9f064aeca916c807c4cc429b045f9",
-      "_sha256_comment": "SHA-256 of auth/dart/install.py at Users@a0caa76; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of auth/dart/install.py at Users@55048d34; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "users_sdk",
@@ -46,7 +46,7 @@
       "git": "https://github.com/RokctAI/Users",
       "ref": "main",
       "sha256": "c45dc71de03c47c0930d1ea277469a4520988946336066f6328b85b8e6e43137",
-      "_sha256_comment": "SHA-256 of users/dart/install.py at Users@a0caa76; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of users/dart/install.py at Users@55048d34; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "merchants_sdk",
@@ -56,7 +56,7 @@
       "git": "https://github.com/RokctAI/commerce",
       "ref": "main",
       "sha256": "eeb112f21c2ae23e7da1d7fed8336d5b9b143ff7edc71f0a0b0ef88d306f6b28",
-      "_sha256_comment": "SHA-256 of merchants/dart/install.py at commerce@8023283; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of merchants/dart/install.py at commerce@71394ca8; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "products_sdk",
@@ -66,7 +66,7 @@
       "git": "https://github.com/RokctAI/commerce",
       "ref": "main",
       "sha256": "16c3664281acd12e34fb13432c9491de1993383e5465b30ae79de9f4278df556",
-      "_sha256_comment": "SHA-256 of products/dart/install.py at commerce@8023283; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of products/dart/install.py at commerce@71394ca8; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "orders_sdk",
@@ -76,7 +76,7 @@
       "git": "https://github.com/RokctAI/commerce",
       "ref": "main",
       "sha256": "f249b603d94a1202c39c45181ab30930aee3e940f85ffc820dc0f25cf8b80967",
-      "_sha256_comment": "SHA-256 of orders/dart/install.py at commerce@8023283; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of orders/dart/install.py at commerce@71394ca8; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "fav_sdk",
@@ -86,7 +86,7 @@
       "path": "../agent/fav/dart",
       "ref": "main",
       "sha256": "3cc60d69fc23a00edd1e35b150dab394241b70f2cb4caf2566faeeddc786c6a8",
-      "_sha256_comment": "SHA-256 of fav/dart/install.py at agent@61e0becb; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of fav/dart/install.py at agent@798de2da; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "wallet_sdk",
@@ -96,7 +96,7 @@
       "path": "../pay/wallet/dart",
       "ref": "main",
       "sha256": "ef9e35ae06bf8a90ac13ec7da63d13c744df25390d90b9e1ad1f400d0b779ec0",
-      "_sha256_comment": "SHA-256 of wallet/dart/install.py at pay@7955f61; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of wallet/dart/install.py at pay@e57930e2; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "payments_sdk",
@@ -106,7 +106,7 @@
       "path": "../pay/payments/dart",
       "ref": "main",
       "sha256": "b4060f6e4a437bdedb8ecfd5ce4c5f89204f08f0d75cb629784418f3af1b2b22",
-      "_sha256_comment": "SHA-256 of payments/dart/install.py at pay@7955f61; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of payments/dart/install.py at pay@e57930e2; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "delivery_sdk",
@@ -147,7 +147,7 @@
       "path": "../corporate/corporate/dart",
       "ref": "main",
       "sha256": "88ac3c9d07789e5e5e81d3090402e3a595c79d88f7924b79c15109dd5292988b",
-      "_sha256_comment": "SHA-256 of corporate/dart/install.py at corporate@b93cfac; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of corporate/dart/install.py at corporate@a3a9eb05; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "processing_sdk",
@@ -157,7 +157,7 @@
       "path": "../productivity/processing/dart",
       "ref": "main",
       "sha256": "1514678d5c20d26c6653f630bbd77811f454263390980ced8c3b462089b399a5",
-      "_sha256_comment": "SHA-256 of processing/dart/install.py at productivity@ae63508; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of processing/dart/install.py at productivity@84f6495c; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "map_sdk",
@@ -177,7 +177,7 @@
       "git": "https://github.com/RokctAI/commerce",
       "ref": "main",
       "sha256": "0477b9efef1e82b3391ab92d638881a4113a0a11b1debd3a64715f606007264d",
-      "_sha256_comment": "SHA-256 of promotions/dart/install.py at commerce@8023283; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of promotions/dart/install.py at commerce@71394ca8; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "loyalty_sdk",
@@ -187,7 +187,17 @@
       "git": "https://github.com/RokctAI/commerce",
       "ref": "main",
       "sha256": "b9580d300e27008917b745c08a4dd677c8910367804316cd09a4aab4acdbba51",
-      "_sha256_comment": "SHA-256 of loyalty/dart/install.py at commerce@8023283; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+      "_sha256_comment": "SHA-256 of loyalty/dart/install.py at commerce@71394ca8; required by the composer's unpinned-installer gate. Update when upstream install.py changes."
+    },
+    {
+      "name": "booking_sdk",
+      "enabled": true,
+      "source": "git",
+      "path": "../commerce/booking/dart",
+      "git": "https://github.com/RokctAI/commerce",
+      "ref": "main",
+      "sha256": "aff13291fc1bba7ee8808b7296c980063d92b920e5e0b690b2102f2f639b2fad",
+      "_sha256_comment": "SHA-256 of booking/dart/install.py at commerce@71394ca8 (unchanged by commerce#101, which recovers the reservation flow into booking_sdk 1.1.0 without touching install.py); required by the composer's unpinned-installer gate. Update when upstream install.py changes."
     },
     {
       "name": "agent_sdk",
@@ -197,7 +207,7 @@
       "path": "../agent/agent/dart",
       "ref": "main",
       "sha256": "84f411fc0af984d1f1ca87da296d7fb112656dfcf039356c43d7b82b5e549fe1",
-      "_sha256_comment": "SHA-256 of agent/dart/install.py at agent@61e0becb; required by the composer's unpinned-installer gate. Update when upstream install.py changes.",
+      "_sha256_comment": "SHA-256 of agent/dart/install.py at agent@798de2da; required by the composer's unpinned-installer gate. Update when upstream install.py changes.",
       "_comment": "Disabled as per requirements"
     },
     {

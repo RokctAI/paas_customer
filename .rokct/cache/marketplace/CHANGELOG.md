@@ -1,3 +1,52 @@
+## 1.14.1
+
+* Guided-tour fragment (`templates/tour/marketplace.tour.yaml`): the address
+  the first step seeds is "Home" / "14 Jacaranda Road, Melville" instead of
+  "Demo address" / "1 Demo Street". The home header renders the seeded
+  address verbatim, and these stills are published to the app stores, so
+  "Demo address" was on the marketplace_home screenshot. Comments that named
+  the mock shop were updated to its new name (Corner Kitchen).
+
+## 1.14.0
+
+* Fix-wave 2026-09-02 (Dart SDK audit, G6 M28/M29): the rest of the
+  pre-fork customer route table this SDK owns is declared in the manifest -
+  `/searchPage`, `/recommended`, `/recommended_one`, `/recommended_two`,
+  `/recommended_three`, `/help`, `/result_filter`, `/create_shop`,
+  `/shops_banner`, `/share_referral`, `/share_referral_faq`,
+  `/notification_list_page`, `/like_page`, `/address_list_page` - with one
+  @RoutePage shell each in `templates/routes/marketplace_route_pages.dart`,
+  and the matching base_sdk AppRoutes seams are filled (`pushProfileRoute`,
+  `pushSearchRoute`, `pushRecommended*Route`, `pushHelpRoute`,
+  `pushResultFilterRoute`, `pushCreateShopRoute`, `pushShopsBannerRoute`,
+  `pushShareReferral*Route`, `pushNotificationListRoute`, `pushLikeRoute`,
+  `pushAddressListRoute`). Until now every one of those seam calls threw the
+  host's `noSuchMethod` StateError. `WalletHistoryPage` is deliberately NOT
+  declared (wallet_sdk's `/wallet-history` is canonical); the
+  `NotificationListRoute` name is shared with comms_sdk's manager/driver
+  shell and only collides if comms ever gains a customer block.
+* The 16 raw `context.router.pushNamed('/shop?shopId=' | '/map' |
+  '/map?isPop=true' | '/parcel_page' | '/storyList?index=' | '/recommended')`
+  sites under `pages/home/**` now go through the seam (`pushShopRoute`,
+  `pushViewMapRoute`, `pushParcelRoute`, `pushStoryListRoute`,
+  `pushRecommendedRoute`), so they work under any host that composes the
+  owning SDK rather than silently failing on an undeclared path. The
+  `/login` push in door_to_door is untouched (auth_sdk declares that path).
+* Tests: `test/manifest_wiring_test.dart` (routes <-> shells <-> seams).
+
+## 1.13.0
+
+* The profile's Reservation button (both the section-registry host and the
+  legacy `ProfilePage`) and the reservation notification tap now push
+  booking_sdk's in-app `/reservations` route by path instead of opening
+  `ReservationShops` (a `{webUrl}/reservations` web view hand-off) - the
+  reservation flow was recovered into booking_sdk 1.1.0 and this SDK's
+  copy of `reservation_shops.dart` is removed (nothing else imported it).
+  The gate is unchanged: `AppHelpers.getReservationEnable()`, whose
+  `reservation_enable_for_user` key booking_sdk's settings bridge now
+  serves. A compose without booking_sdk fails through `onFailure` with a
+  top snack bar rather than throwing.
+
 ## 1.12.0
 
 * `WalletTopUpScreen` tops up by naming the saved CARD, not by handing

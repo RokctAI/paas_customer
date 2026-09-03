@@ -1,0 +1,58 @@
+# Guided-tour fragment for booking_sdk.
+#
+# Brand-neutral by rule: app names, taglines and any per-app wording live in
+# the app shell's tour/app.tour.yaml ({app_name}/{app_tagline} placeholders
+# are substituted at merge time). This fragment owns only the screens
+# booking_sdk itself installs (manifest.json app_type blocks).
+#
+# ROLE SPLIT - booking_sdk is composed into BOTH customer and manager /
+# pos apps, and each route below exists in one family only. An app tour
+# manifest must pick the keys for its role (missing keys are skipped with
+# a log at deploy time; a route that does not exist in the compose fails
+# the step):
+#   customer composes : reservations, new_reservation
+#   manager / pos     : shop_reservations, reservation_tables,
+#                       reservation_schedule
+#
+# Demo grounding (--dart-define=IS_DEMO=true): booking_di.dart swaps in
+# DemoBookingRepository (a seeded reservation, two sections with tables, a
+# 10:00-22:00 slot) and the manager / pos di_hook swaps in
+# DemoSellerBookingRepository (an evening of four reservations in mixed
+# states), so every step captures a stocked screen with zero backend
+# contact. The customer steps need a signed-in demo session (the screens
+# gate on LocalStorage.getToken()); the shell's tour login step provides
+# it.
+#
+# Format: RokctAI/shared-workflows scripts/tour/README.md
+sdk: booking
+steps:
+  - key: reservations
+    title: "Your table, kept"
+    caption: "Every table you have booked, in one place - and *cancel in a tap* if plans change."
+    action: route
+    route: /reservations
+    settle: 6
+  - key: new_reservation
+    title: "Book a table in a minute"
+    caption: "Pick the shop, the section, the table, then a day and time the shop is actually open - *no phone call needed*."
+    action: route
+    route: /new-reservation
+    settle: 8
+  - key: shop_reservations
+    title: "Tonight's bookings, at a glance"
+    caption: "New, accepted, cancelled - every reservation on one list, and *one tap* confirms a table."
+    action: route
+    route: /shop-reservations
+    settle: 6
+  - key: reservation_tables
+    title: "Your floor plan"
+    caption: "Sections and tables with their seat counts - *add or retire* a table whenever the room changes."
+    action: route
+    route: /reservation-tables
+    settle: 6
+  - key: reservation_schedule
+    title: "Open when you say so"
+    caption: "Booking hours, working days and closed dates - *guests only see the times you can honour*."
+    action: route
+    route: /reservation-schedule
+    settle: 6

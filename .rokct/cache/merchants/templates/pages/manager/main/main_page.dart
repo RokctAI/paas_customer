@@ -1,25 +1,20 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:comms_sdk/comms_sdk.dart' show PushPermissionService;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
@@ -48,6 +43,8 @@ import 'package:${package}/presentation/routes/app_router.dart';
 import 'package:${package}/presentation/pages/main/widgets/bottom_navigator_item.dart';
 import 'package:${package}/presentation/pages/main/widgets/buttons_bouncing_effect.dart';
 import 'package:merchants_sdk/src/manager/application/main/main_provider.dart';
+import 'package:merchants_sdk/src/manager/presentation/main/nav_rail_layout.dart';
+import 'package:merchants_sdk/src/manager/presentation/main/signed_in_role_toast.dart';
 import 'package:products_sdk/src/manager/application/foods/food_tabs_provider.dart';
 import 'package:base_sdk/src/constants/app_constants.dart';
 import 'package:base_sdk/src/presentation/adaptive/breakpoints.dart';
@@ -96,7 +93,14 @@ class _MainPageState extends State<MainPage> {
             defaultTargetPlatform == TargetPlatform.iOS ||
             defaultTargetPlatform == TargetPlatform.macOS)) {
       try {
-        FirebaseMessaging.instance.requestPermission(
+        // comms_sdk owns the OS notification prompt for every composition
+        // (comms_sdk >= 1.15.0). PushPermissionService keeps this call site's
+        // platform guard + fail-open idiom AND de-duplicates concurrent
+        // requests: a second sign-in inside one process re-mounts this shell
+        // and the platform channel refuses a second in-flight request. The
+        // service owns the future, so that failure is caught and logged
+        // instead of escaping as an uncaught async error past the try below.
+        PushPermissionService.request(
           sound: true,
           alert: true,
           badge: false,
@@ -116,6 +120,12 @@ class _MainPageState extends State<MainPage> {
         debugPrint('==> main page FCM setup skipped: $e');
       }
     }
+    // The session_policy admits seller AND admin onto this route, so say
+    // which one this session is - once per sign-in, on the first frame,
+    // after the overlay exists (SignedInRoleToast owns the once gate).
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) SignedInRoleToast.showOnce(context);
+    });
     super.initState();
   }
 
@@ -146,38 +156,20 @@ class _MainPageState extends State<MainPage> {
                 children: list,
               );
               if (!isRail) return pages;
-              // The rail overlays the pages instead of living in the
-              // Scaffold's floatingActionButton slot: that slot is
-              // anchored to the bottom edge by design, and a side rail
-              // needs the full body to align itself against.
-              return Stack(
-                children: [
-                  Positioned.fill(child: pages),
-                  Align(
-                    // AlignmentDirectional keeps the rail RTL-aware:
-                    // railStart hugs the right edge in a right-to-left
-                    // layout, exactly like the pill's own items flip.
-                    alignment: placement == FloatingNavPlacement.railStart
-                        ? AlignmentDirectional.centerStart
-                        : AlignmentDirectional.centerEnd,
-                    child: SafeArea(
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.only(
-                          start: 16.w,
-                          end: 16.w,
-                        ),
-                        // Same guard as the pill's items: on a window
-                        // that is tablet-mode wide but short (landscape
-                        // phone) the rail scales down instead of
-                        // overflowing.
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: _railNav(context, ref),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+              // The rail lives in the body, not in the Scaffold's
+              // floatingActionButton slot (that slot is anchored to the
+              // bottom edge by design). NavRailLayout gives the rail a
+              // column of its own on the start (or end) edge and the
+              // pages the rest — the rail's footprint is RESERVED, never
+              // painted over the pages: every tab's leading content sat
+              // under the old Stack overlay (tablet store review
+              // 2026-09-02, stills 08 / 10 / 12 / 14). The layout stays
+              // RTL-aware: railStart hugs the right edge in a
+              // right-to-left app, exactly like the pill's items flip.
+              return NavRailLayout(
+                placement: placement,
+                rail: _railNav(context, ref),
+                pages: pages,
               );
             },
           ),

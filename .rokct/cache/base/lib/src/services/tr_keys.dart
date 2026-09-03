@@ -1,28 +1,75 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
 class TrKeys {
   TrKeys._();
 
   // @sdk-tr-keys-start
+  static const String reservations = 'reservations';
+  static const String myReservations = 'my_reservations';
+  static const String newReservation = 'new_reservation';
+  static const String reserveATable = 'reserve_a_table';
+  static const String chooseAShop = 'choose_a_shop';
+  static const String chooseASection = 'choose_a_section';
+  static const String chooseATable = 'choose_a_table';
+  static const String chooseDateAndTime = 'choose_date_and_time';
+  static const String reservationDate = 'reservation_date';
+  static const String reservationTime = 'reservation_time';
+  static const String reservationGuests = 'reservation_guests';
+  static const String reservationSeats = 'reservation_seats';
+  static const String reservationNote = 'reservation_note';
+  static const String confirmReservation = 'confirm_reservation';
+  static const String reservationCreated = 'reservation_created';
+  static const String reservationCancelled = 'reservation_cancelled';
+  static const String cancelReservation = 'cancel_reservation';
+  static const String cancelThisReservation = 'cancel_this_reservation';
+  static const String noReservationsYet = 'no_reservations_yet';
+  static const String noSectionsYet = 'no_sections_yet';
+  static const String noTablesYet = 'no_tables_yet';
+  static const String shopNotTakingReservationsYet = 'shop_not_taking_reservations_yet';
+  static const String noTimesLeftOnThisDay = 'no_times_left_on_this_day';
+  static const String logInToReserveATable = 'log_in_to_reserve_a_table';
+  static const String reservationStatusNew = 'reservation_status_new';
+  static const String reservationStatusAccepted = 'reservation_status_accepted';
+  static const String reservationStatusCancelled = 'reservation_status_cancelled';
+  static const String tables = 'tables';
+  static const String tablesAndSections = 'tables_and_sections';
+  static const String reservationSchedule = 'reservation_schedule';
+  static const String bookingHours = 'booking_hours';
+  static const String bookingWorkingDays = 'booking_working_days';
+  static const String bookingClosedDates = 'booking_closed_dates';
+  static const String addSection = 'add_section';
+  static const String addTable = 'add_table';
+  static const String sectionName = 'section_name';
+  static const String tableName = 'table_name';
+  static const String chairCount = 'chair_count';
+  static const String markAccepted = 'mark_accepted';
+  static const String markNew = 'mark_new';
+  static const String markCancelled = 'mark_cancelled';
+  static const String addBookingHours = 'add_booking_hours';
+  static const String opensAt = 'opens_at';
+  static const String closesAt = 'closes_at';
+  static const String maxMinutesPerReservation = 'max_minutes_per_reservation';
+  static const String saveSchedule = 'save_schedule';
+  static const String scheduleSaved = 'schedule_saved';
+  static const String addClosedDate = 'add_closed_date';
+  static const String deleteThisSectionAndItsTables = 'delete_this_section_and_its_tables';
+  static const String deleteThisTable = 'delete_this_table';
+  static const String noShopOnThisAccount = 'no_shop_on_this_account';
+  static const String reservedFor = 'reserved_for';
+  static const String reservationsAreNotAvailable = 'reservations_are_not_available';
   static const String ageVerification = 'age_verification';
   static const String ageVerificationRequiredForAdultsOnly = 'age_verification_is_required_to_order_adults_only_items';
   static const String adultsOnlyBirthDateNeeded = 'this_order_includes_an_adults_only_item_please_confirm_your_date_of_birth';
@@ -36,7 +83,6 @@ class TrKeys {
   static const String documents = 'documents';
   static const String uploadDocuments = 'upload.documents';
   static const String helpInfo = 'help.info';
-  static const String uiType = 'ui_type';
   static const String orderImage = 'order.image';
   static const String especiallyForYou = 'especially_for_you';
   static const String workForYou = 'work_for_you';

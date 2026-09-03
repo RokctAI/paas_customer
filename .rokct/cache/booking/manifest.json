@@ -1,0 +1,155 @@
+{
+  "name": "booking_sdk",
+  "version": "1.1.0",
+  "_comment_requires": "booking_sdk >= 1.1.0 recovers the table-reservation flow that was lost when the shells were extracted (customer: paas_customer's web-only Reservation hand-off; seller: paas_pos's TablesPage). It requires base_sdk >= 1.46.0 (ListFilterTabBar from the standard list language, ProfileSectionRegistry, PlatformGateway, AppHelpers.getReservationEnable) and a backend carrying commerce booking/frappe with `api.booking.get_booking_settings` and `api.booking.get_shop_booking_schedule` (this same commerce change); against an older backend the flag bridge fails open (the Reservation button stays hidden) and the schedule read fails through ApiResult.failure. The customer flow lists shops through base_sdk's ShopsRepositoryFacade, which merchants_sdk registers in customer composes; without it the flow reports that shops are unavailable. The composer manifest schema has no machine-readable minimum-version field, so this is the declaration.",
+  "installs": [],
+  "integrations": [],
+  "routes": [],
+  "di_hooks": [
+    {
+      "id": "booking-settings-bridge",
+      "order": 30,
+      "body": "BookingSettingsBridge.install(GetIt.instance);",
+      "imports": [
+        "import 'package:booking_sdk/src/common/infrastructure/services/booking_settings_bridge.dart';"
+      ],
+      "_comment": "The visibility flag without a core change: wraps the registered SettingsRepositoryFacade (comms_sdk) so getGlobalSettings() carries `reservation_enable_for_user` from the booking-owned `api.booking.get_booking_settings` (Permission Settings enable_reservations). base_sdk's AppHelpers.getReservationEnable() and marketplace's profile gate then work unchanged. Order 30 so it runs after every *SdkDependencies.register (the installer emits di_hooks after the generated DI block) and after sibling hooks that might register the facade. Fail-open: a booking failure leaves the inner result untouched."
+    }
+  ],
+  "tr_keys": {
+    "reservations": "reservations",
+    "myReservations": "my_reservations",
+    "newReservation": "new_reservation",
+    "reserveATable": "reserve_a_table",
+    "chooseAShop": "choose_a_shop",
+    "chooseASection": "choose_a_section",
+    "chooseATable": "choose_a_table",
+    "chooseDateAndTime": "choose_date_and_time",
+    "reservationDate": "reservation_date",
+    "reservationTime": "reservation_time",
+    "reservationGuests": "reservation_guests",
+    "reservationSeats": "reservation_seats",
+    "reservationNote": "reservation_note",
+    "confirmReservation": "confirm_reservation",
+    "reservationCreated": "reservation_created",
+    "reservationCancelled": "reservation_cancelled",
+    "cancelReservation": "cancel_reservation",
+    "cancelThisReservation": "cancel_this_reservation",
+    "noReservationsYet": "no_reservations_yet",
+    "noSectionsYet": "no_sections_yet",
+    "noTablesYet": "no_tables_yet",
+    "shopNotTakingReservationsYet": "shop_not_taking_reservations_yet",
+    "noTimesLeftOnThisDay": "no_times_left_on_this_day",
+    "logInToReserveATable": "log_in_to_reserve_a_table",
+    "reservationStatusNew": "reservation_status_new",
+    "reservationStatusAccepted": "reservation_status_accepted",
+    "reservationStatusCancelled": "reservation_status_cancelled",
+    "tables": "tables",
+    "tablesAndSections": "tables_and_sections",
+    "reservationSchedule": "reservation_schedule",
+    "bookingHours": "booking_hours",
+    "bookingWorkingDays": "booking_working_days",
+    "bookingClosedDates": "booking_closed_dates",
+    "addSection": "add_section",
+    "addTable": "add_table",
+    "sectionName": "section_name",
+    "tableName": "table_name",
+    "chairCount": "chair_count",
+    "markAccepted": "mark_accepted",
+    "markNew": "mark_new",
+    "markCancelled": "mark_cancelled",
+    "addBookingHours": "add_booking_hours",
+    "opensAt": "opens_at",
+    "closesAt": "closes_at",
+    "maxMinutesPerReservation": "max_minutes_per_reservation",
+    "saveSchedule": "save_schedule",
+    "scheduleSaved": "schedule_saved",
+    "addClosedDate": "add_closed_date",
+    "deleteThisSectionAndItsTables": "delete_this_section_and_its_tables",
+    "deleteThisTable": "delete_this_table",
+    "noShopOnThisAccount": "no_shop_on_this_account",
+    "reservedFor": "reserved_for",
+    "reservationsAreNotAvailable": "reservations_are_not_available"
+  },
+  "_comment_tr_keys": "Declared here rather than hand-written into base_sdk because only this SDK uses them; injected into base's TrKeys between the @sdk-tr-keys markers for the installed templates. lib/ code references the same wire keys through BookingTrKeys (orders_sdk precedent: lib/ analyzes against raw base_sdk where the injected constants do not exist). `reservation` is base-owned and deliberately not redeclared. AppHelpers.getTranslation humanizes any key the translation store lacks.",
+  "app_type": {
+    "customer": {
+      "installs": [
+        {
+          "from": "templates/pages/customer/reservations/reservations_page.dart",
+          "to": "lib/presentation/pages/reservations/reservations_page.dart"
+        },
+        {
+          "from": "templates/pages/customer/reservations/new_reservation_page.dart",
+          "to": "lib/presentation/pages/reservations/new_reservation_page.dart"
+        }
+      ],
+      "routes": [
+        {
+          "path": "/reservations",
+          "page": "ReservationsRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/pages/reservations/reservations_page.dart",
+          "_comment": "The customer's reservations (paas_customer's profile Reservation button used to open {webUrl}/reservations in a web view; marketplace_sdk 1.13.0 pushes this path instead). Installed page carries @RoutePage(name: 'ReservationsRoute'); auto_route generates the class in the host's app_router.gr.dart."
+        },
+        {
+          "path": "/new-reservation",
+          "page": "NewReservationRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/pages/reservations/new_reservation_page.dart",
+          "_comment": "Shop -> section -> table -> day/time -> confirm. Optional ?shopId=<Shop docname> query parameter pre-selects the shop. A flat path (not /reservations/new) so auto_route's exact matching never needs prefix matches."
+        }
+      ],
+      "_comment": "Customer block: My reservations (list + cancel) and the reservation flow. The 1.0.x reservation_shops.dart template (a web hand-off that nothing navigated to) is gone; marketplace_sdk's profile Reservation button now pushes /reservations, gated by AppHelpers.getReservationEnable() exactly as before."
+    },
+    "manager": {
+      "installs": [
+        {
+          "from": "templates/pages/manager/reservations/shop_reservations_page.dart",
+          "to": "lib/presentation/pages/reservations/shop_reservations_page.dart"
+        },
+        {
+          "from": "templates/pages/manager/reservations/reservation_tables_page.dart",
+          "to": "lib/presentation/pages/reservations/reservation_tables_page.dart"
+        },
+        {
+          "from": "templates/pages/manager/reservations/reservation_schedule_page.dart",
+          "to": "lib/presentation/pages/reservations/reservation_schedule_page.dart"
+        }
+      ],
+      "routes": [
+        {
+          "path": "/shop-reservations",
+          "page": "ManagerReservationsRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/reservations/shop_reservations_page.dart",
+          "_comment": "paas_pos's TablesPage booking list with New / Accepted / Cancelled status changes. Manager-prefixed route names (orders_sdk / revenue_sdk convention), CupertinoRoute like the sibling manager pages."
+        },
+        {
+          "path": "/reservation-tables",
+          "page": "ManagerReservationTablesRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/reservations/reservation_tables_page.dart"
+        },
+        {
+          "path": "/reservation-schedule",
+          "page": "ManagerReservationScheduleRoute.page",
+          "type": "CupertinoRoute",
+          "import": "package:${package}/presentation/pages/reservations/reservation_schedule_page.dart"
+        }
+      ],
+      "di_hooks": [
+        {
+          "id": "booking-manager-role-di",
+          "order": 14,
+          "body": "ManagerBookingDependencies.register(GetIt.instance);",
+          "imports": [
+            "import 'package:booking_sdk/src/manager/di/manager_booking_di.dart';"
+          ],
+          "_comment": "Registers SellerBookingRepositoryFacade (demo-gated) and the RESERVATIONS group (ProfileSection id booking.reservations, order 135) on base_sdk's ProfileSectionRegistry, which is how the manager profile host reaches the three routes above without merchants_sdk changing. Order 14: after orders' manager DI (10), before its POS facades (20); it depends on neither."
+        }
+      ],
+      "_comment": "Seller block, recovered from paas_pos@78ccee4520666ca15788cccf5b9638ee1e6140ab (lib/src/presentation/pages/tables/*, repository/table_repository*): reservation list with status updates, section + table CRUD, booking hours (Booking slots), working days and closed dates - only what booking/frappe serves. Dropped because the server has no counterpart: getStatistic (booking statistics), getTableInfo's `get_booking?id` lookup, and the disableDates stub. POS shells compose this SAME manager block: pos.json composes orders_sdk / merchants_sdk / kitchen_sdk, none of which declares a pos persona, so a pos shell resolves as the manager persona. A separate app_type.pos block was deliberately NOT declared - sdk_composer.strip_unused_role_folders removes lib/src/<persona>/ for every declared persona other than the app's own, so a declared pos persona would strip lib/src/manager/ from a pos compose and break its own imports."
+    }
+  }
+}

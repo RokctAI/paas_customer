@@ -1,7 +1,32 @@
 {
   "name": "promotions_sdk",
-  "version": "1.1.1",
-  "installs": [],
-  "routes": [],
-  "integrations": []
+  "version": "1.2.2",
+  "_comment_requires": "promotions_sdk >= 1.2.1 requires base_sdk >= 1.56.0: MockBannersRepository's demo banner art is one of base_sdk's DemoImages (an inline data: URI), which only base_sdk >= 1.56.0 renders - older base_sdk hands it to CachedNetworkImage and draws its broken-image state. The composer manifest schema has no machine-readable minimum-version field, so this is the declaration.",
+  "installs": [
+    {
+      "from": "templates/routes/promotions_route_pages.dart",
+      "to": "lib/presentation/routes/promotions_route_pages.dart"
+    }
+  ],
+  "routes": [
+    {
+      "path": "/storyList",
+      "page": "StoryListRoute.page",
+      "type": "MaterialRoute",
+      "import": "package:${package}/presentation/routes/promotions_route_pages.dart",
+      "_comment": "Pre-fork story viewer route recovered (fix-wave 2026-09-02, route map row 17): `/storyList?index=<n>` deep links keep resolving via @QueryParam; the shell lives in promotions_route_pages.dart. Top-level: this manifest has no flavour blocks and promotions_sdk composes only into customer-family apps."
+    }
+  ],
+  "integrations": [],
+  "app_routes": [
+    {
+      "method": "pushStoryListRoute",
+      "params": "BuildContext context, {dynamic controller, dynamic index}",
+      "body": "context.router.push(StoryListRoute(index: (index is int) ? index : int.tryParse('$index') ?? 0, controller: controller));",
+      "imports": [
+        "import 'package:${package}/presentation/routes/app_router.dart';"
+      ]
+    }
+  ],
+  "_comment_app_routes": "Fills base_sdk's AppRoutes.pushStoryListRoute seam (marketplace's story bar tiles call it). `params` must match base_sdk's signature verbatim; the dynamic `controller` is the caller's pull-to-refresh RefreshController (or null)."
 }

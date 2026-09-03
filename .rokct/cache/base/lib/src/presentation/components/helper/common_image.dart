@@ -1,25 +1,20 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -139,7 +134,16 @@ class CommonImage extends StatelessWidget {
                     width: width,
                     fit: fit,
                   )
-                : AppHelpers.checkIsSvg(url)
+                // Inline ("data:") images carry their own pixels - the demo
+                // seed data uses them (see DemoImages) so a demo build with
+                // no backend, and the CI tour emulator with no dependable
+                // route to an image host, still render real artwork instead
+                // of the error state below. Checked before checkIsSvg(),
+                // whose filename-extension test cannot see an SVG inside a
+                // data URI.
+                : AppHelpers.isInlineImage(url)
+                    ? _inlineImage()
+                    : AppHelpers.checkIsSvg(url)
                     ? SvgPicture.network(
                         '$url',
                         width: width?.r,
@@ -189,5 +193,39 @@ class CommonImage extends StatelessWidget {
                                 ),
                         ),
                       ));
+  }
+
+  /// Renders an inline `data:` image: SVG markup through [SvgPicture.string],
+  /// any other payload (png/jpeg/webp) through [Image.memory]. A payload that
+  /// cannot be decoded degrades to a plain tinted box, the same shape this
+  /// widget shows for an unreachable URL.
+  Widget _inlineImage() {
+    Widget fallback() => Container(
+          height: height?.r,
+          width: width?.r,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(errorRadius.r),
+            color: errorBackground ?? AppStyle.bgGrey,
+          ),
+        );
+    if (AppHelpers.isInlineSvg(url)) {
+      final String svg = AppHelpers.inlineImagePayload(url);
+      if (svg.isEmpty) return fallback();
+      return SvgPicture.string(
+        svg,
+        width: width?.r,
+        height: height?.r,
+        fit: fit ?? BoxFit.cover,
+      );
+    }
+    final Uint8List? bytes = AppHelpers.inlineImageBytes(url);
+    if (bytes == null || bytes.isEmpty) return fallback();
+    return Image.memory(
+      bytes,
+      width: width?.r,
+      height: height?.r,
+      fit: fit ?? BoxFit.cover,
+      errorBuilder: (_, __, ___) => fallback(),
+    );
   }
 }

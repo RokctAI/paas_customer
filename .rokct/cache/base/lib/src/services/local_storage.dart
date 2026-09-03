@@ -1,22 +1,16 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
 import 'dart:convert';
@@ -90,12 +84,6 @@ abstract class LocalStorage {
   static Future<void> deleteTokenExpiry() async {
     await _preferences?.remove(StorageKeys.keyTokenExpiry);
   }
-
-  static Future<void> setUiType(int type) async {
-    await _preferences?.setInt(StorageKeys.keyUiType, type);
-  }
-
-  static int? getUiType() => _preferences?.getInt(StorageKeys.keyUiType);
 
   static Future<void> setUser(ProfileData? user) async {
     if (_preferences != null) {
@@ -291,6 +279,61 @@ abstract class LocalStorage {
     }
     await _preferences?.setString(StorageKeys.keyShop, jsonEncode(shop));
   }
+
+  /// Generic JSON key API for records the kernel does not type (design 46e:
+  /// feature SDKs park their own small records in the same store
+  /// `getUser`/`getToken`/`setUser` use instead of opening their own
+  /// SharedPreferences key). Stored as `StorageKeys.keyHostRecordPrefix +
+  /// key`, so a caller key can never collide with a typed key above; the
+  /// caller owns the schema and its versioning. Null [value] removes the
+  /// key. No-op before [init].
+  static Future<void> setJson(String key, Map<String, dynamic>? value) async {
+    assert(key.isNotEmpty, 'LocalStorage.setJson: key must not be empty');
+    if (value == null) {
+      await _preferences?.remove(_hostRecordKey(key));
+      return;
+    }
+    await _preferences?.setString(_hostRecordKey(key), jsonEncode(value));
+  }
+
+  /// The record stored under [key] by [setJson]; null when absent, empty,
+  /// not valid JSON, or not a JSON object. Never throws: a corrupt record
+  /// reads as "nothing stored" so the owner starts fresh rather than
+  /// failing at the door.
+  static Map<String, dynamic>? getJson(String key) {
+    final raw = _preferences?.getString(_hostRecordKey(key));
+    if (raw == null || raw.isEmpty) return null;
+    try {
+      final decoded = jsonDecode(raw);
+      return decoded is Map<String, dynamic> ? decoded : null;
+    } catch (_) {
+      return null;
+    }
+  }
+
+  static Future<void> deleteJson(String key) async {
+    await _preferences?.remove(_hostRecordKey(key));
+  }
+
+  static String _hostRecordKey(String key) =>
+      '${StorageKeys.keyHostRecordPrefix}$key';
+
+  /// First-run setup progress (design 46e/46h): the run record
+  /// onboarding_sdk's `OnboardingProgressStore` persists so a run survives
+  /// the app closing mid-setup. Untyped here on purpose — the schema
+  /// (`OnboardingRunRecord.toJson`: version, stepIndex, done[], lastTouched,
+  /// values, role, roleStepVisible) belongs to onboarding_sdk, exactly as
+  /// [setShopJson] leaves the shop's shape to the persona SDKs. Null clears
+  /// it. Deliberately NOT part of [logout]: setup progress is per install,
+  /// not per session.
+  static Future<void> setOnboardingRun(Map<String, dynamic>? run) =>
+      setJson(StorageKeys.keyOnboardingRun, run);
+
+  static Map<String, dynamic>? getOnboardingRun() =>
+      getJson(StorageKeys.keyOnboardingRun);
+
+  static Future<void> deleteOnboardingRun() =>
+      deleteJson(StorageKeys.keyOnboardingRun);
 
   static Future<void> setSettingsList(List<SettingsData> settings) async {
     final List<String> strings =

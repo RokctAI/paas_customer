@@ -1,22 +1,16 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
 abstract class StorageKeys {
@@ -29,7 +23,6 @@ abstract class StorageKeys {
   // Access-token expiry (not secret — the refresh token itself lives in
   // SecureStorage, not in shared preferences).
   static const String keyTokenExpiry = 'keyTokenExpiry';
-  static const String keyUiType = 'keyUiType';
   static const String keyLocaleCode = 'keyLocaleCode';
   static const String keyBoard = 'keyBoard';
   static const String keyProfileImage = 'keyProfileImage';
@@ -64,4 +57,15 @@ abstract class StorageKeys {
   static const String keyLangLtr = 'keyLangLtr';
   static const String keyCarInfo = 'keyCarInfo';
   static const String keyShop = 'shop';
+
+  // Namespace for the generic JSON key API (LocalStorage.setJson/getJson/
+  // deleteJson): every caller-supplied key is stored as
+  // `keyHostRecordPrefix + key`, so a host-owned record can never land on
+  // one of the typed keys above (or on a bare key another SDK writes to the
+  // same SharedPreferences directly).
+  static const String keyHostRecordPrefix = 'hostRecord.';
+  // First-run setup progress (design 46e): the sub-key onboarding_sdk's
+  // progress store hands to setOnboardingRun/getOnboardingRun. Stored as
+  // `hostRecord.onboardingRun`.
+  static const String keyOnboardingRun = 'onboardingRun';
 }

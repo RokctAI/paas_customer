@@ -1,9 +1,9 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.55.0",
+      "version": "1.60.0",
       "files": {
-        "lib/main.dart": "7b66d0bf6d647a00cfafac3fc499106789b83cddc3fd7e163c9afa662acf50a7",
+        "lib/main.dart": "343014dec4b6f3e50b8fc42ac2824543471696797f32e804089c19e9a23fdcab",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
         "lib/core/presentation/routes/app_router.dart": "7e7c72675c4a414818d0bed611623aa3248fc2ae3d264fe8fbed6f64bfd7c82c",
         "lib/core/presentation/routes/route_pages.dart": "fa862244b5c0344a8e25a061d4957e5af4792cdd9483b4bf63d041fa4fda105e",
@@ -232,11 +232,11 @@
         "assets/temp/discount6.png": "784e1ff8e0b7ec4b57bd72daf84960837251f7c011029a7332c85a0bc38642c1",
         "lib/core/presentation/theme/app_style.dart": "a41cdea4c78180c66b26633ed79139d9e44555146b9a446184c36ac6b36a55ef",
         "lib/core/presentation/theme/theme.dart": "0d3a0e59c133fccfd32dd80bf649e99d580d56605936fd8bd63e5d6301c7091e",
-        "lib/presentation/app_widget.dart": "660810720a83a8ade894fb47220b0f5ebacf4bcc43997b0a79a7eaacacb2e712",
-        "lib/presentation/routes/app_router.dart": "a3f4d5db5deab2ef09734b3d48a22957c96906a14368ea452c594ed92c6a0411",
-        "lib/presentation/routes/route_pages.dart": "49d80533970d4eec6fdc9e5e938f42cb9534a34e364ab0c5f00521dbea44ba46",
-        "lib/presentation/theme/theme.dart": "a2b2ac2e4e90abdcac4247ea6d29ced0e58922a99a1c65c3d12639bfb6949f27",
-        "lib/presentation/theme/app_style.dart": "c9dc27c1648d67478f2c4633753141715735c97773b775b3a215292071521e30",
+        "lib/presentation/app_widget.dart": "868f76ed49e4bd523aced7d839f356403ccc65a160447633935d900b9683648f",
+        "lib/presentation/routes/app_router.dart": "3b99e50c60dab1161ccf14aa381f7481ab1baad0223575df04e4bda89a20464b",
+        "lib/presentation/routes/route_pages.dart": "73c0b8cbf05823b865c35381355c9361c37135618d36e0ed3ea839f8d86af76d",
+        "lib/presentation/theme/theme.dart": "dccd0527934c068d0b8ef48d7d0677d068d1054e7fcc1e1eea1f6682912bfcd5",
+        "lib/presentation/theme/app_style.dart": "a45367fab06abafa465a15d659d631e344f3c1badc06a8880b2298eaf063c535",
         "android/app/src/main/res/xml/backup_rules.xml": "a977a3552bb8c4facc634f4060ce11d623366bc310f5b119d390feb51b2f9409",
         "android/app/src/main/res/xml/data_extraction_rules.xml": "ea351530e8fc2c342abc9798bca781ab3cabb9245b328b32ea113ed6bf1531ac",
         "android/app/src/main/kotlin/com/app/demo/RestoreCredentialBridge.kt": "623f61a4aba5ec0798c632f11f0d218eed2e50dbedb63e75c3b22502203decd1",
@@ -261,12 +261,6 @@
         {
           "path": "/maintenance",
           "page": "MaintenanceRoute.page",
-          "type": "MaterialRoute",
-          "import": "package:${package}/presentation/routes/route_pages.dart"
-        },
-        {
-          "path": "/ui-type",
-          "page": "UiTypeRoute.page",
           "type": "MaterialRoute",
           "import": "package:${package}/presentation/routes/route_pages.dart"
         },
@@ -303,14 +297,6 @@
           ]
         },
         {
-          "method": "replaceUiTypeRoute",
-          "body": "context.router.replace(UiTypeRoute());",
-          "imports": [
-            "import 'package:auto_route/auto_route.dart';",
-            "import 'package:${package}/presentation/routes/app_router.dart';"
-          ]
-        },
-        {
           "method": "pushGenericProfileRoute",
           "body": "context.router.push(GenericProfileRoute());",
           "imports": [
@@ -341,10 +327,6 @@
         "assets/images/splash.png",
         "assets/images/splash1.png",
         "assets/images/splash2.png",
-        "assets/images/ui0.png",
-        "assets/images/ui1.png",
-        "assets/images/ui2.png",
-        "assets/images/ui3.png",
         "assets/images/visa.png",
         "assets/lottie/girl_empty.json",
         "assets/lottie/not-found.json",
@@ -368,9 +350,9 @@
       ]
     },
     "marketplace_sdk": {
-      "version": "1.12.0",
+      "version": "1.14.1",
       "files": {
-        "lib/presentation/routes/marketplace_route_pages.dart": "478eaa37fcdf1889cc102db8a9c6ce83061174e60f3ae772ffb7c7e8b1a4a0dd"
+        "lib/presentation/routes/marketplace_route_pages.dart": "c09d0a80eb53d1bf529a8c06f5748a4d928594f302cfbceda71be25229420caa"
       },
       "routes": [
         {
@@ -386,12 +368,210 @@
           "type": "MaterialRoute",
           "import": "package:${package}/presentation/routes/marketplace_route_pages.dart",
           "_comment": "The customer app's main destination (customer twin of merchants_sdk's manager /main). Before this entry the customer compose had NO main route: AppHelpers.goHome() -> AppRoutes.replaceMainRoute hit _HostAppRoutes' noSuchMethod StateError after every login/registration/guest-skip, stranding the user (after registering: on the registration-steps shell's spinner instead of the home page's shimmer placeholders). The installed shell renders marketplace_sdk's lean CustomerMainPage (home/search/like/profile tabs); the full legacy paas_customer shell keeps migrating separately."
+        },
+        {
+          "path": "/searchPage",
+          "page": "SearchRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/marketplace_route_pages.dart",
+          "_comment": "Pre-fork customer route table recovered (fix-wave 2026-09-02, route map rows 14/18-20/22/24/26/27/29/30/32/34/37/40): paths are paas_customer's exact strings so deep links keep resolving; shells live in marketplace_route_pages.dart and are named as base_sdk's AppRoutes seam expects. WalletHistoryPage is NOT declared - wallet_sdk's /wallet-history is canonical."
+        },
+        {
+          "path": "/recommended",
+          "page": "RecommendedRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/marketplace_route_pages.dart"
+        },
+        {
+          "path": "/recommended_one",
+          "page": "RecommendedOneRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/marketplace_route_pages.dart"
+        },
+        {
+          "path": "/recommended_two",
+          "page": "RecommendedTwoRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/marketplace_route_pages.dart"
+        },
+        {
+          "path": "/recommended_three",
+          "page": "RecommendedThreeRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/marketplace_route_pages.dart"
+        },
+        {
+          "path": "/help",
+          "page": "HelpRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/marketplace_route_pages.dart"
+        },
+        {
+          "path": "/result_filter",
+          "page": "ResultFilterRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/marketplace_route_pages.dart"
+        },
+        {
+          "path": "/create_shop",
+          "page": "CreateShopRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/marketplace_route_pages.dart"
+        },
+        {
+          "path": "/shops_banner",
+          "page": "ShopsBannerRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/marketplace_route_pages.dart"
+        },
+        {
+          "path": "/share_referral",
+          "page": "ShareReferralRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/marketplace_route_pages.dart"
+        },
+        {
+          "path": "/share_referral_faq",
+          "page": "ShareReferralFaqRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/marketplace_route_pages.dart"
+        },
+        {
+          "path": "/notification_list_page",
+          "page": "NotificationListRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/marketplace_route_pages.dart",
+          "_comment": "Same generated class name as comms_sdk's manager/driver /list-notification shell; the two only meet if comms ever gains a customer block (recorded clash, fix-wave 2026-09-02)."
+        },
+        {
+          "path": "/like_page",
+          "page": "LikeRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/marketplace_route_pages.dart"
+        },
+        {
+          "path": "/address_list_page",
+          "page": "AddressListRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/marketplace_route_pages.dart"
         }
       ],
       "app_routes": [
         {
           "method": "replaceMainRoute",
           "body": "context.router.replace(MainRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushProfileRoute",
+          "body": "context.router.push(ProfileRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushSearchRoute",
+          "body": "context.router.push(SearchRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushRecommendedRoute",
+          "params": "BuildContext context, {dynamic isShop, dynamic isNewsOfPage}",
+          "body": "context.router.push(RecommendedRoute(isShop: isShop ?? false, isNewsOfPage: isNewsOfPage ?? false));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushRecommendedOneRoute",
+          "params": "BuildContext context, {dynamic isNewsOfPage, dynamic isShop}",
+          "body": "context.router.push(RecommendedOneRoute(isNewsOfPage: isNewsOfPage ?? false, isShop: isShop ?? false));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushRecommendedTwoRoute",
+          "params": "BuildContext context, {dynamic isNewsOfPage, dynamic isPopular, dynamic isShop}",
+          "body": "context.router.push(RecommendedTwoRoute(isNewsOfPage: isNewsOfPage ?? false, isPopular: isPopular ?? false, isShop: isShop ?? false));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushRecommendedThreeRoute",
+          "params": "BuildContext context, {dynamic isNewsOfPage, dynamic isShop}",
+          "body": "context.router.push(RecommendedThreeRoute(isNewsOfPage: isNewsOfPage ?? false, isShop: isShop ?? false));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushHelpRoute",
+          "body": "context.router.push(HelpRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushResultFilterRoute",
+          "params": "BuildContext context, {dynamic categoryId}",
+          "body": "context.router.push(ResultFilterRoute(categoryId: categoryId?.toString() ?? ''));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushCreateShopRoute",
+          "body": "context.router.push(CreateShopRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushShopsBannerRoute",
+          "params": "BuildContext context, {dynamic bannerId, dynamic isAds, dynamic title}",
+          "body": "context.router.push(ShopsBannerRoute(bannerId: bannerId?.toString() ?? '', title: title?.toString() ?? '', isAds: isAds ?? false));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushShareReferralRoute",
+          "body": "context.router.push(ShareReferralRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushShareReferralFaqRoute",
+          "params": "BuildContext context, {dynamic terms}",
+          "body": "context.router.push(ShareReferralFaqRoute(terms: terms?.toString() ?? ''));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushNotificationListRoute",
+          "body": "context.router.push(NotificationListRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushLikeRoute",
+          "body": "context.router.push(LikeRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushAddressListRoute",
+          "body": "context.router.push(AddressListRoute());",
           "imports": [
             "import 'package:${package}/presentation/routes/app_router.dart';"
           ]
@@ -431,11 +611,11 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.9.4",
+      "version": "1.10.1",
       "files": {
-        "lib/presentation/routes/auth_route_pages.dart": "05e658f5428f91cd08705b4baee224419d101e7cf67c869047647470a8ba89a2",
-        "lib/presentation/routes/registration_step_pages.dart": "0688256171defa4e5aadaa38b010cb754d0a4ca19bc517b9a6f192d4afdd4e6f",
-        "lib/presentation/routes/auth_session_policy.dart": "b2a880ddf4caf4a23b42a6fa4bca97b69a72f88fc58ba885e33f832bfb04d441"
+        "lib/presentation/routes/auth_route_pages.dart": "87b5d1dbc3f0f9417db5289be2c1ebbcb7dfecf1638f348b6f5ee1581f7ce4d2",
+        "lib/presentation/routes/registration_step_pages.dart": "d18f7e35878721c688c4f0964db42c97148e1f2e9d225cd1a6bb7490e2628347",
+        "lib/presentation/routes/auth_session_policy.dart": "9524d696f956a99c2964ce0866cbab0cb282e868247d5f08b050e94bb9f5df5a"
       },
       "routes": [
         {
@@ -478,8 +658,8 @@
           ]
         },
         {
-          "method": "replaceUiTypeRoute",
-          "body": "context.router.replace(UiTypeRoute());",
+          "method": "pushLoginRoute",
+          "body": "context.router.push(LoginRoute());",
           "imports": [
             "import 'package:${package}/presentation/routes/app_router.dart';"
           ]
@@ -515,7 +695,7 @@
       }
     },
     "users_sdk": {
-      "version": "1.3.2",
+      "version": "1.3.3",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -526,12 +706,51 @@
       "boot_hooks": []
     },
     "merchants_sdk": {
-      "version": "1.22.0",
+      "version": "1.28.0",
       "files": {
-        "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d"
+        "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
+        "lib/presentation/routes/merchants_customer_route_pages.dart": "94118cddd225b802a07db40ac5683697fd190d5d1de42494d955fc3f7eb79456"
       },
-      "routes": [],
-      "app_routes": [],
+      "routes": [
+        {
+          "path": "/shop",
+          "page": "ShopRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/merchants_customer_route_pages.dart"
+        },
+        {
+          "path": "/shops_detail",
+          "page": "ShopDetailRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/merchants_customer_route_pages.dart"
+        }
+      ],
+      "app_routes": [
+        {
+          "method": "pushShopRoute",
+          "params": "BuildContext context, {dynamic productId, dynamic shop, dynamic shopId}",
+          "body": "context.router.push(ShopRoute(shopId: shopId?.toString() ?? '', productId: productId?.toString(), shop: shop));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "replaceShopRoute",
+          "params": "BuildContext context, {dynamic productId, dynamic shop, dynamic shopId}",
+          "body": "context.router.replace(ShopRoute(shopId: shopId?.toString() ?? '', productId: productId?.toString(), shop: shop));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushShopDetailRoute",
+          "params": "BuildContext context, {dynamic shop, dynamic workTime}",
+          "body": "context.router.push(ShopDetailRoute(shop: shop, workTime: workTime?.toString() ?? ''));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        }
+      ],
       "onboarding_slides": [],
       "registration_steps": [],
       "embedded_widgets": [],
@@ -546,7 +765,7 @@
       ]
     },
     "products_sdk": {
-      "version": "1.7.0",
+      "version": "1.10.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -557,10 +776,131 @@
       "boot_hooks": []
     },
     "orders_sdk": {
-      "version": "1.15.0",
-      "files": {},
-      "routes": [],
-      "app_routes": [],
+      "version": "1.18.1",
+      "files": {
+        "lib/presentation/routes/orders_customer_route_pages.dart": "acadebdd2b7525434e765bf02683c151b97d7a392e1552d8f2af02b916a4702c"
+      },
+      "routes": [
+        {
+          "path": "/order",
+          "page": "OrdersListRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/orders_customer_route_pages.dart",
+          "_comment": "Pre-fork customer order/parcel route table recovered (fix-wave 2026-09-02, route map rows 11/13/23/35/36/38/39). Paths are paas_customer's exact strings; shells live in orders_customer_route_pages.dart and are named as base_sdk's AppRoutes seam expects. Under app_type.customer only: the manager flavour's /order is ManagerOrderRoute and never composes alongside."
+        },
+        {
+          "path": "/orderScreen",
+          "page": "OrderRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/orders_customer_route_pages.dart"
+        },
+        {
+          "path": "/order_progress",
+          "page": "OrderProgressRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/orders_customer_route_pages.dart"
+        },
+        {
+          "path": "/parcel_page",
+          "page": "ParcelRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/orders_customer_route_pages.dart"
+        },
+        {
+          "path": "/info_screen",
+          "page": "InfoRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/orders_customer_route_pages.dart"
+        },
+        {
+          "path": "/parcel_list_page",
+          "page": "ParcelListRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/orders_customer_route_pages.dart"
+        },
+        {
+          "path": "/parcel_progress_page",
+          "page": "ParcelProgressRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/orders_customer_route_pages.dart"
+        }
+      ],
+      "app_routes": [
+        {
+          "method": "pushOrdersListRoute",
+          "body": "context.router.push(OrdersListRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "replaceOrdersListRoute",
+          "body": "context.router.replace(OrdersListRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushOrderRoute",
+          "body": "context.router.push(OrderRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushOrderProgressRoute",
+          "params": "BuildContext context, {dynamic orderId}",
+          "body": "context.router.push(OrderProgressRoute(orderId: orderId?.toString()));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushParcelRoute",
+          "body": "context.router.push(ParcelRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushInfoRoute",
+          "params": "BuildContext context, {dynamic index}",
+          "body": "context.router.push(InfoRoute(index: (index is int) ? index : int.tryParse('$index') ?? 0));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "replaceInfoRoute",
+          "params": "BuildContext context, {dynamic index}",
+          "body": "context.router.replace(InfoRoute(index: (index is int) ? index : int.tryParse('$index') ?? 0));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushParcelListRoute",
+          "body": "context.router.push(ParcelListRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "replaceParcelListRoute",
+          "body": "context.router.replace(ParcelListRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushParcelProgressRoute",
+          "params": "BuildContext context, {dynamic parcelId}",
+          "body": "context.router.push(ParcelProgressRoute(parcelId: parcelId?.toString()));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        }
+      ],
       "onboarding_slides": [],
       "registration_steps": [],
       "embedded_widgets": [],
@@ -600,9 +940,9 @@
       "boot_hooks": []
     },
     "wallet_sdk": {
-      "version": "1.4.1",
+      "version": "1.6.0",
       "files": {
-        "lib/presentation/routes/wallet_route_pages.dart": "9f83ea96f4f1261257031ddbaaa8579b9563c13862310a2c42dd1ec97f80bdc1"
+        "lib/presentation/routes/wallet_route_pages.dart": "86d07bc5c2e239b713c49a9caa4f2dc6007ec1e20aa9519aeb960f3fcc8ee5a7"
       },
       "routes": [
         {
@@ -618,7 +958,15 @@
           "import": "package:${package}/presentation/routes/wallet_route_pages.dart"
         }
       ],
-      "app_routes": [],
+      "app_routes": [
+        {
+          "method": "pushWalletHistoryRoute",
+          "body": "context.router.push(WalletHistoryRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        }
+      ],
       "onboarding_slides": [],
       "registration_steps": [],
       "embedded_widgets": [],
@@ -647,7 +995,7 @@
       "boot_hooks": []
     },
     "delivery_sdk": {
-      "version": "1.15.0",
+      "version": "1.18.0",
       "files": {
         "assets/svg/balance.svg": "6f17d12b29de8e5500bc445ee89eec5c1fc8830cea42711af9bf80975e6b79ce",
         "assets/image/my_location.png": "0e6b49eb78d1f74ac96ac24ce39f834105ce68e361c302038ba9cefdcd926126"
@@ -674,7 +1022,7 @@
       ]
     },
     "comms_sdk": {
-      "version": "1.14.0",
+      "version": "1.15.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -723,9 +1071,24 @@
       }
     },
     "corporate_sdk": {
-      "version": "1.1.3",
-      "files": {},
-      "routes": [],
+      "version": "1.2.0",
+      "files": {
+        "lib/presentation/routes/corporate_route_pages.dart": "7bd7deacfebf5ae507821ca4778a460cb5ac709158254b1ae725003efc6992fe"
+      },
+      "routes": [
+        {
+          "path": "/term",
+          "page": "TermRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/corporate_route_pages.dart"
+        },
+        {
+          "path": "/policy",
+          "page": "PolicyRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/corporate_route_pages.dart"
+        }
+      ],
       "app_routes": [],
       "onboarding_slides": [],
       "registration_steps": [],
@@ -756,10 +1119,43 @@
       "boot_hooks": []
     },
     "map_sdk": {
-      "version": "1.2.1",
-      "files": {},
-      "routes": [],
-      "app_routes": [],
+      "version": "1.3.0",
+      "files": {
+        "lib/presentation/routes/map_route_pages.dart": "40d4309147726738a018def95efb9f3e16815684c55ac631f0559b74dfef4a50"
+      },
+      "routes": [
+        {
+          "path": "/map",
+          "page": "ViewMapRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/map_route_pages.dart"
+        },
+        {
+          "path": "/map_search",
+          "page": "MapSearchRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/map_route_pages.dart"
+        }
+      ],
+      "app_routes": [
+        {
+          "method": "pushViewMapRoute",
+          "params": "BuildContext context, {dynamic address, dynamic indexAddress, dynamic isParcel, dynamic isPop, dynamic isShopLocation, dynamic shopId}",
+          "body": "context.router.push(ViewMapRoute(address: address, indexAddress: indexAddress, isParcel: isParcel ?? false, isPop: isPop ?? true, isShopLocation: isShopLocation ?? false, shopId: shopId));",
+          "imports": [
+            "import 'package:auto_route/auto_route.dart';",
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushMapSearchRoute",
+          "body": "context.router.push(MapSearchRoute());",
+          "imports": [
+            "import 'package:auto_route/auto_route.dart';",
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        }
+      ],
       "onboarding_slides": [],
       "registration_steps": [],
       "embedded_widgets": [],
@@ -770,10 +1166,29 @@
       ]
     },
     "promotions_sdk": {
-      "version": "1.1.1",
-      "files": {},
-      "routes": [],
-      "app_routes": [],
+      "version": "1.2.2",
+      "files": {
+        "lib/presentation/routes/promotions_route_pages.dart": "0dc5d4de524957c7fd906b18a65e639082ddb94d18dc94b8859b5ebcceb7f77b"
+      },
+      "routes": [
+        {
+          "path": "/storyList",
+          "page": "StoryListRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/promotions_route_pages.dart",
+          "_comment": "Pre-fork story viewer route recovered (fix-wave 2026-09-02, route map row 17): `/storyList?index=<n>` deep links keep resolving via @QueryParam; the shell lives in promotions_route_pages.dart. Top-level: this manifest has no flavour blocks and promotions_sdk composes only into customer-family apps."
+        }
+      ],
+      "app_routes": [
+        {
+          "method": "pushStoryListRoute",
+          "params": "BuildContext context, {dynamic controller, dynamic index}",
+          "body": "context.router.push(StoryListRoute(index: (index is int) ? index : int.tryParse('$index') ?? 0, controller: controller));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        }
+      ],
       "onboarding_slides": [],
       "registration_steps": [],
       "embedded_widgets": [],
@@ -792,7 +1207,7 @@
       "boot_hooks": []
     },
     "desktop_sdk": {
-      "version": "1.2.1",
+      "version": "1.2.2",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -834,80 +1249,174 @@
       "embedded_widgets": [],
       "di_hooks": [],
       "boot_hooks": []
+    },
+    "booking_sdk": {
+      "version": "1.1.0",
+      "files": {
+        "lib/presentation/pages/reservations/reservations_page.dart": "31dd111ff24ef746f0c11208bf258ff4ace786b7ad261a74e9e75ac3ee7fa236",
+        "lib/presentation/pages/reservations/new_reservation_page.dart": "48719b888173cdb8c185ed7c61f190c7b16d06d869680f76c83d862851600254"
+      },
+      "routes": [
+        {
+          "path": "/reservations",
+          "page": "ReservationsRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/pages/reservations/reservations_page.dart",
+          "_comment": "The customer's reservations (paas_customer's profile Reservation button used to open {webUrl}/reservations in a web view; marketplace_sdk 1.13.0 pushes this path instead). Installed page carries @RoutePage(name: 'ReservationsRoute'); auto_route generates the class in the host's app_router.gr.dart."
+        },
+        {
+          "path": "/new-reservation",
+          "page": "NewReservationRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/pages/reservations/new_reservation_page.dart",
+          "_comment": "Shop -> section -> table -> day/time -> confirm. Optional ?shopId=<Shop docname> query parameter pre-selects the shop. A flat path (not /reservations/new) so auto_route's exact matching never needs prefix matches."
+        }
+      ],
+      "app_routes": [],
+      "onboarding_slides": [],
+      "registration_steps": [],
+      "embedded_widgets": [],
+      "di_hooks": [
+        {
+          "id": "booking-settings-bridge",
+          "order": 30,
+          "body": "BookingSettingsBridge.install(GetIt.instance);",
+          "imports": [
+            "import 'package:booking_sdk/src/common/infrastructure/services/booking_settings_bridge.dart';"
+          ],
+          "_comment": "The visibility flag without a core change: wraps the registered SettingsRepositoryFacade (comms_sdk) so getGlobalSettings() carries `reservation_enable_for_user` from the booking-owned `api.booking.get_booking_settings` (Permission Settings enable_reservations). base_sdk's AppHelpers.getReservationEnable() and marketplace's profile gate then work unchanged. Order 30 so it runs after every *SdkDependencies.register (the installer emits di_hooks after the generated DI block) and after sibling hooks that might register the facade. Fail-open: a booking failure leaves the inner result untouched."
+        }
+      ],
+      "boot_hooks": [],
+      "tr_keys": {
+        "reservations": "reservations",
+        "myReservations": "my_reservations",
+        "newReservation": "new_reservation",
+        "reserveATable": "reserve_a_table",
+        "chooseAShop": "choose_a_shop",
+        "chooseASection": "choose_a_section",
+        "chooseATable": "choose_a_table",
+        "chooseDateAndTime": "choose_date_and_time",
+        "reservationDate": "reservation_date",
+        "reservationTime": "reservation_time",
+        "reservationGuests": "reservation_guests",
+        "reservationSeats": "reservation_seats",
+        "reservationNote": "reservation_note",
+        "confirmReservation": "confirm_reservation",
+        "reservationCreated": "reservation_created",
+        "reservationCancelled": "reservation_cancelled",
+        "cancelReservation": "cancel_reservation",
+        "cancelThisReservation": "cancel_this_reservation",
+        "noReservationsYet": "no_reservations_yet",
+        "noSectionsYet": "no_sections_yet",
+        "noTablesYet": "no_tables_yet",
+        "shopNotTakingReservationsYet": "shop_not_taking_reservations_yet",
+        "noTimesLeftOnThisDay": "no_times_left_on_this_day",
+        "logInToReserveATable": "log_in_to_reserve_a_table",
+        "reservationStatusNew": "reservation_status_new",
+        "reservationStatusAccepted": "reservation_status_accepted",
+        "reservationStatusCancelled": "reservation_status_cancelled",
+        "tables": "tables",
+        "tablesAndSections": "tables_and_sections",
+        "reservationSchedule": "reservation_schedule",
+        "bookingHours": "booking_hours",
+        "bookingWorkingDays": "booking_working_days",
+        "bookingClosedDates": "booking_closed_dates",
+        "addSection": "add_section",
+        "addTable": "add_table",
+        "sectionName": "section_name",
+        "tableName": "table_name",
+        "chairCount": "chair_count",
+        "markAccepted": "mark_accepted",
+        "markNew": "mark_new",
+        "markCancelled": "mark_cancelled",
+        "addBookingHours": "add_booking_hours",
+        "opensAt": "opens_at",
+        "closesAt": "closes_at",
+        "maxMinutesPerReservation": "max_minutes_per_reservation",
+        "saveSchedule": "save_schedule",
+        "scheduleSaved": "schedule_saved",
+        "addClosedDate": "add_closed_date",
+        "deleteThisSectionAndItsTables": "delete_this_section_and_its_tables",
+        "deleteThisTable": "delete_this_table",
+        "noShopOnThisAccount": "no_shop_on_this_account",
+        "reservedFor": "reserved_for",
+        "reservationsAreNotAvailable": "reservations_are_not_available"
+      }
     }
   },
   "sdk_cache": {
     "base": {
-      "version": "1.55.0",
-      "hash": "832c32a06c3eeb0e"
+      "version": "1.60.0",
+      "hash": "a91b6694fe2976f9"
     },
     "comms": {
-      "version": "1.14.0",
-      "hash": "c566d302e8b27f19"
+      "version": "1.15.0",
+      "hash": "8dd0bf00a569a50a"
     },
     "marketplace": {
-      "version": "1.12.0",
-      "hash": "ae0f7e8609196935"
+      "version": "1.14.1",
+      "hash": "e1bcc6386bb7b24e"
     },
     "merchants": {
-      "version": "1.22.0",
-      "hash": "f974c10d52da117a"
+      "version": "1.28.0",
+      "hash": "bf329ce7defc784c"
     },
     "products": {
-      "version": "1.7.0",
-      "hash": "94855b8fb1f4b731"
+      "version": "1.10.0",
+      "hash": "0f3a4452babc677b"
     },
     "orders": {
-      "version": "1.15.0",
-      "hash": "c8f09f8c9cf38862"
+      "version": "1.18.1",
+      "hash": "ca1c8a98f640abb5"
     },
     "promotions": {
-      "version": "1.1.1",
-      "hash": "f507beac62b6bc16"
+      "version": "1.2.2",
+      "hash": "87c734593daab096"
     },
     "loyalty": {
       "version": "1.0.2",
       "hash": "5ac9fa78ff6e1dfe"
     },
     "auth": {
-      "version": "1.9.4",
-      "hash": "4fbbbc6af3aacceb"
+      "version": "1.10.1",
+      "hash": "efd373d74ae9f6b4"
     },
     "users": {
-      "version": "1.3.2",
-      "hash": "551bd08b590090e8"
+      "version": "1.3.3",
+      "hash": "893b5ab83ae76de6"
     },
     "fav": {
       "version": "1.0.2",
       "hash": "373721752683554f"
     },
     "wallet": {
-      "version": "1.4.1",
-      "hash": "a40337cdbfb85d8b"
+      "version": "1.6.0",
+      "hash": "5795c5cfaba78a3b"
     },
     "payments": {
       "version": "1.2.1",
       "hash": "e0721789ba081cd0"
     },
     "delivery": {
-      "version": "1.15.0",
-      "hash": "2b83cb8358872141"
+      "version": "1.18.0",
+      "hash": "0705d75a98115666"
     },
     "map": {
-      "version": "1.2.1",
-      "hash": "1b19fced6c8f5072"
+      "version": "1.3.0",
+      "hash": "145c622b8f9a6b52"
     },
     "corporate": {
-      "version": "1.1.3",
-      "hash": "3c6c146c9745f00f"
+      "version": "1.2.0",
+      "hash": "ef378600c400e1cf"
     },
     "processing": {
       "version": "1.0.2",
       "hash": "83864d75f80cd5e1"
     },
     "desktop": {
-      "version": "1.2.1",
-      "hash": "cdfba2160635b35c"
+      "version": "1.2.2",
+      "hash": "a5f94e74405057ac"
     },
     "hms": {
       "version": "1.0.1",
@@ -916,6 +1425,10 @@
     "telemetry": {
       "version": "1.0.1",
       "hash": "d72bc5e07ff1124c"
+    },
+    "booking": {
+      "version": "1.1.0",
+      "hash": "21cb6a831aac0691"
     }
   }
 }

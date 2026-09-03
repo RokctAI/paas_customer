@@ -1,22 +1,16 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:base_sdk/src/handlers/api_result.dart';
 import 'dart:io';
@@ -95,6 +89,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
       final connect = await AppConnectivity.connectivity();
       if (connect) {
         final response = await _settingsRepository.getLanguages();
+        if (!mounted) return;
         response.when(
           success: (data) {
             final List<LanguageData> languages = data.data ?? [];
@@ -139,6 +134,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
       final connect = await AppConnectivity.connectivity();
       if (connect) {
         final response = await _settingsRepository.getLanguages();
+        if (!mounted) return;
         response.when(
           success: (data) {
             state = state.copyWith(list: data.data ?? []);
@@ -228,7 +224,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
   ///   * policy allows the account's role -> persist token + active
   ///     address, land wherever the policy says (the default policy lands
   ///     exactly where this code always landed: `isDemo ?
-  ///     replaceUiTypeRoute : goHome`), then refresh the FCM token.
+  ///     goHome`), then refresh the FCM token.
   ///   * policy rejects it -> nothing is persisted; the policy presents the
   ///     rejection (message/route). Manager-style compositions use this to
   ///     admit only sellers without owning any auth code.
@@ -264,6 +260,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
   Future<void> login(BuildContext context) async {
     final connected = await AppConnectivity.connectivity();
+    if (!mounted) return;
     if (connected) {
       if (checkEmail()) {
         if (!AppValidators.isValidEmail(state.email)) {
@@ -281,9 +278,14 @@ class LoginNotifier extends StateNotifier<LoginState> {
         email: state.email,
         password: state.password,
       );
+      if (!mounted) return;
       response.when(
         success: (data) async {
           await _establishSession(context, data.data);
+          // onAuthenticated navigates away, which disposes this autoDispose
+          // notifier while the session is still being finalised; only
+          // touch state if the login screen is still around.
+          if (!mounted) return;
           state = state.copyWith(isLoading: false);
         },
         failure: (failure, status) {
@@ -316,6 +318,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
         email: state.email,
         password: state.password,
       );
+      if (!mounted) return;
       state = state.copyWith(isLoading: false);
       if (result.success) {
         // The role of an offline account can't be verified against the
@@ -340,14 +343,17 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
   Future<void> loginWithGoogle(BuildContext context) async {
     final connected = await AppConnectivity.connectivity();
+    if (!mounted) return;
     if (connected) {
       state = state.copyWith(isLoading: true);
       GoogleSignInAccount? googleUser;
       try {
         googleUser = await GoogleSignIn().signIn();
       } catch (e) {
+        if (!mounted) return;
         state = state.copyWith(isLoading: false);
       }
+      if (!mounted) return;
       if (googleUser == null) {
         state = state.copyWith(isLoading: false);
         return;
@@ -359,6 +365,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
         id: googleUser.id,
         avatar: googleUser.photoUrl ?? "",
       );
+      if (!mounted) return;
       response.when(
         success: (data) async {
           state = state.copyWith(isLoading: false);
@@ -384,6 +391,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
   Future<void> loginWithFacebook(BuildContext context) async {
     final connected = await AppConnectivity.connectivity();
+    if (!mounted) return;
     if (connected) {
       state = state.copyWith(isLoading: true);
       final fb = FacebookAuth.instance;
@@ -422,6 +430,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
         final userObj = await FirebaseAuth.instance.signInWithCredential(
           credential,
         );
+        if (!mounted) return;
 
         if (user.status == LoginStatus.success) {
           final response = await _authRepository.loginWithGoogle(
@@ -430,6 +439,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
             id: userObj.user?.uid ?? "",
             avatar: userObj.user?.photoURL ?? "",
           );
+          if (!mounted) return;
           response.when(
             success: (data) async {
               state = state.copyWith(isLoading: false);
@@ -456,6 +466,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
           }
         }
       } catch (e) {
+        if (!mounted) return;
         state = state.copyWith(isLoading: false);
         debugPrint('===> login with face exception: $e');
       }
@@ -468,6 +479,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
   Future<void> loginWithApple(BuildContext context) async {
     final connected = await AppConnectivity.connectivity();
+    if (!mounted) return;
     if (connected) {
       state = state.copyWith(isLoading: true);
 
@@ -495,6 +507,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
           id: credential.userIdentifier ?? userObj.user?.uid ?? "",
           avatar: userObj.user?.displayName ?? "",
         );
+        if (!mounted) return;
         response.when(
           success: (data) async {
             state = state.copyWith(isLoading: false);
@@ -512,6 +525,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
           },
         );
       } catch (e) {
+        if (!mounted) return;
         state = state.copyWith(isLoading: false);
         debugPrint('===> login with apple exception: $e');
       }

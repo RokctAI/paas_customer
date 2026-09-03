@@ -1,22 +1,16 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 // DESIGN STRIP SECTION 49 — the driver's home sheet.
 //
@@ -127,6 +121,17 @@ class _BottomSheetScreenState extends ConsumerState<BottomSheetScreen> {
   Widget build(BuildContext context) {
     return AnimatedPositioned(
       bottom: widget.isScrolling ? -280.h : 0,
+      // A Stack child positioned on ONE axis only is laid out
+      // horizontally unbounded, and `CrossAxisAlignment.stretch` then
+      // hands its children w=Infinity — which is exactly what the driver
+      // home threw the moment the banner arrived and turned this sheet's
+      // single self-sized Container into a stretching Column. Pinning
+      // both edges gives the column the stack's width, which is the
+      // width this sheet has always drawn at anyway (`_sheetBody` asks
+      // for the full screen), so stretch now means "as wide as the
+      // sheet" instead of "as wide as infinity".
+      left: 0,
+      right: 0,
       duration: const Duration(milliseconds: 400),
       child: Column(
         mainAxisSize: MainAxisSize.min,

@@ -1,25 +1,18 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:base_sdk/src/di/injection.dart';
 import 'package:base_sdk/src/domain/interface/orders.dart';
 import 'package:base_sdk/src/models/data/order_active_model.dart';
 import 'package:base_sdk/src/models/models.dart';
@@ -32,8 +25,18 @@ class OrdersRepository implements OrdersRepositoryFacade {
   /// Universal platform gateway (fleet rule 2026-08-15): cmds mirror the
   /// owning modules' `manifest.json` whitelisted-method keys with the app
   /// segment dropped (`api.order.*`, `api.coupon.*`, `api.shop.*`,
-  /// `api.payment.*`, `api.delivery.*`).
+  /// `api.payment.*`, `api.delivery.*`, `api.user.*`, `api.repeating_order.*`).
   static const _gateway = PlatformGateway();
+
+  /// The only hosted-checkout initiators the wallet frappe half whitelists
+  /// (`api.payment.initiate_{flutterwave|paypal|paystack}_payment`). Any other
+  /// gateway name (PayFast, Stripe, ...) has no `initiate_*` counterpart, so
+  /// the call is refused client-side with a clear failure instead of a 404.
+  static const Set<String> hostedCheckoutProviders = {
+    'flutterwave',
+    'paypal',
+    'paystack',
+  };
 
   @override
   Future<ApiResult<OrderActiveModel>> createOrder(
@@ -145,13 +148,21 @@ class OrdersRepository implements OrdersRepositoryFacade {
     bool forceCardPayment = false,
     bool enableTokenization = false,
   }) async {
-    try {
-      final client = dioHttp.client(requireAuth: true);
-      var res = await client.post(
-        '/api/method/paas.api.payment.initiate_${name.toLowerCase()}_payment',
-        data: {'order_id': orderBody.cartId},
+    final String provider = name.toLowerCase();
+    if (!hostedCheckoutProviders.contains(provider)) {
+      return ApiResult.failure(
+        error: 'No hosted checkout is available for "$name" on this backend',
+        statusCode: 400,
       );
-      return ApiResult.success(data: res.data["redirect_url"]);
+    }
+    try {
+      // wallet's payment.initiate_<provider>_payment(order_id) — the cart id
+      // is what the pre-fork flow passed as the order reference.
+      final response = await _gateway.tenant(
+        'api.payment.initiate_${provider}_payment',
+        {'order_id': orderBody.cartId},
+      );
+      return ApiResult.success(data: response['redirect_url']);
     } catch (e, s) {
       debugPrint('==> order process failure: $e, $s');
       return ApiResult.failure(
@@ -178,11 +189,10 @@ class OrdersRepository implements OrdersRepositoryFacade {
   @override
   Future<ApiResult<void>> refundOrder(String orderId, String title) async {
     try {
-      final data = {"order": orderId, "cause": title};
-      final client = dioHttp.client(requireAuth: true);
-      await client.post(
-        '/api/method/paas.api.user.create_order_refund',
-        data: data,
+      // users' user.create_order_refund(order, cause).
+      await _gateway.tenant(
+        'api.user.create_order_refund',
+        {'order': orderId, 'cause': title},
       );
       return const ApiResult.success(data: null);
     } catch (e) {
@@ -204,10 +214,12 @@ class OrdersRepository implements OrdersRepositoryFacade {
     String? savedCardId,
   }) async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      await client.post(
-        '/api/method/paas.api.repeating_order.create_repeating_order',
-        data: {
+      // orders' repeating_order.create_repeating_order requires
+      // original_order, start_date AND cron_pattern; a caller that gives no
+      // pattern gets the daily-at-midnight default rather than a TypeError.
+      await _gateway.tenant(
+        'api.repeating_order.create_repeating_order',
+        {
           'original_order': orderId,
           'start_date': from,
           'cron_pattern': cronPattern ?? '0 0 * * *',
@@ -228,10 +240,9 @@ class OrdersRepository implements OrdersRepositoryFacade {
   @override
   Future<ApiResult> pauseAutoOrder(String autoOrderId) async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      await client.post(
-        '/api/method/paas.api.repeating_order.pause_repeating_order',
-        data: {'repeating_order_id': autoOrderId},
+      await _gateway.tenant(
+        'api.repeating_order.pause_repeating_order',
+        {'repeating_order_id': autoOrderId},
       );
       return const ApiResult.success(data: null);
     } catch (e) {
@@ -245,10 +256,9 @@ class OrdersRepository implements OrdersRepositoryFacade {
   @override
   Future<ApiResult> resumeAutoOrder(String autoOrderId) async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      await client.post(
-        '/api/method/paas.api.repeating_order.resume_repeating_order',
-        data: {'repeating_order_id': autoOrderId},
+      await _gateway.tenant(
+        'api.repeating_order.resume_repeating_order',
+        {'repeating_order_id': autoOrderId},
       );
       return const ApiResult.success(data: null);
     } catch (e) {
@@ -266,14 +276,15 @@ class OrdersRepository implements OrdersRepositoryFacade {
 
   @override
   Future<ApiResult<RefundOrdersModel>> getRefundOrders(int page) async {
-    final data = {'page': page};
     try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.get(
-        '/api/method/paas.api.user.get_user_order_refunds',
-        queryParameters: data,
+      // users' user.get_user_order_refunds(page) — the legacy GET query
+      // becomes the cmd payload; the gateway answers the method's own
+      // (already interceptor-unwrapped) body, so no second unwrap.
+      final response = await _gateway.tenant(
+        'api.user.get_user_order_refunds',
+        {'page': page},
       );
-      return ApiResult.success(data: RefundOrdersModel.fromJson(response.data));
+      return ApiResult.success(data: RefundOrdersModel.fromJson(response));
     } catch (e) {
       debugPrint('==> get refund orders failure: $e');
       return ApiResult.failure(
@@ -355,10 +366,9 @@ class OrdersRepository implements OrdersRepositoryFacade {
     String? endDate,
   }) async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      await client.post(
-        '/api/method/paas.api.repeating_order.create_repeating_order',
-        data: {
+      await _gateway.tenant(
+        'api.repeating_order.create_repeating_order',
+        {
           'original_order': orderId,
           'start_date': startDate,
           'cron_pattern': cronPattern,
@@ -379,10 +389,9 @@ class OrdersRepository implements OrdersRepositoryFacade {
     required String repeatingOrderId,
   }) async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      await client.post(
-        '/api/method/paas.api.repeating_order.delete_repeating_order',
-        data: {'repeating_order_id': repeatingOrderId},
+      await _gateway.tenant(
+        'api.repeating_order.delete_repeating_order',
+        {'repeating_order_id': repeatingOrderId},
       );
       return const ApiResult.success(data: null);
     } catch (e) {
