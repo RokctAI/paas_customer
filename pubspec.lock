@@ -2502,7 +2502,7 @@ packages:
       path: ".rokct/cache/wallet"
       relative: true
     source: path
-    version: "1.6.0"
+    version: "1.6.2"
   watcher:
     dependency: transitive
     description:

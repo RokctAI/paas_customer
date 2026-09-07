@@ -1,3 +1,34 @@
+## 1.6.2
+
+* **Fix: wallet history no longer shows a permanent spinner in demo
+  builds;** the loading flag is ignored when the demo history is bound
+  (`isLoadingHistory` defaults to `true` and the demo path never fetched).
+
+## 1.6.1
+
+* **Wallet history header no longer overflows on tablets.** The
+  `CommonAppBar` child on `/wallet-history` stacked a rigid
+  `55.verticalSpace` above the Transactions/Top-up/Send row, but the app
+  bar's box is `76.h` plus the status-bar inset less `20.h` of padding, so
+  the row only ever had `1.h + inset` of room. Wherever ScreenUtil scales
+  1:1 (any window >= 600 dp wide, i.e. the guided tour's tablet leg) that
+  is 25 dp for a 35 dp row - the "BOTTOM OVERFLOWED BY 10.0 PIXELS" stripe
+  in the tablet still. The spacer is now `Flexible`, so it keeps its full
+  height wherever it fits (phones render pixel-identically) and yields
+  only the shortfall elsewhere.
+* **Demo history seeded; empty state actually shows.** A demo build
+  (`--dart-define=IS_DEMO=true`) talks to no backend and users_sdk's
+  `UserRepositoryFacade.getWalletHistories` has no demo variant, so the
+  tour captured a blank list. New `DemoWalletHistory` (five Rand rows:
+  a card top-up, purchases at Corner Kitchen and Nonna's Pizzeria, a
+  partial refund and a cash-out, timestamps relative to now) renders in
+  place of the fetch under `AppConstants.isDemo`; pull-to-refresh and
+  load-more complete locally there. Independently, the page now falls
+  through to its `EmptyBadge` whenever the bound list is empty - base_sdk's
+  notifier never sets `isEmptyWallet`, so a real account with no rows (or
+  a failed fetch) previously rendered nothing at all. Guarded by
+  `test/demo_wallet_history_test.dart`.
+
 ## 1.6.0
 
 * **Design strip frames 49g/49h/49i — the bank-deposit route (client

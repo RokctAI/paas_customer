@@ -34,7 +34,7 @@ imports:
 steps:
   - key: order_queue
     title: "Every order, one queue"
-    caption: "New, accepted, ready, on the way - *every order* moves through one queue the moment it lands."
+    caption: "New, accepted, ready, on the way - *every order* in one queue. The launcher counts what is waiting on you, never the takings."
     action: dart
     settle: 8
     dart: |

@@ -38,6 +38,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:base_sdk/src/application/profile/profile_notifier.dart';
 import 'package:base_sdk/src/application/profile/profile_provider.dart';
 import 'package:base_sdk/src/application/profile/profile_state.dart';
+import 'package:base_sdk/src/constants/app_constants.dart';
+import 'package:base_sdk/src/models/response/wallet_histories_response.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
@@ -50,6 +52,7 @@ import 'package:base_sdk/src/presentation/components/buttons/second_button.dart'
 import 'package:base_sdk/src/presentation/components/loading.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 
+import 'package:wallet_sdk/src/common/infrastructure/repositories/demo_wallet_history.dart';
 import 'package:wallet_sdk/src/common/presentation/pages/send/wallet_send_screen.dart';
 
 // Capitalize helper carried over from the donor.
@@ -76,9 +79,13 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
   @override
   void initState() {
     controller = RefreshController();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(profileProvider.notifier).getWallet(context);
-    });
+    // A demo build talks to no backend: the seeded rows render instead of
+    // asking the repository (see DemoWalletHistory), so no fetch here.
+    if (!AppConstants.isDemo) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ref.read(profileProvider.notifier).getWallet(context);
+      });
+    }
     super.initState();
   }
 
@@ -138,6 +145,15 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
   @override
   Widget build(BuildContext context) {
     state = ref.watch(profileProvider);
+    // The rows on screen: the demo seed in a demo build, else whatever the
+    // notifier fetched. Bound once so the list and its empty state agree.
+    final List<WalletData> history = AppConstants.isDemo
+        ? DemoWalletHistory.entries()
+        : (state.walletHistory ?? const <WalletData>[]);
+    // `isLoadingHistory` defaults to true and is only cleared by the fetch
+    // the demo build skips above, so a demo build must ignore it or the
+    // page spins forever over rows it already has.
+    final bool showLoading = state.isLoadingHistory && !AppConstants.isDemo;
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
@@ -149,7 +165,16 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                 CommonAppBar(
                   child: Column(
                     children: [
-                      55.verticalSpace,
+                      // Flexible, not a fixed spacer: CommonAppBar's box is
+                      // 76.h plus the status-bar inset less 20.h of bottom
+                      // padding, so a rigid 55.h here leaves the row only
+                      // (1.h + inset) of room. Wherever ScreenUtil scales
+                      // 1:1 (any window >= 600 dp wide - the tour's tablet
+                      // leg) that is 25 dp for a 35 dp row: the 10 px
+                      // BOTTOM OVERFLOWED stripe. Flexible keeps the full
+                      // 55.h wherever it fits (phones are pixel-identical)
+                      // and yields only the shortfall elsewhere.
+                      Flexible(child: 55.verticalSpace),
                       Row(
                         children: [
                           10.horizontalSpace,
@@ -193,9 +218,9 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                   ),
                 ),
                 Expanded(
-                  child: state.isLoadingHistory
+                  child: showLoading
                       ? const Center(child: Loading())
-                      : state.isEmptyWallet
+                      : state.isEmptyWallet || history.isEmpty
                           ? _resultEmpty()
                           : SmartRefresher(
                               enablePullDown: true,
@@ -203,9 +228,17 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                               physics: const BouncingScrollPhysics(),
                               controller: controller,
                               onLoading: () {
+                                if (AppConstants.isDemo) {
+                                  controller.loadNoData();
+                                  return;
+                                }
                                 event.getWalletPage(context, controller);
                               },
                               onRefresh: () {
+                                if (AppConstants.isDemo) {
+                                  controller.refreshCompleted();
+                                  return;
+                                }
                                 event.getWallet(context,
                                     refreshController: controller);
                               },
@@ -214,15 +247,15 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
                                 scrollDirection: Axis.vertical,
-                                itemCount: state.walletHistory?.length ?? 0,
+                                itemCount: history.length,
                                 itemBuilder: (context, index) => Container(
                                   margin: EdgeInsets.only(bottom: 16.h),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12.r),
                                     color:
-                                        state.walletHistory?[index].type == "topup"
+                                        history[index].type == "topup"
                                             ? Colors.green.withValues(alpha: 0.5)
-                                            : state.walletHistory?[index].type ==
+                                            : history[index].type ==
                                                     "withdraw"
                                                 ? AppStyle.red.withValues(alpha: 0.5)
                                                 : AppStyle.white,
@@ -241,7 +274,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "${AppHelpers.getTranslation(TrKeys.paymentDate)}: ${intl.DateFormat("MMM dd,yyyy h:mm a").format(DateTime.tryParse(state.walletHistory?[index].createdAt ?? "")?.toLocal() ?? DateTime.now())}",
+                                              "${AppHelpers.getTranslation(TrKeys.paymentDate)}: ${intl.DateFormat("MMM dd,yyyy h:mm a").format(DateTime.tryParse(history[index].createdAt ?? "")?.toLocal() ?? DateTime.now())}",
                                               style: AppStyle.interRegular(
                                                 size: 12.sp,
                                                 color: AppStyle.black,
@@ -259,8 +292,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                                     ),
                                                   ),
                                                   TextSpan(
-                                                    text: state
-                                                            .walletHistory?[index]
+                                                    text: history[index]
                                                             .note ??
                                                         "",
                                                     style: AppStyle.interRegular(
@@ -296,8 +328,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                                 ),
                                                 Text(
                                                   AppHelpers.numberFormat(
-                                                    number: state
-                                                        .walletHistory?[index]
+                                                    number: history[index]
                                                         .price,
                                                   ),
                                                   style: AppStyle.interBold(
@@ -312,7 +343,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                                   MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Text(
-                                                  (state.walletHistory?[index]
+                                                  (history[index]
                                                               .type ??
                                                           "")
                                                       .capitalize(),
@@ -322,7 +353,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  'Status: ${(state.walletHistory?[index].status ?? "").capitalize()}',
+                                                  'Status: ${(history[index].status ?? "").capitalize()}',
                                                   style: AppStyle.interRegular(
                                                     size: 12.sp,
                                                     color: AppStyle.black,

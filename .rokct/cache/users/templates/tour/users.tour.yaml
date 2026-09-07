@@ -10,8 +10,10 @@
 # book), and ships the manager profile application slice — so the steps
 # below drive the composed app's account screens, which render exactly this
 # SDK's data. In demo builds (--dart-define=IS_DEMO=true) the session comes
-# from auth_sdk's MockAuthRepository (the "Demo User" account), so the
-# account surface is fully populated with demo data.
+# from auth_sdk's MockAuthRepository and the profile from this SDK's
+# MockUserRepository — the same account (Thandi Mokoena, the seller the
+# commerce demo shop seeds) — so the account surface is fully populated
+# and reads like a real person's, never like fixture data.
 #
 # Where the steps land: composed apps that route their account surface
 # expose it at /profile (e.g. paas_driver: delivery_sdk's ProfileRoute,
@@ -40,7 +42,7 @@ steps:
   # keeps its current screen instead of failing the tour.
   - key: users_profile
     title: "Your account at a glance"
-    caption: "Your {app_name} account keeps *your details in one place*."
+    caption: "Your {app_name} account keeps *all your details* in one place."
     action: dart
     screenshot: true
     settle: 6
@@ -56,7 +58,7 @@ steps:
   # current screen rather than an error.
   - key: users_profile_settings
     title: "Keep your details fresh"
-    caption: "Update your *name, phone and email* any time they change."
+    caption: "Update your *name, phone, email* any time they change."
     action: dart
     screenshot: true
     settle: 5

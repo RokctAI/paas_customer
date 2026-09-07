@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.60.0",
+      "version": "1.60.4",
       "files": {
         "lib/main.dart": "343014dec4b6f3e50b8fc42ac2824543471696797f32e804089c19e9a23fdcab",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -611,7 +611,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.10.1",
+      "version": "1.10.4",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "87b5d1dbc3f0f9417db5289be2c1ebbcb7dfecf1638f348b6f5ee1581f7ce4d2",
         "lib/presentation/routes/registration_step_pages.dart": "d18f7e35878721c688c4f0964db42c97148e1f2e9d225cd1a6bb7490e2628347",
@@ -679,6 +679,16 @@
           "id": "auth_restore_credential_gate",
           "order": 1,
           "body": "RestoreCredentialGate.install(); SessionEndHooks.register('restore_credentials', RestoreCredentialGate.clear);"
+        },
+        {
+          "id": "auth_en_bundled_translations",
+          "order": 2,
+          "body": "BundledTranslations.register('en', kAuthEnTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:auth_sdk/src/translations/auth_en_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled English map into base_sdk's BundledTranslations registry at boot (lms_sdk's 'af' hook is the precedent). base_sdk bundles no 'en' map because English normally survives through the humanized-key fallback, but that only holds for keys named after their copy: reset_password_text humanized to the literal \"Reset password text\" on every app shell's reset-password sheet, because demo builds take their served map from comms_sdk's MockSettingsRepository (a handful of rows that never carried this key). Backend-served translation rows still win; the map is only the offline/unseeded fallback consulted before the humanized-key fallback. Imports are declared explicitly (src paths, like lms_sdk) because neither symbol is exported by the auth_sdk barrel every composed main.dart already imports. Requires a base_sdk with bundled_translations.dart (the bundled-af wave)."
         }
       ],
       "database": {
@@ -695,7 +705,7 @@
       }
     },
     "users_sdk": {
-      "version": "1.3.3",
+      "version": "1.3.7",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -706,7 +716,7 @@
       "boot_hooks": []
     },
     "merchants_sdk": {
-      "version": "1.28.0",
+      "version": "1.29.3",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "lib/presentation/routes/merchants_customer_route_pages.dart": "94118cddd225b802a07db40ac5683697fd190d5d1de42494d955fc3f7eb79456"
@@ -765,7 +775,7 @@
       ]
     },
     "products_sdk": {
-      "version": "1.10.0",
+      "version": "1.10.1",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -776,7 +786,7 @@
       "boot_hooks": []
     },
     "orders_sdk": {
-      "version": "1.18.1",
+      "version": "1.20.1",
       "files": {
         "lib/presentation/routes/orders_customer_route_pages.dart": "acadebdd2b7525434e765bf02683c151b97d7a392e1552d8f2af02b916a4702c"
       },
@@ -907,6 +917,10 @@
       "di_hooks": [],
       "boot_hooks": [],
       "tr_keys": {
+        "ordersToAccept": "orders_to_accept",
+        "waitingOnYou": "waiting_on_you",
+        "openOrders": "open_orders",
+        "manager": "manager",
         "ageVerification": "age_verification",
         "ageVerificationRequiredForAdultsOnly": "age_verification_is_required_to_order_adults_only_items",
         "adultsOnlyBirthDateNeeded": "this_order_includes_an_adults_only_item_please_confirm_your_date_of_birth",
@@ -914,7 +928,19 @@
         "driverCollectsCashFromRecipient": "driver_collects_cash_from_recipient",
         "enterCashAmountGreaterThanZero": "enter_cash_amount_greater_than_zero",
         "underagePurchaseBlocked": "you_must_be_18_or_older_to_order_adults_only_items"
-      }
+      },
+      "integrations": [
+        {
+          "target": "lib/presentation/pages/launch/home.dart",
+          "placeholder": "// @launcher-windows-imports",
+          "replacement": "import 'package:orders_sdk/src/manager/presentation/launcher/manager_launch_window.dart';"
+        },
+        {
+          "target": "lib/presentation/pages/launch/home.dart",
+          "placeholder": "                // @launcher-windows",
+          "replacement": "                LaunchWindowSource.widget(\n                  mode: LaunchMode.manager,\n                  title: AppHelpers.getTranslation('manager'),\n                  icon: RemixIcons.store_2_line,\n                  builder: (context, openApp) =>\n                      ManagerLaunchWindow(onOpen: openApp),\n                ),"
+        }
+      ]
     },
     "fav_sdk": {
       "version": "1.0.2",
@@ -940,7 +966,7 @@
       "boot_hooks": []
     },
     "wallet_sdk": {
-      "version": "1.6.0",
+      "version": "1.6.2",
       "files": {
         "lib/presentation/routes/wallet_route_pages.dart": "86d07bc5c2e239b713c49a9caa4f2dc6007ec1e20aa9519aeb960f3fcc8ee5a7"
       },
@@ -995,10 +1021,11 @@
       "boot_hooks": []
     },
     "delivery_sdk": {
-      "version": "1.18.0",
+      "version": "1.20.3",
       "files": {
         "assets/svg/balance.svg": "6f17d12b29de8e5500bc445ee89eec5c1fc8830cea42711af9bf80975e6b79ce",
-        "assets/image/my_location.png": "0e6b49eb78d1f74ac96ac24ce39f834105ce68e361c302038ba9cefdcd926126"
+        "assets/image/my_location.png": "0e6b49eb78d1f74ac96ac24ce39f834105ce68e361c302038ba9cefdcd926126",
+        "assets/svg/cutter.svg": "62c721d3b827079fd2ae51121de9828ed6454827092fbf0380c13bc314c4b3e6"
       },
       "routes": [],
       "app_routes": [],
@@ -1009,7 +1036,8 @@
       "boot_hooks": [],
       "asset_keys": {
         "pngMyLocation": "assets/image/my_location.png",
-        "svgBalance": "assets/svg/balance.svg"
+        "svgBalance": "assets/svg/balance.svg",
+        "svgCutter": "assets/svg/cutter.svg"
       },
       "app_assets": [
         "assets/images/marker.png",
@@ -1018,11 +1046,31 @@
         "assets/images/splash2.png",
         "assets/lottie/empty-box.json",
         "assets/image/my_location.png",
-        "assets/svg/balance.svg"
+        "assets/svg/balance.svg",
+        "assets/svg/cutter.svg"
+      ],
+      "tr_keys": {
+        "orderWaiting": "order.waiting",
+        "jobInHand": "job.in.hand",
+        "noJobRightNow": "no.job.right.now",
+        "pickUp": "pick.up",
+        "drop": "drop"
+      },
+      "integrations": [
+        {
+          "target": "lib/presentation/pages/launch/home.dart",
+          "placeholder": "// @launcher-windows-imports",
+          "replacement": "import 'package:delivery_sdk/src/driver/presentation/launcher/driver_launch_window.dart';"
+        },
+        {
+          "target": "lib/presentation/pages/launch/home.dart",
+          "placeholder": "                // @launcher-windows",
+          "replacement": "                LaunchWindowSource.widget(\n                  mode: LaunchMode.driver,\n                  title: AppHelpers.getTranslation(TrKeys.driver),\n                  icon: RemixIcons.e_bike_2_line,\n                  builder: (context, openApp) =>\n                      DriverLaunchWindow(onOpen: openApp),\n                ),"
+        }
       ]
     },
     "comms_sdk": {
-      "version": "1.15.0",
+      "version": "1.15.1",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1119,7 +1167,7 @@
       "boot_hooks": []
     },
     "map_sdk": {
-      "version": "1.3.0",
+      "version": "1.3.1",
       "files": {
         "lib/presentation/routes/map_route_pages.dart": "40d4309147726738a018def95efb9f3e16815684c55ac631f0559b74dfef4a50"
       },
@@ -1347,28 +1395,28 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.60.0",
-      "hash": "a91b6694fe2976f9"
+      "version": "1.60.4",
+      "hash": "8f3c2bc890d8c61d"
     },
     "comms": {
-      "version": "1.15.0",
-      "hash": "8dd0bf00a569a50a"
+      "version": "1.15.1",
+      "hash": "c3c7540e4e09b021"
     },
     "marketplace": {
       "version": "1.14.1",
       "hash": "e1bcc6386bb7b24e"
     },
     "merchants": {
-      "version": "1.28.0",
-      "hash": "bf329ce7defc784c"
+      "version": "1.29.3",
+      "hash": "b8f882dd73cf98fb"
     },
     "products": {
-      "version": "1.10.0",
-      "hash": "0f3a4452babc677b"
+      "version": "1.10.1",
+      "hash": "054e6c067b1ca2c5"
     },
     "orders": {
-      "version": "1.18.1",
-      "hash": "ca1c8a98f640abb5"
+      "version": "1.20.1",
+      "hash": "7eb078e90bb0687e"
     },
     "promotions": {
       "version": "1.2.2",
@@ -1379,32 +1427,32 @@
       "hash": "5ac9fa78ff6e1dfe"
     },
     "auth": {
-      "version": "1.10.1",
-      "hash": "efd373d74ae9f6b4"
+      "version": "1.10.4",
+      "hash": "5940157a40010df3"
     },
     "users": {
-      "version": "1.3.3",
-      "hash": "893b5ab83ae76de6"
+      "version": "1.3.7",
+      "hash": "9886a73d85f55738"
     },
     "fav": {
       "version": "1.0.2",
       "hash": "373721752683554f"
     },
     "wallet": {
-      "version": "1.6.0",
-      "hash": "5795c5cfaba78a3b"
+      "version": "1.6.2",
+      "hash": "31a165693f16019a"
     },
     "payments": {
       "version": "1.2.1",
       "hash": "e0721789ba081cd0"
     },
     "delivery": {
-      "version": "1.18.0",
-      "hash": "0705d75a98115666"
+      "version": "1.20.3",
+      "hash": "8b6e7f893d54e4ce"
     },
     "map": {
-      "version": "1.3.0",
-      "hash": "145c622b8f9a6b52"
+      "version": "1.3.1",
+      "hash": "59d2d79706c97184"
     },
     "corporate": {
       "version": "1.2.0",
