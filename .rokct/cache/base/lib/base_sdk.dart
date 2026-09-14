@@ -21,6 +21,7 @@ library base_sdk;
 // Handlers (HTTP plumbing, result/failure types)
 export 'src/handlers/api_result.dart';
 export 'src/handlers/http_service.dart';
+export 'src/handlers/log_redaction.dart';
 export 'src/handlers/network_exceptions.dart';
 export 'src/handlers/network_helpers.dart';
 export 'src/handlers/platform_gateway.dart';
@@ -93,9 +94,11 @@ export 'src/presentation/components/floating_nav/floating_bottom_nav.dart';
 export 'src/application/profile/profile_host_capabilities.dart';
 export 'src/presentation/pages/profile/edit_profile_sheet.dart';
 export 'src/presentation/pages/profile/generic_profile_page.dart';
+export 'src/presentation/pages/profile/generic_profile_route_page.dart';
 export 'src/presentation/pages/profile/profile_action_item.dart';
 export 'src/presentation/pages/profile/profile_host_scope.dart';
 export 'src/presentation/pages/profile/profile_section.dart';
+export 'src/presentation/pages/profile/profile_section_navigator.dart';
 export 'src/presentation/pages/profile/profile_section_registry.dart';
 export 'src/presentation/pages/profile/widgets/app_usage_badge.dart';
 export 'src/presentation/pages/profile/widgets/base_profile_footer.dart';
@@ -116,6 +119,9 @@ export 'src/services/timing_telemetry.dart';
 export 'src/services/app_helpers.dart';
 export 'src/services/key_sound.dart';
 export 'src/services/local_storage.dart';
+// The runtime demo switch (a server-marked demo account signed in through
+// the real backend) alongside the compile-time AppConstants.isDemo.
+export 'src/services/demo_session.dart';
 // Memory pressure + image cache sizing (Play's Feb 2027 memory thresholds)
 // and the Restore Credentials transport (Play's April 2027 Zero-Tap
 // Sign-In requirement).

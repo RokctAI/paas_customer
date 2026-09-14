@@ -1,3 +1,15 @@
+## 1.6.3
+
+* **Fix: top-up and history pages now follow the app's colour mode.**
+  Both pages pinned light-only tokens (`bgGrey` grounds, `white` cards,
+  `black` ink and dividers, `borderColor` strokes, `textGrey` secondary
+  text, and `isDarkMode: false` on their bottom sheets), so the guided
+  tour captured them light while the rest of the app was dark. They now
+  read base_sdk's mode-resolving tokens (`surfaceDark`, `cardDark`,
+  `strokeDark`, `textPrimary`, `textDarkSecondary`, `AppStyle.isDark`)
+  and render correctly in both modes. Brand-on-primary labels (white on
+  the primary buttons) are unchanged.
+
 ## 1.6.2
 
 * **Fix: wallet history no longer shows a permanent spinner in demo

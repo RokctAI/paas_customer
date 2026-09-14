@@ -23,6 +23,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
 
 import 'package:base_sdk/src/presentation/components/loading.dart';
+import 'package:base_sdk/src/presentation/pages/profile/profile_section_navigator.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:${package}/presentation/pages/profile/edit_car.dart';
 import 'package:${package}/presentation/component/helper/keyboard_disable.dart';
@@ -38,9 +39,21 @@ import 'package:delivery_sdk/src/driver/application/profile/provider/profile_edi
 import 'package:delivery_sdk/src/driver/application/profile/provider/profile_image_provider.dart';
 import 'package:delivery_sdk/src/driver/application/profile/provider/profile_settings_provider.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/services/courier_constants.dart';
+import 'package:delivery_sdk/src/driver/presentation/widgets/driver_sheet_surface.dart';
 
+/// The driver's Profile settings form: the bottom sheet the profile opens
+/// on a phone (the default), or - [embedded] - the same form as the
+/// profile host's DETAIL PANE at plane widths (Ray 2026-09-08, the sheet
+/// fork ruling: "sheet = PHONE, plane widths get a pane"; base_sdk
+/// 1.60.11's editProfileDetailBuilder). Embedded, the form drops the
+/// sheet's rounded card, sits top-aligned in the plane the host owns, and
+/// its Save leaves the pane through ProfileSectionNavigator.close (back to
+/// the default detail) instead of popping the route. The sheet path is
+/// untouched.
 class EditProfileModal extends ConsumerStatefulWidget {
-  const EditProfileModal({super.key});
+  final bool embedded;
+
+  const EditProfileModal({super.key, this.embedded = false});
 
   @override
   ConsumerState<EditProfileModal> createState() => _EditProfileModalState();
@@ -74,7 +87,7 @@ class _EditProfileModalState extends ConsumerState<EditProfileModal> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(profileSettingsProvider);
-    return state.isLoading || state.userData == null
+    final Widget body = state.isLoading || state.userData == null
         ? Padding(
             padding: REdgeInsets.symmetric(vertical: 30),
             child: const Loading(),
@@ -97,6 +110,7 @@ class _EditProfileModalState extends ConsumerState<EditProfileModal> {
                             title: AppHelpers.getTranslation(
                               TrKeys.profileSettings,
                             ),
+                            titleColor: AppStyle.textPrimary,
                           ),
                           24.verticalSpace,
                           Row(
@@ -106,62 +120,75 @@ class _EditProfileModalState extends ConsumerState<EditProfileModal> {
                                   final imageState = ref.watch(
                                     profileImageProvider,
                                   );
-                                  return Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      ShopAvatar(
-                                        radius: 16,
-                                        imageUrl: imageState.imageUrl,
-                                        path: imageState.path,
-                                        size: 50,
-                                        padding: 6,
-                                        bgColor: AppStyle.black.withOpacity(
-                                          0.27,
-                                        ),
-                                      ),
-                                      Container(
-                                        width: 50.r,
-                                        height: 50.r,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            16.r,
-                                          ),
-                                          color: AppStyle.black.withOpacity(
+                                  // The avatar's own square. A Row hands
+                                  // a non-flex child unbounded width, so
+                                  // without this the Stack is as wide as
+                                  // whatever a child asks for - the
+                                  // 100000-wide error box a build failure
+                                  // leaves behind overflowed the row on
+                                  // the tablet. Bounded, nothing inside
+                                  // can size the row.
+                                  return SizedBox.square(
+                                    dimension: 50.r,
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        ShopAvatar(
+                                          radius: 16,
+                                          imageUrl: imageState.imageUrl,
+                                          path: imageState.path,
+                                          size: 50,
+                                          padding: 6,
+                                          bgColor: AppStyle.black.withOpacity(
                                             0.27,
                                           ),
                                         ),
-                                      ),
-                                      IconButton(
-                                        icon: Icon(
-                                          Remix.camera_fill,
-                                          color: AppStyle.white,
-                                          size: 20.r,
+                                        Container(
+                                          width: 50.r,
+                                          height: 50.r,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                              16.r,
+                                            ),
+                                            color: AppStyle.black.withOpacity(
+                                              0.27,
+                                            ),
+                                          ),
                                         ),
-                                        onPressed: () async {
-                                          final XFile? pickedFile =
-                                              await ImagePicker().pickImage(
-                                                source: ImageSource.gallery,
-                                                maxWidth: 1000,
-                                                maxHeight: 1000,
-                                                imageQuality: 90,
-                                              );
-                                          if (pickedFile != null) {
-                                            // ignore: use_build_context_synchronously
-                                            ref
-                                                .read(
-                                                  profileImageProvider.notifier,
-                                                )
-                                                .changePhoto(
-                                                  // ignore: use_build_context_synchronously
-                                                  context: context,
-                                                  path: pickedFile.path,
-                                                  firstname:
-                                                      state.userData?.firstname,
+                                        IconButton(
+                                          icon: Icon(
+                                            Remix.camera_fill,
+                                            color: AppStyle.white,
+                                            size: 20.r,
+                                          ),
+                                          onPressed: () async {
+                                            final XFile? pickedFile =
+                                                await ImagePicker().pickImage(
+                                                  source: ImageSource.gallery,
+                                                  maxWidth: 1000,
+                                                  maxHeight: 1000,
+                                                  imageQuality: 90,
                                                 );
-                                          }
-                                        },
-                                      ),
-                                    ],
+                                            if (pickedFile != null) {
+                                              // ignore: use_build_context_synchronously
+                                              ref
+                                                  .read(
+                                                    profileImageProvider
+                                                        .notifier,
+                                                  )
+                                                  .changePhoto(
+                                                    // ignore: use_build_context_synchronously
+                                                    context: context,
+                                                    path: pickedFile.path,
+                                                    firstname: state
+                                                        .userData
+                                                        ?.firstname,
+                                                  );
+                                            }
+                                          },
+                                        ),
+                                      ],
+                                    ),
                                   );
                                 },
                               ),
@@ -309,7 +336,7 @@ class _EditProfileModalState extends ConsumerState<EditProfileModal> {
                                 editState.showPassword
                                     ? Remix.eye_line
                                     : Remix.eye_close_line,
-                                color: AppStyle.black,
+                                color: AppStyle.textPrimary,
                                 size: 20.r,
                               ),
                               onPressed: editNotifier.toggleShowPassword,
@@ -335,7 +362,7 @@ class _EditProfileModalState extends ConsumerState<EditProfileModal> {
                                 editState.showConfirmPassword
                                     ? Remix.eye_line
                                     : Remix.eye_close_line,
-                                color: AppStyle.black,
+                                color: AppStyle.textPrimary,
                                 size: 20.r,
                               ),
                               onPressed: editNotifier.toggleShowConfirmPassword,
@@ -372,14 +399,14 @@ class _EditProfileModalState extends ConsumerState<EditProfileModal> {
                                     ),
                                     style: AppStyle.interNormal(
                                       size: 12.sp,
-                                      color: AppStyle.black,
+                                      color: AppStyle.textPrimary,
                                     ),
                                   ),
                                   Text(
                                     "${LocalStorage.getDeliveryInfo()?.data?.number ?? ''} — ${LocalStorage.getDeliveryInfo()?.data?.model ?? ''}, ${LocalStorage.getDeliveryInfo()?.data?.color ?? ''}",
                                     style: AppStyle.interNormal(
                                       size: 12.sp,
-                                      color: AppStyle.black,
+                                      color: AppStyle.textPrimary,
                                     ),
                                   ),
                                 ],
@@ -408,7 +435,9 @@ class _EditProfileModalState extends ConsumerState<EditProfileModal> {
                                 ),
                               );
                             },
-                            updated: context.router.maybePop,
+                            updated: widget.embedded
+                                ? () => _leavePane(context)
+                                : context.router.maybePop,
                           );
                         },
                       ),
@@ -418,5 +447,38 @@ class _EditProfileModalState extends ConsumerState<EditProfileModal> {
               },
             ),
           );
+    if (widget.embedded) {
+      // The pane: the host's plane is the surface, so no sheet card - the
+      // form top-aligned under the plane's safe area, the title leading.
+      // The plane is a bare box, though (base's PlaneHost: Row - Expanded
+      // - Planes - Builder, no Scaffold and no sheet between the app and
+      // this form), so the Material the form's IconButtons and text
+      // fields require is this widget's to provide - transparent, the
+      // plane's surface shows through. The sheet has the bottom-sheet
+      // route's Material and keeps its own card below.
+      return Material(
+        type: MaterialType.transparency,
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.only(top: 16.h),
+              child: body,
+            ),
+          ),
+        ),
+      );
+    }
+    // The sheet route is transparent (AppHelpers.showCustomModalBottomSheet);
+    // the opaque themed card is this widget's to paint, loader included.
+    return DriverSheetSurface(child: body);
+  }
+
+  /// Saved while embedded: pop the pane back to the profile's default
+  /// detail through the host seam; outside a host (never, on planes, but
+  /// bounded) the route pops as the sheet's Save always did.
+  void _leavePane(BuildContext context) {
+    if (ProfileSectionNavigator.close(context)) return;
+    context.router.maybePop();
   }
 }

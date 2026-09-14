@@ -61,7 +61,7 @@ class OrdersItem extends StatelessWidget {
         margin: EdgeInsets.only(bottom: 10.h),
         padding: EdgeInsets.symmetric(vertical: 16.h),
         decoration: BoxDecoration(
-          color: AppStyle.white,
+          color: AppStyle.cardDark,
           borderRadius: BorderRadius.circular(10.r),
         ),
         child: Column(
@@ -150,8 +150,12 @@ class OrdersItem extends StatelessWidget {
                       Container(
                         width: 36.r,
                         height: 36.r,
-                        decoration: const BoxDecoration(
-                          color: AppStyle.bgGrey,
+                        decoration: BoxDecoration(
+                          // Was the PINNED AppStyle.bgGrey. The Icon in it
+                          // carries no colour at all, so it takes the theme's
+                          // - white in dark mode - and vanished into the
+                          // light chip. Both halves resolve now.
+                          color: AppStyle.cardDarkAlt,
                           shape: BoxShape.circle,
                         ),
                         child: const Center(
@@ -221,63 +225,81 @@ class OrdersItem extends StatelessWidget {
                         ),
                       ),
                       16.horizontalSpace,
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.sizeOf(context).width - 124.w,
-                            child: Text(
-                              order.address?.address ?? "",
-                              style: AppStyle.interSemi(
-                                size: 14.sp,
-                                letterSpacing: -0.3,
+                      // Expanded: the column takes the width the ROW has,
+                      // never the screen's. Guided Tour run 34166841914,
+                      // tablet (1066 dp, three planes): the card sits in
+                      // the profile host's 346 dp detail plane (order
+                      // history, 1.21.3), but the address and customer
+                      // lines were sized to the SCREEN width
+                      // (MediaQuery.sizeOf(context).width - 124.w) and
+                      // this row overflowed by 676 px. The cap below keeps
+                      // the phone width exactly as it was; on planes the
+                      // row bounds it.
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.sizeOf(context).width - 124.w,
                               ),
-                              maxLines: 2,
-                              overflow: TextOverflow.visible,
+                              child: Text(
+                                order.address?.address ?? "",
+                                style: AppStyle.interSemi(
+                                  size: 14.sp,
+                                  letterSpacing: -0.3,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.visible,
+                              ),
                             ),
-                          ),
-                          2.verticalSpace,
-                          SizedBox(
-                            width: MediaQuery.sizeOf(context).width - 124.w,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: AutoSizeText(
-                                    order.user == null
-                                        ? AppHelpers.getTranslation(
-                                            TrKeys.deletedUser,
-                                          )
-                                        : order.user?.firstname ?? "",
-                                    style: AppStyle.interNormal(
-                                      size: 14.sp,
-                                      letterSpacing: -0.3,
+                            2.verticalSpace,
+                            ConstrainedBox(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.sizeOf(context).width - 124.w,
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: AutoSizeText(
+                                      order.user == null
+                                          ? AppHelpers.getTranslation(
+                                              TrKeys.deletedUser,
+                                            )
+                                          : order.user?.firstname ?? "",
+                                      style: AppStyle.interNormal(
+                                        size: 14.sp,
+                                        letterSpacing: -0.3,
+                                      ),
+                                      maxLines: 1,
+                                      minFontSize: 14,
                                     ),
-                                    maxLines: 1,
-                                    minFontSize: 14,
                                   ),
-                                ),
-                                SizedBox(
-                                  height: 12.r,
-                                  child: const VerticalDivider(
-                                    width: 8,
-                                    thickness: 1,
-                                  ),
-                                ),
-                                Expanded(
-                                  child: AutoSizeText(
-                                    order.user?.phone ?? "",
-                                    style: AppStyle.interNormal(
-                                      size: 14.sp,
-                                      letterSpacing: -0.3,
+                                  SizedBox(
+                                    height: 12.r,
+                                    child: const VerticalDivider(
+                                      width: 8,
+                                      thickness: 1,
                                     ),
-                                    maxLines: 1,
-                                    minFontSize: 14,
                                   ),
-                                ),
-                              ],
+                                  Expanded(
+                                    child: AutoSizeText(
+                                      order.user?.phone ?? "",
+                                      style: AppStyle.interNormal(
+                                        size: 14.sp,
+                                        letterSpacing: -0.3,
+                                      ),
+                                      maxLines: 1,
+                                      minFontSize: 14,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -312,8 +334,8 @@ class OrdersItem extends StatelessWidget {
                   Container(
                     width: 36.r,
                     height: 36.r,
-                    decoration: const BoxDecoration(
-                      color: AppStyle.bgGrey,
+                    decoration: BoxDecoration(
+                      color: AppStyle.cardDarkAlt,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Remix.arrow_right_s_line),

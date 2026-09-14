@@ -22,12 +22,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:remixicon/remixicon.dart';
 
-import 'package:base_sdk/src/constants/app_constants.dart';
 import 'package:base_sdk/src/presentation/adaptive/planes.dart';
 import 'package:base_sdk/src/presentation/components/floating_nav/floating_bottom_nav.dart';
 import 'package:base_sdk/src/presentation/components/helper/common_image.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
+import 'package:base_sdk/src/services/demo_session.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:get_it/get_it.dart';
 import 'package:merchants_sdk/src/manager/application/pos_cart/pos_cart_provider.dart';
@@ -36,6 +36,7 @@ import 'package:merchants_sdk/src/manager/application/pos_cart/pos_sale_finish.d
 import 'package:merchants_sdk/src/manager/application/quick_flow/quick_flow_provider.dart';
 import 'package:merchants_sdk/src/manager/domain/interface/pos_orders.dart';
 import 'package:merchants_sdk/src/manager/presentation/main/manager_nav_clearance.dart';
+import 'package:merchants_sdk/src/manager/presentation/pos/pos_category_chip_bar.dart';
 import 'package:merchants_sdk/src/manager/presentation/pos/receipt_preview_page.dart';
 import 'package:merchants_sdk/src/manager/presentation/pos/receipt_slip.dart';
 
@@ -129,9 +130,11 @@ import 'checkout_page.dart';
 // pill pops it back to the till. On a phone the checkout pushes the
 // preview as a route itself (11k).
 //
-// NOT BUILT from the approved frames (flagged, not invented): 11m's
-// category chip bar (chip 349) — PosCatalogRepositoryFacade only
-// searches, it exposes no categories.
+// 11m's category chip bar (chip 349, "a horizontal pill row (All / ...)
+// in the dark till tokens") rides the Add Items PANE since 1.30.0 —
+// PosCategoryChipBar under the search field, fed by the catalog seam's
+// categories; a tapped chip filters the rows (with nothing typed it lists
+// the category). Pane only: the phone sheet (11j) stays 316–321.
 
 class BillingPage extends ConsumerStatefulWidget {
   const BillingPage({super.key});
@@ -170,7 +173,11 @@ class _BillingPageState extends ConsumerState<BillingPage>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    if (!AppConstants.isDemo) {
+    // The camera stays unmounted in a demo build or a demo session
+    // (base_sdk's runtime switch; the stage renders its stand-in). A plain
+    // read: the till is pushed after the login flow has settled the switch,
+    // and a sign-out tears it down, so it is never on screen at the flip.
+    if (!DemoSession.demoActive) {
       _controller = MobileScannerController(
         detectionSpeed: DetectionSpeed.normal,
       );
@@ -1020,8 +1027,11 @@ class _BillingPageState extends ConsumerState<BillingPage>
 ///    [asPane]: on the plane grid with no sheet chrome, no pill and no
 ///    autofocus (a pane must not raise the keyboard on every till
 ///    visit), and an add keeps the pane and its query up for the next
-///    item. 11m's category chip bar (349) is NOT here: the catalog seam
-///    only searches (no categories to draw) — flagged, not invented.
+///    item, and 11m's category chip bar (349) sits under the search field
+///    — All first, then the shop's categories from the catalog seam; a
+///    tapped chip narrows the rows to that category (with nothing typed
+///    it lists the category), All widens them again. The bar is the
+///    pane's alone: the phone sheet (11j) draws 316–321, no chips.
 class _AddItemsSearch extends ConsumerStatefulWidget {
   final bool asPane;
 
@@ -1034,6 +1044,17 @@ class _AddItemsSearch extends ConsumerStatefulWidget {
 class _AddItemsSearchState extends ConsumerState<_AddItemsSearch> {
   final TextEditingController _controller = TextEditingController();
   Timer? _debounce;
+
+  @override
+  void initState() {
+    super.initState();
+    // The chip bar's categories (349): fetched once per till session, by
+    // the pane that draws them — the sheet never shows the bar, so a
+    // phone never asks. The answer lands after this frame.
+    if (widget.asPane && ref.read(posCartProvider).categories.isEmpty) {
+      unawaited(ref.read(posCartProvider.notifier).loadCategories());
+    }
+  }
 
   @override
   void dispose() {
@@ -1097,6 +1118,17 @@ class _AddItemsSearchState extends ConsumerState<_AddItemsSearch> {
             ),
           ),
           12.verticalSpace,
+          // Chip 349 (frame 11m): the category chip bar, pane only.
+          if (asPane) ...[
+            PosCategoryChipBar(
+              key: const Key('posCategoryChipBar'),
+              categories: state.categories,
+              selectedId: state.categoryId,
+              onSelect: (id) =>
+                  ref.read(posCartProvider.notifier).selectCategory(id),
+            ),
+            if (state.categories.isNotEmpty) 12.verticalSpace,
+          ],
           if (state.isSearching)
             Padding(
               padding: EdgeInsets.all(24.r),

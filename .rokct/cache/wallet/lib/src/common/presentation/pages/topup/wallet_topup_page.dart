@@ -167,7 +167,7 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
           builder: (context, ref, _) => const WalletReceiveScreen(),
         ),
       ),
-      isDarkMode: false,
+      isDarkMode: AppStyle.isDark,
     );
   }
 
@@ -329,14 +329,17 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: KeyboardDismisser(
         child: Scaffold(
-          backgroundColor: AppStyle.bgGrey,
+          backgroundColor: AppStyle.surfaceDark,
           appBar: AppBar(
-            backgroundColor: AppStyle.bgGrey,
+            backgroundColor: AppStyle.surfaceDark,
             elevation: 0,
-            iconTheme: IconThemeData(color: AppStyle.black),
+            iconTheme: IconThemeData(color: AppStyle.textPrimary),
             title: Text(
               AppHelpers.getTranslation(TrKeys.topUpWallet),
-              style: AppStyle.interSemi(size: 18.sp, color: AppStyle.black),
+              style: AppStyle.interSemi(
+                size: 18.sp,
+                color: AppStyle.textPrimary,
+              ),
             ),
           ),
           body: SafeArea(
@@ -352,6 +355,7 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
                       title: AppHelpers.getTranslation(TrKeys.enterAmount),
                       paddingHorizontalSize: 0,
                       titleSize: 16,
+                      titleColor: AppStyle.textPrimary,
                     ),
                     16.verticalSpace,
                     TextField(
@@ -374,8 +378,8 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8.r),
-                          borderSide: const BorderSide(
-                            color: AppStyle.borderColor,
+                          borderSide: BorderSide(
+                            color: AppStyle.strokeDark,
                           ),
                         ),
                         focusedBorder: OutlineInputBorder(
@@ -406,9 +410,9 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
                               vertical: 10.h,
                             ),
                             decoration: BoxDecoration(
-                              color: AppStyle.white,
+                              color: AppStyle.cardDark,
                               borderRadius: BorderRadius.circular(8.r),
-                              border: Border.all(color: AppStyle.borderColor),
+                              border: Border.all(color: AppStyle.strokeDark),
                               boxShadow: [
                                 BoxShadow(
                                   color: AppStyle.black.withValues(alpha: 0.05),
@@ -486,9 +490,9 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
                                 ),
                         ),
                       4.verticalSpace,
-                      const Row(
+                      Row(
                         children: [
-                          Expanded(child: Divider(color: AppStyle.black)),
+                          Expanded(child: Divider(color: AppStyle.strokeDark)),
                         ],
                       ),
                       4.verticalSpace,
@@ -540,9 +544,9 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
                     ),
 
                     16.verticalSpace,
-                    const Row(
+                    Row(
                       children: [
-                        Expanded(child: Divider(color: AppStyle.black)),
+                        Expanded(child: Divider(color: AppStyle.strokeDark)),
                       ],
                     ),
                     16.verticalSpace,
@@ -578,7 +582,7 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
                         AppHelpers.getTranslation(TrKeys.cardWillBeSaved),
                         style: AppStyle.interNormal(
                           size: 12.sp,
-                          color: AppStyle.textGrey,
+                          color: AppStyle.textDarkSecondary,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -619,10 +623,10 @@ class _SavedCardTile extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
           decoration: BoxDecoration(
-            color: AppStyle.white,
+            color: AppStyle.cardDark,
             borderRadius: BorderRadius.circular(8.r),
             border: Border.all(
-              color: selected ? AppStyle.primary : AppStyle.borderColor,
+              color: selected ? AppStyle.primary : AppStyle.strokeDark,
               width: selected ? 2 : 1,
             ),
           ),
@@ -630,7 +634,7 @@ class _SavedCardTile extends StatelessWidget {
             children: [
               Icon(
                 Icons.credit_card,
-                color: selected ? AppStyle.primary : AppStyle.textGrey,
+                color: selected ? AppStyle.primary : AppStyle.textDarkSecondary,
               ),
               12.horizontalSpace,
               Expanded(
@@ -646,7 +650,7 @@ class _SavedCardTile extends StatelessWidget {
                         card.expiryDate,
                         style: AppStyle.interNormal(
                           size: 12.sp,
-                          color: AppStyle.textGrey,
+                          color: AppStyle.textDarkSecondary,
                         ),
                       ),
                   ],

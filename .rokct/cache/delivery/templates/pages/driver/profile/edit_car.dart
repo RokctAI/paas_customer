@@ -41,6 +41,7 @@ import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/services/courier_helpers.dart';
+import 'package:delivery_sdk/src/driver/presentation/widgets/driver_sheet_surface.dart';
 
 class EditCar extends ConsumerStatefulWidget {
   const EditCar({super.key});
@@ -167,7 +168,7 @@ class _EditCarState extends ConsumerState<EditCar> {
     stateImage = ref.watch(profileImageProvider);
     final vehicleTypeState = ref.watch(vehicleTypeProvider);
 
-    return KeyboardDisable(
+    final Widget body = KeyboardDisable(
       child: ListView(
         physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.zero,
@@ -179,6 +180,7 @@ class _EditCarState extends ConsumerState<EditCar> {
               children: [
                 TitleAndIcon(
                   title: AppHelpers.getTranslation(TrKeys.carSettings),
+                  titleColor: AppStyle.textPrimary,
                 ),
                 24.verticalSpace,
                 vehicleTypeState.when(
@@ -245,7 +247,7 @@ class _EditCarState extends ConsumerState<EditCar> {
                         ).toUpperCase(),
                         labelStyle: AppStyle.interNormal(
                           size: 14.sp,
-                          color: AppStyle.black,
+                          color: AppStyle.textPrimary,
                         ),
                         contentPadding: REdgeInsets.symmetric(
                           horizontal: 0,
@@ -420,7 +422,7 @@ class _EditCarState extends ConsumerState<EditCar> {
               margin: EdgeInsets.all(16.r),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.r),
-                border: Border.all(color: AppStyle.black),
+                border: Border.all(color: AppStyle.strokeDark),
               ),
               child: stateImage.carImageUrl == null
                   ? imagePath == null
@@ -494,5 +496,8 @@ class _EditCarState extends ConsumerState<EditCar> {
         ],
       ),
     );
+    // Opened from the Profile settings sheet through the same transparent
+    // sheet route, so it paints the same opaque themed card.
+    return DriverSheetSurface(child: body);
   }
 }

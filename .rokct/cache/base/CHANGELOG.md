@@ -1,5 +1,385 @@
 # Changelog
 
+## 1.64.1
+
+* Fixed: a tablet profile no longer leaves the third plane empty (Ray,
+  2026-09-07: "on a tablet the generic profile host must not leave the
+  third plane empty"). `GenericProfileRoutePage` only ever filled the last
+  plane by SEEDING a detail into it, and a detail is only seeded when the
+  registry carries a `ProfileSectionRegistry.defaultSectionId` - which no
+  composed SDK sets, so every real tablet profile rendered profile |
+  profile | bare. The host's profile page now declares
+  `PlanePage.allowNeighbors` false: with no detail beside it the profile is
+  the whole flow, so `PlaneHost` clamps the visible planes to the two the
+  claim holds and those two share the full width. The universal cap is
+  untouched - still two planes and two columns, never a stretched phone
+  layout - and the flag is read only for the ACTIVE step, so it does
+  nothing at all once a card (or the seeded default) opens a detail: the
+  profile yields the last plane and spreads over the two before it exactly
+  as before. Two-plane windows and phones are unchanged.
+* `test/generic_profile_route_page_test.dart` now asserts the landing state
+  at 1066 dp fills the window in two columns instead of stopping short of a
+  bare third plane.
+
+## 1.64.0
+
+* Added: a dotted app name folds to its stem on the splash. When the
+  display name (server 'title' setting, else the composed app's
+  `AppConstants.appTitle`) contains a dot with something in front of it,
+  the wide-window boot wordmark and the boot-fallback screen show the full
+  name first, then after 1.5 s the dot and everything after it slide into
+  the stem (the suffix's clipped box collapses toward the stem with the
+  floating bar's `easeOutCubic` / `AppConstants.animationDuration`; one
+  step when the platform disables animations). A name with no dot renders
+  exactly as before. New `AppHelpers.appNameStem`, `appNameFolds`,
+  `appNameSuffix` and `getAppNameStem` decide on the value alone - no
+  brand is named anywhere; new
+  `src/presentation/pages/initial/splash/folding_brand_name.dart`
+  (`FoldingBrandName`) carries the motion. The profile footer keeps the
+  full name.
+
+## 1.63.1
+
+* Fixed: Tour builds hide the system bars on large screens so the launcher
+  taskbar stays out of tablet stills; shipped builds unchanged.
+  `SplashPage._removeSplash` now restores the post-splash system UI mode
+  through `postSplashSystemUiMode` (new
+  `src/presentation/adaptive/tour_system_ui.dart`): immersive-sticky only
+  when `AppConstants.isTour` (`--dart-define=TOUR_MODE=true`) AND the
+  window's shortest side is at least `AppBreakpoints.medium`, edge-to-edge
+  everywhere else - exactly what it was before.
+
+## 1.63.0
+
+* Fixed (security): a credential carried as a query parameter no longer
+  reaches a log. Dio's `LogInterceptor` prints the full request URI on
+  every request and on every failure, and a debug console is copied
+  verbatim into CI job logs - so any secret travelling in a query string
+  was written down in clear text every time the call failed. New
+  `src/handlers/log_redaction.dart` is the one place that decides what a
+  log line may say: `redactUri`, `redactLogText`, `redactHeaders` and the
+  `kSensitiveQueryParameters` / `kSensitiveHeaders` name lists. Redaction
+  is by parameter NAME, never by matching the secret itself, so nothing
+  has to know a key in order to hide it and a rotated key is covered the
+  moment it rotates. Everything else in the URI - host, path, the other
+  parameters, their order and encoding - is left exactly as it was, so a
+  redacted line is still worth reading.
+* Changed: every `LogInterceptor` this kernel builds now prints through
+  `logRedactedLine` (`HttpService.client`, both the ordinary and the
+  routing client). The credential names cover the ones in use across the
+  fleet - `api_key`, `apikey`, `api-key`, `key`, `token`, `access_token`,
+  `refresh_token`, `secret`, `signature` and friends as parameters;
+  `Authorization`, `Cookie`, `X-Api-Key`, `X-Goog-Api-Key` and
+  `X-RapidAPI-Key` as headers, since `requestHeader: true` prints those
+  verbatim too and moving a secret into a header is no fix if the header
+  is logged.
+* Changed: the network error funnel redacts before it reports.
+  `AppHelpers.errorHandler`'s connection-failure path sent
+  `requestOptions.uri` to telemetry, which debugPrints its whole payload
+  in a debug build and stores it after that; it now sends the redacted
+  URI and a redacted `message`. Same one-line treatment for the other
+  places that print a raw network exception: `TelemetryClient` (both
+  lanes, payload and delivery failure), `TokenRefreshService`,
+  `TranslationSeeder` and `RemoteConfigService`.
+* Added: `RoutingCredentialInterceptor`, on the routing client only. The
+  routing provider authenticates by an `Authorization` header as well as
+  by an `api_key` query parameter - an unauthenticated
+  GET answers 401 "Authorization field missing", and the header is
+  equivalent thereafter - so the interceptor strips every
+  credential-named parameter off a routing request and promotes its value
+  to the header. Call sites may keep passing `api_key` and none of them
+  can reintroduce the leak; the header also keeps the secret out of every
+  proxy and provider access log between the device and the API, which no
+  redaction on this side could ever reach. `AppConstants.routingKey` and
+  its `ROUTING_KEY` define are untouched.
+* Tests: `test/log_redaction_test.dart` - a failing request carrying a
+  credential parameter is driven through the real Dio logging path and
+  the emitted string is asserted to hold the path, the coordinates and
+  the 403 but not the credential; header lines redacted while a header
+  NAME quoted inside a response body is left alone; the routing
+  interceptor moving the key off the wire URL and onto the header, from
+  the query map and from a path-appended query alike; and a wiring
+  contract that no `LogInterceptor` built here prints raw.
+
+## 1.62.0
+
+* Changed: base_sdk's own two demo reads follow the RUNTIME demo switch
+  (phase 2 of "demo login in production", Ray 2026-09-08; phase 1 was
+  1.61.0's `DemoSession`). `DemoCurrency` and `ProfileMetaRow` now ask
+  `DemoSession.demoActive` (a demo BUILD or a demo SESSION) where they
+  read the compile-time `AppConstants.isDemo` alone. The constant itself,
+  and `DemoSession.demoActive`'s own read of it, are untouched, so the
+  guided tour, render strip and screenshots build exactly as before.
+* Added: `DemoCurrency.followDemoSession()` - `seed()`s now and again on
+  every flip of `DemoSession.instance`, one listener per process. The
+  kernel DI (`BaseSdkDependencies.register`) calls it in place of the bare
+  `seed()`, so a demo account that signs in after boot still prints every
+  amount in rand. `seed()` keeps its contract - only where nothing is
+  selected, never a delete - so a session ending writes nothing and a
+  real account's currency stays exactly as it was. Test-only
+  `stopFollowingDemoSession()`.
+* Changed: the profile footer's Online/Offline dot (`ProfileMetaRow`)
+  reads as connected in a demo session as it does in a demo build, and
+  rebuilds on the session flip (`ListenableBuilder` on
+  `DemoSession.instance`): the profile is the screen a sign-out happens
+  on, so the dot re-asks the real probe the moment the session ends
+  instead of keeping the session's answer. Nothing new on screen.
+* `DemoCurrency.isDemoOverride` / `ProfileMetaRow.isDemoOverride` now
+  stand in for `DemoSession.demoActive` (null asks the session), same
+  seam as before for tests.
+* Tests: `test/demo_currency_test.dart` (seeded on flip, untouched on
+  clear, a selected currency survives a flip, one listener per process),
+  `test/base_profile_footer_demo_test.dart` (Online per session, back to
+  the probe on clear), and `test/demo_switch_contract_test.dart` - a
+  source contract that no `AppConstants.isDemo` read remains in any
+  `*/dart/lib` of this repo outside `app_constants.dart` (the definition)
+  and `demo_session.dart` (the OR), so a new seam cannot quietly bypass
+  the runtime switch.
+
+## 1.61.1
+
+* Added: the profile's edit form as a DETAIL PANE at plane widths (Ray
+  2026-09-08, the sheet fork ruling: "sheet = PHONE, plane widths get a
+  pane" — on the driver tablet the END-anchored Profile settings sheet
+  left an empty band at 385 dp and was cut in the store crop). A detail
+  WITHOUT a hub card: `ProfileSectionRegistry.editProfileDetailBuilder`
+  (nullable `WidgetBuilder`; the form rendered embedded — no sheet chrome,
+  app bar or back of its own) under the fixed step id
+  `ProfileSectionRegistry.editProfileDetailId`, plus
+  `ProfileSection.detailOnly(id:, detailBuilder:)` for such a section.
+  `ProfileSectionNavigator` gains `openDetail(context, id:, detailBuilder:)`
+  (an ad-hoc detail in the host's last plane), `openEditProfile(context)`
+  (the registry's edit detail), `canOpenEditProfile(context)` and
+  `close(context)` (an embedded detail's own way back to the landing state
+  — the default section's detail on three planes, the bare stage on two —
+  without popping the route), behind a new optional `onClose` on the seam
+  that `GenericProfileRoutePage` provides. The identity-card pencil now
+  tries `openEditProfile` first and runs `onEditProfile` only when the
+  host cannot open a detail, so an SDK keeps its sheet as the phone flow
+  by construction; the pencil also draws with a detail alone (planes
+  only — a phone with no `onEditProfile` draws no dead pencil). The corner
+  pill pops this detail back to the default before it pops the route,
+  exactly as for a card's detail. Every existing call site is
+  source-compatible; a registry with no `editProfileDetailBuilder` renders
+  byte-identical to 1.60.10.
+
+## 1.61.0
+
+* Added: the RUNTIME half of the demo switch, for "demo login in
+  production" (Ray 2026-09-08: keep the build-time tour flag AND let real
+  accounts on the production backend - one per role: deliveryman, seller,
+  admin - flip the app into the in-app fixtures once the real backend has
+  accepted them; nothing on screen says demo; session-scoped; sign-out
+  clears it; demo actions never reach real shops, drivers or payments).
+  `AppConstants.isDemo` (`--dart-define=IS_DEMO=true`) is untouched, so
+  the guided tour, render strip and screenshots build exactly as before.
+  New `DemoSession` (`lib/src/services/demo_session.dart`, exported): a
+  `ChangeNotifier` singleton (`DemoSession.instance`) whose `active` is
+  persisted in `LocalStorage` under `demo_session_active`, with
+  `activate()` / `clear()` (each notifies once per real flip, never on a
+  no-op) and `static bool get demoActive => isDemo ||
+  DemoSession.instance.active` - the one question every demo seam should
+  ask from now on. `LocalStorage.logout()` calls `clear()`, so every
+  sign-out path in the fleet (users_sdk logout / delete-account, the 401
+  auto-logout) ends the demo session with the session. New
+  `LocalStorage.setDemoSessionActive` / `getDemoSessionActive` /
+  `deleteDemoSessionActive` and `StorageKeys.keyDemoSessionActive`.
+* Added: the server-asserted demo marker on the user models. `UserModel`
+  (the login payload's `user`) and `ProfileData` (the profile endpoint,
+  the stored session) both parse an optional `is_demo_account` (a Frappe
+  Check's 0/1 or a JSON bool; absent, null or anything else is false) into
+  `bool get isDemoAccount`, carry it through `copyWith` / `toJson`, and
+  the shared `parseDemoAccountMarker` decodes it. auth_sdk 1.11.0 flips
+  `DemoSession` on this field alone, strictly after the real
+  `AuthRepository` has signed the account in - never on an address or a
+  password, and `MockAuthRepository` stays compile-time gated.
+* Phase 2 (SDK data wiring) follows: the per-SDK DI ternaries that read
+  `AppConstants.isDemo` at registration (auth, users, delivery, orders,
+  products, merchants, revenue, zones, comms, plus the delivery launcher /
+  location / profile gates and this kernel's `DemoCurrency.seed` and
+  `ProfileMetaRow`) move to `DemoSession.demoActive` and re-register on
+  `DemoSession.instance.addListener`. Until then `activate()` changes
+  nothing a user can see beyond the flag itself: with only this release
+  merged a demo account signs in and is served exactly like any other.
+  Tests: `test/demo_session_test.dart` (activate / clear / persist round
+  trip, listener notifications, sign-out via `LocalStorage.logout`,
+  `demoActive` under the `isDemoOverride` seam), and
+  `test/demo_account_marker_test.dart` (the marker on both models).
+
+## 1.60.10
+
+* Added: the generic profile host's DETAIL PLANE (Ray 2026-09-07, "on a
+  tablet the generic profile host must not leave the third plane empty").
+  `ProfileSection` gains an optional `detailBuilder` (the section's detail
+  surface, rendered embedded — content only, no app bar or back of its
+  own) and `ProfileSectionRegistry` a `defaultSectionId` (plus `section(id)`
+  and `defaultSection` lookups). `GenericProfileRoutePage` (the routed
+  `/generic-profile` page) now owns a plane stack instead of a constant
+  one-entry host: on a THREE-plane screen the default section's detail is
+  pushed on top of the profile from the first frame with the default
+  one-plane claim, so it fills the third plane while the profile keeps its
+  two (the universal cap; the `PlaneHost` yield rule does the rest); on two
+  planes nothing is seeded. New `ProfileSectionNavigator` seam: a section
+  card calls `ProfileSectionNavigator.open(context, id)` from its tap and
+  keeps its ordinary push as the fallback — on planes the host opens the
+  detail in its last plane (replacing the default; the corner Back returns
+  to the default before it pops the route), while a phone route, a host
+  without the seam, or a section without a detail answers false so the
+  card pushes exactly as before. Phone behaviour and every other plane
+  flow are untouched; a registry with no `defaultSectionId` renders the
+  route page byte-identical to 1.60.9.
+
+## 1.60.9
+
+* Fixed: the floating Back pill's chevron and label were under the WCAG
+  floor on every light page. The pill's housing (`_Housing`, shared by the
+  tab pill, the bare Back pill, `FloatingBackPill` and the tablet rail)
+  filled itself with a 30% wash of the polarity-PINNED
+  `AppStyle.bottomNavigationBarColor` (`0xFF191919`) under pinned-white
+  ink. The housing is deliberately the same dark pill in both themes - but
+  at 30% it took 70% of whatever page it floated over, so on a light page
+  it measured `#ACACAE`-`#B2B3B5` and its white contents sat at 2.1-2.3:1.
+  The fill is now 70%: the smallest round alpha that keeps white ink at
+  or above 4.5:1 over ANY page (6.48:1 on pure white; 60% is the exact
+  floor with no margin). Size, radius, blur, icon, label and placement
+  (the bottom-END corner from 1.60.5) are untouched.
+
+  Measured from real renders of the courier profile (`paas_driver`
+  `test/render/`, the composed `ProfilePage` route with its bare Back pill)
+  and the courier Orders list, phone frame, WCAG sRGB ratios inside the
+  pill's own rects:
+
+  | frame | ink on pill, before | after | pill vs page, before | after |
+  |-------|---------------------|-------|----------------------|-------|
+  | profile, dark  | `#FFFFFF` on `#131313` - 18.58:1 | `#FFFFFF` on `#161616` - 18.10:1 | 1.02:1 | 1.05:1 |
+  | profile, light | `#FFFFFF` on `#ACACAE` - **2.27:1** | `#FFFFFF` on `#585859` - **7.11:1** | 1.92:1 | 6.03:1 |
+  | orders, dark   | `#FFFFFF` on `#B2B3B5` - **2.10:1** | `#FFFFFF` on `#5B5B5C` - **6.78:1** | 1.92:1 | 6.22:1 |
+  | orders, light  | `#FFFFFF` on `#B2B3B5` - **2.10:1** | `#FFFFFF` on `#5B5B5C` - **6.78:1** | 1.92:1 | 6.22:1 |
+
+  The dark-page look is unchanged to the eye (`#131313` -> `#161616`
+  over `surfaceDark`). The Orders row is the same in both modes because that
+  page still grounds itself on the pinned `bgGrey` on current main; zones
+  #106 (delivery_sdk 1.21.1) moves it to `surfaceDark`, after which its dark
+  row reads like the profile's. No public API changed; no call site changes.
+
+## 1.60.8
+
+* Fixed: `CustomAppBar` was invisible in dark mode - every label on it
+  vanished. The bar grounded itself on the polarity-PINNED `AppStyle.white`
+  (`0xFFFFFFFF`), a surface that never flips, while all ten of its call
+  sites put DEFAULT ink on it (`AppStyle.interSemi`/`interRegular` with no
+  `color:`, which resolve through `AppStyle.textPrimary` and go `#FFFFFF`
+  in dark mode). White ink on a white bar. `CommonAppBar`, the sibling in
+  the same folder, already grounds itself on the mode-resolving
+  `AppStyle.cardDark`; this bar was the outlier, and now matches it.
+
+  Measured from a real render of the Manager create-order screen
+  (`paas_manager` `test/render/`, `OrderPage`), element
+  `orders.create.appbar_title` (shop title, `interSemi` 18):
+
+  | mode  | before                     | after                      |
+  |-------|----------------------------|----------------------------|
+  | dark  | `#FFFFFF` on `#FFFFFF` - **1.00:1** | `#FFFFFF` on `#1C1C1C` - **17.04:1** |
+  | light | `#1B1B20` on `#FFFFFF` - 17.15:1 | `#1B1B20` on `#F9F9FB` - 16.31:1 |
+
+  The dark "before" number is not a near-miss, it is the whole story: the
+  title's box measured **100.0% a single colour**, i.e. not one glyph pixel
+  was distinguishable from the bar. After the fix the same box is 71.7%
+  ground / 28.3% ink - pixel-for-pixel the same glyph coverage the light
+  frame has always had.
+
+  In light mode the bar moves from pure `#FFFFFF` to the light palette's
+  card surface `#F9F9FB` - the value `AppStyle.cardDark` resolves to in
+  light mode, and the ground `CommonAppBar` has always drawn. Contrast
+  stays far above the 4.5:1 WCAG floor.
+
+* Fixed: the backend-maintenance page had an invisible title in dark mode.
+  `MaintenancePage` pinned `Scaffold(backgroundColor: AppStyle.white)` under
+  a title styled `AppStyle.interSemi(size: 20.sp)` - resolving ink, pinned
+  ground, the same collision as the bar above. It now uses
+  `AppStyle.surfaceDark`, the mode-resolving page ground
+  `generic_profile_page` already uses. Measured on the same harness,
+  element `base.maintenance.title`:
+
+  | mode  | before                     | after                      |
+  |-------|----------------------------|----------------------------|
+  | dark  | `#FFFFFF` on `#FFFFFF` - **1.00:1** | `#FFFFFF` on `#101010` - **19.03:1** |
+  | light | `#1B1B20` on `#FFFFFF` - 17.15:1 | `#1B1B20` on `#ECECEF` - 14.55:1 |
+
+  The palette is untouched: `AppStyle.white` keeps its value and its other
+  light-only call sites. No public API changed, and no call site needed a
+  change - all ten `CustomAppBar` call sites across `orders_sdk`,
+  `delivery_sdk` and `revenue_sdk` put only resolving ink on the bar, so
+  every one of them is strictly improved by the flip.
+
+## 1.60.7
+
+* Fixed: "Forgot password" was unreadable on the dark sign-in sheet.
+  `ForgotTextButton` styled its label with the polarity-PINNED
+  `AppStyle.black` (`0xFF232B2F`) - ink that never flips - so on the dark
+  sheet it measured **1.32:1** against the sheet's `0xFF101010` ground, far
+  under the 4.5:1 WCAG floor for body text, while the sheet title beside it
+  (which already resolves through `AppStyle.textPrimary`) sat at 19.03:1.
+  Measured from a real render of the Manager sign-in sheet
+  (`paas_manager` `test/render/render_screen_test.dart`), element
+  `auth.login.forgot_password`:
+
+  | mode  | before                     | after                      |
+  |-------|----------------------------|----------------------------|
+  | dark  | `#232B2F` on `#101010` - **1.32:1** | `#FFFFFF` on `#101010` - **19.03:1** |
+  | light | `#232B2F` on `#ECECEF` - 12.22:1 | `#1B1B20` on `#ECECEF` - 14.55:1 |
+
+  The label now takes `fontColor ?? AppStyle.textPrimary`. Two details
+  worth naming: the `fontColor` parameter was declared but never read by
+  `build` (the label was hard-coded), so it is now honoured; and its const
+  `AppStyle.black` default became `null`, because `AppStyle.textPrimary`
+  is a mode-resolving getter and cannot appear in a `const` expression -
+  the same reason the whole `AppStyle.inter*` type scale takes a nullable
+  `color`. Nothing in the fleet passes `fontColor`, so no call site changes
+  appearance in light mode beyond the ink token's own `#232B2F` ->
+  `#1B1B20`.
+
+## 1.60.6
+
+* Fixed: the routed `/generic-profile` page stretched its phone list
+  across a tablet window. base_sdk's route shell mounted a bare
+  `GenericProfilePage`, and the page spreads only under a `PlaneHost`
+  (`Planes.maybeOf` was null), so on the launcher's tablet leg the
+  profile rendered as one stretched column with no back. New
+  `GenericProfileRoutePage` (exported) is what the shell mounts now: at
+  plane widths it hosts `GenericProfilePage` in a two-plane `PlaneHost`
+  (the approved profile cap, frames 1c/1f: two planes at most, the
+  leftover plane a bare stage at the END on the page surface) and, the
+  routed profile being a pushed page, parks the one Back — a
+  `FloatingBackPill` — at the bottom-END corner where `PlaneHost` parks
+  its own (frame 1d, "back button should always be at a corner"), only
+  while the route can pop. On a phone the page is `GenericProfilePage`
+  exactly as before. The same fleet pattern zones' driver profile host
+  uses, now in base so no shell needs a wrapper of its own.
+
+## 1.60.5
+
+* Fixed: the bare Back pill sat in the wrong place in a tablet-mode window.
+  `FloatingBottomNav` treated a back-only `FloatingNavTabsMode` (empty
+  `tabs`, no `trailing`, a `back`) as a tab bar, so it followed the
+  app's `tabletNavPlacement`: bottom-centre on every fleet default app
+  (the driver's pushed pages, the wallet history, the comms settings and
+  notification pages), and a one-button rail at mid-height on the START
+  edge on the manager (`railStart`). The approved two-state nav rule
+  (design strip section 12, frame 12d, Ray 2026-08-29 12:36Z: "the nav
+  sits at bottom center unless i tell you to snap it on the right. but
+  back with no other buttons sit at the corner") puts a back with no other
+  buttons at the bottom-END corner. `FloatingBottomNav.build` now parks
+  that pill at the bottom-END corner in a tablet-mode window - a
+  `FloatingBackPill` 16 logical in from both edges inside the SafeArea,
+  directional so it flips in RTL - the same placement `PlaneHost` already
+  gives a pushed plane, whatever the app's or page's tablet placement
+  says. A back that rides with tabs or trailing actions still follows
+  placement; phone windows still draw the bottom-centre pill; controls
+  mode is untouched. `test/floating_nav_back_test.dart` covers the corner
+  at the fleet default, under `railStart` and `hidden`, and the unchanged
+  phone pill.
+
 ## 1.60.4
 
 * Fixed: the maintenance page rendered its translation keys. On a tenant

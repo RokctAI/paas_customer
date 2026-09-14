@@ -31,6 +31,7 @@ import 'package:delivery_sdk/src/driver/infrastructure/models/data/order_detail.
 import 'package:delivery_sdk/src/driver/presentation/deposit/deposit_flow.dart';
 import 'package:delivery_sdk/src/driver/presentation/home/driver_root_nav.dart';
 import 'package:delivery_sdk/src/driver/presentation/widgets/deferred_map_surface.dart';
+import 'package:delivery_sdk/src/driver/presentation/widgets/driver_map_style.dart';
 import 'package:base_sdk/src/handlers/api_result.dart';
 import 'package:base_sdk/src/presentation/components/loading.dart';
 import 'package:${package}/presentation/pages/home/parcel_bottom_sheet.dart';
@@ -537,7 +538,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                   right: state.isScrolling ? -120.w : 16.w,
                   child: Container(
                     decoration: BoxDecoration(
-                      color: AppStyle.white,
+                      color: AppStyle.cardDark,
                       borderRadius: BorderRadius.circular(10.r),
                     ),
                     padding: EdgeInsets.all(6.r),
@@ -702,6 +703,12 @@ class _HomePageState extends ConsumerState<HomePage> {
       height: MediaQuery.sizeOf(context).height,
       child: DeferredMapSurface(
         child: GoogleMap(
+          // Tablet audit 2026-09-07 (05-driver_home LIGHT in dark mode):
+          // the native map resolves with the mode like the chrome over
+          // it - base_sdk's night JSON when dark, the plugin's daylight
+          // default when light. The off-duty [_map] filter composes over
+          // either.
+          style: DriverMapStyle.forMode(),
           myLocationButtonEnabled: false,
           initialCameraPosition: CameraPosition(
             bearing: 0,
@@ -801,7 +808,11 @@ class _HomePageState extends ConsumerState<HomePage> {
           width: 50.r,
           height: 50.r,
           decoration: BoxDecoration(
-            color: AppStyle.white,
+            // Map chrome. Was the PINNED AppStyle.white under a bare
+            // `Icon(Remix.focus_3_fill)`, so in dark mode the my-location
+            // glyph went white on a white pill. The online-toggle pill above
+            // moves with it so the two controls stay one set.
+            color: AppStyle.cardDark,
             borderRadius: BorderRadius.circular(10.r),
             boxShadow: const [
               BoxShadow(

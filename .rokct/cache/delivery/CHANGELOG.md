@@ -1,3 +1,401 @@
+## 1.22.2
+
+* The standalone harness can finally load this SDK's whole test suite.
+  `TrKeys` entries this SDK's pages reference are declared in
+  `manifest.json` (`tr_keys`, plus the `app_type.driver` block) and are by
+  design absent from raw base_sdk: the installer injects every installed
+  SDK's manifest keys into the HOST app's copy of base_sdk's `TrKeys`,
+  between the `// @sdk-tr-keys-start` / `// @sdk-tr-keys-end` markers
+  base_sdk carries for that purpose. Resolved standalone, base_sdk comes
+  from the workspace checkout and that marker region is empty, so every
+  `TrKeys.<key>` failed to compile and ten test files never loaded.
+  * `tool/inject_tr_keys.dart` (new, the merchants_sdk / lms_sdk pattern)
+    performs the same injection the installer does, from the same single
+    source of truth (`manifest.json`), into the same marker region of the
+    RESOLVED base_sdk checkout, with the same collision rule - a key
+    base_sdk already declares outside the markers is skipped, base wins
+    (`juvoBenefit` is the one such key today). It is idempotent, writes
+    only inside the markers, and commits nothing anywhere. Run it from
+    `delivery/dart` after `flutter pub get`:
+    `dart run tool/inject_tr_keys.dart`. Nothing is added to `TrKeys` by
+    hand, and the standalone harness cannot drift from compose because
+    both read the same map.
+  * `test/tr_keys_injection_guard_test.dart` (new) fails with the exact
+    regeneration command whenever the resolved base_sdk is missing a
+    manifest key - ONE actionable failure instead of 58 undefined-getter
+    errors taking down the driver suite - and additionally pins the other
+    direction: every `TrKeys.<name>` referenced anywhere in `lib/`,
+    `templates/` or `test/` must be declared by this manifest or by
+    base_sdk itself, so a key added to the source but not to the manifest
+    is caught here rather than in a composed host.
+* `test/demo_driver_details_test.dart` imports
+  `package:base_sdk/src/handlers/api_result.dart`. `ApiResult.when` is not
+  missing from base_sdk - it is a member of the generated
+  `ApiResultPatterns` extension, and a Dart extension only applies where
+  its defining library is imported. This file was the one caller that
+  imported neither that library nor the barrel that exports it (every
+  other test in this package already imports it directly), so its two
+  `result.when(...)` calls were the only `undefined_method` failures of
+  their kind.
+
+## 1.22.1
+
+* Profile settings pane: give the embedded editor a Material ancestor and
+  bound the header row; fixes the error box and overflow at plane widths
+  (Guided Tour run 34219676531, paas_driver at 4e016066, both tablet legs
+  - 1066 dp three planes and 800 dp two planes; the phone sheet was
+  fine). `17-users_profile_settings` showed the detail plane as a Flutter
+  error box: `No Material widget found. IconButton widgets require a
+  Material widget ancestor` at the composed
+  `lib/presentation/pages/profile/widgets/edit_profile_modal.dart:156`
+  (seven of them - the camera button and every text field), then
+  `A RenderFlex overflowed by 99702 pixels on the right` at the header
+  `Row` (`:124`, `constraints: 0.0<=w<=314.2`, `size: 314.2 x 100000`).
+  * Cause: `EditProfileModal(embedded: true)` (1.21.5) is rendered by
+    base's routed profile host as a `PlaneHost` plane - Row, Expanded,
+    Planes, Builder - straight under the MaterialApp, with no Scaffold
+    and no sheet between the app and the form, and the host's theme is
+    Material 2 (`useMaterial3: false`), whose `IconButton` and
+    `TextField` assert a `Material` ancestor. The sheet the phone opens
+    has the bottom-sheet route's Material, which is why it never showed.
+    Each control that failed to build was replaced by Flutter's
+    `ErrorWidget`, whose render box asks for 100000 x 100000; the header
+    row's avatar `Stack` is a non-flex Row child, so it got unbounded
+    width, took the box's 100000 and overflowed the row - the second
+    error is the first one's box.
+  * Fix (`templates/pages/driver/profile/widgets/edit_profile_modal.dart`
+    only): the embedded branch returns the form on a
+    `Material(type: MaterialType.transparency)` - the plane's surface
+    still shows through - and the avatar `Stack` sits in a
+    `SizedBox.square(dimension: 50.r)`, the square its overlay and
+    `ShopAvatar` already draw, so nothing inside it can size the row. The
+    sheet branch is untouched (`DriverSheetSurface(child: body)`); on a
+    phone the header measures exactly as before wherever `50.r >= 48`
+    (every phone the 375 dp design covers), the avatar square having
+    been the Stack's largest child.
+  * `test/driver_profile_settings_pane_render_test.dart` pins it. The
+    template cannot be pumped from this package (its import chain carries
+    the composer's `${package}` placeholder, like the driver home and
+    order card tests), so the widget tests pump the header row it draws -
+    the real `ShopAvatar` and `UnderlinedBorderTextField` templates -
+    inside the real `PlaneHost` under the host's M2 theme at both tour
+    widths: bare, the row throws `No Material widget found` and the one
+    `RenderFlex overflowed` with the `ErrorWidget` in the avatar and the
+    row 100000 tall, at 314 / 361 dp exactly as the tour reported; under
+    the shell the fix installs it renders clean with the avatar 50 x 50;
+    the bound holds even against an `ErrorWidget` placed in the camera's
+    seat, and without the bound the Material alone still overflows; the
+    same row under a Material at phone width never failed. Source tests
+    pin the transparent Material on the embedded branch alone, the
+    untouched sheet return and the bounded Stack.
+
+## 1.22.0
+
+* Demo repositories follow the runtime demo session (demo login phase 2,
+  base_sdk 1.61.0 / core #184 `DemoSession`). Every demo seam in this SDK
+  now asks `DemoSession.demoActive` - the compile-time `IS_DEMO` build OR
+  the runtime session a server-marked account opens after a real sign-in -
+  instead of the compile-time `AppConstants.isDemo` alone. Nothing on
+  screen changes; a release build with neither on behaves exactly as
+  before.
+  * `lib/src/driver/di/driver_delivery_di.dart`:
+    `DriverDeliveryDependencies.register` registers the five courier
+    facades (CourierOrders / CourierParcel / Courier / CourierRoute /
+    DriverDeposit) through a demo-aware slot that reads the switch at
+    registration time, and keeps ONE listener on `DemoSession.instance`
+    (added once; a second `register` with the same container adds
+    nothing) that drops the facades this hook itself registered
+    (`isRegistered`-checked) and registers the other twin when the session
+    flips - after login, before the app routes on, and again on sign-out.
+    A facade a host pre-registered is never touched. Nothing throws at
+    boot, and a boot that restores an active session registers the demo
+    twins directly.
+  * `driver_launch_window.dart` (the launcher's unregistered-facade
+    fallback), `courier_location_fix.dart` (`pinnedBuild`, the pinned GPS)
+    and the installed driver `profile_page.dart` (the delete-account row
+    gate) read `DemoSession.demoActive` per call; none of the three can be
+    on screen at flip time, so a plain read is enough and no widget
+    listens.
+  * `test/demo_session_di_test.dart` pins it: the real types with the
+    session off, the Demo* twins after `activate()`, the real ones back
+    after `clear()`, a host's own facade surviving the flip, a double
+    `register` staying single, and a source contract that no
+    `AppConstants.isDemo` read remains in lib/ or templates/.
+
+## 1.21.5
+
+* Tablet: the driver's Profile settings open as the profile's DETAIL PANE
+  at plane widths instead of an END-anchored bottom sheet (Ray 2026-09-08,
+  the sheet fork ruling: "sheet = PHONE, plane widths get a pane" - the
+  sheet left an empty band beside itself at 385 dp and was cut in the
+  store crop). Requires base_sdk 1.60.11. The installed shell
+  (`profile_page.dart`) supplies `DriverProfileActions.profileSettingsDetail`
+  - `EditProfileModal(embedded: true)`, a new pane rendering mode of the
+  sheet's form: no `DriverSheetSurface` card, top-aligned in the plane
+  with its title, avatar, fields, vehicle row and Save, and Save leaves
+  the pane through `ProfileSectionNavigator.close` (back to the Order
+  history default) instead of popping the route. `DriverProfileSections
+  .register` puts it on the registry as `editProfileDetailBuilder`, so the
+  header pencil opens the pane through base's host; the Profile settings
+  row and the shell's `_openProfileSettings` try
+  `ProfileSectionNavigator.openEditProfile` first and fall back to
+  `showCustomModalBottomSheet`. On a phone the seam answers false, so the
+  sheet opens byte-identical to 1.21.4. Follow-up (users_sdk, not this
+  change): the tour's `users_close_profile_settings` chapter pops the
+  navigator while it can; at plane widths there is no sheet to pop, so
+  it pops the profile route itself - harmless as the last chapter.
+
+## 1.21.4
+
+* Tablet: the driver order card lays out inside a plane (Guided Tour run
+  34166841914, paas_driver main at 7c919273, tablet FIRST attempt at
+  1600x2560 / 240 dpi = 1066 dp, three planes: `flutter test` exited 1 on
+  `A RenderFlex overflowed by 676 pixels on the right` at the composed
+  `lib/presentation/component/orders_item.dart:200`, four times - one per
+  history row - so the tour fell back to its 800 dp native retry and the
+  landed tablet stills silently dropped to the two-plane geometry).
+  * Cause: `templates/components/driver/orders_item.dart` sized the
+    customer row's address and name / phone lines to
+    `MediaQuery.sizeOf(context).width - 124.w` - the SCREEN's width. On a
+    phone that is the card's width. Since 1.21.3 the card also renders in
+    the profile host's DETAIL plane (`OrderHistoryPane`), which at 1066 dp
+    is `(1066 - 2 * 14) / 3 = 346` dp wide: the row had 314 dp and was
+    handed 990 (`32 + 16 + (1066 - 124)`; ScreenUtil is 1:1 on a
+    non-compact window). At 800 dp the profile keeps both planes and the
+    history renders full width, which is why the retry never saw it.
+  * Fix: the column is `Expanded` (it takes the row's width) and the two
+    fixed widths become a `ConstrainedBox` `maxWidth` cap, so a phone lays
+    the lines out at exactly the width it always had while a plane bounds
+    them. Nothing else on the card changes.
+  * `test/driver_orders_item_layout_test.dart` pins the contract on the
+    template source: the template's `order_detail.dart` import chain
+    carries the `${package}` placeholder, so this package cannot pump it
+    (the same reason the driver home tests read their template). Verified
+    in a composed driver harness: the card in the 346 dp detail plane at
+    1066 dp lays out with no exception, the 800 dp and phone controls are
+    unchanged, and the phone address is still `width - 124.w` wide.
+
+## 1.21.3
+
+* Tablet: the driver profile opens a DEFAULT section in the plane host's
+  detail plane (tablet audit 2026-09-07, 16-users_profile: the third
+  plane stayed empty). base_sdk 1.60.10 (core #181) added
+  `ProfileSection.detailBuilder`, `ProfileSectionRegistry.defaultSectionId`
+  and `ProfileSectionNavigator.open`, and its `GenericProfileRoutePage`
+  seeds the default section's detail into the third plane on a
+  three-plane screen. Adopted for the driver:
+  * `lib/src/driver/presentation/profile/driver_profile_sections.dart`:
+    `DriverProfileActions.orderHistoryDetail` (optional `WidgetBuilder`)
+    is the rows section's `detailBuilder`; when the shell supplies one,
+    `register` sets `defaultSectionId ??= delivery.driver_rows`
+    (`DriverProfileSections.defaultSectionId`). The **Order history** row
+    goes through `ProfileSectionNavigator.open` before its push, so on
+    planes it opens beside the profile and on a phone it pushes exactly
+    as before.
+  * Which section, and why: the driver profile has ONE content section
+    (the row list), so the choice is which row's content its detail
+    carries. Income would be the driver's first pick, but it is
+    revenue_sdk's route page (its own Scaffold, tabs and withdraw flow) -
+    embedding it needs a revenue_sdk change, recorded as a follow-up.
+    Order history is the courier's own record, the list the header's
+    delivered / last-profit figures summarise, and this SDK's page, so
+    it embeds without a second Scaffold.
+  * `templates/pages/driver/order_history/order_history.dart`: the page
+    is split into `OrderHistoryPage` (route: Scaffold, app bar, pill,
+    filter - unchanged on screen) and the new `OrderHistoryPane` (the
+    fetch on mount, loading state and pull-to-refresh list; with
+    `heading: true` it leads with the page's title and subtitle as plain
+    text for a plane with no app bar). The routed page renders the pane
+    under its app bar, so the two can never drift.
+  * `templates/pages/driver/profile/profile_page.dart`: plane widths now
+    render base's `GenericProfileRoutePage` (the seam, the detail plane,
+    the third-plane seeding and the same bottom-END corner pill this
+    shell drew) instead of a `PlaneHost` of its own; the shell hands the
+    rows section `orderHistoryDetail: OrderHistoryPane(heading: true)`.
+    The phone branch (GenericProfilePage in a one-plane host with the
+    bottom-centre pill) is byte-identical.
+  * Requires base_sdk >= 1.60.10 (`_comment_requires_host`); base_sdk is
+    a path dependency, so no pin moves.
+* `templates/tour/delivery.tour.yaml` is unchanged and needs no change:
+  the profile step's route, finder and caption stay, and users_sdk's tour
+  still taps the Profile settings row by its title. Demo seeds untouched.
+* Version 1.21.1 -> 1.21.3 (pubspec 1.3.1 -> 1.3.3): 1.21.2 is the driver
+  map dark-style PR on its own branch; whichever merges second takes the
+  higher number.
+
+## 1.21.2
+
+* Dark mode: the driver home map (tablet audit 2026-09-07, 05-driver_home
+  LIGHT in dark mode - mean luminance 199) shipped its `GoogleMap` with no
+  style at all, so the native map painted Google's daylight tiles under
+  chrome that resolves with the mode. The map now takes base_sdk's own
+  night style - `AppMapThemes.mapDarkTheme` (`map_themes.dart`: dark
+  geometry, muted labels, the standard Google night JSON), which base has
+  carried unused since the refork - through the new
+  `DriverMapStyle.forMode()` (`lib/src/driver/presentation/widgets/
+  driver_map_style.dart`): the theme JSON-encoded once, returned while
+  `AppStyle.isDark`, `null` (the plugin's daylight default, exactly what
+  the map drew before) otherwise. Light mode is unchanged; the off-duty
+  desaturation stays the paint-time `ColorFiltered` it was and composes
+  over either style. Camera, markers, polygons, polylines and padding are
+  untouched.
+* The driver delivery-zone editor lives in zones_sdk (its
+  `templates/pages/driver/profile/delivery_zone/delivery_zone_page.dart`)
+  and takes the same style and `DeferredMapSurface` from this package in
+  zones_sdk 1.5.1; that page's fixes are recorded there.
+* `templates/tour/delivery.tour.yaml` is unchanged and needs no change:
+  no step's route, finder, caption or seed moves, and no element is added,
+  renamed or removed. Demo seeds untouched.
+* Version 1.21.1 -> 1.21.2 (pubspec 1.3.1 -> 1.3.2) so version-aware cache
+  reconciliation re-extracts the SDK.
+
+## 1.21.1
+
+* Dark mode: the driver screens the profile links to were drawn on
+  polarity-PINNED light surfaces (`AppStyle.white`, `AppStyle.bgGrey`)
+  holding ink that DOES resolve with the mode, so in dark mode the ink
+  turned white while the surface stayed white and the content
+  disappeared. Same class as base_sdk's `ForgotTextButton` (core #178,
+  base_sdk 1.60.7) and the same fix: the widget reaches for the
+  mode-resolving token instead of the pinned constant. The palette is
+  untouched - `AppStyle.white` / `black` / `bgGrey` keep their values and
+  their light-only call sites across the fleet.
+  Surfaces now resolve through the tokens the courier profile already
+  uses since 1.21.0 (`cardDark` / `cardDarkAlt` / `surfaceDark`), and the
+  inks and rules pinned ON those surfaces through `textPrimary` /
+  `strokeDark`:
+  * **Order cards** - `components/driver/order_item.dart` (the four cards
+    of the order detail: the 18+ ID warning, the shop and customer
+    address blocks, the totals row and the courier note) and
+    `components/driver/orders_item.dart` (the list card plus its two
+    round icon chips, whose `Icon()`s carry no colour at all and so
+    vanished into the chip).
+  * **Order detail chrome** - `components/driver/order_detail.dart`
+    (the outlined "Order information" button and the "Order image" tile,
+    both drawn with a pinned near-black rule and label on the
+    TRANSPARENT sheet ground), `components/driver/product_item.dart` and
+    `pages/driver/home/widgets/foods_page.dart` (the item list, its
+    price table and the rule between rows).
+  * **The delivery sheet and its dialogs** -
+    `pages/driver/home/delivery_bottom_sheet.dart` (the sheet ground, the
+    cash-to-collect banner, the age-verification and cancel dialogs),
+    `widgets/approve_dialog.dart`, `widgets/rate_customer.dart` and
+    `components/driver/image_dialog.dart`.
+  * **Parcels** - `pages/driver/home/parcel_bottom_sheet.dart` (sheet
+    ground, COD banner, cash dialog) and `pages/driver/parcels/
+    parcel_item.dart`, whose card carried NO explicit ink at all.
+  * **Route** - `pages/driver/route/route_page.dart`: the page ground,
+    the dispatch-note card, every stop card and the Done / Skip labels.
+  * **Page grounds** - `orders_page.dart`, `order_history.dart`,
+    `parcels_page.dart`, `parcel_history.dart` scaffolds, and the two
+    map-chrome pills on `home/home_page.dart` (the online toggle and the
+    my-location button, whose `Icon()` was invisible on it).
+  * **Shared components on a transparent sheet** -
+    `components/driver/maps_list.dart` (bare `Text` on a white card),
+    `components/driver/filter_screen.dart`,
+    `components/driver/custom_date_picker.dart`,
+    `components/driver/restaurant_item.dart` and
+    `components/driver/text_fields/underline_bordered_text_field.dart`,
+    whose field label and description ignored the `isDarkMode` its own
+    value and cursor already honour.
+  * **Profile dialogs** - `profile/widgets/cancel_dialog.dart`,
+    `profile/widgets/logout_modal.dart` (the outlined Cancel button
+    inherited `CustomButton`'s pinned `textColor` default on the dark
+    sheet), `profile/edit_car.dart` (the vehicle-photo dropzone rule and
+    a field label the 1.21.0 sweep missed) and, in lib,
+    `infrastructure/services/courier_helpers.dart`'s photo-source dialog.
+* Two inks stay PINNED because their ground is `AppStyle.primary`, not a
+  card, and black-on-orange is the fleet's pairing (it is `CustomButton`'s
+  own `textColor` default): the route page's **Done** button label, and
+  the **selected day** in `components/driver/custom_date_picker.dart` -
+  the latter now declares `selectedDayTextStyle` explicitly, because
+  `dayTextStyle` would otherwise have covered the highlighted day too.
+  Measured: resolving those two would have taken the Done label from
+  4.91:1 to 2.94:1, i.e. made the fix worse than the bug. The picker's
+  config also becomes a getter so the styles re-resolve when the mode
+  changes instead of freezing at `State` construction.
+* NOT changed, deliberately: the self-consistent PINNED PAIRS, where a
+  near-black chip carries white ink (the phone / SMS call buttons, the
+  route stop-sequence badge, the `AppStyle.black` confirm buttons) and
+  the avatar image backdrops and error circles. Their labels stay legible
+  in both modes - only the pill loses its edge against a dark card - so
+  they are a design call, not this invisibility bug, and flipping them
+  would be a visible dark-mode redesign rather than a polarity fix.
+* Light mode is unchanged in substance: the pinned light values are
+  replaced by the light halves of the same resolving pairs
+  (`white` 0xFFFFFFFF -> `cardDark`'s light 0xFFF9F9FB, `bgGrey`
+  0xFFF4F5F8 -> `surfaceDark`'s light 0xFFECECEF, `black` 0xFF232B2F ->
+  `textPrimary`'s light 0xFF1B1B20) - the fleet light palette every other
+  fixed screen already converged on, and every one of those pairs stays
+  far above the WCAG floor.
+* `templates/tour/delivery.tour.yaml` is unchanged and needs no change:
+  no step's route, finder, caption or seed moves - every finder goes
+  through a route name or a translated string, and no element is added,
+  renamed or removed. The demo seeds are untouched.
+* manifest.json 1.21.0 -> 1.21.1.
+
+## 1.21.0
+
+* The driver profile now renders on base_sdk's generic profile host
+  (approved design strip section 1: the unified header unit, the title /
+  theme-toggle / sign-out top row and frame 1c's two-plane spread on EVERY
+  profile page) instead of the standalone page
+  `templates/pages/driver/profile/profile_page.dart` used to be - the
+  tablet audit's "driver profile is not on the host" defect. The installed
+  file keeps its route name, path and constructor (`ProfileRoute`,
+  `/profile`) and is now a host route shell: `GenericProfilePage` inside a
+  `PlaneHost` / `PlanePage(span: PlaneSpan.two)` (the universal profile cap),
+  registering the driver's content on `ProfileSectionRegistry` the way
+  merchants' restaurant_page.dart and marketplace's ProfileRoute shell do.
+  Nothing the old page showed is gone:
+  * balance, last profit and delivered-orders tiles -> the header card's
+    `stats` slot (`DriverProfileStatsRow`; balance from the host's profile
+    state, the rest from the courier statistics provider);
+  * the row list (profile settings, delivery zone, orders, parcels,
+    notifications, order history, parcel history, income, language, delete
+    account - demo builds still hide the last) -> one `delivery.driver_rows`
+    section of base `ProfileNavTile`s in the old order;
+  * the Online helper call button -> the `delivery.online_helper` section;
+  * the app-bar sign-out glyph -> the host's red top-row sign-out (chip 76),
+    running the old LogoutModal's confirmed branch after the host's own
+    confirmation; the settings sheet also opens from the header pencil
+    (chip 109) besides the Profile settings row, which stays because
+    users_sdk's tour fragment taps that row by its translated title.
+  New lib file `lib/src/driver/presentation/profile/
+  driver_profile_sections.dart` (`DriverProfileSections.register`,
+  `DriverProfileActions`, `DriverProfileStatsRow`, `DriverProfileRows`,
+  `DriverOnlineHelperSection`) holds the widgets and imports only base_sdk;
+  the shell supplies the composed app's routes as callbacks. The host's
+  `base.footer` meta row (app name, version, Online dot, usage badge) is
+  claimed with the back-pill clearance under it, as merchants' hub does.
+* Two-state nav on the profile (approved 12d): the page is pushed, so it
+  carries the bare back pill - bottom-centre on a phone exactly as before,
+  and at the bottom-END corner on plane widths (where `PlaneHost` parks its
+  own pill), drawn by the shell with base_sdk's `FloatingBackPill`.
+* The Profile settings sheet (`widgets/edit_profile_modal.dart`) and the
+  vehicle sheet it opens (`edit_car.dart`) rendered transparent: base_sdk's
+  `AppHelpers.showCustomModalBottomSheet` paints the sheet route transparent
+  and expects the sheet to bring its own card, and neither did - on the
+  tablet still the form floated over the profile's dimmed button and back
+  pill. Both now sit on the new `DriverSheetSurface`
+  (`lib/src/driver/presentation/widgets/driver_sheet_surface.dart`): the
+  same mode-resolving pair base_sdk's `EditProfileScreen` uses (dark: the
+  theme dark surface, light: the page grey), opaque, top corners rounded
+  16. The sheets' fixed black inks (titles, password eyes, the vehicle
+  line) resolve with the mode too, so the card reads in dark mode.
+* `widgets/sections_item.dart` (the old page's row tile) is removed with
+  its install entry; the rows are base `ProfileNavTile`s now.
+* `templates/tour/delivery.tour.yaml` is unchanged: `driver_profile` still
+  routes to `/profile` (navigation-only, no still), and users_sdk's
+  `users_profile_settings` step still finds the Profile settings row.
+* Requires base_sdk >= 1.58.0 (declared in `manifest.json`
+  `_comment_requires_host`): the driver compose registers no
+  ShopsRepositoryFacade / GalleryRepositoryFacade, and 1.58.0 is where
+  `profileProvider` resolves its facades lazily (`ProfileNotifier.
+  fromLocator`) instead of throwing while building the host.
+* manifest.json 1.20.3 -> 1.21.0 so version-aware cache reconciliation
+  re-extracts the shell into every driver compose.
+
 ## 1.20.3
 
 * fix(tour): the `driver_available_orders` caption in

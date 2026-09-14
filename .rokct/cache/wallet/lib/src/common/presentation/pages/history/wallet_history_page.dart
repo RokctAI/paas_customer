@@ -121,7 +121,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
           builder: (context, ref, _) => const WalletSendScreen(),
         ),
       ),
-      isDarkMode: false,
+      isDarkMode: AppStyle.isDark,
     );
   }
 
@@ -138,7 +138,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
     AppHelpers.showCustomModalBottomSheet(
       context: context,
       modal: ProviderScope(child: loan),
-      isDarkMode: false,
+      isDarkMode: AppStyle.isDark,
     );
   }
 
@@ -157,7 +157,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: AppStyle.bgGrey,
+        backgroundColor: AppStyle.surfaceDark,
         body: Stack(
           children: [
             Column(
@@ -182,7 +182,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                             AppHelpers.getTranslation(TrKeys.transactions),
                             style: AppStyle.interNoSemi(
                               size: 18,
-                              color: AppStyle.black,
+                              color: AppStyle.textPrimary,
                             ),
                           ),
                           5.horizontalSpace,
@@ -258,7 +258,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                             : history[index].type ==
                                                     "withdraw"
                                                 ? AppStyle.red.withValues(alpha: 0.5)
-                                                : AppStyle.white,
+                                                : AppStyle.cardDark,
                                   ),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -277,7 +277,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                               "${AppHelpers.getTranslation(TrKeys.paymentDate)}: ${intl.DateFormat("MMM dd,yyyy h:mm a").format(DateTime.tryParse(history[index].createdAt ?? "")?.toLocal() ?? DateTime.now())}",
                                               style: AppStyle.interRegular(
                                                 size: 12.sp,
-                                                color: AppStyle.black,
+                                                color: AppStyle.textPrimary,
                                               ),
                                             ),
                                             4.verticalSpace,
@@ -288,7 +288,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                                     text: "Ref: ",
                                                     style: AppStyle.interBold(
                                                       size: 16.sp,
-                                                      color: AppStyle.black,
+                                                      color: AppStyle.textPrimary,
                                                     ),
                                                   ),
                                                   TextSpan(
@@ -297,7 +297,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                                         "",
                                                     style: AppStyle.interRegular(
                                                       size: 16.sp,
-                                                      color: AppStyle.black,
+                                                      color: AppStyle.textPrimary,
                                                     ),
                                                   ),
                                                 ],
@@ -306,7 +306,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                           ],
                                         ),
                                       ),
-                                      const Divider(color: AppStyle.black),
+                                      Divider(color: AppStyle.strokeDark),
                                       Padding(
                                         padding: EdgeInsets.only(
                                           bottom: 16.r,
@@ -323,7 +323,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                                   "Transaction type: ",
                                                   style: AppStyle.interRegular(
                                                     size: 12.sp,
-                                                    color: AppStyle.black,
+                                                    color: AppStyle.textPrimary,
                                                   ),
                                                 ),
                                                 Text(
@@ -333,7 +333,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                                   ),
                                                   style: AppStyle.interBold(
                                                     size: 16.sp,
-                                                    color: AppStyle.black,
+                                                    color: AppStyle.textPrimary,
                                                   ),
                                                 ),
                                               ],
@@ -349,14 +349,14 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                                       .capitalize(),
                                                   style: AppStyle.interBold(
                                                     size: 12.sp,
-                                                    color: AppStyle.black,
+                                                    color: AppStyle.textPrimary,
                                                   ),
                                                 ),
                                                 Text(
                                                   'Status: ${(history[index].status ?? "").capitalize()}',
                                                   style: AppStyle.interRegular(
                                                     size: 12.sp,
-                                                    color: AppStyle.black,
+                                                    color: AppStyle.textPrimary,
                                                   ),
                                                 ),
                                               ],

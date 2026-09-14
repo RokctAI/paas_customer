@@ -36,6 +36,7 @@ import 'package:base_sdk/src/constants/app_constants.dart';
 import 'package:base_sdk/src/constants/demo_currency.dart';
 import 'package:base_sdk/src/navigation/app_routes.dart';
 import 'package:base_sdk/src/presentation/adaptive/breakpoints.dart';
+import 'package:base_sdk/src/handlers/log_redaction.dart';
 import 'package:base_sdk/src/handlers/network_exceptions.dart';
 import 'package:base_sdk/src/models/data/address_old_data.dart';
 import 'package:base_sdk/src/services/app_connectivity.dart';
@@ -314,6 +315,33 @@ abstract class AppHelpers {
     // name (compose-time override of AppConstants.appTitle; 'JUVO' for apps
     // that declare nothing — the historical hardcoded fallback).
     return AppConstants.appTitle;
+  }
+
+  /// The app name with a dotted suffix folded away: `acme.school` reads
+  /// `acme`. A name with no dot, an empty name, or a name whose first
+  /// character is the dot (nothing to keep in front of it) comes back
+  /// unchanged - only the value is inspected, never a brand.
+  static String appNameStem(String name) {
+    final int dot = name.indexOf('.');
+    if (dot <= 0) {
+      return name;
+    }
+    return name.substring(0, dot);
+  }
+
+  /// Whether [appNameStem] would shorten [name]: a dot with at least one
+  /// character before it.
+  static bool appNameFolds(String name) => appNameStem(name) != name;
+
+  /// The part [appNameStem] folds away - the first dot and everything after
+  /// it (`.school` for `acme.school`), or '' when the name does not fold.
+  static String appNameSuffix(String name) =>
+      name.substring(appNameStem(name).length);
+
+  /// [getAppName] with its dotted suffix folded away (see [appNameStem]).
+  static String? getAppNameStem() {
+    final String? name = getAppName();
+    return name == null ? null : appNameStem(name);
   }
 
   /// The trademark symbol rendered after the app name: '®' (Registered),
@@ -813,13 +841,18 @@ abstract class AppHelpers {
     try {
       String url = '';
       try {
-        url = e.requestOptions.uri.toString();
+        // Redacted at the source: this URL is debugPrinted by the
+        // telemetry client in debug builds (and a debug console is a CI
+        // job log), and stored server-side after that. A credential
+        // carried as a query parameter must survive neither trip.
+        url = redactUri(e.requestOptions.uri).toString();
       } catch (_) {}
       TelemetryClient.I.logError(
         type: 'network_unreachable',
         context: {
           'exception': e.type.name,
-          'message': e.message ?? '',
+          // Dio folds the failing address into some transport messages.
+          'message': redactLogText(e.message),
           if (url.isNotEmpty) 'url': url,
         },
       );

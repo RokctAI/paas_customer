@@ -26,6 +26,8 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/navigation/app_routes.dart';
 import 'package:base_sdk/src/presentation/adaptive/breakpoints.dart';
+import 'package:base_sdk/src/presentation/adaptive/tour_system_ui.dart';
+import 'package:base_sdk/src/presentation/pages/initial/splash/folding_brand_name.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/services/app_connectivity.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
@@ -61,9 +63,13 @@ class _SplashPageState extends ConsumerState<SplashPage> {
   /// gesture pill). Re-asserting the mode and the shared overlay style here,
   /// at the exact moment the splash goes away, restores the full frame:
   /// content draws behind both transparent bars with white icons.
-  static void _removeSplash() {
+  ///
+  /// The mode itself comes from [postSplashSystemUiMode]: edge-to-edge for
+  /// every shipped build and every phone, immersive only for a tour build
+  /// on a large screen (see `tour_system_ui.dart` for why).
+  void _removeSplash() {
     FlutterNativeSplash.remove();
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    applyPostSplashSystemUi(context);
     SystemChrome.setSystemUIOverlayStyle(AppStyle.systemUiOverlay);
   }
 
@@ -321,8 +327,8 @@ class _SplashPageState extends ConsumerState<SplashPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    AppHelpers.getAppName() ?? AppConstants.appTitle,
+                  FoldingBrandName(
+                    name: AppHelpers.getAppName() ?? AppConstants.appTitle,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.inter(
                       fontSize: 28,
@@ -390,7 +396,9 @@ class _SplashPageState extends ConsumerState<SplashPage> {
 /// resolved the way the rest of base_sdk does it (server 'title' setting via
 /// [AppHelpers.getAppName], falling back to the composed app's
 /// [AppConstants.appTitle]) and sized off the window width (20%, clamped
-/// 40-80) exactly like the reference.
+/// 40-80) exactly like the reference. The name itself is a
+/// [FoldingBrandName]: a dotted name shows in full, then its suffix slides
+/// into the stem; a plain name is unchanged.
 class _BreathingBrandName extends StatefulWidget {
   const _BreathingBrandName();
 
@@ -434,8 +442,8 @@ class _BreathingBrandNameState extends State<_BreathingBrandName>
           ),
         );
       },
-      child: Text(
-        AppHelpers.getAppName() ?? AppConstants.appTitle,
+      child: FoldingBrandName(
+        name: AppHelpers.getAppName() ?? AppConstants.appTitle,
         textAlign: TextAlign.center,
         style: GoogleFonts.inter(
           fontSize: fontSize,

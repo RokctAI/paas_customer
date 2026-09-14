@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.60.4",
+      "version": "1.64.1",
       "files": {
         "lib/main.dart": "343014dec4b6f3e50b8fc42ac2824543471696797f32e804089c19e9a23fdcab",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -234,7 +234,7 @@
         "lib/core/presentation/theme/theme.dart": "0d3a0e59c133fccfd32dd80bf649e99d580d56605936fd8bd63e5d6301c7091e",
         "lib/presentation/app_widget.dart": "868f76ed49e4bd523aced7d839f356403ccc65a160447633935d900b9683648f",
         "lib/presentation/routes/app_router.dart": "3b99e50c60dab1161ccf14aa381f7481ab1baad0223575df04e4bda89a20464b",
-        "lib/presentation/routes/route_pages.dart": "73c0b8cbf05823b865c35381355c9361c37135618d36e0ed3ea839f8d86af76d",
+        "lib/presentation/routes/route_pages.dart": "32ab7543d1b94e5b5aedd5a59604a390c373d6e881801c875e37f2ddd001d8c8",
         "lib/presentation/theme/theme.dart": "dccd0527934c068d0b8ef48d7d0677d068d1054e7fcc1e1eea1f6682912bfcd5",
         "lib/presentation/theme/app_style.dart": "a45367fab06abafa465a15d659d631e344f3c1badc06a8880b2298eaf063c535",
         "android/app/src/main/res/xml/backup_rules.xml": "a977a3552bb8c4facc634f4060ce11d623366bc310f5b119d390feb51b2f9409",
@@ -611,7 +611,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.10.4",
+      "version": "1.12.0",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "87b5d1dbc3f0f9417db5289be2c1ebbcb7dfecf1638f348b6f5ee1581f7ce4d2",
         "lib/presentation/routes/registration_step_pages.dart": "d18f7e35878721c688c4f0964db42c97148e1f2e9d225cd1a6bb7490e2628347",
@@ -705,7 +705,7 @@
       }
     },
     "users_sdk": {
-      "version": "1.3.7",
+      "version": "1.4.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -716,7 +716,7 @@
       "boot_hooks": []
     },
     "merchants_sdk": {
-      "version": "1.29.3",
+      "version": "1.31.0",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "lib/presentation/routes/merchants_customer_route_pages.dart": "94118cddd225b802a07db40ac5683697fd190d5d1de42494d955fc3f7eb79456"
@@ -775,7 +775,7 @@
       ]
     },
     "products_sdk": {
-      "version": "1.10.1",
+      "version": "1.11.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -786,7 +786,7 @@
       "boot_hooks": []
     },
     "orders_sdk": {
-      "version": "1.20.1",
+      "version": "1.21.0",
       "files": {
         "lib/presentation/routes/orders_customer_route_pages.dart": "acadebdd2b7525434e765bf02683c151b97d7a392e1552d8f2af02b916a4702c"
       },
@@ -966,7 +966,7 @@
       "boot_hooks": []
     },
     "wallet_sdk": {
-      "version": "1.6.2",
+      "version": "1.6.3",
       "files": {
         "lib/presentation/routes/wallet_route_pages.dart": "86d07bc5c2e239b713c49a9caa4f2dc6007ec1e20aa9519aeb960f3fcc8ee5a7"
       },
@@ -1021,7 +1021,7 @@
       "boot_hooks": []
     },
     "delivery_sdk": {
-      "version": "1.20.3",
+      "version": "1.22.2",
       "files": {
         "assets/svg/balance.svg": "6f17d12b29de8e5500bc445ee89eec5c1fc8830cea42711af9bf80975e6b79ce",
         "assets/image/my_location.png": "0e6b49eb78d1f74ac96ac24ce39f834105ce68e361c302038ba9cefdcd926126",
@@ -1070,7 +1070,7 @@
       ]
     },
     "comms_sdk": {
-      "version": "1.15.1",
+      "version": "1.16.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1167,7 +1167,7 @@
       "boot_hooks": []
     },
     "map_sdk": {
-      "version": "1.3.1",
+      "version": "1.3.2",
       "files": {
         "lib/presentation/routes/map_route_pages.dart": "40d4309147726738a018def95efb9f3e16815684c55ac631f0559b74dfef4a50"
       },
@@ -1395,28 +1395,28 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.60.4",
-      "hash": "8f3c2bc890d8c61d"
+      "version": "1.64.1",
+      "hash": "1dd7519344374297"
     },
     "comms": {
-      "version": "1.15.1",
-      "hash": "c3c7540e4e09b021"
+      "version": "1.16.0",
+      "hash": "92dd94546ff0a1ae"
     },
     "marketplace": {
       "version": "1.14.1",
       "hash": "e1bcc6386bb7b24e"
     },
     "merchants": {
-      "version": "1.29.3",
-      "hash": "b8f882dd73cf98fb"
+      "version": "1.31.0",
+      "hash": "0b385a34c3f2b31d"
     },
     "products": {
-      "version": "1.10.1",
-      "hash": "054e6c067b1ca2c5"
+      "version": "1.11.0",
+      "hash": "326fd62a42d2e763"
     },
     "orders": {
-      "version": "1.20.1",
-      "hash": "7eb078e90bb0687e"
+      "version": "1.21.0",
+      "hash": "7f887eb579392434"
     },
     "promotions": {
       "version": "1.2.2",
@@ -1427,32 +1427,32 @@
       "hash": "5ac9fa78ff6e1dfe"
     },
     "auth": {
-      "version": "1.10.4",
-      "hash": "5940157a40010df3"
+      "version": "1.12.0",
+      "hash": "68769c4298e440ba"
     },
     "users": {
-      "version": "1.3.7",
-      "hash": "9886a73d85f55738"
+      "version": "1.4.0",
+      "hash": "8747546a4b006a37"
     },
     "fav": {
       "version": "1.0.2",
       "hash": "373721752683554f"
     },
     "wallet": {
-      "version": "1.6.2",
-      "hash": "31a165693f16019a"
+      "version": "1.6.3",
+      "hash": "d011ab3b258f151c"
     },
     "payments": {
       "version": "1.2.1",
       "hash": "e0721789ba081cd0"
     },
     "delivery": {
-      "version": "1.20.3",
-      "hash": "8b6e7f893d54e4ce"
+      "version": "1.22.2",
+      "hash": "b2d5566c78c8e66d"
     },
     "map": {
-      "version": "1.3.1",
-      "hash": "59d2d79706c97184"
+      "version": "1.3.2",
+      "hash": "a06c45f6e8a9a1ee"
     },
     "corporate": {
       "version": "1.2.0",

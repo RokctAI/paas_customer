@@ -1,5 +1,49 @@
 # Changelog
 
+## 1.16.0
+
+* Changed: demo repositories follow the runtime demo session (phase 2 of
+  "demo login in production", Ray 2026-09-08). `CommsSdkDependencies.register`
+  picks `MockSettingsRepository` or `SettingsRepository` from base_sdk's
+  `DemoSession.demoActive` - a demo BUILD (`--dart-define=IS_DEMO=true`,
+  exactly as before) OR a demo SESSION (a server-marked demo account
+  signed in on a real build) - instead of the compile-time constant alone,
+  and re-registers the `SettingsRepositoryFacade` singleton when
+  `DemoSession.instance` flips: a demo account signing in after boot gets
+  the fixtures, a sign-out ending its session gets the real repository
+  back. One listener per container however often `register` is called;
+  a facade a host wired before this hook is never replaced. The
+  currencies and notification repositories have no demo twin and are
+  unchanged. Requires base_sdk >= 1.62.0. Test-only
+  `stopFollowingDemoSession(getIt)`.
+* Tests: `test/comms_di_demo_test.dart` - real repository when the
+  session is off, the demo twin after `activate()`, real again after
+  `clear()`, the twin from registration when the session is already on,
+  a host's own registration untouched across flips.
+
+## 1.15.3
+
+* Fixed: the Languages sheet (`LanguageScreen`) painted a light surface
+  regardless of theme. `AppHelpers.showCustomModalBottomSheet` paints the
+  sheet route transparent and expects the modal to bring its own surface, so
+  the `isDarkMode` flag 1.15.2 started passing from the tour never reached
+  the paint - guided tour run 34112448075 still captured a light sheet over
+  a dark Kitchen page (`16-comms_language.png`). The sheet now resolves
+  `AppStyle.isDark ? AppStyle.surfaceDark : AppStyle.bgGrey` (the pair
+  base_sdk's `EditProfileScreen` uses) and draws its title in
+  `AppStyle.textPrimary`.
+* Fixed: the sheet capped itself at 30% of the window height, which on the
+  tablet leg (END-anchored narrow panel) pushed the Save button below the
+  fold. The cap is gone; the helper's own window-height constraint still
+  bounds the sheet and long language lists still scroll.
+
+## 1.15.2
+
+* Fixed: the `comms_language` tour step opened the language sheet with
+  `isDarkMode: false`, so the still captured a light sheet inside a tour the
+  shells now start dark. The sheet follows `LocalStorage.getAppThemeMode()`,
+  the theme the tour is actually running in.
+
 ## 1.15.1
 
 * Fixed: privacy policy and terms of service placeholder copy in the mock
