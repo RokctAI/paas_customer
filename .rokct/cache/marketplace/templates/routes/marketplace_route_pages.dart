@@ -89,7 +89,7 @@ void registerMarketplaceProfileSections() {
 
 /// Host route shell for the customer profile, now rendering base_sdk's
 /// generic profile host. Route name (ProfileRoute) and constructor params
-/// match the deprecated marketplace ProfilePage, so existing navigation
+/// match the removed marketplace ProfilePage, so existing navigation
 /// call-sites keep working; the sections come from
 /// [registerMarketplaceProfileSections].
 @RoutePage(name: 'ProfileRoute')

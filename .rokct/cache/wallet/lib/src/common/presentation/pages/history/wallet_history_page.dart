@@ -38,9 +38,9 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:base_sdk/src/application/profile/profile_notifier.dart';
 import 'package:base_sdk/src/application/profile/profile_provider.dart';
 import 'package:base_sdk/src/application/profile/profile_state.dart';
-import 'package:base_sdk/src/constants/app_constants.dart';
 import 'package:base_sdk/src/models/response/wallet_histories_response.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
+import 'package:base_sdk/src/services/demo_session.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:base_sdk/src/presentation/components/app_bars/common_app_bar.dart';
@@ -79,9 +79,12 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
   @override
   void initState() {
     controller = RefreshController();
-    // A demo build talks to no backend: the seeded rows render instead of
-    // asking the repository (see DemoWalletHistory), so no fetch here.
-    if (!AppConstants.isDemo) {
+    // A demo session talks to no backend: the seeded rows render instead
+    // of asking the repository (see DemoWalletHistory), so no fetch here.
+    // Read at the moment the decision is taken, never stored on the state:
+    // DemoSession.demoActive is the tour build OR a live demo session, and
+    // the session half can be activated by a sign-in at any point.
+    if (!DemoSession.demoActive) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         ref.read(profileProvider.notifier).getWallet(context);
       });
@@ -145,15 +148,21 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
   @override
   Widget build(BuildContext context) {
     state = ref.watch(profileProvider);
-    // The rows on screen: the demo seed in a demo build, else whatever the
-    // notifier fetched. Bound once so the list and its empty state agree.
-    final List<WalletData> history = AppConstants.isDemo
+    // Re-read every build, never cached on the state: a sign-in that
+    // activates the demo session after this page mounted has to be seen by
+    // the next frame. Bound to one local per build so the rows and the
+    // spinner below cannot disagree within a frame.
+    final bool demoActive = DemoSession.demoActive;
+    // The rows on screen: the demo seed in a demo session, else whatever
+    // the notifier fetched. Bound once so the list and its empty state
+    // agree.
+    final List<WalletData> history = demoActive
         ? DemoWalletHistory.entries()
         : (state.walletHistory ?? const <WalletData>[]);
     // `isLoadingHistory` defaults to true and is only cleared by the fetch
-    // the demo build skips above, so a demo build must ignore it or the
+    // a demo session skips above, so a demo session must ignore it or the
     // page spins forever over rows it already has.
-    final bool showLoading = state.isLoadingHistory && !AppConstants.isDemo;
+    final bool showLoading = state.isLoadingHistory && !demoActive;
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
@@ -228,14 +237,18 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                               physics: const BouncingScrollPhysics(),
                               controller: controller,
                               onLoading: () {
-                                if (AppConstants.isDemo) {
+                                // Read per gesture, not captured when the
+                                // closure was built.
+                                if (DemoSession.demoActive) {
                                   controller.loadNoData();
                                   return;
                                 }
                                 event.getWalletPage(context, controller);
                               },
                               onRefresh: () {
-                                if (AppConstants.isDemo) {
+                                // Read per gesture, not captured when the
+                                // closure was built.
+                                if (DemoSession.demoActive) {
                                   controller.refreshCompleted();
                                   return;
                                 }

@@ -116,24 +116,14 @@ class _SplashPageState extends ConsumerState<SplashPage> {
           return;
         }
       } else {
-        // Has internet - proceed with normal flow. The backend probe above
-        // already answered, so the online path knows whether the backend is
-        // actually reachable (radio alone false-passes on networks without
-        // internet, or when only the tenant backend is down).
+        // Has internet - proceed with normal flow. Pass true if backend is up so online sync/translations fire.
+        // If backend is down/unavailable, _proceedOnline won't fail; it gracefully falls back to local data/routing.
         await _proceedOnline(backendUp: backendStatus == BackendStatus.up);
       }
     } catch (e) {
-      // Error occurred - check if we can proceed offline
+      // Error occurred - check if we can proceed offline or go to login if token exists or local route
       _report('splash_bootstrap_failed', e);
-      final hasOfflineData = _hasRequiredOfflineData();
-      if (hasOfflineData) {
-        await _proceedOffline();
-      } else {
-        if (!mounted) return;
-        _leaveSplash('no_connection', () {
-          AppRoutes.I.replaceNoConnectionRoute(context);
-        });
-      }
+      await _proceedOffline();
     } finally {
       _booting = false;
     }
@@ -218,12 +208,15 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     return 'Check your network connection.';
   }
 
+  /// The boot-time radio check. Asks [AppConnectivity.isOnline] — the one
+  /// online definition — instead of re-spelling it: a third copy of the
+  /// mobile/ethernet/wifi whitelist is what booted a VPN-connected phone
+  /// down the offline path while it had a perfectly good network.
   Future<bool> _checkConnectivity() async {
     try {
-      var connectivityResult = await Connectivity().checkConnectivity();
-      return connectivityResult.contains(ConnectivityResult.mobile) ||
-          connectivityResult.contains(ConnectivityResult.ethernet) ||
-          connectivityResult.contains(ConnectivityResult.wifi);
+      return AppConnectivity.isOnline(
+        await Connectivity().checkConnectivity(),
+      );
     } catch (e) {
       return false;
     }
@@ -272,6 +265,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
       // stayed on this page.
       await ref.read(splashProvider.notifier).getToken(
         context,
+        backendUp: backendUp,
         goMain: () => _leaveSplash('main', () {
           AppHelpers.goHome(context);
         }),

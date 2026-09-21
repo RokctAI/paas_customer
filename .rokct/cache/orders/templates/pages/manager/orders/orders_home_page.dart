@@ -12,8 +12,11 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:${package}/presentation/routes/app_router.dart';
 
 import 'package:${package}/presentation/pages/orders/details/order_details_modal.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
@@ -92,6 +95,13 @@ class _OrdersHomePageState extends ConsumerState<OrdersHomePage> {
     });
   }
 
+  /// The workspace's own entry to the shop's consignment LOADS (/load) —
+  /// the driver-van queue, hung on the orders header beside the board's
+  /// other utilities. From there the shop issues one (/load/issue).
+  void _openLoads(BuildContext context) {
+    context.pushRoute(const ManagerLoadsRoute());
+  }
+
   void _openDetailModal(OrderData order, BoardStatus status) {
     AppHelpers.showCustomModalBottomSheet(
       paddingTop: MediaQuery.paddingOf(context).top + 60,
@@ -123,7 +133,7 @@ class _OrdersHomePageState extends ConsumerState<OrdersHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const OrdersBoardHeader(compact: true),
+            OrdersBoardHeader(compact: true, onOpenLoads: () => _openLoads(context)),
             Expanded(
               child: Consumer(
                 builder: (context, ref, _) {
@@ -153,7 +163,7 @@ class _OrdersHomePageState extends ConsumerState<OrdersHomePage> {
           boardBuilder: (context, flow) => Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const OrdersBoardHeader(),
+              OrdersBoardHeader(onOpenLoads: () => _openLoads(context)),
               Expanded(
                 child: Consumer(
                   builder: (context, ref, _) {

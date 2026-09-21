@@ -14,16 +14,17 @@
 
 import 'package:base_sdk/src/models/response/wallet_histories_response.dart';
 
-/// The demo (`--dart-define=IS_DEMO=true`) wallet-history seed.
+/// The demo wallet-history seed.
 ///
-/// A demo build talks to no backend, and the wallet history behind
+/// A demo session talks to no backend, and the wallet history behind
 /// `/wallet-history` is served by users_sdk's `UserRepositoryFacade`
 /// (`api.user.get_wallet_history`), which has no demo variant: its gateway
 /// call fails offline, the notifier settles with no rows, and the guided
 /// tour captured an empty list. This SDK owns the page, so it owns the
 /// demo rows: [WalletHistoryPage] renders these instead of asking the
-/// repository when `AppConstants.isDemo` is set. Zero behaviour change in
-/// a real build.
+/// repository whenever `DemoSession.demoActive` answers true (the guided
+/// tour build, or a server-marked demo account signed in). Zero behaviour
+/// change in a real session.
 ///
 /// Values are Rand and the ledger is self-consistent (net +R 793.00 after
 /// a top-up, two purchases, a partial refund and a cash-out), so the

@@ -958,6 +958,10 @@ class _NavActionButton extends StatelessWidget {
   /// reactions button wearing whatever was last sent.
   final String? emoji;
 
+  /// The bar's OWN long press for this control, which wins over the
+  /// action's [FloatingNavAction.onLongPress]: the reactions button uses it
+  /// to reopen the emoji picker, and that is the bar's behaviour rather than
+  /// the caller's.
   final VoidCallback? onLongPress;
 
   /// Overrides [compact]'s default leading-edge gap. The tablet-mode
@@ -998,7 +1002,7 @@ class _NavActionButton extends StatelessWidget {
       child: InkWell(
         customBorder: const CircleBorder(),
         onTap: enabled ? action.onTap : null,
-        onLongPress: enabled ? onLongPress : null,
+        onLongPress: enabled ? (onLongPress ?? action.onLongPress) : null,
         child: Padding(
           padding: EdgeInsets.all(9.r),
           child: Stack(

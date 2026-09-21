@@ -43,7 +43,10 @@ import 'package:orders_sdk/src/common/infrastructure/repositories/orders_reposit
 import 'package:orders_sdk/src/common/infrastructure/repositories/parcel_repository.dart';
 import 'package:orders_sdk/src/manager/infrastructure/models/data/stock.dart';
 import 'package:orders_sdk/src/manager/infrastructure/repositories/pos_products_repository.dart';
+import 'package:orders_sdk/src/manager/domain/interface/shop_loads.dart';
 import 'package:orders_sdk/src/manager/infrastructure/repositories/seller_orders_repository.dart';
+import 'package:orders_sdk/src/manager/infrastructure/repositories/shop_drivers_repository.dart';
+import 'package:orders_sdk/src/manager/infrastructure/repositories/shop_loads_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// A recording stand-in for base_sdk's [HttpService]: every Dio the
@@ -296,6 +299,69 @@ void main() {
       expect(products.first, containsPair('stock_id', 'STK-1'));
       expect(products.first, containsPair('quantity', 3));
       expect(http.last.payload, containsPair('type', 'pickup'));
+    });
+  });
+
+  group('shop loads repository (commerce#135)', () {
+    test('the four shop cmds are the load module\'s, app segment dropped',
+        () async {
+      final repo = ShopLoadsRepository();
+
+      await repo.getShopLoads(status: 'open');
+      expect(http.last.path, kPlatformGatewayPath);
+      expect(http.last.cmd, 'api.order.load.get_shop_loads');
+      expect(http.last.payload, {'status': 'open'});
+
+      // No status asked for is no status sent: the backend then serves
+      // both, which is its own documented default.
+      await repo.getShopLoads();
+      expect(http.last.payload, isEmpty);
+
+      await repo.listShopDeliverymen();
+      expect(http.last.cmd, 'api.order.load.list_shop_deliverymen');
+
+      await repo.closeLoad(loadOrder: 'LD-1');
+      expect(http.last.cmd, 'api.order.load.close_load');
+      expect(http.last.payload, {'load_order': 'LD-1'});
+    });
+
+    test('create_load sends the driver and {stock, quantity} rows', () async {
+      await ShopLoadsRepository().createLoad(
+        deliveryman: 'driver@shop',
+        items: const [
+          LoadIssueLine(stockId: 'STK-1', quantity: 3),
+          LoadIssueLine(stockId: 'STK-2', quantity: 2),
+        ],
+      );
+      expect(http.last.cmd, 'api.order.load.create_load');
+      expect(http.last.payload, containsPair('deliveryman', 'driver@shop'));
+      final items = http.last.payload!['items'] as List;
+      expect(items, hasLength(2));
+      expect(items.first, {'stock': 'STK-1', 'quantity': 3});
+      expect(items.last, {'stock': 'STK-2', 'quantity': 2});
+    });
+  });
+
+  group('shop drivers roster repository (own drivers)', () {
+    test('the three roster cmds are ZONES\' shop_drivers module, app '
+        'segment dropped', () async {
+      final repo = ShopDriversRepository();
+
+      await repo.listShopDrivers();
+      expect(http.last.path, kPlatformGatewayPath);
+      expect(http.last.cmd, 'api.shop_drivers.list_shop_drivers');
+      // The roster is scoped to the CALLER's shop on the backend, so the
+      // read sends no arguments at all — nothing here names a shop and
+      // nothing here can reach another one's roster.
+      expect(http.last.payload, isNull);
+
+      await repo.addShopDriver(deliveryman: 'thabo@shop');
+      expect(http.last.cmd, 'api.shop_drivers.add_shop_driver');
+      expect(http.last.payload, {'deliveryman': 'thabo@shop'});
+
+      await repo.removeShopDriver(deliveryman: 'thabo@shop');
+      expect(http.last.cmd, 'api.shop_drivers.remove_shop_driver');
+      expect(http.last.payload, {'deliveryman': 'thabo@shop'});
     });
   });
 

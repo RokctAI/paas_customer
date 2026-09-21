@@ -1,3 +1,115 @@
+## 1.13.3
+
+* Fixed (through base_sdk 1.66.8): the login screen showed "Something went
+  wrong with the server" for a backend that simply was not answering. Ray,
+  2026-09-20: "something went wrong with server is stll showing in splash/
+  login screen" - on a phone the login page draws the splash artwork
+  full-bleed, so the two read as one screen, and the toast is the login
+  page's: `LoginNotifier.checkLanguage` runs from its first post-frame
+  callback with no user action, on every open, in BOTH of its branches.
+  With a network present the radio guard passes, the language-catalogue
+  fetch is attempted, and the failure branch calls
+  `AuthErrorPresenter.showTechnical`, which discarded the honest "we
+  couldn't reach the server" line the failure already carried and painted
+  the generic fallback instead. No auth_sdk code changed; the fix is in the
+  presenter this SDK's thin `AuthErrorPresenter` alias delegates to, and in
+  `AppHelpers.getTranslation`'s bundled-copy lookup for a device that has
+  not chosen a language yet - which is every first-run entry, and the only
+  state this screen can be in while the backend is unreachable.
+* New: `auth_unreachable_toast_test.dart` - 5 tests over the exact presenter
+  call `login_notifier.dart` makes when the language or translation fetch
+  fails, with the failure string and status built the way
+  `SettingsRepository.getLanguages` builds them. `LoginNotifier` itself
+  cannot be constructed in a standalone auth_sdk test (it reaches
+  `OfflineAuthService`, whose drift accessors exist only after a host app
+  has run build_runner over its composed `AppDatabase`), which is
+  pre-existing and is noted in the test's header.
+* auth_sdk 1.13.3 requires base_sdk >= 1.66.8 for the presenter fix; on an
+  older base_sdk the code still compiles and behaves as it did, the login
+  toast just keeps the vague wording.
+
+## 1.13.2
+
+* Fixed: four auth sheets — the OTP confirmation sheet
+  (`RegisterConfirmationPage`), the phone-verify sheet (`PhoneVerify`), the
+  reset-password sheet (`ResetPasswordPage`) and the set-password sheet
+  (`SetPasswordPage`) — now follow a theme-mode flip while they stay open,
+  instead of keeping the previous mode's colours until the sheet is closed
+  and opened again. Each `build` decided its sheet background, its
+  instruction copy, the phone field's ink or the confirm button's idle fill
+  from `AppStyle.surfaceDark` / `AppStyle.textDarkSecondary` /
+  `AppStyle.textPrimary` — mode-resolving statics, not inherited widgets —
+  and the only things they read from the `BuildContext` were
+  `MediaQuery.of(context).viewInsets` and `MediaQuery.paddingOf(context)`,
+  neither of which changes on a theme flip, so the flip scheduled no rebuild
+  of the element. The feature notifiers they watch
+  (`registerConfirmationProvider`, `registerProvider`,
+  `resetPasswordProvider`) are never notified by a theme-mode change, so they
+  are no rebuild trigger either, and every in-repo mount site hands the sheet
+  either a `const` instance or one captured value, so a parent rebuild cannot
+  deliver the flip. Each build now reads `Theme.of(context).brightness` once,
+  outside every inner builder, and names its colours through base_sdk's
+  `AppStyle.surfaceFor` / `AppStyle.secondaryInkFor` / `AppStyle.inkFor` role
+  helpers — the same seam the registration steps page, the shared glance card
+  and the profile footer use. No colour value changed in either mode, and no
+  helper was added to base_sdk.
+* `SetPasswordPage` now imports `reset_password_provider.dart` directly
+  instead of the `auth.dart` barrel. The barrel also exports the
+  register-confirmation provider, which drags `OfflineAuthService` into the
+  library, and that service's drift accessors exist only after the composer
+  has injected auth_sdk's `OfflineUsersTable` into base_sdk's
+  `@DriftDatabase` — so the barrel is what made this page impossible to mount
+  in a widget test. The sheet only ever used `resetPasswordProvider`.
+  `set_password_theme_mode_test.dart` mounts the sheet behind a `const` child
+  boundary, flips `AppStyle.setBrightness` plus the Material `themeMode` the
+  way `AppNotifier.changeTheme` does, and pumps without remounting.
+  `auth_sheet_theme_mode_guard_test.dart` covers the other three on the
+  source instead: they reach `OfflineAuthService` through the confirmation
+  sheet they push, so no test in this package can import them at all yet.
+
+## 1.13.1
+
+* Fixed: the post-registration steps pipeline
+  (`RegistrationStepsPage`) restyles itself the moment the theme mode
+  changes, instead of keeping the previous mode's colours until the page is
+  built again from scratch. Its `build` decided the Scaffold surface, the
+  brand glow's fade-out stop and the `n/m` progress label from
+  `AppStyle.surfaceDark` / `AppStyle.textDarkSecondary` — mode-resolving
+  statics, not inherited widgets — and read nothing else from the
+  `BuildContext`, so a mode flip scheduled no rebuild of the element.
+  `RegistrationStepsPage` reads nothing from the context either, so the flip
+  could not reach the state through a parent rebuild. The build now reads
+  `Theme.of(context).brightness` once and names its colours through
+  base_sdk's `AppStyle.surfaceFor` / `AppStyle.secondaryInkFor` role
+  helpers, the same seam the shared glance card and profile footer use. No
+  colour value changed in either mode. `manifest.json` also catches up to
+  the pubspec version, which it had drifted behind at 1.12.1, and declares
+  the new floor: both helpers arrived in base_sdk 1.66.4, so this release
+  requires base_sdk >= 1.66.4.
+
+## 1.13.0
+
+* Fixed: recognized demo accounts can now authenticate locally even when the device is offline or the backend is completely unreachable.
+  Added `MockAuthRepository.isDemoAccount(email)` to check if entered credentials match the SDK's recognized demo account source of truth.
+  `LoginNotifier.login()` now checks `MockAuthRepository.isDemoAccount(state.email)` before invoking `AppConnectivity` or `AuthRepository.login()`,
+  authenticating recognized demo accounts through `MockAuthRepository` and establishing full local sessions via `_establishSession()` without
+  invoking backend services or requiring network connectivity. Arbitrary credentials continue to be sent through standard backend/offline registration pathways.
+
+## 1.12.1
+
+* Build fix: `auth_di.dart` read `AppConstants.isDemo`, which base_sdk
+  removed with the `--dart-define=IS_DEMO=true` define, so every composed
+  app failed to compile (`The getter 'isDemo' isn't defined for the type
+  'AppConstants'`). The `MockAuthRepository` / `AuthRepository` selection now
+  reads `AppConstants.isTour`, the one compile-time flag base_sdk still has
+  and the one build with no backend and no sign-in to assert the
+  demo-account marker with. This is deliberately NOT
+  `DemoSession.demoActive`: a demo account is a real account on the
+  production backend and must sign in through the real `AuthRepository` to
+  receive its marker, so the mock twin stays compile-time gated and can
+  never be selected at runtime. `demo_account_test.dart` pins the new
+  constant in place of the removed one.
+
 ## 1.12.0
 
 * Demo login in production, phase 2 (auth side): the `auth.register`

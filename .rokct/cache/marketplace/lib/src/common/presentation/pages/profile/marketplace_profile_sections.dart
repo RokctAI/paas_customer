@@ -47,7 +47,7 @@ import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/my
 /// marketplace_sdk's sections for base_sdk's generic profile host
 /// ([GenericProfilePage] + [ProfileSectionRegistry]).
 ///
-/// Every block of the deprecated customer [ProfilePage] hub is expressed
+/// Every block of the removed customer profile hub is expressed
 /// here as a [ProfileSection], preserving the old semantics: the same
 /// feature-flag swaps (AppHelpers.getParcel / getReservationEnable /
 /// getLendingEnabled, membership), the same navigation targets (the
@@ -59,7 +59,7 @@ class MarketplaceProfileSections {
 
   static const int _base = 100;
 
-  /// The old ProfilePage's `onCardAdded` route param, re-homed: sections
+  /// The old profile hub's `onCardAdded` route param, re-homed: sections
   /// are registered once at boot, so the route shell stores the current
   /// navigation's callback here before building the host page. Null (the
   /// default, and what the boot registration leaves) means no callback —
@@ -67,7 +67,7 @@ class MarketplaceProfileSections {
   static Function()? onCardAdded;
 
   /// Registers every marketplace profile section, mirroring the deprecated
-  /// [ProfilePage] body top to bottom.
+  /// that hub's body, top to bottom.
   static void register() {
     final registry = ProfileSectionRegistry.I;
 

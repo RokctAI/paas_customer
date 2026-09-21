@@ -23,8 +23,10 @@ import 'package:base_sdk/src/services/demo_session.dart';
 
 import 'package:delivery_sdk/src/driver/domain/interface/courier.dart';
 import 'package:delivery_sdk/src/driver/domain/interface/deposit.dart';
+import 'package:delivery_sdk/src/driver/domain/interface/load.dart';
 import 'package:delivery_sdk/src/driver/domain/interface/orders.dart';
 import 'package:delivery_sdk/src/driver/domain/interface/parcel.dart';
+import 'package:delivery_sdk/src/driver/domain/interface/poi.dart';
 import 'package:delivery_sdk/src/driver/domain/interface/route.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/courier_repository.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/demo_courier_orders_repository.dart';
@@ -32,9 +34,13 @@ import 'package:delivery_sdk/src/driver/infrastructure/repositories/demo_courier
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/demo_courier_repository.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/demo_courier_route_repository.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/demo_deposit_repository.dart';
+import 'package:delivery_sdk/src/driver/infrastructure/repositories/demo_load_repository.dart';
+import 'package:delivery_sdk/src/driver/infrastructure/repositories/demo_poi_repository.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/deposit_repository.dart';
+import 'package:delivery_sdk/src/driver/infrastructure/repositories/load_repository.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/orders_repository.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/parcel_repository.dart';
+import 'package:delivery_sdk/src/driver/infrastructure/repositories/poi_repository.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/route_repository.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/services/courier_storage.dart';
 
@@ -61,9 +67,12 @@ import 'package:delivery_sdk/src/driver/infrastructure/services/courier_storage.
 /// it. A host's own pre-registered implementation is never touched by the
 /// swap (idempotent guards in [_Slot]), and nothing here throws at boot.
 class DriverDeliveryDependencies {
-  /// The five courier facades this hook owns, each with its Demo* twin.
-  /// Design strip frames 49g/49h/49i own the last one: the driver's
-  /// bank-deposit route on wallet's api.wallet.* defs.
+  /// The courier facades this hook owns, each with its Demo* twin.
+  /// Design strip frames 49g/49h/49i own the deposit one: the driver's
+  /// bank-deposit route on wallet's api.wallet.* defs. Then van sales: the
+  /// consignment load the shop issues him, on commerce's api.order.load.*
+  /// defs. The last is points of interest - shared local knowledge he
+  /// files as he passes - on map's api.poi.* defs.
   static final List<_Slot<Object>> _slots = <_Slot<Object>>[
     _Slot<CourierOrdersRepositoryFacade>(
       (demo) =>
@@ -81,6 +90,12 @@ class DriverDeliveryDependencies {
     ),
     _Slot<DriverDepositRepositoryFacade>(
       (demo) => demo ? DemoDriverDepositRepository() : DriverDepositRepository(),
+    ),
+    _Slot<DriverLoadRepositoryFacade>(
+      (demo) => demo ? DemoDriverLoadRepository() : DriverLoadRepository(),
+    ),
+    _Slot<DriverPoiRepositoryFacade>(
+      (demo) => demo ? DemoDriverPoiRepository() : DriverPoiRepository(),
     ),
   ];
 
@@ -199,6 +214,12 @@ CourierRouteRepositoryFacade get routeRepository =>
 
 DriverDepositRepositoryFacade get depositRepository =>
     _getIt.get<DriverDepositRepositoryFacade>();
+
+DriverLoadRepositoryFacade get loadRepository =>
+    _getIt.get<DriverLoadRepositoryFacade>();
+
+DriverPoiRepositoryFacade get poiRepository =>
+    _getIt.get<DriverPoiRepositoryFacade>();
 
 /// Registered by map_sdk's `MapSdkDependencies.register` (map_sdk is part of
 /// every driver compose — driver.json).

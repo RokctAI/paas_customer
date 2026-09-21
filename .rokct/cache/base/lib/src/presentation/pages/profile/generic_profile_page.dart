@@ -27,8 +27,8 @@ import 'package:base_sdk/src/application/profile/profile_host_capabilities.dart'
 import 'package:base_sdk/src/application/profile/profile_provider.dart';
 import 'package:base_sdk/src/models/data/profile_data.dart';
 import 'package:base_sdk/src/presentation/components/buttons/custom_button.dart';
-import 'package:base_sdk/src/presentation/components/custom_network_image.dart';
 import 'package:base_sdk/src/presentation/components/loading.dart';
+import 'package:base_sdk/src/presentation/components/user_avatar.dart';
 import 'package:base_sdk/src/presentation/adaptive/planes.dart';
 import 'package:base_sdk/src/presentation/pages/profile/profile_host_scope.dart';
 import 'package:base_sdk/src/presentation/pages/profile/profile_section.dart';
@@ -853,6 +853,12 @@ class _PlanBackCard extends StatelessWidget {
   }
 }
 
+/// The header card's avatar: [UserAvatar] at this page's size.
+///
+/// The picture / initials / neutral-glyph ladder lives in [UserAvatar] so the
+/// profile header and the launcher's account control cannot disagree about
+/// it. This used to be a local copy that fell through to a literal "?" when
+/// a signed-in user had neither a picture nor a name — see [UserAvatar].
 class _Avatar extends StatelessWidget {
   final ProfileData? user;
 
@@ -860,31 +866,10 @@ class _Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final img = user?.img ?? '';
-    if (img.isNotEmpty) {
-      return CustomNetworkImage(
-        url: img,
-        width: 56.r,
-        height: 56.r,
-        radius: 28.r,
-        profile: true,
-      );
-    }
-    final source =
-        '${user?.firstname ?? ''}${user?.lastname ?? ''}${user?.email ?? ''}';
-    final initial = source.isEmpty ? '?' : source[0].toUpperCase();
-    return Container(
-      width: 56.r,
-      height: 56.r,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: AppStyle.primary,
-        shape: BoxShape.circle,
-      ),
-      child: Text(
-        initial,
-        style: AppStyle.interSemi(size: 22.sp, color: AppStyle.white),
-      ),
+    return UserAvatar(
+      user: user,
+      size: 56.r,
+      fontSize: 22.sp,
     );
   }
 }
@@ -894,6 +879,16 @@ class _EmptySections extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // The mode comes from the inherited theme, not from the app-wide
+    // AppStyle.isDark static (Ray, 2026-09-19: "glance doesnt change test
+    // immediately untill you come back if you switched theme mode" - the
+    // same defect, found here by the fleet audit that followed). A static
+    // is not an inherited widget, so a mode flip scheduled no rebuild of
+    // this placeholder and it kept the previous mode's secondary ink; and
+    // it is mounted `const`, so the flip provably cannot reach it through
+    // a parent rebuild either.
+    final Brightness brightness = Theme.of(context).brightness;
+
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 64.r),
       child: Column(
@@ -901,14 +896,14 @@ class _EmptySections extends StatelessWidget {
           Icon(
             Remix.list_settings_line,
             size: 56.sp,
-            color: AppStyle.textDarkSecondary,
+            color: AppStyle.secondaryInkFor(brightness),
           ),
           16.verticalSpace,
           Text(
             AppHelpers.getTranslation(TrKeys.noData),
             style: AppStyle.interNormal(
               size: 14.sp,
-              color: AppStyle.textDarkSecondary,
+              color: AppStyle.secondaryInkFor(brightness),
             ),
             textAlign: TextAlign.center,
           ),

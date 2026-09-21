@@ -1,3 +1,32 @@
+## 1.4.1
+
+* fix(users): the local session is cleared on sign-out whether or not the
+  server revoke succeeds. `UserRepository.logoutAccount` ran
+  `LocalStorage.logout()` INSIDE the `try`, after
+  `api.user.logout` - so a revoke that threw (no network, a 401 on a token
+  the backend never issued, a backend that is down) returned failure and
+  left the token, the persisted profile and every SDK's session-scoped
+  on-device data exactly where they were. The clear moves into a
+  `finally`; the returned `ApiResult` still reports what the revoke did, it
+  just no longer decides whether the device forgets the session.
+  `deleteAccount` moves with it, for the same reason and one more:
+  `SessionEndHooks.run()` has already torn the session-scoped state down by
+  that point, so a live local session behind a failed delete is strictly
+  worse than being signed out and asked to try again.
+* The case that made this certain rather than unlucky: an offline /
+  temp-local account's token is `offline:<local user id>` (auth_sdk's
+  `OfflineAuthService`), which no backend ever issued, so `api.user.logout`
+  can NEVER succeed for one of those users. Sign-out was a guaranteed
+  no-op for exactly the users who only have local data - Ray, 2026-09-19:
+  "if on temp local user you logout all your tasks still show".
+* Tests: `test/user_repository_logout_test.dart` - the revoke succeeding
+  clears the session; the revoke failing clears it too and still returns
+  the failure; the session-end hooks fire on the failing path; a failed
+  `deleteAccount` clears it as well. The gateway is exercised end to end
+  through a stubbed `HttpService`, so the failure is a real
+  `DioException` out of `PlatformGateway`.
+* manifest.json 1.4.0 -> 1.4.1; no new base_sdk requirement.
+
 ## 1.4.0
 
 * Demo login in production, phase 2: the demo repositories follow the

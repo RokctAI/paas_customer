@@ -1,3 +1,22 @@
+## 1.6.4
+
+* **Fix: wallet history compiles against base_sdk >= 1.65.0.** `base_sdk`
+  deleted `AppConstants.isDemo` (the `--dart-define=IS_DEMO=true` build
+  flag) in 1.65.0, but `WalletHistoryPage` still read it in five places, so
+  any host that composes this SDK - supacharge reaches it transitively
+  through payments_sdk - died at the kernel snapshot with `Member not
+  found: 'isDemo'`, taking the Android and Windows builds with it. All five
+  reads now ask `DemoSession.demoActive`, base_sdk's one demo switch (the
+  guided-tour build OR a live server-marked demo session), which is what
+  every one of these sites meant: serve the in-app seed because there is no
+  backend to ask. None of the five was a tour-only check, so none became
+  `AppConstants.isTour`. Each site reads the switch where the decision is
+  taken - at the fetch in `initState`, once per `build` for the bound rows
+  and the spinner, and inside the pull-to-refresh and load-more callbacks -
+  rather than caching it at construction, so a demo session activated by a
+  sign-in after the page mounted is honoured. Behaviour is unchanged in a
+  real session and under the tour.
+
 ## 1.6.3
 
 * **Fix: top-up and history pages now follow the app's colour mode.**

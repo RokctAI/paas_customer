@@ -47,6 +47,14 @@ class MockAuthRepository
     'manager@demo.rokct.ai': 'seller',
   };
 
+  /// Returns true if [email] matches a recognized demo account (either one of
+  /// the role-mapped sign-in addresses or the demo identity email).
+  static bool isDemoAccount(String email) {
+    final normalized = email.trim().toLowerCase();
+    return _demoRolesByEmail.containsKey(normalized) ||
+        normalized == 'thandi.mokoena@outlook.com';
+  }
+
   static String _roleForEmail(String email) =>
       _demoRolesByEmail[email.trim().toLowerCase()] ?? 'customer';
 

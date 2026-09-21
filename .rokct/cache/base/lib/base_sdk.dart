@@ -41,6 +41,7 @@ export 'src/presentation/theme/app_theme.dart';
 // Shared presentation components (generic, no feature-SDK logic — ADR-005)
 export 'src/presentation/components/glance_card.dart';
 export 'src/presentation/components/blur_wrap.dart';
+export 'src/presentation/components/user_avatar.dart';
 
 // Adaptive primitives: Material 3 window-size classes + the two layout
 // shells every composed app builds its phone/wide split from.
@@ -119,8 +120,8 @@ export 'src/services/timing_telemetry.dart';
 export 'src/services/app_helpers.dart';
 export 'src/services/key_sound.dart';
 export 'src/services/local_storage.dart';
-// The runtime demo switch (a server-marked demo account signed in through
-// the real backend) alongside the compile-time AppConstants.isDemo.
+// The fleet's only demo switch: a server-marked demo account signed in
+// through the real backend, OR the guided-tour build (AppConstants.isTour).
 export 'src/services/demo_session.dart';
 // Memory pressure + image cache sizing (Play's Feb 2027 memory thresholds)
 // and the Restore Credentials transport (Play's April 2027 Zero-Tap
@@ -137,6 +138,7 @@ export 'src/common/translation_seeder.dart';
 // Offline database (shared Drift instance + generic JSON document store)
 export 'src/database/app_database.dart';
 export 'src/database/kv_tables.dart';
+export 'src/database/owner_scope.dart';
 
 // Offline sync engine (outbox drain + temp-id -> backend-id mapping).
 // Feature SDKs implement SyncHandler and register it per op type from
@@ -153,6 +155,7 @@ export 'src/di/base_di.dart';
 
 // Host-backed indirection for navigation and cross-SDK widget embedding
 export 'src/navigation/app_routes.dart';
+export 'src/navigation/route_presence.dart';
 export 'src/navigation/embedded_widgets.dart';
 
 // Kernel session models

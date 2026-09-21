@@ -63,6 +63,7 @@ void main() {
     expect((await _signIn('driver@demo.rokct.ai')).role, 'deliveryman');
     expect((await _signIn('partner@demo.rokct.ai')).role, 'partner');
     expect((await _signIn('admin@demo.rokct.ai')).role, 'admin');
+    expect((await _signIn('thandi.mokoena@outlook.com')).role, 'customer');
     expect((await _signIn('demo.student@example.com')).role, 'customer');
   });
 
@@ -178,13 +179,13 @@ void main() {
     expect(uses, hasLength(1));
     final lineStart = di.lastIndexOf('\n', uses.single.start) + 1;
     final line = di.substring(lineStart).split('\n').first;
-    expect(line, contains('AppConstants.isDemo'));
+    expect(line, contains('AppConstants.isTour'));
     expect(di, isNot(contains('DemoSession')));
 
     final notifier = File(
       'lib/src/common/application/auth/login/login_notifier.dart',
     ).readAsStringSync();
-    expect(notifier, isNot(contains('MockAuthRepository')));
+    expect(notifier, contains('MockAuthRepository.isDemoAccount'));
     expect(notifier, isNot(contains('demoUserLogin')));
     expect(notifier, isNot(contains('demoUserPassword')));
   });

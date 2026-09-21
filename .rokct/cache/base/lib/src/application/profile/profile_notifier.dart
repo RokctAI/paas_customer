@@ -340,7 +340,26 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
         debugPrint('==> logout fcm token skipped: $e');
       }
     }
-    _userRepository?.logoutAccount(fcm: fcm);
+    // AWAITED, and followed by a local clear that does not depend on it.
+    //
+    // Unawaited, this returned the moment the request was sent: the caller
+    // (a profile screen's Log out button) navigated away while the revoke
+    // was still in flight, and users_sdk's session-end hooks -- the thing
+    // each SDK hangs its own on-device user data off -- were still running
+    // against a session the UI had already declared over. Nothing then
+    // cleared the session locally on this path at all, so a compose whose
+    // Log out button lands here left the user signed in.
+    //
+    // The clear is unconditional for the same reason it is in
+    // `UserRepository.logoutAccount` and in launch_sdk's
+    // `LauncherAuthControl.logOut`: forgetting the session on the device IS
+    // the sign-out, and an offline / temp-local account's `offline:<id>`
+    // token means the server revoke can never succeed. Calling it here as
+    // well as there is deliberate and harmless -- it is idempotent, and a
+    // host that registered a repository this notifier cannot reach (or none
+    // at all) still gets a real sign-out.
+    await _userRepository?.logoutAccount(fcm: fcm);
+    LocalStorage.logout();
   }
 
   Future<void> deleteAccount(BuildContext context) async {

@@ -29,7 +29,7 @@ class AuthSdkDependencies {
   static void register(GetIt getIt) {
     if (!getIt.isRegistered<AuthRepositoryFacade>()) {
       getIt.registerSingleton<AuthRepositoryFacade>(
-        AppConstants.isDemo ? MockAuthRepository() : AuthRepository(),
+        AppConstants.isTour ? MockAuthRepository() : AuthRepository(),
       );
     }
     // Attach the auth.register push handler so offline registrations drain
@@ -40,9 +40,12 @@ class AuthSdkDependencies {
     // base_sdk >= 1.5.0 (SyncEngine/SyncHandler). DemoHoldSyncHandler
     // holds the ops back while the runtime demo switch is on (it reads
     // DemoSession per push, base_sdk >= 1.61.0), so registering once is
-    // enough; the repository above stays on the compile-time constant on
+    // enough; the repository above stays on a compile-time constant on
     // purpose - a demo session signs in through the real backend, and the
-    // mock twin must never be selected at runtime.
+    // mock twin must never be selected at runtime. That constant is now
+    // AppConstants.isTour, the one build with no backend and no sign-in to
+    // assert the demo-account marker with; the former AppConstants.isDemo
+    // define is gone from base_sdk.
     final engine =
         getIt.isRegistered<SyncEngine>() ? getIt<SyncEngine>() : SyncEngine();
     engine.registerHandler(

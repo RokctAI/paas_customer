@@ -44,6 +44,18 @@ import 'package:base_sdk/src/services/enums.dart';
 import 'package:base_sdk/src/services/telemetry.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 
+/// Hard fallback for `could_not_reach_server`, for callers that run before
+/// LocalStorage is initialized. Named so [AppHelpers.errorHandler] (which
+/// returns it) and [AppHelpers.isAuthoredConnectionMessage] (which
+/// recognises it) cannot drift apart.
+const String kCouldNotReachServerLine =
+    "We couldn't reach the server. Please try again.";
+
+/// Hard fallback for `server_took_too_long`. See
+/// [kCouldNotReachServerLine].
+const String kServerTookTooLongLine =
+    'The server took too long to respond. Please try again.';
+
 abstract class AppHelpers {
   AppHelpers._();
 
@@ -491,8 +503,22 @@ abstract class AppHelpers {
     // Backend-served rows always win; for keys the served map lacks (no row
     // seeded for this locale, or the fetch never succeeded) consult the
     // locally bundled per-locale maps before humanizing the key.
-    final bundled =
-        BundledTranslations.lookup(LocalStorage.getLanguage()?.locale, trKey);
+    //
+    // A null stored language is not "no bundled copy": it is the state
+    // every app is in on the screens that run before a language has been
+    // chosen - splash, and the login screen whose own `checkLanguage`
+    // cannot store one while the backend is unreachable. Passing that null
+    // through made `lookup` return null for every key, so those two screens
+    // humanized past the bundled English map and showed clipped fragments
+    // ("Could not reach server") in place of the copy written for them.
+    // English is already the fleet's base locale (the `isDefault` row of
+    // BundledTranslations.fallbackLanguages), so it stands in until a
+    // language is chosen; a language that IS chosen behaves exactly as
+    // before.
+    final bundled = BundledTranslations.lookup(
+      LocalStorage.getLanguage()?.locale ?? BundledTranslations.baseLocale,
+      trKey,
+    );
     if (bundled != null) return bundled;
     return humanizeTrKey(trKey);
   }
@@ -544,11 +570,11 @@ abstract class AppHelpers {
 
   /// Inline ("data:") image support.
   ///
-  /// The demo seed data (`--dart-define=IS_DEMO=true`, see [DemoImages])
-  /// carries its imagery inline rather than pointing at an image host: a demo
-  /// build talks to no backend, and the CI emulator that walks the guided
-  /// tour has no dependable route to a public placeholder host either, so a
-  /// remote URL there renders as the image widgets' broken-image error state.
+  /// The demo seed data (see [DemoImages]) carries its imagery inline rather
+  /// than pointing at an image host: the guided-tour build talks to no
+  /// backend, and the CI emulator that walks the guided tour has no
+  /// dependable route to a public placeholder host either, so a remote URL
+  /// there renders as the image widgets' broken-image error state.
   /// [CustomNetworkImage] and [CommonImage] check this before they reach for
   /// the network.
   static bool isInlineImage(String? url) =>
@@ -801,34 +827,102 @@ abstract class AppHelpers {
       // surface the friendly line and send the detail to telemetry for
       // the admin side.
       _reportConnectionFailure(e);
-      return _connectionErrorMessage();
+      return _connectionErrorMessage(e);
     }
     return _presentable(_extractErrorMessage(e));
   }
 
   /// Connection-class DioException: never got an HTTP response — offline,
-  /// DNS failure, connection refused, or a timeout. Anything with a real
+  /// DNS failure, connection refused, a dead host, a rejected certificate,
+  /// a timeout, or a request Dio itself cancelled. Anything with a real
   /// response (DioExceptionType.badResponse) carries a server message and
   /// keeps the existing extraction path untouched.
+  ///
+  /// [RequestCancelled] is in the list on purpose: a cancelled request also
+  /// has no response, so leaving it out sent it down the extraction chain,
+  /// which has nothing to extract and ends at `e.toString()` — raw
+  /// "DioException [request cancelled]" text on a student's screen.
   static bool _isConnectionFailure(DioException e) {
     if (e.response != null) return false;
     final classified = NetworkExceptions.getDioException(e);
     return classified is NoInternetConnection ||
         classified is RequestTimeout ||
-        classified is SendTimeout;
+        classified is SendTimeout ||
+        classified is RequestCancelled;
   }
 
-  /// Student-facing one-liner for connection failures — the same
-  /// translation key every offline surface already shows, with a hard
+  /// Student-facing one-liner for a connection failure, with a hard
   /// fallback for callers that run before LocalStorage is initialized.
-  static String _connectionErrorMessage() {
+  ///
+  /// This runs only for a request that was ATTEMPTED, and every network
+  /// path in the fleet sits behind an `AppConnectivity.connectivity()`
+  /// guard (`ProfileNotifier.fetchUser` and siblings) that shows its own
+  /// offline snackbar and returns without calling anything. So by the time
+  /// a response-less failure lands here the device had a network moments
+  /// ago, and "check your network connection" is the one thing this is NOT
+  /// — it blames the reader for a server that did not answer. Ray,
+  /// 2026-09-19: "not check your connection but check your network
+  /// connection" and "i think it could be that the backend is unreachable
+  /// rather than the phone being offline". He was right.
+  ///
+  /// Two outcomes, because they carry different instructions: a server
+  /// that never answered is not a server that answered too slowly.
+  static String _connectionErrorMessage(DioException e) {
+    final bool timedOut = e.type == DioExceptionType.connectionTimeout ||
+        e.type == DioExceptionType.receiveTimeout ||
+        e.type == DioExceptionType.sendTimeout ||
+        e.type == DioExceptionType.transformTimeout;
     try {
-      final message = getTranslation(TrKeys.checkYourNetworkConnection).trim();
+      final message = getTranslation(
+        timedOut ? TrKeys.serverTookTooLong : TrKeys.couldNotReachServer,
+      ).trim();
       if (message.isNotEmpty && message != 'null') return message;
     } catch (_) {
-      // Fall through to the literal below.
+      // Fall through to the literals below.
     }
-    return "Couldn't connect. Please check your internet and try again.";
+    return timedOut ? kServerTookTooLongLine : kCouldNotReachServerLine;
+  }
+
+  /// True when [message] is one of the two connection-failure lines
+  /// [errorHandler] AUTHORS in [_connectionErrorMessage] — not something
+  /// scraped off an exception.
+  ///
+  /// Why this exists. [errorHandler] already does the honest thing for a
+  /// response-less failure: it sends the verbatim cause to telemetry and
+  /// returns student-facing copy that names the SERVER rather than the
+  /// reader's connection. Repositories put that string into
+  /// `ApiResult.failure(error:)`, so a presenter standing between the
+  /// repository and the screen receives a friendly line, not technical
+  /// detail — and [ErrorPresenter]'s unconditional technical branch was
+  /// throwing it away for the generic "something went wrong with the
+  /// server" fallback. Surfaces that render `failure` directly (the base
+  /// profile page) kept the honest line; surfaces that go through the
+  /// presenter (every auth screen, including login) lost it. This lets the
+  /// presenter recognise its own fleet's copy instead of guessing at it.
+  ///
+  /// Matching is exact against the same values [_connectionErrorMessage]
+  /// can return — the translated row for either key, or the two literal
+  /// fallbacks — so no arbitrary server or exception text can pass.
+  static bool isAuthoredConnectionMessage(String message) {
+    final trimmed = message.trim();
+    if (trimmed.isEmpty) return false;
+    if (trimmed == kCouldNotReachServerLine ||
+        trimmed == kServerTookTooLongLine) {
+      return true;
+    }
+    for (final key in const <String>[
+      TrKeys.couldNotReachServer,
+      TrKeys.serverTookTooLong,
+    ]) {
+      try {
+        final line = getTranslation(key).trim();
+        if (line.isNotEmpty && line != 'null' && line == trimmed) return true;
+      } catch (_) {
+        // LocalStorage not initialized yet: the literals above already
+        // covered the only strings this helper could have produced.
+      }
+    }
+    return false;
   }
 
   /// Admin-side detail for a connection failure whose student-facing

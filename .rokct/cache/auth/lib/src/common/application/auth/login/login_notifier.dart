@@ -40,6 +40,7 @@ import 'package:base_sdk/src/domain/interface/settings.dart';
 import 'package:auth_sdk/src/common/application/auth/login/login_state.dart';
 import 'package:auth_sdk/src/common/domain/interface/auth_session_policy.dart';
 import 'package:auth_sdk/src/common/infrastructure/services/offline_auth_service.dart';
+import 'package:auth_sdk/src/common/infrastructure/repositories/mock_auth_repository.dart';
 import 'package:auth_sdk/src/common/services/auth_error_presenter.dart';
 import 'package:auth_sdk/src/common/services/demo_account_session.dart';
 import 'package:auth_sdk/src/common/services/platform_support.dart';
@@ -277,20 +278,44 @@ class LoginNotifier extends StateNotifier<LoginState> {
   }
 
   Future<void> login(BuildContext context) async {
+    if (checkEmail()) {
+      if (!AppValidators.isValidEmail(state.email)) {
+        state = state.copyWith(isEmailNotValid: true);
+        return;
+      }
+    }
+
+    if (!AppValidators.isValidPassword(state.password)) {
+      state = state.copyWith(isPasswordNotValid: true);
+      return;
+    }
+
+    // Check if entered credentials belong to a recognized demo account.
+    // Recognized demo accounts authenticate locally via MockAuthRepository regardless
+    // of device connectivity or backend availability.
+    if (MockAuthRepository.isDemoAccount(state.email)) {
+      state = state.copyWith(isLoading: true);
+      final response = await MockAuthRepository().login(
+        email: state.email,
+        password: state.password,
+      );
+      if (!mounted) return;
+      response.when(
+        success: (data) async {
+          await _establishSession(context, data.data);
+          if (!mounted) return;
+          state = state.copyWith(isLoading: false);
+        },
+        failure: (failure, status) {
+          state = state.copyWith(isLoading: false, isLoginError: true);
+        },
+      );
+      return;
+    }
+
     final connected = await AppConnectivity.connectivity();
     if (!mounted) return;
     if (connected) {
-      if (checkEmail()) {
-        if (!AppValidators.isValidEmail(state.email)) {
-          state = state.copyWith(isEmailNotValid: true);
-          return;
-        }
-      }
-
-      if (!AppValidators.isValidPassword(state.password)) {
-        state = state.copyWith(isPasswordNotValid: true);
-        return;
-      }
       state = state.copyWith(isLoading: true);
       final response = await _authRepository.login(
         email: state.email,

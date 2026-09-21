@@ -455,6 +455,16 @@ class TrKeys {
   static const String search = 'search';
   static const String checkYourNetworkConnection =
       'check_your_network_connection';
+
+  /// A request that WAS attempted and never reached a responding server.
+  /// Distinct from [checkYourNetworkConnection], which belongs to the
+  /// pre-request radio guard: past the guard the device had a network, so
+  /// the honest line names the server, not the reader's connection.
+  static const String couldNotReachServer = 'could_not_reach_server';
+
+  /// A server that answered too slowly rather than not at all — the one
+  /// connection-class failure whose instruction really is "try again".
+  static const String serverTookTooLong = 'server_took_too_long';
   static const String somethingWentWrongWithTheServer =
       'something_went_wrong_with_the_server';
   static const String totalProductPrice = 'total_product_price';

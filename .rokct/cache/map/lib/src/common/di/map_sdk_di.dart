@@ -15,6 +15,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:base_sdk/src/constants/app_constants.dart';
 import 'package:base_sdk/src/domain/interface/draw.dart';
+import 'package:base_sdk/src/services/demo_session.dart';
+import 'package:map_sdk/src/common/domain/interface/customer_poi.dart';
+import 'package:map_sdk/src/common/infrastructure/repositories/customer_poi_repository.dart';
+import 'package:map_sdk/src/common/infrastructure/repositories/demo_customer_poi_repository.dart';
 import 'package:map_sdk/src/common/infrastructure/repositories/draw_repository.dart';
 import 'package:map_sdk/src/common/infrastructure/services/places/places_service.dart';
 
@@ -29,6 +33,16 @@ class MapSdkDependencies {
       // no bare Dio() is constructed here (radio_sdk audit-2 precedent).
       getIt.registerSingleton<GooglePlacesService>(
         GooglePlacesService(apiKey: AppConstants.googleApiKey),
+      );
+    }
+    if (!getIt.isRegistered<CustomerPoiRepositoryFacade>()) {
+      // Demo mode gets the offline twin, which serves no points; see
+      // DemoCustomerPoiRepository for why an offline map stays empty
+      // rather than standing places on it.
+      getIt.registerSingleton<CustomerPoiRepositoryFacade>(
+        DemoSession.demoActive
+            ? DemoCustomerPoiRepository()
+            : CustomerPoiRepository(),
       );
     }
   }

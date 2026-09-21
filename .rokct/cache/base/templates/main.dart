@@ -48,7 +48,39 @@ import 'package:${package}/presentation/app_widget.dart';
 // @generated-wiring-imports-end
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final WidgetsBinding binding = WidgetsFlutterBinding.ensureInitialized();
+
+  // Uncaught-error capture, installed before anything else in main() can
+  // throw, so a crash leaves a record instead of just disappearing.
+  //
+  // FlutterError.onError receives what the framework itself catches: errors
+  // thrown in build, layout, paint, and in the callbacks it invokes.
+  // presentError IS the default handler, so calling it last keeps the existing
+  // behaviour exactly - red screen in debug, console dump in release - and the
+  // debugPrint ahead of it puts the same exception and stack in the platform
+  // log (logcat / the Windows console), where a device bug report can be read
+  // after the app is already gone.
+  FlutterError.onError = (FlutterErrorDetails details) {
+    debugPrint('Uncaught Flutter error: ${details.exceptionAsString()}');
+    debugPrint('${details.stack}');
+    FlutterError.presentError(details);
+  };
+
+  // Errors that never pass through the framework arrive here instead: a throw
+  // from a platform message handler, an unawaited Future that fails inside a
+  // boot hook, anything raised on the root zone after the first frame.
+  // Returning true reports the error as handled - the debugPrint above is the
+  // record - rather than letting it reach the engine's default reporter.
+  //
+  // Deliberately no runZonedGuarded: the platform dispatcher hook already
+  // covers the whole app, and a zone around runApp here would be wrong, since
+  // the bindings are initialized on the line above in the root zone and
+  // calling runApp from a different zone is the "Zone mismatch" assertion.
+  binding.platformDispatcher.onError = (Object error, StackTrace stack) {
+    debugPrint('Uncaught platform error: $error');
+    debugPrint('$stack');
+    return true;
+  };
 
   // Boot hooks: SDK-declared startup statements (each SDK manifest's
   // "boot_hooks" list — id-keyed, order-sequenced; see the installer's

@@ -251,8 +251,8 @@ void main() {
     final manifest = jsonDecode(File('manifest.json').readAsStringSync())
         as Map<String, dynamic>;
 
-    test('declares 1.20.0 and the launch_sdk floor', () {
-      expect(manifest['version'], '1.20.0');
+    test('declares the current version and the launch_sdk floor', () {
+      expect(manifest['version'], '1.23.0');
       expect(manifest['_comment_requires'], contains('launch_sdk >= 1.4.3'));
     });
 

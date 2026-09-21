@@ -39,7 +39,15 @@ class DemoCourierRouteRepository implements CourierRouteRepositoryFacade {
   Future<ApiResult<List<RouteStopData>>> getDriverRoute({
     double? latitude,
     double? longitude,
+    DriverRouteSource source = DriverRouteSource.work,
   }) async {
+    // Offline knows no points of interest, for the same reason
+    // [DemoDriverPoiRepository] knows none: a point is a real place a real
+    // driver stood in front of. The POI route is therefore empty rather
+    // than the day's work relabelled.
+    if (source == DriverRouteSource.pois) {
+      return const ApiResult.success(data: <RouteStopData>[]);
+    }
     return ApiResult.success(
       data: RouteStopData.listFromJson(_stopsWithOverlay()),
     );

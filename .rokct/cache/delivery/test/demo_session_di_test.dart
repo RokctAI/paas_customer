@@ -37,8 +37,10 @@ import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:delivery_sdk/src/driver/di/driver_delivery_di.dart';
 import 'package:delivery_sdk/src/driver/domain/interface/courier.dart';
 import 'package:delivery_sdk/src/driver/domain/interface/deposit.dart';
+import 'package:delivery_sdk/src/driver/domain/interface/load.dart';
 import 'package:delivery_sdk/src/driver/domain/interface/orders.dart';
 import 'package:delivery_sdk/src/driver/domain/interface/parcel.dart';
+import 'package:delivery_sdk/src/driver/domain/interface/poi.dart';
 import 'package:delivery_sdk/src/driver/domain/interface/route.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/courier_repository.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/demo_courier_orders_repository.dart';
@@ -46,9 +48,13 @@ import 'package:delivery_sdk/src/driver/infrastructure/repositories/demo_courier
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/demo_courier_repository.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/demo_courier_route_repository.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/demo_deposit_repository.dart';
+import 'package:delivery_sdk/src/driver/infrastructure/repositories/demo_load_repository.dart';
+import 'package:delivery_sdk/src/driver/infrastructure/repositories/demo_poi_repository.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/deposit_repository.dart';
+import 'package:delivery_sdk/src/driver/infrastructure/repositories/load_repository.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/orders_repository.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/parcel_repository.dart';
+import 'package:delivery_sdk/src/driver/infrastructure/repositories/poi_repository.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/repositories/route_repository.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/services/courier_location_fix.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -68,6 +74,9 @@ void _expectReal(GetIt getIt) {
       isA<CourierRouteRepository>());
   expect(getIt.get<DriverDepositRepositoryFacade>(),
       isA<DriverDepositRepository>());
+  expect(getIt.get<DriverLoadRepositoryFacade>(),
+      isA<DriverLoadRepository>());
+  expect(getIt.get<DriverPoiRepositoryFacade>(), isA<DriverPoiRepository>());
 }
 
 void _expectDemo(GetIt getIt) {
@@ -80,6 +89,10 @@ void _expectDemo(GetIt getIt) {
       isA<DemoCourierRouteRepository>());
   expect(getIt.get<DriverDepositRepositoryFacade>(),
       isA<DemoDriverDepositRepository>());
+  expect(getIt.get<DriverLoadRepositoryFacade>(),
+      isA<DemoDriverLoadRepository>());
+  expect(getIt.get<DriverPoiRepositoryFacade>(),
+      isA<DemoDriverPoiRepository>());
 }
 
 void main() {
