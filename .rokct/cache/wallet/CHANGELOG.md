@@ -17,6 +17,13 @@
   sign-in after the page mounted is honoured. Behaviour is unchanged in a
   real session and under the tour.
 
+## 1.6.5
+
+* fix(send): the Send money sheet follows light/dark mode; typed text is
+  readable in both.
+* feat(topup): Top-up opens as a modal sheet like Send
+  (`WalletTopUpPage.showAsSheet`); the /wallet-topup route is unchanged.
+
 ## 1.6.3
 
 * **Fix: top-up and history pages now follow the app's colour mode.**

@@ -59,7 +59,8 @@ class MockAuthRepository
   static String _roleForEmail(String email) =>
       _demoRolesByEmail[email.trim().toLowerCase()] ?? 'customer';
 
-  /// The account every demo sign-in lands on. Display data only: the
+  /// The student-side demo account (the partner and admin roles sign in
+  /// to their own accounts, see [_demoUsersByRole]). Display data only: the
   /// sign-in ADDRESS decides the role ([_demoRolesByEmail]) and nothing
   /// else - [login] hands back THIS account, email included, whatever was
   /// typed, so a tour's sign-in address (`demo.student@example.com`,
@@ -95,6 +96,56 @@ class MockAuthRepository
       ),
     ],
   );
+
+  /// One demo ACCOUNT per role, not one account wearing every role.
+  ///
+  /// base_sdk scopes every local row (the KV store, the outbox, the
+  /// persisted session) to `OwnerScope.instance.current`, which is the
+  /// signed-in user's id. When every demo sign-in handed back [_demoUser]
+  /// with only the role swapped, the student, partner and admin demo
+  /// accounts all signed in as user "1": one owner, so whatever any of them
+  /// wrote (Thandi's grade, schedule attendance, library, the partner's
+  /// latch) was read back by all three, and the profile header named
+  /// Thandi on every one of them. Ray, 2026-09-23: "partner and admin demo
+  /// accounts exist but show the same user data ... like there is no
+  /// owner".
+  ///
+  /// The student side (customer, and the seller/courier roles other shells
+  /// sign in with, each in its own app database) keeps Thandi and id "1",
+  /// so data already on a device stays hers. The partner is Thandi's
+  /// parent and the admin is an operator, each with an id of its own, so
+  /// each gets its own owner scope and its own profile.
+  static final Map<String, UserModel> _demoUsersByRole = <String, UserModel>{
+    'partner': UserModel(
+      id: "2",
+      uuid: "demo_uuid_partner",
+      firstname: "Nomvula",
+      lastname: "Mokoena",
+      email: "nomvula.mokoena@outlook.com",
+      phone: "+27 83 214 5567",
+      role: "partner",
+      active: true,
+      isDemoAccount: true,
+      img: DemoImages.avatar,
+    ),
+    'admin': UserModel(
+      id: "3",
+      uuid: "demo_uuid_admin",
+      firstname: "Ayanda",
+      lastname: "Khumalo",
+      email: "ayanda.khumalo@outlook.com",
+      phone: "+27 71 908 3342",
+      role: "admin",
+      active: true,
+      isDemoAccount: true,
+      img: DemoImages.avatar,
+    ),
+  };
+
+  /// The account a demo sign-in with [role] lands on: the role's own
+  /// account when it has one, otherwise [_demoUser] carrying [role].
+  UserModel _demoUserForRole(String role) =>
+      _demoUsersByRole[role] ?? _demoUser.copyWith(role: role);
 
   ProfileData _mapUserToProfile(UserModel user) => sessionProfileOf(user);
 
@@ -142,12 +193,13 @@ class MockAuthRepository
           accessToken: "demo_access_token",
           tokenType: "Bearer",
           // The typed address is a credential and a role selector, not an
-          // identity: the account signed in is always [_demoUser], email
+          // identity: the account signed in is the role's own demo account
+          // ([_demoUserForRole]: Thandi for the student side), email
           // included. Echoing the address here is how a tour's sign-in
           // ("demo.student@example.com", "manager@demo.rokct.ai") reached
           // the profile header once LoginNotifier started persisting the
           // login user (1.10.3).
-          user: _demoUser.copyWith(role: _roleForEmail(email)),
+          user: _demoUserForRole(_roleForEmail(email)),
         ),
       ),
     );

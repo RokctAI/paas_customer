@@ -67,6 +67,23 @@ void main() {
     expect((await _signIn('demo.student@example.com')).role, 'customer');
   });
 
+  test('each demo role signs in to its own account, so its own owner scope',
+      () async {
+    // base_sdk scopes local data to the signed-in user's id; the student,
+    // partner and admin demo accounts used to share Thandi's id "1" and so
+    // read one merged data set (Ray, 2026-09-23).
+    final student = await _signIn('customer@demo.rokct.ai');
+    final partner = await _signIn('partner@demo.rokct.ai');
+    final admin = await _signIn('admin@demo.rokct.ai');
+    expect(student.id, '1');
+    expect(student.firstname, 'Thandi');
+    expect({student.id, partner.id, admin.id}, hasLength(3));
+    expect(partner.firstname, isNot('Thandi'));
+    expect(admin.firstname, isNot('Thandi'));
+    expect(partner.isDemoAccount, isTrue);
+    expect(admin.isDemoAccount, isTrue);
+  });
+
   test('login hands back the demo identity email, never the typed address',
       () async {
     // The typed address is a credential and a role selector; the account

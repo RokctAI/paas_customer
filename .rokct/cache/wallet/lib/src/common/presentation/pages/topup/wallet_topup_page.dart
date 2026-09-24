@@ -61,7 +61,25 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wallet_sdk/src/common/presentation/pages/receive/wallet_receive_screen.dart';
 
 class WalletTopUpPage extends StatefulWidget {
-  const WalletTopUpPage({super.key});
+  /// Render as a bottom sheet (drag handle + title in the sheet chrome,
+  /// no Scaffold/AppBar) instead of a pushed page. The profile wallet
+  /// card's Top-up opens it this way, the same modal shape as its Send
+  /// sheet (Ray, 2026-09-23: "topup wallet needs to be a modal like send
+  /// money screen"); the /wallet-topup route keeps the page form for its
+  /// other callers.
+  final bool asSheet;
+
+  const WalletTopUpPage({super.key, this.asSheet = false});
+
+  /// Opens the top-up flow as a modal bottom sheet over [context].
+  static void showAsSheet(BuildContext context) {
+    AppHelpers.showCustomModalBottomSheet(
+      context: context,
+      modal: const WalletTopUpPage(asSheet: true),
+      isDarkMode: Theme.of(context).brightness == Brightness.dark,
+      paddingTop: 100,
+    );
+  }
 
   @override
   State<WalletTopUpPage> createState() => _WalletTopUpPageState();
@@ -325,275 +343,301 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
   @override
   Widget build(BuildContext context) {
     final bool isLtr = LocalStorage.getLangLtr();
-    return Directionality(
-      textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
-      child: KeyboardDismisser(
-        child: Scaffold(
-          backgroundColor: AppStyle.surfaceDark,
-          appBar: AppBar(
-            backgroundColor: AppStyle.surfaceDark,
-            elevation: 0,
-            iconTheme: IconThemeData(color: AppStyle.textPrimary),
-            title: Text(
-              AppHelpers.getTranslation(TrKeys.topUpWallet),
-              style: AppStyle.interSemi(
-                size: 18.sp,
-                color: AppStyle.textPrimary,
-              ),
+    final content = SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            16.verticalSpace,
+            TitleAndIcon(
+              title: AppHelpers.getTranslation(TrKeys.enterAmount),
+              paddingHorizontalSize: 0,
+              titleSize: 16,
+              titleColor: AppStyle.textPrimary,
             ),
-          ),
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    16.verticalSpace,
-                    TitleAndIcon(
-                      title: AppHelpers.getTranslation(TrKeys.enterAmount),
-                      paddingHorizontalSize: 0,
-                      titleSize: 16,
-                      titleColor: AppStyle.textPrimary,
-                    ),
-                    16.verticalSpace,
-                    TextField(
-                      controller: _amountController,
-                      keyboardType: const TextInputType.numberWithOptions(
-                        decimal: true,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: '0.00',
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 12.w),
-                          child: Text(
-                            'R',
-                            style: AppStyle.interBold(size: 18.sp),
-                          ),
-                        ),
-                        prefixIconConstraints: const BoxConstraints(
-                          minWidth: 0,
-                          minHeight: 0,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.r),
-                          borderSide: BorderSide(
-                            color: AppStyle.strokeDark,
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.r),
-                          borderSide: BorderSide(color: AppStyle.primary),
-                        ),
-                      ),
-                    ),
-                    24.verticalSpace,
-                    Text(
-                      AppHelpers.getTranslation(TrKeys.quickAmount),
-                      style: AppStyle.interSemi(size: 16.sp),
-                    ),
-                    16.verticalSpace,
-                    Wrap(
-                      spacing: 10.w,
-                      runSpacing: 10.h,
-                      children: _amountOptions.map((amount) {
-                        return InkWell(
-                          onTap: () {
-                            setState(() {
-                              _amountController.text = amount.toString();
-                            });
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 16.w,
-                              vertical: 10.h,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppStyle.cardDark,
-                              borderRadius: BorderRadius.circular(8.r),
-                              border: Border.all(color: AppStyle.strokeDark),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppStyle.black.withValues(alpha: 0.05),
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: Text(
-                              'R ${amount.toStringAsFixed(2)}',
-                              style: AppStyle.interNormal(size: 14.sp),
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                    ),
-                    24.verticalSpace,
-
-                    // Saved Cards Section
-                    if (_loadingCards)
-                      Center(
-                        child: CircularProgressIndicator(
-                          color: AppStyle.primary,
-                        ),
-                      )
-                    else if (_savedCards.isNotEmpty) ...[
-                      Text(
-                        AppHelpers.getTranslation(TrKeys.selectCard),
-                        style: AppStyle.interSemi(size: 16.sp),
-                      ),
-                      16.verticalSpace,
-                      ..._savedCards.map(
-                        (card) => _SavedCardTile(
-                          card: card,
-                          selected: _selectedCard?.id == card.id,
-                          onTap: () {
-                            setState(() {
-                              _selectedCard = _selectedCard?.id == card.id
-                                  ? null
-                                  : card;
-                            });
-                          },
-                        ),
-                      ),
-                      16.verticalSpace,
-
-                      // Pay with selected card button
-                      if (_selectedCard != null)
-                        ElevatedButton(
-                          onPressed: _isLoading ? null : _processTokenTopUp,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppStyle.primary,
-                            minimumSize: Size(double.infinity, 50.h),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                          ),
-                          child: _isLoading
-                              ? SizedBox(
-                                  height: 20.h,
-                                  width: 20.w,
-                                  child: CircularProgressIndicator(
-                                    color: AppStyle.white,
-                                    strokeWidth: 2,
-                                  ),
-                                )
-                              : Text(
-                                  AppHelpers.getTranslation(
-                                    TrKeys.payWithSavedCard,
-                                  ),
-                                  style: AppStyle.interSemi(
-                                    size: 16.sp,
-                                    color: AppStyle.white,
-                                  ),
-                                ),
-                        ),
-                      4.verticalSpace,
-                      Row(
-                        children: [
-                          Expanded(child: Divider(color: AppStyle.strokeDark)),
-                        ],
-                      ),
-                      4.verticalSpace,
-                    ],
-
-                    // Pay with new card button
-                    ElevatedButton(
-                      onPressed: _isLoading ? null : _topUpWithNewCard,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _savedCards.isNotEmpty
-                            ? AppStyle.transparent
-                            : AppStyle.primary,
-                        foregroundColor: _savedCards.isNotEmpty
-                            ? AppStyle.primary
-                            : AppStyle.white,
-                        minimumSize: Size(double.infinity, 50.h),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.r),
-                          side: _savedCards.isNotEmpty
-                              ? BorderSide(color: AppStyle.primary)
-                              : BorderSide.none,
-                        ),
-                        elevation: _savedCards.isNotEmpty ? 0 : 2,
-                      ),
-                      child: _isLoading
-                          ? SizedBox(
-                              height: 20.h,
-                              width: 20.w,
-                              child: CircularProgressIndicator(
-                                color: _savedCards.isNotEmpty
-                                    ? AppStyle.primary
-                                    : AppStyle.white,
-                                strokeWidth: 2,
-                              ),
-                            )
-                          : Text(
-                              _savedCards.isNotEmpty
-                                  ? AppHelpers.getTranslation(
-                                      TrKeys.payWithNewCard,
-                                    )
-                                  : AppHelpers.getTranslation(TrKeys.topUpNow),
-                              style: AppStyle.interSemi(
-                                size: 16.sp,
-                                color: _savedCards.isNotEmpty
-                                    ? AppStyle.primary
-                                    : AppStyle.white,
-                              ),
-                            ),
-                    ),
-
-                    16.verticalSpace,
-                    Row(
-                      children: [
-                        Expanded(child: Divider(color: AppStyle.strokeDark)),
-                      ],
-                    ),
-                    16.verticalSpace,
-
-                    // Receive from a friend: mint a 6-digit claim code the
-                    // receiver hands to the sender out-of-band
-                    // (CashSend-style).
-                    ElevatedButton.icon(
-                      onPressed: _isLoading ? null : _openReceiveFromFriend,
-                      icon: const Icon(Icons.call_received),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppStyle.transparent,
-                        foregroundColor: AppStyle.primary,
-                        minimumSize: Size(double.infinity, 50.h),
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.r),
-                          side: BorderSide(color: AppStyle.primary),
-                        ),
-                      ),
-                      label: Text(
-                        AppHelpers.getTranslation('receive_from_a_friend'),
-                        style: AppStyle.interSemi(
-                          size: 16.sp,
-                          color: AppStyle.primary,
-                        ),
-                      ),
-                    ),
-
-                    24.verticalSpace,
-                    Center(
-                      child: Text(
-                        AppHelpers.getTranslation(TrKeys.cardWillBeSaved),
-                        style: AppStyle.interNormal(
-                          size: 12.sp,
-                          color: AppStyle.textDarkSecondary,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    24.verticalSpace,
-                  ],
+            16.verticalSpace,
+            TextField(
+              controller: _amountController,
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
+              decoration: InputDecoration(
+                hintText: '0.00',
+                prefixIcon: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  child: Text('R', style: AppStyle.interBold(size: 18.sp)),
+                ),
+                prefixIconConstraints: const BoxConstraints(
+                  minWidth: 0,
+                  minHeight: 0,
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.r),
+                  borderSide: BorderSide(color: AppStyle.strokeDark),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.r),
+                  borderSide: BorderSide(color: AppStyle.primary),
                 ),
               ),
             ),
-          ),
+            24.verticalSpace,
+            Text(
+              AppHelpers.getTranslation(TrKeys.quickAmount),
+              style: AppStyle.interSemi(size: 16.sp),
+            ),
+            16.verticalSpace,
+            Wrap(
+              spacing: 10.w,
+              runSpacing: 10.h,
+              children: _amountOptions.map((amount) {
+                return InkWell(
+                  onTap: () {
+                    setState(() {
+                      _amountController.text = amount.toString();
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 10.h,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppStyle.cardDark,
+                      borderRadius: BorderRadius.circular(8.r),
+                      border: Border.all(color: AppStyle.strokeDark),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppStyle.black.withValues(alpha: 0.05),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      'R ${amount.toStringAsFixed(2)}',
+                      style: AppStyle.interNormal(size: 14.sp),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+            24.verticalSpace,
+
+            // Saved Cards Section
+            if (_loadingCards)
+              Center(child: CircularProgressIndicator(color: AppStyle.primary))
+            else if (_savedCards.isNotEmpty) ...[
+              Text(
+                AppHelpers.getTranslation(TrKeys.selectCard),
+                style: AppStyle.interSemi(size: 16.sp),
+              ),
+              16.verticalSpace,
+              ..._savedCards.map(
+                (card) => _SavedCardTile(
+                  card: card,
+                  selected: _selectedCard?.id == card.id,
+                  onTap: () {
+                    setState(() {
+                      _selectedCard = _selectedCard?.id == card.id
+                          ? null
+                          : card;
+                    });
+                  },
+                ),
+              ),
+              16.verticalSpace,
+
+              // Pay with selected card button
+              if (_selectedCard != null)
+                ElevatedButton(
+                  onPressed: _isLoading ? null : _processTokenTopUp,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppStyle.primary,
+                    minimumSize: Size(double.infinity, 50.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                  ),
+                  child: _isLoading
+                      ? SizedBox(
+                          height: 20.h,
+                          width: 20.w,
+                          child: CircularProgressIndicator(
+                            color: AppStyle.white,
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : Text(
+                          AppHelpers.getTranslation(TrKeys.payWithSavedCard),
+                          style: AppStyle.interSemi(
+                            size: 16.sp,
+                            color: AppStyle.white,
+                          ),
+                        ),
+                ),
+              4.verticalSpace,
+              Row(
+                children: [
+                  Expanded(child: Divider(color: AppStyle.strokeDark)),
+                ],
+              ),
+              4.verticalSpace,
+            ],
+
+            // Pay with new card button
+            ElevatedButton(
+              onPressed: _isLoading ? null : _topUpWithNewCard,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _savedCards.isNotEmpty
+                    ? AppStyle.transparent
+                    : AppStyle.primary,
+                foregroundColor: _savedCards.isNotEmpty
+                    ? AppStyle.primary
+                    : AppStyle.white,
+                minimumSize: Size(double.infinity, 50.h),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.r),
+                  side: _savedCards.isNotEmpty
+                      ? BorderSide(color: AppStyle.primary)
+                      : BorderSide.none,
+                ),
+                elevation: _savedCards.isNotEmpty ? 0 : 2,
+              ),
+              child: _isLoading
+                  ? SizedBox(
+                      height: 20.h,
+                      width: 20.w,
+                      child: CircularProgressIndicator(
+                        color: _savedCards.isNotEmpty
+                            ? AppStyle.primary
+                            : AppStyle.white,
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : Text(
+                      _savedCards.isNotEmpty
+                          ? AppHelpers.getTranslation(TrKeys.payWithNewCard)
+                          : AppHelpers.getTranslation(TrKeys.topUpNow),
+                      style: AppStyle.interSemi(
+                        size: 16.sp,
+                        color: _savedCards.isNotEmpty
+                            ? AppStyle.primary
+                            : AppStyle.white,
+                      ),
+                    ),
+            ),
+
+            16.verticalSpace,
+            Row(
+              children: [Expanded(child: Divider(color: AppStyle.strokeDark))],
+            ),
+            16.verticalSpace,
+
+            // Receive from a friend: mint a 6-digit claim code the
+            // receiver hands to the sender out-of-band
+            // (CashSend-style).
+            ElevatedButton.icon(
+              onPressed: _isLoading ? null : _openReceiveFromFriend,
+              icon: const Icon(Icons.call_received),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppStyle.transparent,
+                foregroundColor: AppStyle.primary,
+                minimumSize: Size(double.infinity, 50.h),
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8.r),
+                  side: BorderSide(color: AppStyle.primary),
+                ),
+              ),
+              label: Text(
+                AppHelpers.getTranslation('receive_from_a_friend'),
+                style: AppStyle.interSemi(size: 16.sp, color: AppStyle.primary),
+              ),
+            ),
+
+            24.verticalSpace,
+            Center(
+              child: Text(
+                AppHelpers.getTranslation(TrKeys.cardWillBeSaved),
+                style: AppStyle.interNormal(
+                  size: 12.sp,
+                  color: AppStyle.textDarkSecondary,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            24.verticalSpace,
+          ],
         ),
+      ),
+    );
+    return Directionality(
+      textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
+      child: KeyboardDismisser(
+        child: widget.asSheet ? _sheet(content) : _page(content),
+      ),
+    );
+  }
+
+  Widget _page(Widget content) {
+    return Scaffold(
+      backgroundColor: AppStyle.surfaceDark,
+      appBar: AppBar(
+        backgroundColor: AppStyle.surfaceDark,
+        elevation: 0,
+        iconTheme: IconThemeData(color: AppStyle.textPrimary),
+        title: Text(
+          AppHelpers.getTranslation(TrKeys.topUpWallet),
+          style: AppStyle.interSemi(size: 18.sp, color: AppStyle.textPrimary),
+        ),
+      ),
+      body: SafeArea(child: content),
+    );
+  }
+
+  /// The sheet chrome, matching the Send sheet: rounded top, drag handle,
+  /// the title in the sheet, and the keyboard inset so the amount field
+  /// stays above the keyboard.
+  Widget _sheet(Widget content) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppStyle.surfaceDark,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16.r),
+          topRight: Radius.circular(16.r),
+        ),
+      ),
+      width: double.infinity,
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          8.verticalSpace,
+          Container(
+            height: 4.h,
+            width: 48.w,
+            decoration: BoxDecoration(
+              color: AppStyle.dragElement,
+              borderRadius: BorderRadius.all(Radius.circular(40.r)),
+            ),
+          ),
+          16.verticalSpace,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: TitleAndIcon(
+              title: AppHelpers.getTranslation(TrKeys.topUpWallet),
+              paddingHorizontalSize: 0,
+              titleSize: 18,
+              titleColor: AppStyle.textPrimary,
+            ),
+          ),
+          Flexible(child: SafeArea(top: false, child: content)),
+        ],
       ),
     );
   }

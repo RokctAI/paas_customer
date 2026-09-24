@@ -127,7 +127,7 @@ packages:
       path: "../base"
       relative: true
     source: path
-    version: "1.71.0"
+    version: "1.72.2"
   battery_plus:
     dependency: transitive
     description:

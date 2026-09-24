@@ -104,7 +104,8 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
       result.when(
         success: (data) {
           if (!mounted) return;
-          final name = data.fullName ??
+          final name =
+              data.fullName ??
               '${data.firstName ?? ''} ${data.lastName ?? ''}'.trim();
           setState(() {
             _confirmedRecipientName = name;
@@ -222,16 +223,35 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
     }
   }
 
+  /// The sheet's mode, read from the inherited theme ONCE per build and
+  /// used by every helper, so the whole sheet follows the app's light /
+  /// dark setting (Ray, 2026-09-23: "send money screen is always light mode
+  /// and even in light mode not everything is visible, what you type is
+  /// white"). Before, the chrome was pinned to light fills while the typed
+  /// text took the dark theme's white ink.
+  Brightness _b = Brightness.light;
+
+  Color get _ink => AppStyle.inkFor(_b);
+  Color get _secondaryInk => AppStyle.secondaryInkFor(_b);
+  Color get _stroke => AppStyle.strokeFor(_b);
+  Color get _card => AppStyle.cardFor(_b);
+
+  OutlineInputBorder get _border => OutlineInputBorder(
+    borderRadius: BorderRadius.circular(8.r),
+    borderSide: BorderSide(color: _stroke),
+  );
+
   @override
   Widget build(BuildContext context) {
     final bool isLtr = LocalStorage.getLangLtr();
+    _b = Theme.of(context).brightness;
 
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: KeyboardDismisser(
         child: Container(
           decoration: BoxDecoration(
-            color: AppStyle.bgGrey.withValues(alpha: 0.96),
+            color: AppStyle.surfaceFor(_b),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(16.r),
               topRight: Radius.circular(16.r),
@@ -260,6 +280,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
                   24.verticalSpace,
                   TitleAndIcon(
                     title: AppHelpers.getTranslation(TrKeys.sendMoney),
+                    titleColor: _ink,
                     paddingHorizontalSize: 0,
                     titleSize: 18,
                   ),
@@ -288,9 +309,9 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
     return Container(
       padding: EdgeInsets.all(4.r),
       decoration: BoxDecoration(
-        color: AppStyle.white,
+        color: _card,
         borderRadius: BorderRadius.circular(10.r),
-        border: Border.all(color: AppStyle.borderColor),
+        border: Border.all(color: _stroke),
       ),
       child: Row(
         children: [
@@ -330,7 +351,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
               title,
               style: AppStyle.interSemi(
                 size: 14.sp,
-                color: selected ? AppStyle.white : AppStyle.textGrey,
+                color: selected ? AppStyle.white : _secondaryInk,
               ),
             ),
           ),
@@ -345,20 +366,21 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
       children: [
         Text(
           AppHelpers.getTranslation('enter_friend_phone_number'),
-          style: AppStyle.interSemi(size: 16.sp),
+          style: AppStyle.interSemi(size: 16.sp, color: _ink),
         ),
         16.verticalSpace,
         TextField(
           controller: _phoneController,
           enabled: _confirmedRecipientName == null,
           keyboardType: TextInputType.phone,
+          style: AppStyle.interNormal(size: 16.sp, color: _ink),
           decoration: InputDecoration(
             hintText: AppHelpers.getTranslation(TrKeys.phoneNumber),
-            prefixIcon: const Icon(Icons.phone, color: AppStyle.textGrey),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.r),
-              borderSide: const BorderSide(color: AppStyle.borderColor),
-            ),
+            hintStyle: AppStyle.interNormal(size: 16.sp, color: _secondaryInk),
+            prefixIcon: Icon(Icons.phone, color: _secondaryInk),
+            border: _border,
+            enabledBorder: _border,
+            disabledBorder: _border,
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.r),
               borderSide: BorderSide(color: AppStyle.primary),
@@ -392,26 +414,29 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
           24.verticalSpace,
           Text(
             AppHelpers.getTranslation(TrKeys.enterAmount),
-            style: AppStyle.interSemi(size: 16.sp),
+            style: AppStyle.interSemi(size: 16.sp, color: _ink),
           ),
           16.verticalSpace,
           TextField(
             controller: _amountController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            style: AppStyle.interNormal(size: 16.sp, color: _ink),
             decoration: InputDecoration(
               hintText: '0.00',
+              hintStyle: AppStyle.interNormal(
+                size: 16.sp,
+                color: _secondaryInk,
+              ),
               prefixIcon: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
-                child: Text('R', style: AppStyle.interBold(size: 18.sp)),
+                child: Text(
+                  'R',
+                  style: AppStyle.interBold(size: 18.sp, color: _ink),
+                ),
               ),
-              prefixIconConstraints: BoxConstraints(
-                minWidth: 0,
-                minHeight: 0,
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8.r),
-                borderSide: const BorderSide(color: AppStyle.borderColor),
-              ),
+              prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+              border: _border,
+              enabledBorder: _border,
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8.r),
                 borderSide: BorderSide(color: AppStyle.primary),
@@ -448,7 +473,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: AppStyle.white,
+        color: _card,
         borderRadius: BorderRadius.circular(8.r),
         boxShadow: [
           BoxShadow(
@@ -475,14 +500,14 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
               children: [
                 Text(
                   '${AppHelpers.getTranslation('send_to')} $name?',
-                  style: AppStyle.interSemi(size: 16.sp),
+                  style: AppStyle.interSemi(size: 16.sp, color: _ink),
                 ),
                 4.verticalSpace,
                 Text(
                   _phoneController.text,
                   style: AppStyle.interNormal(
                     size: 14.sp,
-                    color: AppStyle.textGrey,
+                    color: _secondaryInk,
                   ),
                 ),
               ],
@@ -509,12 +534,12 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
       children: [
         Text(
           AppHelpers.getTranslation('enter_code_from_friend'),
-          style: AppStyle.interSemi(size: 16.sp),
+          style: AppStyle.interSemi(size: 16.sp, color: _ink),
         ),
         8.verticalSpace,
         Text(
           AppHelpers.getTranslation('amount_is_set_by_the_code'),
-          style: AppStyle.interNormal(size: 13.sp, color: AppStyle.textGrey),
+          style: AppStyle.interNormal(size: 13.sp, color: _secondaryInk),
         ),
         16.verticalSpace,
         TextField(
@@ -523,14 +548,17 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
           maxLength: 6,
           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
           textAlign: TextAlign.center,
-          style: AppStyle.interBold(size: 24.sp, letterSpacing: 8),
+          style: AppStyle.interBold(size: 24.sp, letterSpacing: 8, color: _ink),
           decoration: InputDecoration(
             counterText: '',
             hintText: '000000',
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8.r),
-              borderSide: const BorderSide(color: AppStyle.borderColor),
+            hintStyle: AppStyle.interBold(
+              size: 24.sp,
+              letterSpacing: 8,
+              color: _secondaryInk,
             ),
+            border: _border,
+            enabledBorder: _border,
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.r),
               borderSide: BorderSide(color: AppStyle.primary),
@@ -551,10 +579,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
               ? CircularProgressIndicator(color: AppStyle.white)
               : Text(
                   AppHelpers.getTranslation(TrKeys.sendNow),
-                  style: AppStyle.interSemi(
-                    size: 16.sp,
-                    color: AppStyle.white,
-                  ),
+                  style: AppStyle.interSemi(size: 16.sp, color: AppStyle.white),
                 ),
         ),
       ],
@@ -571,7 +596,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
         Container(
           padding: EdgeInsets.all(24.w),
           decoration: BoxDecoration(
-            color: AppStyle.white,
+            color: _card,
             borderRadius: BorderRadius.circular(8.r),
             boxShadow: [
               BoxShadow(
@@ -583,21 +608,17 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
           ),
           child: Column(
             children: [
-              Icon(
-                Icons.check_circle,
-                color: AppStyle.primary,
-                size: 48.r,
-              ),
+              Icon(Icons.check_circle, color: AppStyle.primary, size: 48.r),
               16.verticalSpace,
               Text(
                 AppHelpers.getTranslation(TrKeys.moneySentSuccessfully),
-                style: AppStyle.interSemi(size: 16.sp),
+                style: AppStyle.interSemi(size: 16.sp, color: _ink),
                 textAlign: TextAlign.center,
               ),
               8.verticalSpace,
               Text(
                 '$amountText — ${_codeSentRecipientName ?? ''}',
-                style: AppStyle.interBold(size: 18.sp),
+                style: AppStyle.interBold(size: 18.sp, color: _ink),
                 textAlign: TextAlign.center,
               ),
             ],

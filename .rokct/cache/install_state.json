@@ -1,9 +1,9 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.71.0",
+      "version": "1.72.2",
       "files": {
-        "lib/main.dart": "032724777d411f60bb1320d15c833a0af9c3b29c07223d9dabd48c3c9a7c1133",
+        "lib/main.dart": "92423f25fa33333d67d8bd380b35d328cc5350033e61f0b750952a6d51641c34",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
         "lib/core/presentation/routes/app_router.dart": "7e7c72675c4a414818d0bed611623aa3248fc2ae3d264fe8fbed6f64bfd7c82c",
         "lib/core/presentation/routes/route_pages.dart": "fa862244b5c0344a8e25a061d4957e5af4792cdd9483b4bf63d041fa4fda105e",
@@ -619,7 +619,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.13.4",
+      "version": "1.13.5",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "87b5d1dbc3f0f9417db5289be2c1ebbcb7dfecf1638f348b6f5ee1581f7ce4d2",
         "lib/presentation/routes/registration_step_pages.dart": "d18f7e35878721c688c4f0964db42c97148e1f2e9d225cd1a6bb7490e2628347",
@@ -713,7 +713,7 @@
       }
     },
     "users_sdk": {
-      "version": "1.4.1",
+      "version": "1.4.2",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -974,7 +974,7 @@
       "boot_hooks": []
     },
     "wallet_sdk": {
-      "version": "1.6.4",
+      "version": "1.6.5",
       "files": {
         "lib/presentation/routes/wallet_route_pages.dart": "86d07bc5c2e239b713c49a9caa4f2dc6007ec1e20aa9519aeb960f3fcc8ee5a7"
       },
@@ -1403,8 +1403,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.71.0",
-      "hash": "82a152addbe0cae2"
+      "version": "1.72.2",
+      "hash": "ed459876f2903cba"
     },
     "comms": {
       "version": "1.16.0",
@@ -1435,20 +1435,20 @@
       "hash": "5ac9fa78ff6e1dfe"
     },
     "auth": {
-      "version": "1.13.4",
-      "hash": "d50c3b36de231c8f"
+      "version": "1.13.5",
+      "hash": "02390d16f682723c"
     },
     "users": {
-      "version": "1.4.1",
-      "hash": "bd04f3c749b75380"
+      "version": "1.4.2",
+      "hash": "2b6052099734834f"
     },
     "fav": {
       "version": "1.0.2",
       "hash": "373721752683554f"
     },
     "wallet": {
-      "version": "1.6.4",
-      "hash": "00f9e2281982b13b"
+      "version": "1.6.5",
+      "hash": "9e94adb9894327d2"
     },
     "payments": {
       "version": "1.2.2",

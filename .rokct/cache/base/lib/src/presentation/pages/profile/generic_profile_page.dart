@@ -98,14 +98,23 @@ class GenericProfilePage extends ConsumerStatefulWidget {
       _GenericProfilePageState();
 }
 
+/// The profile's scroll padding: 16 on every side, plus room at the
+/// bottom for the shell's floating nav pill (60 tall, parked 18 above the
+/// edge) so the last rows — the footer's app-name meta row on a long page —
+/// scroll clear of it instead of ending underneath (Ray, 2026-09-23).
+EdgeInsets get _pagePadding =>
+    EdgeInsets.fromLTRB(16.r, 16.r, 16.r, 16.r + 96.r);
+
 class _GenericProfilePageState extends ConsumerState<GenericProfilePage> {
   /// Resolved async visibility gates, keyed by section id. A gated section
   /// stays hidden until its gate resolves true.
-  final Map<String, bool> _gateResults = {};
+  final Map<String, bool> _gateResults = {...ProfileSectionRegistry.I.lastGateResults};
 
   /// Resolved header-slot gates, keyed by slot. A gated slot stays empty
   /// until its gate resolves true — the same contract as section gates.
-  final Map<ProfileHeaderSlot, bool> _headerSlotGateResults = {};
+  final Map<ProfileHeaderSlot, bool> _headerSlotGateResults = {
+    ...ProfileSectionRegistry.I.lastHeaderSlotGateResults,
+  };
 
   /// Whether the header card currently shows its plan back face (the
   /// in-place flip triggered from the plan row while the planBack slot is
@@ -164,6 +173,7 @@ class _GenericProfilePageState extends ConsumerState<GenericProfilePage> {
       } catch (_) {
         visible = false;
       }
+      ProfileSectionRegistry.I.lastGateResults[section.id] = visible;
       if (!mounted) return;
       setState(() => _gateResults[section.id] = visible);
     }
@@ -179,6 +189,7 @@ class _GenericProfilePageState extends ConsumerState<GenericProfilePage> {
       } catch (_) {
         visible = false;
       }
+      ProfileSectionRegistry.I.lastHeaderSlotGateResults[slot] = visible;
       if (!mounted) return;
       setState(() => _headerSlotGateResults[slot] = visible);
     }
@@ -334,7 +345,7 @@ class _GenericProfilePageState extends ConsumerState<GenericProfilePage> {
                         sections: sections,
                       )
                     : ListView(
-                        padding: EdgeInsets.all(16.r),
+                        padding: _pagePadding,
                         children: [
                           topRow,
                           12.verticalSpace,
@@ -450,7 +461,7 @@ class _SpreadBody extends StatelessWidget {
     }
 
     return SingleChildScrollView(
-      padding: EdgeInsets.all(16.r),
+      padding: _pagePadding,
       child: Column(
         children: [
           topRow,
@@ -793,18 +804,36 @@ class _FlipCard extends StatelessWidget {
       builder: (context, t, _) {
         final angle = t * math.pi;
         final pastMidpoint = angle > math.pi / 2;
+        // The FRONT always sizes the card (Ray, 2026-09-23: "should
+        // maintain height at all times even when flipped it should take
+        // height of the front so ui doesnt jump around"): it stays laid
+        // out — invisible and untappable while the back shows — and the
+        // back fills exactly that box, scrolling inside it if its content
+        // runs taller.
         return Transform(
           alignment: Alignment.center,
           transform: Matrix4.identity()
             ..setEntry(3, 2, 0.0015)
             ..rotateY(angle),
-          child: pastMidpoint
-              ? Transform(
-                  alignment: Alignment.center,
-                  transform: Matrix4.identity()..rotateY(math.pi),
-                  child: back,
-                )
-              : front,
+          child: Stack(
+            children: [
+              Visibility(
+                visible: !pastMidpoint,
+                maintainSize: true,
+                maintainAnimation: true,
+                maintainState: true,
+                child: front,
+              ),
+              if (pastMidpoint)
+                Positioned.fill(
+                  child: Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.identity()..rotateY(math.pi),
+                    child: back,
+                  ),
+                ),
+            ],
+          ),
         );
       },
     );
@@ -831,22 +860,26 @@ class _PlanBackCard extends StatelessWidget {
           color: AppStyle.cardDark,
           borderRadius: BorderRadius.circular(16.r),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            child,
-            12.verticalSpace,
-            Center(
-              child: Text(
-                AppHelpers.getTranslation(TrKeys.tapAnywhereToFlipBack),
-                style: AppStyle.interNormal(
-                  size: 10.sp,
-                  color: AppStyle.textDarkFaint,
+        // The flip card sizes this face to the front's height; content
+        // taller than that scrolls inside the card instead of growing it.
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              child,
+              12.verticalSpace,
+              Center(
+                child: Text(
+                  AppHelpers.getTranslation(TrKeys.tapAnywhereToFlipBack),
+                  style: AppStyle.interNormal(
+                    size: 10.sp,
+                    color: AppStyle.textDarkFaint,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

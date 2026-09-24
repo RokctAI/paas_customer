@@ -17,9 +17,9 @@
 // the card's history arrow, now this SDK's /wallet-history route). The
 // donor already read only base_sdk symbols (profileProvider's
 // getWallet/getWalletPage drive the list). Port deltas, on purpose:
-//   * The app bar's Top-up button pushes this SDK's /wallet-topup route
-//     (guarded, lms_sdk's idiom) instead of the marketplace top-up sheet —
-//     wallet_sdk's WalletTopUpPage is the finished port of that sheet.
+//   * The app bar's Top-up button opens this SDK's WalletTopUpPage as a
+//     modal sheet (the finished port of the marketplace top-up sheet), the
+//     same shape as Send.
 //   * The Send button opens this SDK's ported WalletSendScreen.
 //   * The Loan button stays behind AppHelpers.getLendingEnabled(), but
 //     resolves EmbeddedWidgets.I.loanScreen() inside a guard: a shell that
@@ -29,7 +29,6 @@
 //     wallet_route_pages.dart carries it (this SDK's convention, same as
 //     WalletTopUpPage).
 
-import 'package:auto_route/auto_route.dart';
 import 'package:base_sdk/src/navigation/embedded_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,6 +53,7 @@ import 'package:base_sdk/src/presentation/theme/app_style.dart';
 
 import 'package:wallet_sdk/src/common/infrastructure/repositories/demo_wallet_history.dart';
 import 'package:wallet_sdk/src/common/presentation/pages/send/wallet_send_screen.dart';
+import 'package:wallet_sdk/src/common/presentation/pages/topup/wallet_topup_page.dart';
 
 // Capitalize helper carried over from the donor.
 extension StringExtension on String {
@@ -104,17 +104,8 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
     super.dispose();
   }
 
-  void _openTopUp() {
-    try {
-      context.router.pushNamed(
-        '/wallet-topup',
-        onFailure: (failure) =>
-            debugPrint('==> wallet top-up route unavailable: $failure'),
-      );
-    } catch (e) {
-      debugPrint('==> wallet top-up route unavailable: $e');
-    }
-  }
+  // A modal sheet, the same shape as Send (Ray, 2026-09-23).
+  void _openTopUp() => WalletTopUpPage.showAsSheet(context);
 
   void _openSendSheet() {
     AppHelpers.showCustomModalBottomSheet(

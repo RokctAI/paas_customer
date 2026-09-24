@@ -48,7 +48,45 @@ import 'package:users_sdk/src/common/services/session_end_hooks.dart';
 class MockUserRepository implements UserRepositoryFacade {
   /// In-memory account for the session: edits and avatar changes stick
   /// until the app restarts, so the edit-profile sheet round-trips.
-  ProfileData _profile = ProfileData(
+  /// The demo accounts' profiles, keyed by account id. Every demo role
+  /// used to read this ONE profile, so the partner and admin demo accounts
+  /// rendered Thandi and their sessions carried her id - one owner scope
+  /// for three accounts (Ray, 2026-09-23). Each signed-in account now gets
+  /// its own entry: Thandi's (id "1") is the seeded one below; any other
+  /// demo account is seeded from the session auth_sdk persisted at sign-in
+  /// (its own id, name, email and role), and edits stick per account.
+  final Map<String, ProfileData> _profiles = <String, ProfileData>{};
+
+  static const String _studentId = "1";
+
+  String get _currentId {
+    final String? id = LocalStorage.getUser()?.id;
+    return (id == null || id.isEmpty) ? _studentId : id;
+  }
+
+  ProfileData get _profile =>
+      _profiles[_currentId] ??= _seedFor(_currentId);
+
+  set _profile(ProfileData value) => _profiles[_currentId] = value;
+
+  ProfileData _seedFor(String id) {
+    if (id == _studentId) return _thandi;
+    final ProfileData? session = LocalStorage.getUser();
+    return ProfileData(
+      id: id,
+      uuid: session?.uuid,
+      firstname: session?.firstname,
+      lastname: session?.lastname,
+      email: session?.email,
+      phone: session?.phone,
+      role: session?.role,
+      active: true,
+      isDemoAccount: true,
+      img: session?.img ?? DemoImages.avatar,
+    );
+  }
+
+  final ProfileData _thandi = ProfileData(
     id: "1",
     uuid: "demo_uuid",
     firstname: "Thandi",
@@ -56,6 +94,7 @@ class MockUserRepository implements UserRepositoryFacade {
     email: "thandi.mokoena@outlook.com",
     phone: "+27 82 456 7890",
     active: true,
+    isDemoAccount: true,
     // base_sdk's inline `data:` SVG initials avatar: carries its own
     // pixels, so it renders offline and on the CI tour emulator.
     img: DemoImages.avatar,

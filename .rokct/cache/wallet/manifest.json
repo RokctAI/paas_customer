@@ -1,6 +1,7 @@
 {
   "name": "wallet_sdk",
-  "version": "1.6.4",
+  "version": "1.6.5",
+  "_comment_version_1_6_5": "1.6.4 -> 1.6.5: Ray's 2026-09-23 notes. The Send sheet follows the app's light/dark mode (fills, ink, borders and the typed text resolve from the inherited theme's brightness via base_sdk's explicit-brightness seams, base_sdk >= 1.66.7); before, it was pinned light and the typed text came out white. Top-up now opens as a modal sheet like Send, from both the profile wallet card and the history page (WalletTopUpPage(asSheet: true) / WalletTopUpPage.showAsSheet); the /wallet-topup route keeps the page form for other callers.",
   "_comment_requires": "wallet_sdk >= 1.2.0 requires base_sdk >= 1.33.0 (BaseWalletCard `wallet` param + fixed compile). The composer manifest schema has no machine-readable minimum-version field, so this is the declaration.",
   "di_hooks": [
     {

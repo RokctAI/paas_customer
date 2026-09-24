@@ -1,3 +1,14 @@
+## 1.4.2
+
+* fix(users): `MockUserRepository` keeps one profile per demo account, keyed
+  by the signed-in account's id. It served Thandi's profile (id "1") to
+  every demo session, so even once auth_sdk 1.13.5 gives the partner and
+  admin demo accounts ids of their own, their profile fetch would write
+  Thandi's id back over the stored session and return them to her owner
+  scope. Thandi's account is unchanged; any other demo account is
+  seeded from the session auth_sdk stored at sign-in, and edits stick per
+  account.
+
 ## 1.4.1
 
 * fix(users): the local session is cleared on sign-out whether or not the

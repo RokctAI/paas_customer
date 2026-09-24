@@ -1,3 +1,14 @@
+## 1.13.5
+
+* fix(auth): each demo role signs in to its own account. `MockAuthRepository`
+  handed every demo sign-in the same Thandi account (id "1") with only the
+  role swapped, and base_sdk scopes local data to the signed-in user's id,
+  so the student, partner and admin demo accounts shared one owner and read
+  one merged data set, Thandi's name included (Ray, 2026-09-23: "like there
+  is no owner"). `partner@demo.rokct.ai` now signs in as Nomvula Mokoena
+  (id "2") and `admin@demo.rokct.ai` as Ayanda Khumalo (id "3"); the student
+  side keeps Thandi and id "1", so data already on a device stays hers.
+
 ## [1.13.4] - 2026-09-21
 * * Demo account mapping: Added customer@demo.rokct.ai -> customer, set Thandi demo account role to student with default grade: 12.
 

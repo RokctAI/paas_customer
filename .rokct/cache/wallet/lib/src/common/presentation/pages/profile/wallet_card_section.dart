@@ -40,6 +40,7 @@ import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 
 import 'package:wallet_sdk/src/common/presentation/pages/send/wallet_send_screen.dart';
+import 'package:wallet_sdk/src/common/presentation/pages/topup/wallet_topup_page.dart';
 
 /// Static configuration seam for the 'wallet.card' profile section.
 ///
@@ -105,10 +106,10 @@ class WalletCardSection {
 /// The wallet section's widget: base_sdk's [BaseWalletCard] (self-sourcing
 /// profileProvider → LocalStorage; hides the amount at zero balance, green
 /// positive / red negative) composed with wallet_sdk's own surfaces —
-/// history arrow → the /wallet-history route, Top-up → the /wallet-topup
-/// route (both this SDK's manifest routes, pushed by path with the same
-/// guarded idiom as lms_sdk's top-up door: a shell composed without the
-/// route lands in onFailure/catch and stays put), Send → the ported
+/// history arrow → the /wallet-history route (this SDK's manifest route,
+/// pushed by path with the same guarded idiom as lms_sdk's top-up door: a
+/// shell composed without the route lands in onFailure/catch and stays
+/// put), Top-up → the top-up flow as a modal sheet, Send → the ported
 /// CashSend send sheet.
 class WalletProfileCard extends StatelessWidget {
   /// Optional wallet snapshot passed through to [BaseWalletCard.wallet]
@@ -139,7 +140,9 @@ class WalletProfileCard extends StatelessWidget {
           builder: (context, ref, _) => const WalletSendScreen(),
         ),
       ),
-      isDarkMode: false,
+      // Follow the app's mode; the sheet reads the same brightness for
+      // its own fills and ink (Ray, 2026-09-23).
+      isDarkMode: Theme.of(context).brightness == Brightness.dark,
     );
   }
 
@@ -158,7 +161,9 @@ class WalletProfileCard extends StatelessWidget {
                       title: AppHelpers.getTranslation(TrKeys.topup),
                       bgColor: AppStyle.primary,
                       titleColor: AppStyle.white,
-                      onTap: () => _pushGuarded(context, '/wallet-topup'),
+                      // A modal sheet, like Send (Ray, 2026-09-23); the
+                      // /wallet-topup route stays for its other callers.
+                      onTap: () => WalletTopUpPage.showAsSheet(context),
                     ),
                   ),
                   12.horizontalSpace,

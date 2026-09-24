@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.72.2
+
+* fix(profile): the plan flip card keeps the front's height when flipped;
+  the back face scrolls inside that box.
+* fix(profile): visibility-gate answers are remembered across page mounts,
+  so gated rows no longer pop in and shift the menu on return.
+* fix(profile): bottom scroll padding clears the floating nav.
+
+## 1.72.1
+
+* fix(base): the Android template sets `applicationId "com.app.demo"` as a
+  literal, like `namespace`. The release and build lanes replace that literal
+  with the `<APP_TYPE>_ANDROID_PACKAGE_NAME` value picked by `app-type`; the old
+  `dartDefines.CUSTOMER_ANDROID_PACKAGE_NAME` expression hid it from them, so
+  every composed shell got the customer package.
+
+## 1.72.0
+
+* fix(base): release builds silence `debugPrint`. `templates/main.dart` swaps
+  it for a no-op under `kReleaseMode` before boot hooks and `runApp`; the calls
+  stay for debug and profile. The uncaught-error handlers keep the original
+  printer, so crashes are still logged.
+
 ## 1.71.0
 
 * fix(base): the Android launcher label is the home SDK's. The

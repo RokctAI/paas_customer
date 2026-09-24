@@ -50,6 +50,16 @@ import 'package:${package}/presentation/app_widget.dart';
 void main() async {
   final WidgetsBinding binding = WidgetsFlutterBinding.ensureInitialized();
 
+  // Release builds print nothing through debugPrint (Ray, 2026-09-24): the
+  // calls stay in the code for debug and profile, but in production they are
+  // silenced here, once, before any SDK boot hook runs. The crash handlers
+  // below keep the original printer, so an uncaught error still reaches
+  // logcat / the Windows console.
+  final DebugPrintCallback crashLog = debugPrint;
+  if (kReleaseMode) {
+    debugPrint = (String? message, {int? wrapWidth}) {};
+  }
+
   // Uncaught-error capture, installed before anything else in main() can
   // throw, so a crash leaves a record instead of just disappearing.
   //
@@ -61,15 +71,15 @@ void main() async {
   // log (logcat / the Windows console), where a device bug report can be read
   // after the app is already gone.
   FlutterError.onError = (FlutterErrorDetails details) {
-    debugPrint('Uncaught Flutter error: ${details.exceptionAsString()}');
-    debugPrint('${details.stack}');
+    crashLog('Uncaught Flutter error: ${details.exceptionAsString()}');
+    crashLog('${details.stack}');
     FlutterError.presentError(details);
   };
 
   // Errors that never pass through the framework arrive here instead: a throw
   // from a platform message handler, an unawaited Future that fails inside a
   // boot hook, anything raised on the root zone after the first frame.
-  // Returning true reports the error as handled - the debugPrint above is the
+  // Returning true reports the error as handled - the crashLog above is the
   // record - rather than letting it reach the engine's default reporter.
   //
   // Deliberately no runZonedGuarded: the platform dispatcher hook already
@@ -77,8 +87,8 @@ void main() async {
   // the bindings are initialized on the line above in the root zone and
   // calling runApp from a different zone is the "Zone mismatch" assertion.
   binding.platformDispatcher.onError = (Object error, StackTrace stack) {
-    debugPrint('Uncaught platform error: $error');
-    debugPrint('$stack');
+    crashLog('Uncaught platform error: $error');
+    crashLog('$stack');
     return true;
   };
 
