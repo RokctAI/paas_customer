@@ -1,3 +1,13 @@
+## 1.2.2
+
+* fix(payfast): cancelling on PayFast no longer reports the payment as
+  successful. Failure is decided first, markers are matched on the URL path
+  only, PayFast's own pages are never a completion, and the own-site fallback
+  compares hosts.
+* fix(payfast): the PayFast passphrase, merchant key, signature, customer
+  details, card token and card details are no longer written to device logs.
+  Logged URLs are cut to scheme, host and path.
+
 ## 1.2.0
 
 * Saved-card payment no longer handles the gateway reuse credential.

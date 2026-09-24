@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.71.0
+
+* fix(base): the Android launcher label is the home SDK's. The
+  `resValue "string", "app_name", dartDefines.CUSTOMER_APP_NAME` line is gone
+  from the Android template; the composer writes the home SDK's manifest
+  `app_name` into `res/values/strings.xml` instead. Without one, the neutral
+  default stays.
+
+## 1.70.0
+
+* fix(base): the app's own name and motto are no longer translation keys.
+  `TrKeys.appName` and `TrKeys.appMotto` are removed, with the two bundled
+  Afrikaans rows that served them. They belong to `AppConstants.appTitle` and
+  `AppConstants.appMotto`, which a home SDK re-points through
+  `constants.overrides`; as translation keys they hid that override, so the
+  onboarding welcome card showed the raw key instead of the app's motto.
+  Needs onboarding_sdk 1.2.2, which reads `AppConstants.appMotto` instead.
+
 ## 1.69.0
 
 * feat(base): the host names one more optional Kotlin bridge, `AppChangesBridge`,

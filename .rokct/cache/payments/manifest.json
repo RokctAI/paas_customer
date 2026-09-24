@@ -1,6 +1,7 @@
 {
   "name": "payments_sdk",
-  "version": "1.2.1",
+  "version": "1.2.2",
+  "_comment_version_1_2_2": "1.2.1 -> 1.2.2: PayFast. (1) A cancelled payment was reported as successful: the success test included `url.contains(AppConstants.baseUrl)` and ran before the cancel test, and the backend's cancel_url is `<site>/payment-cancel` on the tenant's own domain, so Cancel matched success - the user saw \"Payment successful\", onComplete(true) fired and an unpaid order was treated as paid. With BASE_URL unset, contains('') matched every URL. Now failure is decided first; markers are matched on the URL's PATH only (the checkout URL carries our return_url and cancel_url in its query string); PayFast's own hosts are never a completion; and the own-site fallback compares hosts, only when BASE_URL is set. (2) The live PayFast passphrase, merchant_key, signature, customer details, tokenisation token and card details were printed with debugPrint, which is not compiled out of release builds. Those logs are removed, and every logged URL is reduced to scheme, host and path. New test/payfast_completion_test.dart; the cancel case fails on the old code.",
   "installs": [],
   "routes": [],
   "integrations": []

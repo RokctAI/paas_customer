@@ -43,6 +43,7 @@ class MockAuthRepository
   static const Map<String, String> _demoRolesByEmail = <String, String>{
     'partner@demo.rokct.ai': 'partner',
     'admin@demo.rokct.ai': 'admin',
+    'customer@demo.rokct.ai': 'customer',
     'driver@demo.rokct.ai': 'deliveryman',
     'manager@demo.rokct.ai': 'seller',
   };
@@ -79,6 +80,7 @@ class MockAuthRepository
     phone: "+27 82 456 7890",
     role: "customer",
     active: true,
+    isDemoAccount: true,
     // base_sdk's inline `data:` SVG initials avatar: carries its own
     // pixels, so it renders offline and on the CI tour emulator, and it is
     // the one avatar users_sdk's MockUserRepository serves too.

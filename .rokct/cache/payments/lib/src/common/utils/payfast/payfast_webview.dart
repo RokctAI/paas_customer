@@ -1,22 +1,16 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -141,7 +135,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
     controller.setNavigationDelegate(
       NavigationDelegate(
         onPageStarted: (String url) {
-          debugPrint('PayFast WebView started loading: $url');
+          debugPrint('PayFast WebView started loading: ${payFastLogUrl(url)}');
         },
         onPageFinished: (String url) {
           if (mounted) {
@@ -149,7 +143,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
               isLoading = false;
             });
           }
-          debugPrint('PayFast WebView finished loading: $url');
+          debugPrint('PayFast WebView finished loading: ${payFastLogUrl(url)}');
 
           // Check for success or return URLs
           _checkForPaymentCompletion(url);
@@ -167,7 +161,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
           }
         },
         onNavigationRequest: (NavigationRequest request) {
-          debugPrint('PayFast WebView navigation: ${request.url}');
+          debugPrint('PayFast WebView navigation: ${payFastLogUrl(request.url)}');
 
           // Check for success or cancel URLs
           if (_checkForPaymentCompletion(request.url)) {
@@ -327,7 +321,7 @@ class PayFastWebViewPreloader {
               url: url,
               isReady: true,
             );
-            debugPrint('PayFast WebView preloaded: $url');
+            debugPrint('PayFast WebView preloaded: ${payFastLogUrl(url)}');
           },
           onNavigationRequest: (NavigationRequest request) {
             // Allow all navigation during preloading
@@ -338,7 +332,7 @@ class PayFastWebViewPreloader {
 
       // Load the URL
       controller.loadRequest(Uri.parse(url));
-      debugPrint('Started preloading PayFast WebView: $url');
+      debugPrint('Started preloading PayFast WebView: ${payFastLogUrl(url)}');
     } catch (e) {
       debugPrint('PayFast WebView preload error: $e');
     }

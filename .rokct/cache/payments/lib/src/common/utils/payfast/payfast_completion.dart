@@ -1,22 +1,16 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -48,43 +42,67 @@ class PayFastCompletionResult {
   bool get hasToken => token != null && token!.isNotEmpty;
 }
 
+/// A PayFast-related URL with its query string removed, for logs.
+///
+/// PayFast checkout URLs carry merchant_id, merchant_key, the signature and
+/// the customer's name, email and phone in the query string, and return URLs
+/// carry the tokenisation token and card details. debugPrint is NOT compiled
+/// out of release builds, so logging a full URL put those in logcat on
+/// production handsets. Scheme, host and path say where the WebView is,
+/// which is all a log needs.
+String payFastLogUrl(String url) {
+  final Uri? uri = Uri.tryParse(url);
+  if (uri == null || uri.host.isEmpty) return '<unparseable url>';
+  return '${uri.scheme}://${uri.host}${uri.path}';
+}
+
+/// PayFast's own hosts. A URL on one of these is the checkout itself, never
+/// a completion - and the checkout URL carries our return_url and cancel_url
+/// in its query string, so matching markers against the whole URL made the
+/// checkout page read as a finished payment.
+bool _isPayFastHost(String host) =>
+    host == 'payfast.co.za' || host.endsWith('.payfast.co.za');
+
 /// Pure URL evaluation shared by the mobile (webview_flutter) and Windows
 /// (flutter_inappwebview) PayFast WebView variants.
 ///
 /// Detects success/cancel redirects and extracts the tokenization token and
 /// card details from the query parameters. Has no side effects.
+///
+/// FAILURE IS DECIDED FIRST, and only on the URL's path. The backend sends
+/// PayFast a cancel_url of `<site>/payment-cancel` on the tenant's own
+/// domain, and a success check that included "the URL contains our base
+/// URL" matched that cancel redirect too and ran first - so tapping Cancel
+/// on PayFast showed "Payment successful" and treated an unpaid order as
+/// paid. With BASE_URL unset, `contains('')` matched every URL.
 PayFastCompletionResult evaluatePayFastUrl(String url) {
-  debugPrint('PayFast URL check: $url');
-
-  // Parse URL to check for token and other parameters
-  final uri = Uri.parse(url);
+  final Uri? uri = Uri.tryParse(url);
+  if (uri == null || uri.host.isEmpty || _isPayFastHost(uri.host)) {
+    return const PayFastCompletionResult(status: PayFastCompletionStatus.none);
+  }
+  final String path = uri.path.toLowerCase();
   final params = uri.queryParameters;
 
-  // Log all parameters to help with debugging
-  debugPrint('PayFast URL parameters: $params');
+  final bool isFailure = path.contains('payment-cancel') ||
+      path.contains('payment-failed') ||
+      path.contains('redirect-cancel');
 
-  // Specifically log all custom_str fields
-  debugPrint('PayFast custom_str1: ${params['custom_str1']}');
-  debugPrint('PayFast custom_str2: ${params['custom_str2']}');
-  debugPrint('PayFast custom_str3: ${params['custom_str3']}');
-  debugPrint('PayFast custom_str4: ${params['custom_str4']}');
-  debugPrint('PayFast custom_str5: ${params['custom_str5']}');
+  // The explicit success markers the backend uses, or - because a caller's
+  // `redirect_to` return_url can be any page on the tenant's site - any
+  // non-failure page on the app's OWN host. Compared host to host, never as
+  // a substring, and never with an empty base URL.
+  final String ownHost = Uri.tryParse(AppConstants.baseUrl)?.host ?? '';
+  final bool isSuccess = !isFailure &&
+      (path.contains('order-stripe-success') ||
+          path.contains('payment-success') ||
+          path.contains('redirect-success') ||
+          (ownHost.isNotEmpty && uri.host == ownHost));
 
-  // Log token parameter
-  debugPrint('PayFast token value: ${params['token']}');
-
-  // Match patterns for success
-  bool isSuccess =
-      url.contains('order-stripe-success') ||
-      url.contains('payment-success') ||
-      url.contains('redirect-success') ||
-      url.contains(AppConstants.baseUrl);
-
-  // Match patterns for cancellation or failure
-  bool isFailure =
-      url.contains('payment-cancel') ||
-      url.contains('payment-failed') ||
-      url.contains('redirect-cancel');
+  if (isFailure) {
+    return const PayFastCompletionResult(
+      status: PayFastCompletionStatus.failure,
+    );
+  }
 
   if (isSuccess) {
     // Check for token in various potential places
@@ -103,16 +121,10 @@ PayFastCompletionResult evaluatePayFastUrl(String url) {
       'card_holder_name': params['card_holder'] ?? '',
     };
 
-    debugPrint('PayFast card details found: $cardData');
-
     return PayFastCompletionResult(
       status: PayFastCompletionStatus.success,
       token: token,
       cardData: cardData,
-    );
-  } else if (isFailure) {
-    return const PayFastCompletionResult(
-      status: PayFastCompletionStatus.failure,
     );
   }
 
@@ -138,7 +150,7 @@ bool handlePayFastCompletion({
   if (result.isSuccess) {
     // If token exists, capture it along with card details
     if (result.hasToken) {
-      debugPrint('PayFast token found: ${result.token}');
+      debugPrint('PayFast token captured');
 
       // Notify about token capture using callback
       if (onTokenCaptured != null) {

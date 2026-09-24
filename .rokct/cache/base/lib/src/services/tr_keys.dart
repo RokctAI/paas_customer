@@ -562,8 +562,15 @@ class TrKeys {
   static const String signedtext = 'signedtext';
   static const String signtext = 'signtext';
   static const String signtext2 = 'signtext2';
-  static const String appName = 'juvo';
-  static const String appMotto = 'motto';
+  // appName and appMotto are NOT here. The app's own name and motto are
+  // identity, not translation: they belong to AppConstants.appTitle and
+  // AppConstants.appMotto, which a home SDK re-points at its own brand
+  // constants through its manifest's `constants.overrides` block. Declaring
+  // them here made every consumer ask the translation map instead, so an
+  // override was invisible on screen and the fallback humanised the raw key
+  // (Ray, 2026-09-23: the onboarding page displayed the key, not
+  // "To the next level"). The composer refuses either name as an SDK tr_key
+  // for the same reason.
   static const String payfast = 'payload_payfast';
   static const String flutterWave = 'payload_flutterwave';
   static const String paystack = 'payload_paystack';

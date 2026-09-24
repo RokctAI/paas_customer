@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.69.0",
+      "version": "1.71.0",
       "files": {
         "lib/main.dart": "032724777d411f60bb1320d15c833a0af9c3b29c07223d9dabd48c3c9a7c1133",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -619,7 +619,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.13.3",
+      "version": "1.13.4",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "87b5d1dbc3f0f9417db5289be2c1ebbcb7dfecf1638f348b6f5ee1581f7ce4d2",
         "lib/presentation/routes/registration_step_pages.dart": "d18f7e35878721c688c4f0964db42c97148e1f2e9d225cd1a6bb7490e2628347",
@@ -1018,7 +1018,7 @@
       "boot_hooks": []
     },
     "payments_sdk": {
-      "version": "1.2.1",
+      "version": "1.2.2",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1403,8 +1403,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.69.0",
-      "hash": "d5b02bf72b5d570c"
+      "version": "1.71.0",
+      "hash": "82a152addbe0cae2"
     },
     "comms": {
       "version": "1.16.0",
@@ -1435,8 +1435,8 @@
       "hash": "5ac9fa78ff6e1dfe"
     },
     "auth": {
-      "version": "1.13.3",
-      "hash": "7e9754c988cc8c1b"
+      "version": "1.13.4",
+      "hash": "d50c3b36de231c8f"
     },
     "users": {
       "version": "1.4.1",
@@ -1451,8 +1451,8 @@
       "hash": "00f9e2281982b13b"
     },
     "payments": {
-      "version": "1.2.1",
-      "hash": "e0721789ba081cd0"
+      "version": "1.2.2",
+      "hash": "190c2490eb6e500d"
     },
     "delivery": {
       "version": "1.26.0",
