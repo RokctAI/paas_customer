@@ -87,7 +87,7 @@ class FilterItem extends StatelessWidget {
                                       currentItemTwo == e.id)
                                 : (currentItem == e || currentItemTwo == e))
                             ? AppStyle.primary
-                            : AppStyle.bgGrey,
+                            : AppStyle.surfaceFor(Theme.of(context).brightness),
                       ),
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
@@ -135,7 +135,7 @@ class FilterItem extends StatelessWidget {
                                   ),
                                   style: AppStyle.interNormal(
                                     size: 14,
-                                    color: AppStyle.black,
+                                    color: AppStyle.inkFor(Theme.of(context).brightness),
                                   ),
                                 )
                               : isOffer
@@ -143,14 +143,14 @@ class FilterItem extends StatelessWidget {
                                   (e as TakeModel).translation?.title ?? "",
                                   style: AppStyle.interNormal(
                                     size: 14,
-                                    color: AppStyle.black,
+                                    color: AppStyle.inkFor(Theme.of(context).brightness),
                                   ),
                                 )
                               : Text(
                                   e,
                                   style: AppStyle.interNormal(
                                     size: 14,
-                                    color: AppStyle.black,
+                                    color: AppStyle.inkFor(Theme.of(context).brightness),
                                   ),
                                 ),
                         ],

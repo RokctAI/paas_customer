@@ -1,6 +1,8 @@
 {
   "name": "wallet_sdk",
-  "version": "1.6.5",
+  "version": "1.7.0",
+  "_comment_version_1_7_0": "1.6.6 -> 1.7.0: the wallet history page runs the REAL fetch in a demo session (Ray, 2026-09-25). WalletSdkDependencies registers DemoFixtures.registerAssetDirectory('assets/demo/wallet'); base_sdk 1.73.0's DemoGatewayInterceptor answers users_sdk's api.user.get_wallet_history from templates/assets/demo/wallet (the same five-row ledger, net +R 793.00). DemoWalletHistory and the page's DemoSession branches are deleted. Needs base_sdk 1.73.0.",
+  "_comment_version_1_6_6": "1.6.5 -> 1.6.6: dark-mode sweep - receive-screen amount chips and the active claim card use AppStyle.cardFor(brightness) instead of a fixed white fill.",
   "_comment_version_1_6_5": "1.6.4 -> 1.6.5: Ray's 2026-09-23 notes. The Send sheet follows the app's light/dark mode (fills, ink, borders and the typed text resolve from the inherited theme's brightness via base_sdk's explicit-brightness seams, base_sdk >= 1.66.7); before, it was pinned light and the typed text came out white. Top-up now opens as a modal sheet like Send, from both the profile wallet card and the history page (WalletTopUpPage(asSheet: true) / WalletTopUpPage.showAsSheet); the /wallet-topup route keeps the page form for other callers.",
   "_comment_requires": "wallet_sdk >= 1.2.0 requires base_sdk >= 1.33.0 (BaseWalletCard `wallet` param + fixed compile). The composer manifest schema has no machine-readable minimum-version field, so this is the declaration.",
   "di_hooks": [
@@ -18,6 +20,10 @@
     {
       "from": "templates/routes/wallet_route_pages.dart",
       "to": "lib/presentation/routes/wallet_route_pages.dart"
+    },
+    {
+      "from": "templates/assets/demo/wallet",
+      "to": "assets/demo/wallet"
     }
   ],
   "routes": [
@@ -45,5 +51,8 @@
     }
   ],
   "_comment_app_routes": "wallet_sdk owns the /wallet-history page, so it implements base_sdk's AppRoutes.pushWalletHistoryRoute seam (called from commerce marketplace_sdk's profile page; route-map row 25, fix-wave 2026-09-02). Before this entry the host's _HostAppRoutes had no such method and the seam threw noSuchMethod's StateError. The body targets the WalletHistoryRoute that the `routes` block above already declares (WalletHistoryRouteView's only argument is defaulted, so the no-arg constructor is valid); update_app_routes() injects it into main.dart's @generated-approutes block with the default `BuildContext context` params, matching the seam signature. Declared top-level (this manifest has no app_type flavour blocks), mirroring auth_sdk's replaceLoginRoute. Do not declare a second WalletHistoryRoute anywhere: commerce marketplace_sdk still carries a WalletHistoryPage copy and this SDK's route is the canonical one.",
-  "integrations": []
+  "integrations": [],
+  "app_assets": [
+    "assets/demo/wallet/"
+  ]
 }

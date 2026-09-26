@@ -53,7 +53,7 @@ class MarketThreeItem extends StatelessWidget {
               //   color: !(shop.open ?? true) ? AppStyle.white.withOpacity(0.5) : AppStyle.transparent
               // ),
               decoration: BoxDecoration(
-                color: AppStyle.bgGrey,
+                color: AppStyle.surfaceFor(Theme.of(context).brightness),
                 borderRadius: BorderRadius.circular(10.r),
               ),
               child: Stack(
@@ -94,7 +94,9 @@ class MarketThreeItem extends StatelessWidget {
                                           : shop.translation?.title ?? "",
                                       style: AppStyle.interSemi(
                                         size: 16,
-                                        color: AppStyle.black,
+                                        color: AppStyle.inkFor(
+                                          Theme.of(context).brightness,
+                                        ),
                                       ),
                                     ),
                                     if (shop.verify ?? false)
@@ -132,7 +134,9 @@ class MarketThreeItem extends StatelessWidget {
                                         : shop.translation?.description ?? "",
                                     style: AppStyle.interNormal(
                                       size: 12,
-                                      color: AppStyle.black,
+                                      color: AppStyle.inkFor(
+                                        Theme.of(context).brightness,
+                                      ),
                                     ),
                                     maxLines: 2,
                                   ),
@@ -151,7 +155,9 @@ class MarketThreeItem extends StatelessWidget {
                                   "${shop.deliveryTime?.from ?? 0}-${shop.deliveryTime?.to ?? 0} ${shop.deliveryTime?.type ?? "min"}",
                                   style: AppStyle.interNormal(
                                     size: 12,
-                                    color: AppStyle.black,
+                                    color: AppStyle.inkFor(
+                                      Theme.of(context).brightness,
+                                    ),
                                   ),
                                 ),
                               ],

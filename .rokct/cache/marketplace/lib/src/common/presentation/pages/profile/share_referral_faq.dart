@@ -40,20 +40,26 @@ class _ShareReferralFaqPageState extends State<ShareReferralFaqPage> {
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: AppStyle.bgGrey,
+        backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
         body: Column(
           children: [
             CommonAppBar(
               child: Text(
                 AppHelpers.getTranslation(TrKeys.referralFaq),
-                style: AppStyle.interNoSemi(size: 18, color: AppStyle.black),
+                style: AppStyle.interNoSemi(
+                  size: 18,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
+                ),
               ),
             ),
             Padding(
               padding: EdgeInsets.all(16.r),
               child: Text(
                 widget.terms,
-                style: AppStyle.interNoSemi(size: 20, color: AppStyle.black),
+                style: AppStyle.interNoSemi(
+                  size: 20,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
+                ),
               ),
             ),
           ],

@@ -161,9 +161,22 @@ void main() {
     });
 
     test('process initiates the hosted checkout by provider (M12)', () async {
+      // initiate_<provider>_payment loads the Order by docname, so the
+      // order is created first and its real name (not the cart id) is sent.
+      http.reply = {
+        'data': {'name': 'ORD-9'},
+        'message': 'Order created successfully.',
+        'status_code': 200,
+      };
       await OrdersRepository().process(_orderBody('CART-1'), 'PayStack');
+      expect(http.calls, hasLength(2));
+      expect(http.calls.first.cmd, 'api.order.create_order');
+      final orderData = (http.calls.first.payload!['order_data'] as Map)
+          .cast<String, dynamic>();
+      expect(orderData['cart_id'], 'CART-1');
+      expect(orderData['shop'], 'SHOP-1');
       expect(http.last.cmd, 'api.payment.initiate_paystack_payment');
-      expect(http.last.payload, {'order_id': 'CART-1'});
+      expect(http.last.payload, {'order_id': 'ORD-9'});
     });
 
     test('process refuses a provider with no initiate_* method (M12)',
@@ -186,6 +199,13 @@ void main() {
       await repo.getRefundOrders(3);
       expect(http.last.cmd, 'api.user.get_user_order_refunds');
       expect(http.last.payload, {'page': 3});
+    });
+
+    test('active orders ask for every non-terminal status', () async {
+      await OrdersRepository().getActiveOrders(1);
+      expect(http.last.cmd, 'api.order.list_orders');
+      expect(http.last.payload,
+          containsPair('status', 'accepted,processing,ready,on_a_way'));
     });
 
     test('repeating orders always carry the three required kwargs (M14)',

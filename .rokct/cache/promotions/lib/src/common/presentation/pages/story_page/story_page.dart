@@ -204,7 +204,7 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                             decoration: BoxDecoration(
                               color: currentIndex >= index
                                   ? AppStyle.primary
-                                  : AppStyle.white,
+                                  : AppStyle.cardFor(Theme.of(context).brightness),
                               borderRadius: BorderRadius.all(
                                 Radius.circular(122.r),
                               ),
@@ -221,7 +221,7 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                                           AlwaysStoppedAnimation<Color>(
                                         AppStyle.primary,
                                       ),
-                                      backgroundColor: AppStyle.white,
+                                      backgroundColor: AppStyle.cardFor(Theme.of(context).brightness),
                                     ),
                                   )
                                 : currentIndex > index
@@ -235,7 +235,7 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                                               AlwaysStoppedAnimation<Color>(
                                             AppStyle.primary,
                                           ),
-                                          backgroundColor: AppStyle.white,
+                                          backgroundColor: AppStyle.cardFor(Theme.of(context).brightness),
                                         ),
                                       )
                                     : const SizedBox.shrink(),
@@ -301,7 +301,7 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                             decoration: BoxDecoration(
                               color: currentIndex >= index
                                   ? AppStyle.primary
-                                  : AppStyle.white,
+                                  : AppStyle.cardFor(Theme.of(context).brightness),
                               borderRadius: BorderRadius.all(
                                 Radius.circular(122.r),
                               ),
@@ -318,7 +318,7 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                                           AlwaysStoppedAnimation<Color>(
                                         AppStyle.primary,
                                       ),
-                                      backgroundColor: AppStyle.white,
+                                      backgroundColor: AppStyle.cardFor(Theme.of(context).brightness),
                                     ),
                                   )
                                 : currentIndex > index
@@ -332,7 +332,7 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                                               AlwaysStoppedAnimation<Color>(
                                             AppStyle.primary,
                                           ),
-                                          backgroundColor: AppStyle.white,
+                                          backgroundColor: AppStyle.cardFor(Theme.of(context).brightness),
                                         ),
                                       )
                                     : const SizedBox.shrink(),

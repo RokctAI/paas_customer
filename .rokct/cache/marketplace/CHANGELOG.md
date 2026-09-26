@@ -1,3 +1,28 @@
+## 1.15.0
+
+* refactor(likes): the liked-shops page and its state move to fav_sdk
+  (>= 1.1.0). `LikePage` keeps its name and route and now wraps
+  `FavoriteShopsPage`, supplying the layout-matched shop card and shimmer.
+  The profile likes badge reads `favoritesProvider`. Likes stay on the
+  device; existing saved shop IDs are migrated once by fav_sdk.
+
+## 1.14.5
+
+* fix(home): the marketplace home layouts (home_zero and home_four) no longer
+  show the active-order glance card under the app bar. The card widget stays
+  in base_sdk; only these two call sites are removed.
+
+## 1.14.4
+
+* docs(tour): the tour fragment's demo-grounding notes describe the real
+  repositories a demo session now runs (answered from the commerce SDKs'
+  demo fixtures) instead of the deleted Mock*/Demo* repositories.
+
+## 1.14.3
+
+* fix(theme): surfaces, cards, ink and strokes now follow the app's light/dark
+  mode instead of hardcoded light colours or static theme reads.
+
 ## 1.14.1
 
 * Guided-tour fragment (`templates/tour/marketplace.tour.yaml`): the address

@@ -22,7 +22,7 @@ import 'package:remixicon/remixicon.dart';
 
 import 'package:base_sdk/src/application/home/home_provider.dart';
 import 'package:base_sdk/src/application/language/language_provider.dart';
-import 'package:base_sdk/src/application/like/like_provider.dart';
+import 'package:fav_sdk/fav_sdk.dart';
 import 'package:base_sdk/src/application/notification/notification_provider.dart';
 import 'package:base_sdk/src/application/orders_list/orders_list_provider.dart';
 import 'package:base_sdk/src/application/parcels_list/parcel_list_provider.dart';
@@ -160,11 +160,11 @@ class MarketplaceLikesAction extends ConsumerWidget {
       },
       icon: Badge(
         label: Text(
-          (ref.watch(likeProvider).likedShopsCount).toString(),
+          (ref.watch(favoritesProvider).likedShopsCount).toString(),
         ),
         child: Icon(
           Remix.heart_3_line,
-          color: AppStyle.textPrimary,
+          color: AppStyle.inkFor(Theme.of(context).brightness),
           size: 20,
         ),
       ),
@@ -226,7 +226,7 @@ class _MarketplaceNotificationsActionState
       ..fetchNewShops(context)
       ..fetchCategories(context);
     ref.read(shopOrderProvider.notifier).getCart(context, () {});
-    ref.read(likeProvider.notifier).fetchLikeShop(context);
+    ref.read(favoritesProvider.notifier).fetchFavoritesShop(context);
     ref.read(profileProvider.notifier).fetchUser(context);
   }
 
@@ -253,7 +253,7 @@ class _MarketplaceNotificationsActionState
         ),
         child: Icon(
           Remix.notification_line,
-          color: AppStyle.textPrimary,
+          color: AppStyle.inkFor(Theme.of(context).brightness),
           size: 20,
         ),
       ),
@@ -284,7 +284,7 @@ class MarketplacePlanRow extends ConsumerWidget {
       children: [
         Text(
           AppHelpers.getTranslation(TrKeys.plan),
-          style: AppStyle.interSemi(size: 13, color: AppStyle.textPrimary),
+          style: AppStyle.interSemi(size: 13, color: AppStyle.inkFor(Theme.of(context).brightness)),
         ),
         _PlanRowDot(),
         Row(
@@ -294,13 +294,13 @@ class MarketplacePlanRow extends ConsumerWidget {
               '${membership?.title ?? ''} ${AppHelpers.getTranslation(TrKeys.benefits)}',
               style: AppStyle.interNormal(
                 size: 13,
-                color: AppStyle.textPrimary,
+                color: AppStyle.inkFor(Theme.of(context).brightness),
               ),
             ),
             Icon(
               Icons.keyboard_arrow_right_sharp,
               size: 16,
-              color: AppStyle.textPrimary,
+              color: AppStyle.inkFor(Theme.of(context).brightness),
             ),
           ],
         ),
@@ -309,7 +309,7 @@ class MarketplacePlanRow extends ConsumerWidget {
           '${AppHelpers.getTranslation(TrKeys.expire)} ${endDate.length >= 10 ? endDate.substring(0, 10) : endDate}',
           style: AppStyle.interNormal(
             size: 11,
-            color: AppStyle.textDarkSecondary,
+            color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
           ),
         ),
       ],
@@ -323,7 +323,7 @@ class _PlanRowDot extends StatelessWidget {
         width: 4,
         height: 4,
         decoration: BoxDecoration(
-          color: AppStyle.textDarkSecondary,
+          color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
           shape: BoxShape.circle,
         ),
       );
@@ -360,7 +360,7 @@ class MarketplacePlanBackCard extends ConsumerWidget {
                 '${membership?.title ?? ''} ${AppHelpers.getTranslation(TrKeys.benefits)}',
                 style: AppStyle.interSemi(
                   size: 16,
-                  color: AppStyle.textPrimary,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
                 ),
               ),
             ),
@@ -372,14 +372,14 @@ class MarketplacePlanBackCard extends ConsumerWidget {
           padding: const EdgeInsets.only(top: 12),
           decoration: BoxDecoration(
             border: Border(
-              top: BorderSide(color: AppStyle.strokeDark, width: 0.5),
+              top: BorderSide(color: AppStyle.strokeFor(Theme.of(context).brightness), width: 0.5),
             ),
           ),
           child: Text(
             '${AppHelpers.getTranslation(TrKeys.expire)} ${endDate.length >= 10 ? endDate.substring(0, 10) : endDate}',
             style: AppStyle.interNormal(
               size: 12,
-              color: AppStyle.textDarkSecondary,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
             ),
           ),
         ),
@@ -444,7 +444,7 @@ class _PlanBackLink extends StatelessWidget {
           label,
           style: AppStyle.interNormal(
             size: 12,
-            color: AppStyle.textPrimary,
+            color: AppStyle.inkFor(Theme.of(context).brightness),
             textDecoration: TextDecoration.underline,
           ),
         ),
@@ -476,7 +476,7 @@ class MarketplaceSettingsCorner extends StatelessWidget {
         child: Icon(
           Remix.settings_3_line,
           size: 16,
-          color: AppStyle.textDarkSecondary,
+          color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
         ),
       ),
     );
@@ -511,7 +511,7 @@ class _MarketplaceProfileTileGridState
 
   @override
   Widget build(BuildContext context) {
-    final bool isDarkMode = LocalStorage.getAppThemeMode();
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final bool hasMembership = LocalStorage.getUser()?.membership != null;
 
     return Column(
@@ -764,7 +764,7 @@ class _MarketplaceProfileTileGridState
         width: width.w,
         height: height.w,
         decoration: BoxDecoration(
-          color: backgroundColor ?? AppStyle.cardDark,
+          color: backgroundColor ?? AppStyle.cardFor(Theme.of(context).brightness),
           borderRadius: BorderRadius.circular(20.r),
           border: borderColor != null ? Border.all(color: borderColor) : null,
           boxShadow: [
@@ -787,7 +787,7 @@ class _MarketplaceProfileTileGridState
                       child: Icon(
                         icon,
                         size: 30.r,
-                        color: iconColor ?? AppStyle.textPrimary,
+                        color: iconColor ?? AppStyle.inkFor(Theme.of(context).brightness),
                       ),
                     ),
                   if (icon != null && title != null) 8.verticalSpace,
@@ -796,7 +796,7 @@ class _MarketplaceProfileTileGridState
                       title,
                       style: AppStyle.interNormal(
                         size: 14.sp,
-                        color: textColor ?? AppStyle.textPrimary,
+                        color: textColor ?? AppStyle.inkFor(Theme.of(context).brightness),
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -850,14 +850,14 @@ class MarketplaceProfileFooter extends StatelessWidget {
                           Text(
                             AppHelpers.getTranslation(TrKeys.help),
                             style: TextStyle(
-                              color: AppStyle.textPrimary,
+                              color: AppStyle.inkFor(Theme.of(context).brightness),
                               decoration: TextDecoration.underline,
                             ),
                           ),
                           const SizedBox(width: 12),
                           Icon(
                             Icons.circle_rounded,
-                            color: AppStyle.textDarkSecondary,
+                            color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                             size: 7,
                           ),
                         ],
@@ -878,14 +878,14 @@ class MarketplaceProfileFooter extends StatelessWidget {
                           Text(
                             AppHelpers.getTranslation(TrKeys.terms),
                             style: TextStyle(
-                              color: AppStyle.textPrimary,
+                              color: AppStyle.inkFor(Theme.of(context).brightness),
                               decoration: TextDecoration.underline,
                             ),
                           ),
                           const SizedBox(width: 12),
                           Icon(
                             Icons.circle_rounded,
-                            color: AppStyle.textDarkSecondary,
+                            color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                             size: 7,
                           ),
                         ],
@@ -907,7 +907,7 @@ class MarketplaceProfileFooter extends StatelessWidget {
                           Text(
                             AppHelpers.getTranslation(TrKeys.privacyPolicy),
                             style: TextStyle(
-                              color: AppStyle.textPrimary,
+                              color: AppStyle.inkFor(Theme.of(context).brightness),
                               decoration: TextDecoration.underline,
                             ),
                           ),

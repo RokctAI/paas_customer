@@ -63,8 +63,10 @@ import 'package:delivery_sdk/src/driver/domain/interface/load.dart';
 import 'package:delivery_sdk/src/driver/domain/interface/orders.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/models/data/driver_day_report.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/models/data/driver_load.dart';
-import 'package:delivery_sdk/src/driver/infrastructure/repositories/demo_courier_orders_repository.dart';
-import 'package:delivery_sdk/src/driver/infrastructure/repositories/demo_load_repository.dart';
+import 'package:delivery_sdk/src/driver/infrastructure/repositories/load_repository.dart';
+import 'package:delivery_sdk/src/driver/infrastructure/repositories/orders_repository.dart';
+
+import 'support/demo_fixtures_harness.dart';
 import 'package:delivery_sdk/src/driver/infrastructure/services/courier_storage.dart';
 import 'package:delivery_sdk/src/driver/presentation/home/cash_on_hand_card.dart';
 
@@ -102,8 +104,8 @@ Future<void> _pumpSheet(WidgetTester tester, {bool isScrolling = false}) async {
 }
 
 /// A day report the test dictates, so the cash card's gate is set by the
-/// test rather than by whatever the offline seed happens to hold.
-class _ReportingOrders extends DemoCourierOrdersRepository {
+/// test rather than by whatever the demo fixtures happen to hold.
+class _ReportingOrders extends CourierOrdersRepository {
   _ReportingOrders(this.report);
 
   final DriverDayReport report;
@@ -211,25 +213,28 @@ Future<void> _pumpGated(
 }
 
 void main() {
-  setUp(() {
-    SharedPreferences.setMockInitialValues(<String, Object>{});
+  setUp(() async {
+    // The real repositories in a demo session, answered from the demo
+    // fixtures by base_sdk's DemoGatewayInterceptor.
+    await startDemoFixtures();
     final GetIt getIt = GetIt.instance;
     if (!getIt.isRegistered<CourierOrdersRepositoryFacade>()) {
       getIt.registerSingleton<CourierOrdersRepositoryFacade>(
-        DemoCourierOrdersRepository(),
+        CourierOrdersRepository(),
       );
     }
     // The sheet reads the driver's consignment load for its "My load"
-    // tile; the offline twin serves no load, so the tile is absent and
+    // tile; the demo fixture serves no load, so the tile is absent and
     // this file keeps testing the layout it was written for.
     if (!getIt.isRegistered<DriverLoadRepositoryFacade>()) {
       getIt.registerSingleton<DriverLoadRepositoryFacade>(
-        DemoDriverLoadRepository(),
+        DriverLoadRepository(),
       );
     }
   });
 
   tearDown(() async {
+    await stopDemoFixtures();
     await GetIt.instance.reset();
   });
 

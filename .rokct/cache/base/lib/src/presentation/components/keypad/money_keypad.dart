@@ -155,7 +155,7 @@ class MoneyKeypad extends StatelessWidget {
                             okLabel,
                             style: AppStyle.interSemi(
                               size: 17,
-                              color: AppStyle.blackColor,
+                              color: AppStyle.inkFor(Theme.of(context).brightness),
                             ),
                           ),
                         ),

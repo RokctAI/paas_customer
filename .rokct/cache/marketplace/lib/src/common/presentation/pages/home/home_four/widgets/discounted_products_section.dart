@@ -138,7 +138,7 @@ class DiscountedProductsSection extends ConsumerWidget {
         data: product,
         cartId: cartId,
       ),
-      isDarkMode: false,
+      isDarkMode: Theme.of(context).brightness == Brightness.dark,
       isDrag: true,
       radius: 16,
     );

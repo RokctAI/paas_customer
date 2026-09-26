@@ -150,7 +150,7 @@ class _PromoCodeState extends ConsumerState<PromoCodeScreen> {
                           ? AppStyle.primary
                           : AppStyle.borderColor,
                       textColor:
-                          state.isActive ? AppStyle.black : AppStyle.textGrey,
+                          state.isActive ? AppStyle.inkFor(Theme.of(context).brightness) : AppStyle.textGrey,
                       title: AppHelpers.getTranslation(TrKeys.save),
                       onPressed: () {
                         if (state.isActive) {

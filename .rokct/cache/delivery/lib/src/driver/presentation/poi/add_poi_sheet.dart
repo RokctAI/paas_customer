@@ -95,7 +95,7 @@ class AddPoiSheet extends ConsumerStatefulWidget {
   }) {
     AppHelpers.showCustomModalBottomSheet(
       context: context,
-      isDarkMode: AppStyle.isDark,
+      isDarkMode: (Theme.of(context).brightness == Brightness.dark),
       modal: AddPoiSheet(shop: shop, onFiled: onFiled),
     );
   }
@@ -222,7 +222,7 @@ class _AddPoiSheetState extends ConsumerState<AddPoiSheet> {
           AppHelpers.getTranslation('which_shop_is_this_place_for'),
           style: AppStyle.interRegular(
             size: 12,
-            color: AppStyle.textDarkFaint,
+            color: AppStyle.faintFor(Theme.of(context).brightness),
           ),
         ),
         8.verticalSpace,
@@ -265,7 +265,7 @@ class _AddPoiSheetState extends ConsumerState<AddPoiSheet> {
           ),
           style: AppStyle.interRegular(
             size: 12,
-            color: AppStyle.textDarkFaint,
+            color: AppStyle.faintFor(Theme.of(context).brightness),
           ),
         ),
         8.verticalSpace,
@@ -365,10 +365,10 @@ class _AddPoiSheetState extends ConsumerState<AddPoiSheet> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         key: const Key('addPoiOwnerClashDialog'),
-        backgroundColor: AppStyle.cardDark,
+        backgroundColor: AppStyle.cardFor(Theme.of(context).brightness),
         title: Text(
           AppHelpers.getTranslation('is_this_the_same_person'),
-          style: AppStyle.interSemi(size: 16, color: AppStyle.textPrimary),
+          style: AppStyle.interSemi(size: 16, color: AppStyle.inkFor(Theme.of(context).brightness)),
         ),
         content: Text(
           onFile.isEmpty
@@ -378,7 +378,7 @@ class _AddPoiSheetState extends ConsumerState<AddPoiSheet> {
                   '$onFile.',
           style: AppStyle.interRegular(
             size: 13,
-            color: AppStyle.textDarkSecondary,
+            color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
           ),
         ),
         actions: [
@@ -389,7 +389,7 @@ class _AddPoiSheetState extends ConsumerState<AddPoiSheet> {
               AppHelpers.getTranslation('no_let_me_check_the_number'),
               style: AppStyle.interSemi(
                 size: 14,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
           ),
@@ -463,14 +463,14 @@ class _AddPoiSheetState extends ConsumerState<AddPoiSheet> {
         children: [
           Text(
             AppHelpers.getTranslation('add_a_place'),
-            style: AppStyle.interSemi(size: 18, color: AppStyle.textPrimary),
+            style: AppStyle.interSemi(size: 18, color: AppStyle.inkFor(Theme.of(context).brightness)),
           ),
           6.verticalSpace,
           Text(
             AppHelpers.getTranslation('the_next_driver_on_this_round_sees_it'),
             style: AppStyle.interRegular(
               size: 12,
-              color: AppStyle.textDarkSecondary,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
             ),
           ),
           16.verticalSpace,
@@ -486,7 +486,7 @@ class _AddPoiSheetState extends ConsumerState<AddPoiSheet> {
             AppHelpers.getTranslation('what_kind_of_place'),
             style: AppStyle.interRegular(
               size: 12,
-              color: AppStyle.textDarkFaint,
+              color: AppStyle.faintFor(Theme.of(context).brightness),
             ),
           ),
           8.verticalSpace,
@@ -496,7 +496,7 @@ class _AddPoiSheetState extends ConsumerState<AddPoiSheet> {
               AppHelpers.getTranslation('place_types_are_still_loading'),
               style: AppStyle.interRegular(
                 size: 12,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             )
           else
@@ -598,7 +598,7 @@ class _OwnerOnFileLine extends StatelessWidget {
             AppHelpers.getTranslation('not_this_person'),
             style: AppStyle.interRegular(
               size: 12,
-              color: AppStyle.textDarkSecondary,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
             ),
           ),
         ),
@@ -628,7 +628,7 @@ class _ShopRow extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: 6.h),
       child: Material(
-        color: selected ? AppStyle.primary : AppStyle.cardDarkAlt,
+        color: selected ? AppStyle.primary : AppStyle.cardAltFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(10.r),
         child: InkWell(
           key: Key('addPoiShop-${shop.id}'),
@@ -644,8 +644,8 @@ class _ShopRow extends StatelessWidget {
                     style: AppStyle.interSemi(
                       size: 13,
                       color: selected
-                          ? AppStyle.blackColor
-                          : AppStyle.textPrimary,
+                          ? AppStyle.inkFor(Theme.of(context).brightness)
+                          : AppStyle.inkFor(Theme.of(context).brightness),
                     ),
                   ),
                 ),
@@ -653,7 +653,7 @@ class _ShopRow extends StatelessWidget {
                   Icon(
                     Remix.check_line,
                     size: 16.r,
-                    color: AppStyle.blackColor,
+                    color: AppStyle.inkFor(Theme.of(context).brightness),
                   ),
               ],
             ),
@@ -680,7 +680,7 @@ class _TypeChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: selected ? AppStyle.primary : AppStyle.cardDarkAlt,
+      color: selected ? AppStyle.primary : AppStyle.cardAltFor(Theme.of(context).brightness),
       borderRadius: BorderRadius.circular(10.r),
       child: InkWell(
         key: Key('addPoiType-${type.id}'),
@@ -695,7 +695,7 @@ class _TypeChip extends StatelessWidget {
                 type.label,
                 style: AppStyle.interSemi(
                   size: 13,
-                  color: selected ? AppStyle.blackColor : AppStyle.textPrimary,
+                  color: selected ? AppStyle.inkFor(Theme.of(context).brightness) : AppStyle.inkFor(Theme.of(context).brightness),
                 ),
               ),
               if (type.customerVisible) ...[
@@ -704,7 +704,7 @@ class _TypeChip extends StatelessWidget {
                   Remix.eye_line,
                   size: 13.r,
                   color:
-                      selected ? AppStyle.blackColor : AppStyle.textDarkFaint,
+                      selected ? AppStyle.blackColor : AppStyle.faintFor(Theme.of(context).brightness),
                 ),
               ],
             ],

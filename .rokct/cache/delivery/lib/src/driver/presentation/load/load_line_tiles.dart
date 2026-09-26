@@ -65,7 +65,7 @@ class LoadLineFactRow extends StatelessWidget {
                   loadLineTitle(line),
                   style: AppStyle.interSemi(
                     size: 14,
-                    color: AppStyle.textPrimary,
+                    color: AppStyle.inkFor(Theme.of(context).brightness),
                   ),
                 ),
               ),
@@ -74,7 +74,7 @@ class LoadLineFactRow extends StatelessWidget {
                 AppHelpers.numberFormat(number: line.unitPrice),
                 style: AppStyle.interRegular(
                   size: 13,
-                  color: AppStyle.textDarkSecondary,
+                  color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                 ),
               ),
             ],
@@ -139,9 +139,11 @@ class LoadLineStepperRow extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 10.h),
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: AppStyle.cardDarkAlt,
+        color: AppStyle.cardAltFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(color: AppStyle.strokeDarkSubtle),
+        border: Border.all(
+          color: AppStyle.subtleStrokeFor(Theme.of(context).brightness),
+        ),
       ),
       child: Row(
         children: [
@@ -154,7 +156,7 @@ class LoadLineStepperRow extends StatelessWidget {
                   loadLineTitle(line),
                   style: AppStyle.interSemi(
                     size: 14,
-                    color: AppStyle.textPrimary,
+                    color: AppStyle.inkFor(Theme.of(context).brightness),
                   ),
                 ),
                 4.verticalSpace,
@@ -164,7 +166,9 @@ class LoadLineStepperRow extends StatelessWidget {
                   '${AppHelpers.numberFormat(number: line.unitPrice)}',
                   style: AppStyle.interRegular(
                     size: 12,
-                    color: AppStyle.textDarkSecondary,
+                    color: AppStyle.secondaryInkFor(
+                      Theme.of(context).brightness,
+                    ),
                   ),
                 ),
               ],
@@ -184,7 +188,10 @@ class LoadLineStepperRow extends StatelessWidget {
               quantity.toString(),
               key: Key('loadStepQty-${line.stockId ?? ''}'),
               textAlign: TextAlign.center,
-              style: AppStyle.interSemi(size: 17, color: AppStyle.textPrimary),
+              style: AppStyle.interSemi(
+                size: 17,
+                color: AppStyle.inkFor(Theme.of(context).brightness),
+              ),
             ),
           ),
           _StepButton(
@@ -225,7 +232,9 @@ class _StepButton extends StatelessWidget {
       icon: Icon(
         icon,
         size: 20.r,
-        color: enabled ? AppStyle.textPrimary : AppStyle.textDarkFaint,
+        color: enabled
+            ? AppStyle.inkFor(Theme.of(context).brightness)
+            : AppStyle.faintFor(Theme.of(context).brightness),
       ),
     );
   }
@@ -252,15 +261,21 @@ class _Figure extends StatelessWidget {
           style: AppStyle.interRegular(
             size: 10,
             letterSpacing: 0.8,
-            color: AppStyle.textDarkFaint,
+            color: AppStyle.faintFor(Theme.of(context).brightness),
           ),
         ),
         4.horizontalSpace,
         Text(
           value,
           style: strong
-              ? AppStyle.interSemi(size: 13, color: AppStyle.textPrimary)
-              : AppStyle.interRegular(size: 13, color: AppStyle.textPrimary),
+              ? AppStyle.interSemi(
+                  size: 13,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
+                )
+              : AppStyle.interRegular(
+                  size: 13,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
+                ),
         ),
       ],
     );

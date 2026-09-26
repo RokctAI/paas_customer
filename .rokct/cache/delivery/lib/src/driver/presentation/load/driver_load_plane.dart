@@ -79,7 +79,7 @@ class _DriverLoadPlaneState extends ConsumerState<DriverLoadPlane> {
     final state = ref.watch(driverLoadProvider);
     final loads = state.openLoads;
     return Scaffold(
-      backgroundColor: AppStyle.surfaceDark,
+      backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
       body: SafeArea(
         child: Stack(
           children: [
@@ -148,7 +148,7 @@ class _LoadEmptyState extends StatelessWidget {
       key: const Key('driverLoadEmpty'),
       style: AppStyle.interRegular(
         size: 14,
-        color: AppStyle.textDarkSecondary,
+        color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
       ),
     );
   }
@@ -167,9 +167,9 @@ class _LoadCard extends ConsumerWidget {
       key: Key('driverLoadCard-${load.id}'),
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: AppStyle.strokeDark),
+        border: Border.all(color: AppStyle.strokeFor(Theme.of(context).brightness)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -186,7 +186,7 @@ class _LoadCard extends ConsumerWidget {
                       load.shopTitle ?? load.shopId ?? load.id,
                       style: AppStyle.interSemi(
                         size: 16,
-                        color: AppStyle.textPrimary,
+                        color: AppStyle.inkFor(Theme.of(context).brightness),
                       ),
                     ),
                     4.verticalSpace,
@@ -194,7 +194,7 @@ class _LoadCard extends ConsumerWidget {
                       _subLine(),
                       style: AppStyle.interRegular(
                         size: 12,
-                        color: AppStyle.textDarkSecondary,
+                        color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                       ),
                     ),
                   ],
@@ -210,7 +210,7 @@ class _LoadCard extends ConsumerWidget {
                     key: Key('driverLoadRemainingTotal-${load.id}'),
                     style: AppStyle.interSemi(
                       size: 18,
-                      color: AppStyle.textPrimary,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
                     ),
                   ),
                   2.verticalSpace,
@@ -218,7 +218,7 @@ class _LoadCard extends ConsumerWidget {
                     AppHelpers.getTranslation('still_on_the_van'),
                     style: AppStyle.interRegular(
                       size: 11,
-                      color: AppStyle.textDarkFaint,
+                      color: AppStyle.faintFor(Theme.of(context).brightness),
                     ),
                   ),
                 ],
@@ -226,9 +226,9 @@ class _LoadCard extends ConsumerWidget {
             ],
           ),
           12.verticalSpace,
-          Divider(height: 1, color: AppStyle.strokeDarkSubtle),
+          Divider(height: 1, color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
           for (final line in load.lines) LoadLineFactRow(line: line),
-          Divider(height: 1, color: AppStyle.strokeDarkSubtle),
+          Divider(height: 1, color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
           12.verticalSpace,
           Wrap(
             spacing: 8.w,
@@ -309,8 +309,8 @@ class _CardAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final background = primary ? AppStyle.primary : AppStyle.cardDarkAlt;
-    final textColor = primary ? AppStyle.blackColor : AppStyle.textPrimary;
+    final background = primary ? AppStyle.primary : AppStyle.cardAltFor(Theme.of(context).brightness);
+    final textColor = primary ? AppStyle.blackColor : AppStyle.inkFor(Theme.of(context).brightness);
     return Opacity(
       opacity: enabled ? 1 : 0.45,
       child: Material(

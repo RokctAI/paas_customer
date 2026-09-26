@@ -36,7 +36,7 @@ class OrderContainer extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: AppStyle.bgGrey,
+          color: AppStyle.surfaceFor(Theme.of(context).brightness),
           borderRadius: BorderRadius.circular(10.r),
         ),
         padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 16.w),
@@ -58,7 +58,10 @@ class OrderContainer extends StatelessWidget {
                   width: MediaQuery.sizeOf(context).width - 164.w,
                   child: Text(
                     description,
-                    style: AppStyle.interBold(size: 14, color: AppStyle.black),
+                    style: AppStyle.interBold(
+                      size: 14,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),

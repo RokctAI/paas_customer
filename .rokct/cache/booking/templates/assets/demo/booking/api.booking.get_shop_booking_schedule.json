@@ -1,0 +1,48 @@
+{
+  "shop": "demo-shop",
+  "working_days": [
+    {
+      "day": "Monday",
+      "from_time": "10:00:00",
+      "to_time": "22:00:00",
+      "disabled": 1
+    },
+    {
+      "day": "Tuesday",
+      "from_time": "10:00:00",
+      "to_time": "22:00:00",
+      "disabled": 0
+    },
+    {
+      "day": "Wednesday",
+      "from_time": "10:00:00",
+      "to_time": "22:00:00",
+      "disabled": 0
+    },
+    {
+      "day": "Thursday",
+      "from_time": "10:00:00",
+      "to_time": "22:00:00",
+      "disabled": 0
+    },
+    {
+      "day": "Friday",
+      "from_time": "10:00:00",
+      "to_time": "22:00:00",
+      "disabled": 0
+    },
+    {
+      "day": "Saturday",
+      "from_time": "10:00:00",
+      "to_time": "22:00:00",
+      "disabled": 0
+    },
+    {
+      "day": "Sunday",
+      "from_time": "10:00:00",
+      "to_time": "22:00:00",
+      "disabled": 0
+    }
+  ],
+  "closed_dates": []
+}

@@ -88,7 +88,7 @@ class RecipientWidget extends StatelessWidget {
           child: AnimationButtonEffect(
             child: Container(
               decoration: BoxDecoration(
-                color: AppStyle.bgGrey,
+                color: AppStyle.surfaceFor(Theme.of(context).brightness),
                 borderRadius: BorderRadius.circular(10.r),
               ),
               padding: EdgeInsets.symmetric(horizontal: 20.r, vertical: 16.r),
@@ -176,7 +176,7 @@ class RecipientWidget extends StatelessWidget {
                 autocorrect: true,
                 controller: description,
                 decoration: InputDecoration(
-                  fillColor: AppStyle.bgGrey,
+                  fillColor: AppStyle.surfaceFor(Theme.of(context).brightness),
                   filled: true,
                   hintText: AppHelpers.getTranslation(TrKeys.whatAreYouSending),
                   enabledBorder: OutlineInputBorder(
@@ -260,7 +260,7 @@ class RecipientWidget extends StatelessWidget {
                                 vertical: 10.r,
                               ),
                               decoration: BoxDecoration(
-                                color: AppStyle.bgGrey,
+                                color: AppStyle.surfaceFor(Theme.of(context).brightness),
                                 borderRadius: BorderRadius.circular(10.r),
                               ),
                               child: Text(
@@ -280,7 +280,7 @@ class RecipientWidget extends StatelessWidget {
                 autocorrect: true,
                 controller: value,
                 decoration: InputDecoration(
-                  fillColor: AppStyle.bgGrey,
+                  fillColor: AppStyle.surfaceFor(Theme.of(context).brightness),
                   filled: true,
                   hintText: AppHelpers.getTranslation(TrKeys.itemValue),
                   enabledBorder: OutlineInputBorder(

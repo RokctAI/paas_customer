@@ -52,14 +52,14 @@ class ProfileThemeToggle extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
         decoration: BoxDecoration(
-          color: AppStyle.cardDarkAlt,
+          color: AppStyle.cardAltFor(Theme.of(context).brightness),
           borderRadius: BorderRadius.circular(36),
-          border: Border.all(color: AppStyle.strokeDark, width: 0.5),
+          border: Border.all(color: AppStyle.strokeFor(Theme.of(context).brightness), width: 0.5),
         ),
         child: Icon(
           isDark ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
           size: 16,
-          color: AppStyle.textPrimary,
+          color: AppStyle.inkFor(Theme.of(context).brightness),
         ),
       ),
     );

@@ -178,7 +178,7 @@ class _GenericProfileRoutePageState
           // What shows between and beyond the planes — the seam, and any
           // stage a claim does not reach — is the page surface, not the
           // route's canvas.
-          color: AppStyle.surfaceDark,
+          color: AppStyle.surfaceFor(Theme.of(context).brightness),
           child: Stack(
             children: [
               Positioned.fill(

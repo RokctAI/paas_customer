@@ -66,7 +66,7 @@ class BannerItem extends StatelessWidget {
             buttonText: banner.buttonText,
             list: banner.shops ?? [],
           ),
-          isDarkMode: false,
+          isDarkMode: Theme.of(context).brightness == Brightness.dark,
         );
       },
       child: Stack(
@@ -75,11 +75,11 @@ class BannerItem extends StatelessWidget {
             margin: EdgeInsets.only(right: 6.r),
             width: MediaQuery.of(context).size.width - 46,
             decoration: BoxDecoration(
-              color: AppStyle.white,
+              color: AppStyle.cardFor(Theme.of(context).brightness),
               borderRadius: BorderRadius.all(Radius.circular(15.r)),
             ),
             child: CustomNetworkImage(
-              bgColor: AppStyle.white,
+              bgColor: AppStyle.cardFor(Theme.of(context).brightness),
               url: banner.img ?? "",
               height: double.infinity,
               width: double.infinity,

@@ -44,7 +44,9 @@ class CategoryTwoItem extends StatelessWidget {
           padding: REdgeInsets.all(6),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(70.r)),
-            color: isActive ? AppStyle.primary : AppStyle.white,
+            color: isActive
+                ? AppStyle.primary
+                : AppStyle.cardFor(Theme.of(context).brightness),
             boxShadow: const [
               BoxShadow(
                 color: AppStyle.shadow,
@@ -62,7 +64,7 @@ class CategoryTwoItem extends StatelessWidget {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: AppStyle.bgGrey,
+                    color: AppStyle.surfaceFor(Theme.of(context).brightness),
                     borderRadius: BorderRadius.circular(24.r),
                   ),
                   child: CustomNetworkImage(
@@ -80,7 +82,7 @@ class CategoryTwoItem extends StatelessWidget {
                     title,
                     style: AppStyle.interNormal(
                       size: 12,
-                      color: AppStyle.black,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
                     ),
                     maxLines: 1,
                     textAlign: TextAlign.center,

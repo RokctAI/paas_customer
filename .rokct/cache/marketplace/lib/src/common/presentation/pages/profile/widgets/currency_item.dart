@@ -36,7 +36,7 @@ class CurrencyItem extends StatelessWidget {
         child: Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            color: AppStyle.white,
+            color: AppStyle.cardFor(Theme.of(context).brightness),
             borderRadius: BorderRadius.circular(10.r),
           ),
           child: Padding(
@@ -63,7 +63,7 @@ class CurrencyItem extends StatelessWidget {
                     title,
                     style: AppStyle.interNormal(
                       size: 16,
-                      color: AppStyle.black,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
                     ),
                   ),
                 ),

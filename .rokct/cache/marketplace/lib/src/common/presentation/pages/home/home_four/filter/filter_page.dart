@@ -118,7 +118,7 @@ class _FilterPageState extends ConsumerState<FilterPage> {
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Container(
         decoration: BoxDecoration(
-          color: AppStyle.bgGrey,
+          color: AppStyle.surfaceFor(Theme.of(context).brightness),
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(12.r),
             topRight: Radius.circular(12.r),
@@ -332,7 +332,9 @@ class _FilterPageState extends ConsumerState<FilterPage> {
                                                 .round() >=
                                             i)
                                     ? AppStyle.primary
-                                    : AppStyle.bgGrey,
+                                    : AppStyle.surfaceFor(
+                                        Theme.of(context).brightness,
+                                      ),
                                 borderRadius: BorderRadius.circular(48.r),
                               ),
                             ),

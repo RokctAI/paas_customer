@@ -58,7 +58,7 @@ class _AddressListPageState extends State<AddressListPage> {
         return Directionality(
           textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
           child: Scaffold(
-            backgroundColor: AppStyle.bgGrey,
+            backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
             body: Column(
               children: [
                 CommonAppBar(
@@ -66,7 +66,7 @@ class _AddressListPageState extends State<AddressListPage> {
                     AppHelpers.getTranslation(TrKeys.deliveryAddress),
                     style: AppStyle.interNoSemi(
                       size: 18,
-                      color: AppStyle.black,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
                     ),
                   ),
                 ),

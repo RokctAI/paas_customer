@@ -45,7 +45,7 @@ class BannerScreen extends StatelessWidget {
     // print("Button text being used in BannerScreen: ${buttonText}");
     return Container(
       decoration: BoxDecoration(
-        color: AppStyle.white,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(8.r),
           topRight: Radius.circular(8.r),

@@ -29,7 +29,7 @@ import 'package:base_sdk/src/presentation/components/title_icon.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
-import 'package:comms_sdk/src/common/infrastructure/repositories/mock_settings_repository.dart';
+import 'package:comms_sdk/src/common/infrastructure/repositories/settings_repository.dart';
 import 'package:comms_sdk/src/common/presentation/pages/setting/language_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,7 +40,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Serves the picker its list without the connectivity probe and the
 /// repository round-trip the real notifier makes.
 class _StubLanguageNotifier extends LanguageNotifier {
-  _StubLanguageNotifier() : super(MockSettingsRepository());
+  _StubLanguageNotifier() : super(SettingsRepository());
 
   @override
   Future<void> getLanguages(

@@ -37,7 +37,7 @@ class RestaurantItem extends StatelessWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-            color: AppStyle.white,
+            color: AppStyle.cardFor(Theme.of(context).brightness),
             borderRadius: BorderRadius.circular(10.r),
             boxShadow: [
               BoxShadow(
@@ -67,7 +67,7 @@ class RestaurantItem extends StatelessWidget {
                       shop.translation?.title ?? "",
                       style: AppStyle.interSemi(
                         size: 15,
-                        color: AppStyle.black,
+                        color: AppStyle.inkFor(Theme.of(context).brightness),
                       ),
                     ),
                     SizedBox(
@@ -80,7 +80,7 @@ class RestaurantItem extends StatelessWidget {
                             : shop.translation?.description ?? "",
                         style: AppStyle.interNormal(
                           size: 12,
-                          color: AppStyle.black,
+                          color: AppStyle.inkFor(Theme.of(context).brightness),
                         ),
                         maxLines: 2,
                       ),

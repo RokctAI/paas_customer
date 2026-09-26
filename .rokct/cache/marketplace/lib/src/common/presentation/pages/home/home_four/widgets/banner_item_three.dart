@@ -45,18 +45,18 @@ class BannerItemThree extends StatelessWidget {
             desc: banner.translation?.description ?? "",
             list: banner.shops ?? [],
           ),
-          isDarkMode: false,
+          isDarkMode: Theme.of(context).brightness == Brightness.dark,
         );
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 12.r),
         width: MediaQuery.sizeOf(context).width - 46,
         decoration: BoxDecoration(
-          color: AppStyle.white,
+          color: AppStyle.cardFor(Theme.of(context).brightness),
           borderRadius: BorderRadius.all(Radius.circular(15.r)),
         ),
         child: CustomNetworkImage(
-          bgColor: AppStyle.white,
+          bgColor: AppStyle.cardFor(Theme.of(context).brightness),
           url: banner.img ?? "",
           width: double.infinity,
           radius: 15.r,

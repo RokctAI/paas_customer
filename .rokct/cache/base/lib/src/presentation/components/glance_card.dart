@@ -361,10 +361,12 @@ class _ActiveOrderGlanceCardState extends ConsumerState<ActiveOrderGlanceCard> {
       case 'accepted':
         return Colors.blue;
       case 'processing':
+      case 'cooking':
         return Colors.orange;
       case 'ready':
         return Colors.green;
       case 'on_a_way':
+      case 'shipped':
         return Colors.deepPurple;
       case 'delivered':
         return Colors.purple;

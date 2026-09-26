@@ -47,7 +47,7 @@ class AppBarHome extends StatelessWidget {
                 await AppRoutes.I.pushViewMapRoute(context);
               },
             ),
-            isDarkMode: false,
+            isDarkMode: Theme.of(context).brightness == Brightness.dark,
           );
         },
         child: Row(
@@ -55,9 +55,9 @@ class AppBarHome extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppStyle.bgGrey,
+                color: AppStyle.surfaceFor(Theme.of(context).brightness),
               ),
               padding: EdgeInsets.all(12.r),
               child: SvgPicture.asset("assets/svgs/adress.svg"),
@@ -85,7 +85,7 @@ class AppBarHome extends StatelessWidget {
                             : LocalStorage.getAddressSelected()?.title ?? "",
                         style: AppStyle.interBold(
                           size: 14,
-                          color: AppStyle.black,
+                          color: AppStyle.inkFor(Theme.of(context).brightness),
                         ),
                         maxLines: 1,
                       ),

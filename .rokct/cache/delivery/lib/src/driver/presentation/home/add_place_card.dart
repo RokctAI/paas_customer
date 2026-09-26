@@ -44,7 +44,7 @@ class AddPlaceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppStyle.cardDarkAlt,
+      color: AppStyle.cardAltFor(Theme.of(context).brightness),
       borderRadius: BorderRadius.circular(14.r),
       child: InkWell(
         key: const Key('driverHomeAddPlaceCard'),
@@ -55,7 +55,7 @@ class AddPlaceCard extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(14.r),
-            border: Border.all(color: AppStyle.strokeDarkSubtle),
+            border: Border.all(color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
           ),
           child: Row(
             children: [
@@ -74,7 +74,7 @@ class AddPlaceCard extends StatelessWidget {
                       AppHelpers.getTranslation('add_a_place'),
                       style: AppStyle.interSemi(
                         size: 15,
-                        color: AppStyle.textPrimary,
+                        color: AppStyle.inkFor(Theme.of(context).brightness),
                       ),
                     ),
                     4.verticalSpace,
@@ -84,7 +84,7 @@ class AddPlaceCard extends StatelessWidget {
                       ),
                       style: AppStyle.interNormal(
                         size: 12,
-                        color: AppStyle.textDarkSecondary,
+                        color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                       ),
                     ),
                   ],
@@ -94,7 +94,7 @@ class AddPlaceCard extends StatelessWidget {
               Icon(
                 Remix.arrow_right_s_line,
                 size: 20.r,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ],
           ),

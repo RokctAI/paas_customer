@@ -84,7 +84,7 @@ class CustomerMainPage extends ConsumerWidget {
           type: BottomNavigationBarType.fixed,
           backgroundColor: AppStyle.bottomNavigationBarColor,
           selectedItemColor: AppStyle.primary,
-          unselectedItemColor: AppStyle.textDarkSecondary,
+          unselectedItemColor: AppStyle.secondaryInkFor(Theme.of(context).brightness),
           items: [
             BottomNavigationBarItem(
               icon: const Icon(Remix.home_5_line),

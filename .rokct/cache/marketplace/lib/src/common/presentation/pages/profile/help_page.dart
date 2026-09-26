@@ -53,7 +53,7 @@ class _HelpPageState extends ConsumerState<HelpPage> {
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: AppStyle.bgGrey,
+        backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
         body: state.isLoading
             ? const Loading()
             : Column(
@@ -63,7 +63,7 @@ class _HelpPageState extends ConsumerState<HelpPage> {
                       AppHelpers.getTranslation(TrKeys.help),
                       style: AppStyle.interNoSemi(
                         size: 18,
-                        color: AppStyle.black,
+                        color: AppStyle.inkFor(Theme.of(context).brightness),
                       ),
                     ),
                   ),
@@ -141,7 +141,7 @@ class _HelpPageState extends ConsumerState<HelpPage> {
                                         ),
                                       ),
                                     ),
-                                    isDarkMode: false,
+                                    isDarkMode: Theme.of(context).brightness == Brightness.dark,
                                   );
                                 },
                                 child: Container(
@@ -149,7 +149,7 @@ class _HelpPageState extends ConsumerState<HelpPage> {
                                   padding: EdgeInsets.all(16.r),
                                   width: double.infinity,
                                   decoration: BoxDecoration(
-                                    color: AppStyle.white,
+                                    color: AppStyle.cardFor(Theme.of(context).brightness),
                                     borderRadius: BorderRadius.circular(10.r),
                                   ),
                                   child: Column(

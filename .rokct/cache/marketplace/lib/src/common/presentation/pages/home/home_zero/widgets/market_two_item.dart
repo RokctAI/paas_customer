@@ -56,7 +56,7 @@ class MarketTwoItem extends StatelessWidget {
                   : EdgeInsets.only(right: 8.r),
               width: 268.r,
               decoration: BoxDecoration(
-                color: AppStyle.white,
+                color: AppStyle.cardFor(Theme.of(context).brightness),
                 borderRadius: BorderRadius.all(Radius.circular(24.r)),
               ),
               child: Column(
@@ -66,7 +66,7 @@ class MarketTwoItem extends StatelessWidget {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          color: AppStyle.white,
+                          color: AppStyle.cardFor(Theme.of(context).brightness),
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(24.r),
                             topRight: Radius.circular(24.r),
@@ -157,7 +157,7 @@ class MarketTwoItem extends StatelessWidget {
                                       shop.translation?.title ?? "",
                                       style: AppStyle.interSemi(
                                         size: 16,
-                                        color: AppStyle.black,
+                                        color: AppStyle.inkFor(Theme.of(context).brightness),
                                       ),
                                       maxLines: 1,
                                     ),
@@ -177,7 +177,7 @@ class MarketTwoItem extends StatelessWidget {
                               (shop.avgRate ?? ""),
                               style: AppStyle.interNormal(
                                 size: 12.sp,
-                                color: AppStyle.black,
+                                color: AppStyle.inkFor(Theme.of(context).brightness),
                               ),
                             ),
                           ],
@@ -191,7 +191,7 @@ class MarketTwoItem extends StatelessWidget {
                               : shop.translation?.description ?? "",
                           style: AppStyle.interNormal(
                             size: 12,
-                            color: AppStyle.black,
+                            color: AppStyle.inkFor(Theme.of(context).brightness),
                           ),
                           maxLines: isSimpleShop ? 2 : 1,
                         ),

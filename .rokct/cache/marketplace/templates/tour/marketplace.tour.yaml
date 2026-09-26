@@ -21,17 +21,19 @@
 # migration. Follow-up (rule #59): declare the remaining app_type.customer
 # routes in manifest.json and switch these steps to action: route.
 #
-# Demo grounding (--dart-define=IS_DEMO=true): every facade these screens
-# read is demo-gated in commerce's DI modules -
-#   - home: base_sdk's homeProvider pulls MockBannersRepository
-#     (promotions_di), MockShopsRepository (merchants_di) and
-#     MockCategories/MockProducts/MockBrands (products_di);
-#   - category browse: filterProvider -> MockShopsRepository.getShopFilter
-#     (category id "1" is MockCategoriesRepository's "Burgers");
-#   - search: searchProvider -> MockShopsRepository.searchShops;
-#   - favourites: likeProvider -> MockShopsRepository.getShopsByIds, fed by
-#     the saved-shop id ("1", the mock's Corner Kitchen) seeded in the first
-#     step - LocalStorage.getSavedShopsList() is empty on a fresh install;
+# Demo grounding (a demo session): every facade these screens read is the
+# REAL repository, and base_sdk's DemoGatewayInterceptor answers its
+# platform cmds from the commerce SDKs' fixtures (assets/demo/<sdk>) -
+#   - home: base_sdk's homeProvider pulls banners (promotions_sdk), shops
+#     (merchants_sdk) and categories/products/brands (products_sdk);
+#   - category browse: filterProvider -> ShopsRepository.getShopFilter
+#     (category id "1" is the fixtures' "Burgers");
+#   - search: searchProvider -> ShopsRepository.searchShops;
+#   - favourites: fav_sdk favoritesProvider -> ShopsRepository.getShopsByIds,
+#     fed by the saved-shop id ("1", the fixtures' Corner Kitchen) seeded in
+#     the first step into LocalStorage.getSavedShopsList(), which fav_sdk's
+#     FavoritesStore copies into its on-device store on first load - both
+#     are empty on a fresh install;
 #   - account: renders its guest state without a token (profile fetches are
 #     token-guarded), which is truthful for a signed-out browser.
 # The first step also seeds a selected address: home's post-frame
@@ -43,8 +45,8 @@
 #     screen has not been migrated into commerce; base_sdk only carries the
 #     ProductDetailSheet interface), so there is no commerce-owned widget to
 #     push;
-#   - cart / checkout: MockCartRepository (orders_di) backs the customer
-#     cart facade, but orders_sdk's app_type.customer block installs no
+#   - cart / checkout: orders_sdk's fixtures back the customer cart
+#     facade, but orders_sdk's app_type.customer block installs no
 #     pages, so no cart or checkout screen exists in commerce to capture.
 #
 # Format: RokctAI/shared-workflows scripts/tour/README.md
@@ -71,7 +73,7 @@ steps:
       //    rendered verbatim in the home header, so it reads like a real
       //    address rather than "Demo address" - these stills are published
       //    to the app stores;
-      //  - one saved shop id ("1" = MockShopsRepository's Corner Kitchen), so
+      //  - one saved shop id ("1" = the demo fixtures' Corner Kitchen), so
       //    the favourites step later shows a stocked list.
       await LocalStorage.setAddressSelected(AddressData(
         id: 1,
@@ -101,8 +103,8 @@ steps:
         navigator.pop();
         await Future<void>.delayed(const Duration(milliseconds: 500));
       }
-      // Category id "1" is MockCategoriesRepository's demo "Burgers"
-      // category; the shop list comes from MockShopsRepository.
+      // Category id "1" is the demo fixtures' "Burgers"
+      // category; the shop list comes from merchants_sdk's fixtures.
       navigator.push(MaterialPageRoute<void>(
         builder: (_) =>
             const marketplace_filter.ResultFilterPage(categoryId: '1'),
@@ -135,7 +137,7 @@ steps:
         await Future<void>.delayed(const Duration(milliseconds: 500));
       }
       // Renders the saved shop seeded in the first step via
-      // MockShopsRepository.getShopsByIds.
+      // ShopsRepository.getShopsByIds (answered from the fixtures).
       navigator.push(MaterialPageRoute<void>(
         builder: (_) => const marketplace_like.LikePage(),
       ));

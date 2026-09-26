@@ -45,7 +45,7 @@ class PriceInformation extends StatelessWidget {
                 ? state.orderData?.originPrice
                 : state.calculateData?.price ?? 0,
           ),
-          textStyle: AppStyle.interRegular(size: 16, color: AppStyle.black),
+          textStyle: AppStyle.interRegular(size: 16, color: AppStyle.inkFor(Theme.of(context).brightness)),
         ),
         16.verticalSpace,
         TitleAndPrice(
@@ -57,7 +57,7 @@ class PriceInformation extends StatelessWidget {
                 ? (state.orderData?.deliveryFee ?? 0)
                 : (state.calculateData?.deliveryFee ?? 0),
           ),
-          textStyle: AppStyle.interRegular(size: 16, color: AppStyle.black),
+          textStyle: AppStyle.interRegular(size: 16, color: AppStyle.inkFor(Theme.of(context).brightness)),
         ),
         16.verticalSpace,
         TitleAndPrice(
@@ -69,7 +69,7 @@ class PriceInformation extends StatelessWidget {
                 ? ((state.orderData?.tax ?? 0))
                 : (state.calculateData?.totalTax ?? 0),
           ),
-          textStyle: AppStyle.interRegular(size: 16, color: AppStyle.black),
+          textStyle: AppStyle.interRegular(size: 16, color: AppStyle.inkFor(Theme.of(context).brightness)),
         ),
         16.verticalSpace,
         TitleAndPrice(
@@ -81,7 +81,7 @@ class PriceInformation extends StatelessWidget {
                 ? ((state.orderData?.serviceFee ?? 0))
                 : (state.calculateData?.serviceFee ?? 0),
           ),
-          textStyle: AppStyle.interRegular(size: 16, color: AppStyle.black),
+          textStyle: AppStyle.interRegular(size: 16, color: AppStyle.inkFor(Theme.of(context).brightness)),
         ),
         16.verticalSpace,
         TitleAndPrice(
@@ -91,7 +91,7 @@ class PriceInformation extends StatelessWidget {
             symbol: state.orderData?.currencyModel?.symbol,
             number: state.orderData?.tips ?? 0,
           ),
-          textStyle: AppStyle.interRegular(size: 16, color: AppStyle.black),
+          textStyle: AppStyle.interRegular(size: 16, color: AppStyle.inkFor(Theme.of(context).brightness)),
         ),
         16.verticalSpace,
         if (isOrder
@@ -127,7 +127,7 @@ class PriceInformation extends StatelessWidget {
                     : state.orderData?.totalPrice
                 : state.calculateData?.totalPrice,
           ),
-          textStyle: AppStyle.interSemi(size: 20, color: AppStyle.black),
+          textStyle: AppStyle.interSemi(size: 20, color: AppStyle.inkFor(Theme.of(context).brightness)),
         ),
       ],
     );

@@ -44,7 +44,7 @@ class ProfileItem extends StatelessWidget {
           margin: EdgeInsets.only(bottom: 8.h),
           width: double.infinity,
           decoration: BoxDecoration(
-            color: AppStyle.white,
+            color: AppStyle.cardFor(Theme.of(context).brightness),
             borderRadius: BorderRadius.circular(10.r),
           ),
           child: Padding(
@@ -60,7 +60,7 @@ class ProfileItem extends StatelessWidget {
                       title,
                       style: AppStyle.interNormal(
                         size: 14,
-                        color: AppStyle.black,
+                        color: AppStyle.inkFor(Theme.of(context).brightness),
                       ),
                     ),
                     12.horizontalSpace,

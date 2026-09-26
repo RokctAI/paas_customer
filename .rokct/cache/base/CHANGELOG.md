@@ -1,5 +1,117 @@
 # Changelog
 
+## 1.81.0
+
+* fix(base): TrKeys gains the 33 keys that lms_sdk 1.32.0 (agent/lms/dart,
+  child profiles on the parent's phone) declares in its manifest's
+  `tr_keys`, for example `whoIsLearning`, `addAChild`, `enterParentPin`
+  and `leaveChildMode`, plus the R-3 default praise keys
+  (`r3PraiseYes`, `r3PraiseGreat`, `r3PraiseClever`, `r3PraiseRight`),
+  `r3StartingPath`, `r3LessonsComingSoon` and `onlyGradeRLessonsSoFar`. The values match the SDK manifest. The composer
+  injects SDK tr_keys at compose time, but a standalone SDK checkout
+  compiles against base_sdk directly, so lms_sdk's child profile pages
+  and tests did not compile without the local injection tool. At compose
+  time the composer's collision check keeps base's identical declaration.
+  No bundled en or af rows are added, because lms_sdk owns that copy.
+
+## 1.80.0
+
+* fix(base): `NotificationsListModel` reads `data` as a list, `NotificationData`
+  tolerates null `created_at`/`updated_at` and reads `active` from the row
+  (it was always false).
+
+## 1.79.0
+
+* feat(base): `PushMessages`, an app-wide registry of push-message handlers
+  keyed by `data['type']`. comms_sdk 1.21.0 dispatches received FCM
+  messages into it, and a feature SDK handles its own type without
+  importing comms_sdk. orders_sdk 1.26.0 registers `order_status`.
+* fix(base): `AppHelpers.getOrderStatus` reads the Order doctype's own
+  spellings case-insensitively. `Shipped` is on the way, `Cancelled` is
+  cancelled, `New` is open, and `Cooking` or `processing` is accepted. The
+  backend returns statuses as stored, so a `Shipped` order used to read as
+  accepted. Unknown values still read as accepted.
+* The active-order glance card colours `Cooking` and `Shipped` like
+  `processing` and `on_a_way`.
+* Tests: `test/push_messages_test.dart`.
+
+## 1.78.0
+
+* feat(base): `LiveActivitySnapshot.showProgress` (default true). When it is
+  false, no progress bar is drawn. This is for the driver's ongoing "Online,
+  waiting for orders" entry (design 3a). It was the second commit of #272 and
+  did not land with it. comms_sdk 1.20.0 passes it to the device.
+
+## 1.77.0
+
+* fix(base): TrKeys gains the 431 keys that lms_sdk (agent/lms/dart) and
+  delivery_sdk (zones/delivery/dart, driver) declare in their manifests'
+  `tr_keys`, for example `knowledgeBite`, `renewalsDue`, `renewalsAlignOn`
+  and `goOnDuty`. The values match the SDK manifests. The composer injects
+  SDK tr_keys at compose time, but a standalone SDK checkout compiles
+  against base_sdk directly, so lms_sdk's renewal_status_test and
+  schedule_notifier_test and delivery's driver home tests did not compile.
+  At compose time the composer's collision check keeps base's identical
+  declaration. No bundled en or af rows are added, because the SDKs own
+  that copy.
+
+## 1.76.0
+
+* feat(base): live notifications component (design approved 2026-09-26,
+  sections 1 and 6). `LiveActivitySnapshot` is the immutable snapshot (key,
+  kind, title, subtitle, progress, segments, trackerIcon, endsAt, deepLink,
+  actions, state). `LiveActivityTokens` holds the colour tokens from 6c.
+  `LiveActivities.instance` is the controller every adopter publishes to:
+  - The same key always maps to the same id (`idFor`, FNV-1a, the same
+    function the hosts already use for local-notification ids).
+  - It alerts only on the first post and on a terminal state.
+  - It posts at most once per key every 15s. The latest snapshot wins, and
+    terminal states skip the throttle.
+  - After 10 min without an update it re-posts with "Updating paused, open
+    to refresh".
+  - An ended entry clears after 15 min, and an error entry after 60 min.
+  - A key the user swiped away is not re-posted until `reset`.
+  It is inert until a `LiveActivitySink` is registered. comms_sdk 1.19.0
+  registers the device sink.
+* Tests: `test/live_activities_test.dart` (`fake_async` added as a dev
+  dependency).
+
+## 1.75.0
+
+* feat(base): `SessionStartHooks`, the sign-in counterpart of users_sdk's
+  `SessionEndHooks`. An in-memory registry, idempotent by id: auth_sdk runs
+  it once a session is established, and any SDK subscribes from its own
+  boot hook, so neither depends on the other. One throwing hook is logged
+  and the rest still run. Inert with nothing registered. First subscriber:
+  comms_sdk 1.18.0's one-time notification permission prompt.
+
+## 1.74.0
+
+* feat(base): relative-time demo fixture tokens. `$now_iso`, `$now_ms` and the
+  new `$today` (UTC `yyyy-MM-dd`) accept one signed offset
+  `<+|-><n><m|h|d|w>`: `"$now_iso-30d"`, `"$now_ms+2h"`, `"$today-7d"`.
+  Non-matching strings are left as-is.
+
+## 1.73.0
+
+* feat(base): one demo seam in the HTTP layer. `DemoGatewayInterceptor`, first
+  on every `HttpService` client, answers platform-gateway POSTs
+  (`/api/v1/method/rokct.platform.api`) from `<cmd>.json` fixture files while
+  `DemoSession.demoActive` (read per request), so a demo session runs the real
+  repository code and only the network hop is replaced. SDKs register fixture
+  directories with `DemoFixtures.registerAssetDirectory`. An unknown cmd in
+  demo fails with `DemoFixtureMissing`, never a silent pass. Fixtures support
+  `$now_iso` / `$now_ms` tokens and `$demo_select` (by payload field or role).
+  Outside demo, and for non-gateway paths, it is a pass-through.
+
+## 1.72.3
+
+* Dark mode: hardcoded light fills and dark ink now follow the active theme
+  through AppStyle.surfaceFor/cardFor/inkFor/secondaryInkFor/strokeFor(Theme.of(
+  context).brightness), and builds read the theme from Theme.of(context) instead
+  of static AppStyle reads. Brand fills, white-on-primary and textGrey are
+  unchanged.
+
 ## 1.72.2
 
 * fix(profile): the plan flip card keeps the front's height when flipped;

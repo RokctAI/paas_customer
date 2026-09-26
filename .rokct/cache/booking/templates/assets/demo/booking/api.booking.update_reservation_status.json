@@ -1,0 +1,51 @@
+{
+  "$demo_select": {
+    "by": "payload.status",
+    "cases": {
+      "New": {
+        "name": "demo-reservation-1",
+        "booking": "demo-slot",
+        "table": "Window 2",
+        "start_date": "$now_iso",
+        "end_date": "$now_iso",
+        "guest_count": 2,
+        "note": "Birthday",
+        "status": "New",
+        "user": "Thandi M."
+      },
+      "Accepted": {
+        "name": "demo-reservation-1",
+        "booking": "demo-slot",
+        "table": "Window 2",
+        "start_date": "$now_iso",
+        "end_date": "$now_iso",
+        "guest_count": 2,
+        "note": "Birthday",
+        "status": "Accepted",
+        "user": "Thandi M."
+      },
+      "Cancelled": {
+        "name": "demo-reservation-1",
+        "booking": "demo-slot",
+        "table": "Window 2",
+        "start_date": "$now_iso",
+        "end_date": "$now_iso",
+        "guest_count": 2,
+        "note": "Birthday",
+        "status": "Cancelled",
+        "user": "Thandi M."
+      }
+    },
+    "default": {
+      "name": "demo-reservation-1",
+      "booking": "demo-slot",
+      "table": "Window 2",
+      "start_date": "$now_iso",
+      "end_date": "$now_iso",
+      "guest_count": 2,
+      "note": "Birthday",
+      "status": "New",
+      "user": "Thandi M."
+    }
+  }
+}

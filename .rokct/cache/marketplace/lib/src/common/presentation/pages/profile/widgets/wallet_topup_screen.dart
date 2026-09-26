@@ -115,7 +115,7 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
           builder: (context, ref, _) => const WalletReceiveScreen(),
         ),
       ),
-      isDarkMode: false,
+      isDarkMode: Theme.of(context).brightness == Brightness.dark,
     );
   }
 
@@ -358,7 +358,7 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
                             vertical: 10.h,
                           ),
                           decoration: BoxDecoration(
-                            color: AppStyle.white,
+                            color: AppStyle.cardFor(Theme.of(context).brightness),
                             borderRadius: BorderRadius.circular(8.r),
                             border: Border.all(color: AppStyle.borderColor),
                             boxShadow: [

@@ -53,7 +53,7 @@ class _MyReservationsViewState extends ConsumerState<MyReservationsView> {
   }
 
   Future<void> _confirmCancel(ReservationData r) async {
-    final isDark = LocalStorage.getAppThemeMode();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -106,7 +106,7 @@ class _MyReservationsViewState extends ConsumerState<MyReservationsView> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = LocalStorage.getAppThemeMode();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final state = ref.watch(myReservationsProvider);
 
     Widget body;

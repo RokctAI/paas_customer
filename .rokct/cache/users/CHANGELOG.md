@@ -1,3 +1,37 @@
+## 1.5.1
+
+* fix(users): `saveLocation` sends `{'address_data': ...}` to
+  `api.user.add_user_address`, matching its signature and
+  `AddressRepository.saveAddress`.
+* fix(users): `getWalletHistories` sends `start`/`limit`, the parameters
+  `get_wallet_history` takes; the old `limit_start`/`limit_page_length`
+  were dropped, so every page returned the first rows.
+* fix(users backend): `forgot_password_confirm` called with a valid code and
+  no password now mints a session token (api key/secret, session expiry
+  stamped, code spent) and returns `{token, user}`, the same shape phone
+  reset gets from `verify_phone_code`. Email reset previously got no token
+  and could never set the new password.
+
+## 1.5.0
+
+* **Demo runs the real repositories, the tour included.** Deleted
+  `MockUserRepository`, `MockAddressRepository` and the DI hook's
+  `DemoSession` listener that swapped them in and out (Ray, 2026-09-25).
+  `UsersSdkDependencies` always registers `UserRepository` and
+  `AddressRepository` and registers `assets/demo/users` with base_sdk's
+  `DemoFixtures`; the `DemoGatewayInterceptor` (base_sdk 1.73.0) answers
+  every `api.user.*` cmd from `templates/assets/demo/users/<cmd>.json`
+  while `DemoSession.demoActive`. `api.user.get_user_profile` answers per
+  signed-in role: partner Nomvula (id 2), admin Ayanda (id 3), every other
+  role Thandi (id 1) with the Home address and the R793.00 wallet. Profile
+  edits are acknowledged but no longer stick for the session.
+  `api.user.get_wallet_history` has no fixture here: wallet_sdk owns
+  that cmd's demo ledger.
+  `mock_user_repository_test`, `mock_user_repository_owner_test` and
+  `users_di_demo_session_test` went with the classes;
+  `demo_fixtures_real_repository_test` drives the real repositories
+  through the interceptor. Needs base_sdk 1.73.0.
+
 ## 1.4.2
 
 * fix(users): `MockUserRepository` keeps one profile per demo account, keyed

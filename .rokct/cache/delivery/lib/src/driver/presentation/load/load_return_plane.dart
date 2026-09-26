@@ -89,7 +89,7 @@ class _LoadReturnPlaneState extends ConsumerState<LoadReturnPlane> {
     }
     final lines = load.sellableLines;
     return Scaffold(
-      backgroundColor: AppStyle.surfaceDark,
+      backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
       body: SafeArea(
         child: Stack(
           children: [
@@ -107,7 +107,7 @@ class _LoadReturnPlaneState extends ConsumerState<LoadReturnPlane> {
                     load.shopTitle ?? load.id,
                     style: AppStyle.interRegular(
                       size: 13,
-                      color: AppStyle.textDarkSecondary,
+                      color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                     ),
                   ),
                   20.verticalSpace,
@@ -129,7 +129,7 @@ class _LoadReturnPlaneState extends ConsumerState<LoadReturnPlane> {
                     ),
                     style: AppStyle.interRegular(
                       size: 12,
-                      color: AppStyle.textDarkFaint,
+                      color: AppStyle.faintFor(Theme.of(context).brightness),
                     ),
                   ),
                   20.verticalSpace,

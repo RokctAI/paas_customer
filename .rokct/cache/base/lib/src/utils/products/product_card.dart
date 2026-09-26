@@ -227,7 +227,7 @@ class ProductCard extends ConsumerWidget {
                                         )
                                       : AppStyle.interNoSemi(
                                           size: 16,
-                                          color: AppStyle.black,
+                                          color: AppStyle.inkFor(Theme.of(context).brightness),
                                         ),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,

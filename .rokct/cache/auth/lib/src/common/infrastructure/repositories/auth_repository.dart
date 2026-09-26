@@ -163,6 +163,21 @@ class AuthRepository
     }
   }
 
+  // register_user's signature is (password, first_name, last_name, ...),
+  // but base_sdk's UserModel.toJsonForSignUp emits `firstname`/`lastname`.
+  // Frappe drops unknown kwargs, so without this mapping every sign-up
+  // failed on the missing required first_name/last_name arguments.
+  static Map<String, dynamic> _registerUserPayload(UserModel user) {
+    final json = Map<String, dynamic>.from(user.toJsonForSignUp());
+    if (json.containsKey('firstname')) {
+      json['first_name'] = json.remove('firstname');
+    }
+    if (json.containsKey('lastname')) {
+      json['last_name'] = json.remove('lastname');
+    }
+    return json;
+  }
+
   @override
   Future<ApiResult<VerifyData>> sigUpWithData({
     required UserModel user,
@@ -177,7 +192,7 @@ class AuthRepository
         // Both server params are optional, so the payload stays exactly
         // the old one when the form recorded nothing.
         payload: {
-          ...user.toJsonForSignUp(),
+          ..._registerUserPayload(user),
           ...RegistrationTerms.signUpExtras(),
         },
         requireAuth: false,
@@ -358,7 +373,7 @@ class AuthRepository
         // Same terms/birth-date ride-along as sigUpWithData — the phone
         // path is the same register_user endpoint.
         payload: {
-          ...user.toJsonForSignUp(),
+          ..._registerUserPayload(user),
           ...RegistrationTerms.signUpExtras(),
         },
         requireAuth: false,

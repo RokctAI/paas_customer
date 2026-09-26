@@ -20,6 +20,7 @@ library base_sdk;
 
 // Handlers (HTTP plumbing, result/failure types)
 export 'src/handlers/api_result.dart';
+export 'src/handlers/demo_gateway_interceptor.dart';
 export 'src/handlers/http_service.dart';
 export 'src/handlers/log_redaction.dart';
 export 'src/handlers/network_exceptions.dart';
@@ -123,6 +124,16 @@ export 'src/services/local_storage.dart';
 // The fleet's only demo switch: a server-marked demo account signed in
 // through the real backend, OR the guided-tour build (AppConstants.isTour).
 export 'src/services/demo_session.dart';
+// The moment a sign-in succeeds, published by auth_sdk and subscribed to
+// by any SDK's boot hook (the counterpart of users_sdk's SessionEndHooks).
+export 'src/services/session_start_hooks.dart';
+// Live notifications (design 2026-09-25): one snapshot + throttle/state
+// controller every adopter publishes to; comms_sdk registers the platform
+// sink that draws it.
+export 'src/services/live_activity/live_activity_snapshot.dart';
+export 'src/services/live_activity/live_activity_tokens.dart';
+export 'src/services/live_activity/live_activities.dart';
+export 'src/services/push_messages.dart';
 // Memory pressure + image cache sizing (Play's Feb 2027 memory thresholds)
 // and the Restore Credentials transport (Play's April 2027 Zero-Tap
 // Sign-In requirement).

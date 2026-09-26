@@ -112,7 +112,7 @@ class DeliveryStatusRail extends StatelessWidget {
                     height: 2.h,
                     color: i <= current.index
                         ? AppStyle.primary
-                        : AppStyle.strokeDark,
+                        : AppStyle.strokeFor(Theme.of(context).brightness),
                   ),
                 ),
               ),

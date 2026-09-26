@@ -57,7 +57,7 @@ class DriverLoadCloseFlow {
     if (closed == null || !context.mounted) return;
     AppHelpers.showCustomModalBottomSheet(
       context: context,
-      isDarkMode: AppStyle.isDark,
+      isDarkMode: (Theme.of(context).brightness == Brightness.dark),
       modal: LoadCloseSummarySheet(load: closed),
     );
   }
@@ -76,13 +76,13 @@ class LoadCloseConfirmDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       key: const Key('loadCloseConfirmDialog'),
-      backgroundColor: AppStyle.cardDark,
+      backgroundColor: AppStyle.cardFor(Theme.of(context).brightness),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.r),
       ),
       title: Text(
         AppHelpers.getTranslation('close_load'),
-        style: AppStyle.interSemi(size: 17, color: AppStyle.textPrimary),
+        style: AppStyle.interSemi(size: 17, color: AppStyle.inkFor(Theme.of(context).brightness)),
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -95,7 +95,7 @@ class LoadCloseConfirmDialog extends StatelessWidget {
             ),
             style: AppStyle.interRegular(
               size: 13,
-              color: AppStyle.textDarkSecondary,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
             ),
           ),
           if (load.remainingQtyTotal > 0) ...[
@@ -105,14 +105,14 @@ class LoadCloseConfirmDialog extends StatelessWidget {
               '${AppHelpers.getTranslation('still_on_the_van')}',
               style: AppStyle.interRegular(
                 size: 12,
-                color: AppStyle.textDarkFaint,
+                color: AppStyle.faintFor(Theme.of(context).brightness),
               ),
             ),
             4.verticalSpace,
             Text(
               AppHelpers.numberFormat(number: load.remainingTotal),
               key: const Key('loadCloseConfirmFigure'),
-              style: AppStyle.interSemi(size: 24, color: AppStyle.textPrimary),
+              style: AppStyle.interSemi(size: 24, color: AppStyle.inkFor(Theme.of(context).brightness)),
             ),
           ],
         ],
@@ -125,7 +125,7 @@ class LoadCloseConfirmDialog extends StatelessWidget {
             AppHelpers.getTranslation(TrKeys.cancel),
             style: AppStyle.interNormal(
               size: 14,
-              color: AppStyle.textDarkSecondary,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
             ),
           ),
         ),
@@ -168,7 +168,7 @@ class LoadCloseSummarySheet extends StatelessWidget {
         children: [
           Text(
             AppHelpers.getTranslation('load_closed'),
-            style: AppStyle.interSemi(size: 18, color: AppStyle.textPrimary),
+            style: AppStyle.interSemi(size: 18, color: AppStyle.inkFor(Theme.of(context).brightness)),
           ),
           12.verticalSpace,
           if (short.isEmpty)
@@ -177,7 +177,7 @@ class LoadCloseSummarySheet extends StatelessWidget {
               key: const Key('loadCloseNoVariance'),
               style: AppStyle.interRegular(
                 size: 13,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             )
           else ...[
@@ -191,7 +191,7 @@ class LoadCloseSummarySheet extends StatelessWidget {
                         loadLineTitle(line),
                         style: AppStyle.interRegular(
                           size: 13,
-                          color: AppStyle.textPrimary,
+                          color: AppStyle.inkFor(Theme.of(context).brightness),
                         ),
                       ),
                     ),
@@ -200,7 +200,7 @@ class LoadCloseSummarySheet extends StatelessWidget {
                       loadQtyText(line.varianceQty ?? 0),
                       style: AppStyle.interSemi(
                         size: 13,
-                        color: AppStyle.textPrimary,
+                        color: AppStyle.inkFor(Theme.of(context).brightness),
                       ),
                     ),
                     10.horizontalSpace,
@@ -210,7 +210,7 @@ class LoadCloseSummarySheet extends StatelessWidget {
                       ),
                       style: AppStyle.interSemi(
                         size: 13,
-                        color: AppStyle.textPrimary,
+                        color: AppStyle.inkFor(Theme.of(context).brightness),
                       ),
                     ),
                   ],
@@ -221,14 +221,14 @@ class LoadCloseSummarySheet extends StatelessWidget {
               AppHelpers.getTranslation('charged_to_your_wallet'),
               style: AppStyle.interRegular(
                 size: 12,
-                color: AppStyle.textDarkFaint,
+                color: AppStyle.faintFor(Theme.of(context).brightness),
               ),
             ),
             4.verticalSpace,
             Text(
               AppHelpers.numberFormat(number: load.varianceTotal),
               key: const Key('loadCloseVarianceTotal'),
-              style: AppStyle.interSemi(size: 26, color: AppStyle.textPrimary),
+              style: AppStyle.interSemi(size: 26, color: AppStyle.inkFor(Theme.of(context).brightness)),
             ),
           ],
           20.verticalSpace,

@@ -1,0 +1,36 @@
+{
+  "$demo_select": {
+    "by": "payload.shop_section_id",
+    "cases": {
+      "demo-main-hall": [
+        {
+          "name": "Window 1",
+          "shop_section": "demo-main-hall",
+          "chair_count": 2,
+          "active": 1
+        },
+        {
+          "name": "Window 2",
+          "shop_section": "demo-main-hall",
+          "chair_count": 4,
+          "active": 1
+        },
+        {
+          "name": "Corner 5",
+          "shop_section": "demo-main-hall",
+          "chair_count": 6,
+          "active": 1
+        }
+      ],
+      "demo-terrace": [
+        {
+          "name": "Terrace 1",
+          "shop_section": "demo-terrace",
+          "chair_count": 4,
+          "active": 1
+        }
+      ]
+    },
+    "default": []
+  }
+}

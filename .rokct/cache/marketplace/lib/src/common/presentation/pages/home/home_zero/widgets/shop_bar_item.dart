@@ -105,7 +105,7 @@ class ShopBarItem extends StatelessWidget {
                       story?.title ?? "",
                       style: AppStyle.interNormal(
                         size: 12,
-                        color: AppStyle.black,
+                        color: AppStyle.inkFor(Theme.of(context).brightness),
                       ),
                       maxLines: 1,
                     ),

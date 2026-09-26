@@ -313,7 +313,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     final fallbackLine = _fallbackLine;
     if (fallbackLine != null) {
       return Scaffold(
-        backgroundColor: AppStyle.white,
+        backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
         body: SafeArea(
           child: Center(
             child: Padding(
@@ -327,7 +327,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                     style: GoogleFonts.inter(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: AppStyle.black,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -336,7 +336,7 @@ class _SplashPageState extends ConsumerState<SplashPage> {
                     textAlign: TextAlign.center,
                     style: GoogleFonts.inter(
                       fontSize: 15,
-                      color: AppStyle.black,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
                     ),
                   ),
                   const SizedBox(height: 20),
@@ -366,8 +366,8 @@ class _SplashPageState extends ConsumerState<SplashPage> {
     // paas_pos's LoadingAnimation splash — so the desktop boot screen is
     // branded without any artwork or a bare spinner.
     if (!windowSizeOf(context).isCompact) {
-      return const Scaffold(
-        backgroundColor: AppStyle.white,
+      return Scaffold(
+        backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
         body: Center(child: _BreathingBrandName()),
       );
     }
@@ -442,7 +442,7 @@ class _BreathingBrandNameState extends State<_BreathingBrandName>
         style: GoogleFonts.inter(
           fontSize: fontSize,
           fontWeight: FontWeight.bold,
-          color: AppStyle.black,
+          color: AppStyle.inkFor(Theme.of(context).brightness),
         ),
       ),
     );

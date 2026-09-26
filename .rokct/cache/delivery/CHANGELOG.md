@@ -1,3 +1,38 @@
+## 1.28.0
+
+* feat(driver): active delivery live activity (design section 3a).
+  `DriverLiveActivity` follows `HomeNotifier`'s state under one key
+  (`driver:active`), so the driver never sees two entries.
+  - During a delivery it reads "Go to restaurant" or "Go to customer ·
+    order #id". It has three segments and a scooter tracker, and the
+    subtitle carries the address and any cash to collect.
+  - It shows "Due HH:mm", never a red timer.
+  - Its actions are Navigate and Delivered. Delivered opens the
+    proof-of-delivery step and never completes the order.
+  - Between deliveries it reads "Online · waiting for orders", with no bar.
+  - It cannot be swiped away while the driver is online, and it is removed
+    when the driver goes offline.
+* Requires base_sdk >= 1.76.0 (comms_sdk >= 1.19.0 draws it).
+* Tests: `test/driver_live_activity_test.dart`.
+
+## 1.27.0
+
+* Demo runs the REAL courier repositories through base_sdk 1.73.0's
+  `DemoGatewayInterceptor`. `DriverDeliveryDependencies` always registers
+  the real orders, parcel, courier, route, deposit, load and POI
+  repositories and registers `assets/demo/delivery`, whose `<cmd>.json`
+  fixtures (shipped from `templates/assets/demo/delivery`) carry the data
+  the demo twins served. Deleted the seven `Demo*Repository` classes and
+  the hook's demo-session listener. A trimmed `DemoDeliverySeed` stays for
+  the three legacy REST calls the interceptor cannot answer (vehicle types,
+  parcel marketplace, parcel detail) and for the demo map anchor. Demo
+  writes are acknowledged but reads no longer change after them. Requires
+  base_sdk 1.73.0.
+
+## 1.26.1
+
+* Driver screens (deposit, load, home, POI, profile and status sheets) now follow the app's light or dark mode: hardcoded light fills and dark ink use the theme-aware AppStyle colours, and static theme reads now come from Theme.of(context).
+
 ## 1.26.0
 
 * A PLACE HAS AN OWNER, AND THE OWNER IS A PERSON WITH A PHONE. A driver

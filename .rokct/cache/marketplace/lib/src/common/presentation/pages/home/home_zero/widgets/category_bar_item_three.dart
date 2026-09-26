@@ -39,7 +39,9 @@ class CategoryBarItemThree extends StatelessWidget {
       padding: REdgeInsets.all(8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10.r),
-        color: isActive ? AppStyle.primary : AppStyle.bgGrey,
+        color: isActive
+            ? AppStyle.primary
+            : AppStyle.surfaceFor(Theme.of(context).brightness),
       ),
       child: InkWell(
         onTap: onTap,
@@ -56,7 +58,10 @@ class CategoryBarItemThree extends StatelessWidget {
             6.horizontalSpace,
             Text(
               title,
-              style: AppStyle.interNormal(size: 12, color: AppStyle.black),
+              style: AppStyle.interNormal(
+                size: 12,
+                color: AppStyle.inkFor(Theme.of(context).brightness),
+              ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,

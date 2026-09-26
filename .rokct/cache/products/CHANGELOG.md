@@ -1,3 +1,28 @@
+## 1.12.1
+
+* fix(manifest): install the `assets/demo/products` fixtures from the top-level
+  `installs` instead of one `app_type` block, so every compose that
+  registers the `assets/demo/products/` pubspec entry also has the directory
+  behind it (flutter failed with "unable to find directory entry").
+
+## 1.12.0
+
+* feat(demo): demo runs the real repositories through base_sdk's
+  `DemoGatewayInterceptor` (requires base_sdk >= 1.73.0). The DI hooks
+  register only the real repositories and register the
+  `assets/demo/products` fixture directory; every platform cmd a demo session
+  sends is answered from `templates/assets/demo/products/<cmd>.json`, and an
+  unknown cmd fails loudly with `DemoFixtureMissing`.
+* Removed: `MockProductsRepository`, `MockCategoriesRepository`,
+  `MockBrandsRepository`, `DemoSellerProductsRepository`,
+  `DemoSellerCatalogRepository`, and the demo-session swap code that chose
+  them.
+
+## 1.11.1
+
+* fix(theme): surfaces, cards, ink and strokes now follow the app's light/dark
+  mode instead of hardcoded light colours or static theme reads.
+
 # Changelog
 
 ## 1.11.0

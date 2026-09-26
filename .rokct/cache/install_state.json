@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.72.2",
+      "version": "1.81.0",
       "files": {
         "lib/main.dart": "92423f25fa33333d67d8bd380b35d328cc5350033e61f0b750952a6d51641c34",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -358,7 +358,7 @@
       }
     },
     "marketplace_sdk": {
-      "version": "1.14.2",
+      "version": "1.15.0",
       "files": {
         "lib/presentation/routes/marketplace_route_pages.dart": "37c6193cb69e17ce8c2f83b2a147a0fef9967a6c9ab0e5579f22582f8c60e8c1"
       },
@@ -619,11 +619,21 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.13.5",
+      "version": "1.16.0",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "87b5d1dbc3f0f9417db5289be2c1ebbcb7dfecf1638f348b6f5ee1581f7ce4d2",
         "lib/presentation/routes/registration_step_pages.dart": "d18f7e35878721c688c4f0964db42c97148e1f2e9d225cd1a6bb7490e2628347",
-        "lib/presentation/routes/auth_session_policy.dart": "9524d696f956a99c2964ce0866cbab0cb282e868247d5f08b050e94bb9f5df5a"
+        "lib/presentation/routes/auth_session_policy.dart": "9524d696f956a99c2964ce0866cbab0cb282e868247d5f08b050e94bb9f5df5a",
+        "assets/demo/auth/api.user.login.json": "69e2eac93cbb55cec718685996a364381283394a4f7776acc836107cbde82e39",
+        "assets/demo/auth/api.user.login_with_google.json": "1d5759f03e640a9c380d8900c36c4c5873498e4a75e9e4658de8adf9b912d931",
+        "assets/demo/auth/api.user.resend_verification_email.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+        "assets/demo/auth/tenant.api.verify_my_email.json": "8b231a14101c8c1587e6ea6e958a3de207f54ec27ee71149fba3c8ece4d1049e",
+        "assets/demo/auth/api.user.update_password.json": "ecd6d852c7fc618f171e6b20bcbdef6d4b848e68028fb78cb02fc29f12a86de4",
+        "assets/demo/auth/api.user.forgot_password_confirm.json": "8b231a14101c8c1587e6ea6e958a3de207f54ec27ee71149fba3c8ece4d1049e",
+        "assets/demo/auth/api.user.register_user.json": "8b231a14101c8c1587e6ea6e958a3de207f54ec27ee71149fba3c8ece4d1049e",
+        "assets/demo/auth/api.user.forgot_password.json": "b164450bd2a149d134a2dce464eda7b93856052f1269af827628ab0c6bf337f4",
+        "assets/demo/auth/api.user.send_phone_verification_code.json": "b164450bd2a149d134a2dce464eda7b93856052f1269af827628ab0c6bf337f4",
+        "assets/demo/auth/api.user.verify_phone_code.json": "8b231a14101c8c1587e6ea6e958a3de207f54ec27ee71149fba3c8ece4d1049e"
       },
       "routes": [
         {
@@ -710,24 +720,65 @@
           "version": 16,
           "step": "if (from < 16) { await m.createTable(offlineUsersTable); }"
         }
-      }
+      },
+      "app_assets": [
+        "assets/demo/auth/"
+      ]
     },
     "users_sdk": {
-      "version": "1.4.2",
-      "files": {},
+      "version": "1.5.1",
+      "files": {
+        "assets/demo/users/api.user.search_user.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+        "assets/demo/users/api.user.add_user_address.json": "94040fd50c440c6ddcbbe56ce155489e70d4ae918498599ac55082d238d799ad",
+        "assets/demo/users/api.user.get_user_profile.json": "ecd6d852c7fc618f171e6b20bcbdef6d4b848e68028fb78cb02fc29f12a86de4",
+        "assets/demo/users/api.user.update_profile_image.json": "ecd6d852c7fc618f171e6b20bcbdef6d4b848e68028fb78cb02fc29f12a86de4",
+        "assets/demo/users/api.user.get_user_addresses.json": "77712b6ec35f52696d1db69d1eb89c75da84af4d03d04dc5a5207adbcf82cfc5",
+        "assets/demo/users/api.user.set_active_address.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+        "assets/demo/users/api.user.delete_account.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+        "assets/demo/users/api.user.update_password.json": "ecd6d852c7fc618f171e6b20bcbdef6d4b848e68028fb78cb02fc29f12a86de4",
+        "assets/demo/users/api.user.register_device_token.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+        "assets/demo/users/api.user.update_user_profile.json": "ecd6d852c7fc618f171e6b20bcbdef6d4b848e68028fb78cb02fc29f12a86de4",
+        "assets/demo/users/api.user.delete_user_address.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+        "assets/demo/users/api.user.update_user_address.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+        "assets/demo/users/api.user.logout.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+        "assets/demo/users/api.user.get_referral_details.json": "0cdbf9b57c1c847eb6b0a167f394afd056b6f7e368721c5f7a6bb709e3d5f4fa"
+      },
       "routes": [],
       "app_routes": [],
       "onboarding_slides": [],
       "registration_steps": [],
       "embedded_widgets": [],
       "di_hooks": [],
-      "boot_hooks": []
+      "boot_hooks": [],
+      "app_assets": [
+        "assets/demo/users/"
+      ]
     },
     "merchants_sdk": {
-      "version": "1.31.0",
+      "version": "1.32.1",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
-        "lib/presentation/routes/merchants_customer_route_pages.dart": "94118cddd225b802a07db40ac5683697fd190d5d1de42494d955fc3f7eb79456"
+        "lib/presentation/routes/merchants_customer_route_pages.dart": "94118cddd225b802a07db40ac5683697fd190d5d1de42494d955fc3f7eb79456",
+        "assets/demo/merchants/api.seller_shop.update_shop.json": "6217983659f930765a1349ed444d6544aae7d8aa9c2b26448f61dc25512999a3",
+        "assets/demo/merchants/api.seller_shop.get_quick_flow_settings.json": "20fa3697d095c6c611fc0ee672dbf155fae3b7f34fdd69d76e5b6d91eacd1bb8",
+        "assets/demo/merchants/api.shop.get_shops_by_ids.json": "8e81243b0073e7187a7475ef75d85f25bd4fe51a313d2cbc2a3c03c72a30ed7d",
+        "assets/demo/merchants/api.seller_shop.set_working_status.json": "36f579d4c4606f9ff3c022585bab9c993c9fb9f0aec51523d0a81a7065d0eb31",
+        "assets/demo/merchants/api.seller_shop_settings.get_seller_shop_working_days.json": "be96acbabbe5a5d2ee326c9a8ed78f738cc26f2b559dd443f86166c4920fb284",
+        "assets/demo/merchants/api.shop.get_nearby_shops.json": "8e81243b0073e7187a7475ef75d85f25bd4fe51a313d2cbc2a3c03c72a30ed7d",
+        "assets/demo/merchants/api.shop.search_shops.json": "8e81243b0073e7187a7475ef75d85f25bd4fe51a313d2cbc2a3c03c72a30ed7d",
+        "assets/demo/merchants/api.seller_shop.update_quick_flow_settings.json": "20fa3697d095c6c611fc0ee672dbf155fae3b7f34fdd69d76e5b6d91eacd1bb8",
+        "assets/demo/merchants/api.shop.get_shops_recommend.json": "8e81243b0073e7187a7475ef75d85f25bd4fe51a313d2cbc2a3c03c72a30ed7d",
+        "assets/demo/merchants/api.story.get_story.json": "73a94491ab7f0c92d0be0ba71ed317aed607db2fb91a068ddc7714a08d217954",
+        "assets/demo/merchants/api.shop.create_shop.json": "36f579d4c4606f9ff3c022585bab9c993c9fb9f0aec51523d0a81a7065d0eb31",
+        "assets/demo/merchants/api.product.get_suggest_price.json": "6b096c564363cdd41c2c14af833a9eaa33acbdca59e5889666caaacddfc57e03",
+        "assets/demo/merchants/api.delivery.check_delivery_zone.json": "36f579d4c4606f9ff3c022585bab9c993c9fb9f0aec51523d0a81a7065d0eb31",
+        "assets/demo/merchants/api.shop.get_shop_details.json": "cf95550c57cdbb30444b5f1de4613de3889f7a8f514b0e54ac87ba53120f990a",
+        "assets/demo/merchants/api.cart.join_order.json": "36f579d4c4606f9ff3c022585bab9c993c9fb9f0aec51523d0a81a7065d0eb31",
+        "assets/demo/merchants/api.shop.get_shops.json": "10c37988bef57081885ac28ae4ec3a9a379aeeecfffcd622dedb0c24c1212001",
+        "assets/demo/merchants/api.seller_shop.get_shop.json": "6217983659f930765a1349ed444d6544aae7d8aa9c2b26448f61dc25512999a3",
+        "assets/demo/merchants/api.seller_shop_settings.update_seller_shop_working_days.json": "36f579d4c4606f9ff3c022585bab9c993c9fb9f0aec51523d0a81a7065d0eb31",
+        "assets/demo/merchants/api.tag.get_tags.json": "3b459147c8170c320545247d8ba79c22d55408311adafa4ad737f02c7aa78700",
+        "assets/demo/merchants/api.seller_shop_settings.get_shop_users.json": "33a98071be016297299a446ce438f450c538df533033f56061c083ce354713a8"
       },
       "routes": [
         {
@@ -775,6 +826,7 @@
       "di_hooks": [],
       "boot_hooks": [],
       "app_assets": [
+        "assets/demo/merchants/",
         "assets/audio/notification.wav",
         "assets/images/splash.png",
         "assets/images/splash1.png",
@@ -783,7 +835,7 @@
       ]
     },
     "products_sdk": {
-      "version": "1.11.0",
+      "version": "1.12.1",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -791,10 +843,13 @@
       "registration_steps": [],
       "embedded_widgets": [],
       "di_hooks": [],
-      "boot_hooks": []
+      "boot_hooks": [],
+      "app_assets": [
+        "assets/demo/products/"
+      ]
     },
     "orders_sdk": {
-      "version": "1.23.0",
+      "version": "1.26.0",
       "files": {
         "lib/presentation/routes/orders_customer_route_pages.dart": "acadebdd2b7525434e765bf02683c151b97d7a392e1552d8f2af02b916a4702c"
       },
@@ -922,7 +977,16 @@
       "onboarding_slides": [],
       "registration_steps": [],
       "embedded_widgets": [],
-      "di_hooks": [],
+      "di_hooks": [
+        {
+          "id": "orders-customer-active-order-tracker",
+          "order": 30,
+          "body": "ActiveOrderTracker.instance.attach();",
+          "imports": [
+            "import 'package:orders_sdk/src/common/application/live/active_order_tracker.dart';"
+          ]
+        }
+      ],
       "boot_hooks": [],
       "tr_keys": {
         "ordersToAccept": "orders_to_accept",
@@ -948,10 +1012,13 @@
           "placeholder": "                // @launcher-windows",
           "replacement": "                LaunchWindowSource.widget(\n                  mode: LaunchMode.manager,\n                  title: AppHelpers.getTranslation('manager'),\n                  icon: RemixIcons.store_2_line,\n                  builder: (context, openApp) =>\n                      ManagerLaunchWindow(onOpen: openApp),\n                ),"
         }
+      ],
+      "app_assets": [
+        "assets/demo/orders/"
       ]
     },
     "fav_sdk": {
-      "version": "1.0.2",
+      "version": "1.1.0",
       "files": {},
       "routes": [],
       "database": {
@@ -974,9 +1041,10 @@
       "boot_hooks": []
     },
     "wallet_sdk": {
-      "version": "1.6.5",
+      "version": "1.7.0",
       "files": {
-        "lib/presentation/routes/wallet_route_pages.dart": "86d07bc5c2e239b713c49a9caa4f2dc6007ec1e20aa9519aeb960f3fcc8ee5a7"
+        "lib/presentation/routes/wallet_route_pages.dart": "86d07bc5c2e239b713c49a9caa4f2dc6007ec1e20aa9519aeb960f3fcc8ee5a7",
+        "assets/demo/wallet/api.user.get_wallet_history.json": "0041f5565b4da148f0eef8d8dbc96946fc8c71c4b1ddf4e1ddce4e9912d44e26"
       },
       "routes": [
         {
@@ -1015,10 +1083,13 @@
           "_comment": "Registers the 'wallet.card' profile section (base_sdk's BaseWalletCard composed with this SDK's history/top-up routes and Send sheet) with base_sdk's ProfileSectionRegistry - the wallet card base_sdk's GenericProfilePage renders on any composed profile route. Declared top-level, NOT in an app_type flavor block, mirroring marketplace_sdk's marketplace-profile-sections hook. Configuration rides WalletCardSection's static seam (visible / symbol / extraActions / showActions), set by a home SDK's own di_hook. Order 20 leaves room for a lower-order home-SDK hook to configure the seam before registration - though the builder and gate also re-read the seam on every page mount, so a later hook still takes effect. Requires base_sdk >= 1.23.0 (the profile host) and >= 1.33.0 (BaseWalletCard `wallet` param)."
         }
       ],
-      "boot_hooks": []
+      "boot_hooks": [],
+      "app_assets": [
+        "assets/demo/wallet/"
+      ]
     },
     "payments_sdk": {
-      "version": "1.2.2",
+      "version": "1.2.3",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1029,11 +1100,51 @@
       "boot_hooks": []
     },
     "delivery_sdk": {
-      "version": "1.26.0",
+      "version": "1.28.0",
       "files": {
         "assets/svg/balance.svg": "6f17d12b29de8e5500bc445ee89eec5c1fc8830cea42711af9bf80975e6b79ce",
         "assets/image/my_location.png": "0e6b49eb78d1f74ac96ac24ce39f834105ce68e361c302038ba9cefdcd926126",
-        "assets/svg/cutter.svg": "62c721d3b827079fd2ae51121de9828ed6454827092fbf0380c13bc314c4b3e6"
+        "assets/svg/cutter.svg": "62c721d3b827079fd2ae51121de9828ed6454827092fbf0380c13bc314c4b3e6",
+        "assets/demo/delivery/api.driver_order.upload_order_image.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74",
+        "assets/demo/delivery/api.user.create_request_model.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74",
+        "assets/demo/delivery/api.driver_parcel.set_current_parcel_order.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74",
+        "assets/demo/delivery/api.driver_order.convert_cod_to_credit.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74",
+        "assets/demo/delivery/api.delivery_man.get_deliveryman_order_report.json": "2585bbfb634ed1766fee7a51c08cfe0434c65ca84847b7f4166b56a3cb115847",
+        "assets/demo/delivery/api.driver_order.update_driver_order_status.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74",
+        "assets/demo/delivery/api.poi.lookup_poi_owner.json": "a473231bb47f7b2ef5202851c1fe1697ded4db0e0f4e76b18a4cbda8fc11e02e",
+        "assets/demo/delivery/api.user.update_profile.json": "9dbe3f8e1224a9192908777a4f5c74b0c199c98a8c0e2decf10e63e4b6cba65d",
+        "assets/demo/delivery/api.driver_parcel.attach_parcel_order_to_me.json": "e5ad01294501ef89506d1e257820ec66e9b9dd15ba57a7090fb8b5ef8b5c32d6",
+        "assets/demo/delivery/api.driver_parcel.update_driver_parcel_order_status.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74",
+        "assets/demo/delivery/api.delivery_man.get_deliveryman_settings.json": "a9120d6a8f1f36e3bec254006701d5c172f76a9b7d5b2bcc94a62059e5533948",
+        "assets/demo/delivery/api.delivery_man.get_deliveryman_zone_polygon.json": "3ed84cc3837b7d9f0cea54b068d56c30b05d1c224216aef349460be238865d00",
+        "assets/demo/delivery/api.user.get_user_request_models.json": "906edb277266ae24b3b25c52beeee1629883fe4b4ddf0f6ace2fd9f72cca1d5d",
+        "assets/demo/delivery/api.driver_order.get_driver_route.json": "7aca2264e7f9f73f048ef6ea3fcc60d3c38783e56c230fcf7168d94ddfcc61b7",
+        "assets/demo/delivery/api.order.load.get_my_load.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "assets/demo/delivery/api.poi.get_poi_types.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "assets/demo/delivery/api.driver_order.get_driver_orders_paginate.json": "6fc5ffb923a0ef0e1670c8f233a96fa675682cf3be9ecf695b15c8e9a1b8ef77",
+        "assets/demo/delivery/api.poi.get_my_poi_shops.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+        "assets/demo/delivery/api.driver_order.attach_order_to_me.json": "e5ad01294501ef89506d1e257820ec66e9b9dd15ba57a7090fb8b5ef8b5c32d6",
+        "assets/demo/delivery/api.dispatch_route.get_my_dispatch_route.json": "ed1d37906da8a6b10140aca9b911faa75f3a467a97f21d6108bbce1ca4de5a12",
+        "assets/demo/delivery/api.user.update_password.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74",
+        "assets/demo/delivery/api.wallet.get_deposit_destination.json": "aa273296bed1fddd8976697e2bd411c9980bfd86bbce5618a26dc509af2aa3d4",
+        "assets/demo/delivery/api.wallet.submit_deposit_request.json": "c5f3f737d059d21c22a672465801eb927515c8be9340639b52dbb4da5c8683c2",
+        "assets/demo/delivery/api.driver_parcel.add_parcel_order_review.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74",
+        "assets/demo/delivery/api.driver_parcel.confirm_parcel_cod_collection.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74",
+        "assets/demo/delivery/api.payment.get_wallet_balance.json": "79d2bcb5f16f3d63795e9611a348aa6bb70ae59bf45ae253e3d2078d10d87b0f",
+        "assets/demo/delivery/api.driver_order.set_current_order.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74",
+        "assets/demo/delivery/api.delivery_man.add_deliveryman_order_review.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74",
+        "assets/demo/delivery/api.poi.get_nearby_pois.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "assets/demo/delivery/api.wallet.list_deposit_requests.json": "d098d99e8f732538b28d8164c65082c310c061077d3b2510f3632df2b16d04ee",
+        "assets/demo/delivery/api.delivery_man.update_deliveryman_settings.json": "a9120d6a8f1f36e3bec254006701d5c172f76a9b7d5b2bcc94a62059e5533948",
+        "assets/demo/delivery/api.delivery_man.get_deliveryman_order_details.json": "299f8f19b4c2a88aa062ea36cd76848aad716733e08a2e3c594d8a00256998c9",
+        "assets/demo/delivery/api.poi.get_poi_sales.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+        "assets/demo/delivery/api.delivery_man.get_deliveryman_work_status.json": "994655b53ce5b5a38d5bd3e34f969dda8924a6f2361bb4a8e597fcdfcf3a6b1a",
+        "assets/demo/delivery/api.delivery_man.get_deliveryman_parcel_orders.json": "275675aa497723b00270949566638c5dae3a54e95aae3b9f2c6438e79a4d9b17",
+        "assets/demo/delivery/api.driver_order.confirm_cod_collection.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74",
+        "assets/demo/delivery/api.poi.get_poi_route.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "assets/demo/delivery/api.dispatch_route.complete_dispatch_stop.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74",
+        "assets/demo/delivery/api.delivery_man.get_available_orders.json": "fc18baba379fc1d4a71ad19fd097bdc1d0d811af3952db1f8129e9048b09308c",
+        "assets/demo/delivery/api.driver.update_location.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74"
       },
       "routes": [],
       "app_routes": [],
@@ -1055,7 +1166,8 @@
         "assets/lottie/empty-box.json",
         "assets/image/my_location.png",
         "assets/svg/balance.svg",
-        "assets/svg/cutter.svg"
+        "assets/svg/cutter.svg",
+        "assets/demo/delivery/"
       ],
       "tr_keys": {
         "orderWaiting": "order.waiting",
@@ -1078,8 +1190,21 @@
       ]
     },
     "comms_sdk": {
-      "version": "1.16.0",
-      "files": {},
+      "version": "1.22.0",
+      "files": {
+        "assets/demo/comms/api.notification.read_all_notifications.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+        "assets/demo/comms/api.notification.get_notification_count.json": "e81366a1ea9400e3b0cfd014aabfbdbc12cfea74d7335a64c9feda2a6025318f",
+        "assets/demo/comms/api.notification.update_notification_settings.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+        "assets/demo/comms/api.admin_content.get_admin_faqs.json": "b6224855d5a5496f8aaf3fd07e595fef6bf9071c22a110a444ce4ffe55fd0cda",
+        "assets/demo/comms/api.notification.get_user_notifications.json": "0345797eb7c9a8572a37748670cd59d03232674f0df8b9bdb5ae61d77a1c07eb",
+        "assets/demo/comms/api.notification.read_one_notification.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+        "assets/demo/comms/api.page.get_page.json": "993f0d1ce3045b465bedbfd89c5aabf5993f80a4a10f1c93e0fc707c5f535cd9",
+        "assets/demo/comms/api.notification.get_notification_settings.json": "a7b60d72591768e25c273e27972f15702efd847212ce283c982ba5aba1d45043",
+        "assets/demo/comms/api.system.get_global_settings.json": "bd79ef4bf926cae6e9cf15c508f2aa30b0abc3af7bd98fbe5056ee8d18dee941",
+        "assets/demo/comms/api.system.get_currencies.json": "cb70e135ab501697b3c14a767decf891e029f2195fea5f40ae70e00cd64ab95b",
+        "assets/demo/comms/api.translation.get_mobile_translations.json": "ad9606c0d503b0c27150d2a0c0a82ddf44037a34619f27cbdd7a050d6f7a26fa",
+        "assets/demo/comms/api.language.get_languages.json": "6933ca5d43e6ce955b43f238b728f27e5444585699da1d722e60cae67a5bc16e"
+      },
       "routes": [],
       "app_routes": [],
       "onboarding_slides": [],
@@ -1096,6 +1221,18 @@
       ],
       "di_hooks": [],
       "boot_hooks": [
+        {
+          "id": "comms-live-activity-sink",
+          "order": 40,
+          "body": "LiveActivities.instance.sink ??= DeviceLiveActivitySink();",
+          "_comment": "Live notifications (design approved 2026-09-26). Registers the device sink into base_sdk's LiveActivities (base_sdk >= 1.76.0), so orders, delivery and lms publish snapshots without importing comms_sdk. Registration only: nothing is drawn until an adopter publishes. No 'imports' entry: main.dart already imports base_sdk and comms_sdk (which exports DeviceLiveActivitySink)."
+        },
+        {
+          "id": "comms-push-permission-on-sign-in",
+          "order": 30,
+          "body": "SessionStartHooks.register(PushPermissionPrompt.hookId, PushPermissionPrompt.onSessionStart);",
+          "_comment": "Ray, 2026-09-25: ask for notification permission after a successful sign-in, in every app that composes comms_sdk (before 1.18.0 only merchants' manager shell and delivery's driver home asked; supacharge, paas_customer and the rest never did). Subscribes PushPermissionPrompt to base_sdk's SessionStartHooks (base_sdk >= 1.75.0), which auth_sdk >= 1.15.0 runs once a session is established; neither SDK depends on the other. PushPermissionPrompt skips demo sessions (DemoSession.demoActive), asks at most once per install (a LocalStorage JSON flag set only once the OS was actually asked), and goes through PushPermissionService, so platform guard, fail-open catch and in-flight de-duplication all still apply. Registration only: nothing runs at boot. No 'imports' entry: every composed main.dart already imports package:base_sdk/base_sdk.dart and package:comms_sdk/comms_sdk.dart (which exports PushPermissionPrompt) in its @generated-sdk-imports block."
+        },
         {
           "id": "comms-firebase-fcm-boot",
           "order": 10,
@@ -1116,6 +1253,15 @@
             "import 'package:comms_sdk/src/common/services/desktop_notification_poller.dart';"
           ],
           "_comment": "Windows notification delivery, POS parity (1.6.0): firebase_messaging has no Windows implementation, so the FCM hook above deliberately excludes Windows and composed Windows exes shipped with NO notification path at all. This hook starts comms' DesktopNotificationPoller (10s REST count polling + looping POS notification.wav + ValueNotifier badge feed - see the service's doc comment) on Windows only. The start is deferred to addPostFrameCallback because boot-hook bodies run BEFORE LocalStorage.init() and the sdk-di block in the generated main.dart: by first frame both are done, and runApp is never delayed by a poll. Fail-open try/catch like the FCM hook - a boot failure debugPrints instead of blanking the app. WidgetsBinding resolves via main.dart's static material import; foundation dedupes with the FCM hook's wiring import. Toast layer (still 1.6.0, same unmerged PR): poller.start() also initializes LocalNotifications fail-open (flutter_local_notifications 19.x WindowsInitializationSettings - stable hardcoded GUID, APP_NAME/WINDOWS_AUMID dart-defines for branding, works unpackaged; MSIX identity optional host-side) and each count increase raises a native toast via LocalNotifications.show() alongside the sound - no hook body change needed, the toast path lives entirely inside the service."
+        },
+        {
+          "id": "comms-push-message-dispatch",
+          "order": 15,
+          "body": "if (!kIsWeb && (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.macOS)) {\n  try {\n    PushMessageDispatcher.instance.start();\n  } catch (e) {\n    debugPrint('Push message dispatch skipped: $e');\n  }\n}",
+          "imports": [
+            "import 'package:flutter/foundation.dart';"
+          ],
+          "_comment": "Feeds received FCM messages into base_sdk's PushMessages (base_sdk >= 1.79.0) by data['type'], so a feature SDK handles its own pushes without importing comms_sdk (orders_sdk registers 'order_status' for its ActiveOrderTracker). Foreground messages and taps that open the app dispatch at once; a message that arrives while the app is suspended or closed is queued by firebaseMessagingBackgroundHandler and replayed at start and on resume. Runs after comms-firebase-fcm-boot (order 10). comms_sdk exports PushMessageDispatcher, so no package import is needed."
         }
       ],
       "platform_permissions": {
@@ -1124,7 +1270,10 @@
           "android.permission.VIBRATE"
         ],
         "ios": {}
-      }
+      },
+      "app_assets": [
+        "assets/demo/comms/"
+      ]
     },
     "corporate_sdk": {
       "version": "1.2.0",
@@ -1175,9 +1324,10 @@
       "boot_hooks": []
     },
     "map_sdk": {
-      "version": "1.4.0",
+      "version": "1.5.0",
       "files": {
-        "lib/presentation/routes/map_route_pages.dart": "40d4309147726738a018def95efb9f3e16815684c55ac631f0559b74dfef4a50"
+        "lib/presentation/routes/map_route_pages.dart": "40d4309147726738a018def95efb9f3e16815684c55ac631f0559b74dfef4a50",
+        "assets/demo/map/api.poi.get_customer_pois.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
       },
       "routes": [
         {
@@ -1218,13 +1368,19 @@
       "di_hooks": [],
       "boot_hooks": [],
       "app_assets": [
-        "assets/lottie/pin.json"
+        "assets/lottie/pin.json",
+        "assets/demo/map/"
       ]
     },
     "promotions_sdk": {
-      "version": "1.2.2",
+      "version": "1.3.0",
       "files": {
-        "lib/presentation/routes/promotions_route_pages.dart": "0dc5d4de524957c7fd906b18a65e639082ddb94d18dc94b8859b5ebcceb7f77b"
+        "lib/presentation/routes/promotions_route_pages.dart": "0dc5d4de524957c7fd906b18a65e639082ddb94d18dc94b8859b5ebcceb7f77b",
+        "assets/demo/promotions/api.banner.get_ads.json": "904cc2312d56782b9e12bea4bc8646d47a0dc2829d27c1465689db5b23dc6d93",
+        "assets/demo/promotions/api.banner.like_banner.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
+        "assets/demo/promotions/api.banner.get_banner.json": "fec49c8364e0831e9a60997c3f740b54e5bb977b8531c74c0e474c5abb00e29f",
+        "assets/demo/promotions/api.banner.get_banners.json": "2f2d8388686985951636ce527a7b60ed7266c490a62523fd08966210bc53abe7",
+        "assets/demo/promotions/api.banner.get_ad.json": "fec49c8364e0831e9a60997c3f740b54e5bb977b8531c74c0e474c5abb00e29f"
       },
       "routes": [
         {
@@ -1249,7 +1405,10 @@
       "registration_steps": [],
       "embedded_widgets": [],
       "di_hooks": [],
-      "boot_hooks": []
+      "boot_hooks": [],
+      "app_assets": [
+        "assets/demo/promotions/"
+      ]
     },
     "loyalty_sdk": {
       "version": "1.0.2",
@@ -1307,7 +1466,7 @@
       "boot_hooks": []
     },
     "booking_sdk": {
-      "version": "1.1.0",
+      "version": "1.2.1",
       "files": {
         "lib/presentation/pages/reservations/reservations_page.dart": "31dd111ff24ef746f0c11208bf258ff4ace786b7ad261a74e9e75ac3ee7fa236",
         "lib/presentation/pages/reservations/new_reservation_page.dart": "48719b888173cdb8c185ed7c61f190c7b16d06d869680f76c83d862851600254"
@@ -1398,69 +1557,72 @@
         "noShopOnThisAccount": "no_shop_on_this_account",
         "reservedFor": "reserved_for",
         "reservationsAreNotAvailable": "reservations_are_not_available"
-      }
+      },
+      "app_assets": [
+        "assets/demo/booking/"
+      ]
     }
   },
   "sdk_cache": {
     "base": {
-      "version": "1.72.2",
-      "hash": "ed459876f2903cba"
+      "version": "1.81.0",
+      "hash": "683e8976b9945a1e"
     },
     "comms": {
-      "version": "1.16.0",
-      "hash": "92dd94546ff0a1ae"
+      "version": "1.22.0",
+      "hash": "1f51ce3ea18e4c2f"
     },
     "marketplace": {
-      "version": "1.14.2",
-      "hash": "58d0d0c33a2f4e83"
+      "version": "1.15.0",
+      "hash": "eade7b3e730f6957"
     },
     "merchants": {
-      "version": "1.31.0",
-      "hash": "0b385a34c3f2b31d"
+      "version": "1.32.1",
+      "hash": "acf603fc371813ab"
     },
     "products": {
-      "version": "1.11.0",
-      "hash": "326fd62a42d2e763"
+      "version": "1.12.1",
+      "hash": "991eca5a9e9e0f60"
     },
     "orders": {
-      "version": "1.23.0",
-      "hash": "4aa199918ac47af9"
+      "version": "1.26.0",
+      "hash": "2aae6e408d2edb84"
     },
     "promotions": {
-      "version": "1.2.2",
-      "hash": "87c734593daab096"
+      "version": "1.3.0",
+      "hash": "c298a8164e5f87ef"
     },
     "loyalty": {
       "version": "1.0.2",
       "hash": "5ac9fa78ff6e1dfe"
     },
     "auth": {
-      "version": "1.13.5",
-      "hash": "02390d16f682723c"
+      "version": "1.16.0",
+      "hash": "c0351f66fa8b4c5b"
     },
     "users": {
-      "version": "1.4.2",
-      "hash": "2b6052099734834f"
+      "version": "1.5.1",
+      "hash": "85f8847951bf6cf9"
     },
     "fav": {
-      "version": "1.0.2",
-      "hash": "373721752683554f"
+      "version": "1.1.0",
+      "hash": "5ce1a433d8430989"
     },
     "wallet": {
-      "version": "1.6.5",
-      "hash": "9e94adb9894327d2"
+      "version": "1.7.0",
+      "hash": "2662085449816d36"
     },
     "payments": {
-      "version": "1.2.2",
-      "hash": "190c2490eb6e500d"
+      "version": "1.2.3",
+      "hash": "f723edadd74f4bac"
     },
     "delivery": {
-      "version": "1.26.0",
-      "hash": "8a5985316131696e"
+      "version": "1.28.0",
+      "hash": "9e27136951871762"
     },
     "map": {
-      "version": "1.4.0",
-      "hash": "cf3c6494245c477f"
+      "version": "1.5.0",
+      "hash": "34bc18c75ba4cd92"
     },
     "corporate": {
       "version": "1.2.0",
@@ -1483,8 +1645,8 @@
       "hash": "d72bc5e07ff1124c"
     },
     "booking": {
-      "version": "1.1.0",
-      "hash": "21cb6a831aac0691"
+      "version": "1.2.1",
+      "hash": "cd09bab55538a382"
     }
   }
 }

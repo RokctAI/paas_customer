@@ -53,14 +53,14 @@ class ProductItem extends ConsumerWidget {
           AppHelpers.showCustomModalBottomDragSheet(
             context: context,
             modal: (c) => EmbeddedWidgets.I.productScreen(controller: c, data: product),
-            isDarkMode: false,
+            isDarkMode: Theme.of(context).brightness == Brightness.dark,
             isDrag: true,
             radius: 16,
           );
         },
         child: Container(
           decoration: BoxDecoration(
-            color: AppStyle.white,
+            color: AppStyle.cardFor(Theme.of(context).brightness),
             borderRadius: BorderRadius.circular(10.r),
             boxShadow: [
               BoxShadow(
@@ -96,7 +96,7 @@ class ProductItem extends ConsumerWidget {
                               product.translation?.title ?? "",
                               style: AppStyle.interSemi(
                                 size: 15,
-                                color: AppStyle.black,
+                                color: AppStyle.inkFor(Theme.of(context).brightness),
                               ),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
@@ -106,7 +106,7 @@ class ProductItem extends ConsumerWidget {
                             product.translation?.description ?? "",
                             style: AppStyle.interNormal(
                               size: 12,
-                              color: AppStyle.black,
+                              color: AppStyle.inkFor(Theme.of(context).brightness),
                             ),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
@@ -123,7 +123,7 @@ class ProductItem extends ConsumerWidget {
                             ),
                             style: AppStyle.interSemi(
                               size: 13,
-                              color: AppStyle.black,
+                              color: AppStyle.inkFor(Theme.of(context).brightness),
                             ),
                           ),
                           Text(

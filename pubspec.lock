@@ -127,7 +127,7 @@ packages:
       path: ".rokct/cache/auth"
       relative: true
     source: path
-    version: "1.13.5"
+    version: "1.16.0"
   auto_route:
     dependency: transitive
     description:
@@ -158,7 +158,7 @@ packages:
       path: ".rokct/cache/base"
       relative: true
     source: path
-    version: "1.72.2"
+    version: "1.81.0"
   battery_plus:
     dependency: transitive
     description:
@@ -181,7 +181,7 @@ packages:
       path: ".rokct/cache/booking"
       relative: true
     source: path
-    version: "1.1.0"
+    version: "1.2.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -372,7 +372,7 @@ packages:
       path: ".rokct/cache/comms"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.22.0"
   confetti:
     dependency: transitive
     description:
@@ -466,7 +466,7 @@ packages:
       path: ".rokct/cache/delivery"
       relative: true
     source: path
-    version: "1.3.4"
+    version: "1.28.0"
   desktop_sdk:
     dependency: "direct main"
     description:
@@ -528,7 +528,7 @@ packages:
       path: ".rokct/cache/fav"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.1.0"
   ffi:
     dependency: transitive
     description:
@@ -718,6 +718,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.1.0"
+  flutter_app_group_directory:
+    dependency: transitive
+    description:
+      name: flutter_app_group_directory
+      sha256: "680ef9b2dee84c237cd7bb7fc78bc45867b32556a8a5f0de61278078b9fefd05"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.1.0"
   flutter_cache_manager:
     dependency: transitive
     description:
@@ -1542,6 +1550,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  live_activities:
+    dependency: transitive
+    description:
+      name: live_activities
+      sha256: "30a77e91918585d904c73ce9b96e6553e2d2d958b6059c23a0957277c95522bf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.3"
   location:
     dependency: transitive
     description:
@@ -1603,14 +1619,14 @@ packages:
       path: ".rokct/cache/map"
       relative: true
     source: path
-    version: "1.1.0"
+    version: "1.5.0"
   marketplace_sdk:
     dependency: "direct main"
     description:
       path: ".rokct/cache/marketplace"
       relative: true
     source: path
-    version: "1.1.0"
+    version: "1.15.0"
   matcher:
     dependency: transitive
     description:
@@ -1633,7 +1649,7 @@ packages:
       path: ".rokct/cache/merchants"
       relative: true
     source: path
-    version: "1.5.0"
+    version: "1.32.1"
   meta:
     dependency: transitive
     description:
@@ -1688,7 +1704,7 @@ packages:
       path: ".rokct/cache/orders"
       relative: true
     source: path
-    version: "1.4.1"
+    version: "1.26.0"
   osm_nominatim:
     dependency: transitive
     description:
@@ -1799,7 +1815,7 @@ packages:
       path: ".rokct/cache/payments"
       relative: true
     source: path
-    version: "1.0.0"
+    version: "1.0.1"
   percent_indicator:
     dependency: transitive
     description:
@@ -1933,14 +1949,14 @@ packages:
       path: ".rokct/cache/products"
       relative: true
     source: path
-    version: "1.5.0"
+    version: "1.12.1"
   promotions_sdk:
     dependency: "direct main"
     description:
       path: ".rokct/cache/promotions"
       relative: true
     source: path
-    version: "1.1.0"
+    version: "1.3.0"
   proste_indexed_stack:
     dependency: transitive
     description:
@@ -2439,7 +2455,7 @@ packages:
       path: ".rokct/cache/users"
       relative: true
     source: path
-    version: "1.0.2"
+    version: "1.5.1"
   uuid:
     dependency: transitive
     description:
@@ -2502,7 +2518,7 @@ packages:
       path: ".rokct/cache/wallet"
       relative: true
     source: path
-    version: "1.6.5"
+    version: "1.7.0"
   watcher:
     dependency: transitive
     description:

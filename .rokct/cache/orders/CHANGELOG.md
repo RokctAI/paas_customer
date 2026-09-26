@@ -1,3 +1,71 @@
+## 1.26.0
+
+* feat(orders): `ActiveOrderTracker`, an app-wide poller behind the order live
+  activity (`activeOrderTrackerProvider`). Before this change only
+  `OrderProgressPage` polled, so the entry started only once that screen
+  was open and stopped updating when it closed. The tracker polls each
+  active delivery order every 15s while it is on the way (with the driver
+  location) and every 120s otherwise. It never polls in the background and
+  stops at delivered, cancelled, paid or failed. It starts at app start
+  (new customer `di_hooks` entry), after checkout, on resume, when the home
+  glance card loads active orders, and on an `order_status` push
+  (base_sdk >= 1.79.0 `PushMessages`, fed by comms_sdk >= 1.21.0).
+* `OrderProgressPage` reuses the tracker instead of running its own poll. It
+  reloads its view only when a poll saw a new status or driver.
+* fix(orders): `getActiveOrders` asks for
+  `accepted,processing,ready,on_a_way`. It asked for `accepted` alone, so
+  the home glance card never showed an order that was processing, ready or
+  on its way. The orders backend now resolves a comma-separated status list
+  and the `on_a_way` (Shipped) and `processing` (Cooking) aliases.
+* fix(orders): the live activity reads the backend's own status spellings
+  (`Shipped`, `Cancelled`) and treats `Pickup` like `pickup`.
+* feat(orders backend): the customer gets an `order_status` push on every
+  real status transition, with the new status and the order id in `data`.
+* Requires base_sdk >= 1.79.0.
+* Tests: `test/active_order_tracker_test.dart`, `test/gateway_cmd_test.dart`,
+  `frappe/tests/test_order_status_push.py`,
+  `frappe/tests/test_list_orders_params.py`.
+
+## 1.25.0
+
+* feat(orders): customer order tracking live activity (design section 2).
+  `OrderLiveActivity` maps the polled order and the driver location onto
+  base_sdk's `LiveActivities`. The entry has five segments with a car
+  tracker, and moves through Placed, Preparing, Picked up, On the way,
+  Arriving now and Delivered, or Order cancelled.
+* `OrderProgressPage` polls every 15s while the order is on its way. It
+  keeps 120s otherwise and does not poll in the background. It also calls
+  the previously unused `getDriverLocation`, silently, to move the car.
+* There is no ETA field yet, so "Arrives about" shows the delivery time
+  chosen at checkout.
+* Pickup orders get no entry.
+* Requires base_sdk >= 1.76.0 (comms_sdk >= 1.19.0 draws it).
+* Tests: `test/order_live_activity_test.dart`.
+
+## 1.24.1
+
+* fix(manifest): install the `assets/demo/orders` fixtures from the top-level
+  `installs` instead of one `app_type` block, so every compose that
+  registers the `assets/demo/orders/` pubspec entry also has the directory
+  behind it (flutter failed with "unable to find directory entry").
+
+## 1.24.0
+
+* feat(demo): demo runs the real repositories through base_sdk's
+  `DemoGatewayInterceptor` (requires base_sdk >= 1.73.0). The DI hooks
+  register only the real repositories and register the
+  `assets/demo/orders` fixture directory; every platform cmd a demo session
+  sends is answered from `templates/assets/demo/orders/<cmd>.json`, and an
+  unknown cmd fails loudly with `DemoFixtureMissing`.
+* Removed: `MockCartRepository`, `MockOrdersRepository`,
+  `DemoSellerOrdersRepository`, and the demo-session swap code that chose
+  them.
+
+## 1.23.1
+
+* fix(theme): surfaces, cards, ink and strokes now follow the app's light/dark
+  mode instead of hardcoded light colours or static theme reads.
+
 ## 1.23.0
 
 * feat(drivers): the shop side of Ray's own-drivers ruling — a shop may keep

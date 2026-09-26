@@ -1,3 +1,8 @@
+## 1.2.3
+
+* Dark mode: the saved-card tile and the Windows PayFast app bar now use
+  `AppStyle.cardFor(brightness)` instead of the fixed dark card colour.
+
 ## 1.2.2
 
 * fix(payfast): cancelling on PayFast no longer reports the payment as

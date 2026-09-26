@@ -1,0 +1,12 @@
+[
+  {
+    "name": "demo-main-hall",
+    "area": "Main hall",
+    "shop": "demo-shop"
+  },
+  {
+    "name": "demo-terrace",
+    "area": "Terrace",
+    "shop": "demo-shop"
+  }
+]

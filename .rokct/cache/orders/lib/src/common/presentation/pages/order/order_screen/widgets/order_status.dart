@@ -37,7 +37,7 @@ class OrderStatusScreen extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(top: 16.h),
       decoration: BoxDecoration(
-        color: AppStyle.bgGrey,
+        color: AppStyle.surfaceFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(10.r),
       ),
       padding: EdgeInsets.all(14.r),
@@ -50,7 +50,7 @@ class OrderStatusScreen extends StatelessWidget {
                 AppHelpers.getTranslation(
                   AppHelpers.getOrderStatusText(status),
                 ),
-                style: AppStyle.interNormal(size: 13, color: AppStyle.black),
+                style: AppStyle.interNormal(size: 13, color: AppStyle.inkFor(Theme.of(context).brightness)),
               ),
             ],
           ),
@@ -192,14 +192,14 @@ class OrderStatusScreen extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: status != OrderStatus.open
                                 ? AppStyle.primary
-                                : AppStyle.white,
+                                : AppStyle.cardFor(Theme.of(context).brightness),
                           ),
                         ),
                         OrderStatusItem(
                           icon: Icon(
                             parcel ? Icons.done_all : Icons.restaurant_rounded,
                             size: 16.r,
-                            color: AppStyle.black,
+                            color: AppStyle.inkFor(Theme.of(context).brightness),
                           ),
                           isActive: status == OrderStatus.ready ||
                               status == OrderStatus.onWay,
@@ -213,7 +213,7 @@ class OrderStatusScreen extends StatelessWidget {
                             color: status == OrderStatus.ready ||
                                     status == OrderStatus.onWay
                                 ? AppStyle.primary
-                                : AppStyle.white,
+                                : AppStyle.cardFor(Theme.of(context).brightness),
                           ),
                         ),
                         OrderStatusItem(
@@ -234,7 +234,7 @@ class OrderStatusScreen extends StatelessWidget {
                           height: 6.h,
                           width: 12.w,
                           decoration:
-                              const BoxDecoration(color: AppStyle.white),
+                              BoxDecoration(color: AppStyle.cardFor(Theme.of(context).brightness)),
                         ),
                         OrderStatusItem(
                           icon: Icon(Icons.flag, size: 16.r),

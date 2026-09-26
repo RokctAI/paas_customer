@@ -60,7 +60,7 @@ class MarketOneItem extends StatelessWidget {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          color: AppStyle.white,
+                          color: AppStyle.cardFor(Theme.of(context).brightness),
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(24.r),
                             topRight: Radius.circular(24.r),
@@ -112,7 +112,9 @@ class MarketOneItem extends StatelessWidget {
                                     : shop.translation?.title ?? "",
                                 style: AppStyle.interSemi(
                                   size: 16,
-                                  color: AppStyle.black,
+                                  color: AppStyle.inkFor(
+                                    Theme.of(context).brightness,
+                                  ),
                                 ),
                               ),
                               if (shop.verify ?? false)
@@ -128,7 +130,9 @@ class MarketOneItem extends StatelessWidget {
                               "${shop.deliveryTime?.from ?? 0} - ${shop.deliveryTime?.to ?? 0} ${shop.deliveryTime?.type ?? "min"}",
                               style: AppStyle.interNormal(
                                 size: 14,
-                                color: AppStyle.black,
+                                color: AppStyle.inkFor(
+                                  Theme.of(context).brightness,
+                                ),
                               ),
                             ),
                           ),

@@ -84,7 +84,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: AppStyle.bgGrey,
+        backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
         body: Column(
           children: [
             CommonAppBar(
@@ -98,7 +98,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                         AppHelpers.getTranslation(TrKeys.transactions),
                         style: AppStyle.interNoSemi(
                           size: 18,
-                          color: AppStyle.black,
+                          color: AppStyle.inkFor(Theme.of(context).brightness),
                         ),
                       ),
                       5.horizontalSpace,
@@ -116,7 +116,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                     const WalletTopUpScreen(),
                               ),
                             ),
-                            isDarkMode: LocalStorage.getAppThemeMode(),
+                            isDarkMode: (Theme.of(context).brightness == Brightness.dark),
                           );
                         },
                       ),
@@ -135,7 +135,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                     const WalletSendScreen(),
                               ),
                             ),
-                            isDarkMode: LocalStorage.getAppThemeMode(),
+                            isDarkMode: (Theme.of(context).brightness == Brightness.dark),
                           );
                         },
                       ),
@@ -155,7 +155,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                       EmbeddedWidgets.I.loanScreen(),
                                 ),
                               ),
-                              isDarkMode: LocalStorage.getAppThemeMode(),
+                              isDarkMode: (Theme.of(context).brightness == Brightness.dark),
                             );
                           },
                         ),
@@ -199,7 +199,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                         : state.walletHistory?[index].type ==
                                                 "withdraw"
                                             ? AppStyle.red.withOpacity(0.5)
-                                            : AppStyle.white,
+                                            : AppStyle.cardFor(Theme.of(context).brightness),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

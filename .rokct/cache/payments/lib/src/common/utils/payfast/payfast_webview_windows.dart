@@ -125,7 +125,7 @@ class _PayFastWebViewWindowsState extends State<PayFastWebViewWindows> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppStyle.cardDark,
+        backgroundColor: AppStyle.cardFor(Theme.of(context).brightness),
         elevation: 0,
         title: Text(
           AppHelpers.getTranslation(TrKeys.checkout),

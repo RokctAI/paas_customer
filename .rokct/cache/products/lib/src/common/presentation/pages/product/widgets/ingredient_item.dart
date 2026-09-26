@@ -47,7 +47,7 @@ class IngredientItem extends ConsumerWidget {
         width: double.infinity,
         margin: EdgeInsets.symmetric(vertical: 10.r),
         decoration: BoxDecoration(
-          color: AppStyle.cardDark,
+          color: AppStyle.cardFor(Theme.of(context).brightness),
           borderRadius: BorderRadius.circular(10.r),
         ),
         child: Column(
@@ -65,7 +65,9 @@ class IngredientItem extends ConsumerWidget {
                           addon.product?.translation?.title ?? "",
                           style: AppStyle.interNormal(
                             size: 16,
-                            color: AppStyle.textPrimary,
+                            color: AppStyle.inkFor(
+                              Theme.of(context).brightness,
+                            ),
                           ),
                         ),
                       ),

@@ -85,7 +85,8 @@ class FilterCategoryShopThree extends StatelessWidget {
                                             ?.toString()) ??
                                   "",
                             ),
-                            isDarkMode: false,
+                            isDarkMode:
+                                Theme.of(context).brightness == Brightness.dark,
                             isDrag: false,
                             radius: 12,
                           );
@@ -97,7 +98,9 @@ class FilterCategoryShopThree extends StatelessWidget {
                             vertical: 6.r,
                           ),
                           decoration: BoxDecoration(
-                            color: AppStyle.bgGrey,
+                            color: AppStyle.surfaceFor(
+                              Theme.of(context).brightness,
+                            ),
                             borderRadius: BorderRadius.circular(12.r),
                           ),
                           child: Row(

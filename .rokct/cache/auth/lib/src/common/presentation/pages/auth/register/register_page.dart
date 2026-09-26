@@ -484,31 +484,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       onPressed: () {
                         if (widget.isOnlyEmail) {
                           if (event.checkEmail()) {
+                            // Email sign-up: email -> details form ->
+                            // register_user creates the account and emails
+                            // the code -> code sheet (see
+                            // RegisterNotifier.register). The code can only
+                            // be asked for once the account exists.
                             event.sendCode(context, () {
-                              Navigator.pop(context);
-                              AppHelpers.showCustomModalBottomSheet(
-                                context: context,
-                                modal: RegisterConfirmationPage(
-                                  verificationId: "",
-                                  userModel: UserModel(
-                                    firstname: state.firstName,
-                                    lastname: state.lastName,
-                                    phone: state.phone,
-                                    email: state.email,
-                                    password: state.password,
-                                    confirmPassword: state.confirmPassword,
-                                  ),
-                                ),
-                                isDarkMode: isDarkMode,
-                              );
-                            }, onOffline: () {
-                              // Offline: skip the emailed-code step and go
-                              // straight to the details form — the same
-                              // navigation RegisterConfirmationPage takes on
-                              // verify success. The email lives on in the
-                              // shared registerProvider state; register()
-                              // finishes locally and syncs (then OTP-
-                              // verifies via PendingOtpGate) once online.
                               Navigator.pop(context);
                               AppHelpers.showCustomModalBottomSheet(
                                 context: context,

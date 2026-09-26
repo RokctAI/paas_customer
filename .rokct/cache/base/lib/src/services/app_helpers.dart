@@ -158,19 +158,28 @@ abstract class AppHelpers {
     }
   }
 
+  /// The order status for [value]. Takes the dart wire strings ('new',
+  /// 'on_a_way', ...) and the Order doctype's own options, which the
+  /// backend returns as they are stored ('Shipped', 'Cancelled',
+  /// 'Cooking', ...), case-insensitively. Anything unknown reads as
+  /// accepted, as before.
   static OrderStatus getOrderStatus(String? value) {
-    switch (value) {
+    switch ((value ?? '').trim().toLowerCase()) {
       case 'new':
         return OrderStatus.open;
       case 'accepted':
+      case 'cooking':
+      case 'processing':
         return OrderStatus.accepted;
       case 'ready':
         return OrderStatus.ready;
       case 'on_a_way':
+      case 'shipped':
         return OrderStatus.onWay;
       case 'delivered':
         return OrderStatus.delivered;
       case 'canceled':
+      case 'cancelled':
         return OrderStatus.canceled;
       default:
         return OrderStatus.accepted;
@@ -1039,7 +1048,7 @@ abstract class AppHelpers {
             width: double.infinity,
             padding: EdgeInsets.all(24.w),
             decoration: BoxDecoration(
-              color: AppStyle.bgGrey,
+              color: AppStyle.surfaceFor(Theme.of(context).brightness),
               borderRadius: BorderRadius.circular(16.r),
             ),
             child: SingleChildScrollView(
@@ -1163,7 +1172,7 @@ abstract class AppHelpers {
             title: "Continue Offline",
             background: AppStyle.transparent,
             borderColor: AppStyle.black,
-            textColor: AppStyle.black,
+            textColor: AppStyle.inkFor(Theme.of(context).brightness),
             onPressed: () {
               Navigator.of(context).pop(); // Close dialog
             },

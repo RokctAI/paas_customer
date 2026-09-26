@@ -47,6 +47,13 @@ class RegisterConfirmationPage extends ConsumerStatefulWidget {
   /// sendOtp/verifyPhone pair even when AppConstants.isPhoneFirebase.
   final bool isDeferredOtp;
 
+  /// Email sign-up mode: the details form already created the account
+  /// (register_user sent this code), so on verify success the sheet
+  /// finishes the sign-up — stores the session token verify_my_email
+  /// returns and runs the registration steps — instead of opening the
+  /// details form. Resends go through the existing-account resend.
+  final bool isEmailSignUp;
+
   const RegisterConfirmationPage({
     super.key,
     required this.userModel,
@@ -54,6 +61,7 @@ class RegisterConfirmationPage extends ConsumerStatefulWidget {
     required this.verificationId,
     this.editPhone = false,
     this.isDeferredOtp = false,
+    this.isEmailSignUp = false,
   });
 
   @override
@@ -111,6 +119,10 @@ class _RegisterConfirmationPageState
           // carry on where they were. (Verify success already cleared the
           // pending_otp_verification flag, so the gate won't re-prompt.)
           Navigator.pop(context);
+          return;
+        }
+        if (widget.isEmailSignUp) {
+          // Handled by confirmCode's onVerified (finishEmailSignUp).
           return;
         }
         Navigator.pop(context);
@@ -252,7 +264,8 @@ class _RegisterConfirmationPageState
                                             isResetPassword:
                                                 widget.isResetPassword,
                                             isDeferredOtp:
-                                                widget.isDeferredOtp,
+                                                widget.isDeferredOtp ||
+                                                widget.isEmailSignUp,
                                           )
                                         : notifier.sendCodeToNumber(
                                             context,
@@ -297,6 +310,17 @@ class _RegisterConfirmationPageState
                                             ref,
                                             isDeferredOtp:
                                                 widget.isDeferredOtp,
+                                            onVerified: widget.isEmailSignUp
+                                                ? (data) => ref
+                                                      .read(
+                                                        registerProvider
+                                                            .notifier,
+                                                      )
+                                                      .finishEmailSignUp(
+                                                        context,
+                                                        data,
+                                                      )
+                                                : null,
                                           ) // Pass ref here
                                         : notifier.confirmCodeWithPhone(
                                             context: context,

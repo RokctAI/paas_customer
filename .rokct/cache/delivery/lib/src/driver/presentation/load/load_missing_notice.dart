@@ -36,7 +36,7 @@ class LoadMissingNotice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppStyle.surfaceDark,
+      backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
       body: SafeArea(
         child: Stack(
           children: [
@@ -56,7 +56,9 @@ class LoadMissingNotice extends StatelessWidget {
                       key: const Key('loadMissingNotice'),
                       style: AppStyle.interRegular(
                         size: 14,
-                        color: AppStyle.textDarkSecondary,
+                        color: AppStyle.secondaryInkFor(
+                          Theme.of(context).brightness,
+                        ),
                       ),
                     ),
                   ],

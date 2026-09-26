@@ -34,7 +34,7 @@ class RefundInfoScreen extends StatelessWidget {
         Container(
           width: double.infinity,
           decoration: BoxDecoration(
-            color: AppStyle.white,
+            color: AppStyle.cardFor(Theme.of(context).brightness),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10.r),
               topRight: Radius.circular(10.r),
@@ -85,7 +85,7 @@ class RefundInfoScreen extends StatelessWidget {
                     AppHelpers.getTranslation(TrKeys.reFound),
                     style: AppStyle.interNoSemi(
                       size: 16,
-                      color: AppStyle.black,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
                     ),
                   ),
                   const Spacer(),
@@ -93,7 +93,7 @@ class RefundInfoScreen extends StatelessWidget {
                     refundModel?.status ?? "",
                     style: AppStyle.interNormal(
                       size: 14,
-                      color: AppStyle.black,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
                     ),
                   ),
                 ],
@@ -143,7 +143,7 @@ class RefundInfoScreen extends StatelessWidget {
                     refundModel?.cause ?? "",
                     style: AppStyle.interNoSemi(
                       size: 16,
-                      color: AppStyle.black,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
                     ),
                   ),
                 ],
@@ -165,7 +165,7 @@ class RefundInfoScreen extends StatelessWidget {
                     refundModel?.answer ?? "",
                     style: AppStyle.interNoSemi(
                       size: 16,
-                      color: AppStyle.black,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
                     ),
                   ),
                 ],

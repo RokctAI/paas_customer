@@ -15,16 +15,23 @@
 import 'package:get_it/get_it.dart';
 import 'package:base_sdk/src/constants/app_constants.dart';
 import 'package:base_sdk/src/domain/interface/draw.dart';
-import 'package:base_sdk/src/services/demo_session.dart';
+import 'package:base_sdk/src/handlers/demo_gateway_interceptor.dart';
 import 'package:map_sdk/src/common/domain/interface/customer_poi.dart';
 import 'package:map_sdk/src/common/infrastructure/repositories/customer_poi_repository.dart';
-import 'package:map_sdk/src/common/infrastructure/repositories/demo_customer_poi_repository.dart';
 import 'package:map_sdk/src/common/infrastructure/repositories/draw_repository.dart';
 import 'package:map_sdk/src/common/infrastructure/services/places/places_service.dart';
+
+/// Host asset directory holding map_sdk's demo platform fixtures
+/// (`<cmd>.json`), installed from `templates/assets/demo/map`.
+const String mapDemoFixtureDirectory = 'assets/demo/map';
 
 /// Installer-convention DI hook (see base_sdk BaseSdkDependencies).
 class MapSdkDependencies {
   static void register(GetIt getIt) {
+    // Demo runs the REAL repositories: base_sdk's DemoGatewayInterceptor
+    // answers api.poi.get_customer_pois from this directory (an empty
+    // list - an offline map stands no unapproved place on itself).
+    DemoFixtures.registerAssetDirectory(mapDemoFixtureDirectory);
     if (!getIt.isRegistered<DrawRepositoryFacade>()) {
       getIt.registerSingleton<DrawRepositoryFacade>(DrawRepository());
     }
@@ -36,13 +43,8 @@ class MapSdkDependencies {
       );
     }
     if (!getIt.isRegistered<CustomerPoiRepositoryFacade>()) {
-      // Demo mode gets the offline twin, which serves no points; see
-      // DemoCustomerPoiRepository for why an offline map stays empty
-      // rather than standing places on it.
       getIt.registerSingleton<CustomerPoiRepositoryFacade>(
-        DemoSession.demoActive
-            ? DemoCustomerPoiRepository()
-            : CustomerPoiRepository(),
+        CustomerPoiRepository(),
       );
     }
   }

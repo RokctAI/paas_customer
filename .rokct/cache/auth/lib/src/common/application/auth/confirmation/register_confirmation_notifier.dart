@@ -229,6 +229,7 @@ class RegisterConfirmationNotifier
     BuildContext context,
     WidgetRef ref, {
     bool isDeferredOtp = false,
+    ValueChanged<VerifyData?>? onVerified,
   }) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
@@ -241,6 +242,9 @@ class RegisterConfirmationNotifier
           ref.read(mainProvider.notifier).resetToInitialPage();
           state = state.copyWith(isLoading: false, isSuccess: true);
           _timer?.cancel();
+          // Email sign-up (account created by the details form): hand the
+          // fresh session to the register flow to finish the sign-up.
+          onVerified?.call(data.data);
           final offlineAuth = OfflineAuthService();
           // Read the flag BEFORE clearing: it carries the local row id
           // the rotation below needs.
@@ -309,7 +313,7 @@ class RegisterConfirmationNotifier
       response.when(
         success: (data) async {
           await LocalStorage.setToken(data.token);
-          await syncFcmToken(_userRepositoryFacade);
+          await completeSessionStart(_userRepositoryFacade);
           state = state.copyWith(
             isLoading: false,
             isResetPasswordSuccess: true,
@@ -363,7 +367,7 @@ class RegisterConfirmationNotifier
           response.when(
             success: (data) async {
               await LocalStorage.setToken(data.token);
-              await syncFcmToken(_userRepositoryFacade);
+              await completeSessionStart(_userRepositoryFacade);
               state = state.copyWith(
                 isLoading: false,
                 isResetPasswordSuccess: true,

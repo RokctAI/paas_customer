@@ -230,15 +230,15 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                         width: 38.w,
                                         height: 38.h,
                                         decoration: BoxDecoration(
-                                          color: AppStyle.white,
+                                          color: AppStyle.cardFor(Theme.of(context).brightness),
                                           shape: BoxShape.circle,
                                           border: Border.all(
                                             color: AppStyle.borderColor,
                                           ),
                                         ),
-                                        child: const Icon(
+                                        child: Icon(
                                           Remix.pencil_line,
-                                          color: AppStyle.black,
+                                          color: AppStyle.inkFor(Theme.of(context).brightness),
                                         ),
                                       ),
                                     ),
@@ -309,7 +309,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                   AppHelpers.showCustomModalBottomSheet(
                                     context: context,
                                     modal: EmbeddedWidgets.I.phoneVerify(),
-                                    isDarkMode: false,
+                                    isDarkMode: Theme.of(context).brightness == Brightness.dark,
                                     paddingTop: MediaQuery.paddingOf(
                                       context,
                                     ).top,
@@ -353,7 +353,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                                         ),
                                       ),
                                     ),
-                                    isDarkMode: false,
+                                    isDarkMode: Theme.of(context).brightness == Brightness.dark,
                                   );
                                 },
                                 readOnly: true,

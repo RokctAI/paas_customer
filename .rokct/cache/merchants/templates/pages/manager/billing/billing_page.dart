@@ -92,8 +92,8 @@ import 'checkout_page.dart';
 // Demo (--dart-define=IS_DEMO=true): the camera never mounts — the stage
 // renders its camera-less stand-in (the strip's render harness did the
 // same; the stage, frame and controls are the real widgets) and barcode
-// lookups route to MockProductsRepository via the DI demo gate, so
-// headless tours and the standalone test harness exercise the real page.
+// lookups run the real catalog seam against products_sdk's demo fixtures,
+// so headless tours exercise the real page.
 //
 // TABLET MODE — the approved plane layout (design strip section 11,
 // frames 11m/11n, approved by Ray 2026-08-29 13:53Z / 13:06Z, built here
@@ -166,8 +166,9 @@ class _BillingPageState extends ConsumerState<BillingPage>
   /// (offline-first pending-sync indicator). Null hides the chip.
   int? _pendingSyncCount;
 
-  PosOrdersFacade? get _posOrders =>
-      GetIt.I.isRegistered<PosOrdersFacade>() ? GetIt.I<PosOrdersFacade>() : null;
+  PosOrdersFacade? get _posOrders => GetIt.I.isRegistered<PosOrdersFacade>()
+      ? GetIt.I<PosOrdersFacade>()
+      : null;
 
   @override
   void initState() {
@@ -237,8 +238,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
     if (raw == null || raw.isEmpty) return;
     // The notifier owns the 2s dedupe window — a held frame-stream can
     // never re-add the same physical scan.
-    final added =
-        await ref.read(posCartProvider.notifier).addByBarcode(raw);
+    final added = await ref.read(posCartProvider.notifier).addByBarcode(raw);
     if (added) {
       unawaited(HapticFeedback.mediumImpact());
       _armIdleTimer();
@@ -348,10 +348,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
         seam,
         // 11m plane 3: the cart — 278–280, 286/287.
         Expanded(
-          child: SafeArea(
-            bottom: false,
-            child: _cartColumn(context, state),
-          ),
+          child: SafeArea(bottom: false, child: _cartColumn(context, state)),
         ),
       ],
     );
@@ -377,10 +374,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _scannerStage(context),
-        if (lane) ...[
-          16.verticalSpace,
-          _lanes(context),
-        ],
+        if (lane) ...[16.verticalSpace, _lanes(context)],
       ],
     );
   }
@@ -492,10 +486,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
         children: [
           if (cameraLive)
             Positioned.fill(
-              child: MobileScanner(
-                controller: controller,
-                onDetect: _onDetect,
-              ),
+              child: MobileScanner(controller: controller, onDetect: _onDetect),
             ),
           // Icon dedup per Ray 2026-08-28: the stand-in's ghost
           // scan_2_line watermark is REMOVED (it duplicated the Scan
@@ -555,18 +546,11 @@ class _BillingPageState extends ConsumerState<BillingPage>
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Remix.scan_2_line,
-              size: 22.r,
-              color: AppStyle.blackColor,
-            ),
+            Icon(Remix.scan_2_line, size: 22.r, color: AppStyle.blackColor),
             10.horizontalSpace,
             Text(
               AppHelpers.getTranslation(TrKeys.scan),
-              style: AppStyle.interSemi(
-                size: 17,
-                color: AppStyle.blackColor,
-              ),
+              style: AppStyle.interSemi(size: 17, color: AppStyle.blackColor),
             ),
             10.horizontalSpace,
             Icon(
@@ -636,10 +620,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
           children: [
             Icon(icon, size: 18.r, color: AppStyle.textPrimary),
             8.horizontalSpace,
-            Text(
-              label,
-              style: AppStyle.interSemi(size: 15),
-            ),
+            Text(label, style: AppStyle.interSemi(size: 15)),
           ],
         ),
       ),
@@ -683,11 +664,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
-                    Remix.refresh_line,
-                    size: 14.r,
-                    color: AppStyle.primary,
-                  ),
+                  Icon(Remix.refresh_line, size: 14.r, color: AppStyle.primary),
                   4.horizontalSpace,
                   Text(
                     '$_pendingSyncCount ${AppHelpers.getTranslation(TrKeys.pendingSync)}',
@@ -943,8 +920,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
     int index,
     PosCartLine line,
   ) async {
-    final controller =
-        TextEditingController(text: _trimQty(line.quantity));
+    final controller = TextEditingController(text: _trimQty(line.quantity));
     final entered = await showDialog<String>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -978,8 +954,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
             ),
           ),
           TextButton(
-            onPressed: () =>
-                Navigator.of(dialogContext).pop(controller.text),
+            onPressed: () => Navigator.of(dialogContext).pop(controller.text),
             child: Text(
               AppHelpers.getTranslation(TrKeys.done),
               style: AppStyle.interSemi(size: 14, color: AppStyle.blue),
@@ -1147,8 +1122,7 @@ class _AddItemsSearchState extends ConsumerState<_AddItemsSearch> {
                       ? product.stocks!.first.price
                       : null;
                   return ListTile(
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 8.w),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 8.w),
                     leading: CommonImage(
                       url: product.img,
                       width: 44.r,
@@ -1174,9 +1148,7 @@ class _AddItemsSearchState extends ConsumerState<_AddItemsSearch> {
                       color: AppStyle.blue,
                     ),
                     onTap: () {
-                      ref
-                          .read(posCartProvider.notifier)
-                          .addProduct(product);
+                      ref.read(posCartProvider.notifier).addProduct(product);
                       // The sheet closes on an add; the pane stays up.
                       if (!asPane) Navigator.of(context).pop();
                     },

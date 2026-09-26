@@ -459,9 +459,9 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
   ) {
     return ActionChip(
       label: Text(title),
-      backgroundColor: isSelected ? AppStyle.primary : AppStyle.white,
+      backgroundColor: isSelected ? AppStyle.primary : AppStyle.cardFor(Theme.of(context).brightness),
       labelStyle: TextStyle(
-        color: isSelected ? AppStyle.white : AppStyle.black,
+        color: isSelected ? AppStyle.white : AppStyle.inkFor(Theme.of(context).brightness),
       ),
       onPressed: () => event.setPeriod(index),
     );
@@ -474,9 +474,9 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
   ) {
     return ActionChip(
       label: Text(title),
-      backgroundColor: isSelected ? AppStyle.primary : AppStyle.white,
+      backgroundColor: isSelected ? AppStyle.primary : AppStyle.cardFor(Theme.of(context).brightness),
       labelStyle: TextStyle(
-        color: isSelected ? AppStyle.white : AppStyle.black,
+        color: isSelected ? AppStyle.white : AppStyle.inkFor(Theme.of(context).brightness),
       ),
       onPressed: () => event.setPaymentMethod(title),
     );
@@ -508,7 +508,7 @@ class _AutoOrderModalState extends ConsumerState<AutoOrderModal> {
           ),
         ),
       ),
-      isDarkMode: false,
+      isDarkMode: Theme.of(context).brightness == Brightness.dark,
     );
   }
 }

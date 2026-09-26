@@ -83,7 +83,7 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
             CommonAppBar(
               child: Text(
                 AppHelpers.getTranslation(TrKeys.doorToDoor),
-                style: AppStyle.interNoSemi(size: 18, color: AppStyle.black),
+                style: AppStyle.interNoSemi(size: 18, color: AppStyle.inkFor(Theme.of(context).brightness)),
               ),
             ),
             AppHelpers.getParcel()
@@ -93,7 +93,7 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
                       shrinkWrap: true,
                       children: [
                         Container(
-                          color: AppStyle.white,
+                          color: AppStyle.cardFor(Theme.of(context).brightness),
                           padding: EdgeInsets.all(16.r),
                           child: Form(
                             key: formKey,
@@ -148,11 +148,11 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
                                 10.verticalSpace,
                                 if (state.expand)
                                   CustomButton(
-                                    icon: const Icon(
+                                    icon: Icon(
                                       FlutterRemix.wallet_2_line,
-                                      color: AppStyle.black,
+                                      color: AppStyle.inkFor(Theme.of(context).brightness),
                                     ),
-                                    background: AppStyle.bgGrey,
+                                    background: AppStyle.surfaceFor(Theme.of(context).brightness),
                                     isLoading: state.isButtonLoading,
                                     title: AppHelpers.getTranslation(
                                       state.selectPayment?.tag ??
@@ -169,7 +169,7 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
                                             event.setPayment(payment);
                                           },
                                         ),
-                                        isDarkMode: false,
+                                        isDarkMode: Theme.of(context).brightness == Brightness.dark,
                                         isDrag: true,
                                         radius: 12,
                                       );
@@ -225,9 +225,9 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
                     borderColor:
                         !state.error ? AppStyle.transparent : AppStyle.textGrey,
                     background:
-                        !state.error ? AppStyle.primary : AppStyle.white,
+                        !state.error ? AppStyle.primary : AppStyle.cardFor(Theme.of(context).brightness),
                     textColor:
-                        !state.error ? AppStyle.black : AppStyle.textGrey,
+                        !state.error ? AppStyle.inkFor(Theme.of(context).brightness) : AppStyle.textGrey,
                     title:
                         "${state.expand ? AppHelpers.getTranslation(TrKeys.order) : AppHelpers.getTranslation(TrKeys.continueText)} ${AppHelpers.numberFormat(number: state.calculate?.data?.price ?? 0)}",
                     onPressed: () {

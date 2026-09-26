@@ -14,10 +14,13 @@
 
 import 'package:get_it/get_it.dart';
 
-import 'package:base_sdk/src/constants/app_constants.dart';
+import 'package:base_sdk/base_sdk.dart' show DemoFixtures;
 import 'package:booking_sdk/src/common/domain/interface/booking.dart';
 import 'package:booking_sdk/src/common/infrastructure/repositories/booking_repository.dart';
-import 'package:booking_sdk/src/common/infrastructure/repositories/demo_booking_repository.dart';
+
+/// Host asset directory holding booking_sdk's demo platform fixtures
+/// (`<cmd>.json`), installed from `templates/assets/demo/booking`.
+const String bookingDemoFixtureDirectory = 'assets/demo/booking';
 
 /// Installer-convention DI hook: the composed app's generated `main.dart`
 /// calls `BookingSdkDependencies.register(GetIt.instance)` for every
@@ -27,12 +30,17 @@ import 'package:booking_sdk/src/common/infrastructure/repositories/demo_booking_
 /// manager block's di_hook (POS shells compose the manager persona) - it
 /// cannot be reached from here because customer caches have
 /// lib/src/manager/ stripped.
+///
+/// Demo runs the REAL repositories: base_sdk's DemoGatewayInterceptor
+/// answers every api.booking.* cmd from the `<cmd>.json` fixtures in
+/// [bookingDemoFixtureDirectory] while DemoSession.demoActive (customer and
+/// manager seams alike), and an unknown cmd fails loudly with
+/// DemoFixtureMissing.
 class BookingSdkDependencies {
   static void register(GetIt getIt) {
+    DemoFixtures.registerAssetDirectory(bookingDemoFixtureDirectory);
     if (!getIt.isRegistered<BookingRepositoryFacade>()) {
-      getIt.registerSingleton<BookingRepositoryFacade>(
-        AppConstants.isDemo ? DemoBookingRepository() : BookingRepository(),
-      );
+      getIt.registerSingleton<BookingRepositoryFacade>(BookingRepository());
     }
   }
 }

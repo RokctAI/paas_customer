@@ -47,7 +47,7 @@ class CardAndPromo extends StatelessWidget {
                       shopEnableCod:
                           ref.watch(orderProvider).shopData?.enableCod ?? true,
                     ),
-                    isDarkMode: false,
+                    isDarkMode: Theme.of(context).brightness == Brightness.dark,
                     isDrag: true,
                     radius: 12,
                   );
@@ -63,7 +63,7 @@ class CardAndPromo extends StatelessWidget {
                                   ?.isNotEmpty ??
                               false))
                       ? AppStyle.primary
-                      : AppStyle.black,
+                      : AppStyle.inkFor(Theme.of(context).brightness),
                 ),
                 title: ((AppHelpers.getPaymentType() == "admin")
                         ? (ref.watch(paymentProvider).payments.isNotEmpty)
@@ -105,7 +105,7 @@ class CardAndPromo extends StatelessWidget {
                   AppHelpers.showCustomModalBottomSheet(
                     context: context,
                     modal: const PromoCodeScreen(),
-                    isDarkMode: false,
+                    isDarkMode: Theme.of(context).brightness == Brightness.dark,
                     isDrag: true,
                     radius: 12,
                   );
@@ -114,7 +114,7 @@ class CardAndPromo extends StatelessWidget {
                 icon: Icon(
                   FlutterRemix.ticket_line,
                   color: ref.watch(orderProvider).promoCode == null
-                      ? AppStyle.black
+                      ? AppStyle.inkFor(Theme.of(context).brightness)
                       : AppStyle.primary,
                 ),
                 title: ref.watch(orderProvider).promoCode ??

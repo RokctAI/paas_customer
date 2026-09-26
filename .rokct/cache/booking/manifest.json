@@ -1,7 +1,18 @@
 {
   "name": "booking_sdk",
-  "version": "1.1.0",
-  "_comment_requires": "booking_sdk >= 1.1.0 recovers the table-reservation flow that was lost when the shells were extracted (customer: paas_customer's web-only Reservation hand-off; seller: paas_pos's TablesPage). It requires base_sdk >= 1.46.0 (ListFilterTabBar from the standard list language, ProfileSectionRegistry, PlatformGateway, AppHelpers.getReservationEnable) and a backend carrying commerce booking/frappe with `api.booking.get_booking_settings` and `api.booking.get_shop_booking_schedule` (this same commerce change); against an older backend the flag bridge fails open (the Reservation button stays hidden) and the schedule read fails through ApiResult.failure. The customer flow lists shops through base_sdk's ShopsRepositoryFacade, which merchants_sdk registers in customer composes; without it the flow reports that shops are unavailable. The composer manifest schema has no machine-readable minimum-version field, so this is the declaration.",
+  "version": "1.2.1",
+  "_comment_version_1_2_1": "1.2.0 -> 1.2.1: the demo fixture install moves from the app_type.customer block to the top-level installs, next to the top-level app_assets entry that registers it. The common DI registers assets/demo/booking in every role, but only customer composes copied the fixtures, so any other compose (supacharge's Windows build) got an assets/demo/booking/ pubspec entry with nothing behind it and flutter failed with 'unable to find directory entry in pubspec.yaml'. Manifest-only change; no code changes.",
+  "_comment_version_1_2_0": "1.1.1 -> 1.2.0: demo runs the REAL repositories (Ray, 2026-09-25: \"touch all sdk demos ... remove unused files\"). The DI hooks register the real repositories only and call DemoFixtures.registerAssetDirectory('assets/demo/booking'); base_sdk 1.73.0's DemoGatewayInterceptor answers each platform cmd from templates/assets/demo/booking/<cmd>.json (installed to assets/demo/booking) while DemoSession.demoActive, and an unknown cmd fails with DemoFixtureMissing. The api.booking.* fixtures carry (settings, the Main hall / Terrace sections and their tables, the 10:00-22:00 slot, the weekly schedule, the customer's anniversary booking and the manager's evening of four reservations). Deleted: DemoBookingRepository, DemoSellerBookingRepository and the demo-session swap code that chose them. Needs base_sdk >= 1.73.0 (DemoFixtures / DemoGatewayInterceptor).",
+  "_comment_requires": "booking_sdk >= 1.2.0 requires base_sdk >= 1.73.0 (DemoFixtures.registerAssetDirectory and the DemoGatewayInterceptor that answers the demo fixtures). booking_sdk >= 1.1.0 recovers the table-reservation flow that was lost when the shells were extracted (customer: paas_customer's web-only Reservation hand-off; seller: paas_pos's TablesPage). It requires base_sdk >= 1.46.0 (ListFilterTabBar from the standard list language, ProfileSectionRegistry, PlatformGateway, AppHelpers.getReservationEnable) and a backend carrying commerce booking/frappe with `api.booking.get_booking_settings` and `api.booking.get_shop_booking_schedule` (this same commerce change); against an older backend the flag bridge fails open (the Reservation button stays hidden) and the schedule read fails through ApiResult.failure. The customer flow lists shops through base_sdk's ShopsRepositoryFacade, which merchants_sdk registers in customer composes; without it the flow reports that shops are unavailable. The composer manifest schema has no machine-readable minimum-version field, so this is the declaration.",
+  "app_assets": [
+    "assets/demo/booking/"
+  ],
+  "installs": [
+    {
+      "from": "templates/assets/demo/booking",
+      "to": "assets/demo/booking"
+    }
+  ],
   "installs": [],
   "integrations": [],
   "routes": [],

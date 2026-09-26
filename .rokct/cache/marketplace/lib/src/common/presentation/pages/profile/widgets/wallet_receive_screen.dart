@@ -266,7 +266,7 @@ class _WalletReceiveScreenState extends ConsumerState<WalletReceiveScreen> {
                   vertical: 10.h,
                 ),
                 decoration: BoxDecoration(
-                  color: AppStyle.white,
+                  color: AppStyle.cardFor(Theme.of(context).brightness),
                   borderRadius: BorderRadius.circular(8.r),
                   border: Border.all(color: AppStyle.borderColor),
                   boxShadow: [
@@ -316,7 +316,7 @@ class _WalletReceiveScreenState extends ConsumerState<WalletReceiveScreen> {
         Container(
           padding: EdgeInsets.all(24.w),
           decoration: BoxDecoration(
-            color: AppStyle.white,
+            color: AppStyle.cardFor(Theme.of(context).brightness),
             borderRadius: BorderRadius.circular(8.r),
             boxShadow: [
               BoxShadow(

@@ -76,6 +76,17 @@ flutter:
     - assets/audio/notification.wav
     - assets/audio/tap.wav
     - assets/audio/wrong.wav
+    - assets/demo/auth/
+    - assets/demo/booking/
+    - assets/demo/comms/
+    - assets/demo/delivery/
+    - assets/demo/map/
+    - assets/demo/merchants/
+    - assets/demo/orders/
+    - assets/demo/products/
+    - assets/demo/promotions/
+    - assets/demo/users/
+    - assets/demo/wallet/
     - assets/image/my_location.png
     - assets/images/
     - assets/images/app_logo.png

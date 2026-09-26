@@ -43,7 +43,7 @@ class PoiSheet extends ConsumerStatefulWidget {
   static void open(BuildContext context, DriverPoi point) {
     AppHelpers.showCustomModalBottomSheet(
       context: context,
-      isDarkMode: AppStyle.isDark,
+      isDarkMode: (Theme.of(context).brightness == Brightness.dark),
       modal: PoiSheet(point: point),
     );
   }
@@ -88,7 +88,7 @@ class _PoiSheetState extends ConsumerState<PoiSheet> {
           Text(
             point.title,
             key: const Key('poiSheetTitle'),
-            style: AppStyle.interSemi(size: 20, color: AppStyle.textPrimary),
+            style: AppStyle.interSemi(size: 20, color: AppStyle.inkFor(Theme.of(context).brightness)),
           ),
           if (kind.isNotEmpty) ...[
             4.verticalSpace,
@@ -97,7 +97,7 @@ class _PoiSheetState extends ConsumerState<PoiSheet> {
               key: const Key('poiSheetKind'),
               style: AppStyle.interRegular(
                 size: 13,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
           ],
@@ -114,13 +114,13 @@ class _PoiSheetState extends ConsumerState<PoiSheet> {
             ),
           ],
           16.verticalSpace,
-          Divider(height: 1, color: AppStyle.strokeDarkSubtle),
+          Divider(height: 1, color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
           14.verticalSpace,
           Text(
             AppHelpers.getTranslation('sold_here'),
             style: AppStyle.interRegular(
               size: 12,
-              color: AppStyle.textDarkFaint,
+              color: AppStyle.faintFor(Theme.of(context).brightness),
             ),
           ),
           8.verticalSpace,
@@ -130,7 +130,7 @@ class _PoiSheetState extends ConsumerState<PoiSheet> {
               AppHelpers.getTranslation('reading_what_was_sold_here'),
               style: AppStyle.interRegular(
                 size: 13,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             )
           else if (sales == null || !sales.hasHistory)
@@ -139,7 +139,7 @@ class _PoiSheetState extends ConsumerState<PoiSheet> {
               AppHelpers.getTranslation('nothing_sold_here_yet'),
               style: AppStyle.interRegular(
                 size: 13,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             )
           else ...[
@@ -152,7 +152,7 @@ class _PoiSheetState extends ConsumerState<PoiSheet> {
                     '${AppHelpers.getTranslation(sales.count == 1 ? 'sale' : 'sales')}',
                     style: AppStyle.interRegular(
                       size: 13,
-                      color: AppStyle.textDarkSecondary,
+                      color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                     ),
                   ),
                 ),
@@ -160,7 +160,7 @@ class _PoiSheetState extends ConsumerState<PoiSheet> {
                   AppHelpers.numberFormat(number: sales.total),
                   style: AppStyle.interSemi(
                     size: 18,
-                    color: AppStyle.textPrimary,
+                    color: AppStyle.inkFor(Theme.of(context).brightness),
                   ),
                 ),
               ],
@@ -173,7 +173,7 @@ class _PoiSheetState extends ConsumerState<PoiSheet> {
                 key: const Key('poiSheetLastVisit'),
                 style: AppStyle.interRegular(
                   size: 12,
-                  color: AppStyle.textDarkFaint,
+                  color: AppStyle.faintFor(Theme.of(context).brightness),
                 ),
               ),
             ],
@@ -193,7 +193,7 @@ class _PoiSheetState extends ConsumerState<PoiSheet> {
                                 sale.orderId,
                                 style: AppStyle.interRegular(
                                   size: 13,
-                                  color: AppStyle.textPrimary,
+                                  color: AppStyle.inkFor(Theme.of(context).brightness),
                                 ),
                               ),
                             ),
@@ -201,7 +201,7 @@ class _PoiSheetState extends ConsumerState<PoiSheet> {
                               AppHelpers.numberFormat(number: sale.total),
                               style: AppStyle.interSemi(
                                 size: 13,
-                                color: AppStyle.textPrimary,
+                                color: AppStyle.inkFor(Theme.of(context).brightness),
                               ),
                             ),
                           ],
@@ -229,14 +229,14 @@ class _IconLine extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 16.r, color: AppStyle.textDarkFaint),
+        Icon(icon, size: 16.r, color: AppStyle.faintFor(Theme.of(context).brightness)),
         8.horizontalSpace,
         Expanded(
           child: Text(
             text,
             style: AppStyle.interRegular(
               size: 13,
-              color: AppStyle.textDarkSecondary,
+              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
             ),
           ),
         ),

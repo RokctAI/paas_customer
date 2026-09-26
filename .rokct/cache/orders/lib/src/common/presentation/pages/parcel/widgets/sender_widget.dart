@@ -82,7 +82,7 @@ class SenderWidget extends StatelessWidget {
           child: AnimationButtonEffect(
             child: Container(
               decoration: BoxDecoration(
-                color: AppStyle.bgGrey,
+                color: AppStyle.surfaceFor(Theme.of(context).brightness),
                 borderRadius: BorderRadius.circular(10.r),
               ),
               padding: EdgeInsets.symmetric(horizontal: 20.r, vertical: 16.r),

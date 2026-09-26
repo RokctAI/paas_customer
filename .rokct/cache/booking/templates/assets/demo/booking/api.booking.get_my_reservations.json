@@ -1,0 +1,12 @@
+[
+  {
+    "name": "demo-reservation-1",
+    "booking": "demo-slot",
+    "table": "Window 2",
+    "start_date": "$now_iso",
+    "end_date": "$now_iso",
+    "guest_count": 2,
+    "note": "Anniversary",
+    "status": "Accepted"
+  }
+]

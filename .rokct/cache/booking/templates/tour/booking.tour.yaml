@@ -14,11 +14,11 @@
 #   manager / pos     : shop_reservations, reservation_tables,
 #                       reservation_schedule
 #
-# Demo grounding (--dart-define=IS_DEMO=true): booking_di.dart swaps in
-# DemoBookingRepository (a seeded reservation, two sections with tables, a
-# 10:00-22:00 slot) and the manager / pos di_hook swaps in
-# DemoSellerBookingRepository (an evening of four reservations in mixed
-# states), so every step captures a stocked screen with zero backend
+# Demo grounding (a demo session): the REAL BookingRepository and
+# SellerBookingRepository run, and base_sdk's DemoGatewayInterceptor answers
+# their api.booking.* cmds from the fixtures in assets/demo/booking (a seeded
+# reservation, two sections with tables, a 10:00-22:00 slot, an evening of
+# four reservations in mixed states), so every step captures a stocked screen with zero backend
 # contact. The customer steps need a signed-in demo session (the screens
 # gate on LocalStorage.getToken()); the shell's tour login step provides
 # it.

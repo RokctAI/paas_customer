@@ -43,7 +43,9 @@ class CategoryOneItem extends StatelessWidget {
           height: 72.r,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.r),
-            color: isActive ? AppStyle.primary : AppStyle.white,
+            color: isActive
+                ? AppStyle.primary
+                : AppStyle.cardFor(Theme.of(context).brightness),
           ),
           child: InkWell(
             onTap: onTap,
@@ -67,7 +69,10 @@ class CategoryOneItem extends StatelessWidget {
           width: 64.w,
           child: Text(
             title,
-            style: AppStyle.interNormal(size: 12, color: AppStyle.black),
+            style: AppStyle.interNormal(
+              size: 12,
+              color: AppStyle.inkFor(Theme.of(context).brightness),
+            ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,

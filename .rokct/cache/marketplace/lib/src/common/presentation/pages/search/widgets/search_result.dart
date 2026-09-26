@@ -45,14 +45,14 @@ class SearchResultText extends StatelessWidget {
                     Icon(
                       FlutterRemix.search_2_line,
                       size: 20.r,
-                      color: AppStyle.black,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
                     ),
                     8.horizontalSpace,
                     Text(
                       title,
                       style: AppStyle.interNormal(
                         size: 14,
-                        color: AppStyle.black,
+                        color: AppStyle.inkFor(Theme.of(context).brightness),
                       ),
                     ),
                   ],
@@ -77,7 +77,7 @@ class SearchResultText extends StatelessWidget {
                     child: Icon(
                       FlutterRemix.close_fill,
                       size: 20.r,
-                      color: AppStyle.black,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
                     ),
                   ),
                 ),

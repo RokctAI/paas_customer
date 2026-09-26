@@ -40,7 +40,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart' show Colors;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:map_sdk/src/common/infrastructure/repositories/customer_poi_repository.dart';
-import 'package:map_sdk/src/common/infrastructure/repositories/demo_customer_poi_repository.dart';
+import 'dart:io';
+
+import 'package:base_sdk/src/handlers/demo_gateway_interceptor.dart';
+import 'package:base_sdk/src/services/demo_session.dart';
+import 'package:base_sdk/src/services/local_storage.dart';
+import 'package:map_sdk/src/common/di/map_sdk_di.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class _RecordingAdapter implements HttpClientAdapter {
   _RecordingAdapter(this.body);
@@ -325,15 +331,37 @@ void main() {
     });
   });
 
-  group('DemoCustomerPoiRepository', () {
-    test('serves no points, so an offline map stands nothing on itself',
+  group('demo session', () {
+    setUp(() async {
+      SharedPreferences.setMockInitialValues(<String, Object>{});
+      await LocalStorage.init();
+      await DemoSession.instance.activate();
+      if (getIt.isRegistered<HttpService>()) {
+        await getIt.unregister<HttpService>();
+      }
+      getIt.registerSingleton<HttpService>(HttpService());
+      DemoFixtures.reset();
+      DemoFixtures.loader = (key) async {
+        final f = File(key.replaceFirst(
+            '$mapDemoFixtureDirectory/', 'templates/assets/demo/map/'));
+        return f.existsSync() ? f.readAsString() : null;
+      };
+      DemoFixtures.registerAssetDirectory(mapDemoFixtureDirectory);
+    });
+
+    tearDown(() async {
+      DemoFixtures.reset();
+      await DemoSession.instance.clear();
+    });
+
+    test('the real repository serves no points from the demo fixture',
         () async {
-      final result = await DemoCustomerPoiRepository()
+      final result = await CustomerPoiRepository()
           .getCustomerPois(latitude: -26.2, longitude: 28.05);
 
       result.when(
         success: (pois) => expect(pois, isEmpty),
-        failure: (error, status) => fail('the offline twin failed: $error'),
+        failure: (error, status) => fail('the demo fixture failed: $error'),
       );
     });
   });

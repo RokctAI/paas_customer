@@ -63,7 +63,7 @@ class _PoiSelectorRowState extends ConsumerState<PoiSelectorRow> {
   void _openList() {
     AppHelpers.showCustomModalBottomSheet(
       context: context,
-      isDarkMode: AppStyle.isDark,
+      isDarkMode: (Theme.of(context).brightness == Brightness.dark),
       modal: _PoiPickerSheet(shop: widget.shop),
     );
   }
@@ -75,9 +75,9 @@ class _PoiSelectorRowState extends ConsumerState<PoiSelectorRow> {
     return Container(
       key: const Key('loadSalePoi'),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(color: AppStyle.strokeDark),
+        border: Border.all(color: AppStyle.strokeFor(Theme.of(context).brightness)),
       ),
       child: Material(
         color: Colors.transparent,
@@ -93,7 +93,7 @@ class _PoiSelectorRowState extends ConsumerState<PoiSelectorRow> {
                 Icon(
                   Remix.map_pin_line,
                   size: 18.r,
-                  color: AppStyle.textDarkSecondary,
+                  color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                 ),
                 10.horizontalSpace,
                 Expanded(
@@ -105,7 +105,7 @@ class _PoiSelectorRowState extends ConsumerState<PoiSelectorRow> {
                         AppHelpers.getTranslation('at_this_place'),
                         style: AppStyle.interRegular(
                           size: 11,
-                          color: AppStyle.textDarkFaint,
+                          color: AppStyle.faintFor(Theme.of(context).brightness),
                         ),
                       ),
                       2.verticalSpace,
@@ -115,7 +115,7 @@ class _PoiSelectorRowState extends ConsumerState<PoiSelectorRow> {
                         key: const Key('loadSalePoiValue'),
                         style: AppStyle.interSemi(
                           size: 14,
-                          color: AppStyle.textPrimary,
+                          color: AppStyle.inkFor(Theme.of(context).brightness),
                         ),
                       ),
                     ],
@@ -128,7 +128,7 @@ class _PoiSelectorRowState extends ConsumerState<PoiSelectorRow> {
                     icon: Icon(
                       Remix.close_line,
                       size: 18.r,
-                      color: AppStyle.textDarkSecondary,
+                      color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                     ),
                     onPressed: () =>
                         ref.read(driverPoiProvider.notifier).select(null),
@@ -137,7 +137,7 @@ class _PoiSelectorRowState extends ConsumerState<PoiSelectorRow> {
                   Icon(
                     Remix.arrow_right_s_line,
                     size: 20.r,
-                    color: AppStyle.textDarkSecondary,
+                    color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                   ),
               ],
             ),
@@ -173,7 +173,7 @@ class _PoiPickerSheet extends ConsumerWidget {
         children: [
           Text(
             AppHelpers.getTranslation('where_are_you'),
-            style: AppStyle.interSemi(size: 18, color: AppStyle.textPrimary),
+            style: AppStyle.interSemi(size: 18, color: AppStyle.inkFor(Theme.of(context).brightness)),
           ),
           12.verticalSpace,
           if (state.points.isEmpty)
@@ -186,7 +186,7 @@ class _PoiPickerSheet extends ConsumerWidget {
               ),
               style: AppStyle.interRegular(
                 size: 13,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             )
           else
@@ -254,7 +254,7 @@ class PoiListRow extends StatelessWidget {
     final kind = point.kind;
     final distance = point.distanceKm;
     return Material(
-      color: selected ? AppStyle.cardDarkAlt : Colors.transparent,
+      color: selected ? AppStyle.cardAltFor(Theme.of(context).brightness) : Colors.transparent,
       borderRadius: BorderRadius.circular(10.r),
       child: InkWell(
         key: Key('poiRow-${point.id}'),
@@ -273,7 +273,7 @@ class PoiListRow extends StatelessWidget {
                       point.title,
                       style: AppStyle.interSemi(
                         size: 14,
-                        color: AppStyle.textPrimary,
+                        color: AppStyle.inkFor(Theme.of(context).brightness),
                       ),
                     ),
                     if (kind.isNotEmpty) ...[
@@ -282,7 +282,7 @@ class PoiListRow extends StatelessWidget {
                         kind,
                         style: AppStyle.interRegular(
                           size: 12,
-                          color: AppStyle.textDarkSecondary,
+                          color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                         ),
                       ),
                     ],
@@ -294,7 +294,7 @@ class PoiListRow extends StatelessWidget {
                   poiDistanceText(distance),
                   style: AppStyle.interRegular(
                     size: 12,
-                    color: AppStyle.textDarkFaint,
+                    color: AppStyle.faintFor(Theme.of(context).brightness),
                   ),
                 ),
             ],

@@ -7,8 +7,8 @@
 #
 # promotions_sdk currently owns no navigable screen a tour step could be
 # traced to:
-#   - Its demo data (MockBannersRepository, IS_DEMO-gated in
-#     promotions_di.dart) feeds base_sdk's home providers, and the banner
+#   - Its demo data (the api.banner.* fixtures in assets/demo/promotions,
+#     answered by base_sdk's DemoGatewayInterceptor) feeds base_sdk's home providers, and the banner
 #     carousels/detail screens that display it are owned and installed by
 #     OTHER SDKs (marketplace_sdk's customer home banner screens). Touring
 #     another SDK's screens from this fragment would break the ownership

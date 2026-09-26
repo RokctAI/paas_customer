@@ -378,7 +378,14 @@ class ShopsRepository implements ShopsRepositoryFacade {
         requireAuth: false,
       );
       return ApiResult.success(
-        data: storyModelFromJson(response['message']),
+        // story.get_story returns a bare list of story groups; the gateway
+        // already stripped Frappe's envelope, so `message` is not re-read
+        // (a still-wrapped map is tolerated, as in shop_loads_repository).
+        data: storyModelFromJson(
+          response is Map && response.containsKey('message')
+              ? response['message']
+              : response,
+        ),
       );
     } catch (e) {
       debugPrint('==> get story failure: $e');
@@ -420,7 +427,15 @@ class ShopsRepository implements ShopsRepositoryFacade {
         requireAuth: false,
       );
       return ApiResult.success(
-        data: PriceModel.fromJson(response['message']),
+        // product.get_suggest_price returns the full {timestamp, status,
+        // message, data} map itself; its `message` is a human string, so it
+        // must not be unwrapped again after the gateway strip.
+        data: PriceModel.fromJson(
+          (response is Map && response['data'] is Map
+                  ? response
+                  : (response as Map)['message'] as Map)
+              .cast<String, dynamic>(),
+        ),
       );
     } catch (e) {
       debugPrint('==> get suggest price failure: $e');

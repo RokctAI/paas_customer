@@ -1,3 +1,23 @@
+## 1.7.0
+
+* Demo runs the real wallet-history fetch through base_sdk 1.73.0's
+  `DemoGatewayInterceptor`: `WalletSdkDependencies` registers
+  `assets/demo/wallet`, whose `api.user.get_wallet_history.json` carries
+  the same five-row ledger. Deleted `DemoWalletHistory` and the history
+  page's demo branches. Requires base_sdk 1.73.0.
+
+## 1.6.6
+
+* Dark mode: the receive screen amount chips and active claim card now use
+  `AppStyle.cardFor(brightness)` instead of a fixed white fill.
+
+## 1.6.5
+
+* fix(send): the Send money sheet follows light/dark mode; typed text is
+  readable in both.
+* feat(topup): Top-up opens as a modal sheet like Send
+  (`WalletTopUpPage.showAsSheet`); the /wallet-topup route is unchanged.
+
 ## 1.6.4
 
 * **Fix: wallet history compiles against base_sdk >= 1.65.0.** `base_sdk`
@@ -16,13 +36,6 @@
   rather than caching it at construction, so a demo session activated by a
   sign-in after the page mounted is honoured. Behaviour is unchanged in a
   real session and under the tour.
-
-## 1.6.5
-
-* fix(send): the Send money sheet follows light/dark mode; typed text is
-  readable in both.
-* feat(topup): Top-up opens as a modal sheet like Send
-  (`WalletTopUpPage.showAsSheet`); the /wallet-topup route is unchanged.
 
 ## 1.6.3
 

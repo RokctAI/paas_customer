@@ -90,7 +90,7 @@ class _NewReservationViewState extends ConsumerState<NewReservationView> {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = LocalStorage.getAppThemeMode();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     final state = ref.watch(reservationFlowProvider);
     final notifier = ref.read(reservationFlowProvider.notifier);
     final textColor = isDark ? AppStyle.white : AppStyle.black;

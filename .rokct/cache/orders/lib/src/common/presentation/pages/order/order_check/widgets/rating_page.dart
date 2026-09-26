@@ -172,7 +172,7 @@ class _RatingPageState extends ConsumerState<RatingPage> {
                                     size: 14,
                                     color: state.selectedIndex == i
                                         ? AppStyle.primary
-                                        : AppStyle.black,
+                                        : AppStyle.inkFor(Theme.of(context).brightness),
                                   ),
                                 ),
                                 6.verticalSpace,
@@ -185,7 +185,7 @@ class _RatingPageState extends ConsumerState<RatingPage> {
                                     size: 14,
                                     color: state.selectedIndex == i
                                         ? AppStyle.primary
-                                        : AppStyle.black,
+                                        : AppStyle.inkFor(Theme.of(context).brightness),
                                   ),
                                 ),
                               ]
@@ -194,7 +194,7 @@ class _RatingPageState extends ConsumerState<RatingPage> {
                                   FlutterRemix.edit_2_line,
                                   color: state.selectedIndex == i
                                       ? AppStyle.primary
-                                      : AppStyle.black,
+                                      : AppStyle.inkFor(Theme.of(context).brightness),
                                 ),
                                 Text(
                                   AppHelpers.getTranslation(TrKeys.custom),
@@ -202,7 +202,7 @@ class _RatingPageState extends ConsumerState<RatingPage> {
                                     size: 14,
                                     color: state.selectedIndex == i
                                         ? AppStyle.primary
-                                        : AppStyle.black,
+                                        : AppStyle.inkFor(Theme.of(context).brightness),
                                   ),
                                 ),
                                 6.verticalSpace,
@@ -290,7 +290,7 @@ class _RatingPageState extends ConsumerState<RatingPage> {
                                   );
                             },
                           ),
-                          isDarkMode: false,
+                          isDarkMode: Theme.of(context).brightness == Brightness.dark,
                         );
                       } else {
                         if (widget.parcel) {

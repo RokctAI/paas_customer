@@ -273,7 +273,7 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppStyle.primary.withOpacity(0.05)
-                      : AppStyle.cardDark,
+                      : AppStyle.cardFor(Theme.of(context).brightness),
                   borderRadius: BorderRadius.circular(12.r),
                   border: Border.all(
                     color: isSelected ? AppStyle.primary : AppStyle.borderColor,

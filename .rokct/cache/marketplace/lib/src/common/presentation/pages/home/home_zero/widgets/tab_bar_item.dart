@@ -41,7 +41,9 @@ class CategoryBarItem extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: isActive ? AppStyle.primary : AppStyle.white,
+        color: isActive
+            ? AppStyle.primary
+            : AppStyle.cardFor(Theme.of(context).brightness),
       ),
       child: InkWell(
         onTap: onTap,
@@ -60,7 +62,10 @@ class CategoryBarItem extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 6.r),
               child: Text(
                 title,
-                style: AppStyle.interNormal(size: 12, color: AppStyle.black),
+                style: AppStyle.interNormal(
+                  size: 12,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.center,

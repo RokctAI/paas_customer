@@ -1,3 +1,26 @@
+## 1.32.1
+
+* fix(manager): the tablet side rail no longer adds a page-side margin on
+  top of each page's own gutter, so content starts just past the rail with
+  the same gap it has at the screen edge when the nav is the bottom pill.
+
+## 1.32.0
+
+* feat(demo): demo runs the real repositories through base_sdk's
+  `DemoGatewayInterceptor` (requires base_sdk >= 1.73.0). The DI hooks
+  register only the real repositories and register the
+  `assets/demo/merchants` fixture directory; every platform cmd a demo session
+  sends is answered from `templates/assets/demo/merchants/<cmd>.json`, and an
+  unknown cmd fails loudly with `DemoFixtureMissing`.
+* Removed: `MockShopsRepository`, `DemoSellerShopRepository`,
+  `MockProductsRepository` (POS catalog), `MockPosOrdersRepository`,
+  `MockQuickFlowRepository`, and the demo-session swap code that chose them.
+
+## 1.31.1
+
+* fix(theme): surfaces, cards, ink and strokes now follow the app's light/dark
+  mode instead of hardcoded light colours or static theme reads.
+
 ## 1.31.0
 
 * feat(demo): demo repositories follow the runtime demo session. base_sdk

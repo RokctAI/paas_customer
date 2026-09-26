@@ -79,7 +79,8 @@ class FilterCategoryShop extends StatelessWidget {
                                             .id) ??
                                   "",
                             ),
-                            isDarkMode: false,
+                            isDarkMode:
+                                Theme.of(context).brightness == Brightness.dark,
                             isDrag: false,
                             radius: 12,
                           );
@@ -91,7 +92,9 @@ class FilterCategoryShop extends StatelessWidget {
                             vertical: 6.r,
                           ),
                           decoration: BoxDecoration(
-                            color: AppStyle.white,
+                            color: AppStyle.cardFor(
+                              Theme.of(context).brightness,
+                            ),
                             borderRadius: BorderRadius.circular(10.r),
                           ),
                           child: Row(
@@ -102,7 +105,9 @@ class FilterCategoryShop extends StatelessWidget {
                                 AppHelpers.getTranslation(TrKeys.filter),
                                 style: AppStyle.interNormal(
                                   size: 13,
-                                  color: AppStyle.black,
+                                  color: AppStyle.inkFor(
+                                    Theme.of(context).brightness,
+                                  ),
                                 ),
                               ),
                             ],

@@ -1,6 +1,7 @@
 {
   "name": "fav_sdk",
-  "version": "1.0.2",
+  "version": "1.1.0",
+  "_comment_version_1_1_0": "1.0.2 -> 1.1.0 (pubspec 1.0.0 -> 1.1.0, now in step): liked shop IDs move from LocalStorage's saved-shops list into fav_sdk's FavoritesStore (base_sdk AppDatabase key/value box 'fav_shops', owner-scoped, on device). The first load per account copies the legacy list in, later loads replay legacy-toggle changes, and store writes mirror back to the legacy list. Adds FavoriteShopsPage (the liked-shops list moved out of marketplace_sdk's LikePage), FavoritesNotifier.toggleShop and FavoritesState.shopIds/likedShopsCount. New deps: flutter_screenutil, pull_to_refresh (both already in base_sdk).",
   "installs": [],
   "routes": [],
   "database": {

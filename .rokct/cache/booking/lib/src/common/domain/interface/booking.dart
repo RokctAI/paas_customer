@@ -16,8 +16,8 @@ import 'package:base_sdk/src/handlers/handlers.dart';
 import 'package:booking_sdk/src/common/infrastructure/models/booking_models.dart';
 
 /// The customer-facing booking seam. Registered in GetIt by
-/// `BookingSdkDependencies.register` (demo-gated to
-/// `DemoBookingRepository` under IS_DEMO).
+/// `BookingSdkDependencies.register` (a demo session runs the same
+/// `BookingRepository` against the assets/demo/booking fixtures).
 abstract class BookingRepositoryFacade {
   /// `api.booking.get_booking_settings` (guest-readable).
   Future<ApiResult<BookingSettings>> getBookingSettings();

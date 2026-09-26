@@ -60,7 +60,7 @@ class ProductMainButton extends StatelessWidget {
         (sumTotalPrice + (state.selectedStock?.totalPrice ?? 0) * state.count);
     return Container(
       height: 130.h,
-      color: AppStyle.cardDark,
+      color: AppStyle.cardFor(Theme.of(context).brightness),
       padding: EdgeInsets.only(right: 16.w, left: 16.w),
       child: Column(
         children: [
@@ -94,7 +94,7 @@ class ProductMainButton extends StatelessWidget {
                             "${state.count * (state.productData?.interval ?? 1)}",
                         style: AppStyle.interSemi(
                           size: 14,
-                          color: AppStyle.textPrimary,
+                          color: AppStyle.inkFor(Theme.of(context).brightness),
                         ),
                         children: [
                           TextSpan(
@@ -163,11 +163,11 @@ class ProductMainButton extends StatelessWidget {
             children: [
               Text(
                 AppHelpers.getTranslation(TrKeys.total),
-                style: AppStyle.interNormal(size: 14, color: AppStyle.textPrimary),
+                style: AppStyle.interNormal(size: 14, color: AppStyle.inkFor(Theme.of(context).brightness)),
               ),
               Text(
                 AppHelpers.numberFormat(number: sumTotalPrice),
-                style: AppStyle.interNoSemi(size: 20, color: AppStyle.textPrimary),
+                style: AppStyle.interNoSemi(size: 20, color: AppStyle.inkFor(Theme.of(context).brightness)),
               ),
             ],
           ),

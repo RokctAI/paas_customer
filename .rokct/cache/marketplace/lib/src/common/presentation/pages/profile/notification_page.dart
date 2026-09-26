@@ -72,7 +72,7 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: AppStyle.bgGrey,
+        backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
         body: state.isAllNotificationsLoading
             ? const Loading()
             : Column(
@@ -82,7 +82,7 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
                       AppHelpers.getTranslation(TrKeys.notifications),
                       style: AppStyle.interNoSemi(
                         size: 18,
-                        color: AppStyle.black,
+                        color: AppStyle.inkFor(Theme.of(context).brightness),
                       ),
                     ),
                   ),
@@ -218,7 +218,7 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
                         '${notification.client?.firstname ?? ''} ${notification.client?.lastname?.substring(0, 1) ?? ''}.',
                         style: AppStyle.interSemi(
                           size: 16,
-                          color: AppStyle.black,
+                          color: AppStyle.inkFor(Theme.of(context).brightness),
                         ),
                       ),
                       15.horizontalSpace,
@@ -244,7 +244,7 @@ class _NotificationListPageState extends ConsumerState<NotificationListPage> {
                         maxLines: 3,
                         style: AppStyle.interRegular(
                           size: 14,
-                          color: AppStyle.black,
+                          color: AppStyle.inkFor(Theme.of(context).brightness),
                         ),
                       ),
                     ),

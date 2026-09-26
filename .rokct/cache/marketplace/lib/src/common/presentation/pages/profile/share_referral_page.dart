@@ -68,13 +68,13 @@ class _ShareReferralPageState extends ConsumerState<ShareReferralPage> {
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: AppStyle.bgGrey,
+        backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
         body: Column(
           children: [
             CommonAppBar(
               child: Text(
                 AppHelpers.getTranslation(TrKeys.referral),
-                style: AppStyle.interNoSemi(size: 18, color: AppStyle.black),
+                style: AppStyle.interNoSemi(size: 18, color: AppStyle.inkFor(Theme.of(context).brightness)),
               ),
             ),
             state.isReferralLoading
@@ -98,7 +98,7 @@ class _ShareReferralPageState extends ConsumerState<ShareReferralPage> {
                           state.referralData?.translation?.title ?? "",
                           style: AppStyle.interNoSemi(
                             size: 20,
-                            color: AppStyle.black,
+                            color: AppStyle.inkFor(Theme.of(context).brightness),
                           ),
                         ),
                         16.verticalSpace,
@@ -123,7 +123,7 @@ class _ShareReferralPageState extends ConsumerState<ShareReferralPage> {
                                   ).toLowerCase(),
                                   style: AppStyle.interNoSemi(
                                     size: 14,
-                                    color: AppStyle.black,
+                                    color: AppStyle.inkFor(Theme.of(context).brightness),
                                     decoration: TextDecoration.underline,
                                   ),
                                 ),

@@ -1,0 +1,42 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "shops": [
+        {
+          "id": "demo_shop_1",
+          "translation": {
+            "title": "Nonna's Pizzeria"
+          }
+        }
+      ],
+      "img": "data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800\" height=\"400\" viewBox=\"0 0 800 400\"><defs><linearGradient id=\"b\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\"><stop offset=\"0\" stop-color=\"#12100E\"/><stop offset=\"0.6\" stop-color=\"#7A2E0B\"/><stop offset=\"1\" stop-color=\"#FFA62B\"/></linearGradient></defs><rect width=\"800\" height=\"400\" fill=\"url(#b)\"/><circle cx=\"640\" cy=\"200\" r=\"150\" fill=\"#FFFFFF\" opacity=\"0.10\"/><circle cx=\"640\" cy=\"200\" r=\"96\" fill=\"#FFFFFF\" opacity=\"0.10\"/><rect x=\"0\" y=\"330\" width=\"800\" height=\"70\" fill=\"#0B0A09\" opacity=\"0.30\"/></svg>",
+      "active": true,
+      "translation": {
+        "title": "Weeknight deals",
+        "description": "Up to 50% off at kitchens near you",
+        "locale": "en"
+      },
+      "created_at": "$now_iso",
+      "updated_at": "$now_iso"
+    },
+    {
+      "id": "2",
+      "shops": [
+        {
+          "id": "demo_shop_1",
+          "translation": {
+            "title": "Nonna's Pizzeria"
+          }
+        }
+      ],
+      "img": "data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"800\" height=\"400\" viewBox=\"0 0 800 400\"><defs><linearGradient id=\"b\" x1=\"0\" y1=\"0\" x2=\"1\" y2=\"0\"><stop offset=\"0\" stop-color=\"#12100E\"/><stop offset=\"0.6\" stop-color=\"#7A2E0B\"/><stop offset=\"1\" stop-color=\"#FFA62B\"/></linearGradient></defs><rect width=\"800\" height=\"400\" fill=\"url(#b)\"/><circle cx=\"640\" cy=\"200\" r=\"150\" fill=\"#FFFFFF\" opacity=\"0.10\"/><circle cx=\"640\" cy=\"200\" r=\"96\" fill=\"#FFFFFF\" opacity=\"0.10\"/><rect x=\"0\" y=\"330\" width=\"800\" height=\"70\" fill=\"#0B0A09\" opacity=\"0.30\"/></svg>",
+      "active": true,
+      "translation": {
+        "title": "New Arrivals"
+      },
+      "created_at": "$now_iso",
+      "updated_at": "$now_iso"
+    }
+  ]
+}

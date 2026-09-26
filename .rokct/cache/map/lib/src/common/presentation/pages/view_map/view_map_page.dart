@@ -490,7 +490,7 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage>
                         children: [
                           10.horizontalSpace,
                           Container(
-                            decoration: const BoxDecoration(
+                            decoration: BoxDecoration(
                               boxShadow: <BoxShadow>[
                                 BoxShadow(
                                   color: AppStyle.textGrey,
@@ -500,7 +500,7 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage>
                                 ),
                               ],
                               shape: BoxShape.circle,
-                              color: AppStyle.white,
+                              color: AppStyle.cardFor(Theme.of(context).brightness),
                             ),
                             padding: EdgeInsets.all(10.r),
                             child: const Center(
@@ -524,7 +524,7 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage>
                                   spreadRadius: 0,
                                 ),
                               ],
-                              color: AppStyle.white,
+                              color: AppStyle.cardFor(Theme.of(context).brightness),
                               borderRadius: BorderRadius.circular(16.r),
                             ),
                             child: Center(
@@ -552,7 +552,7 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage>
                       width: 50.r,
                       height: 50.r,
                       decoration: BoxDecoration(
-                        color: AppStyle.white,
+                        color: AppStyle.cardFor(Theme.of(context).brightness),
                         borderRadius: BorderRadius.all(Radius.circular(10.r)),
                         boxShadow: [
                           BoxShadow(
@@ -620,7 +620,7 @@ class _ViewMapPageState extends ConsumerState<ViewMapPage>
                             _nearestPOIInfo,
                             style: AppStyle.interNormal(
                               size: 14,
-                              color: AppStyle.black,
+                              color: AppStyle.inkFor(Theme.of(context).brightness),
                             ),
                             textAlign: TextAlign.center,
                           ),

@@ -138,7 +138,7 @@ class _AppBarHomeState extends ConsumerState<AppBarHome>
 
   @override
   Widget build(BuildContext context) {
-    final bool isDarkMode = LocalStorage.getAppThemeMode();
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     // final ordersState = ref.watch(ordersListProvider);
 
     final addressData = LocalStorage.getAddressSelected();
@@ -184,7 +184,7 @@ class _AppBarHomeState extends ConsumerState<AppBarHome>
                         await AppRoutes.I.pushViewMapRoute(context);
                       },
                     ),
-                    isDarkMode: false,
+                    isDarkMode: Theme.of(context).brightness == Brightness.dark,
                   );
                 },
                 child: Consumer(
@@ -255,7 +255,9 @@ class _AppBarHomeState extends ConsumerState<AppBarHome>
                                               "",
                                     style: AppStyle.interBold(
                                       size: 14,
-                                      color: AppStyle.black,
+                                      color: AppStyle.inkFor(
+                                        Theme.of(context).brightness,
+                                      ),
                                     ),
                                     maxLines: 1,
                                   ),
@@ -453,7 +455,7 @@ class WelcomeText extends StatelessWidget {
                 style: AppStyle.interBold(
                   size: 32,
                   letterSpacing: -0.3,
-                  color: AppStyle.black,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
                 ),
               ),
               if (isLoggedIn)
@@ -462,7 +464,7 @@ class WelcomeText extends StatelessWidget {
                   style: AppStyle.interNormal(
                     size: 16,
                     letterSpacing: -0.3,
-                    color: AppStyle.black,
+                    color: AppStyle.inkFor(Theme.of(context).brightness),
                   ),
                 )
               else
@@ -471,7 +473,7 @@ class WelcomeText extends StatelessWidget {
                     style: AppStyle.interNormal(
                       size: 16,
                       letterSpacing: -0.3,
-                      color: AppStyle.black,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
                     ),
                     children: [
                       TextSpan(

@@ -1,3 +1,65 @@
+## 1.16.0
+
+* fix(auth): email sign-up can finish. The app asked for the emailed code
+  before the account existed, but `api.user.register_user` creates the
+  account and sends the code only once it has the password and names, so
+  the old email -> code -> details order never got a code. The order is now
+  email -> details form -> `register_user` (sends the code) -> code sheet ->
+  `verify_my_email`, whose session token is stored before the registration
+  steps run. The email step makes no network call; "email already
+  registered" (409) is reported when the details form submits; the code
+  sheet's resend uses `resend_verification_email`. Offline email sign-up
+  and phone sign-up (Firebase and backend OTP) are unchanged. No backend
+  change.
+
+## 1.15.1
+
+* fix(auth): `register_user` sign-ups (email details form and phone) now
+  send `first_name`/`last_name`; `UserModel.toJsonForSignUp` emits
+  `firstname`/`lastname`, which the endpoint ignored, so every online
+  registration failed on the missing required arguments.
+* The email password-reset confirm now receives a session token from
+  `forgot_password_confirm` (users backend, users_sdk 1.5.1), so the
+  reset flow's `update_password` call runs as the account instead of Guest.
+
+## 1.15.0
+
+* feat(auth): every successful sign-in runs base_sdk's `SessionStartHooks`.
+  Password, social, phone-OTP and offline sign-ins, registration and a
+  restored Android credential all end in the new `completeSessionStart`
+  (platform_support.dart), which fires the hooks without awaiting them and
+  then syncs the FCM token as before. This is what lets comms_sdk 1.18.0 ask
+  for notification permission after the first real sign-in in every
+  composed app without auth_sdk knowing comms exists. Inert when nothing is
+  registered. Requires base_sdk >= 1.75.0.
+* Tests: `test/session_start_hooks_wiring_test.dart`.
+
+## 1.14.0
+
+* **No mock auth repository, the tour included.** Deleted
+  `MockAuthRepository` (Ray, 2026-09-25: the tour must not use mock repos
+  either). `AuthSdkDependencies` registers `AuthRepository` in every build
+  and registers `assets/demo/auth` with base_sdk's `DemoFixtures`.
+  `LoginNotifier` no longer signs demo addresses in through a local mock:
+  every sign-in, demo accounts included, goes through the real
+  `AuthRepository` (a demo session skips only the radio connectivity
+  check). In the tour build the `DemoGatewayInterceptor` (base_sdk 1.73.0)
+  answers `api.user.login` and the other auth cmds from
+  `templates/assets/demo/auth/<cmd>.json`. The login fixture selects by
+  the typed address: `partner@` Nomvula (partner), `admin@` Ayanda (admin),
+  `driver@` Thandi as deliveryman, `manager@` Thandi as seller,
+  `customer@` Thandi as customer, any other address Thandi as student.
+  Tests that pinned the mock now sign in through the real repository
+  (`test/support/auth_demo_fixtures.dart`); the stale
+  `DemoSession.isDemoOverride` uses (removed from base_sdk) are gone.
+  `DemoHoldSyncHandler` is unchanged. Needs base_sdk 1.73.0.
+
+## 1.13.6
+
+* fix(auth): the login page follows the app's light/dark mode. It read the
+  stored theme flag in build and opened the language sheet with
+  `isDarkMode: false`; both now read `Theme.of(context).brightness`.
+
 ## 1.13.5
 
 * fix(auth): each demo role signs in to its own account. `MockAuthRepository`

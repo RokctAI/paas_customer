@@ -1,3 +1,15 @@
+## 1.5.0
+
+* Demo runs the REAL `CustomerPoiRepository` through base_sdk 1.73.0's
+  `DemoGatewayInterceptor`: `MapSdkDependencies` registers
+  `assets/demo/map`, whose `api.poi.get_customer_pois.json` answers an
+  empty list (an offline map still stands no unapproved place on itself).
+  Deleted `DemoCustomerPoiRepository`. Requires base_sdk 1.73.0.
+
+## 1.4.1
+
+* The map page and map modal now follow the app's light or dark mode: their white cards and black ink use AppStyle.cardFor and inkFor.
+
 ## 1.4.0
 
 * The customer map draws the points of interest an administrator stored and

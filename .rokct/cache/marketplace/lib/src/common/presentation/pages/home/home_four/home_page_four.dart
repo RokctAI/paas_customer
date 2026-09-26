@@ -12,7 +12,6 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import 'package:base_sdk/src/presentation/components/glance_card.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -280,7 +279,7 @@ class _HomePageState extends ConsumerState<HomePageFour> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(homeProvider);
-    final bool isDarkMode = LocalStorage.getAppThemeMode();
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final bool isLtr = LocalStorage.getLangLtr();
 
     // Add a listener for debugging brands in HomeState
@@ -327,7 +326,7 @@ class _HomePageState extends ConsumerState<HomePageFour> {
           scrollController: _controller,
           header: WaterDropMaterialHeader(
             distance: 160.h,
-            backgroundColor: AppStyle.white,
+            backgroundColor: AppStyle.cardFor(Theme.of(context).brightness),
             color: AppStyle.textGrey,
           ),
           onLoading: () => _onLoading(),
@@ -338,7 +337,6 @@ class _HomePageState extends ConsumerState<HomePageFour> {
               child: Column(
                 children: [
                   AppBarHome(state: state, event: event),
-                  const ActiveOrderGlanceCard(),
                   CategoryScreen(
                     state: state,
                     event: event,

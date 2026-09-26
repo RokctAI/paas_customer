@@ -90,7 +90,9 @@ class UserRepository implements UserRepositoryFacade {
     try {
       await _gateway.tenant(
         'api.user.add_user_address',
-        address?.toJson(),
+        // add_user_address(address_data) takes the address as one
+        // argument, same as AddressRepository.saveAddress.
+        {'address_data': address?.toJson()},
       );
       return const ApiResult.success(data: null);
     } catch (e) {
@@ -201,7 +203,9 @@ class UserRepository implements UserRepositoryFacade {
   Future<ApiResult<WalletHistoriesResponse>> getWalletHistories(
     int page,
   ) async {
-    final data = {'limit_start': (page - 1) * 10, 'limit_page_length': 10};
+    // get_wallet_history(start, limit): the Frappe list-style keys were
+    // silently dropped, so every page returned the first 20 rows.
+    final data = {'start': (page - 1) * 10, 'limit': 10};
     try {
       final response = await _gateway.tenant(
         'api.user.get_wallet_history',

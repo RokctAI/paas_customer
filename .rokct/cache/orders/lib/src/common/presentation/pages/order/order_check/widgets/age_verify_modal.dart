@@ -158,7 +158,7 @@ class _AgeVerifyModalState extends State<AgeVerifyModal> {
                   decoration: BoxDecoration(
                     border: Border.all(color: AppStyle.borderColor),
                     borderRadius: BorderRadius.circular(10.r),
-                    color: AppStyle.white,
+                    color: AppStyle.cardFor(Theme.of(context).brightness),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

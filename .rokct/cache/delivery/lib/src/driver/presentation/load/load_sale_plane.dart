@@ -134,10 +134,10 @@ class _LoadSalePlaneState extends ConsumerState<LoadSalePlane> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         key: const Key('loadSalePoiFarDialog'),
-        backgroundColor: AppStyle.cardDark,
+        backgroundColor: AppStyle.cardFor(Theme.of(context).brightness),
         title: Text(
           AppHelpers.getTranslation('are_you_at_this_place'),
-          style: AppStyle.interSemi(size: 16, color: AppStyle.textPrimary),
+          style: AppStyle.interSemi(size: 16, color: AppStyle.inkFor(Theme.of(context).brightness)),
         ),
         content: Text(
           '${AppHelpers.getTranslation('you_are')} ${metres!.round()} m '
@@ -145,7 +145,7 @@ class _LoadSalePlaneState extends ConsumerState<LoadSalePlane> {
           '${AppHelpers.getTranslation('continue_anyway')}',
           style: AppStyle.interRegular(
             size: 13,
-            color: AppStyle.textDarkSecondary,
+            color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
           ),
         ),
         actions: [
@@ -156,7 +156,7 @@ class _LoadSalePlaneState extends ConsumerState<LoadSalePlane> {
               AppHelpers.getTranslation(TrKeys.cancel),
               style: AppStyle.interSemi(
                 size: 14,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
           ),
@@ -183,7 +183,7 @@ class _LoadSalePlaneState extends ConsumerState<LoadSalePlane> {
     final planeNavigator = Navigator.of(context);
     AppHelpers.showCustomModalBottomSheet(
       context: context,
-      isDarkMode: AppStyle.isDark,
+      isDarkMode: (Theme.of(context).brightness == Brightness.dark),
       isDrag: false,
       isDismissible: false,
       modal: LoadSaleDoneSheet(
@@ -206,7 +206,7 @@ class _LoadSalePlaneState extends ConsumerState<LoadSalePlane> {
     final lines = load.sellableLines;
     final total = _draft.totalFor(load);
     return Scaffold(
-      backgroundColor: AppStyle.surfaceDark,
+      backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
       body: SafeArea(
         child: Stack(
           children: [
@@ -224,7 +224,7 @@ class _LoadSalePlaneState extends ConsumerState<LoadSalePlane> {
                     load.shopTitle ?? load.id,
                     style: AppStyle.interRegular(
                       size: 13,
-                      color: AppStyle.textDarkSecondary,
+                      color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                     ),
                   ),
                   20.verticalSpace,
@@ -303,13 +303,13 @@ class _WalkInCustomerRow extends StatelessWidget {
       key: const Key('loadSaleCustomer'),
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(color: AppStyle.strokeDark),
+        border: Border.all(color: AppStyle.strokeFor(Theme.of(context).brightness)),
       ),
       child: Row(
         children: [
-          Icon(Remix.user_line, size: 18.r, color: AppStyle.textDarkSecondary),
+          Icon(Remix.user_line, size: 18.r, color: AppStyle.secondaryInkFor(Theme.of(context).brightness)),
           10.horizontalSpace,
           Expanded(
             child: Column(
@@ -320,7 +320,7 @@ class _WalkInCustomerRow extends StatelessWidget {
                   AppHelpers.getTranslation('customer'),
                   style: AppStyle.interRegular(
                     size: 11,
-                    color: AppStyle.textDarkFaint,
+                    color: AppStyle.faintFor(Theme.of(context).brightness),
                   ),
                 ),
                 2.verticalSpace,
@@ -328,7 +328,7 @@ class _WalkInCustomerRow extends StatelessWidget {
                   AppHelpers.getTranslation('myself_walk_in'),
                   style: AppStyle.interSemi(
                     size: 14,
-                    color: AppStyle.textPrimary,
+                    color: AppStyle.inkFor(Theme.of(context).brightness),
                   ),
                 ),
               ],
@@ -351,9 +351,9 @@ class _TotalRow extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
       decoration: BoxDecoration(
-        color: AppStyle.cardDarkAlt,
+        color: AppStyle.cardAltFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(color: AppStyle.strokeDarkSubtle),
+        border: Border.all(color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
       ),
       child: Row(
         children: [
@@ -363,7 +363,7 @@ class _TotalRow extends StatelessWidget {
               '${AppHelpers.getTranslation(units == 1 ? 'item' : 'items')}',
               style: AppStyle.interRegular(
                 size: 13,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
           ),
@@ -371,7 +371,7 @@ class _TotalRow extends StatelessWidget {
           Text(
             AppHelpers.numberFormat(number: total),
             key: const Key('loadSaleTotal'),
-            style: AppStyle.interSemi(size: 20, color: AppStyle.textPrimary),
+            style: AppStyle.interSemi(size: 20, color: AppStyle.inkFor(Theme.of(context).brightness)),
           ),
         ],
       ),
@@ -406,7 +406,7 @@ class LoadSaleDoneSheet extends StatelessWidget {
         children: [
           Text(
             AppHelpers.getTranslation('sale_recorded'),
-            style: AppStyle.interSemi(size: 18, color: AppStyle.textPrimary),
+            style: AppStyle.interSemi(size: 18, color: AppStyle.inkFor(Theme.of(context).brightness)),
           ),
           8.verticalSpace,
           if (sale.orderId != null)
@@ -415,7 +415,7 @@ class LoadSaleDoneSheet extends StatelessWidget {
               key: const Key('loadSaleDoneOrderId'),
               style: AppStyle.interRegular(
                 size: 13,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
           16.verticalSpace,
@@ -423,14 +423,14 @@ class LoadSaleDoneSheet extends StatelessWidget {
             AppHelpers.getTranslation('collect'),
             style: AppStyle.interRegular(
               size: 12,
-              color: AppStyle.textDarkFaint,
+              color: AppStyle.faintFor(Theme.of(context).brightness),
             ),
           ),
           4.verticalSpace,
           Text(
             AppHelpers.numberFormat(number: sale.amount),
             key: const Key('loadSaleDoneAmount'),
-            style: AppStyle.interSemi(size: 28, color: AppStyle.textPrimary),
+            style: AppStyle.interSemi(size: 28, color: AppStyle.inkFor(Theme.of(context).brightness)),
           ),
           20.verticalSpace,
           CustomButton(

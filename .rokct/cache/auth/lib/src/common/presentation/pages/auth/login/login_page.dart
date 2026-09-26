@@ -144,7 +144,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       isDrag: false,
       context: context,
       modal: languageScreen,
-      isDarkMode: false,
+      isDarkMode: Theme.of(context).brightness == Brightness.dark,
     );
   }
 
@@ -192,7 +192,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       }
     });
 
-    final bool isDarkMode = LocalStorage.getAppThemeMode();
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final bool isLtr = LocalStorage.getLangLtr();
     final bool isWideWindow = windowSizeOf(context).isAtLeastMedium;
     return Directionality(

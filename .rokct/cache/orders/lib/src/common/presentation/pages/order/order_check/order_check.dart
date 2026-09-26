@@ -12,6 +12,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:base_sdk/src/handlers/api_result.dart';
 import 'package:base_sdk/src/navigation/app_routes.dart';
@@ -40,6 +42,7 @@ import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/enums.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:base_sdk/src/presentation/components/buttons/custom_button.dart';
+import 'package:orders_sdk/src/common/application/live/active_order_tracker.dart';
 import 'package:orders_sdk/src/common/presentation/pages/order/order_check/price_information.dart';
 import 'package:orders_sdk/src/common/presentation/pages/order/order_check/widgets/age_verify_modal.dart';
 import 'package:orders_sdk/src/common/presentation/pages/order/order_check/widgets/auto_order_modal.dart';
@@ -189,7 +192,7 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
       AppHelpers.showCustomModalBottomSheet(
         context: context,
         modal: EmbeddedWidgets.I.phoneVerify(),
-        isDarkMode: false,
+        isDarkMode: Theme.of(context).brightness == Brightness.dark,
         paddingTop: MediaQuery.paddingOf(context).top,
       );
       return;
@@ -237,7 +240,7 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
             );
           },
         ),
-        isDarkMode: false,
+        isDarkMode: Theme.of(context).brightness == Brightness.dark,
         paddingTop: MediaQuery.paddingOf(context).top,
       );
       return;
@@ -305,6 +308,9 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
               widget.controllerCenter?.play();
               eventShopOrder.getCart(context, () {});
               eventOrderList.fetchActiveOrders(context);
+              // Start the live entry for the new order (the app-wide
+              // tracker, not the progress screen).
+              unawaited(ref.read(activeOrderTrackerProvider).sync());
 
               // Navigate back to main screen if needed
               AppHelpers.goHome(context);
@@ -317,7 +323,7 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
             }
           },
         ),
-        isDarkMode: false,
+        isDarkMode: Theme.of(context).brightness == Brightness.dark,
       );
     } else {
       // Use the standard flow
@@ -332,6 +338,9 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
           widget.controllerCenter?.play();
           eventShopOrder.getCart(context, () {});
           eventOrderList.fetchActiveOrders(context);
+          // Start the live entry for the new order (the app-wide
+          // tracker, not the progress screen).
+          unawaited(ref.read(activeOrderTrackerProvider).sync());
         },
         onWebview: (paymentUrl, transactionId) {
           if (isPayFast) {
@@ -439,7 +448,7 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppStyle.white,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(10.r),
           topRight: Radius.circular(10.r),
@@ -499,7 +508,7 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
                           state.orderData?.createdAt ?? DateTime.now(),
                         ),
                       ),
-                      isDarkMode: false,
+                      isDarkMode: Theme.of(context).brightness == Brightness.dark,
                     );
                   },
                   isRepeatLoading: state.isAddLoading,
@@ -783,14 +792,14 @@ class _WebViewPageState extends State<WebViewPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppStyle.white,
+        backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
         elevation: 0,
         title: Text(
           AppHelpers.getTranslation(TrKeys.checkout),
           style: AppStyle.interNormal(),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppStyle.black),
+          icon: Icon(Icons.arrow_back, color: AppStyle.inkFor(Theme.of(context).brightness)),
           onPressed: () {
             Navigator.pop(context);
 
@@ -1026,7 +1035,7 @@ class _PayFastPaymentScreenState extends ConsumerState<PayFastPaymentScreen> {
                           padding: EdgeInsets.all(12.r),
                           decoration: BoxDecoration(
                             color:
-                                isSelected ? AppStyle.primary : AppStyle.white,
+                                isSelected ? AppStyle.primary : AppStyle.cardFor(Theme.of(context).brightness),
                             borderRadius: BorderRadius.circular(12.r),
                             border: Border.all(
                               color: isSelected

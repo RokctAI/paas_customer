@@ -46,7 +46,7 @@ class TypeAndTime extends StatelessWidget {
             child: InkWell(
               child: Container(
                 decoration: BoxDecoration(
-                  color: AppStyle.white,
+                  color: AppStyle.cardFor(Theme.of(context).brightness),
                   borderRadius: BorderRadius.circular(10.r),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 20.r, vertical: 16.r),
@@ -81,7 +81,7 @@ class TypeAndTime extends StatelessWidget {
           ),
         Container(
           margin: EdgeInsets.only(top: 16.r, bottom: 24.r),
-          color: AppStyle.white,
+          color: AppStyle.cardFor(Theme.of(context).brightness),
           padding: EdgeInsets.all(16.r),
           child: InkWell(
             onTap: () async {
@@ -118,7 +118,7 @@ class TypeAndTime extends StatelessWidget {
             child: AnimationButtonEffect(
               child: Container(
                 decoration: BoxDecoration(
-                  color: AppStyle.bgGrey,
+                  color: AppStyle.surfaceFor(Theme.of(context).brightness),
                   borderRadius: BorderRadius.circular(10.r),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 20.r, vertical: 16.r),
@@ -154,7 +154,7 @@ class TypeAndTime extends StatelessWidget {
         ),
         Container(
           margin: EdgeInsets.only(top: 10.r, bottom: 24.r),
-          color: AppStyle.white,
+          color: AppStyle.cardFor(Theme.of(context).brightness),
           padding: EdgeInsets.all(16.r),
           child: GridView.builder(
             padding: EdgeInsets.zero,
@@ -173,7 +173,7 @@ class TypeAndTime extends StatelessWidget {
                       context: context,
                       modal: Container(
                         decoration: BoxDecoration(
-                          color: AppStyle.white,
+                          color: AppStyle.cardFor(Theme.of(context).brightness),
                           borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(12.r),
                             topRight: Radius.circular(12.r),
@@ -230,7 +230,8 @@ class TypeAndTime extends StatelessWidget {
                           ],
                         ),
                       ),
-                      isDarkMode: false,
+                      isDarkMode:
+                          Theme.of(context).brightness == Brightness.dark,
                     );
                     return;
                   }
@@ -245,7 +246,7 @@ class TypeAndTime extends StatelessWidget {
                     ),
                     margin: EdgeInsets.all(8.r),
                     decoration: BoxDecoration(
-                      color: AppStyle.bgGrey,
+                      color: AppStyle.surfaceFor(Theme.of(context).brightness),
                       borderRadius: BorderRadius.circular(10.r),
                     ),
                     child: Column(

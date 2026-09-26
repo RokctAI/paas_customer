@@ -12,7 +12,9 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:base_sdk/src/services/demo_session.dart';
 import 'package:base_sdk/src/handlers/api_result.dart';
+import 'dart:async';
 import 'dart:io';
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
@@ -31,6 +33,7 @@ import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/app_validators.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/secure_storage.dart';
+import 'package:base_sdk/src/services/session_start_hooks.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 // [refork] removed host router import
 import 'package:permission_handler/permission_handler.dart';
@@ -40,7 +43,6 @@ import 'package:base_sdk/src/domain/interface/settings.dart';
 import 'package:auth_sdk/src/common/application/auth/login/login_state.dart';
 import 'package:auth_sdk/src/common/domain/interface/auth_session_policy.dart';
 import 'package:auth_sdk/src/common/infrastructure/services/offline_auth_service.dart';
-import 'package:auth_sdk/src/common/infrastructure/repositories/mock_auth_repository.dart';
 import 'package:auth_sdk/src/common/services/auth_error_presenter.dart';
 import 'package:auth_sdk/src/common/services/demo_account_session.dart';
 import 'package:auth_sdk/src/common/services/platform_support.dart';
@@ -268,7 +270,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
       context.router.popUntilRoot();
     }
     AuthSessionPolicy.I.onAuthenticated(context, role: role);
-    await syncFcmToken(_userRepositoryFacade);
+    await completeSessionStart(_userRepositoryFacade);
     // Register an Android restore key for the account that just signed in,
     // so a move to a new device lands them signed in instead of here
     // again. No-ops on every other platform, and on Android once this
@@ -290,30 +292,12 @@ class LoginNotifier extends StateNotifier<LoginState> {
       return;
     }
 
-    // Check if entered credentials belong to a recognized demo account.
-    // Recognized demo accounts authenticate locally via MockAuthRepository regardless
-    // of device connectivity or backend availability.
-    if (MockAuthRepository.isDemoAccount(state.email)) {
-      state = state.copyWith(isLoading: true);
-      final response = await MockAuthRepository().login(
-        email: state.email,
-        password: state.password,
-      );
-      if (!mounted) return;
-      response.when(
-        success: (data) async {
-          await _establishSession(context, data.data);
-          if (!mounted) return;
-          state = state.copyWith(isLoading: false);
-        },
-        failure: (failure, status) {
-          state = state.copyWith(isLoading: false, isLoginError: true);
-        },
-      );
-      return;
-    }
-
-    final connected = await AppConnectivity.connectivity();
+    // Demo accounts sign in like any other: through the real
+    // AuthRepository (the backend asserts the demo marker; in the tour
+    // build base_sdk's demo interceptor answers from auth_sdk's fixtures,
+    // which needs no network, so a demo session skips the radio check).
+    final connected =
+        DemoSession.demoActive || await AppConnectivity.connectivity();
     if (!mounted) return;
     if (connected) {
       state = state.copyWith(isLoading: true);
@@ -374,6 +358,9 @@ class LoginNotifier extends StateNotifier<LoginState> {
           if (context.mounted) AuthSessionPolicy.I.onRejected(context);
         } else if (context.mounted) {
           AuthSessionPolicy.I.onAuthenticated(context);
+          // An offline sign-in is still a sign-in: run the session-start
+          // hooks (there is no FCM token to push without a connection).
+          unawaited(SessionStartHooks.run());
         }
       } else {
         state = state.copyWith(isLoginError: true);

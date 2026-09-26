@@ -109,7 +109,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
             CommonAppBar(
               child: Text(
                 AppHelpers.getTranslation(TrKeys.becomeSeller),
-                style: AppStyle.interNoSemi(size: 18, color: AppStyle.black),
+                style: AppStyle.interNoSemi(size: 18, color: AppStyle.inkFor(Theme.of(context).brightness)),
               ),
             ),
             16.verticalSpace,
@@ -340,7 +340,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                                 ),
                                                 style: AppStyle.interNormal(
                                                   size: 12.sp,
-                                                  color: AppStyle.black,
+                                                  color: AppStyle.inkFor(Theme.of(context).brightness),
                                                 ),
                                               ),
                                               SizedBox(
@@ -352,7 +352,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                                   "${state.addressModel?.title ?? ""}, ${state.addressModel?.address?.address ?? ""}",
                                                   style: AppStyle.interNormal(
                                                     size: 12.sp,
-                                                    color: AppStyle.black,
+                                                    color: AppStyle.inkFor(Theme.of(context).brightness),
                                                   ),
                                                 ),
                                               ),
@@ -409,7 +409,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                             AppHelpers.getTranslation(TrKeys.yourRequest),
                             style: AppStyle.interNoSemi(
                               size: 18,
-                              color: AppStyle.black,
+                              color: AppStyle.inkFor(Theme.of(context).brightness),
                             ),
                           ),
                         ],
@@ -446,7 +446,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
       height: 180.h,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppStyle.white,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: state.bgImage.isNotEmpty
@@ -528,7 +528,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                     AppHelpers.getTranslation(TrKeys.bgPicture),
                     style: AppStyle.interSemi(
                       size: 14,
-                      color: AppStyle.black,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
                       letterSpacing: -0.3,
                     ),
                   ),
@@ -536,7 +536,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                     AppHelpers.getTranslation(TrKeys.recommendedSize),
                     style: AppStyle.interRegular(
                       size: 14,
-                      color: AppStyle.black,
+                      color: AppStyle.inkFor(Theme.of(context).brightness),
                       letterSpacing: -0.3,
                     ),
                   ),
@@ -553,7 +553,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
           height: 80.h,
           width: double.infinity,
           decoration: BoxDecoration(
-            color: AppStyle.white,
+            color: AppStyle.cardFor(Theme.of(context).brightness),
             borderRadius: BorderRadius.circular(12.r),
           ),
           child: InkWell(
@@ -571,7 +571,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                   AppHelpers.getTranslation(TrKeys.uploadDocuments),
                   style: AppStyle.interNoSemi(
                     size: 14,
-                    color: AppStyle.black,
+                    color: AppStyle.inkFor(Theme.of(context).brightness),
                     letterSpacing: -0.3,
                   ),
                 ),
@@ -583,7 +583,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
         ...state.filepath.map(
           (e) => Container(
             decoration: BoxDecoration(
-              color: AppStyle.white,
+              color: AppStyle.cardFor(Theme.of(context).brightness),
               borderRadius: BorderRadius.circular(6.r),
             ),
             padding: REdgeInsets.symmetric(horizontal: 6, vertical: 6),
