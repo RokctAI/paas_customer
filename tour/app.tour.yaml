@@ -85,12 +85,33 @@ tour:
   # customer wallet surface). Amount presets render locally; the saved-card
   # picker degrades gracefully to its no-saved-cards state offline.
   - fragment: wallet
+  # Customer order tracking (orders_sdk customer routes, app_type.customer).
+  # App steps, not a fragment: orders_sdk's own fragment is the manager
+  # queue. orders_sdk's demo fixtures answer api.order.list_orders and
+  # api.order.get_order_details (order 3 is the live, on-the-way order), so
+  # both stills are stocked offline. The phone status-bar live activity and
+  # the 'order_status' push are system surfaces the runner cannot capture.
+  - step:
+      key: customer_orders
+      title: "Your orders"
+      caption: "Active orders up top, the rest in your history - *every order* in one list."
+      action: route
+      route: /order
+      settle: 8
+  - step:
+      key: customer_order_tracking
+      title: "Track it live"
+      caption: "Follow the order from kitchen to door - the status *updates live* as it moves."
+      action: route
+      route: /order_progress?orderId=3
+      settle: 10
   # NOT listed (deliberately):
   # - users: its fragment routes to /profile, and this compose exposes no
   #   /profile route (the customer account surface is a tab inside the
   #   marketplace home shell). The fragment's own header says to prefer the
   #   home SDK's fragment in exactly this case.
-  # - merchants/products/orders (manager role), delivery (driver role):
-  #   wrong persona for the customer shell.
+  # - merchants/products/orders fragments (manager role), delivery (driver
+  #   role): wrong persona for the customer shell (the customer order
+  #   steps above are app steps for that reason).
   # - promotions: registered empty upstream (no navigable promotions-owned
   #   screen yet).
