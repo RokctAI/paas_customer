@@ -778,7 +778,8 @@
         "assets/demo/merchants/api.seller_shop.get_shop.json": "6217983659f930765a1349ed444d6544aae7d8aa9c2b26448f61dc25512999a3",
         "assets/demo/merchants/api.seller_shop_settings.update_seller_shop_working_days.json": "36f579d4c4606f9ff3c022585bab9c993c9fb9f0aec51523d0a81a7065d0eb31",
         "assets/demo/merchants/api.tag.get_tags.json": "3b459147c8170c320545247d8ba79c22d55408311adafa4ad737f02c7aa78700",
-        "assets/demo/merchants/api.seller_shop_settings.get_shop_users.json": "33a98071be016297299a446ce438f450c538df533033f56061c083ce354713a8"
+        "assets/demo/merchants/api.seller_shop_settings.get_shop_users.json": "33a98071be016297299a446ce438f450c538df533033f56061c083ce354713a8",
+        "assets/demo/merchants/api.shop.get_shop_branches.json": "44e39501c1fde8a81c948b9647e7340446cd6d0909a291271c0ddb4db4be967c"
       },
       "routes": [
         {
@@ -836,7 +837,37 @@
     },
     "products_sdk": {
       "version": "1.12.1",
-      "files": {},
+      "files": {
+        "assets/demo/products/api.brand.get_brand_by_uuid.json": "2f572655239beaef3a4258dca9213d201ad23d9092a8d44e9251e68daad92fbb",
+        "assets/demo/products/api.brand.get_brands.json": "e6d9aceed478a49c043f14905a208bf587418015ae67925eef65f7d7f07631ea",
+        "assets/demo/products/api.category.get_categories.json": "00249f595c3844888ee0cb885fdd8c517a8a95000a62eacf39b11fb4d3903f88",
+        "assets/demo/products/api.category.search_categories.json": "fc3142f6a32aeabe90c89bee0d3d39a210840fe65c89ff097ab6bdb0f993e647",
+        "assets/demo/products/api.product.add_product_review.json": "36f579d4c4606f9ff3c022585bab9c993c9fb9f0aec51523d0a81a7065d0eb31",
+        "assets/demo/products/api.product.get_discounted_products.json": "ecdabb118b2a2ab7be3597f2283c3e95f0642e76dc081cd9a226c7edce1033db",
+        "assets/demo/products/api.product.get_product_by_uuid.json": "b6b6fc777b93b291a5471aeb3c0fad727c30f69c5dbebfcc8d7f45f72b1b3eff",
+        "assets/demo/products/api.product.get_products.json": "35ee734e54df9925016d620c297897e033d96fc6c65d7a4de1a43adc3e14e064",
+        "assets/demo/products/api.product.get_products_by_ids.json": "92ad12eb00e867bc3d9b9216551acd9a5f741ddc79ab26fce6e8c58d8fb3e815",
+        "assets/demo/products/api.product.most_sold_products.json": "27d429a93a610f797b1f80a20589922aa0b6153f4fd988aa24fbefab725236b2",
+        "assets/demo/products/api.product.order_products_calculate.json": "e7c2dcb1f3914f2b38754688638ea1f5c3c1f246de97335a9fe83460408f8af2",
+        "assets/demo/products/api.product_extra.update_product_extras.json": "a67554aeb86dd241f4a481ad1f71e764314bbc248b715df94b465c4d2366df87",
+        "assets/demo/products/api.seller_product.create_product.json": "bee4522df88ddd17c2b7cc0737a3bf414bdfd018fb3aa6a574b028d2fb9db5d1",
+        "assets/demo/products/api.seller_product.create_seller_category.json": "36f579d4c4606f9ff3c022585bab9c993c9fb9f0aec51523d0a81a7065d0eb31",
+        "assets/demo/products/api.seller_product.create_seller_extra_group.json": "14ec220f5a6fea182363d994257af9e477ce0008e2a436bf39ecbb944290923d",
+        "assets/demo/products/api.seller_product.create_seller_extra_value.json": "f5055dc2f1bd380e02994d5eb6e1944931bce351168dae6dcf590e5a6c821e79",
+        "assets/demo/products/api.seller_product.delete_seller_category.json": "36f579d4c4606f9ff3c022585bab9c993c9fb9f0aec51523d0a81a7065d0eb31",
+        "assets/demo/products/api.seller_product.delete_seller_extra_group.json": "36f579d4c4606f9ff3c022585bab9c993c9fb9f0aec51523d0a81a7065d0eb31",
+        "assets/demo/products/api.seller_product.delete_seller_extra_value.json": "36f579d4c4606f9ff3c022585bab9c993c9fb9f0aec51523d0a81a7065d0eb31",
+        "assets/demo/products/api.seller_product.get_product_details.json": "c085451bfdfea3523c7993705fcb031786836d9ebf58d8ec9e48e85107bdb54b",
+        "assets/demo/products/api.seller_product.get_seller_categories.json": "b157cbc4a61bf1e3363e53ec2e3daba81b9286cb6a1383cba1701b2f437ad9ed",
+        "assets/demo/products/api.seller_product.get_seller_extra_groups.json": "cb98ee84da19c51bbcf52a32050e526907d0ecb94fcfe27552012e7800bc9c61",
+        "assets/demo/products/api.seller_product.get_seller_extra_values.json": "d789972934afe6df681a3880bbe3ea948d9d87ddb79f96e183a7ac28082e863b",
+        "assets/demo/products/api.seller_product.get_seller_products.json": "03ffdbe0984c64a6a42441c5b42e01c04ba2f1d94bc4ac20cb1fdbc3605cb815",
+        "assets/demo/products/api.seller_product.get_seller_units.json": "e1712e4e7fd416e31ca88a5d5798895aad5ab1becfb2bbc0f8054b374803e026",
+        "assets/demo/products/api.seller_product.update_seller_extra_group.json": "d789972934afe6df681a3880bbe3ea948d9d87ddb79f96e183a7ac28082e863b",
+        "assets/demo/products/api.seller_product.update_seller_extra_value.json": "5e68b07d3c440c252c3f3b7454497387131d32775ad532b39461d33b95586e9a",
+        "assets/demo/products/api.seller_product.update_seller_product.json": "c085451bfdfea3523c7993705fcb031786836d9ebf58d8ec9e48e85107bdb54b",
+        "assets/demo/products/api.stock.update_product_stocks.json": "a67554aeb86dd241f4a481ad1f71e764314bbc248b715df94b465c4d2366df87"
+      },
       "routes": [],
       "app_routes": [],
       "onboarding_slides": [],

@@ -46,6 +46,8 @@ dependencies:
     path: .rokct/cache/map
   promotions_sdk:
     path: .rokct/cache/promotions
+  subscriptions_sdk:
+    path: .rokct/cache/subscriptions
   loyalty_sdk:
     path: .rokct/cache/loyalty
   booking_sdk:
