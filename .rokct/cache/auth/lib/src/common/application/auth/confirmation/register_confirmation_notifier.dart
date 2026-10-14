@@ -30,9 +30,11 @@ import 'package:base_sdk/src/domain/interface/user.dart';
 import 'package:base_sdk/src/application/main/main_provider.dart';
 import 'package:auth_sdk/src/common/application/auth/confirmation/register_confirmation_state.dart';
 import 'package:auth_sdk/src/common/domain/interface/deferred_otp_email_resend.dart';
+import 'package:auth_sdk/src/common/domain/interface/email_code_verification.dart';
 import 'package:auth_sdk/src/common/infrastructure/services/offline_auth_service.dart';
 import 'package:auth_sdk/src/common/services/auth_error_presenter.dart';
 import 'package:auth_sdk/src/common/services/platform_support.dart';
+import 'package:auth_sdk/src/common/services/session_profile.dart';
 
 class RegisterConfirmationNotifier
     extends StateNotifier<RegisterConfirmationState> {
@@ -133,6 +135,7 @@ class RegisterConfirmationNotifier
             // Deferred-OTP accounts are fully verified from here on.
             await offlineAuth.clearPendingOtpVerification();
             await LocalStorage.setToken(data.data?.token);
+            await storeSessionProfile(data.data?.user, _userRepositoryFacade);
             if (isDeferredOtp && pendingOtp != null) {
               // Forced credential rotation: accounts synced by old app
               // versions carry a guessable sync-time backend password.
@@ -230,13 +233,20 @@ class RegisterConfirmationNotifier
     WidgetRef ref, {
     bool isDeferredOtp = false,
     ValueChanged<VerifyData?>? onVerified,
+    String email = '',
   }) async {
     final connected = await AppConnectivity.connectivity();
     if (connected) {
       state = state.copyWith(isLoading: true, isSuccess: false);
-      final response = await _authRepository.verifyEmail(
-        verifyCode: state.confirmCode.trim(),
-      );
+      // verify_email_code (by email + code) mints the session token the
+      // sign-up needs; verify_my_email (the facade's verifyEmail) does not.
+      final repo = _authRepository;
+      final response = repo is EmailCodeVerification && email.trim().isNotEmpty
+          ? await (repo as EmailCodeVerification).verifyEmailCode(
+              email: email.trim(),
+              verifyCode: state.confirmCode.trim(),
+            )
+          : await repo.verifyEmail(verifyCode: state.confirmCode.trim());
       response.when(
         success: (data) async {
           ref.read(mainProvider.notifier).resetToInitialPage();
@@ -259,6 +269,7 @@ class RegisterConfirmationNotifier
               // after) runs as the verified account instead of the
               // `offline:<id>` placeholder.
               await LocalStorage.setToken(freshToken);
+              await storeSessionProfile(null, _userRepositoryFacade);
             }
             // Forced credential rotation — same contract as the phone
             // path: fire and forget, retried by PendingOtpGate on
@@ -313,6 +324,7 @@ class RegisterConfirmationNotifier
       response.when(
         success: (data) async {
           await LocalStorage.setToken(data.token);
+          await storeSessionProfile(data.user, _userRepositoryFacade);
           await completeSessionStart(_userRepositoryFacade);
           state = state.copyWith(
             isLoading: false,
@@ -367,6 +379,7 @@ class RegisterConfirmationNotifier
           response.when(
             success: (data) async {
               await LocalStorage.setToken(data.token);
+              await storeSessionProfile(data.user, _userRepositoryFacade);
               await completeSessionStart(_userRepositoryFacade);
               state = state.copyWith(
                 isLoading: false,
@@ -416,6 +429,7 @@ class RegisterConfirmationNotifier
             );
             _timer?.cancel();
             LocalStorage.setToken(data.data?.token);
+            await storeSessionProfile(data.data?.user, _userRepositoryFacade);
             LocalStorage.setAddressSelected(
               AddressData(
                 title:

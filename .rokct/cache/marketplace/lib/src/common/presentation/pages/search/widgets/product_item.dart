@@ -15,7 +15,7 @@
 import 'package:flutter/material.dart';
 import 'package:base_sdk/src/navigation/embedded_widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_remix/flutter_remix.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:base_sdk/src/models/data/product_data.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
@@ -144,7 +144,7 @@ class ProductItem extends ConsumerWidget {
                                     color: AppStyle.blueBonus,
                                   ),
                                   child: Icon(
-                                    FlutterRemix.gift_2_fill,
+                                    Remix.gift_2_fill,
                                     size: 16.r,
                                     color: AppStyle.white,
                                   ),

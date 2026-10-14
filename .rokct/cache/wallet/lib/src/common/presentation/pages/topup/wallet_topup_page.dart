@@ -17,8 +17,8 @@
 // centrally; no HTTP client is created in this file)
 
 // Wallet top-up screen, ported from commerce/marketplace's finished
-// WalletTopUpScreen (#33): amount presets, a saved-card picker, token
-// top-up, and the redirect-URL branch for a new card.
+// WalletTopUpScreen (#33): amount presets and a saved-card picker that
+// tops up with the chosen card.
 //
 // Port deltas, on purpose:
 //   * Every backend call goes through base_sdk's [PlatformGateway]
@@ -29,10 +29,18 @@
 //     `EmbeddedWidgets.I.savedCardsWidget`: feature SDKs must not import
 //     each other (ADR-005), and a shell that composes wallet_sdk without
 //     the marketplace surfaces never registers that embedded widget — the
-//     donor's call would throw. `payFastWebView` (the redirect branch) IS
-//     still reached through EmbeddedWidgets, guarded, because a WebView
-//     stack is host plumbing this SDK should not own; a shell without it
-//     degrades to a friendly message.
+//     donor's call would throw.
+//   * No "pay with new card" path. The backend has no card-capture flow a
+//     top-up can use: its tokenize_card refuses typed-in card details, and
+//     PayFast saves a card only through an order checkout. The page used to
+//     push `paymentScreen(tokenizeOnly: true)`, which has no card form (it
+//     lists saved cards) and crashed in apps without the orders SDK. Until
+//     a gateway-hosted card form exists, a card saved at checkout is the
+//     only way in; with none, the page says so.
+//   * Each top-up sends an X-Idempotency-Key (one per card + amount, reused
+//     on a retry) so a retried top-up cannot charge twice, and a success
+//     refreshes the profile so the wallet card shows the new balance.
+//   * Amounts show the backend's currency symbol (rand only as fallback).
 //   * Student-facing errors are one friendly line; the detail goes to
 //     [TelemetryClient] (#56 standing rule). The donor put raw `$error`
 //     text on screen.
@@ -42,11 +50,11 @@
 
 import 'dart:async';
 
+import 'package:base_sdk/src/application/profile/profile_provider.dart';
 import 'package:base_sdk/src/di/injection.dart';
 import 'package:base_sdk/src/handlers/api_result.dart';
 import 'package:base_sdk/src/handlers/platform_gateway.dart';
 import 'package:base_sdk/src/models/data/saved_card.dart';
-import 'package:base_sdk/src/navigation/embedded_widgets.dart';
 import 'package:base_sdk/src/presentation/components/keyboard_dismisser.dart';
 import 'package:base_sdk/src/presentation/components/title_icon.dart';
 import 'package:base_sdk/src/presentation/theme/theme.dart';
@@ -54,13 +62,17 @@ import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/telemetry.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
+import 'package:base_sdk/src/sync/sync_engine.dart';
 import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:wallet_sdk/src/common/infrastructure/repositories/wallet_repository.dart';
 import 'package:wallet_sdk/src/common/presentation/pages/receive/wallet_receive_screen.dart';
+import 'package:wallet_sdk/src/common/utils/wallet_currency.dart';
 
-class WalletTopUpPage extends StatefulWidget {
+class WalletTopUpPage extends ConsumerStatefulWidget {
   /// Render as a bottom sheet (drag handle + title in the sheet chrome,
   /// no Scaffold/AppBar) instead of a pushed page. The profile wallet
   /// card's Top-up opens it this way, the same modal shape as its Send
@@ -82,10 +94,10 @@ class WalletTopUpPage extends StatefulWidget {
   }
 
   @override
-  State<WalletTopUpPage> createState() => _WalletTopUpPageState();
+  ConsumerState<WalletTopUpPage> createState() => _WalletTopUpPageState();
 }
 
-class _WalletTopUpPageState extends State<WalletTopUpPage> {
+class _WalletTopUpPageState extends ConsumerState<WalletTopUpPage> {
   static const _gateway = PlatformGateway();
 
   final _amountController = TextEditingController();
@@ -97,6 +109,22 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
 
   // Predefined amount options for quick selection (donor's presets).
   final List<double> _amountOptions = [50, 100, 200, 500, 1500, 2000];
+
+  /// One idempotency key per top-up attempt (card + amount), reused when
+  /// the same top-up is retried after a failure or timeout so the server
+  /// never charges it twice; another card or amount gets a new key, and a
+  /// completed top-up clears it.
+  String? _topUpKey;
+  String? _topUpKeyFor;
+
+  String _topUpKeyForAttempt(String cardId, double amount) {
+    final attempt = '$cardId|$amount';
+    if (_topUpKey == null || _topUpKeyFor != attempt) {
+      _topUpKey = SyncEngine.newOpId();
+      _topUpKeyFor = attempt;
+    }
+    return _topUpKey!;
+  }
 
   @override
   void initState() {
@@ -130,8 +158,8 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
     try {
       // Manifest key: {app_name}.api.payment.get_saved_cards. The method
       // returns a bare list of card rows (name/gateway/last_four/card_type/
-      // expiry_date/card_holder_name). No reuse credential: `name` is the
-      // handle the top-up charge takes.
+      // expiry_date/card_holder_name/is_default), the default first. No
+      // reuse credential: `name` is the handle the top-up charge takes.
       final body = await _gateway.tenant('api.payment.get_saved_cards');
       final data = body is Map && body.containsKey('message')
           ? body['message']
@@ -146,6 +174,7 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
                     cardType: e['card_type']?.toString() ?? 'Card',
                     expiryDate: e['expiry_date']?.toString() ?? '',
                     cardHolderName: e['card_holder_name']?.toString() ?? '',
+                    isDefault: e['is_default'] == true || e['is_default'] == 1,
                   ),
                 )
                 .toList()
@@ -154,14 +183,16 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
       setState(() {
         _savedCards = cards;
         _loadingCards = false;
+        // Start on the user's default card, when they have chosen one.
+        _selectedCard ??= cards.where((c) => c.isDefault).firstOrNull;
       });
     } catch (e) {
       if (!mounted) return;
       setState(() {
         _loadingCards = false;
       });
-      // Cards failing to load is not fatal — the new-card path still
-      // works — so no snackbar, telemetry only.
+      // Cards failing to load shows the no-saved-card state; telemetry
+      // only, no snackbar.
       unawaited(
         TelemetryClient.I.logError(
           type: 'wallet_topup_saved_cards_failed',
@@ -221,10 +252,15 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
     });
 
     try {
-      final result = await _walletRepository.walletTopUp(
-        amount: amount,
-        token: card.id,
-      );
+      final key = _topUpKeyForAttempt(card.id, amount);
+      final repository = _walletRepository;
+      final result = repository is WalletRepository
+          ? await repository.walletTopUp(
+              amount: amount,
+              token: card.id,
+              idempotencyKey: key,
+            )
+          : await repository.walletTopUp(amount: amount, token: card.id);
 
       if (!mounted) return;
       setState(() {
@@ -233,7 +269,11 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
 
       result.when(
         success: (data) {
+          _topUpKey = null;
           if (!mounted) return;
+          // The profile wallet card reads the profile; refetch it so the
+          // new balance shows instead of the pre-top-up one.
+          ref.read(profileProvider.notifier).fetchUser(context);
           AppHelpers.showCheckTopSnackBarDone(
             context,
             AppHelpers.getTranslation(TrKeys.topUpSuccessful),
@@ -254,87 +294,6 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
       _failFriendly(
         TrKeys.somethingWentWrongWithTheServer,
         'wallet_topup_token_failed',
-        e,
-      );
-    }
-  }
-
-  // Process top-up with a new card (redirect-URL branch).
-  Future<void> _topUpWithNewCard() async {
-    final amount = _validAmount();
-    if (amount == null) return;
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final result = await _walletRepository.walletTopUp(amount: amount);
-
-      if (!mounted) return;
-      setState(() {
-        _isLoading = false;
-      });
-
-      result.when(
-        success: (data) {
-          if (!mounted) return;
-          if (data is String && data.isNotEmpty) {
-            _openRedirect(data);
-          } else {
-            // Direct success (unlikely for a new card, but possible if the
-            // gateway completes without a redirect).
-            _loadSavedCards();
-            AppHelpers.showCheckTopSnackBarDone(
-              context,
-              AppHelpers.getTranslation(TrKeys.topUpSuccessful),
-            );
-            _navigateBack();
-          }
-        },
-        failure: (error, statusCode) => _failFriendly(
-          TrKeys.somethingWentWrongWithTheServer,
-          'wallet_topup_new_card_failed',
-          '$error (status $statusCode)',
-        ),
-      );
-    } catch (e) {
-      if (!mounted) return;
-      setState(() {
-        _isLoading = false;
-      });
-      _failFriendly(
-        TrKeys.somethingWentWrongWithTheServer,
-        'wallet_topup_new_card_failed',
-        e,
-      );
-    }
-  }
-
-  /// The gateway answered with a hosted card-capture URL. The WebView is
-  /// host plumbing reached through [EmbeddedWidgets]; a shell composed
-  /// without one lands in the catch and shows a friendly line.
-  void _openRedirect(String url) {
-    try {
-      final webView = EmbeddedWidgets.I.payFastWebView(
-        url: url,
-        onComplete: (success) {
-          if (!mounted) return;
-          if (success) {
-            _loadSavedCards();
-            AppHelpers.showCheckTopSnackBarDone(
-              context,
-              AppHelpers.getTranslation(TrKeys.topUpSuccessful),
-            );
-            _navigateBack();
-          }
-        },
-      );
-      Navigator.push(context, MaterialPageRoute(builder: (_) => webView));
-    } catch (e) {
-      _failFriendly(
-        TrKeys.somethingWentWrongWithTheServer,
-        'wallet_topup_webview_unavailable',
         e,
       );
     }
@@ -367,7 +326,10 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
                 hintText: '0.00',
                 prefixIcon: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12.w),
-                  child: Text('R', style: AppStyle.interBold(size: 18.sp)),
+                  child: Text(
+                    WalletCurrency.symbol,
+                    style: AppStyle.interBold(size: 18.sp),
+                  ),
                 ),
                 prefixIconConstraints: const BoxConstraints(
                   minWidth: 0,
@@ -417,7 +379,7 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
                       ],
                     ),
                     child: Text(
-                      'R ${amount.toStringAsFixed(2)}',
+                      WalletCurrency.format(amount),
                       style: AppStyle.interNormal(size: 14.sp),
                     ),
                   ),
@@ -478,57 +440,27 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
                           ),
                         ),
                 ),
-              4.verticalSpace,
-              Row(
-                children: [
-                  Expanded(child: Divider(color: AppStyle.strokeDark)),
-                ],
-              ),
-              4.verticalSpace,
-            ],
-
-            // Pay with new card button
-            ElevatedButton(
-              onPressed: _isLoading ? null : _topUpWithNewCard,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: _savedCards.isNotEmpty
-                    ? AppStyle.transparent
-                    : AppStyle.primary,
-                foregroundColor: _savedCards.isNotEmpty
-                    ? AppStyle.primary
-                    : AppStyle.white,
-                minimumSize: Size(double.infinity, 50.h),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8.r),
-                  side: _savedCards.isNotEmpty
-                      ? BorderSide(color: AppStyle.primary)
-                      : BorderSide.none,
-                ),
-                elevation: _savedCards.isNotEmpty ? 0 : 2,
-              ),
-              child: _isLoading
-                  ? SizedBox(
-                      height: 20.h,
-                      width: 20.w,
-                      child: CircularProgressIndicator(
-                        color: _savedCards.isNotEmpty
-                            ? AppStyle.primary
-                            : AppStyle.white,
-                        strokeWidth: 2,
-                      ),
-                    )
-                  : Text(
-                      _savedCards.isNotEmpty
-                          ? AppHelpers.getTranslation(TrKeys.payWithNewCard)
-                          : AppHelpers.getTranslation(TrKeys.topUpNow),
-                      style: AppStyle.interSemi(
-                        size: 16.sp,
-                        color: _savedCards.isNotEmpty
-                            ? AppStyle.primary
-                            : AppStyle.white,
-                      ),
+            ] else
+              // No saved card: a top-up charges a saved card, and a card
+              // is saved by paying with it at a gateway checkout. There is
+              // no card form here to add one (see the header).
+              Center(
+                child: Column(
+                  children: [
+                    Icon(
+                      Remix.bank_card_line,
+                      size: 40.r,
+                      color: AppStyle.textDarkSecondary,
                     ),
-            ),
+                    8.verticalSpace,
+                    Text(
+                      AppHelpers.getTranslation(TrKeys.noSavedCard),
+                      style: AppStyle.interSemi(size: 16.sp),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
 
             16.verticalSpace,
             Row(
@@ -541,7 +473,7 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
             // (CashSend-style).
             ElevatedButton.icon(
               onPressed: _isLoading ? null : _openReceiveFromFriend,
-              icon: const Icon(Icons.call_received),
+              icon: const Icon(Remix.arrow_left_down_line),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppStyle.transparent,
                 foregroundColor: AppStyle.primary,
@@ -558,17 +490,6 @@ class _WalletTopUpPageState extends State<WalletTopUpPage> {
               ),
             ),
 
-            24.verticalSpace,
-            Center(
-              child: Text(
-                AppHelpers.getTranslation(TrKeys.cardWillBeSaved),
-                style: AppStyle.interNormal(
-                  size: 12.sp,
-                  color: AppStyle.textDarkSecondary,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
             24.verticalSpace,
           ],
         ),
@@ -677,7 +598,7 @@ class _SavedCardTile extends StatelessWidget {
           child: Row(
             children: [
               Icon(
-                Icons.credit_card,
+                Remix.bank_card_line,
                 color: selected ? AppStyle.primary : AppStyle.textDarkSecondary,
               ),
               12.horizontalSpace,
@@ -701,7 +622,7 @@ class _SavedCardTile extends StatelessWidget {
                 ),
               ),
               if (selected)
-                Icon(Icons.check_circle, color: AppStyle.primary, size: 20.r),
+                Icon(Remix.checkbox_circle_fill, color: AppStyle.primary, size: 20.r),
             ],
           ),
         ),

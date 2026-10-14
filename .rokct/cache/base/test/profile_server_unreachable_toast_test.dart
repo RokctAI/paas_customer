@@ -60,6 +60,10 @@ class _UnreachableUserRepository extends Fake implements UserRepositoryFacade {
   final DioExceptionType type;
   int profileCalls = 0;
 
+  /// Set to make the server ANSWER with this status instead of not
+  /// answering at all.
+  int? answeredStatus;
+
   @override
   Future<ApiResult<ProfileResponse>> getProfileDetails() async {
     profileCalls++;
@@ -67,6 +71,13 @@ class _UnreachableUserRepository extends Fake implements UserRepositoryFacade {
       path: kPlatformGatewayPath,
       data: {'cmd': 'api.user.get_profile'},
     );
+    // A server that answered: its own copy reaches the page verbatim.
+    if (answeredStatus != null) {
+      return ApiResult<ProfileResponse>.failure(
+        error: 'Profile service failed',
+        statusCode: answeredStatus!,
+      );
+    }
     // No `response`: nothing ever answered.
     final e = DioException(requestOptions: options, type: type);
     return ApiResult<ProfileResponse>.failure(
@@ -113,9 +124,11 @@ void main() {
 
   Future<_UnreachableUserRepository> pumpProfile(
     WidgetTester tester,
-    DioExceptionType type,
-  ) async {
-    final repository = _UnreachableUserRepository(type);
+    DioExceptionType type, {
+    int? answeredStatus,
+  }) async {
+    final repository = _UnreachableUserRepository(type)
+      ..answeredStatus = answeredStatus;
     getIt.registerSingleton<UserRepositoryFacade>(repository);
     tester.view.physicalSize = const Size(390, 1400);
     tester.view.devicePixelRatio = 1.0;
@@ -137,10 +150,13 @@ void main() {
     return repository;
   }
 
+  // Ray, 2026-10-03: "using app offline cant be taken as an error". A
+  // backend that does not answer is the app being used offline: the page
+  // renders the cached user and the footer's Online/Offline label is the
+  // only signal. Neither connection line may toast here any more.
   group('the profile page when the guard passes and the backend does not '
       'answer', () {
-    testWidgets('an attempted-and-refused fetch names the server, not the '
-        "reader's connection", (tester) async {
+    testWidgets('an unreachable backend shows no toast', (tester) async {
       final repository =
           await pumpProfile(tester, DioExceptionType.connectionError);
 
@@ -151,33 +167,45 @@ void main() {
       );
       expect(
         find.text(AppHelpers.getTranslation(TrKeys.couldNotReachServer)),
-        findsOneWidget,
-        reason: 'an unreachable backend must say the server was unreachable',
+        findsNothing,
+        reason: 'offline use is not an error on the profile page',
       );
-      // The regression Ray reported, verbatim wording and all.
       expect(
         find.text(
           AppHelpers.getTranslation(TrKeys.checkYourNetworkConnection),
         ),
         findsNothing,
-        reason: 'the guard already found a network; do not blame the reader',
       );
-      // And not the OTHER profile toast either: that one belongs to the
-      // guard, which did not fire here.
       expect(find.text('No internet connection'), findsNothing);
     });
 
-    testWidgets('a timeout says the server was too slow', (tester) async {
+    testWidgets('a timeout shows no toast either', (tester) async {
       await pumpProfile(tester, DioExceptionType.receiveTimeout);
 
       expect(
         find.text(AppHelpers.getTranslation(TrKeys.serverTookTooLong)),
-        findsOneWidget,
+        findsNothing,
       );
       expect(
         find.text(AppHelpers.getTranslation(TrKeys.couldNotReachServer)),
         findsNothing,
       );
+    });
+
+    // Ray, 2026-10-05: no error on load before the person did anything.
+    // The page's own initState fetch is load-time, so even a failure the
+    // server answered stays off screen (debug output only); only a fetch
+    // the person asked for (`userInitiated: true`) may toast it.
+    testWidgets('a server that answers with an error is silent on load',
+        (tester) async {
+      final repository = await pumpProfile(
+        tester,
+        DioExceptionType.badResponse,
+        answeredStatus: 500,
+      );
+
+      expect(repository.profileCalls, 1);
+      expect(find.text('Profile service failed'), findsNothing);
     });
   });
 }

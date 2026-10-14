@@ -26,6 +26,7 @@ import 'package:base_sdk/src/presentation/components/keyboard_dismisser.dart';
 import 'package:base_sdk/src/presentation/components/title_icon.dart';
 import 'package:base_sdk/src/presentation/theme/theme.dart';
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/wallet_receive_screen.dart';
+import 'package:remixicon/remixicon.dart';
 // [refork] embed via EmbeddedWidgets
 
 // [refork] embed via EmbeddedWidgets
@@ -499,7 +500,7 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
                   // receiver hands to the sender out-of-band (CashSend-style).
                   ElevatedButton.icon(
                     onPressed: _isLoading ? null : _openReceiveFromFriend,
-                    icon: const Icon(Icons.call_received),
+                    icon: const Icon(Remix.arrow_left_down_line),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppStyle.transparent,
                       foregroundColor: AppStyle.primary,

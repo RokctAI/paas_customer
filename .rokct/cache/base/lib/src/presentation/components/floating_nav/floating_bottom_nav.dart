@@ -14,6 +14,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -22,6 +23,7 @@ import '../../../constants/app_constants.dart';
 import '../../adaptive/breakpoints.dart';
 import '../../theme/app_style.dart';
 import '../blur_wrap.dart';
+import '../user_avatar.dart';
 import 'bottom_navigator_item.dart';
 import 'floating_nav_mode.dart';
 
@@ -138,7 +140,7 @@ class _FloatingBottomNavState extends ConsumerState<FloatingBottomNav> {
       // but back with no other buttons sit at the corner." The corner is
       // the bottom-END one, the same spot PlaneHost parks its pill in —
       // not a one-button rail at the start edge, not bottom center.
-      if (mode.back != null && mode.tabs.isEmpty && mode.trailing.isEmpty) {
+      if (mode.back != null && !mode.hasEntries && mode.companion == null) {
         return _backCorner(mode.back!);
       }
       final placement =
@@ -224,9 +226,12 @@ class _FloatingBottomNavState extends ConsumerState<FloatingBottomNav> {
   /// choice of dash or rectangle; dash unless it says otherwise).
   Widget _tabsPill(FloatingNavTabsMode mode) {
     final isScrolling = ref.watch(floatingProvider).isScrolling;
-    return _Housing(
+    final companion = mode.companion;
+    final pill = _Housing(
       radius: 100.r,
-      fitted: true,
+      // With a companion the pill and the button beside it scale down
+      // together, so the Row below does the fitting instead.
+      fitted: companion == null,
       height: 60.r,
       padding: EdgeInsets.symmetric(horizontal: 10.r),
       child: Row(
@@ -244,7 +249,7 @@ class _FloatingBottomNavState extends ConsumerState<FloatingBottomNav> {
             // The hairline splits back from the tabs. A back-only pill —
             // empty tabs, no trailing actions: the no-tab-set apps'
             // pushed routes — has nothing to split from, so it draws none.
-            if (mode.tabs.isNotEmpty || mode.trailing.isNotEmpty)
+            if (mode.hasEntries)
               Container(
                 width: 1,
                 height: 26.r,
@@ -266,12 +271,28 @@ class _FloatingBottomNavState extends ConsumerState<FloatingBottomNav> {
               label: mode.tabs[i].label,
               indicator: mode.indicator,
             ),
+          if (mode.profile != null) _ProfileEntry(profile: mode.profile!),
           // Not destinations: these invoke a mode rather than moving the
           // viewer, so they never carry the active indicator.
           for (final action in mode.trailing)
             _NavActionButton(action: action, compact: true),
         ],
       ),
+    );
+    if (companion == null) return pill;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Flexible(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [pill, _CompanionButton(action: companion)],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -345,7 +366,7 @@ class _FloatingBottomNavState extends ConsumerState<FloatingBottomNav> {
             _BackSegment(back: mode.back!, vertical: true),
             // Same rule as the bottom pill: a back-only rail draws no
             // hairline — there are no tabs to split from.
-            if (mode.tabs.isNotEmpty || mode.trailing.isNotEmpty)
+            if (mode.hasEntries || mode.companion != null)
               Container(
                 height: 1,
                 width: 26.r,
@@ -369,9 +390,22 @@ class _FloatingBottomNavState extends ConsumerState<FloatingBottomNav> {
             ),
           // Same rule as the bottom pill: these invoke a mode rather than
           // moving the viewer, so they never carry the active indicator.
+          if (mode.profile != null)
+            Padding(
+              padding: EdgeInsets.only(top: 8.r),
+              child: _ProfileEntry(profile: mode.profile!),
+            ),
           for (final action in mode.trailing)
             _NavActionButton(
               action: action,
+              compact: true,
+              margin: EdgeInsets.only(top: 8.r),
+            ),
+          // The rail has no room beside it, so the companion rides at its
+          // end, still a round button with its badge.
+          if (mode.companion != null)
+            _NavActionButton(
+              action: mode.companion!,
               compact: true,
               margin: EdgeInsets.only(top: 8.r),
             ),
@@ -416,8 +450,8 @@ class _FloatingBottomNavState extends ConsumerState<FloatingBottomNav> {
                 : null,
             action: FloatingNavAction(
               icon: _reactionsOpen
-                  ? Icons.emoji_emotions
-                  : Icons.emoji_emotions_outlined,
+                  ? Remix.emotion_happy_fill
+                  : Remix.emotion_happy_line,
               label: mode.reactionsLabel,
               active: _reactionsOpen,
               onTap: !mode.reactionsEnabled
@@ -823,7 +857,7 @@ class _ComposerBlockState extends State<_ComposerBlock> {
                           Padding(
                             padding: EdgeInsets.only(right: 8.r),
                             child: Icon(
-                              Icons.lock_outline,
+                              Remix.lock_line,
                               size: 17.r,
                               color: AppStyle.white.withOpacity(0.42),
                             ),
@@ -878,7 +912,7 @@ class _ComposerBlockState extends State<_ComposerBlock> {
                           _NavActionButton(
                             compact: true,
                             action: FloatingNavAction(
-                              icon: Icons.arrow_upward_rounded,
+                              icon: Remix.arrow_up_line,
                               label: input.placeholder,
                               active: true,
                               onTap: _submit,
@@ -933,7 +967,7 @@ class _TargetChip extends StatelessWidget {
                 if (target.onTap != null) ...[
                   SizedBox(width: 3.r),
                   Icon(
-                    Icons.keyboard_arrow_down,
+                    Remix.arrow_down_s_line,
                     size: 15.r,
                     color: AppStyle.white.withOpacity(0.6),
                   ),
@@ -1038,7 +1072,7 @@ class _NavActionButton extends StatelessWidget {
                       color: AppStyle.bottomNavigationBarColor,
                     ),
                     child: Icon(
-                      Icons.lock,
+                      Remix.lock_fill,
                       size: 10.r,
                       color: AppStyle.white.withOpacity(0.7),
                     ),
@@ -1131,6 +1165,109 @@ class _ReactionStrip extends StatelessWidget {
                   ),
                 ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The person's picture as the pill's last entry ([FloatingNavProfile]).
+///
+/// The customer app's original profile entry (paas_customer main_page.dart
+/// before the 2026-08-24 re-fork): a 40px circle, ringed in the brand colour
+/// while active and transparent otherwise. Never collapses on scroll, as the
+/// original did not: it is how a signed-out viewer finds sign-in.
+class _ProfileEntry extends StatelessWidget {
+  final FloatingNavProfile profile;
+
+  const _ProfileEntry({required this.profile});
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      button: true,
+      selected: profile.active,
+      label: profile.label,
+      child: Tooltip(
+        message: profile.label,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: profile.onTap,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 6.r),
+            child: Container(
+              width: 40.r,
+              height: 40.r,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: profile.active
+                      ? AppStyle.primary
+                      : AppStyle.transparent,
+                  width: 2.r,
+                ),
+              ),
+              child: UserAvatar(user: profile.user, size: 36.r),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// The round button beside the pill ([FloatingNavTabsMode.companion]).
+///
+/// The customer app's original cart button (paas_customer main_page.dart
+/// before the 2026-08-24 re-fork): a 56px near-black circle 8px right of the
+/// pill, white icon, the count in a badge at its top right.
+class _CompanionButton extends StatelessWidget {
+  final FloatingNavAction action;
+
+  const _CompanionButton({required this.action});
+
+  @override
+  Widget build(BuildContext context) {
+    final enabled = action.enabled;
+    return Semantics(
+      button: true,
+      enabled: enabled,
+      label: action.label,
+      child: Tooltip(
+        message: action.label,
+        child: Padding(
+          padding: EdgeInsets.only(left: 8.r),
+          child: Material(
+            color: const Color.fromRGBO(0, 0, 0, 0.8),
+            shape: const CircleBorder(),
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              onTap: enabled ? action.onTap : null,
+              onLongPress: enabled ? action.onLongPress : null,
+              child: SizedBox(
+                width: 56.r,
+                height: 56.r,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Icon(
+                      action.icon,
+                      size: 24.r,
+                      color: enabled
+                          ? AppStyle.white
+                          : AppStyle.white.withValues(alpha: 0.38),
+                    ),
+                    if (action.badgeCount > 0)
+                      Positioned(
+                        top: 9.r,
+                        right: 8.r,
+                        child: Badge(label: Text('${action.badgeCount}')),
+                      ),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ),

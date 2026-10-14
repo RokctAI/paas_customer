@@ -57,11 +57,15 @@ import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:base_sdk/src/models/data/saved_card.dart';
 import 'package:base_sdk/src/di/injection.dart';
+import 'package:base_sdk/src/handlers/platform_gateway.dart';
+import 'package:orders_sdk/src/common/infrastructure/repositories/orders_repository.dart';
 // [refork] embed via EmbeddedWidgets
 import 'package:orders_sdk/src/common/presentation/pages/order/order_check/widgets/card_and_promo.dart';
 import 'package:orders_sdk/src/common/presentation/pages/order/order_check/widgets/delivery_info.dart';
 import 'package:orders_sdk/src/common/presentation/pages/order/order_check/widgets/order_button.dart';
 import 'package:orders_sdk/src/common/presentation/pages/order/order_check/widgets/order_info.dart';
+import 'package:orders_sdk/src/common/presentation/pages/order/order_check/order_check_keys.dart';
+import 'package:remixicon/remixicon.dart';
 
 // Import the PreloadedWebView provider
 final preloadedWebViewProvider = StateProvider<PreloadedWebViewState?>(
@@ -343,6 +347,16 @@ class _OrderCheckState extends ConsumerState<OrderCheck> {
           unawaited(ref.read(activeOrderTrackerProvider).sync());
         },
         onWebview: (paymentUrl, transactionId) {
+          if (paymentUrl == OrdersRepository.braintreeNativePaid) {
+            // Paid in the native Braintree drop-in: no WebView to open.
+            if (!mounted) return;
+            widget.controllerCenter?.play();
+            eventShopOrder.getCart(context, () {});
+            eventOrderList.fetchActiveOrders(context);
+            unawaited(ref.read(activeOrderTrackerProvider).sync());
+            AppHelpers.goHome(context);
+            return;
+          }
           if (isPayFast) {
             // For PayFast, use our preloaded WebView if available
             final preloadedState = ref.read(preloadedWebViewProvider);
@@ -730,10 +744,44 @@ class _WebViewPageState extends State<WebViewPage> {
     }
   }
 
+  /// PayPal REST return: capture the approved order (idempotent server
+  /// side) and treat it as paid only when the capture completed.
+  Future<void> _capturePaypalRestOrder(String paypalOrderId) async {
+    bool paid = false;
+    try {
+      final response = await const PlatformGateway().tenant(
+        'api.payment.capture_paypal_rest_order',
+        {'order_id': paypalOrderId},
+      );
+      paid = response is Map && response['status'] == 'success';
+    } catch (e) {
+      debugPrint('==> paypal capture failure: $e');
+    }
+    if (!mounted) return;
+    if (paid) {
+      widget.onComplete?.call(true);
+      AppHelpers.goHome(context);
+    } else {
+      AppHelpers.showCheckTopSnackBarInfo(
+        context,
+        AppHelpers.getTranslation(TrKeys.paymentRejected),
+      );
+      widget.onComplete?.call(false);
+      Navigator.pop(context);
+    }
+  }
+
   // Check if the URL indicates payment completion
   bool _checkForPaymentCompletion(String url) {
     // Don't process if already detected payment completion
     if (isPaymentComplete) return false;
+
+    final String? paypalOrderId = OrdersRepository.paypalRestReturnToken(url);
+    if (paypalOrderId != null) {
+      isPaymentComplete = true;
+      _capturePaypalRestOrder(paypalOrderId);
+      return true;
+    }
 
     final isSuccess = url.contains('order-stripe-success') ||
         url.contains('payment-success') ||
@@ -799,7 +847,7 @@ class _WebViewPageState extends State<WebViewPage> {
           style: AppStyle.interNormal(),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: AppStyle.inkFor(Theme.of(context).brightness)),
+          icon: Icon(Remix.arrow_left_line, color: AppStyle.inkFor(Theme.of(context).brightness)),
           onPressed: () {
             Navigator.pop(context);
 
@@ -1002,7 +1050,7 @@ class _PayFastPaymentScreenState extends ConsumerState<PayFastPaymentScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                AppHelpers.getTranslation(TrKeys.payment),
+                AppHelpers.getTranslation(OrderCheckKeys.payment),
                 style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
               ),
               20.verticalSpace,

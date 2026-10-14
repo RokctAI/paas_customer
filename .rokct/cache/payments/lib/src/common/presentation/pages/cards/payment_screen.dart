@@ -20,6 +20,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:base_sdk/src/handlers/api_result.dart';
 import 'package:base_sdk/src/application/shop_order/shop_order_provider.dart';
 import 'package:base_sdk/src/di/injection.dart';
+import 'package:base_sdk/src/domain/interface/orders.dart';
 import 'package:base_sdk/src/models/data/order_body_data.dart';
 import 'package:base_sdk/src/models/data/saved_card.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
@@ -49,8 +50,19 @@ class PaymentScreen extends ConsumerStatefulWidget {
 }
 
 class _PaymentScreenState extends ConsumerState<PaymentScreen> {
-  final _ordersRepository = ordersRepository;
   final _paymentsRepository = paymentsRepository;
+
+  /// The orders SDK's repository, or null when the host composes no orders
+  /// SDK (supacharge). Resolved only where a PayFast checkout needs it: a
+  /// field initializer resolved it eagerly, so opening this screen threw a
+  /// StateError in such a host even in tokenize-only and top-up use.
+  OrdersRepositoryFacade? get _ordersRepository =>
+      getIt.isRegistered<OrdersRepositoryFacade>() ? ordersRepository : null;
+
+  /// A new card can be paid with (and so saved) only through the orders
+  /// SDK's PayFast checkout, for an order.
+  bool get _canPayWithNewCard =>
+      widget.orderData != null && _ordersRepository != null;
   bool _isLoading = false;
   bool _loadingCards = true;
   List<SavedCardModel> _savedCards = [];
@@ -178,11 +190,13 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
 
   // Redirects to PayFast WebView for payment
   Future<void> _redirectToPayFastWebView() async {
+    final orders = _ordersRepository;
+    if (orders == null || widget.orderData == null) return;
     setState(() {
       _isLoading = true;
     });
     try {
-      final result = await _ordersRepository.process(
+      final result = await orders.process(
         widget.orderData!,
         'pay-fast',
         context: context,
@@ -353,26 +367,30 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                     4.verticalSpace,
                   ],
 
-                  // Button to use PayFast WebView for new card
-                  CustomButton(
-                    isLoading: _isLoading,
-                    title: _selectedCard != null
-                        ? AppHelpers.getTranslation(TrKeys.payWithNewCard)
-                        : AppHelpers.getTranslation(TrKeys.payWithCard),
-                    onPressed: _redirectToPayFastWebView,
-                  ),
+                  // Button to use PayFast WebView for new card. Hidden
+                  // where there is no checkout to run it through (no order,
+                  // or no orders SDK in this app).
+                  if (_canPayWithNewCard) ...[
+                    CustomButton(
+                      isLoading: _isLoading,
+                      title: _selectedCard != null
+                          ? AppHelpers.getTranslation(TrKeys.payWithNewCard)
+                          : AppHelpers.getTranslation(TrKeys.payWithCard),
+                      onPressed: _redirectToPayFastWebView,
+                    ),
 
-                  10.verticalSpace,
+                    10.verticalSpace,
 
-                  Center(
-                    child: Text(
-                      AppHelpers.getTranslation(TrKeys.cardWillBeSaved),
-                      style: AppStyle.interNormal(
-                        size: 13.sp,
-                        color: AppStyle.textGrey,
+                    Center(
+                      child: Text(
+                        AppHelpers.getTranslation(TrKeys.cardWillBeSaved),
+                        style: AppStyle.interNormal(
+                          size: 13.sp,
+                          color: AppStyle.textGrey,
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                   16.verticalSpace,
                 ],
               ),

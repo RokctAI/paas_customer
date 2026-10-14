@@ -32,6 +32,7 @@ import 'package:base_sdk/src/presentation/components/buttons/custom_button.dart'
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/services/bundled_translations.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
+import 'package:base_sdk/src/services/load_silence.dart';
 import 'package:base_sdk/src/constants/app_constants.dart';
 import 'package:base_sdk/src/constants/demo_currency.dart';
 import 'package:base_sdk/src/navigation/app_routes.dart';
@@ -124,17 +125,18 @@ abstract class AppHelpers {
   }
 
   static showNoConnectionSnackBar(BuildContext context) {
+    if (LoadQuietGate.suppress('showNoConnectionSnackBar', 'offline')) return;
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     final snackBar = SnackBar(
       backgroundColor: AppStyle.primary,
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 3),
       content: Text(
-        'No internet connection',
+        getTranslation(TrKeys.noInternetConnection),
         style: AppStyle.interNoSemi(size: 14, color: AppStyle.white),
       ),
       action: SnackBarAction(
-        label: 'Close',
+        label: getTranslation(TrKeys.close),
         disabledTextColor: AppStyle.black,
         textColor: AppStyle.black,
         onPressed: () {
@@ -235,6 +237,8 @@ abstract class AppHelpers {
   /// -- an integration-test driver context, a callback running after its
   /// route is gone -- used to throw straight through the caller.
   static showCheckTopSnackBar(BuildContext context, String text) {
+    // No error before the person has done anything (see LoadQuietGate).
+    if (LoadQuietGate.suppress('showCheckTopSnackBar', text)) return;
     final overlay = Overlay.maybeOf(context);
     if (overlay == null) {
       return;
@@ -1183,11 +1187,22 @@ abstract class AppHelpers {
   }
 
   static void goHome(BuildContext context) {
-    if (AppConstants.enableMarketplace) {
-      AppRoutes.I.replaceMainRoute(context);
-    } else {
-      AppRoutes.I.replaceShopRoute(context, shopId: AppConstants.defaultShopId);
+    if (!AppConstants.enableMarketplace) {
+      // A single-shop build lands on its shop. Only a marketplace compose
+      // declares that page; anywhere else (launcher, manager, driver,
+      // supacharge) asking for it would throw, so those land on their main
+      // screen instead.
+      try {
+        AppRoutes.I.replaceShopRoute(
+          context,
+          shopId: AppConstants.defaultShopId,
+        );
+        return;
+      } on StateError catch (e) {
+        debugPrint('==> no shop page in this app, going to main: $e');
+      }
     }
+    AppRoutes.I.replaceMainRoute(context);
   }
 }
 

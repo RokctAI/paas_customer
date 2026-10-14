@@ -184,7 +184,7 @@ class CartOrderItem extends StatelessWidget {
                                               horizontal: 10.w,
                                             ),
                                             child: Icon(
-                                              Icons.remove,
+                                              Remix.subtract_line,
                                               color: AppStyle.inkFor(Theme.of(context).brightness),
                                             ),
                                           ),
@@ -227,7 +227,7 @@ class CartOrderItem extends StatelessWidget {
                                               horizontal: 10.w,
                                             ),
                                             child: Icon(
-                                              Icons.add,
+                                              Remix.add_line,
                                               color: AppStyle.inkFor(Theme.of(context).brightness),
                                             ),
                                           ),

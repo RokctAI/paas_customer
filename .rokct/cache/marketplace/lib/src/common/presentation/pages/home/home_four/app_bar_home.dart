@@ -29,6 +29,7 @@ import 'package:base_sdk/src/presentation/components/sellect_address_screen.dart
 import 'package:flutter/gestures.dart';
 import 'package:base_sdk/src/constants/app_constants.dart';
 import 'package:base_sdk/src/navigation/app_routes.dart';
+import 'package:remixicon/remixicon.dart';
 
 class AppBarHome extends ConsumerStatefulWidget {
   final HomeState state;
@@ -262,7 +263,7 @@ class _AppBarHomeState extends ConsumerState<AppBarHome>
                                     maxLines: 1,
                                   ),
                                 ),
-                                const Icon(Icons.keyboard_arrow_down_sharp),
+                                const Icon(Remix.arrow_down_s_line),
                               ],
                             ),
                           ],

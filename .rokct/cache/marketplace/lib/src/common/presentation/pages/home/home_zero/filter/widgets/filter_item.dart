@@ -14,7 +14,7 @@
 
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_remix/flutter_remix.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:base_sdk/src/models/data/take_data.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
@@ -96,7 +96,7 @@ class FilterItem extends StatelessWidget {
                               ? Row(
                                   children: [
                                     Icon(
-                                      FlutterRemix.star_smile_fill,
+                                      Remix.star_smile_fill,
                                       size: 16.r,
                                     ),
                                     6.horizontalSpace,
@@ -105,7 +105,7 @@ class FilterItem extends StatelessWidget {
                               : isOffer
                               ? Row(
                                   children: [
-                                    Icon(FlutterRemix.leaf_fill, size: 16.r),
+                                    Icon(Remix.leaf_fill, size: 16.r),
                                     6.horizontalSpace,
                                   ],
                                 )

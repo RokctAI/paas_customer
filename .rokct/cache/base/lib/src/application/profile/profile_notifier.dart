@@ -26,7 +26,9 @@ import 'package:base_sdk/src/domain/interface/user.dart';
 import 'package:base_sdk/src/models/data/address_old_data.dart';
 import 'package:base_sdk/src/models/models.dart';
 import 'package:base_sdk/src/services/app_connectivity.dart';
+import 'package:base_sdk/src/services/load_silence.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
+import 'package:base_sdk/src/services/demo_session.dart';
 import 'package:base_sdk/src/services/enums.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 // [refork] removed host router import
@@ -110,7 +112,7 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
       },
       failure: (r, s) {
         state = state.copyWith(isTermLoading: false);
-        AppHelpers.showCheckTopSnackBar(context, r.toString());
+        _showPageLoadFailure(context, r, s, where: 'getTerm');
       },
     );
   }
@@ -124,9 +126,35 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
       },
       failure: (r, s) {
         state = state.copyWith(isPolicyLoading: false);
-        AppHelpers.showCheckTopSnackBar(context, r.toString());
+        _showPageLoadFailure(context, r, s, where: 'getPolicy');
       },
     );
+  }
+
+  /// Terms and privacy failures in plain words. Offline asks the person to
+  /// check their connection, and a page the tenant never published
+  /// (Frappe's DoesNotExistError, a 404) says it is not available yet,
+  /// instead of the raw error text.
+  Future<void> _showPageLoadFailure(
+    BuildContext context,
+    dynamic error,
+    int status, {
+    required String where,
+  }) async {
+    final detail = error?.toString() ?? '';
+    final connected = await AppConnectivity.connectivity();
+    if (!context.mounted) return;
+    final String key;
+    if (!connected) {
+      key = TrKeys.checkYourNetworkConnection;
+    } else if (status == 404 || detail.contains('DoesNotExist')) {
+      key = TrKeys.pageNotAvailableYet;
+    } else {
+      AppHelpers.showCheckTopSnackBar(context, detail);
+      return;
+    }
+    debugPrint('==> $where failure: $detail');
+    AppHelpers.showCheckTopSnackBar(context, AppHelpers.getTranslation(key));
   }
 
   resetShopData() {
@@ -198,13 +226,33 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
     BuildContext context, {
     RefreshController? refreshController,
     VoidCallback? onSuccess,
+    bool quietWhenOffline = false,
+    bool userInitiated = false,
   }) async {
+    // [userInitiated] (Ray, 2026-10-05: errors on load before he did
+    // anything): a fetch the app started by itself — a page's initState,
+    // a refresh after a save or a map edit — fails silently (debug only).
+    // Only a caller passing true (the person explicitly asked for this
+    // fetch) may show a failure the server answered.
+    // Offline is never an error: no connection toast in either case.
+    // [quietWhenOffline] is kept for existing callers; it is now implied.
+    final bool loud = userInitiated;
+    // [quietWhenOffline]: the profile page passes true. "Using the app
+    // offline can't be taken as an error" (Ray, 2026-10-03): with no
+    // radio, or a backend that cannot be reached, the page keeps rendering
+    // the cached user and its footer's Online/Offline label is the only
+    // signal, so neither connection toast fires. Any other failure (a
+    // 4xx/5xx the server actually answered) still shows. Other callers
+    // keep the toasts.
     // Anonymous host (no UserRepositoryFacade registered): nothing to
     // fetch and no account to fetch it for — see [capabilities].
     final userRepository = _userRepository;
     if (userRepository == null) return;
     if (LocalStorage.getToken().isNotEmpty) {
-      final connected = await AppConnectivity.connectivity();
+      // A demo session is answered by the demo interceptor, which needs no
+      // network, so the offline demo sign-in reaches a loaded profile.
+      final connected =
+          DemoSession.demoActive || await AppConnectivity.connectivity();
       if (connected) {
         if (refreshController == null) {
           state = state.copyWith(isLoading: true);
@@ -268,17 +316,22 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
             if (refreshController == null) {
               state = state.copyWith(isLoading: false);
             }
-            if (status == 401) {
+            if (status == 401 && context.mounted) {
               context.router.popUntilRoot();
               AppRoutes.I.replaceLoginRoute(context);
+            }
+            final bool offline =
+                AppHelpers.isAuthoredConnectionMessage(failure.toString());
+            if (!shouldSurfaceLoadError(userInitiated: loud, offline: offline) ||
+                !context.mounted) {
+              logSilencedLoadError('ProfileNotifier.fetchUser', failure);
+              return;
             }
             AppHelpers.showCheckTopSnackBar(context, failure);
           },
         );
       } else {
-        if (context.mounted) {
-          AppHelpers.showNoConnectionSnackBar(context);
-        }
+        logSilencedLoadError('ProfileNotifier.fetchUser', 'offline');
       }
     }
   }
@@ -371,11 +424,15 @@ class ProfileNotifier extends StateNotifier<ProfileState> {
       final response = await userRepository.deleteAccount();
       response.when(
         success: (data) async {
+          // The delete request outlives the page when the person leaves
+          // it; routing through a dead context throws.
+          if (!context.mounted) return;
           context.router.popUntilRoot();
           AppRoutes.I.replaceLoginRoute(context);
         },
         failure: (failure, status) {
           state = state.copyWith(isLoading: false);
+          if (!context.mounted) return;
           AppHelpers.showCheckTopSnackBar(context, failure);
         },
       );

@@ -178,7 +178,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         child: Container(
           margin: MediaQuery.of(context).viewInsets,
           decoration: BoxDecoration(
-            color: AppStyle.surfaceDark,
+            color: AppStyle.surfaceFor(Theme.of(context).brightness),
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(16.r),
               topRight: Radius.circular(16.r),
@@ -235,9 +235,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                 ? TextDirection.ltr
                                 : TextDirection.rtl,
                             child: IntlPhoneField(
-                              style: TextStyle(color: AppStyle.textPrimary),
+                              style: TextStyle(color: AppStyle.inkFor(Theme.of(context).brightness)),
                               dropdownTextStyle: TextStyle(
-                                color: AppStyle.textPrimary,
+                                color: AppStyle.inkFor(Theme.of(context).brightness),
                               ),
                               onChanged: (phoneNum) {
                                 event.setEmail(phoneNum.completeNumber);
@@ -466,7 +466,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                             _birthDate!,
                                           ),
                                     style: TextStyle(
-                                      color: AppStyle.textPrimary,
+                                      color: AppStyle.inkFor(Theme.of(context).brightness),
                                     ),
                                   ),
                                 ),
@@ -570,7 +570,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               children: <Widget>[
                                 Expanded(
                                   child: Divider(
-                                    color: AppStyle.strokeDark.withOpacity(
+                                    color: AppStyle.strokeFor(Theme.of(context).brightness).withOpacity(
                                       0.18,
                                     ),
                                   ),
@@ -592,7 +592,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                 ),
                                 Expanded(
                                   child: Divider(
-                                    color: AppStyle.strokeDark.withOpacity(
+                                    color: AppStyle.strokeFor(Theme.of(context).brightness).withOpacity(
                                       0.18,
                                     ),
                                   ),
@@ -603,7 +603,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
-                                if (isIOS)
+                                // Apple and Facebook stay hidden until
+                                // they have a verified backend path.
+                                if (isIOS && appleAndFacebookSignInVerified)
                                   SocialButton(
                                     iconData: Remix.apple_fill,
                                     onPressed: () {
@@ -612,21 +614,25 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                     title: "Apple",
                                   ),
                                 // Add toggle button for email/phone when on Android
-                                if (!isIOS)
+                                // (and on iOS while the Apple button is hidden)
+                                if (!isIOS || !appleAndFacebookSignInVerified)
                                   SocialButton(
                                     iconData:
                                         currentSignUpType == SignUpType.phone
                                         ? Remix.mail_fill
                                         : Remix.phone_fill,
                                     onPressed: toggleSignUpType,
-                                    title: currentSignUpType == SignUpType.phone
-                                        ? "Email"
-                                        : "Phone",
+                                    title: AppHelpers.getTranslation(
+                                      currentSignUpType == SignUpType.phone
+                                          ? TrKeys.email
+                                          : TrKeys.phone,
+                                    ),
                                   ),
                                 // No Windows/Linux implementation for
                                 // these plugins — hide instead of
                                 // throwing on tap.
-                                if (supportsSocialSignIn)
+                                if (supportsSocialSignIn &&
+                                    appleAndFacebookSignInVerified)
                                   SocialButton(
                                     iconData: Remix.facebook_fill,
                                     onPressed: () {

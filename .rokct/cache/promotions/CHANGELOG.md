@@ -1,3 +1,17 @@
+## 1.4.0
+
+* The story viewer is customer-only. Sellers make stories on the web merchant
+  dashboard and only the customer app shows them; the manager app installed
+  the page but never opened it. Its route shell, `/storyList` and
+  `AppRoutes.pushStoryListRoute` now sit under `app_type.customer`.
+
+## 1.3.1
+
+* fix(icons): every icon is Remixicon (`package:remixicon`, `Remix.*`), the
+  fleet's one icon set. Material `Icons.*`, `CupertinoIcons.*` and
+  `flutter_remix` uses are replaced with their Remixicon equivalents;
+  `flutter_remix` is dropped and `remixicon: ^1.4.1` is required. Icons only.
+
 ## 1.3.0
 
 * feat(demo): demo runs the real repositories through base_sdk's

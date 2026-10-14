@@ -1,6 +1,7 @@
 {
   "name": "promotions_sdk",
-  "version": "1.3.0",
+  "version": "1.4.0",
+  "_comment_version_1_4_0": "1.3.1 -> 1.4.0: the story viewer (route pages install, /storyList, AppRoutes.pushStoryListRoute) is customer-only, under app_type.customer. Sellers make stories on the web merchant dashboard and only the customer app shows them; the manager app installed the page but never opened it (Ray, 2026-10-13: \"remove it in the app\"). The manager compose keeps promotions_sdk's repositories and demo fixtures.",
   "_comment_version_1_3_0": "1.2.3 -> 1.3.0: demo runs the REAL repositories (Ray, 2026-09-25: \"touch all sdk demos ... remove unused files\"). The DI hooks register the real repositories only and call DemoFixtures.registerAssetDirectory('assets/demo/promotions'); base_sdk 1.73.0's DemoGatewayInterceptor answers each platform cmd from templates/assets/demo/promotions/<cmd>.json (installed to assets/demo/promotions) while DemoSession.demoActive, and an unknown cmd fails with DemoFixtureMissing. The api.banner.* fixtures carry (the Weeknight deals / New Arrivals banners for Nonna's Pizzeria). Deleted: MockBannersRepository and the demo-session swap code that chose them. Needs base_sdk >= 1.73.0 (DemoFixtures / DemoGatewayInterceptor).",
   "_comment_requires": "promotions_sdk >= 1.3.0 requires base_sdk >= 1.73.0 (DemoFixtures.registerAssetDirectory and the DemoGatewayInterceptor that answers the demo fixtures).",
   "app_assets": [
@@ -10,31 +11,37 @@
     {
       "from": "templates/assets/demo/promotions",
       "to": "assets/demo/promotions"
-    },
-    {
-      "from": "templates/routes/promotions_route_pages.dart",
-      "to": "lib/presentation/routes/promotions_route_pages.dart"
-    }
-  ],
-  "routes": [
-    {
-      "path": "/storyList",
-      "page": "StoryListRoute.page",
-      "type": "MaterialRoute",
-      "import": "package:${package}/presentation/routes/promotions_route_pages.dart",
-      "_comment": "Pre-fork story viewer route recovered (fix-wave 2026-09-02, route map row 17): `/storyList?index=<n>` deep links keep resolving via @QueryParam; the shell lives in promotions_route_pages.dart. Top-level: this manifest has no flavour blocks and promotions_sdk composes only into customer-family apps."
     }
   ],
   "integrations": [],
-  "app_routes": [
-    {
-      "method": "pushStoryListRoute",
-      "params": "BuildContext context, {dynamic controller, dynamic index}",
-      "body": "context.router.push(StoryListRoute(index: (index is int) ? index : int.tryParse('$index') ?? 0, controller: controller));",
-      "imports": [
-        "import 'package:${package}/presentation/routes/app_router.dart';"
-      ]
+  "app_type": {
+    "customer": {
+      "installs": [
+        {
+          "from": "templates/routes/promotions_route_pages.dart",
+          "to": "lib/presentation/routes/promotions_route_pages.dart"
+        }
+      ],
+      "routes": [
+        {
+          "path": "/storyList",
+          "page": "StoryListRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/promotions_route_pages.dart",
+          "_comment": "Pre-fork story viewer route recovered (fix-wave 2026-09-02, route map row 17): `/storyList?index=<n>` deep links keep resolving via @QueryParam; the shell lives in promotions_route_pages.dart. Customer only since 1.4.0."
+        }
+      ],
+      "app_routes": [
+        {
+          "method": "pushStoryListRoute",
+          "params": "BuildContext context, {dynamic controller, dynamic index}",
+          "body": "context.router.push(StoryListRoute(index: (index is int) ? index : int.tryParse('$index') ?? 0, controller: controller));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        }
+      ],
+      "_comment_app_routes": "Fills base_sdk's AppRoutes.pushStoryListRoute seam (marketplace's story bar tiles call it). `params` must match base_sdk's signature verbatim; the dynamic `controller` is the caller's pull-to-refresh RefreshController (or null)."
     }
-  ],
-  "_comment_app_routes": "Fills base_sdk's AppRoutes.pushStoryListRoute seam (marketplace's story bar tiles call it). `params` must match base_sdk's signature verbatim; the dynamic `controller` is the caller's pull-to-refresh RefreshController (or null)."
+  }
 }

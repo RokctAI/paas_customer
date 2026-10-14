@@ -166,4 +166,49 @@ void main() {
       expect(failure.error, isNotEmpty);
     });
   });
+
+  group('double-charge guard: X-Idempotency-Key', () {
+    test('walletTopUp sends the key on process_wallet_top_up', () async {
+      install((_) => _json({'status': 'success', 'transaction_id': 'T-1'}));
+
+      await WalletRepository().walletTopUp(
+        amount: 100,
+        token: 'CARD-0001',
+        idempotencyKey: 'key-1',
+      );
+
+      final request = requests.single;
+      expect((request.data as Map)['cmd'], 'api.payment.process_wallet_top_up');
+      expect((request.data as Map)['payload'],
+          {'amount': 100.0, 'saved_card': 'CARD-0001'});
+      expect(request.headers['X-Idempotency-Key'], 'key-1');
+    });
+
+    test('sendWalletToPhone sends the key on send_wallet_balance', () async {
+      install((_) => _json({
+            'success': true,
+            'recipient_name': 'Thandi',
+            'amount': 50,
+            'new_balance': 10,
+          }));
+
+      await WalletRepository().sendWalletToPhone(
+        phone: '0821234567',
+        amount: 50,
+        idempotencyKey: 'key-2',
+      );
+
+      final request = requests.single;
+      expect((request.data as Map)['cmd'], 'api.transfer.send_wallet_balance');
+      expect(request.headers['X-Idempotency-Key'], 'key-2');
+    });
+
+    test('no key, no header (facade callers are unchanged)', () async {
+      install((_) => _json({'status': 'success', 'transaction_id': 'T-1'}));
+
+      await WalletRepository().walletTopUp(amount: 100, token: 'CARD-0001');
+
+      expect(requests.single.headers.containsKey('X-Idempotency-Key'), isFalse);
+    });
+  });
 }

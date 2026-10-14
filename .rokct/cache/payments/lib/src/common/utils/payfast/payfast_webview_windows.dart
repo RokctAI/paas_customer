@@ -14,6 +14,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -132,7 +133,7 @@ class _PayFastWebViewWindowsState extends State<PayFastWebViewWindows> {
           style: AppStyle.interNormal(),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppStyle.black),
+          icon: const Icon(Remix.arrow_left_line, color: AppStyle.black),
           onPressed: () {
             // Confirm before closing the payment
             AppHelpers.showAlertDialog(
@@ -291,7 +292,7 @@ class _PayFastWebViewWindowsState extends State<PayFastWebViewWindows> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(
-                Icons.travel_explore,
+                Remix.compass_discover_line,
                 size: 48,
                 color: AppStyle.textGrey,
               ),

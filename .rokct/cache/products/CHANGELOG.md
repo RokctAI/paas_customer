@@ -1,3 +1,43 @@
+## 1.12.7
+
+* fix(wiring): declare `EmbeddedWidgets.productScreen` (the product sheet), implemented by `ProductScreen`. Tapping a product in a shop or in search threw a `StateError` in the customer app, because no SDK declared it.
+
+## 1.12.6
+
+* fix(manifest): install the demo fixtures only in marketplace apps
+  (`app_types`: customer, driver, manager; Ray, 2026-10-05). Supacharge and
+  other non-marketplace shells no longer get `assets/demo/products/`.
+
+## 1.12.5
+
+* fix(manifest): remove the duplicate empty top-level `installs` key that
+  overrode the demo-fixture install, so composes copy
+  `templates/assets/demo/products` to `assets/demo/products` and the
+  registered `assets/demo/products/` entry is no longer empty.
+
+## 1.12.4
+
+* fix(theme): widgets read their surface, card, stroke and ink colours from Theme.of(context) at build time (AppStyle.surfaceFor/cardFor/cardAltFor/strokeFor/subtleStrokeFor/inkFor/secondaryInkFor/faintFor) instead of the AppStyle.isDark-resolved statics, so a live dark/light switch restyles open pages instead of leaving the old mode's colours (Ray, 2026-10-04).
+
+## 1.12.3
+
+* fix(icons): every icon is Remixicon (`package:remixicon`, `Remix.*`), the
+  fleet's one icon set. Material `Icons.*`, `CupertinoIcons.*` and
+  `flutter_remix` uses are replaced with their Remixicon equivalents;
+  `flutter_remix` is dropped and `remixicon: ^1.4.1` is required. Icons only.
+
+## 1.12.2
+
+* fix(manager): `updateStocks` and `updateExtras` reach the new products
+  server methods through the gateway (`api.stock.update_product_stocks`,
+  `api.product_extra.update_product_extras`) instead of the dead
+  `paas.api.seller_product` path (fixplan M20).
+* fix(gallery): image upload posts multipart to core's fleet endpoint
+  `/api/v1/method/<uploadAppPrefix>.api.upload.upload_file` (overridable
+  `GalleryRepository.uploadAppPrefix`, default `rcore`) instead of stock
+  `/api/method/upload_file`, and reads the returned `file_url`. It stays a
+  direct call because multipart cannot ride the gateway envelope.
+
 ## 1.12.1
 
 * fix(manifest): install the `assets/demo/products` fixtures from the top-level

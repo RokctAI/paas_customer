@@ -13,7 +13,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_remix/flutter_remix.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:base_sdk/src/application/payment_methods/payment_provider.dart';
@@ -136,7 +136,7 @@ class OrderButton extends ConsumerWidget {
                             ),
                           ),
                           12.horizontalSpace,
-                          const Icon(FlutterRemix.gallery_fill),
+                          const Icon(Remix.gallery_fill),
                         ],
                       ),
                     ),

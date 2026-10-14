@@ -14,6 +14,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -207,7 +208,7 @@ class _PayFastWebViewState extends State<PayFastWebView> {
           style: AppStyle.interNormal(),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppStyle.black),
+          icon: const Icon(Remix.arrow_left_line, color: AppStyle.black),
           onPressed: () {
             // Confirm before closing the payment
             AppHelpers.showAlertDialog(

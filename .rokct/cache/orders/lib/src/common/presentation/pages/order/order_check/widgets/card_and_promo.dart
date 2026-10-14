@@ -13,7 +13,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_remix/flutter_remix.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:base_sdk/src/application/order/order_provider.dart';
@@ -53,7 +53,7 @@ class CardAndPromo extends StatelessWidget {
                   );
                 },
                 icon: Icon(
-                  FlutterRemix.bank_card_fill,
+                  Remix.bank_card_fill,
                   color: ((AppHelpers.getPaymentType() == "admin")
                           ? (ref.watch(paymentProvider).payments.isNotEmpty)
                           : (ref
@@ -112,7 +112,7 @@ class CardAndPromo extends StatelessWidget {
                 },
                 isActive: ref.watch(orderProvider).promoCode != null,
                 icon: Icon(
-                  FlutterRemix.ticket_line,
+                  Remix.ticket_line,
                   color: ref.watch(orderProvider).promoCode == null
                       ? AppStyle.inkFor(Theme.of(context).brightness)
                       : AppStyle.primary,

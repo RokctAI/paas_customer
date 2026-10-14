@@ -135,7 +135,7 @@ void main() {
     await expectRestylesOnFlip(
       tester,
       child: const _BottomSheetBarRegion(),
-      read: (t) => iconInk(t, Icons.arrow_back),
+      read: (t) => iconInk(t, Remix.arrow_left_line),
       expected: AppStyle.inkFor,
       reason: "the sheet bar's back glyph kept the previous mode's ink",
     );

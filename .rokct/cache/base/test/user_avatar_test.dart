@@ -24,6 +24,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:remixicon/remixicon.dart';
 
 import 'package:base_sdk/src/models/data/profile_data.dart';
 import 'package:base_sdk/src/presentation/components/custom_network_image.dart';
@@ -125,7 +126,7 @@ void main() {
       expect(find.byKey(UserAvatar.glyphKey), findsOneWidget);
       expect(
         tester.widget<Icon>(find.byKey(UserAvatar.glyphKey)).icon,
-        Icons.person_outline,
+        Remix.user_line,
       );
       expect(find.byKey(UserAvatar.initialsKey), findsNothing);
       expect(find.byType(CustomNetworkImage), findsNothing);

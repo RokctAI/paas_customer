@@ -31,6 +31,7 @@ import 'package:base_sdk/src/application/shop_order/shop_order_provider.dart';
 import 'package:base_sdk/src/constants/app_constants.dart';
 import 'package:base_sdk/src/navigation/app_routes.dart';
 import 'package:base_sdk/src/navigation/embedded_widgets.dart';
+import 'package:base_sdk/src/presentation/pages/profile/profile_action_item.dart';
 import 'package:base_sdk/src/presentation/pages/profile/profile_section.dart';
 import 'package:base_sdk/src/presentation/pages/profile/profile_section_registry.dart';
 import 'package:base_sdk/src/presentation/pages/profile/widgets/base_profile_footer.dart';
@@ -58,6 +59,30 @@ class MarketplaceProfileSections {
   MarketplaceProfileSections._();
 
   static const int _base = 100;
+
+  /// The ProfileSectionRegistry action group whose items render as extra
+  /// lines of the header plan row (e.g. loyalty_sdk's customer
+  /// subscription). A contributor supplies the line's widget through
+  /// [ProfileActionItem.badgeBuilder] (falling back to icon + label +
+  /// [ProfileActionItem.onTap]); the key is the only contract.
+  static const String planGroup = 'marketplace.plan';
+
+  /// The contributed plan lines whose visibility gates pass (a thrown
+  /// gate hides the line, per the registry contract).
+  static Future<List<ProfileActionItem>> visiblePlanLines() async {
+    final out = <ProfileActionItem>[];
+    for (final item in ProfileSectionRegistry.I.actions(planGroup)) {
+      final gate = item.visible;
+      if (gate == null) {
+        out.add(item);
+        continue;
+      }
+      try {
+        if (await gate()) out.add(item);
+      } catch (_) {}
+    }
+    return out;
+  }
 
   /// The old profile hub's `onCardAdded` route param, re-homed: sections
   /// are registered once at boot, so the route shell stores the current
@@ -98,10 +123,16 @@ class MarketplaceProfileSections {
     // stored membership.
     Future<bool> hasMembership() async =>
         LocalStorage.getUser()?.membership != null;
+    // The plan row is the profile's single plan entry: it also carries
+    // any plan line another SDK contributes to the [planGroup] action
+    // group (loyalty_sdk's customer subscription), so the slot shows
+    // whenever there is a membership OR a visible contributed line.
+    Future<bool> hasPlan() async =>
+        await hasMembership() || (await visiblePlanLines()).isNotEmpty;
     registry.registerHeaderSlot(
       ProfileHeaderSlot.plan,
       id: 'marketplace.plan',
-      visible: hasMembership,
+      visible: hasPlan,
       builder: (context) => const MarketplacePlanRow(),
     );
     registry.registerHeaderSlot(
@@ -277,7 +308,17 @@ class MarketplacePlanRow extends ConsumerWidget {
         ref.watch(profileProvider).userData ?? LocalStorage.getUser();
     final membership = user?.membership;
     final endDate = membership?.endDate ?? '';
-    return Wrap(
+    final lines = ProfileSectionRegistry.I
+        .actions(MarketplaceProfileSections.planGroup)
+        .map((item) => _ContributedPlanLine(item: item))
+        .toList();
+    if (membership == null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: lines,
+      );
+    }
+    final membershipRow = Wrap(
       spacing: 6,
       runSpacing: 2,
       crossAxisAlignment: WrapCrossAlignment.center,
@@ -298,7 +339,7 @@ class MarketplacePlanRow extends ConsumerWidget {
               ),
             ),
             Icon(
-              Icons.keyboard_arrow_right_sharp,
+              Remix.arrow_right_s_line,
               size: 16,
               color: AppStyle.inkFor(Theme.of(context).brightness),
             ),
@@ -313,6 +354,53 @@ class MarketplacePlanRow extends ConsumerWidget {
           ),
         ),
       ],
+    );
+    if (lines.isEmpty) return membershipRow;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        membershipRow,
+        for (final line in lines)
+          Padding(padding: const EdgeInsets.only(top: 6), child: line),
+      ],
+    );
+  }
+}
+
+/// One contributed plan line (see [MarketplaceProfileSections.planGroup]):
+/// the contributor's own widget when it supplies one, else its label with
+/// a chevron, tapping through to its [ProfileActionItem.onTap]. Its own
+/// gesture wins over the header's flip, so the line opens its page.
+class _ContributedPlanLine extends StatelessWidget {
+  final ProfileActionItem item;
+
+  const _ContributedPlanLine({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    final custom = item.badgeBuilder;
+    if (custom != null) return custom(context);
+    final brightness = Theme.of(context).brightness;
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => item.onTap(context),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            item.label(),
+            style: AppStyle.interNormal(
+              size: 13,
+              color: AppStyle.inkFor(brightness),
+            ),
+          ),
+          Icon(
+            Remix.arrow_right_s_line,
+            size: 16,
+            color: AppStyle.inkFor(brightness),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -856,7 +944,7 @@ class MarketplaceProfileFooter extends StatelessWidget {
                           ),
                           const SizedBox(width: 12),
                           Icon(
-                            Icons.circle_rounded,
+                            Remix.checkbox_blank_circle_fill,
                             color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                             size: 7,
                           ),
@@ -884,7 +972,7 @@ class MarketplaceProfileFooter extends StatelessWidget {
                           ),
                           const SizedBox(width: 12),
                           Icon(
-                            Icons.circle_rounded,
+                            Remix.checkbox_blank_circle_fill,
                             color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                             size: 7,
                           ),

@@ -26,6 +26,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:base_sdk/src/domain/interface/auth.dart';
 import 'package:base_sdk/src/domain/interface/user.dart';
+import 'package:auth_sdk/src/common/domain/interface/google_id_token_sign_in.dart';
 import 'package:base_sdk/src/models/data/address_old_data.dart';
 import 'package:base_sdk/src/models/models.dart';
 import 'package:base_sdk/src/models/request/edit_profile.dart';
@@ -48,6 +49,7 @@ import 'package:auth_sdk/src/common/services/restore_credential_service.dart';
 import 'package:auth_sdk/src/common/presentation/pages/auth/registration/registration_steps_page.dart';
 import 'package:auth_sdk/src/common/presentation/pages/auth/confirmation/register_confirmation_page.dart';
 import 'package:auth_sdk/src/common/services/platform_support.dart';
+import 'package:auth_sdk/src/common/services/session_profile.dart';
 
 /// TrKeys-style key for the offline sign-up hand-off (same convention as
 /// [trPhoneVerificationNotAvailableOnDesktop]): backend translations can
@@ -324,12 +326,13 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
           if ((data.token ?? '').isEmpty && state.email.isNotEmpty) {
             // Email sign-up: register_user created the account and emailed
             // the 6-digit code, but mints no session token — that comes
-            // from verify_my_email. Ask for the code now; the sheet's
+            // from verify_email_code. Ask for the code now; the sheet's
             // verify success runs [finishEmailSignUp].
             if (context.mounted) _askForEmailCode(context);
             return;
           }
           LocalStorage.setToken(data.token);
+          await storeSessionProfile(data.user, _userRepositoryFacade);
           LocalStorage.setAddressSelected(
             AddressData(
               title:
@@ -464,7 +467,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
   }
 
   /// Last step of the email sign-up, after the emailed code verified:
-  /// verify_my_email returned the account's first session token, so store
+  /// verify_email_code returned the account's first session token, so store
   /// it and land exactly where a token-returning registration lands.
   Future<void> finishEmailSignUp(
     BuildContext context,
@@ -473,6 +476,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
     final token = data?.token;
     if (token != null && token.isNotEmpty) {
       await LocalStorage.setToken(token);
+      await storeSessionProfile(data?.user, _userRepositoryFacade);
     }
     if (context.mounted) {
       RegistrationFlow.completeRegistration(context, user: data?.user);
@@ -556,6 +560,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
         success: (data) async {
           state = state.copyWith(isLoading: false);
           LocalStorage.setToken(data.token);
+          await storeSessionProfile(data.user, _userRepositoryFacade);
           LocalStorage.setAddressSelected(
             AddressData(
               title:
@@ -762,7 +767,9 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
       state = state.copyWith(isLoading: true);
       GoogleSignInAccount? googleUser;
       try {
-        googleUser = await GoogleSignIn().signIn();
+        googleUser = await GoogleSignIn(
+          serverClientId: GoogleSignInConfig.serverClientId,
+        ).signIn();
       } catch (e) {
         state = state.copyWith(isLoading: false);
         debugPrint('===> login with google exception: $e');
@@ -780,16 +787,39 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
         return;
       }
 
-      final response = await _authRepository.loginWithGoogle(
-        email: googleUser.email,
-        displayName: googleUser.displayName ?? '',
-        id: googleUser.id,
-        avatar: googleUser.photoUrl ?? "",
+      // The backend signs in from the verified Google ID token only (it
+      // reads the email from the token), so the token is what is sent.
+      String? idToken;
+      try {
+        idToken = (await googleUser.authentication).idToken;
+      } catch (e) {
+        debugPrint('===> google authentication exception: $e');
+      }
+      final repo = _authRepository;
+      final googleRepo =
+          repo is GoogleIdTokenSignIn ? repo as GoogleIdTokenSignIn : null;
+      if (idToken == null || googleRepo == null) {
+        state = state.copyWith(isLoading: false);
+        if (context.mounted) {
+          AuthErrorPresenter.showTechnical(
+            context,
+            type: 'auth_social_login_failed',
+            detail: 'Google Sign-In returned no ID token',
+            extra: const {'provider': 'google'},
+          );
+        }
+        return;
+      }
+      final response = await googleRepo.loginWithGoogleIdToken(
+        idToken: idToken,
+        displayName: googleUser.displayName,
+        avatar: googleUser.photoUrl,
       );
       response.when(
         success: (data) async {
           state = state.copyWith(isLoading: false);
           LocalStorage.setToken(data.data?.accessToken ?? '');
+          await storeSessionProfile(data.data?.user, _userRepositoryFacade);
           LocalStorage.setAddressSelected(
             AddressData(
               title:
@@ -912,6 +942,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
             success: (data) async {
               state = state.copyWith(isLoading: false);
               LocalStorage.setToken(data.data?.accessToken ?? '');
+              await storeSessionProfile(data.data?.user, _userRepositoryFacade);
               LocalStorage.setAddressSelected(
                 AddressData(
                   title:
@@ -1028,6 +1059,7 @@ class RegisterNotifier extends StateNotifier<RegisterState> {
           success: (data) async {
             state = state.copyWith(isLoading: false);
             LocalStorage.setToken(data.data?.accessToken ?? '');
+            await storeSessionProfile(data.data?.user, _userRepositoryFacade);
             LocalStorage.setAddressSelected(
               AddressData(
                 title:

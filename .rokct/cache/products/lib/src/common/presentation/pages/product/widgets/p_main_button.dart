@@ -26,6 +26,7 @@ import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:base_sdk/src/presentation/components/buttons/custom_button.dart';
 // [refork] removed host router import
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
+import 'package:remixicon/remixicon.dart';
 
 class ProductMainButton extends StatelessWidget {
   final ShopOrderNotifier eventOrderShop;
@@ -85,7 +86,7 @@ class ProductMainButton extends StatelessWidget {
                           vertical: 8.h,
                           horizontal: 10.w,
                         ),
-                        child: const Icon(Icons.remove),
+                        child: const Icon(Remix.subtract_line),
                       ),
                     ),
                     RichText(
@@ -117,7 +118,7 @@ class ProductMainButton extends StatelessWidget {
                           vertical: 8.h,
                           horizontal: 10.w,
                         ),
-                        child: const Icon(Icons.add),
+                        child: const Icon(Remix.add_line),
                       ),
                     ),
                   ],

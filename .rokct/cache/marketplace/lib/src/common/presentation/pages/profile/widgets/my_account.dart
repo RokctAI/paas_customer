@@ -16,7 +16,7 @@ import 'package:base_sdk/src/navigation/app_routes.dart';
 import 'package:base_sdk/src/navigation/embedded_widgets.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_remix/flutter_remix.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
@@ -63,7 +63,7 @@ class MyAccount extends StatelessWidget {
             const SizedBox(height: 24),
             ButtonItem(
               isLtr: isLtr,
-              icon: FlutterRemix.edit_2_line,
+              icon: Remix.edit_2_line,
               title: AppHelpers.getTranslation(TrKeys.editAccount),
               onTap: () {
                 //  ref.refresh(editProfileProvider);
@@ -76,7 +76,7 @@ class MyAccount extends StatelessWidget {
             ),
             ButtonItem(
               isLtr: isLtr,
-              icon: FlutterRemix.lock_2_line,
+              icon: Remix.lock_2_line,
               title: AppHelpers.getTranslation(TrKeys.changePassword),
               onTap: () {
                 Navigator.pop(context);
@@ -89,7 +89,7 @@ class MyAccount extends StatelessWidget {
             ),
             ButtonItem(
               isLtr: isLtr,
-              icon: FlutterRemix.hotel_line,
+              icon: Remix.hotel_line,
               title: AppHelpers.getTranslation(TrKeys.deliveryTo),
               onTap: () {
                 AppRoutes.I.pushAddressListRoute(context);
@@ -97,7 +97,7 @@ class MyAccount extends StatelessWidget {
             ),
             ButtonItem(
               isLtr: isLtr,
-              icon: FlutterRemix.settings_3_line,
+              icon: Remix.settings_3_line,
               title: AppHelpers.getTranslation(TrKeys.notifications),
               onTap: () {
                 AppRoutes.I.pushSettingRoute(context);
@@ -106,7 +106,7 @@ class MyAccount extends StatelessWidget {
             ButtonItem(
               isLtr: isLtr,
               title: AppHelpers.getTranslation(TrKeys.language),
-              icon: FlutterRemix.global_line,
+              icon: Remix.global_line,
               onTap: () {
                 AppHelpers.showCustomModalBottomSheet(
                   isDismissible: false,
@@ -123,7 +123,7 @@ class MyAccount extends StatelessWidget {
             ButtonItem(
               isLtr: isLtr,
               title: AppHelpers.getTranslation(TrKeys.currencies),
-              icon: FlutterRemix.bank_card_line,
+              icon: Remix.bank_card_line,
               onTap: () {
                 AppHelpers.showCustomModalBottomSheet(
                   context: context,

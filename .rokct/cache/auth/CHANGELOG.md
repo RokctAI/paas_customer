@@ -1,3 +1,169 @@
+## 1.20.0
+
+* fix(auth): a wrong password or an unverified account now shows the
+  backend's message. The backend answers these with HTTP 200 and the real
+  status in the body, and login took any 200 as success and saved an empty
+  token. The same check now covers the password-reset code, so a wrong or
+  expired code no longer moves on to the new-password step. A sign-in that
+  comes back without a token is refused instead of saved.
+* fix(auth): the first-run language picker opens again. It counted the
+  languages in a list only the picker itself loads, so it never opened. It
+  now uses the list the login screen fetched, and only asks once the backend
+  has answered: when the backend can't be reached (offline, or online but
+  not answering) the picker is skipped quietly.
+* fix(auth): the Facebook and Apple buttons are hidden on the login and
+  sign-up screens. The backend refuses both since 1.19.0 (they have no
+  verified sign-in path yet). The code behind them is kept. On iPhone the
+  Email/Phone switch shows in the Apple button's place.
+* fix(auth): `GoogleSignInConfig.serverClientId` defaults to the
+  `GOOGLE_SERVER_CLIENT_ID` build setting (from `.env/production.env`, like
+  the other keys), so Android gets the Google ID token the backend checks.
+* fix(auth): the push (FCM) token is sent again whenever Firebase replaces
+  it while someone is signed in, and once at start-up for someone already
+  signed in (new boot hook `auth_fcm_token_sync`). Before, it was only sent
+  at sign-in.
+* fix(auth): Skip on the login screen is remembered in apps with an
+  onboarding intro (supacharge) too, so the next start does not force the
+  login screen again, the same as the launcher.
+* fix(auth): the Login button and the Email/Phone switch are translated.
+* chore(auth): the "Keep me logged in" checkbox is hidden (nothing used it),
+  and the dated September 2024 splash artwork switch is removed
+  (`splash.png` is always used).
+* manifest.json's version now matches pubspec (it still said 1.18.0).
+
+## 1.19.0
+
+* fix(auth, security): Sign in with Google sends Google's ID token, and the
+  backend verifies it. `api.user.login_with_google` used to look the
+  account up by the `email` the client sent and return a session for it,
+  with no Google check, so anyone who knew an address could sign in as that
+  account (admins included). It now requires `id_token`, verifies it with
+  google-auth (signature, expiry, issuer, audience against Auth Settings >
+  Google Client IDs, or `google_client_ids` in site_config) and takes the
+  account from the token's verified `email`. Administrator / System Manager
+  accounts are refused on this path. The Google identity (`sub`) is bound
+  to the account in `Google User`, and a different one is refused. The
+  session is minted like `login()` (refresh token, 24h expiry), and `role`
+  is `login()`'s (seller / deliveryman / user) instead of a fixed "user".
+* New `GoogleIdTokenSignIn` capability on `AuthRepository`, which the login
+  and register notifiers use (base_sdk's `AuthRepositoryFacade.loginWithGoogle`
+  is core-owned and still sends the email form, which the backend now
+  refuses). Apps set `GoogleSignInConfig.serverClientId` to their OAuth web
+  client id so Android returns an ID token; that id must be listed in Auth
+  Settings.
+* Breaking for Facebook and Apple sign-in: both also called
+  `login_with_google` with Firebase user details and are refused until they
+  get a verified path of their own.
+
+## 1.18.0
+
+* feat(auth): an app can sign people up as the role it needs. The session
+  policy's `signup_app_role` is sent as `app_role` on every sign-up (email
+  and phone, online and when an offline sign-up syncs). The manager app
+  asks for seller.
+* feat(auth): `allow_offline_accounts` lets an account signed up offline on
+  the phone sign in offline, landing where the app's role lands. The manager
+  app sets it, so a seller can sign up and sell with no signal. The driver
+  app does not: only approved drivers, only online.
+* fix(auth): after sign-up and its registration steps, the session policy
+  decides where the new account lands (`onSignedUp`). Before, every app went
+  straight home, so a new driver reached the driver app unapproved. The
+  manager app lands a new seller on `/main`. The driver app turns the new
+  account away with its approval message, after the vehicle step has filed
+  the courier request. Apps with no declared policy land home as before.
+* fix(wiring): declare `EmbeddedWidgets.phoneVerify` (`PhoneVerify`) and
+  `resetPasswordPage` (`ResetPasswordPage`) in the manifest. No SDK declared
+  them, so the customer app's Verify phone (checkout, edit profile) and
+  Change password (Profile > My account) threw a StateError.
+
+## 1.17.0
+
+* fix(auth): Skip on the login page is remembered (Ray, 2026-10-10: "make
+  skip remember that I have skipped before"). Where no onboarding intro is
+  composed, `_skip` calls base_sdk's `SignedOutEntry.rememberGuest()` before
+  landing, so base_sdk's splash sends the next cold start home instead of
+  back to this page. Sign-in stays reachable from the app's own UI. A
+  composed onboarding intro (supacharge) is unchanged. Needs base_sdk
+  >= 1.86.0. New `test/login_skip_is_remembered_test.dart`.
+
+## 1.16.7
+
+* fix(auth): the restore-credential boot hook waits for the first frame
+  before deciding whether anyone is signed in. It runs in main() before
+  `LocalStorage.init()`, where the token always reads empty, so every launch
+  was treated as signed out: a signed-in user never got the restore-key
+  check, and every cold start (on the launcher, every return after the
+  system reclaimed it) asked the backend for restore options and Credential
+  Manager for a key before anyone touched the screen. Nothing is shown
+  either way; failures stay debug-only.
+
+## 1.16.6
+
+* fix(theme): widgets read their surface, card, stroke and ink colours from Theme.of(context) at build time (AppStyle.surfaceFor/cardFor/cardAltFor/strokeFor/subtleStrokeFor/inkFor/secondaryInkFor/faintFor) instead of the AppStyle.isDark-resolved statics, so a live dark/light switch restyles open pages instead of leaving the old mode's colours (Ray, 2026-10-04).
+
+## 1.16.5
+
+* fix(auth): nothing the login screen does by itself on load can show an
+  error (Ray, 2026-10-05: still an auth/backend error on load after
+  1.16.4). The initial Dynamic Links lookup in `LoginPage.initDynamicLinks`
+  is guarded (it escaped as an uncaught async error offline or with Dynamic
+  Links unconfigured) and logs to debug only. The language picker the page
+  opens by itself and the single-language auto-select are silent through
+  base_sdk 1.83.5 (`userInitiated` defaults to false). Errors still show for
+  sign-in and other user actions. Offline is never an error.
+
+## 1.16.4
+
+* fix(auth): the login screen no longer shows a backend error on load
+  (Ray, 2026-10-04: "Login screen on loading still shows a backend error
+  before anything is done"). `LoginNotifier.checkLanguage` gains
+  `userInitiated` (default false); the page's load-time language and
+  translation probes now fail silently (debug output only) via the new
+  `shouldSurfaceLoginError` silencer. Errors still surface for user
+  actions such as sign-in. Offline is never an error.
+
+## 1.16.3
+
+* fix(auth): the offline demo sign-in is back (Ray, 2026-10-03: "i didnt
+  said remove existing features"). 1.13.0's address list (the five
+  @demo.rokct.ai accounts and thandi.mokoena@outlook.com, new
+  `demo_sign_in.dart`) switches the session to demo BEFORE the radio check
+  in `LoginNotifier.login`; the sign-in then runs through the real
+  `AuthRepository` and base_sdk's `DemoGatewayInterceptor` answers it from
+  the `api.user.login` fixture (thandi.mokoena@outlook.com -> Thandi,
+  student; customer@ -> Thandi, customer). No mock repository returns. A
+  failed sign-in for a listed address ends the demo session. The profile
+  page loads offline after it with base_sdk 1.83.2.
+* fix(auth): register and confirmation store the signed-in profile, as
+  login does (new `storeSessionProfile`, fetching the profile when the
+  response has no user). `LocalStorage.getUser()` was null after sign-up,
+  so seeds keyed on the account email (productivity's MaintenanceSeed)
+  skipped a freshly registered account.
+
+## 1.16.2
+
+* fix(auth): using the app offline is not an error on the login screen
+  (Ray, 2026-10-03). When the radio is up but the backend never answers
+  (base_sdk's `couldNotReachServer` / `serverTookTooLong` lines),
+  `LoginNotifier.login` now takes the same offline sign-in path as a dead
+  radio (`_loginOffline`, extracted unchanged) instead of toasting "We
+  couldn't reach the server". A refusal the server actually sent (wrong
+  credentials, a 5xx) still shows. The decision is
+  `loginFailureMeansOffline` (new `offline_login_decision.dart`).
+
+## 1.16.1
+
+* fix(auth): the email code sheet now calls `api.user.verify_email_code`
+  (email + code, through the new auth_sdk-local `EmailCodeVerification`),
+  which mints the session token, instead of `verify_my_email`, which mints
+  none and left the user signed out after email sign-up (regression from
+  1.16.0). Same endpoint as the web twin.
+* fix(auth): `sendOtp` sends the phone with its leading `+`, matching
+  `verifyPhone`; the backend keys the OTP cache on the phone verbatim, so
+  the two never matched. It now returns the phone as `verifyId`.
+* fix(auth): `sendOtp`, `verifyPhone` and `verifyEmailCode` treat a 200 body
+  with `status_code` >= 400 as a failure (a wrong code is not a success).
+
 ## 1.16.0
 
 * fix(auth): email sign-up can finish. The app asked for the emailed code

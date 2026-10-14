@@ -14,7 +14,7 @@
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_remix/flutter_remix.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:orders_sdk/src/common/application/parcel/parcel_notifier.dart';
 import 'package:orders_sdk/src/common/application/parcel/parcel_state.dart';
@@ -124,7 +124,7 @@ class TypeAndTime extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 20.r, vertical: 16.r),
                 child: Row(
                   children: [
-                    const Icon(FlutterRemix.time_line),
+                    const Icon(Remix.time_line),
                     12.horizontalSpace,
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,7 +145,7 @@ class TypeAndTime extends StatelessWidget {
                       ],
                     ),
                     const Spacer(),
-                    const Icon(FlutterRemix.arrow_right_s_line),
+                    const Icon(Remix.arrow_right_s_line),
                   ],
                 ),
               ),

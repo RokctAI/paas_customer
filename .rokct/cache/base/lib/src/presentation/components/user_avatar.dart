@@ -14,6 +14,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
 
 import 'package:base_sdk/src/models/data/profile_data.dart';
 import 'package:base_sdk/src/presentation/components/custom_network_image.dart';
@@ -29,7 +30,7 @@ import 'package:base_sdk/src/presentation/theme/app_style.dart';
 ///      work and a failed load keeps that widget's own profile fallback;
 ///   2. otherwise the person's initials on the brand colour — the first
 ///      letter of each of the first two words of their name;
-///   3. otherwise [Icons.person_outline], a neutral person glyph.
+///   3. otherwise [Remix.user_line], a neutral person glyph.
 ///
 /// A literal "?" is never drawn. The two private `_Avatar` copies this
 /// replaces (the generic profile header and the launcher's account control)
@@ -143,7 +144,7 @@ class UserAvatar extends StatelessWidget {
       ),
       child: initials.isEmpty
           ? Icon(
-              Icons.person_outline,
+              Remix.user_line,
               key: glyphKey,
               size: glyphSize ?? size * 0.6,
               color: AppStyle.white,

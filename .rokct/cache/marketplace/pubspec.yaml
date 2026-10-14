@@ -1,6 +1,6 @@
 name: marketplace_sdk
 description: "marketplace_sdk - extracted from paas_customer (refork 2026-07-11)."
-version: 1.15.0
+version: 1.17.0
 publish_to: 'none'
 environment:
   sdk: '>=3.10.0 <4.0.0'
@@ -15,7 +15,6 @@ dependencies:
   auto_route: ^9.2.0
   collection: ^1.18.0
   flutter_html: ^3.0.0-alpha.6
-  flutter_remix: ^0.0.3
   flutter_riverpod: ^2.5.1
   flutter_screenutil: ^5.9.0
   flutter_staggered_animations: ^1.1.1
@@ -30,7 +29,7 @@ dependencies:
   package_info_plus: ^8.2.1
   proste_indexed_stack: ^0.2.4
   pull_to_refresh: ^2.0.0
-  remixicon: ^1.2.0
+  remixicon: ^1.4.1
   share_plus: ^10.1.1
   smooth_page_indicator: ^1.2.0
   url_launcher: ^6.3.0

@@ -41,4 +41,8 @@ const Map<String, String> kBaseEnTranslations = {
   'maintenance_title': 'Under maintenance',
   'maintenance_brief':
       'We are doing some maintenance. Please try again shortly.',
+  // Customer subscriptions (loyalty_sdk).
+  'payment_overdue_benefits_are_paused':
+      'Payment overdue. Your benefits are paused until it goes through.',
+  'the_payment_did_not_go_through': "The payment didn't go through.",
 };

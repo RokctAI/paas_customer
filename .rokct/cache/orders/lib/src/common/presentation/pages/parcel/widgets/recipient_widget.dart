@@ -15,7 +15,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:base_sdk/src/navigation/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_remix/flutter_remix.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:orders_sdk/src/common/application/parcel/parcel_notifier.dart';
 import 'package:orders_sdk/src/common/application/parcel/parcel_state.dart';
@@ -94,7 +94,7 @@ class RecipientWidget extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20.r, vertical: 16.r),
               child: Row(
                 children: [
-                  const Icon(FlutterRemix.map_pin_range_line),
+                  const Icon(Remix.map_pin_range_line),
                   12.horizontalSpace,
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +117,7 @@ class RecipientWidget extends StatelessWidget {
                     ],
                   ),
                   const Spacer(),
-                  const Icon(FlutterRemix.arrow_right_s_line),
+                  const Icon(Remix.arrow_right_s_line),
                 ],
               ),
             ),

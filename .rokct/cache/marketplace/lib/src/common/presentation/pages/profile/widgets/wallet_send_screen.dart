@@ -24,6 +24,7 @@ import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:base_sdk/src/presentation/components/keyboard_dismisser.dart';
 import 'package:base_sdk/src/presentation/components/title_icon.dart';
 import 'package:base_sdk/src/presentation/theme/theme.dart';
+import 'package:remixicon/remixicon.dart';
 
 /// CashSend/eWallet-style send flow. There is deliberately NO user search
 /// here (anti-enumeration): the sender either types the friend's full
@@ -347,7 +348,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
           keyboardType: TextInputType.phone,
           decoration: InputDecoration(
             hintText: AppHelpers.getTranslation(TrKeys.phoneNumber),
-            prefixIcon: const Icon(Icons.phone, color: AppStyle.textGrey),
+            prefixIcon: const Icon(Remix.phone_line, color: AppStyle.textGrey),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.r),
               borderSide: const BorderSide(color: AppStyle.borderColor),
@@ -482,7 +483,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.close, color: AppStyle.red),
+            icon: const Icon(Remix.close_line, color: AppStyle.red),
             onPressed: _isLoading
                 ? null
                 : () {
@@ -577,7 +578,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
           child: Column(
             children: [
               Icon(
-                Icons.check_circle,
+                Remix.checkbox_circle_fill,
                 color: AppStyle.primary,
                 size: 48.r,
               ),

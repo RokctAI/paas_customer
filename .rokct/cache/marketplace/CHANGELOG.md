@@ -1,3 +1,27 @@
+## 1.17.0
+
+* feat(main): the customer main page floats base_sdk's pill again instead of
+  a docked Material bar (Ray, 2026-10-12: "then let marketplace use floating
+  nav"), restoring the legacy paas_customer shell's nav (main_page.dart
+  before the 2026-08-24 re-fork):
+  * Home, Search and Liked as tabs, and the person's picture as the last
+    entry (`FloatingNavTabsMode.profile`). Signed out it is the person
+    glyph and opens the login page; signed in it opens the profile tab.
+  * The basket beside the pill (`FloatingNavTabsMode.companion`) with the
+    cart's line count, opening the order page (`pushOrderRoute`, or login
+    when signed out). With a scrolling nav it shows only when the cart has
+    something; a fixed nav (`AppConstants.fixed`) always shows it.
+  * In fixed-nav builds, the "you are shopping at {shop}" bar with the
+    cart total above the pill while the cart has items.
+  * Requires base_sdk >= 1.87.0.
+
+## 1.16.1
+
+* fix(icons): every icon is Remixicon (`package:remixicon`, `Remix.*`), the
+  fleet's one icon set. Material `Icons.*`, `CupertinoIcons.*` and
+  `flutter_remix` uses are replaced with their Remixicon equivalents;
+  `flutter_remix` is dropped and `remixicon: ^1.4.1` is required. Icons only.
+
 ## 1.15.0
 
 * refactor(likes): the liked-shops page and its state move to fav_sdk

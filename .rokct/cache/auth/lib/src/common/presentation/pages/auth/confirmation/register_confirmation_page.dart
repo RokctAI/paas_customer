@@ -49,7 +49,7 @@ class RegisterConfirmationPage extends ConsumerStatefulWidget {
 
   /// Email sign-up mode: the details form already created the account
   /// (register_user sent this code), so on verify success the sheet
-  /// finishes the sign-up — stores the session token verify_my_email
+  /// finishes the sign-up — stores the session token verify_email_code
   /// returns and runs the registration steps — instead of opening the
   /// details form. Resends go through the existing-account resend.
   final bool isEmailSignUp;
@@ -310,6 +310,8 @@ class _RegisterConfirmationPageState
                                             ref,
                                             isDeferredOtp:
                                                 widget.isDeferredOtp,
+                                            email:
+                                                widget.userModel.email ?? '',
                                             onVerified: widget.isEmailSignUp
                                                 ? (data) => ref
                                                       .read(
@@ -371,7 +373,7 @@ class _RegisterConfirmationPageState
                               // flip rebuilds the build that reads it.
                               background: state.isConfirm
                                   ? AppStyle.primary
-                                  : AppStyle.cardDark,
+                                  : AppStyle.cardFor(Theme.of(context).brightness),
                               textColor: state.isConfirm
                                   ? AppStyle.black
                                   : AppStyle.textGrey,

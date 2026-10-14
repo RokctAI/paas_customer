@@ -21,6 +21,7 @@ import 'package:base_sdk/src/services/vibration.dart';
 import 'package:base_sdk/src/presentation/theme/theme.dart';
 
 import 'package:base_sdk/src/presentation/components/custom_checkbox.dart';
+import 'package:remixicon/remixicon.dart';
 
 class IngredientItem extends ConsumerWidget {
   final VoidCallback onTap;
@@ -88,7 +89,7 @@ class IngredientItem extends ConsumerWidget {
                           IconButton(
                             onPressed: remove,
                             icon: Icon(
-                              Icons.remove,
+                              Remix.subtract_line,
                               color: (addon.quantity ?? 1) == 1
                                   ? AppStyle.outlineButtonBorder
                                   : AppStyle.black,
@@ -100,7 +101,7 @@ class IngredientItem extends ConsumerWidget {
                           ),
                           IconButton(
                             onPressed: add,
-                            icon: const Icon(Icons.add),
+                            icon: const Icon(Remix.add_line),
                           ),
                         ],
                       )

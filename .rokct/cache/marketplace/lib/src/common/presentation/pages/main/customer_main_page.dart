@@ -17,7 +17,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:proste_indexed_stack/proste_indexed_stack.dart';
 import 'package:remixicon/remixicon.dart';
 
+import 'package:base_sdk/base_sdk.dart'
+    show
+        AppConstants,
+        AppRoutes,
+        FloatingBottomNav,
+        FloatingNavAction,
+        FloatingNavProfile,
+        FloatingNavTab,
+        FloatingNavTabsMode,
+        LocalStorage;
+import 'package:base_sdk/src/application/home/home_provider.dart';
 import 'package:base_sdk/src/application/main/main_provider.dart';
+import 'package:base_sdk/src/application/shop_order/shop_order_provider.dart';
+import 'package:base_sdk/src/models/data/cart_data.dart';
 import 'package:base_sdk/src/presentation/components/keyboard_dismisser.dart';
 import 'package:base_sdk/src/presentation/pages/profile/generic_profile_page.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
@@ -44,9 +57,18 @@ import '../search/search_page.dart';
 /// to land on, the home page's own shimmer placeholders show while its
 /// content loads).
 ///
-/// Deliberately lean (the full legacy paas_customer shell — parcel, wallet
-/// history, service tabs, per-ui-type navigators — is being migrated
-/// separately): four tabs over the surfaces marketplace_sdk owns today.
+/// The FLOATING NAV is back (Ray, 2026-10-12: "then let marketplace use
+/// floating nav"). The lean page this replaced drew a docked Material bar;
+/// the legacy paas_customer shell (main_page.dart before the 2026-08-24
+/// re-fork) floated base_sdk's pill over the page instead, with the
+/// person's picture as its last entry, a basket button beside it with the
+/// cart count, and, in fixed-nav builds, a "you are shopping at" bar above
+/// it. All three are restored on base_sdk's FloatingBottomNav
+/// (FloatingNavTabsMode.profile and .companion, base_sdk >= 1.87.0).
+///
+/// Still lean in what it routes to (parcel, wallet history, service tabs
+/// and the one/two/three ui-type navigators are not here): Home, Search
+/// and Liked are tabs, and the picture is the fourth destination.
 /// Home follows the backend `ui_type` setting the way the legacy shell did
 /// for the two variants this SDK kept (home_zero default, home_four for
 /// type 4); the retired one/two/three variants fall back to home_zero.
@@ -55,52 +77,208 @@ import '../search/search_page.dart';
 class CustomerMainPage extends ConsumerWidget {
   const CustomerMainPage({super.key});
 
+  /// The profile's index in the stack. Not one of the pill's tabs: the
+  /// picture is drawn as [FloatingNavTabsMode.profile].
+  static const int profileIndex = 3;
+
+  /// Key the tests and the guided tour use to find the cart button.
+  static const Key cartKey = ValueKey<String>('customer-nav-cart');
+
+  /// Key for the "you are shopping at" bar.
+  static const Key cartBarKey = ValueKey<String>('customer-nav-cart-bar');
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final int selectedIndex = ref.watch(
       mainProvider.select((state) => state.selectIndex),
     );
+    final Cart? cart = ref.watch(shopOrderProvider.select((s) => s.cart));
+    final int cartCount = cartItemCount(cart);
+    final bool signedIn = LocalStorage.getToken().isNotEmpty;
+    final mainNotifier = ref.read(mainProvider.notifier);
+
+    void select(int index) {
+      mainNotifier.changeScrolling(false);
+      mainNotifier.selectIndex(index);
+    }
+
+    // Signed out, the basket and the bar go to sign-in first, as the
+    // legacy shell's did; the order page needs a session.
+    void openCart() {
+      if (!signedIn) {
+        AppRoutes.I.pushLoginRoute(context);
+        return;
+      }
+      AppRoutes.I.pushOrderRoute(context);
+    }
+
+    // The legacy rule: with a scrolling (non-fixed) nav the basket only
+    // shows once something is in the cart; a fixed nav always shows it.
+    final bool showCart = AppConstants.fixed || cartCount > 0;
+
     return KeyboardDismisser(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: ProsteIndexedStack(
-          index: selectedIndex,
+        body: Stack(
           children: [
-            IndexedStackChild(
-              child: AppHelpers.getType() == 4
-                  ? const HomePageFour()
-                  : const HomePage(),
-              preload: true,
+            Positioned.fill(
+              child: ProsteIndexedStack(
+                index: selectedIndex,
+                children: [
+                  IndexedStackChild(
+                    child: AppHelpers.getType() == 4
+                        ? const HomePageFour()
+                        : const HomePage(),
+                    preload: true,
+                  ),
+                  IndexedStackChild(
+                    child: const SearchPage(isBackButton: false),
+                  ),
+                  IndexedStackChild(
+                    child: const LikePage(isBackButton: false),
+                  ),
+                  IndexedStackChild(child: const GenericProfilePage()),
+                ],
+              ),
             ),
-            IndexedStackChild(child: const SearchPage(isBackButton: false)),
-            IndexedStackChild(child: const LikePage(isBackButton: false)),
-            IndexedStackChild(child: const GenericProfilePage()),
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (AppConstants.fixed && cartCount > 0)
+                      _CartBar(
+                        key: cartBarKey,
+                        shopName: _cartShopName(cart, ref),
+                        totalPrice: cart?.totalPrice,
+                        onTap: openCart,
+                      ),
+                    FloatingBottomNav(
+                      mode: FloatingNavTabsMode(
+                        tabs: [
+                          FloatingNavTab(
+                            selectIcon: Remix.home_5_fill,
+                            unSelectIcon: Remix.home_5_line,
+                            label: AppHelpers.getTranslation(TrKeys.home),
+                          ),
+                          FloatingNavTab(
+                            selectIcon: Remix.search_2_fill,
+                            unSelectIcon: Remix.search_2_line,
+                            label: AppHelpers.getTranslation(TrKeys.search),
+                          ),
+                          FloatingNavTab(
+                            selectIcon: Remix.heart_3_fill,
+                            unSelectIcon: Remix.heart_3_line,
+                            label: AppHelpers.getTranslation(TrKeys.liked),
+                          ),
+                        ],
+                        currentIndex: selectedIndex,
+                        onSelect: select,
+                        profile: FloatingNavProfile(
+                          user: signedIn ? LocalStorage.getUser() : null,
+                          label: AppHelpers.getTranslation(
+                            signedIn ? TrKeys.profile : TrKeys.login,
+                          ),
+                          active: selectedIndex == profileIndex,
+                          // Signed out the picture is the way in: home stays
+                          // underneath and the login page goes on top.
+                          onTap: () {
+                            if (!signedIn) {
+                              select(0);
+                              AppRoutes.I.pushLoginRoute(context);
+                              return;
+                            }
+                            select(profileIndex);
+                          },
+                        ),
+                        companion: showCart
+                            ? FloatingNavAction(
+                                icon: Remix.shopping_basket_2_fill,
+                                label: AppHelpers.getTranslation(TrKeys.cart),
+                                badgeCount: cartCount,
+                                onTap: openCart,
+                              )
+                            : null,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: selectedIndex,
-          onTap: (index) =>
-              ref.read(mainProvider.notifier).selectIndex(index),
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: AppStyle.bottomNavigationBarColor,
-          selectedItemColor: AppStyle.primary,
-          unselectedItemColor: AppStyle.secondaryInkFor(Theme.of(context).brightness),
-          items: [
-            BottomNavigationBarItem(
-              icon: const Icon(Remix.home_5_line),
-              label: AppHelpers.getTranslation(TrKeys.home),
+      ),
+    );
+  }
+
+  /// How many lines the current cart holds: the first user cart's details,
+  /// the count the legacy basket badge showed.
+  static int cartItemCount(Cart? cart) {
+    final carts = cart?.userCarts;
+    if (carts == null || carts.isEmpty) return 0;
+    return carts.first.cartDetails?.length ?? 0;
+  }
+
+  /// The name of the shop the cart belongs to, looked up among the shops
+  /// home already loaded, as the legacy bar did. Empty when not found.
+  static String _cartShopName(Cart? cart, WidgetRef ref) {
+    final String? shopId = cart?.shopId;
+    if (shopId == null) return '';
+    final home = ref.watch(homeProvider);
+    for (final shops in [
+      home.shops,
+      home.newShops,
+      home.allShops,
+      home.shopsRecommend,
+      home.filterShops,
+    ]) {
+      for (final shop in shops) {
+        if (shop.id == shopId) return shop.translation?.title ?? '';
+      }
+    }
+    return '';
+  }
+}
+
+/// The legacy shell's "you are shopping at" bar: the cart's shop and its
+/// total, drawn above the floating nav in fixed-nav builds while the cart
+/// has something in it. Tapping it opens the order, like the basket.
+class _CartBar extends StatelessWidget {
+  final String shopName;
+  final num? totalPrice;
+  final VoidCallback onTap;
+
+  const _CartBar({
+    super.key,
+    required this.shopName,
+    required this.totalPrice,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: MediaQuery.sizeOf(context).width * 0.8,
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        decoration: BoxDecoration(
+          color: AppStyle.primary.withValues(alpha: 0.8),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                '${AppHelpers.getTranslation(TrKeys.shopping)} $shopName',
+                style: AppStyle.interRegular(size: 14, color: AppStyle.white),
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-            BottomNavigationBarItem(
-              icon: const Icon(Remix.search_2_line),
-              label: AppHelpers.getTranslation(TrKeys.search),
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Remix.heart_3_line),
-              label: AppHelpers.getTranslation(TrKeys.liked),
-            ),
-            BottomNavigationBarItem(
-              icon: const Icon(Remix.user_line),
-              label: AppHelpers.getTranslation(TrKeys.profile),
+            Text(
+              AppHelpers.numberFormat(number: totalPrice),
+              style: AppStyle.interSemi(size: 16, color: AppStyle.white),
             ),
           ],
         ),

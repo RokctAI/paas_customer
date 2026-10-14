@@ -21,10 +21,10 @@
 //     modal sheet (the finished port of the marketplace top-up sheet), the
 //     same shape as Send.
 //   * The Send button opens this SDK's ported WalletSendScreen.
-//   * The Loan button stays behind AppHelpers.getLendingEnabled(), but
-//     resolves EmbeddedWidgets.I.loanScreen() inside a guard: a shell that
-//     enables lending without registering the embedded loan screen logs
-//     and stays put instead of throwing mid-build.
+//   * The Loan button shows only when lending is enabled
+//     (AppHelpers.getLendingEnabled()) AND the app provides a loan screen
+//     (EmbeddedWidgets.I.loanScreen() is declared, polaris today). An app
+//     without one, supacharge for example, shows no Loan button at all.
 //   * No @RoutePage annotation here — the host-side shell in the installed
 //     wallet_route_pages.dart carries it (this SDK's convention, same as
 //     WalletTopUpPage).
@@ -73,6 +73,21 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
   late ProfileState state;
   late ProfileNotifier event;
   final bool isLtr = LocalStorage.getLangLtr();
+
+  /// Whether this app provides a loan screen. Only apps that compose one
+  /// (polaris today; the marketplace or merchants could declare it too)
+  /// show the Loan button; elsewhere, supacharge for one, it would do
+  /// nothing (Ray, 2026-10-13: "this button is not needed in supacharge").
+  late final bool _hasLoanScreen = _loanScreenAvailable();
+
+  static bool _loanScreenAvailable() {
+    try {
+      EmbeddedWidgets.I.loanScreen();
+      return true;
+    } on StateError {
+      return false;
+    }
+  }
 
   @override
   void initState() {
@@ -182,7 +197,8 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                             titleSize: 12.sp,
                             onTap: _openSendSheet,
                           ),
-                          if (AppHelpers.getLendingEnabled()) ...[
+                          if (_hasLoanScreen &&
+                              AppHelpers.getLendingEnabled()) ...[
                             5.horizontalSpace,
                             SecondButton(
                               title: AppHelpers.getTranslation(TrKeys.loan),

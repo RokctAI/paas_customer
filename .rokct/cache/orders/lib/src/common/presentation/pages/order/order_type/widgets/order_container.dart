@@ -15,6 +15,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:base_sdk/src/presentation/theme/theme.dart';
+import 'package:remixicon/remixicon.dart';
 
 class OrderContainer extends StatelessWidget {
   final Widget icon;
@@ -69,7 +70,7 @@ class OrderContainer extends StatelessWidget {
               ],
             ),
             const Spacer(),
-            Icon(Icons.keyboard_arrow_right, size: 21.r),
+            Icon(Remix.arrow_right_s_line, size: 21.r),
           ],
         ),
       ),

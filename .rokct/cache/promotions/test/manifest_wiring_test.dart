@@ -34,7 +34,10 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   final manifest =
       jsonDecode(File('manifest.json').readAsStringSync()) as Map<String, dynamic>;
-  final block = manifest;
+  // The story viewer is customer-only (1.4.0): the routes, the seam and the
+  // shell install all live under app_type.customer.
+  final block = (manifest['app_type'] as Map<String, dynamic>)['customer']
+      as Map<String, dynamic>;
 
   List<Map<String, dynamic>> listOf(String key) =>
       ((block[key] as List?) ?? const [])

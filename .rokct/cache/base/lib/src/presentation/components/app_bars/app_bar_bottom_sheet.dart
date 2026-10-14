@@ -14,6 +14,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:base_sdk/src/presentation/theme/theme.dart';
 
@@ -45,7 +46,7 @@ class AppBarBottomSheet extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back, color: AppStyle.inkFor(brightness)),
+          icon: Icon(Remix.arrow_left_line, color: AppStyle.inkFor(brightness)),
         ),
         Text(
           title,

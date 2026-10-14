@@ -1,3 +1,48 @@
+## 1.34.0
+
+* feat(manager): sign-up asks for the seller role, and an account signed up
+  offline on the phone can sign in offline, so a new seller can sign up and
+  sell with no signal. Their shop waits for approval; sales sync once it is
+  approved.
+* An account that isn't a seller is told what to do: "Apply in the customer
+  app (Become a seller)". A seller never waits for approval to sign in (only
+  the shop does), so the message doesn't mention waiting.
+* fix(backend): "Become a seller" in the customer app works. `create_shop`
+  used to refuse anyone without the Seller role, so an existing customer
+  could never apply. A signed-in account now gets its own shop, pending
+  approval, and the Seller role. Guests are refused, and only a System
+  Manager can open a shop in someone else's name.
+* Needs auth_sdk >= 1.18.0.
+
+## 1.33.5
+
+* fix(wiring): declare `EmbeddedWidgets.cartOrderItem`, `cartClearDialog` and `bonusScreen`, implemented by `CartOrderItem`, `CartClearDialog` and `BonusScreen`. The order screen's cart lines and clear-cart dialog, and the product bonus sheet, threw a `StateError` in the customer app, because no SDK declared them.
+
+## 1.33.4
+
+* fix(manifest): install the demo fixtures only in marketplace apps
+  (`app_types`: customer, driver, manager; Ray, 2026-10-05). The catch-all
+  `templates/assets` -> `assets` install is split into `audio`, `images`
+  and `svgs` so it no longer copies the fixtures too. Supacharge and other
+  non-marketplace shells no longer get `assets/demo/merchants/`.
+
+## 1.33.3
+
+* fix(theme): widgets read their surface, card, stroke and ink colours from Theme.of(context) at build time (AppStyle.surfaceFor/cardFor/cardAltFor/strokeFor/subtleStrokeFor/inkFor/secondaryInkFor/faintFor) instead of the AppStyle.isDark-resolved statics, so a live dark/light switch restyles open pages instead of leaving the old mode's colours (Ray, 2026-10-04).
+
+## 1.33.2
+
+* fix(icons): every icon is Remixicon (`package:remixicon`, `Remix.*`), the
+  fleet's one icon set. Material `Icons.*`, `CupertinoIcons.*` and
+  `flutter_remix` uses are replaced with their Remixicon equivalents;
+  `flutter_remix` is dropped and `remixicon: ^1.4.1` is required. Icons only.
+
+## 1.33.1
+
+* fix(customer): `getShopBranch` calls the new guest gateway cmd
+  `api.shop.get_shop_branches` (merchants `shop.py`) instead of the dead
+  `paas.api.shop.shop.get_shop_branch` path (fixplan M23).
+
 ## 1.32.1
 
 * fix(manager): the tablet side rail no longer adds a page-side margin on

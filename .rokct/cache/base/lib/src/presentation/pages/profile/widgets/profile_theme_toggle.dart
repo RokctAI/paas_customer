@@ -14,6 +14,7 @@
 
 
 import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:base_sdk/src/application/app_widget/app_provider.dart';
@@ -57,7 +58,7 @@ class ProfileThemeToggle extends ConsumerWidget {
           border: Border.all(color: AppStyle.strokeFor(Theme.of(context).brightness), width: 0.5),
         ),
         child: Icon(
-          isDark ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
+          isDark ? Remix.moon_line : Remix.sun_line,
           size: 16,
           color: AppStyle.inkFor(Theme.of(context).brightness),
         ),

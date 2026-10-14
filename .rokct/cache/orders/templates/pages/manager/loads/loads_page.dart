@@ -137,7 +137,7 @@ class _LoadsPlanesState extends State<_LoadsPlanes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppStyle.surfaceDark,
+      backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
       body: SafeArea(
         child: LoadsPlaneFlow(
           key: _flowKey,

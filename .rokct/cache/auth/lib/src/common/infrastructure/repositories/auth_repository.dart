@@ -28,7 +28,10 @@ import 'package:base_sdk/src/models/models.dart';
 
 import 'package:base_sdk/src/handlers/token_refresh_service.dart';
 
+import 'package:auth_sdk/src/common/domain/interface/auth_session_policy.dart';
 import 'package:auth_sdk/src/common/domain/interface/deferred_otp_email_resend.dart';
+import 'package:auth_sdk/src/common/domain/interface/email_code_verification.dart';
+import 'package:auth_sdk/src/common/domain/interface/google_id_token_sign_in.dart';
 import 'package:auth_sdk/src/common/domain/interface/session_password_rotation.dart';
 import 'package:auth_sdk/src/common/domain/interface/session_token_refresh.dart';
 import 'package:auth_sdk/src/common/services/registration_config.dart';
@@ -37,6 +40,8 @@ class AuthRepository
     implements
         AuthRepositoryFacade,
         DeferredOtpEmailResend,
+        EmailCodeVerification,
+        GoogleIdTokenSignIn,
         SessionPasswordRotation,
         SessionTokenRefresh {
   /// Universal platform gateway: every backend call is a POST to the single
@@ -64,8 +69,11 @@ class AuthRepository
         payload: {'usr': email, 'pwd': password},
         requireAuth: false,
       );
-      // Assuming a successful login returns user data that can be adapted to LoginResponse
-      // This part will need careful adaptation based on the actual Frappe response
+      // A wrong password (401) or an unverified account (403) arrives as a
+      // 200 whose body carries the status_code; it is a failure, not an
+      // empty session.
+      final rejected = _bodyRejection<LoginResponse>(response);
+      if (rejected != null) return rejected;
       return ApiResult.success(data: LoginResponse.fromJson(response));
     } catch (e) {
       debugPrint('==> login failure: $e');
@@ -78,15 +86,33 @@ class AuthRepository
 
   @override
   Future<ApiResult<RegisterResponse>> sendOtp({required String phone}) async {
-    final data = {'phone': phone.replaceAll('+', "")};
+    // The phone goes out exactly as verifyPhone later sends it (with the
+    // leading "+"): the backend caches the OTP under `phone_otp:<phone>`
+    // verbatim, so stripping "+" here meant the verify lookup never matched.
     try {
       final response = await _gateway.call(
         'api.user.send_phone_verification_code',
-        payload: data,
+        payload: {'phone': phone},
         requireAuth: false,
       );
-      // The response from this endpoint is simple, may need to adjust RegisterResponse model
-      return ApiResult.success(data: RegisterResponse.fromJson(response));
+      final rejected = _bodyRejection<RegisterResponse>(response);
+      if (rejected != null) return rejected;
+      // The endpoint answers with a bare message and no verifyId; the phone
+      // itself is the id verify_phone_code keys on, so hand it back as one.
+      final parsed = RegisterResponse.fromJson(response);
+      return ApiResult.success(
+        data: RegisterResponse(
+          timestamp: parsed.timestamp,
+          status: parsed.status,
+          message: parsed.message,
+          data: RegisterData(
+            verifyId: (parsed.data?.verifyId?.isNotEmpty ?? false)
+                ? parsed.data!.verifyId
+                : phone,
+            phone: parsed.data?.phone ?? phone,
+          ),
+        ),
+      );
     } catch (e) {
       debugPrint('==> send otp failure: $e');
       return ApiResult.failure(
@@ -96,6 +122,51 @@ class AuthRepository
     }
   }
 
+  /// api_response answers HTTP 200 with the real outcome in the body's
+  /// `status_code` (a wrong OTP is 401/400 inside a 2xx), so the Dio stack
+  /// never throws for it. Turn such a body into a failure.
+  static ApiResult<T>? _bodyRejection<T>(dynamic response) {
+    if (response is! Map) return null;
+    final code = int.tryParse('${response['status_code'] ?? ''}');
+    if (code == null || code < 400) return null;
+    return ApiResult.failure(
+      error: '${response['message'] ?? 'Request failed'}',
+      statusCode: code,
+    );
+  }
+
+  // EmailCodeVerification: the 6-digit code register_user (and
+  // resend_verification_email) emailed. verify_email_code mints the
+  // session token, so the user is signed in after sign-up -- the same
+  // endpoint the web twin (verifyRegistrationEmail) uses.
+  @override
+  Future<ApiResult<VerifyPhoneResponse>> verifyEmailCode({
+    required String email,
+    required String verifyCode,
+  }) async {
+    try {
+      final response = await _gateway.call(
+        'api.user.verify_email_code',
+        payload: {'email': email, 'otp': verifyCode},
+        requireAuth: false,
+      );
+      final rejected = _bodyRejection<VerifyPhoneResponse>(response);
+      if (rejected != null) return rejected;
+      return ApiResult.success(
+        data: VerifyPhoneResponse.fromJson(response),
+      );
+    } catch (e) {
+      debugPrint('==> verify email code failure: $e');
+      return ApiResult.failure(
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
+    }
+  }
+
+  // Facade fallback without the email: verify_my_email checks the
+  // welcome-link token and mints no session token. The app's code sheet
+  // goes through [verifyEmailCode] instead.
   @override
   Future<ApiResult<VerifyPhoneResponse>> verifyEmail({
     required String verifyCode,
@@ -131,6 +202,8 @@ class AuthRepository
         payload: {"phone": verifyId, "otp": verifyCode},
         requireAuth: false,
       );
+      final rejected = _bodyRejection<VerifyPhoneResponse>(response);
+      if (rejected != null) return rejected;
       return ApiResult.success(
         data: VerifyPhoneResponse.fromJson(response),
       );
@@ -194,6 +267,11 @@ class AuthRepository
         payload: {
           ..._registerUserPayload(user),
           ...RegistrationTerms.signUpExtras(),
+          // The role this app signs people up as (the manager app asks for
+          // seller). Read at send time, so an offline sign-up syncing
+          // later asks for the same role.
+          if (AuthSessionPolicy.I.signUpAppRole != null)
+            'app_role': AuthSessionPolicy.I.signUpAppRole,
         },
         requireAuth: false,
         // register_user is @idempotent server-side: a stable key makes an
@@ -229,6 +307,9 @@ class AuthRepository
         payload: {'verify_code': verifyCode, 'email': email},
         requireAuth: false,
       );
+      // A wrong or expired code is a 200 whose body says 400.
+      final rejected = _bodyRejection<VerifyData>(response);
+      if (rejected != null) return rejected;
       return ApiResult.success(
         data: VerifyData.fromJson(response['data'] ?? response),
       );
@@ -255,6 +336,39 @@ class AuthRepository
     );
   }
 
+  // GoogleIdTokenSignIn: the backend verifies the Google ID token and
+  // reads the email from it; nothing else the client sends identifies the
+  // account.
+  @override
+  Future<ApiResult<LoginResponse>> loginWithGoogleIdToken({
+    required String idToken,
+    String? displayName,
+    String? avatar,
+  }) async {
+    try {
+      final response = await _gateway.call(
+        'api.user.login_with_google',
+        payload: {
+          'id_token': idToken,
+          if (displayName != null && displayName.isNotEmpty)
+            'display_name': displayName,
+          if (avatar != null && avatar.isNotEmpty) 'avatar': avatar,
+        },
+        requireAuth: false,
+      );
+      return ApiResult.success(data: LoginResponse.fromJson(response));
+    } catch (e) {
+      debugPrint('==> login with google failure: $e');
+      return ApiResult.failure(
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
+    }
+  }
+
+  /// The facade's email/id form. The backend no longer signs anyone in
+  /// from these (it requires a verified Google ID token), so this call is
+  /// refused; Google sign-in goes through [loginWithGoogleIdToken].
   @override
   Future<ApiResult<LoginResponse>> loginWithGoogle({
     required String email,
@@ -375,6 +489,11 @@ class AuthRepository
         payload: {
           ..._registerUserPayload(user),
           ...RegistrationTerms.signUpExtras(),
+          // The role this app signs people up as (the manager app asks for
+          // seller). Read at send time, so an offline sign-up syncing
+          // later asks for the same role.
+          if (AuthSessionPolicy.I.signUpAppRole != null)
+            'app_role': AuthSessionPolicy.I.signUpAppRole,
         },
         requireAuth: false,
       );

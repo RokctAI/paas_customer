@@ -42,6 +42,7 @@ export 'src/presentation/theme/app_theme.dart';
 // Shared presentation components (generic, no feature-SDK logic — ADR-005)
 export 'src/presentation/components/glance_card.dart';
 export 'src/presentation/components/blur_wrap.dart';
+export 'src/presentation/components/return_to_launcher_scope.dart';
 export 'src/presentation/components/user_avatar.dart';
 
 // Adaptive primitives: Material 3 window-size classes + the two layout
@@ -113,6 +114,7 @@ export 'src/presentation/pages/profile/widgets/profile_theme_toggle.dart';
 
 // Kernel services
 export 'src/services/app_connectivity.dart';
+export 'src/services/load_silence.dart';
 export 'src/services/app_ui_keys.dart';
 export 'src/services/customer_cart_store.dart';
 export 'src/services/error_presenter.dart';
@@ -167,6 +169,7 @@ export 'src/di/base_di.dart';
 // Host-backed indirection for navigation and cross-SDK widget embedding
 export 'src/navigation/app_routes.dart';
 export 'src/navigation/route_presence.dart';
+export 'src/navigation/signed_out_entry.dart';
 export 'src/navigation/embedded_widgets.dart';
 
 // Kernel session models

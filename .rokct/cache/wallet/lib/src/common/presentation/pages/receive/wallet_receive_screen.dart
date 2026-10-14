@@ -33,6 +33,8 @@ import 'package:base_sdk/src/presentation/components/keyboard_dismisser.dart';
 import 'package:base_sdk/src/presentation/components/title_icon.dart';
 import 'package:base_sdk/src/presentation/theme/theme.dart';
 
+import 'package:wallet_sdk/src/common/utils/wallet_currency.dart';
+
 /// CashSend/eWallet-style receive flow: the receiver picks an amount, the
 /// backend mints a single-use 6-digit claim code, and the receiver hands the
 /// code to the sender out-of-band (codes are never pushed or SMSed).
@@ -239,7 +241,7 @@ class _WalletReceiveScreenState extends ConsumerState<WalletReceiveScreen> {
             hintText: '0.00',
             prefixIcon: Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.w),
-              child: Text('R', style: AppStyle.interBold(size: 18.sp)),
+              child: Text(WalletCurrency.symbol, style: AppStyle.interBold(size: 18.sp)),
             ),
             prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
             border: OutlineInputBorder(
@@ -286,7 +288,7 @@ class _WalletReceiveScreenState extends ConsumerState<WalletReceiveScreen> {
                   ],
                 ),
                 child: Text(
-                  'R ${amount.toStringAsFixed(2)}',
+                  WalletCurrency.format(amount),
                   style: AppStyle.interNormal(size: 14.sp),
                 ),
               ),
@@ -337,7 +339,7 @@ class _WalletReceiveScreenState extends ConsumerState<WalletReceiveScreen> {
           child: Column(
             children: [
               Text(
-                'R ${(_claimAmount ?? 0).toStringAsFixed(2)}',
+                WalletCurrency.format(_claimAmount ?? 0),
                 style: AppStyle.interSemi(size: 18.sp),
                 textAlign: TextAlign.center,
               ),

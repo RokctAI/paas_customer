@@ -1,6 +1,32 @@
 {
   "name": "loyalty_sdk",
-  "version": "1.0.2",
+  "version": "1.2.1",
+  "_comment_version_1_2_0": "1.1.0 -> 1.2.0: no separate profile tile any more. The 'loyalty.customer_subscription' profile section (order 125) duplicated the profile header's existing plan row, so it is removed; the customer subscription now rides that row as a ProfileSectionRegistry action in group 'marketplace.plan' whose badgeBuilder renders CustomerSubscriptionPlanLine (plan name + state, tap opens CustomerPlansPage). CustomerSubscriptionProfileCard is replaced by CustomerSubscriptionPlanLine; CustomerPlansPage is unchanged. Needs marketplace_sdk >= 1.16.0 composed to render the line.",
+  "_comment_version_1_1_0": "1.0.2 -> 1.1.0: customer subscriptions (Uber One style). CustomerPlansPage lists plans with their benefits, subscribes paying by wallet or a saved card (the method rows are subscriptions_sdk's shared SubscriptionPaymentMethodRow), and manages the current subscription: cancel (benefits run to the end date, confirmed with the LMS cancel copy), resume, pay a past-due renewal now, change the renewal method. (1.1.0 only: a profile card 'loyalty.customer_subscription', order 125, opened it; see 1.2.0.) Talks to commerce loyalty/frappe's api.customer_subscription.* cmds; payment and auto-renewal run server-side through subscriptions_sdk's shared recurring engine. Requires subscriptions_sdk >= 1.6.0 (pubspec path ../subscriptions) and base_sdk >= 1.82.0 (the tr_keys below).",
+  "di_hooks": [
+    {
+      "id": "loyalty-profile-sections",
+      "order": 20,
+      "body": "registerLoyaltyProfileSections();",
+      "imports": [
+        "import 'package:loyalty_sdk/loyalty_sdk.dart';"
+      ],
+      "_comment": "Contributes the customer-subscription line to the profile header plan row (ProfileSectionRegistry action group marketplace.plan, rendered by marketplace_sdk >= 1.16.0). Requires base_sdk >= 1.23.0 (the profile host)."
+    }
+  ],
+  "tr_keys": {
+    "subscriptionPlans": "subscription_plans",
+    "youSavedWithSubscription": "you_saved_with_your_subscription",
+    "subscriptionPastDue": "payment_overdue_benefits_are_paused",
+    "subscriptionPaymentFailed": "the_payment_did_not_go_through",
+    "changePaymentMethod": "change_payment_method",
+    "renewsWith": "renews_with",
+    "offDelivery": "off_delivery",
+    "noServiceFee": "no_service_fee",
+    "onOrdersOver": "on_orders_over",
+    "quarter": "quarter",
+    "subscriptionPending": "waiting_for_payment"
+  },
   "installs": [],
   "routes": [],
   "integrations": []

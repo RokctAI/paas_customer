@@ -1,5 +1,43 @@
 # Changelog
 
+## 1.22.4
+
+* fix(language): the Languages sheet waits for Save to finish before it
+  closes, so a translations error still shows (as 1.22.2 meant), and the
+  chosen language now applies at once (base_sdk 1.88.3).
+* fix(windows): the notification sound rings 3 times for each new
+  notification, then stops. It used to loop until the unread count went
+  down, and supacharge has no notification list, so it never stopped.
+  Polling still runs every 10 seconds.
+* fix(push): a message that arrives while the app is open, and that no
+  feature claims, now shows as a notification. Before, it showed nothing.
+  The toast and banner text is translated.
+* Requires base_sdk >= 1.88.3.
+
+## 1.22.3
+
+* fix(wiring): the customer app's chat ("Chat with a shop" on a shop page,
+  "Chat with us" on home layout 4) and notification settings (Profile >
+  My account > Notifications) threw a StateError, because no SDK declared
+  `AppRoutes.pushChatRoute` or `pushSettingRoute` for the customer app.
+  comms_sdk now installs route shells for its chat and settings pages
+  (`/chat`, `/setting`) in the customer app and declares both methods.
+* fix(wiring): `EmbeddedWidgets.chatPage` is declared for every app, so the
+  loan screen's chat no longer throws a StateError either.
+
+## 1.22.2
+
+* fix(comms): the Languages sheet's Save passes `userInitiated: true` to
+  `makeSelectedLang` (base_sdk 1.83.5), so a translations failure after the
+  person saves still shows, while the same call made on load stays silent.
+
+## 1.22.1
+
+* fix(comms): the Languages sheet and the notification list (and its order
+  pane routes) read their surface and ink from Theme.of(context) at build
+  time instead of AppStyle.isDark and its mode statics, so a live dark/light
+  switch restyles them.
+
 ## 1.22.0
 
 * fix(comms): notification badge count reads `data.count`; the notification

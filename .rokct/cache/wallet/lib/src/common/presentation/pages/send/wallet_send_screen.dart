@@ -19,8 +19,11 @@
 // sendWalletByCode — implemented by this SDK's WalletRepository), so the
 // port is verbatim beyond this note.
 
+import 'package:base_sdk/src/application/profile/profile_provider.dart';
 import 'package:base_sdk/src/handlers/api_result.dart';
+import 'package:base_sdk/src/sync/sync_engine.dart';
 import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,6 +34,9 @@ import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:base_sdk/src/presentation/components/keyboard_dismisser.dart';
 import 'package:base_sdk/src/presentation/components/title_icon.dart';
 import 'package:base_sdk/src/presentation/theme/theme.dart';
+
+import 'package:wallet_sdk/src/common/infrastructure/repositories/wallet_repository.dart';
+import 'package:wallet_sdk/src/common/utils/wallet_currency.dart';
 
 /// CashSend/eWallet-style send flow. There is deliberately NO user search
 /// here (anti-enumeration): the sender either types the friend's full
@@ -55,6 +61,22 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
 
   /// Set once the backend has confirmed who the phone number belongs to.
   String? _confirmedRecipientName;
+
+  /// One idempotency key per send attempt (recipient + amount), reused
+  /// when the same send is retried after a failure or timeout so the
+  /// server can never pay it twice; a new recipient or amount gets a new
+  /// key, and a completed send clears it.
+  String? _sendKey;
+  String? _sendKeyFor;
+
+  String _sendKeyForAttempt(String phone, double amount) {
+    final attempt = '$phone|$amount';
+    if (_sendKey == null || _sendKeyFor != attempt) {
+      _sendKey = SyncEngine.newOpId();
+      _sendKeyFor = attempt;
+    }
+    return _sendKey!;
+  }
 
   /// Set after a successful send-by-code; holds recipient name + amount.
   String? _codeSentRecipientName;
@@ -146,10 +168,16 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
     });
 
     try {
-      final result = await walletRepository.sendWalletToPhone(
-        phone: _normalizedPhone(),
-        amount: amount,
-      );
+      final phone = _normalizedPhone();
+      final key = _sendKeyForAttempt(phone, amount);
+      final repository = walletRepository;
+      final result = repository is WalletRepository
+          ? await repository.sendWalletToPhone(
+              phone: phone,
+              amount: amount,
+              idempotencyKey: key,
+            )
+          : await repository.sendWalletToPhone(phone: phone, amount: amount);
 
       setState(() {
         _isLoading = false;
@@ -157,7 +185,10 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
 
       result.when(
         success: (data) {
+          _sendKey = null;
           if (!mounted) return;
+          // The profile wallet card shows the new balance.
+          ref.read(profileProvider.notifier).fetchUser(context);
           AppHelpers.showCheckTopSnackBarDone(
             context,
             AppHelpers.getTranslation(TrKeys.moneySentSuccessfully),
@@ -203,6 +234,8 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
       result.when(
         success: (data) {
           if (!mounted) return;
+          // The profile wallet card shows the new balance.
+          ref.read(profileProvider.notifier).fetchUser(context);
           setState(() {
             _codeSentRecipientName = data.recipientName ?? '';
             _codeSentAmount = data.amount;
@@ -377,7 +410,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
           decoration: InputDecoration(
             hintText: AppHelpers.getTranslation(TrKeys.phoneNumber),
             hintStyle: AppStyle.interNormal(size: 16.sp, color: _secondaryInk),
-            prefixIcon: Icon(Icons.phone, color: _secondaryInk),
+            prefixIcon: Icon(Remix.phone_line, color: _secondaryInk),
             border: _border,
             enabledBorder: _border,
             disabledBorder: _border,
@@ -430,7 +463,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
               prefixIcon: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 12.w),
                 child: Text(
-                  'R',
+                  WalletCurrency.symbol,
                   style: AppStyle.interBold(size: 18.sp, color: _ink),
                 ),
               ),
@@ -514,7 +547,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.close, color: AppStyle.red),
+            icon: const Icon(Remix.close_line, color: AppStyle.red),
             onPressed: _isLoading
                 ? null
                 : () {
@@ -588,7 +621,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
 
   Widget _buildCodeSendSuccess() {
     final amountText = _codeSentAmount != null
-        ? 'R ${_codeSentAmount!.toStringAsFixed(2)}'
+        ? WalletCurrency.format(_codeSentAmount!)
         : '';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -608,7 +641,7 @@ class _WalletSendScreenState extends ConsumerState<WalletSendScreen> {
           ),
           child: Column(
             children: [
-              Icon(Icons.check_circle, color: AppStyle.primary, size: 48.r),
+              Icon(Remix.checkbox_circle_fill, color: AppStyle.primary, size: 48.r),
               16.verticalSpace,
               Text(
                 AppHelpers.getTranslation(TrKeys.moneySentSuccessfully),

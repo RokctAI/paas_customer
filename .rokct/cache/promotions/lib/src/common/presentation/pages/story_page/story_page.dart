@@ -16,7 +16,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:base_sdk/src/navigation/app_routes.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_remix/flutter_remix.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:jiffy/jiffy.dart';
@@ -264,7 +264,7 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(
-                        FlutterRemix.image_line,
+                        Remix.image_line,
                         color: AppStyle.white,
                         size: 32.r,
                       ),
@@ -452,7 +452,7 @@ class _StoryPageState extends State<StoryPage> with TickerProviderStateMixin {
                           left: 8.r,
                           right: 4.r,
                         ),
-                        child: const Icon(Icons.close, color: AppStyle.white),
+                        child: const Icon(Remix.close_line, color: AppStyle.white),
                       ),
                     ),
                   ),

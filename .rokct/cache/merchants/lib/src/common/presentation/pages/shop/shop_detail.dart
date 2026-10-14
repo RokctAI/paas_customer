@@ -143,7 +143,7 @@ class _ShopDetailPageState extends ConsumerState<ShopDetailPage> {
                   },
                   child: Row(
                     children: [
-                      const Icon(Icons.place_rounded),
+                      const Icon(Remix.map_pin_fill),
                       24.horizontalSpace,
                       Expanded(
                         child: Text(widget.shop.translation?.address ?? ""),

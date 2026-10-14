@@ -1,3 +1,94 @@
+## 1.30.0
+
+* feat(manager): sales for a shop still pending approval wait on the device.
+  The backend refuses them with `SHOP_PENDING_APPROVAL`, and
+  `OrderCreateSyncHandler` answers `SyncResult.held`. The sale stays queued
+  without spending its retry attempts, and syncs once the shop is approved.
+* feat(manager): a queued sale can move on the board. `updateOrderStatus` on
+  an `offline:` id updates the stored sale, and the sync sends the status
+  the sale is in when it syncs. Every column lists the queued sales in its
+  own status. Before, they all sat in New.
+* test: the manifest-version check reads `pubspec.yaml` rather than a
+  hard-coded number that had gone stale.
+* Requires base_sdk >= 1.88.0.
+
+## 1.29.4
+
+* fix(wiring): declare `EmbeddedWidgets.orderMap`, implemented by `OrderMap`. The shop info page threw a `StateError` in the customer app, because no SDK declared it.
+
+## 1.29.3
+
+* fix(deps): the `comms_sdk` dev dependency now uses the sibling path
+  `../comms` (the `.rokct/cache` layout) with a `dependency_overrides` entry
+  for the workspace checkout (`../../../core/comms/dart`), the same
+  convention as `base_sdk`. A vendored copy of orders_sdk now resolves on
+  its own, so the composer's freezed codegen runs in it.
+* fix(analyze): orders_sdk analyzes with 0 errors against base_sdk from
+  core main.
+  * `orders_item.dart` imports `package:flutter/material.dart` again. The
+    Remixicon move (1.29.1) commented it out by mistake, so `OrdersItem`
+    was not a widget.
+  * The manager swipe-button labels and the POS customer picker's
+    "no name" fallback use wire keys from the new `ManagerOrderKeys`, and
+    the checkout's "Payment" heading uses `OrderCheckKeys`. Raw base_sdk
+    has no `TrKeys.swipeTo*`, `TrKeys.noName` or `TrKeys.payment`. The
+    wire strings are unchanged (`swipe_to_accept`, `no_name`, `payment`,
+    ...) and already declared in `manifest.json`.
+
+## 1.29.2
+
+* fix(theme): widgets read their surface, card, stroke and ink colours from Theme.of(context) at build time (AppStyle.surfaceFor/cardFor/cardAltFor/strokeFor/subtleStrokeFor/inkFor/secondaryInkFor/faintFor) instead of the AppStyle.isDark-resolved statics, so a live dark/light switch restyles open pages instead of leaving the old mode's colours (Ray, 2026-10-04).
+
+## 1.29.1
+
+* fix(icons): every icon is Remixicon (`package:remixicon`, `Remix.*`), the
+  fleet's one icon set. Material `Icons.*`, `CupertinoIcons.*` and
+  `flutter_remix` uses are replaced with their Remixicon equivalents;
+  `flutter_remix` is dropped and `remixicon: ^1.4.1` is required. Icons only.
+
+## 1.29.0
+
+* feat(checkout): the price breakdown shows "You saved X with your
+  subscription" when the quote carries `subscription_savings` (customer
+  subscription free delivery, delivery discount or service fee waiver).
+  Needs base_sdk 1.82.0.
+
+## 1.28.0
+
+* feat(orders): Braintree as a native payment method for order and parcel
+  checkout on Android and iOS. With a `braintree` gateway tag,
+  `OrdersRepository.process` and `ParcelRepository.process` create the
+  order as before, then pay it in Braintree's drop-in through payments_sdk's
+  `payments.braintree_native_checkout` seam (payments_sdk >= 1.3.0). The
+  server charges the amount on the document. On success they answer
+  `native-paid://braintree`, and the checkout screens treat the order as paid
+  with no WebView.
+* On web or Windows, without payments_sdk, or when the drop-in cannot run,
+  the existing path runs unchanged. No WebView gateway changes.
+* Needs the pay PR adding `braintree_client_token` / `braintree_checkout`
+  (merge pay first). Tests: `test/braintree_native_test.dart`.
+
+## 1.27.1
+
+* fix(orders): parcel lists send the Parcel Order status labels ("On a way")
+  and page with limit/offset, so paging and the on-the-way filter work.
+
+## 1.27.0
+
+* feat(orders): PayPal order and parcel checkout use the wallet's PayPal
+  REST Orders v2 cmds. `OrdersRepository.process` and
+  `ParcelRepository.process` with PayPal call
+  `api.payment.create_paypal_rest_order {target_type: order|parcel,
+  target_id}` and answer its `approve_url`. `WebViewPage` sees the
+  `paypal_rest_return` redirect, captures with
+  `api.payment.capture_paypal_rest_order {order_id}` and treats the order as
+  paid only when the capture succeeded. A parcel paid in an external
+  browser is captured by the server's return endpoint.
+* The hosted `api.payment.initiate_paypal_payment` and
+  `initiate_paypal_parcel_payment` cmds are retired in pay in the same
+  wave; merge together with that pay PR.
+* Tests: `test/gateway_cmd_test.dart`, `test/paypal_rest_return_test.dart`.
+
 ## 1.26.0
 
 * feat(orders): `ActiveOrderTracker`, an app-wide poller behind the order live

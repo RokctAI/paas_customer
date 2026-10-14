@@ -47,7 +47,7 @@ class ShopDriversPage extends StatelessWidget {
     return Directionality(
       textDirection: isLtr ? TextDirection.ltr : TextDirection.rtl,
       child: Scaffold(
-        backgroundColor: AppStyle.surfaceDark,
+        backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
         body: SafeArea(
           child: Stack(
             children: [

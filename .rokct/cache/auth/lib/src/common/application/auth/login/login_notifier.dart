@@ -26,6 +26,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:base_sdk/src/domain/interface/auth.dart';
 import 'package:base_sdk/src/domain/interface/user.dart';
+import 'package:auth_sdk/src/common/domain/interface/google_id_token_sign_in.dart';
 import 'package:base_sdk/src/models/data/address_old_data.dart';
 import 'package:base_sdk/src/models/models.dart';
 import 'package:base_sdk/src/services/app_connectivity.dart';
@@ -45,8 +46,11 @@ import 'package:auth_sdk/src/common/domain/interface/auth_session_policy.dart';
 import 'package:auth_sdk/src/common/infrastructure/services/offline_auth_service.dart';
 import 'package:auth_sdk/src/common/services/auth_error_presenter.dart';
 import 'package:auth_sdk/src/common/services/demo_account_session.dart';
+import 'package:auth_sdk/src/common/services/offline_login_decision.dart';
+import 'package:auth_sdk/src/common/services/login_load_silencer.dart';
 import 'package:auth_sdk/src/common/services/platform_support.dart';
 import 'package:auth_sdk/src/common/services/restore_credential_service.dart';
+import 'package:auth_sdk/src/common/services/demo_sign_in.dart';
 import 'package:auth_sdk/src/common/services/session_profile.dart';
 
 class LoginNotifier extends StateNotifier<LoginState> {
@@ -87,53 +91,67 @@ class LoginNotifier extends StateNotifier<LoginState> {
     state = state.copyWith(isKeepLogin: keep);
   }
 
-  Future<void> checkLanguage(BuildContext context) async {
+  /// [userInitiated] is false for the page's own load-time probe: its
+  /// failures stay silent (see [shouldSurfaceLoginError]).
+  Future<void> checkLanguage(
+    BuildContext context, {
+    bool userInitiated = false,
+  }) async {
+    final bool loud = shouldSurfaceLoginError(userInitiated: userInitiated);
     final lang = LocalStorage.getLanguage();
     if (lang == null) {
-      // No language selected yet, check available languages
-      final connect = await AppConnectivity.connectivity();
-      if (connect) {
-        final response = await _settingsRepository.getLanguages();
-        if (!mounted) return;
-        response.when(
-          success: (data) {
-            final List<LanguageData> languages = data.data ?? [];
-            state = state.copyWith(list: languages);
-
-            // Auto-select if there's only one language
-            if (languages.length == 1) {
-              // Set as selected language
-              LocalStorage.setLanguageData(languages[0]);
-              LocalStorage.setLangLtr(languages[0].backward);
-              LocalStorage.setLanguageSelected(true);
-
-              // Get translations for this language
-              _getTranslations(context, languages[0]);
-
-              // Update state to skip language selection screen
-              state = state.copyWith(isSelectLanguage: true);
-            } else {
-              // Multiple languages available, show selection screen
-              state = state.copyWith(isSelectLanguage: false);
-            }
-          },
-          failure: (failure, status) {
-            state = state.copyWith(isSelectLanguage: false);
-            // Settings fetch: never user-actionable — friendly line only,
-            // real cause to telemetry (entry-56 rule).
-            AuthErrorPresenter.showTechnical(
-              context,
-              type: 'auth_languages_load_failed',
-              detail: failure,
-              statusCode: status,
-            );
-          },
-        );
-      } else {
-        if (context.mounted) {
-          AppHelpers.showNoConnectionSnackBar(context);
-        }
+      // No language selected yet, check available languages. Offline-first:
+      // a radio that is up but a backend that does not answer is offline
+      // too, so the first-run picker is only offered once the backend has
+      // actually answered with its languages; otherwise it is skipped
+      // quietly and the bundled translations stay in use.
+      final connect =
+          DemoSession.demoActive || await AppConnectivity.backendAvailability();
+      if (!mounted) return;
+      if (!connect) {
+        debugPrint('==> LoginNotifier: backend unreachable, no language picker');
+        return;
       }
+      final response = await _settingsRepository.getLanguages();
+      if (!mounted) return;
+      response.when(
+        success: (data) {
+          final List<LanguageData> languages = data.data ?? [];
+          state = state.copyWith(list: languages);
+
+          // Auto-select if there's only one language
+          if (languages.length == 1) {
+            // Set as selected language
+            LocalStorage.setLanguageData(languages[0]);
+            LocalStorage.setLangLtr(languages[0].backward);
+            LocalStorage.setLanguageSelected(true);
+
+            // Get translations for this language
+            _getTranslations(context, languages[0], loud: loud);
+
+            // Update state to skip language selection screen
+            state = state.copyWith(isSelectLanguage: true);
+          } else {
+            // Multiple languages available, show selection screen
+            state = state.copyWith(isSelectLanguage: false);
+          }
+        },
+        failure: (failure, status) {
+          state = state.copyWith(isSelectLanguage: false);
+          // Settings fetch: never user-actionable — friendly line only,
+          // real cause to telemetry (entry-56 rule).
+          if (!loud) {
+            debugPrint('==> LoginNotifier: silent load-time probe failed: $failure');
+            return;
+          }
+          AuthErrorPresenter.showTechnical(
+            context,
+            type: 'auth_languages_load_failed',
+            detail: failure,
+            statusCode: status,
+          );
+        },
+      );
     } else {
       // Language already selected, verify it exists in available languages
       final connect = await AppConnectivity.connectivity();
@@ -153,6 +171,10 @@ class LoginNotifier extends StateNotifier<LoginState> {
           },
           failure: (failure, status) {
             state = state.copyWith(isSelectLanguage: false);
+            if (!loud) {
+              debugPrint('==> LoginNotifier: silent load-time probe failed: $failure');
+              return;
+            }
             AuthErrorPresenter.showTechnical(
               context,
               type: 'auth_languages_load_failed',
@@ -162,7 +184,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
           },
         );
       } else {
-        if (context.mounted) {
+        if (loud && context.mounted) {
           AppHelpers.showNoConnectionSnackBar(context);
         }
       }
@@ -172,8 +194,9 @@ class LoginNotifier extends StateNotifier<LoginState> {
   // Helper method to get translations
   Future<void> _getTranslations(
     BuildContext context,
-    LanguageData language,
-  ) async {
+    LanguageData language, {
+    bool loud = false,
+  }) async {
     final connect = await AppConnectivity.connectivity();
     if (connect) {
       final response = await _settingsRepository.getMobileTranslations();
@@ -182,6 +205,10 @@ class LoginNotifier extends StateNotifier<LoginState> {
           LocalStorage.setTranslations(data.data);
         },
         failure: (failure, status) {
+          if (!loud) {
+            debugPrint('==> LoginNotifier: silent load-time probe failed: $failure');
+            return;
+          }
           AuthErrorPresenter.showTechnical(
             context,
             type: 'auth_translations_load_failed',
@@ -191,7 +218,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
         },
       );
     } else {
-      if (context.mounted) {
+      if (loud && context.mounted) {
         AppHelpers.showNoConnectionSnackBar(context);
       }
     }
@@ -238,7 +265,23 @@ class LoginNotifier extends StateNotifier<LoginState> {
     UserData? data, {
     bool popUntilRoot = false,
   }) async {
-    final String? role = data?.user?.role;
+    // A "success" without a token is not a session: persisting it would
+    // save an empty token and land the user signed in to nothing.
+    final String? token = data?.accessToken;
+    if (data == null || token == null || token.isEmpty) {
+      if (mounted) {
+        state = state.copyWith(isLoading: false, isLoginError: true);
+      }
+      if (context.mounted) {
+        AuthErrorPresenter.showTechnical(
+          context,
+          type: 'auth_session_missing_token',
+          detail: 'credential exchange returned no access token',
+        );
+      }
+      return;
+    }
+    final String? role = data.user?.role;
     if (!AuthSessionPolicy.I.allows(role)) {
       AuthSessionPolicy.I.onRejected(context, role: role);
       return;
@@ -246,16 +289,16 @@ class LoginNotifier extends StateNotifier<LoginState> {
     // setToken clears any stale refresh contract, so persist the fresh
     // one strictly after it. Flows that mint none (Google login) simply
     // store nothing — their sessions are never proactively refreshed.
-    await LocalStorage.setToken(data?.accessToken ?? '');
-    await SecureStorage.setRefreshToken(data?.refreshToken);
-    await LocalStorage.setTokenExpiry(data?.expiresAt);
-    LocalStorage.setAddressSelected(_activeAddressOf(data?.user));
+    await LocalStorage.setToken(token);
+    await SecureStorage.setRefreshToken(data.refreshToken);
+    await LocalStorage.setTokenExpiry(data.expiresAt);
+    LocalStorage.setAddressSelected(_activeAddressOf(data.user));
     // Persist the account the exchange came back with, so the profile
     // header has a name and avatar on its first paint instead of the
     // empty "Profile" / "?" state it showed until profileProvider's
     // fetch (the only other writer of the stored user) came back. The
     // fetch still runs and overwrites this with the full profile.
-    final UserModel? user = data?.user;
+    final UserModel? user = data.user;
     if (user != null) {
       await LocalStorage.setUser(sessionProfileOf(user));
     }
@@ -263,8 +306,9 @@ class LoginNotifier extends StateNotifier<LoginState> {
     // the real backend just accepted either carries its `is_demo_account`
     // marker (a real, per-role demo account -> the session is served from
     // the in-app fixtures once phase 2 wires the SDKs) or it does not (any
-    // demo session left behind is ended here). Never keyed on the typed
-    // address or the password; nothing on screen changes.
+    // demo session left behind is ended here). Never keyed on the password;
+    // only the listed demo addresses (see [beginDemoSignInIfListed]) start
+    // a demo session before sign-in, and nothing on screen changes.
     await applyDemoAccountSession(user);
     if (popUntilRoot) {
       context.router.popUntilRoot();
@@ -296,6 +340,11 @@ class LoginNotifier extends StateNotifier<LoginState> {
     // AuthRepository (the backend asserts the demo marker; in the tour
     // build base_sdk's demo interceptor answers from auth_sdk's fixtures,
     // which needs no network, so a demo session skips the radio check).
+    //
+    // The listed demo addresses (1.13.0's list) switch the session to demo
+    // first, so they sign in whatever the network, as they did before
+    // 1.14.0 (Ray, 2026-10-03).
+    await beginDemoSignInIfListed(state.email);
     final connected =
         DemoSession.demoActive || await AppConnectivity.connectivity();
     if (!mounted) return;
@@ -315,8 +364,23 @@ class LoginNotifier extends StateNotifier<LoginState> {
           if (!mounted) return;
           state = state.copyWith(isLoading: false);
         },
-        failure: (failure, status) {
+        failure: (failure, status) async {
+          // "Using the app offline can't be taken as an error" (Ray,
+          // 2026-10-03). A backend that never answered (base_sdk's
+          // authored couldNotReachServer / serverTookTooLong lines) is
+          // the app being used offline: take the same offline path as a
+          // dead radio instead of toasting. Anything the server actually
+          // answered (wrong credentials, a 5xx) is still shown below.
+          if (loginFailureMeansOffline(failure.toString())) {
+            await _loginOffline(context);
+            return;
+          }
           state = state.copyWith(isLoading: false, isLoginError: true);
+          // A listed demo address that did not sign in leaves no demo
+          // session behind.
+          if (isDemoSignInAddress(state.email)) {
+            DemoSession.instance.clear();
+          }
           // Refusal split: a definitive 4xx carries the backend's own
           // user-actionable copy (wrong credentials) and stays verbatim;
           // anything else shows a friendly line and the raw detail goes
@@ -330,43 +394,51 @@ class LoginNotifier extends StateNotifier<LoginState> {
         },
       );
     } else {
-      // No connection — try a local account created via offline
-      // registration on this device before giving up. A real backend
-      // account that's never been registered offline here simply won't be
-      // found; that's a distinct, clearer error than a generic
-      // "no connection" snackbar.
-      if (!AppValidators.isValidPassword(state.password)) {
-        state = state.copyWith(isPasswordNotValid: true);
-        return;
+      await _loginOffline(context);
+    }
+  }
+
+  /// The no-connection sign-in: a local account created via offline
+  /// registration on this device. Taken when the radio is down and when
+  /// the backend could not be reached.
+  Future<void> _loginOffline(BuildContext context) async {
+    // No connection — try a local account created via offline
+    // registration on this device before giving up. A real backend
+    // account that's never been registered offline here simply won't be
+    // found; that's a distinct, clearer error than a generic
+    // "no connection" snackbar.
+    if (!AppValidators.isValidPassword(state.password)) {
+      state = state.copyWith(isPasswordNotValid: true);
+      return;
+    }
+    state = state.copyWith(isLoading: true);
+    final result = await _offlineAuth.loginOffline(
+      phone: state.email,
+      email: state.email,
+      password: state.password,
+    );
+    if (!mounted) return;
+    state = state.copyWith(isLoading: false);
+    if (result.success) {
+      // The role of an offline account can't be verified against the
+      // backend, so a declared role-gated policy rejects offline sessions
+      // (its onRejected also removes the offline token loginOffline just
+      // stored) unless it lets in offline accounts (the manager app: a
+      // seller signed up here with no signal). The default policy allows
+      // them and lands exactly where this branch always landed.
+      if (!AuthSessionPolicy.I.allowsOfflineAccount()) {
+        LocalStorage.deleteToken();
+        if (context.mounted) AuthSessionPolicy.I.onRejected(context);
+      } else if (context.mounted) {
+        AuthSessionPolicy.I.onOfflineAuthenticated(context);
+        // An offline sign-in is still a sign-in: run the session-start
+        // hooks (there is no FCM token to push without a connection).
+        unawaited(SessionStartHooks.run());
       }
-      state = state.copyWith(isLoading: true);
-      final result = await _offlineAuth.loginOffline(
-        phone: state.email,
-        email: state.email,
-        password: state.password,
-      );
-      if (!mounted) return;
-      state = state.copyWith(isLoading: false);
-      if (result.success) {
-        // The role of an offline account can't be verified against the
-        // backend, so a declared role-gated policy rejects offline sessions
-        // outright (its onRejected also removes the offline token
-        // loginOffline just stored). The default policy allows them and
-        // lands exactly where this branch always landed.
-        if (!AuthSessionPolicy.I.allows(null)) {
-          LocalStorage.deleteToken();
-          if (context.mounted) AuthSessionPolicy.I.onRejected(context);
-        } else if (context.mounted) {
-          AuthSessionPolicy.I.onAuthenticated(context);
-          // An offline sign-in is still a sign-in: run the session-start
-          // hooks (there is no FCM token to push without a connection).
-          unawaited(SessionStartHooks.run());
-        }
-      } else {
-        state = state.copyWith(isLoginError: true);
-        if (context.mounted) {
-          AppHelpers.showCheckTopSnackBar(context, result.error ?? '');
-        }
+    } else {
+      state = state.copyWith(isLoginError: true);
+      if (context.mounted) {
+        AppHelpers.showCheckTopSnackBar(context, result.error ?? '');
       }
     }
   }
@@ -378,7 +450,9 @@ class LoginNotifier extends StateNotifier<LoginState> {
       state = state.copyWith(isLoading: true);
       GoogleSignInAccount? googleUser;
       try {
-        googleUser = await GoogleSignIn().signIn();
+        googleUser = await GoogleSignIn(
+          serverClientId: GoogleSignInConfig.serverClientId,
+        ).signIn();
       } catch (e) {
         if (!mounted) return;
         state = state.copyWith(isLoading: false);
@@ -389,11 +463,34 @@ class LoginNotifier extends StateNotifier<LoginState> {
         return;
       }
 
-      final response = await _authRepository.loginWithGoogle(
-        email: googleUser.email,
-        displayName: googleUser.displayName ?? '',
-        id: googleUser.id,
-        avatar: googleUser.photoUrl ?? "",
+      // The backend signs in from the verified Google ID token only (it
+      // reads the email from the token), so the token is what is sent.
+      String? idToken;
+      try {
+        idToken = (await googleUser.authentication).idToken;
+      } catch (e) {
+        debugPrint('===> google authentication exception: $e');
+      }
+      if (!mounted) return;
+      final repo = _authRepository;
+      final googleRepo =
+          repo is GoogleIdTokenSignIn ? repo as GoogleIdTokenSignIn : null;
+      if (idToken == null || googleRepo == null) {
+        state = state.copyWith(isLoading: false);
+        if (context.mounted) {
+          AuthErrorPresenter.showTechnical(
+            context,
+            type: 'auth_social_login_failed',
+            detail: 'Google Sign-In returned no ID token',
+            extra: const {'provider': 'google'},
+          );
+        }
+        return;
+      }
+      final response = await googleRepo.loginWithGoogleIdToken(
+        idToken: idToken,
+        displayName: googleUser.displayName,
+        avatar: googleUser.photoUrl,
       );
       if (!mounted) return;
       response.when(

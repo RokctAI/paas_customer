@@ -18,19 +18,33 @@ import 'package:base_sdk/src/domain/interface/payments.dart';
 import 'package:base_sdk/src/models/models.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/handlers/handlers.dart';
+import 'package:base_sdk/src/handlers/platform_gateway.dart';
 import 'package:base_sdk/src/models/data/saved_card.dart';
 
 class PaymentsRepository implements PaymentsRepositoryFacade {
+  /// Universal platform gateway: every call POSTs `{"cmd", "payload"}` to
+  /// the one gateway path. `cmd` is the wallet frappe manifest's
+  /// whitelisted-method key with the app prefix stripped
+  /// (`{app_name}.api.payment.*` -> `api.payment.*`).
+  static const _gateway = PlatformGateway();
+
+  /// FrappeResponseInterceptor already unwraps the top-level `message`
+  /// envelope on 2xx; tolerate both shapes for overridden clients.
+  static dynamic _unwrap(dynamic body) =>
+      body is Map && body.containsKey('message') && body.length == 1
+      ? body['message']
+      : body;
+
   @override
   Future<ApiResult<PaymentsResponse>> getPayments() async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      debugPrint('==> Getting payments');
-      final response = await client.get(
-        '/api/method/paas.api.payment.get_payment_gateways',
+      // get_payment_gateways returns a bare list of gateway rows.
+      final data = _unwrap(
+        await _gateway.tenant('api.payment.get_payment_gateways'),
       );
-      debugPrint('==> Payments response: ${response.data}');
-      return ApiResult.success(data: PaymentsResponse.fromJson(response.data));
+      return ApiResult.success(
+        data: PaymentsResponse.fromJson(data is List ? {'data': data} : data),
+      );
     } catch (e) {
       debugPrint('==> get payments failure: $e');
       return ApiResult.failure(
@@ -46,14 +60,12 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
     required String paymentId,
   }) async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.post(
-        '/api/method/paas.api.payment.create_transaction',
-        data: {'order_id': orderId, 'payment_id': paymentId},
-      );
-      return ApiResult.success(
-        data: TransactionsResponse.fromJson(response.data),
-      );
+      // create_transaction returns {timestamp, status, message, data}.
+      final data = await _gateway.tenant('api.payment.create_transaction', {
+        'order_id': orderId,
+        'payment_id': paymentId,
+      });
+      return ApiResult.success(data: TransactionsResponse.fromJson(data));
     } catch (e) {
       debugPrint('==> create transaction failure: $e');
       return ApiResult.failure(
@@ -66,14 +78,24 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
   @override
   Future<ApiResult<List<SavedCardModel>>> getSavedCards() async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.get(
-        '/api/method/paas.api.payment.get_saved_cards',
-      );
-
+      // get_saved_cards returns a bare list of Saved Card rows
+      // (name/gateway/last_four/card_type/expiry_date/card_holder_name/
+      // is_default), the default card first.
+      final data = _unwrap(await _gateway.tenant('api.payment.get_saved_cards'));
+      final rows = data is List ? data : const [];
       return ApiResult.success(
-        data: (response.data['data'] as List)
-            .map((e) => SavedCardModel.fromJson(e))
+        data: rows
+            .whereType<Map>()
+            .map(
+              (e) => SavedCardModel(
+                id: (e['id'] ?? e['name'])?.toString() ?? '',
+                lastFour: e['last_four']?.toString() ?? '',
+                cardType: e['card_type']?.toString() ?? 'Card',
+                expiryDate: e['expiry_date']?.toString() ?? '',
+                cardHolderName: e['card_holder_name']?.toString() ?? '',
+                isDefault: e['is_default'] == true || e['is_default'] == 1,
+              ),
+            )
             .toList(),
       );
     } catch (e) {
@@ -85,7 +107,11 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
     }
   }
 
-  // Implementing Card specific methods first
+  // Saving a card from typed-in details is refused without a request: no
+  // gateway tokenizes raw card details on the backend (its tokenize_card
+  // refuses too), so sending the card number and CVC would only put them
+  // on the wire for nothing. A card is saved by paying through a gateway
+  // checkout.
   @override
   Future<ApiResult<String>> tokenizeCard({
     required String cardNumber,
@@ -93,28 +119,12 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
     required String expiryDate,
     required String cvc,
   }) async {
-    try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.post(
-        '/api/method/paas.api.payment.tokenize_card',
-        data: {
-          'card_number': cardNumber,
-          'card_holder': cardName,
-          'expiry_date': expiryDate,
-          'cvc': cvc,
-        },
-      );
-      // The gateway reuse credential stays on the server. What comes
-      // back is the Saved Card docname, which is what the charge
-      // endpoints take.
-      return ApiResult.success(data: response.data['data']['name']);
-    } catch (e) {
-      debugPrint('==> tokenize card failure: $e');
-      return ApiResult.failure(
-        error: AppHelpers.errorHandler(e),
-        statusCode: NetworkExceptions.getDioStatus(e),
-      );
-    }
+    return const ApiResult.failure(
+      error: 'Saving a card from typed-in details is not available. '
+          'Pay with a gateway checkout to save a card.',
+      // 501 Not Implemented: nothing was sent, nothing was stored.
+      statusCode: 501,
+    );
   }
 
   @override
@@ -127,11 +137,11 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
     String? lastFour,
     String? cardType,
   ]) async {
-    // Backend actually handles saving if save_card=True.
-    // But we have a specific endpoint save_payfast_card (or generic)
-    // Let's use the tokenize_card endpoint, which saves the card and
-    // returns its Saved Card docname. The gateway reuse credential stays
-    // on the server and never reaches this client.
+    // A gateway's reusable credential is saved server-side from the
+    // gateway's own confirmation (save_gateway_card), never from what a
+    // client reports. This path used to hand the details to tokenize_card,
+    // which dropped [token] and saved a random stand-in; it now gets the
+    // same honest refusal as [tokenizeCard].
     return tokenizeCard(
       cardNumber: cardNumber,
       cardName: cardName,
@@ -143,11 +153,7 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
   @override
   Future<ApiResult<bool>> deleteCard(String cardId) async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      await client.post(
-        '/api/method/paas.api.payment.delete_card',
-        data: {'card_name': cardId},
-      );
+      await _gateway.tenant('api.payment.delete_card', {'card_name': cardId});
       return const ApiResult.success(data: true);
     } catch (e) {
       debugPrint('==> delete card failure: $e');
@@ -160,9 +166,49 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
 
   @override
   Future<ApiResult<bool>> setDefaultCard(String cardId) async {
-    // Logic typically involves local storage or backend flag?
-    // Assuming backend for now or simple return if not needed.
-    return const ApiResult.success(data: true);
+    try {
+      // set_default_card marks this card the user's one default and clears
+      // the flag on their other cards.
+      final data = _unwrap(
+        await _gateway.tenant('api.payment.set_default_card', {
+          'card_name': cardId,
+        }),
+      );
+      return ApiResult.success(
+        data: data is Map && data['status'] == 'success',
+      );
+    } catch (e) {
+      debugPrint('==> set default card failure: $e');
+      return ApiResult.failure(
+        error: AppHelpers.errorHandler(e),
+        statusCode: NetworkExceptions.getDioStatus(e),
+      );
+    }
+  }
+
+  /// The card endpoints charge an existing Order (they check ownership and
+  /// read its total), but checkout hands this SDK the cart body. Create the
+  /// order first and return its id.
+  Future<String> _createOrderId(OrderBodyData orderData) async {
+    final result = await ordersRepository.createOrder(orderData);
+    String? orderId;
+    String? error;
+    result.when(
+      success: (order) => orderId = order.id,
+      failure: (e, _) => error = e,
+    );
+    if (orderId == null || orderId!.isEmpty) {
+      throw StateError(error ?? 'Order could not be created');
+    }
+    return orderId!;
+  }
+
+  static String _transactionId(dynamic body, String fallback) {
+    final data = _unwrap(body);
+    if (data is Map && data['transaction_id'] != null) {
+      return data['transaction_id'].toString();
+    }
+    return fallback;
   }
 
   @override
@@ -171,16 +217,16 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
     String savedCardId,
   ) async {
     try {
-      final client = dioHttp.client(requireAuth: true);
+      final orderId = await _createOrderId(orderData);
       // `saved_card`, not `token`: the gateway reuse credential is
-      // server-side only, so the card is named by its docname (the `name`
-      // that get_saved_cards / tokenize_card return).
-      await client.post(
-        '/api/method/paas.api.payment.process_token_payment',
-        data: {'order_id': orderData.cartId, 'saved_card': savedCardId},
-      );
-      return const ApiResult.success(data: "Success");
+      // server-side only, so the card is named by its docname.
+      final body = await _gateway.tenant('api.payment.process_token_payment', {
+        'order_id': orderId,
+        'saved_card': savedCardId,
+      });
+      return ApiResult.success(data: _transactionId(body, orderId));
     } catch (e) {
+      debugPrint('==> token payment failure: $e');
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
         statusCode: NetworkExceptions.getDioStatus(e),
@@ -197,19 +243,18 @@ class PaymentsRepository implements PaymentsRepositoryFacade {
     String cvc,
   ) async {
     try {
-      final client = dioHttp.client(requireAuth: true);
-      final response = await client.post(
-        '/api/method/paas.api.payment.process_direct_card_payment',
-        data: {
-          'order_id': orderBody.cartId,
-          'card_number': cardNumber,
-          'card_holder': cardName,
-          'expiry_date': expiryDate,
-          'cvc': cvc,
-        },
-      );
-      return ApiResult.success(data: response.data['message']);
+      final orderId = await _createOrderId(orderBody);
+      final body = await _gateway
+          .tenant('api.payment.process_direct_card_payment', {
+            'order_id': orderId,
+            'card_number': cardNumber,
+            'card_holder': cardName,
+            'expiry_date': expiryDate,
+            'cvc': cvc,
+          });
+      return ApiResult.success(data: _transactionId(body, orderId));
     } catch (e) {
+      debugPrint('==> direct card payment failure: $e');
       return ApiResult.failure(
         error: AppHelpers.errorHandler(e),
         statusCode: NetworkExceptions.getDioStatus(e),

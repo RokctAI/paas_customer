@@ -16,3 +16,4 @@ library payments_sdk;
 
 // Import concrete files via package:payments_sdk/src/common/...
 export 'src/common/di/payments_di.dart';
+export 'src/common/utils/braintree/braintree_native_checkout.dart';

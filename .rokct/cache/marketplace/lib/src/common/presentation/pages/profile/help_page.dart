@@ -28,6 +28,7 @@ import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:base_sdk/src/presentation/components/app_bars/common_app_bar.dart';
 import 'package:base_sdk/src/presentation/components/buttons/pop_button.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
+import 'package:remixicon/remixicon.dart';
 
 @RoutePage()
 class HelpPage extends ConsumerStatefulWidget {
@@ -169,7 +170,7 @@ class _HelpPageState extends ConsumerState<HelpPage> {
                                             ),
                                           ),
                                           const Icon(
-                                            Icons.keyboard_arrow_right,
+                                            Remix.arrow_right_s_line,
                                             color: AppStyle.textGrey,
                                           ),
                                         ],

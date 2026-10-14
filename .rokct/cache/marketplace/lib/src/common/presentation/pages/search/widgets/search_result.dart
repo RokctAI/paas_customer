@@ -13,7 +13,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_remix/flutter_remix.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:base_sdk/src/presentation/theme/theme.dart';
 
@@ -43,7 +43,7 @@ class SearchResultText extends StatelessWidget {
                 child: Row(
                   children: [
                     Icon(
-                      FlutterRemix.search_2_line,
+                      Remix.search_2_line,
                       size: 20.r,
                       color: AppStyle.inkFor(Theme.of(context).brightness),
                     ),
@@ -75,7 +75,7 @@ class SearchResultText extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.all(4.r),
                     child: Icon(
-                      FlutterRemix.close_fill,
+                      Remix.close_fill,
                       size: 20.r,
                       color: AppStyle.inkFor(Theme.of(context).brightness),
                     ),

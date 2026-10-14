@@ -14,7 +14,9 @@
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:base_sdk/src/domain/interface/orders.dart';
 import 'package:base_sdk/src/models/data/order_active_model.dart';
 import 'package:base_sdk/src/models/models.dart';
@@ -22,6 +24,13 @@ import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/handlers/handlers.dart';
 import 'package:base_sdk/src/handlers/platform_gateway.dart';
 import 'package:base_sdk/src/services/enums.dart';
+
+/// payments_sdk's native Braintree checkout: `(targetType, targetId)` ->
+/// `{status: success|failed|cancelled|unavailable, message?, transaction_id?}`.
+typedef BraintreeNativeSeam = Future<Map<String, Object?>> Function(
+  String targetType,
+  String targetId,
+);
 
 class OrdersRepository implements OrdersRepositoryFacade {
   /// Universal platform gateway (fleet rule 2026-08-15): cmds mirror the
@@ -149,15 +158,119 @@ class OrdersRepository implements OrdersRepositoryFacade {
   static OrderActiveModel _order(dynamic response) =>
       OrderActiveModel.fromJson({'data': normaliseOrder(_payloadMap(response))});
 
-  /// The only hosted-checkout initiators the wallet frappe half whitelists
-  /// (`api.payment.initiate_{flutterwave|paypal|paystack}_payment`). Any other
-  /// gateway name (PayFast, Stripe, ...) has no `initiate_*` counterpart, so
-  /// the call is refused client-side with a clear failure instead of a 404.
+  /// The hosted checkouts the wallet frappe half serves: Flutterwave and
+  /// Paystack through `api.payment.initiate_{flutterwave|paystack}_payment`,
+  /// PayPal through the REST Orders v2 `api.payment.create_paypal_rest_order`
+  /// (the hosted `initiate_paypal_payment` is retired). Any other gateway
+  /// name (PayFast, Stripe, ...) has no hosted checkout, so the call is
+  /// refused client-side with a clear failure instead of a 404.
   static const Set<String> hostedCheckoutProviders = {
     'flutterwave',
     'paypal',
     'paystack',
   };
+
+  /// GetIt instance name of payments_sdk's native Braintree checkout
+  /// (`BraintreeNativeCheckout.seam`, registered as a
+  /// [BraintreeNativeSeam]). orders_sdk does not import payments_sdk; the
+  /// function type is structural, so the same registration resolves here.
+  static const String braintreeNativeSeam =
+      'payments.braintree_native_checkout';
+
+  /// What [process] answers instead of a URL when the native Braintree
+  /// drop-in already paid the document. Callers treat it as paid and open
+  /// no WebView.
+  static const String braintreeNativePaid = 'native-paid://braintree';
+
+  /// A Braintree gateway tag (`braintree`, `braintree-main`, ...).
+  static bool isBraintree(String name) =>
+      name.toLowerCase().startsWith('braintree');
+
+  /// Android and iOS only: flutter_braintree has no web or desktop build.
+  static bool get nativeCheckoutPlatform =>
+      !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.iOS);
+
+  static bool braintreeNativeAvailable({GetIt? getIt, bool? platformOk}) =>
+      (platformOk ?? nativeCheckoutPlatform) &&
+      (getIt ?? GetIt.I).isRegistered<BraintreeNativeSeam>(
+        instanceName: braintreeNativeSeam,
+      );
+
+  /// Pays [targetType] (`order` / `parcel`) [targetId] with the native
+  /// Braintree drop-in. Answers [braintreeNativePaid] on success and a
+  /// failure when the payer cancelled or the charge was refused. Answers
+  /// null when the native flow is unavailable here or threw before a
+  /// payment was attempted: the caller then keeps its existing WebView path.
+  static Future<ApiResult<String>?> braintreeNative(
+    String targetType,
+    String targetId, {
+    GetIt? getIt,
+    bool? platformOk,
+  }) async {
+    final GetIt locator = getIt ?? GetIt.I;
+    if (!braintreeNativeAvailable(getIt: locator, platformOk: platformOk)) {
+      return null;
+    }
+    try {
+      final BraintreeNativeSeam seam = locator<BraintreeNativeSeam>(
+        instanceName: braintreeNativeSeam,
+      );
+      final Map<String, Object?> result = await seam(targetType, targetId);
+      switch (result['status']) {
+        case 'success':
+          return const ApiResult.success(data: braintreeNativePaid);
+        case 'cancelled':
+          return ApiResult.failure(
+            error: AppHelpers.getTranslation('payment_cancelled'),
+            statusCode: 400,
+          );
+        case 'failed':
+          return ApiResult.failure(
+            error:
+                result['message']?.toString() ??
+                AppHelpers.getTranslation('payment.rejected'),
+            statusCode: 402,
+          );
+        default:
+          return null;
+      }
+    } catch (e) {
+      debugPrint('==> braintree native checkout unavailable: $e');
+      return null;
+    }
+  }
+
+  /// PayPal REST checkout for an Order / Parcel Order: the wallet creates
+  /// an Orders v2 order for the document (amount from the document) and
+  /// answers its approval link, which the caller opens in [WebViewPage].
+  /// On return the WebView captures it with `capture_paypal_rest_order`
+  /// (and the server's `paypal_rest_return` / webhook capture it when the
+  /// payer returns in an external browser); the capture marks it Paid.
+  /// The PayPal order id when [url] is the wallet's PayPal REST return
+  /// (`...api.payment.paypal_rest_return?token=<order id>&PayerID=...`).
+  static String? paypalRestReturnToken(String url) {
+    final Uri? uri = Uri.tryParse(url);
+    if (uri == null || !uri.path.contains('paypal_rest_return')) return null;
+    final String? token = uri.queryParameters['token'];
+    return (token == null || token.isEmpty) ? null : token;
+  }
+
+  static Future<String> createPaypalRestOrder(
+    String targetType,
+    String targetId,
+  ) async {
+    final response = await const PlatformGateway().tenant(
+      'api.payment.create_paypal_rest_order',
+      {'target_type': targetType, 'target_id': targetId},
+    );
+    final Object? url = response is Map ? response['approve_url'] : null;
+    if (url == null || url.toString().isEmpty) {
+      throw Exception('PayPal did not return an approval link');
+    }
+    return url.toString();
+  }
 
   @override
   Future<ApiResult<OrderActiveModel>> createOrder(
@@ -279,6 +392,28 @@ class OrdersRepository implements OrdersRepositoryFacade {
     bool enableTokenization = false,
   }) async {
     final String provider = name.toLowerCase();
+    if (isBraintree(provider) && braintreeNativeAvailable()) {
+      // Native Braintree drop-in on Android/iOS. When it cannot run the
+      // existing path below is used unchanged.
+      try {
+        final created = await _gateway.tenant(
+          'api.order.create_order',
+          createOrderPayload(orderBody),
+        );
+        final Map<String, dynamic> order = _payloadMap(created);
+        final String? orderName = (order['name'] ?? order['id'])?.toString();
+        if (orderName != null && orderName.isNotEmpty) {
+          final native = await braintreeNative('order', orderName);
+          if (native != null) return native;
+        }
+      } catch (e) {
+        debugPrint('==> braintree native order failure: $e');
+        return ApiResult.failure(
+          error: AppHelpers.errorHandler(e),
+          statusCode: NetworkExceptions.getDioStatus(e),
+        );
+      }
+    }
     if (!hostedCheckoutProviders.contains(provider)) {
       return ApiResult.failure(
         error: 'No hosted checkout is available for "$name" on this backend',
@@ -300,6 +435,11 @@ class OrdersRepository implements OrdersRepositoryFacade {
         return ApiResult.failure(
           error: 'The order could not be created for checkout',
           statusCode: 400,
+        );
+      }
+      if (provider == 'paypal') {
+        return ApiResult.success(
+          data: await createPaypalRestOrder('order', orderName),
         );
       }
       final response = await _gateway.tenant(

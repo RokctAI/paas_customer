@@ -121,7 +121,23 @@ class _FavoriteShopsPageState extends ConsumerState<FavoriteShopsPage> {
                     ? (widget.loadingBuilder?.call(context) ??
                         const Center(child: CircularProgressIndicator()))
                     : state.shops.isEmpty
-                        ? EmptyBadge()
+                        // Liked shops exist on the device but could not be
+                        // loaded (offline): say so instead of claiming the
+                        // list is empty.
+                        ? state.shopIds.isNotEmpty
+                            ? Padding(
+                                padding: EdgeInsets.all(24.r),
+                                child: Text(
+                                  AppHelpers.getTranslation(
+                                      TrKeys.checkYourNetworkConnection),
+                                  textAlign: TextAlign.center,
+                                  style: AppStyle.interNormal(
+                                    size: 14,
+                                    color: AppStyle.inkFor(brightness),
+                                  ),
+                                ),
+                              )
+                            : EmptyBadge()
                         : ListView.builder(
                             padding: widget.listPadding ??
                                 EdgeInsets.only(top: 6.h),

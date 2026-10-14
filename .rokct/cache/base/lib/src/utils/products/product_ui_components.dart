@@ -82,7 +82,7 @@ class ProductUIComponents {
                   color: AppStyle.cardFor(Theme.of(context).brightness),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.remove, size: 20.r, color: AppStyle.inkFor(Theme.of(context).brightness)),
+                child: Icon(Remix.subtract_line, size: 20.r, color: AppStyle.inkFor(Theme.of(context).brightness)),
               ),
             ),
 
@@ -124,7 +124,7 @@ class ProductUIComponents {
                   color: AppStyle.cardFor(Theme.of(context).brightness),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.add, size: 20.r, color: AppStyle.inkFor(Theme.of(context).brightness)),
+                child: Icon(Remix.add_line, size: 20.r, color: AppStyle.inkFor(Theme.of(context).brightness)),
               ),
             ),
           ],

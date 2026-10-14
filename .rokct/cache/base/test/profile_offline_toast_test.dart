@@ -45,6 +45,7 @@ import 'package:base_sdk/src/models/response/profile_response.dart';
 import 'package:base_sdk/src/presentation/pages/profile/generic_profile_page.dart';
 import 'package:base_sdk/src/presentation/pages/profile/profile_section_registry.dart';
 import 'package:base_sdk/src/services/app_connectivity.dart';
+import 'package:base_sdk/src/services/demo_session.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/storage_keys.dart';
 
@@ -182,13 +183,37 @@ void main() {
       );
     });
 
-    testWidgets('a radio that reports none still says so', (tester) async {
+    // Ray, 2026-10-03: "using app offline cant be taken as an error".
+    // With no radio the page skips the fetch and stays quiet; the cached
+    // user and the footer's Online/Offline label carry the state.
+    testWidgets('a radio that reports none skips the fetch without a toast',
+        (tester) async {
       stubRadio(['none']);
 
       final repository = await pumpProfile(tester);
 
-      expect(find.text('No internet connection'), findsOneWidget);
+      expect(find.text('No internet connection'), findsNothing);
       expect(repository.profileCalls, 0);
+    });
+
+    // Ray, 2026-10-03: the offline demo sign-in (auth_sdk 1.16.3) must
+    // reach a working profile page. A demo session is answered by the
+    // demo interceptor, which needs no network, so the radio does not gate
+    // the fetch.
+    testWidgets('a demo session loads the profile with no radio and no error',
+        (tester) async {
+      stubRadio(['none']);
+      await DemoSession.instance.activate();
+      addTearDown(DemoSession.instance.clear);
+
+      final repository = await pumpProfile(tester);
+
+      expect(repository.profileCalls, 1);
+      expect(find.text('No internet connection'), findsNothing);
+      expect(
+        find.text("We couldn't reach the server. Please try again."),
+        findsNothing,
+      );
     });
   });
 }

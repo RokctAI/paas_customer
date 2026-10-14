@@ -15,6 +15,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:base_sdk/src/domain/interface/payments.dart';
 import 'package:payments_sdk/src/common/infrastructure/repositories/payments_repository.dart';
+import 'package:payments_sdk/src/common/utils/braintree/braintree_native_checkout.dart';
 
 /// Installer-convention DI hook: the composed app's generated `main.dart`
 /// calls `PaymentsSdkDependencies.register(GetIt.instance)` for every
@@ -24,6 +25,16 @@ class PaymentsSdkDependencies {
   static void register(GetIt getIt) {
     if (!getIt.isRegistered<PaymentsRepositoryFacade>()) {
       getIt.registerSingleton<PaymentsRepositoryFacade>(PaymentsRepository());
+    }
+    // Native Braintree checkout for SDKs that cannot import payments_sdk
+    // (orders, parcels): a plain function under a well-known name.
+    if (!getIt.isRegistered<BraintreeNativeSeam>(
+      instanceName: kBraintreeNativeCheckoutSeam,
+    )) {
+      getIt.registerSingleton<BraintreeNativeSeam>(
+        BraintreeNativeCheckout.seam,
+        instanceName: kBraintreeNativeCheckoutSeam,
+      );
     }
   }
 }

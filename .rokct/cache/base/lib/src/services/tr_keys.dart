@@ -79,6 +79,7 @@ class TrKeys {
   static const String waitingOnYou = 'waiting_on_you';
   static const String openOrders = 'open_orders';
   static const String manager = 'manager';
+  static const String paymentCancelled = 'payment_cancelled';
   static const String ageVerification = 'age_verification';
   static const String ageVerificationRequiredForAdultsOnly = 'age_verification_is_required_to_order_adults_only_items';
   static const String adultsOnlyBirthDateNeeded = 'this_order_includes_an_adults_only_item_please_confirm_your_date_of_birth';
@@ -465,6 +466,8 @@ class TrKeys {
   /// A server that answered too slowly rather than not at all — the one
   /// connection-class failure whose instruction really is "try again".
   static const String serverTookTooLong = 'server_took_too_long';
+  /// A content page (terms, privacy policy) the tenant has not published.
+  static const String pageNotAvailableYet = 'this_page_is_not_available_yet';
   static const String somethingWentWrongWithTheServer =
       'something_went_wrong_with_the_server';
   static const String totalProductPrice = 'total_product_price';
@@ -499,6 +502,9 @@ class TrKeys {
   static const String phoneNumber = 'phone_number';
   static const String cancel = 'cancel';
   static const String noInternetConnection = 'no_internet_connection';
+  static const String newNotifications = 'new_notifications';
+  static const String youHaveUnseenNotifications =
+      'you_have_unseen_notifications';
   static const String resetPassword = 'reset_password';
   static const String confirmation = 'confirm';
   static const String confirmPassword = 'confirm_password';
@@ -1291,4 +1297,29 @@ class TrKeys {
   static const String youreInForThe = 'youre_in_for_the';
   static const String youreReady = 'youre_ready';
   static const String zoomedOutEveryBand = 'zoomed_out_every_band_this_term';
+
+  // Customer subscriptions (loyalty_sdk 1.1.0: plans, subscribe with
+  // wallet or card, manage, and the checkout saving line). Declared in
+  // loyalty_sdk's manifest tr_keys too; base carries them so a standalone
+  // SDK checkout compiles.
+  static const String subscriptionPlans = 'subscription_plans';
+  static const String youSavedWithSubscription = 'you_saved_with_your_subscription';
+  static const String subscriptionPastDue = 'payment_overdue_benefits_are_paused';
+  static const String subscriptionPaymentFailed = 'the_payment_did_not_go_through';
+  static const String changePaymentMethod = 'change_payment_method';
+  static const String renewsWith = 'renews_with';
+  static const String offDelivery = 'off_delivery';
+  static const String noServiceFee = 'no_service_fee';
+  static const String onOrdersOver = 'on_orders_over';
+  static const String quarter = 'quarter';
+  static const String subscriptionPending = 'waiting_for_payment';
+
+  // lms_sdk subject help (Ray, 2026-10-01): the hardest-subject question, the
+  // suggestion line and the partner's report-marks entry. Keys are named
+  // after their copy, so the humanized fallback is the English.
+  static const String whichSubjectDoYouFindHardest = 'which_subject_do_you_find_hardest';
+  static const String needAHandWith = 'need_a_hand_with';
+  static const String schoolReportMarks = 'school_report_marks';
+  static const String enterTheLatestMarksFromTheSchoolReport = 'enter_the_latest_marks_from_the_school_report';
+  static const String admissionPointScore = 'admission_point_score';
 }

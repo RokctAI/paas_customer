@@ -13,7 +13,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_remix/flutter_remix.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
@@ -59,7 +59,7 @@ class OrderStatusScreen extends StatelessWidget {
                   children: [
                     OrderStatusItem(
                       icon: Icon(
-                        parcel ? FlutterRemix.survey_fill : Icons.done_all,
+                        parcel ? Remix.survey_fill : Remix.check_double_line,
                         size: 16.r,
                       ),
                       bgColor: AppStyle.red,
@@ -74,7 +74,7 @@ class OrderStatusScreen extends StatelessWidget {
                     ),
                     OrderStatusItem(
                       icon: Icon(
-                        parcel ? Icons.done_all : Icons.restaurant_rounded,
+                        parcel ? Remix.check_double_line : Remix.restaurant_fill,
                         size: 16.r,
                         color: AppStyle.black,
                       ),
@@ -90,7 +90,7 @@ class OrderStatusScreen extends StatelessWidget {
                     ),
                     OrderStatusItem(
                       icon: parcel
-                          ? const Icon(FlutterRemix.truck_fill)
+                          ? const Icon(Remix.truck_fill)
                           : SvgPicture.asset(
                               "assets/svgs/delivery2.svg",
                               width: 20.w,
@@ -106,7 +106,7 @@ class OrderStatusScreen extends StatelessWidget {
                       decoration: const BoxDecoration(color: AppStyle.red),
                     ),
                     OrderStatusItem(
-                      icon: Icon(Icons.flag, size: 16.r),
+                      icon: Icon(Remix.flag_fill, size: 16.r),
                       bgColor: AppStyle.red,
                       isActive: true,
                       isProgress: false,
@@ -118,7 +118,7 @@ class OrderStatusScreen extends StatelessWidget {
                       children: [
                         OrderStatusItem(
                           icon: Icon(
-                            parcel ? FlutterRemix.survey_fill : Icons.done_all,
+                            parcel ? Remix.survey_fill : Remix.check_double_line,
                             size: 16.r,
                           ),
                           bgColor: AppStyle.primary,
@@ -134,7 +134,7 @@ class OrderStatusScreen extends StatelessWidget {
                         ),
                         OrderStatusItem(
                           icon: Icon(
-                            parcel ? Icons.done_all : Icons.restaurant_rounded,
+                            parcel ? Remix.check_double_line : Remix.restaurant_fill,
                             size: 16.r,
                             color: AppStyle.black,
                           ),
@@ -151,7 +151,7 @@ class OrderStatusScreen extends StatelessWidget {
                         ),
                         OrderStatusItem(
                           icon: parcel
-                              ? const Icon(FlutterRemix.truck_fill)
+                              ? const Icon(Remix.truck_fill)
                               : SvgPicture.asset(
                                   "assets/svgs/delivery2.svg",
                                   width: 20.w,
@@ -168,7 +168,7 @@ class OrderStatusScreen extends StatelessWidget {
                               BoxDecoration(color: AppStyle.primary),
                         ),
                         OrderStatusItem(
-                          icon: Icon(Icons.flag, size: 16.r),
+                          icon: Icon(Remix.flag_fill, size: 16.r),
                           bgColor: AppStyle.primary,
                           isActive: true,
                           isProgress: false,
@@ -179,7 +179,7 @@ class OrderStatusScreen extends StatelessWidget {
                       children: [
                         OrderStatusItem(
                           icon: Icon(
-                            parcel ? FlutterRemix.survey_fill : Icons.done_all,
+                            parcel ? Remix.survey_fill : Remix.check_double_line,
                             size: 16.r,
                           ),
                           isActive: status != OrderStatus.open,
@@ -197,7 +197,7 @@ class OrderStatusScreen extends StatelessWidget {
                         ),
                         OrderStatusItem(
                           icon: Icon(
-                            parcel ? Icons.done_all : Icons.restaurant_rounded,
+                            parcel ? Remix.check_double_line : Remix.restaurant_fill,
                             size: 16.r,
                             color: AppStyle.inkFor(Theme.of(context).brightness),
                           ),
@@ -218,7 +218,7 @@ class OrderStatusScreen extends StatelessWidget {
                         ),
                         OrderStatusItem(
                           icon: parcel
-                              ? const Icon(FlutterRemix.truck_fill)
+                              ? const Icon(Remix.truck_fill)
                               : SvgPicture.asset(
                                   status == OrderStatus.onWay
                                       ? "assets/svgs/delivery2.svg"
@@ -237,7 +237,7 @@ class OrderStatusScreen extends StatelessWidget {
                               BoxDecoration(color: AppStyle.cardFor(Theme.of(context).brightness)),
                         ),
                         OrderStatusItem(
-                          icon: Icon(Icons.flag, size: 16.r),
+                          icon: Icon(Remix.flag_fill, size: 16.r),
                           isActive: false,
                           isProgress: false,
                         ),

@@ -17,7 +17,7 @@ import 'package:base_sdk/src/navigation/app_routes.dart';
 
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter_remix/flutter_remix.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
@@ -168,7 +168,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                                   ),
                                             child: const Center(
                                               child: Icon(
-                                                FlutterRemix.camera_fill,
+                                                Remix.camera_fill,
                                                 color: AppStyle.white,
                                               ),
                                             ),
@@ -326,7 +326,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                       child: Row(
                                         children: [
                                           Icon(
-                                            FlutterRemix.navigation_fill,
+                                            Remix.navigation_fill,
                                             size: 20.r,
                                           ),
                                           8.horizontalSpace,
@@ -360,7 +360,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                                           ),
                                           const Spacer(),
                                           const Icon(
-                                            FlutterRemix.arrow_right_s_line,
+                                            Remix.arrow_right_s_line,
                                           ),
                                         ],
                                       ),
@@ -479,7 +479,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                               color: AppStyle.white.withOpacity(0.15),
                             ),
                             child: const Icon(
-                              FlutterRemix.image_add_fill,
+                              Remix.image_add_fill,
                               color: AppStyle.white,
                             ),
                           ),
@@ -500,7 +500,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                               color: AppStyle.white.withOpacity(0.15),
                             ),
                             child: const Icon(
-                              FlutterRemix.delete_bin_fill,
+                              Remix.delete_bin_fill,
                               color: AppStyle.white,
                             ),
                           ),
@@ -519,7 +519,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    FlutterRemix.upload_cloud_2_line,
+                    Remix.upload_cloud_2_line,
                     size: 42.r,
                     color: AppStyle.primary,
                   ),
@@ -562,7 +562,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  FlutterRemix.file_pdf_line,
+                  Remix.file_pdf_line,
                   size: 42.r,
                   color: AppStyle.primary,
                 ),
@@ -597,7 +597,7 @@ class _EditRestaurantState extends ConsumerState<CreateShopPage> {
                   onPressed: () {
                     event.deleteFile(e);
                   },
-                  icon: Icon(FlutterRemix.close_circle_line, size: 21.r),
+                  icon: Icon(Remix.close_circle_line, size: 21.r),
                 ),
               ],
             ),

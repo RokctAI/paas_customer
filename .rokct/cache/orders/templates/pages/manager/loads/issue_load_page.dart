@@ -103,7 +103,7 @@ class _IssueLoadPageState extends ConsumerState<IssueLoadPage> {
       child: KeyboardDismisser(
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          backgroundColor: AppStyle.surfaceDark,
+          backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
           body: SafeArea(
             child: Stack(
               children: [
@@ -159,7 +159,7 @@ class _IssueLoadPageState extends ConsumerState<IssueLoadPage> {
                 ),
                 suffixIcon: Icon(
                   Remix.search_2_line,
-                  color: AppStyle.textPrimary,
+                  color: AppStyle.inkFor(Theme.of(context).brightness),
                   size: 20,
                 ),
               );

@@ -1,5 +1,252 @@
 # Changelog
 
+## 1.88.3
+
+* fix(profile): edit profile saves again. It sent the old key names
+  (`firstname`, `birthday`, `images`), which the backend ignores, so names
+  and birthdays never saved. It now sends `first_name`, `last_name`,
+  `birth_date`, `gender` and `phone`, and leaves the phone out when there
+  is none instead of blanking it. The same fix covers registration's
+  profile step, which uses the same request.
+* fix(profile): saving no longer blanks the signed-in user. The backend
+  answers a save with a message, not a profile, and that empty answer was
+  stored as the user. The app now reads the profile back, or keeps the
+  edits on the current user if that read fails.
+* fix(profile): a new profile photo is attached to the account after it
+  uploads (`update_profile_image`). Before, it was uploaded and then never
+  used.
+* fix(profile): the date of birth starts empty for someone who has none,
+  so an untouched Save no longer stores today's date as their birthday.
+* fix(profile): the footer's Online / Offline label and the "No internet
+  connection" snackbar are translated.
+* fix(profile): Terms and Privacy show "Check your network connection"
+  when offline and "This page is not available yet" when the tenant has
+  not published the page, instead of the raw error.
+* fix(profile): deleting the account, or a signed-out profile refresh, no
+  longer routes through a page that has already closed.
+* fix(language): saving a language changes the running app at once
+  (locale and text direction). Before, it only took effect after a restart.
+* fix(splash): a later start routes straight away on the stored settings
+  and refreshes them in the background. Only the first start, which has
+  none stored, waits for them. It was the other way round, so every start
+  after the first waited on the network.
+
+## 1.88.2
+
+* fix(build): base now asks for dio 5.10 or newer. Its timeout handling
+  uses `DioExceptionType.transformTimeout`, which dio added in 5.10, but
+  the constraint still allowed 5.7. Manager and driver had dio 5.7.0 saved
+  in their lockfiles, so their Android and Windows builds failed to
+  compile on 13 Oct. The new floor makes those apps pick up a newer dio.
+
+## 1.88.1
+
+* fix(navigation): `AppHelpers.goHome` no longer crashes an app without a
+  shop page. With the marketplace off (a single-shop build), it asked for
+  the shop page. Only a marketplace app declares that page, so the
+  launcher, manager, driver or supacharge would have thrown there. It now
+  lands on the main screen when the shop page is missing. The marketplace
+  is on in every app today, so nothing crashed yet; this removes the trap.
+* chore: removed `ActiveOrderGlanceCard`, the order-status glance card. No app
+  has used it since 26 Sep, when the live order notification replaced it on
+  the customer home (marketplace 1.14.5). Its theme test goes with it.
+  `GlanceCard` itself, used by the launcher, lms and productivity, stays.
+
+## 1.88.0
+
+* feat(sync): `SyncResult.held(reason)`, for an op the backend is
+  deliberately not ready for yet. The first user is a till sale for a shop
+  still pending approval: it is recorded offline, and syncs once the shop is
+  approved. A held op goes back to pending with its attempt count untouched,
+  so waiting never runs down `maxAttempts`. It is looked at again after
+  `SyncEngine.holdDelay` (15 minutes), and its dependants wait with it.
+
+## 1.87.1
+
+* fix(theme): the app root follows a theme change again (Ray, 2026-10-12:
+  "profile page theme toggle does nothing to profile page ... theme toggle
+  seem to be only working on home page", and the launcher's app drawer not
+  respecting the mode). `templates/app_widget.dart` read `appProvider` with
+  `ref.refresh`, which reads once and subscribes to nothing, so the
+  `MaterialApp`'s `themeMode` stayed at the cold-start value and every page
+  reading `Theme.of(context)` kept the old mode. Only pages that watch
+  `appProvider` themselves (the launcher home) followed a toggle. It now uses
+  `ref.watch`; `AppNotifier` already loads the stored mode and locale when it
+  is created. Language changes reach the root the same way.
+
+## 1.87.0
+
+* feat(floating-nav): the floating pill can carry the person's picture and a
+  round button beside it, restored from the customer app's original
+  floating nav (paas_customer main_page.dart before the 2026-08-24 re-fork),
+  which the SDK move dropped (Ray, 2026-10-12: "let marketplace use floating
+  nav. that profile from old can still be added as i also want it to be
+  used by laucher").
+  * `FloatingNavTabsMode.profile` (`FloatingNavProfile`): a 40px
+    `UserAvatar` after the tabs, ringed in the brand colour while
+    `active`. Signed out (null user) it shows the person glyph. The host
+    says what a tap does (profile or login).
+  * `FloatingNavTabsMode.companion` (`FloatingNavAction`): a 56px dark
+    circle beside the pill with a count badge (the customer cart). In a
+    tablet side rail it rides at the rail's end instead.
+  * `FloatingNavTabsMode.hasEntries`. A back pill with a profile or
+    companion is no longer treated as the bare back pill.
+  * Both default to null, so every existing host renders as before.
+* feat(navigation): `ReturnToLauncherScope` (exported). A page another app
+  opened from the launcher (`?from=launcher`, launch_sdk 1.25.0) wraps itself
+  in it: every pop of its route (back pill, swipe, Android's back) pops the
+  page and calls `SystemNavigator.pop()`, so the person lands back on the
+  launcher (Ray, 2026-10-12, on the calculator opened in another app). Used
+  by calc_sdk 1.4.0 and productivity_sdk 1.8.0.
+
+## 1.86.0
+
+* fix(base): a signed-out cold start no longer always lands on the login
+  page (Ray, 2026-10-10: "make launcher not to take me to login screen if
+  I'm not logged in when it launch after the first launch ... it's like
+  it's forcing you to login").
+  * Cause: every signed-out exit from the splash (online, backend down,
+    offline) called `replaceLoginRoute`, and Skip was never stored. A
+    home-screen launcher is cold-started by Android over and over, so each
+    start forwarded the person back to login.
+  * New `SignedOutEntry` (navigation/signed_out_entry.dart, exported). The
+    splash sends every signed-out exit through it. A remembered Skip
+    (`rememberGuest`, `LocalStorage` `keyIsGuest`) lands home in any
+    composition. A composition that sets `SignedOutEntry.homeAfterFirstRun`
+    (launch_sdk 1.23.0 does) offers the login page only on the first
+    signed-out start of an install (`keyLoginOffered`) and lands home after.
+  * Both flags are install-level and `LocalStorage.logout()` leaves them
+    alone: sign-out ends the session only. Being signed out is not reported
+    as an error. Compositions that set nothing and whose users never tap
+    Skip behave as before. New `test/signed_out_entry_test.dart`.
+
+## 1.85.0
+
+* fix(base): no error toast before the person has done anything (Ray: being
+  offline or logged out must never be shown as an error; minilauncher 1.2.16
+  still showed a server error on the splash / login screen when opened, or
+  returned to, signed out).
+  * New `LoadQuietGate` (load_silence.dart, exported), armed in
+    `BaseSdkDependencies.register` so every composed app gets it. Until the
+    person touches the screen or presses a key, `AppHelpers.showCheckTopSnackBar`
+    (and through it `ErrorPresenter.show` / `showTechnical` and auth_sdk's
+    `AuthErrorPresenter`) and `AppHelpers.showNoConnectionSnackBar` show
+    nothing and log to debug output. Telemetry the presenters send is
+    unchanged.
+  * A tap is a pointer-down, which lands before the button's handler runs,
+    so errors from anything the person did still show.
+  * Coming back to the app with the last touch older than
+    `LoadQuietGate.staleAfter` (2 minutes) starts quiet again. A shorter
+    trip, such as Google or Apple sign-in UI, keeps the last touch.
+  * Unarmed (unit tests, hosts that never call `BaseSdkDependencies`)
+    nothing changes. New `test/load_quiet_gate_test.dart`.
+
+## 1.84.0
+
+* The routed `/generic-profile` on a phone, when PUSHED (the launcher opens
+  it from its avatar), now carries the floating nav's back-only pill like
+  every other pushed page; a root profile draws none, and planes are
+  unchanged. A composition may register its own nav for that page through
+  the new `ProfileSectionRegistry.pushedProfileNavBuilder` (reset clears it);
+  a profile hosted as a shell tab never reads it.
+* `editProfileProvider` resolves `GalleryRepositoryFacade` only where it is
+  registered, so the shared edit-own-details sheet opens and saves in a
+  composition without products/merchants (the launcher). Without the facade
+  a picked avatar is not uploaded; every other field saves as before.
+
+## 1.83.5
+
+* fix(base): nothing the app does by itself on load shows an error any more
+  (Ray, 2026-10-05: an auth/backend error still showed on load, before he
+  did anything, after auth_sdk 1.16.4). New `shouldSurfaceLoadError` /
+  `logSilencedLoadError` (load_silence.dart): load-time failures go to debug
+  output only, an error shows only for something the person did, and
+  offline is never an error.
+  * `LanguageNotifier.getLanguages` / `getTranslations` / `makeSelectedLang`
+    gain `userInitiated` (default false). The language list fetched when
+    the picker opens (the login page opens it by itself) and the
+    translations fetched when the login page auto-selects a single
+    language no longer toast; offline no longer toasts "No internet
+    connection" or replaces the screen with the no-connection page.
+  * `ProfileNotifier.fetchUser` gains `userInitiated` (default false): the
+    profile page's initState fetch and the refresh after an address edit
+    or shop save are silent on failure; offline never toasts.
+    `quietWhenOffline` is kept and now implied. A 401 still returns to login.
+  * `SplashPage`: starting offline with no cached data now proceeds to
+    login/home from bundled data instead of opening on the no-connection
+    page, and a radio drop between checks does the same. The no-connection
+    page remains the fallback for a composition that declares no route.
+
+## 1.83.4
+
+* fix(profile): the profile page surface, cards, hairlines, ink and the
+  sign-out Cancel button read Theme.of(context) at build time instead of the
+  AppStyle.surfaceDark/cardDark/strokeDark/textPrimary statics, so a live
+  dark/light switch restyles the open page (Ray, 2026-10-04: "profile did not
+  do everything I asked").
+
+## 1.83.3
+
+* feat(trkeys): five keys for lms_sdk's subject help (Ray, 2026-10-01): the
+  hardest-subject question, the "Need a hand with" suggestion line, the
+  partner's school-report marks title and hint, and the APS label. Named after their copy, so
+  no bundled English row is needed.
+
+## 1.83.2
+
+* fix(profile): using the app offline is not an error on the profile page
+  (Ray, 2026-10-03). `GenericProfilePage` calls `fetchUser` with the new
+  `quietWhenOffline: true`: with no radio, or a backend that does not
+  answer (the `couldNotReachServer` / `serverTookTooLong` lines), the page
+  keeps rendering the cached user and its Online/Offline label is the only
+  signal. A failure the server actually answered still toasts. Other
+  `fetchUser` callers (the address picker) are unchanged.
+* fix(profile): a demo session loads the profile with no network.
+  `fetchUser` no longer gates on the radio while `DemoSession.demoActive`:
+  the demo interceptor answers from fixtures, so the offline demo sign-in
+  (auth_sdk 1.16.3) reaches a loaded profile page with no connection toast.
+
+## 1.83.1
+
+* fix(icons): the last Material `Icons.*` glyphs (quantity stepper, theme
+  toggle, glance card, floating nav, bottom-sheet app bar, title icon, user
+  avatar fallback) move to Remixicon (`Remix.*`). `remixicon` constraint
+  raised to `^1.4.1`. Icons only.
+
+## 1.83.0
+
+* feat(lms): TrKeys gains the 14 keys lms_sdk 1.34.0 declares in its manifest
+  `tr_keys` (same values): the child-mode forgot-PIN reset (`forgotParentPin`,
+  `resetParentPin`, `resetParentPinHint`, `parentPasswordWrong`,
+  `parentPasswordCheckFailed`), the optional fingerprint/face unlock
+  (`useBiometricsToLeave`, `useBiometrics`, `biometricLeaveReason`) and the
+  child's claim-code screen (`haveClaimCode`, `claimProfile`,
+  `claimProfileExplainer`, `claimCode`, `claimProfileButton`,
+  `couldNotClaimProfile`). A standalone lms_sdk checkout compiles against
+  base_sdk directly, so it needs them declared here. No bundled en/af rows,
+  no cmd, payload or route changed.
+
+## 1.82.1
+
+* fix(backend): `upload_file` reads the multipart file from
+  `frappe.request.files["file"]` and accepts only images and common documents
+  up to 10 MB. `get_remote_config` stops serving `chatGpt`. No Dart change.
+
+## 1.82.0
+
+* feat(subscriptions): TrKeys gains the customer-subscription keys loyalty_sdk
+  1.1.0 declares (`subscriptionPlans`, `youSavedWithSubscription`,
+  `subscriptionPastDue`, `subscriptionPaymentFailed`, `changePaymentMethod`,
+  `renewsWith`, `offDelivery`, `noServiceFee`, `onOrdersOver`, `quarter`,
+  `subscriptionPending`), with bundled en copy for the two sentences.
+  `GetCalculateModel.subscriptionSavings` reads the quote's
+  `subscription_savings` so checkout can show "You saved X with your
+  subscription".
+
+## 1.81.1
+
+* fix(wallet): `WalletData.fromJson` reads the Wallet History keys the backend sends (transaction_type, amount, description, creation, name), keeping the legacy keys as fallbacks. Every wallet history row rendered blank.
+
 ## 1.81.0
 
 * fix(base): TrKeys gains the 33 keys that lms_sdk 1.32.0 (agent/lms/dart,

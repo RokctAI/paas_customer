@@ -128,7 +128,7 @@ class _OrdersHomePageState extends ConsumerState<OrdersHomePage> {
   /// reachable via the toggle (it scrolls sideways).
   Widget _buildCompact(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppStyle.surfaceDark,
+      backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -157,7 +157,7 @@ class _OrdersHomePageState extends ConsumerState<OrdersHomePage> {
   /// Two planes or more: the plane-hosted workspace (33a + 33d).
   Widget _buildExpanded(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppStyle.surfaceDark,
+      backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
       body: SafeArea(
         child: OrdersBoardPlaneFlow(
           boardBuilder: (context, flow) => Column(
@@ -217,18 +217,18 @@ class _OrderDetailPane extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ColoredBox(
-      color: AppStyle.surfaceDark,
+      color: AppStyle.surfaceFor(Theme.of(context).brightness),
       child: ClipRect(
         child: Navigator(
           observers: [_PopToSentinelObserver(onClosed)],
           onGenerateInitialRoutes: (navigator, initialRoute) => [
             MaterialPageRoute(
               settings: const RouteSettings(name: _sentinelName),
-              builder: (_) => ColoredBox(color: AppStyle.surfaceDark),
+              builder: (_) => ColoredBox(color: AppStyle.surfaceFor(Theme.of(context).brightness)),
             ),
             MaterialPageRoute(
               builder: (_) => Scaffold(
-                backgroundColor: AppStyle.surfaceDark,
+                backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
                 body: SafeArea(
                   child: OrderDetailsModal(
                     order: order,
@@ -240,7 +240,7 @@ class _OrderDetailPane extends StatelessWidget {
           ],
           onGenerateRoute: (settings) => MaterialPageRoute(
             settings: settings,
-            builder: (_) => ColoredBox(color: AppStyle.surfaceDark),
+            builder: (_) => ColoredBox(color: AppStyle.surfaceFor(Theme.of(context).brightness)),
           ),
         ),
       ),

@@ -14,7 +14,6 @@
 
 import 'package:auto_route/auto_route.dart';
 import 'package:base_sdk/src/navigation/app_routes.dart';
-//import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 //import 'package:flutter_svg/flutter_svg.dart';
@@ -28,6 +27,7 @@ import 'package:base_sdk/src/presentation/theme/theme.dart';
 
 //import '../../../../infrastructure/services/app_constants.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:remixicon/remixicon.dart';
 
 class OrdersItem extends StatelessWidget {
   final OrderActiveModel? order;
@@ -119,8 +119,8 @@ class OrdersItem extends StatelessWidget {
                 )
                     : Icon(
                   (refund?.status ?? "") == "accepted"
-                      ? Icons.done_all
-                      : Icons.cancel_outlined,
+                      ? Remix.check_double_line
+                      : Remix.close_circle_line,
                   size: 16.r,
                 ),
               )
@@ -146,8 +146,8 @@ class OrdersItem extends StatelessWidget {
                     : Icon(
                   AppHelpers.getOrderStatus(order?.status ?? "") ==
                       OrderStatus.delivered
-                      ? Icons.done_all
-                      : Icons.cancel_outlined,
+                      ? Remix.check_double_line
+                      : Remix.close_circle_line,
                   size: 16.r,
                 ),
               ),
@@ -235,7 +235,7 @@ class OrdersItem extends StatelessWidget {
               decoration: const BoxDecoration(
                   color: AppStyle.black, shape: BoxShape.circle),
               child: const Icon(
-                Icons.arrow_forward,
+                Remix.arrow_right_line,
                  color: AppStyle.white,
               ),
             ), */

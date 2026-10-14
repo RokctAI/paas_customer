@@ -255,7 +255,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppStyle.surfaceDark,
+      backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
       body: LayoutBuilder(
         builder: (context, constraints) {
           // A phone-width window never hosts the checkout in a plane —
@@ -394,7 +394,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
                     AppHelpers.getTranslation(TrKeys.cartIsEmpty),
                     style: AppStyle.interRegular(
                       size: 14,
-                      color: AppStyle.textDarkSecondary,
+                      color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                     ),
                   ),
                 )
@@ -611,14 +611,14 @@ class _BillingPageState extends ConsumerState<BillingPage>
         height: 44.r,
         padding: EdgeInsets.symmetric(horizontal: 18.w),
         decoration: BoxDecoration(
-          color: AppStyle.cardDark,
+          color: AppStyle.cardFor(Theme.of(context).brightness),
           borderRadius: BorderRadius.circular(100.r),
-          border: Border.all(color: AppStyle.strokeDark, width: 1.r),
+          border: Border.all(color: AppStyle.strokeFor(Theme.of(context).brightness), width: 1.r),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 18.r, color: AppStyle.textPrimary),
+            Icon(icon, size: 18.r, color: AppStyle.inkFor(Theme.of(context).brightness)),
             8.horizontalSpace,
             Text(label, style: AppStyle.interSemi(size: 15)),
           ],
@@ -703,7 +703,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
     return Container(
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Row(
@@ -734,7 +734,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
                   '${AppHelpers.numberFormat(number: line.unitPrice)} × ${_trimQty(line.quantity)}',
                   style: AppStyle.interRegular(
                     size: 13,
-                    color: AppStyle.textDarkSecondary,
+                    color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                   ),
                 ),
                 10.verticalSpace,
@@ -795,11 +795,11 @@ class _BillingPageState extends ConsumerState<BillingPage>
         width: 36.r,
         height: 36.r,
         decoration: BoxDecoration(
-          color: AppStyle.cardDarkAlt,
+          color: AppStyle.cardAltFor(Theme.of(context).brightness),
           borderRadius: BorderRadius.circular(10.r),
-          border: Border.all(color: AppStyle.strokeDarkSubtle, width: 1.r),
+          border: Border.all(color: AppStyle.subtleStrokeFor(Theme.of(context).brightness), width: 1.r),
         ),
-        child: Icon(icon, size: 18.r, color: AppStyle.textPrimary),
+        child: Icon(icon, size: 18.r, color: AppStyle.inkFor(Theme.of(context).brightness)),
       ),
     );
   }
@@ -820,7 +820,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
               width: double.infinity,
               padding: EdgeInsets.all(16.r),
               decoration: BoxDecoration(
-                color: AppStyle.cardDark,
+                color: AppStyle.cardFor(Theme.of(context).brightness),
                 borderRadius: BorderRadius.circular(16.r),
               ),
               child: Column(
@@ -832,7 +832,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
                         AppHelpers.getTranslation(TrKeys.items),
                         style: AppStyle.interRegular(
                           size: 14,
-                          color: AppStyle.textDarkSecondary,
+                          color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                         ),
                       ),
                       const Spacer(),
@@ -843,7 +843,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
                     ],
                   ),
                   10.verticalSpace,
-                  Divider(height: 1.h, color: AppStyle.strokeDarkSubtle),
+                  Divider(height: 1.h, color: AppStyle.subtleStrokeFor(Theme.of(context).brightness)),
                   10.verticalSpace,
                   Row(
                     children: [
@@ -924,7 +924,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
     final entered = await showDialog<String>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        backgroundColor: AppStyle.cardDark,
+        backgroundColor: AppStyle.cardFor(Theme.of(context).brightness),
         title: Text(
           AppHelpers.getTranslation(TrKeys.editQuantity),
           style: AppStyle.interSemi(size: 18),
@@ -938,7 +938,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
             hintText: AppHelpers.getTranslation(TrKeys.typeHere),
             hintStyle: AppStyle.interRegular(
               size: 16,
-              color: AppStyle.textDarkFaint,
+              color: AppStyle.faintFor(Theme.of(context).brightness),
             ),
           ),
         ),
@@ -949,7 +949,7 @@ class _BillingPageState extends ConsumerState<BillingPage>
               AppHelpers.getTranslation(TrKeys.cancel),
               style: AppStyle.interSemi(
                 size: 14,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
             ),
           ),
@@ -1077,15 +1077,15 @@ class _AddItemsSearchState extends ConsumerState<_AddItemsSearch> {
               prefixIcon: Icon(
                 Remix.search_line,
                 size: 20.r,
-                color: AppStyle.textDarkSecondary,
+                color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
               ),
               hintText: AppHelpers.getTranslation(TrKeys.searchProducts),
               hintStyle: AppStyle.interRegular(
                 size: 15,
-                color: AppStyle.textDarkFaint,
+                color: AppStyle.faintFor(Theme.of(context).brightness),
               ),
               filled: true,
-              fillColor: AppStyle.cardDark,
+              fillColor: AppStyle.cardFor(Theme.of(context).brightness),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14.r),
                 borderSide: BorderSide.none,
@@ -1139,7 +1139,7 @@ class _AddItemsSearchState extends ConsumerState<_AddItemsSearch> {
                             AppHelpers.numberFormat(number: price),
                             style: AppStyle.interRegular(
                               size: 13,
-                              color: AppStyle.textDarkSecondary,
+                              color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                             ),
                           ),
                     trailing: Icon(
@@ -1188,7 +1188,7 @@ class _AddItemsSearchState extends ConsumerState<_AddItemsSearch> {
     }
     return Container(
       decoration: BoxDecoration(
-        color: AppStyle.surfaceDark,
+        color: AppStyle.surfaceFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24.r),
           topRight: Radius.circular(24.r),

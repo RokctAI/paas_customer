@@ -13,12 +13,15 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 // ignore_for_file: use_build_context_synchronously
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:base_sdk/src/application/language/language_provider.dart';
+import 'package:base_sdk/src/navigation/signed_out_entry.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
@@ -51,7 +54,7 @@ class LoginPage extends ConsumerStatefulWidget {
 class _LoginPageState extends ConsumerState<LoginPage> {
   bool _showIntro = false;
   late final LoginEmbeddedSlots _slots;
-  late String splashImage;
+  static const String splashImage = "assets/images/splash.png";
 
   @override
   void initState() {
@@ -78,19 +81,6 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         Navigator.pop(context);
       },
     );
-
-    // Determine which splash image to use based on the current date
-    DateTime now = DateTime.now();
-    DateTime startDate = DateTime(2024, 9, 1);
-    DateTime endDate = DateTime(2024, 9, 10, 23, 59);
-
-    if (now.isBefore(startDate)) {
-      splashImage = "assets/images/splash1.png";
-    } else if (now.isBefore(endDate)) {
-      splashImage = "assets/images/splash2.png";
-    } else {
-      splashImage = "assets/images/splash.png"; // Default image
-    }
   }
 
   Future<void> initDynamicLinks() async {
@@ -117,11 +107,21 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         AppHelpers.goHome(context);
       }
     }).onError((error) {
-      debugPrint(error.message);
+      debugPrint('==> LoginPage: dynamic link stream failed: $error');
     });
 
-    final PendingDynamicLinkData? data =
-        await FirebaseDynamicLinks.instance.getInitialLink();
+    // Load-time work (Ray, 2026-10-05: no error before he does anything):
+    // the initial-link lookup is a platform/network call that can throw
+    // offline or with Dynamic Links unconfigured. It used to escape as an
+    // uncaught async error out of initState; now it is debug output only.
+    final PendingDynamicLinkData? data;
+    try {
+      data = await dynamicLinks.getInitialLink();
+    } catch (e) {
+      debugPrint('==> LoginPage: initial dynamic link lookup failed: $e');
+      return;
+    }
+    if (!mounted) return;
     final Uri? deepLink = data?.link;
 
     if (deepLink.toString().contains("product") ||
@@ -161,6 +161,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   /// the app's normal post-auth destination — the same default landing the
   /// registration pipeline uses — instead of the affordance being hidden.
   void _skip() {
+    // Remembered, so the next cold start lands home instead of back on this
+    // page (Ray, 2026-10-10: "make skip remember that I have skipped
+    // before"), in every composition: with a composed onboarding intro
+    // (supacharge) too, the same as the launcher. base_sdk's splash reads it
+    // through SignedOutEntry. Written before navigating and not awaited: the
+    // landing must not wait on a preference write, and a write that fails
+    // only costs the old behaviour.
+    unawaited(SignedOutEntry.rememberGuest());
     if (_slots.introPage != null) {
       _showIntroPage();
       return;
@@ -181,11 +189,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     ref.listen(loginProvider, (previous, next) {
       if (!next.isSelectLanguage &&
           !((previous?.isSelectLanguage ?? false) == next.isSelectLanguage)) {
-        // Only show language selection if we have more than one language
-        final languageState = ref.read(languageProvider);
-        if (languageState.list.length > 1) {
+        // Only show language selection if we have more than one language.
+        // The count comes from the list LoginNotifier.checkLanguage just
+        // fetched: languageProvider is only loaded by the language screen
+        // itself, so on a first run it was still empty here and the picker
+        // never opened. An empty list (backend unreachable) opens nothing.
+        if (next.list.length > 1) {
           selectLanguage();
-        } else if (languageState.list.length == 1) {
+        } else if (next.list.length == 1) {
           // If there's only one language, auto-select it
           ref.read(languageProvider.notifier).makeSelectedLang(context);
         }

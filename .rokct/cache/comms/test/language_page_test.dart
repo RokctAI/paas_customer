@@ -29,6 +29,7 @@ import 'package:base_sdk/src/presentation/components/title_icon.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
+import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:comms_sdk/src/common/infrastructure/repositories/settings_repository.dart';
 import 'package:comms_sdk/src/common/presentation/pages/setting/language_page.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +47,7 @@ class _StubLanguageNotifier extends LanguageNotifier {
   Future<void> getLanguages(
     BuildContext context, {
     bool autoSelectIfSingle = false,
+    bool userInitiated = false,
   }) async {
     state = LanguageState(
       isLoading: false,
@@ -57,13 +59,16 @@ class _StubLanguageNotifier extends LanguageNotifier {
   }
 }
 
-Widget _harness(Widget child) => ProviderScope(
+Widget _harness(Widget child, [Brightness brightness = Brightness.dark]) => ProviderScope(
       overrides: [
         languageProvider.overrideWith((ref) => _StubLanguageNotifier()),
       ],
       child: ScreenUtilInit(
         designSize: const Size(390, 844),
-        builder: (_, __) => MaterialApp(home: child),
+        builder: (_, __) => MaterialApp(
+          theme: ThemeData(brightness: brightness),
+          home: child,
+        ),
       ),
     );
 
@@ -112,12 +117,37 @@ void main() {
     testWidgets('light: the soft page grey', (tester) async {
       AppStyle.setBrightness(Brightness.light);
       await tester.pumpWidget(
-        _harness(Scaffold(body: LanguageScreen(onSave: () {}))),
+        _harness(
+          Scaffold(body: LanguageScreen(onSave: () {})),
+          Brightness.light,
+        ),
       );
       await tester.pump();
 
       expect(_surfaceOf(tester), AppStyle.bgGrey.withValues(alpha: 0.96));
     });
+  });
+
+  testWidgets('a live theme flip restyles the open sheet (static unchanged)',
+      (tester) async {
+    AppStyle.setBrightness(Brightness.dark);
+    await tester.pumpWidget(
+      _harness(Scaffold(body: LanguageScreen(onSave: () {}))),
+    );
+    await tester.pump();
+    expect(_surfaceOf(tester), AppStyle.surfaceDark.withValues(alpha: 0.96));
+
+    // Only the inherited theme flips; the AppStyle static stays dark.
+    await tester.pumpWidget(
+      _harness(
+        Scaffold(body: LanguageScreen(onSave: () {})),
+        Brightness.light,
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(_surfaceOf(tester), AppStyle.bgGrey.withValues(alpha: 0.96));
+    final title = tester.widget<TitleAndIcon>(find.byType(TitleAndIcon));
+    expect(title.titleColor, AppStyle.inkFor(Brightness.light));
   });
 
   group('opened through the helper on a wide window', () {
@@ -160,4 +190,41 @@ void main() {
       expect(_surfaceOf(tester), AppStyle.surfaceDark.withValues(alpha: 0.96));
     });
   });
+
+  testWidgets('Save closes the sheet only after the language is saved',
+      (tester) async {
+    final events = <String>[];
+    await tester.pumpWidget(ProviderScope(
+      overrides: [
+        languageProvider.overrideWith((ref) => _RecordingLanguageNotifier(events)),
+      ],
+      child: ScreenUtilInit(
+        designSize: const Size(390, 844),
+        builder: (_, __) => MaterialApp(
+          home: Scaffold(
+            body: LanguageScreen(onSave: () => events.add('closed')),
+          ),
+        ),
+      ),
+    ));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text(AppHelpers.getTranslation(TrKeys.save)));
+    await tester.pumpAndSettle();
+    expect(events, ['saved', 'closed']);
+  });
+}
+
+class _RecordingLanguageNotifier extends _StubLanguageNotifier {
+  _RecordingLanguageNotifier(this.events);
+
+  final List<String> events;
+
+  @override
+  Future<void> makeSelectedLang(
+    BuildContext context, {
+    bool userInitiated = false,
+  }) async {
+    await Future<void>.delayed(Duration.zero);
+    events.add('saved');
+  }
 }

@@ -179,6 +179,25 @@ void main() {
       expect(http.last.payload, {'order_id': 'ORD-9'});
     });
 
+    test('PayPal order checkout creates a REST Orders v2 order', () async {
+      http.reply = {
+        'data': {'name': 'ORD-9'},
+        'message': 'Order created successfully.',
+        'status_code': 200,
+        'approve_url': 'https://paypal.test/approve',
+      };
+      final result =
+          await OrdersRepository().process(_orderBody('CART-1'), 'PayPal');
+      expect(http.calls, hasLength(2));
+      expect(http.calls.first.cmd, 'api.order.create_order');
+      expect(http.last.cmd, 'api.payment.create_paypal_rest_order');
+      expect(http.last.payload, {'target_type': 'order', 'target_id': 'ORD-9'});
+      result.when(
+        success: (url) => expect(url, 'https://paypal.test/approve'),
+        failure: (error, _) => fail('unexpected failure: $error'),
+      );
+    });
+
     test('process refuses a provider with no initiate_* method (M12)',
         () async {
       final result =
@@ -249,6 +268,11 @@ void main() {
       await repo.process('PARCEL-1', 'Flutterwave');
       expect(http.last.cmd, 'api.payment.initiate_flutterwave_parcel_payment');
       expect(http.last.payload, {'order_id': 'PARCEL-1'});
+
+      await repo.process('PARCEL-1', 'PayPal');
+      expect(http.last.cmd, 'api.payment.create_paypal_rest_order');
+      expect(http.last.payload,
+          {'target_type': 'parcel', 'target_id': 'PARCEL-1'});
 
       await repo.createTransaction(orderId: 'PARCEL-1', paymentId: 'PG-1');
       expect(http.last.cmd, 'api.payment.create_order_transaction');

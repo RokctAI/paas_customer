@@ -12,6 +12,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:dio/dio.dart' show Options;
 import 'package:flutter/material.dart';
 import 'package:base_sdk/src/handlers/handlers.dart';
 import 'package:base_sdk/src/handlers/platform_gateway.dart';
@@ -105,20 +106,34 @@ class WalletRepository implements WalletRepositoryFacade {
     }
   }
 
+  /// Request options carrying [idempotencyKey] as `X-Idempotency-Key`, or
+  /// null without one. The server's @idempotent guard answers a repeat of
+  /// a key that already succeeded with the stored result instead of
+  /// moving money again (the same header the orders sync handlers send).
+  static Options? _idempotent(String? idempotencyKey) =>
+      idempotencyKey == null || idempotencyKey.isEmpty
+          ? null
+          : Options(headers: {'X-Idempotency-Key': idempotencyKey});
+
+  /// [idempotencyKey] is an addition over the base_sdk facade: callers
+  /// holding this concrete repository pass one key per send attempt and
+  /// reuse it on a retry, so a retried send cannot pay twice.
   @override
   Future<ApiResult<WalletTransferData>> sendWalletToPhone({
     required String phone,
     required double amount,
+    String? idempotencyKey,
   }) async {
     try {
       // Manifest key: {app_name}.api.transfer.send_wallet_balance (phone
       // mode). The sender is always the session user server-side; the
       // backend enforces a strictly positive amount and an atomic
       // debit+credit.
-      final body = await _gateway.tenant('api.transfer.send_wallet_balance', {
-        'phone': phone,
-        'amount': amount,
-      });
+      final body = await _gateway.call(
+        'api.transfer.send_wallet_balance',
+        payload: {'phone': phone, 'amount': amount},
+        options: _idempotent(idempotencyKey),
+      );
       return ApiResult.success(
         data: WalletTransferData.fromJson(_asMap(body)),
       );
@@ -194,10 +209,13 @@ class WalletRepository implements WalletRepositoryFacade {
     }
   }
 
+  /// [idempotencyKey]: as for [sendWalletToPhone], one key per top-up
+  /// attempt, reused on a retry, so a retried top-up cannot charge twice.
   @override
   Future<ApiResult<dynamic>> walletTopUp({
     required double amount,
     String? token,
+    String? idempotencyKey,
   }) async {
     try {
       // Manifest key: {app_name}.api.payment.process_wallet_top_up.
@@ -205,10 +223,14 @@ class WalletRepository implements WalletRepositoryFacade {
       // overrides; what travels is the Saved Card docname on `saved_card`.
       // The gateway reuse credential is server-side only and this client
       // never sees it.
-      final body = await _gateway.tenant('api.payment.process_wallet_top_up', {
-        'amount': amount,
-        if (token != null) 'saved_card': token,
-      });
+      final body = await _gateway.call(
+        'api.payment.process_wallet_top_up',
+        payload: {
+          'amount': amount,
+          if (token != null) 'saved_card': token,
+        },
+        options: _idempotent(idempotencyKey),
+      );
       // FrappeResponseInterceptor already unwraps the top-level `message`
       // envelope on 2xx; tolerate both shapes for overridden clients. A
       // String answer is a redirect URL (gateway-hosted card capture); a

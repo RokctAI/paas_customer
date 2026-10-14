@@ -1,8 +1,41 @@
 {
   "name": "payments_sdk",
-  "version": "1.2.3",
+  "version": "1.3.5",
+  "_comment_version_1_3_5": "1.3.4 -> 1.3.5: the bundled flutter_braintree compiles against API 34. PaymentScreen resolves the orders repository only when the orders SDK is registered, so it opens in apps without one (supacharge); its PayFast new-card button shows only with an order and the orders SDK. setDefaultCard calls api.payment.set_default_card (needs the matching wallet backend) and saved cards carry is_default, with a set-as-default star in SavedCardsWidget. tokenizeCard refuses locally and no longer sends card numbers.",
+  "_comment_version_1_3_4": "1.3.3 -> 1.3.4: declares embedded_widgets payFastWebView, paymentScreen and savedCardsWidget so the host answers EmbeddedWidgets.I for them. Nothing declared them, so the customer app's checkout card/PayFast payment and Profile Cards threw a StateError and wallet top-up with a new PayFast card showed \"not available\". preloadPayFastWebView is not declared: the composer generates only Widget-returning methods and it returns void.",
+  "_comment_version_1_3_3": "1.3.2 -> 1.3.3: flutter_braintree comes from the vendored third_party/flutter_braintree (4.0.0 minus the v1-embedding Registrar code) because pub.dev 4.0.0 no longer compiles on Android with current Flutter.",
+  "_comment_version_1_3_1": "1.3.0 -> 1.3.1: PaymentsRepository calls the platform gateway (api.payment.*) instead of legacy paas.api.payment.* URLs; saved-card and direct-card charges create the order first and send its id. Needs the orders SDK ordersRepository registered.",
+  "_comment_version_1_3_0": "1.2.3 -> 1.3.0: native Braintree checkout. New BraintreeNativeCheckout (flutter_braintree ^4.0.0, MIT, Android/iOS): api.payment.braintree_client_token {target_type, target_id} -> Braintree drop-in (cards, PayPal, Google Pay; Apple Pay only when built with --dart-define=APPLE_PAY_MERCHANT_ID) -> api.payment.braintree_checkout {target_type, target_id, nonce, device_data}. The server charges the amount and currency on the document. PaymentsSdkDependencies registers BraintreeNativeCheckout.seam in GetIt as a BraintreeNativeSeam function type under instanceName 'payments.braintree_native_checkout' so orders/parcels can call it without importing payments_sdk. On web/desktop, or when the plugin or client token is unavailable, it answers status unavailable and callers keep their WebView path. Requires the matching pay wallet backend (braintree_client_token / braintree_checkout).",
   "_comment_version_1_2_2": "1.2.1 -> 1.2.2: PayFast. (1) A cancelled payment was reported as successful: the success test included `url.contains(AppConstants.baseUrl)` and ran before the cancel test, and the backend's cancel_url is `<site>/payment-cancel` on the tenant's own domain, so Cancel matched success - the user saw \"Payment successful\", onComplete(true) fired and an unpaid order was treated as paid. With BASE_URL unset, contains('') matched every URL. Now failure is decided first; markers are matched on the URL's PATH only (the checkout URL carries our return_url and cancel_url in its query string); PayFast's own hosts are never a completion; and the own-site fallback compares hosts, only when BASE_URL is set. (2) The live PayFast passphrase, merchant_key, signature, customer details, tokenisation token and card details were printed with debugPrint, which is not compiled out of release builds. Those logs are removed, and every logged URL is reduced to scheme, host and path. New test/payfast_completion_test.dart; the cancel case fails on the old code.",
   "installs": [],
   "routes": [],
-  "integrations": []
+  "integrations": [],
+  "embedded_widgets": [
+    {
+      "method": "payFastWebView",
+      "params": "{required String url, Function(bool)? onComplete, Function(String, Map<String, String>)? onTokenCaptured, dynamic preloadedController}",
+      "body": "return PayFastWebView(url: url, onComplete: onComplete, onTokenCaptured: onTokenCaptured, preloadedController: preloadedController);",
+      "imports": [
+        "import 'package:payments_sdk/src/common/utils/payfast/payfast_webview.dart';"
+      ]
+    },
+    {
+      "method": "paymentScreen",
+      "params": "{OrderBodyData? orderData, required Function(bool) onPaymentComplete, ScrollController? scrollController, bool? tokenizeOnly}",
+      "body": "return PaymentScreen(orderData: orderData, onPaymentComplete: onPaymentComplete, scrollController: scrollController, tokenizeOnly: tokenizeOnly ?? false);",
+      "imports": [
+        "import 'package:base_sdk/src/models/data/order_body_data.dart';",
+        "import 'package:payments_sdk/src/common/presentation/pages/cards/payment_screen.dart';"
+      ]
+    },
+    {
+      "method": "savedCardsWidget",
+      "params": "{required Function(SavedCardModel?) onCardSelected, SavedCardModel? initialSelectedCard, bool? hideManagement}",
+      "body": "return SavedCardsWidget(onCardSelected: onCardSelected, initialSelectedCard: initialSelectedCard, hideManagement: hideManagement ?? false);",
+      "imports": [
+        "import 'package:base_sdk/src/models/data/saved_card.dart';",
+        "import 'package:payments_sdk/src/common/presentation/pages/cards/payment_card.dart';"
+      ]
+    }
+  ]
 }

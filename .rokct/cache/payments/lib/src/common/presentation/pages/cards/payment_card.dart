@@ -13,6 +13,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import 'package:flutter/material.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:base_sdk/src/handlers/api_result.dart';
@@ -173,6 +174,27 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
     }
   }
 
+  // Makes [card] the user's default (the server keeps one per user and
+  // lists it first, so it is the card preselected next time).
+  Future<void> _setDefaultCard(SavedCardModel card) async {
+    if (card.isDefault) return;
+    final result = await _repository.setDefaultCard(card.id);
+    if (!mounted) return;
+    result.when(
+      success: (ok) {
+        if (!ok) return;
+        setState(() {
+          _savedCards = [
+            for (final c in _savedCards) c.copyWith(isDefault: c.id == card.id),
+          ];
+        });
+      },
+      failure: (error, statusCode) {
+        AppHelpers.showCheckTopSnackBarInfo(context, error);
+      },
+    );
+  }
+
   void _confirmDeleteCard(SavedCardModel card) {
     AppHelpers.showAlertDialog(
       context: context,
@@ -219,7 +241,7 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.credit_card_off, size: 48.r, color: AppStyle.textGrey),
+            Icon(Remix.bank_card_line, size: 48.r, color: AppStyle.textGrey),
             16.verticalSpace,
             Text(
               AppHelpers.getTranslation(TrKeys.noSavedCard),
@@ -342,12 +364,26 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
                       ),
                     ),
 
+                    // Default-card toggle (only when management is shown)
+                    if (!widget.hideManagement)
+                      IconButton(
+                        onPressed: () => _setDefaultCard(card),
+                        icon: Icon(
+                          card.isDefault ? Remix.star_fill : Remix.star_line,
+                          color: card.isDefault
+                              ? AppStyle.primary
+                              : AppStyle.textGrey,
+                          size: 20.r,
+                        ),
+                        tooltip: AppHelpers.getTranslation('set_as_default'),
+                      ),
+
                     // Delete button (only show if management is not hidden)
                     if (!widget.hideManagement)
                       IconButton(
                         onPressed: () => _confirmDeleteCard(card),
                         icon: Icon(
-                          Icons.close,
+                          Remix.close_line,
                           color: Colors.red.shade400,
                           size: 20.r,
                         ),
@@ -376,13 +412,13 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
   IconData _getCardIcon(String cardType) {
     final type = cardType.toLowerCase();
     if (type.contains('visa')) {
-      return Icons.credit_card;
+      return Remix.bank_card_line;
     } else if (type.contains('master')) {
-      return Icons.credit_card;
+      return Remix.bank_card_line;
     } else if (type.contains('amex')) {
-      return Icons.credit_card;
+      return Remix.bank_card_line;
     } else {
-      return Icons.credit_card;
+      return Remix.bank_card_line;
     }
   }
 }

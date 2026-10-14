@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.81.0",
+      "version": "1.88.3",
       "files": {
         "lib/main.dart": "92423f25fa33333d67d8bd380b35d328cc5350033e61f0b750952a6d51641c34",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -232,7 +232,7 @@
         "assets/temp/discount6.png": "784e1ff8e0b7ec4b57bd72daf84960837251f7c011029a7332c85a0bc38642c1",
         "lib/core/presentation/theme/app_style.dart": "a41cdea4c78180c66b26633ed79139d9e44555146b9a446184c36ac6b36a55ef",
         "lib/core/presentation/theme/theme.dart": "0d3a0e59c133fccfd32dd80bf649e99d580d56605936fd8bd63e5d6301c7091e",
-        "lib/presentation/app_widget.dart": "868f76ed49e4bd523aced7d839f356403ccc65a160447633935d900b9683648f",
+        "lib/presentation/app_widget.dart": "a9d3df8525970b1b6400079f34014c504b96c636cf681b52c69e612071fc02be",
         "lib/presentation/routes/app_router.dart": "3b99e50c60dab1161ccf14aa381f7481ab1baad0223575df04e4bda89a20464b",
         "lib/presentation/routes/route_pages.dart": "32ab7543d1b94e5b5aedd5a59604a390c373d6e881801c875e37f2ddd001d8c8",
         "lib/presentation/theme/theme.dart": "dccd0527934c068d0b8ef48d7d0677d068d1054e7fcc1e1eea1f6682912bfcd5",
@@ -358,7 +358,7 @@
       }
     },
     "marketplace_sdk": {
-      "version": "1.15.0",
+      "version": "1.17.0",
       "files": {
         "lib/presentation/routes/marketplace_route_pages.dart": "37c6193cb69e17ce8c2f83b2a147a0fef9967a6c9ab0e5579f22582f8c60e8c1"
       },
@@ -619,10 +619,10 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.16.0",
+      "version": "1.20.0",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "87b5d1dbc3f0f9417db5289be2c1ebbcb7dfecf1638f348b6f5ee1581f7ce4d2",
-        "lib/presentation/routes/registration_step_pages.dart": "d18f7e35878721c688c4f0964db42c97148e1f2e9d225cd1a6bb7490e2628347",
+        "lib/presentation/routes/registration_step_pages.dart": "68aed195fc07db746a0919c7ba6d47ffa445ca86e7d9cf6ee50fbcb00e82d3c2",
         "lib/presentation/routes/auth_session_policy.dart": "9524d696f956a99c2964ce0866cbab0cb282e868247d5f08b050e94bb9f5df5a",
         "assets/demo/auth/api.user.login.json": "69e2eac93cbb55cec718685996a364381283394a4f7776acc836107cbde82e39",
         "assets/demo/auth/api.user.login_with_google.json": "1d5759f03e640a9c380d8900c36c4c5873498e4a75e9e4658de8adf9b912d931",
@@ -685,7 +685,24 @@
       ],
       "onboarding_slides": [],
       "registration_steps": [],
-      "embedded_widgets": [],
+      "embedded_widgets": [
+        {
+          "method": "phoneVerify",
+          "params": "",
+          "body": "return const PhoneVerify();",
+          "imports": [
+            "import 'package:auth_sdk/src/common/presentation/pages/auth/phone_verify.dart';"
+          ]
+        },
+        {
+          "method": "resetPasswordPage",
+          "params": "",
+          "body": "return const ResetPasswordPage();",
+          "imports": [
+            "import 'package:auth_sdk/src/common/presentation/pages/auth/reset/reset_password_page.dart';"
+          ]
+        }
+      ],
       "di_hooks": [],
       "boot_hooks": [
         {
@@ -707,6 +724,15 @@
             "import 'package:auth_sdk/src/translations/auth_en_translations.dart';"
           ],
           "_comment": "Registers this SDK's bundled English map into base_sdk's BundledTranslations registry at boot (lms_sdk's 'af' hook is the precedent). base_sdk bundles no 'en' map because English normally survives through the humanized-key fallback, but that only holds for keys named after their copy: reset_password_text humanized to the literal \"Reset password text\" on every app shell's reset-password sheet, because demo builds take their served map from comms_sdk's MockSettingsRepository (a handful of rows that never carried this key). Backend-served translation rows still win; the map is only the offline/unseeded fallback consulted before the humanized-key fallback. Imports are declared explicitly (src paths, like lms_sdk) because neither symbol is exported by the auth_sdk barrel every composed main.dart already imports. Requires a base_sdk with bundled_translations.dart (the bundled-af wave)."
+        },
+        {
+          "id": "auth_fcm_token_sync",
+          "order": 3,
+          "body": "FcmTokenSync.install();",
+          "imports": [
+            "import 'package:auth_sdk/src/common/services/platform_support.dart';"
+          ],
+          "_comment": "Keeps the backend's FCM token current between sign-ins: once the first frame is up (LocalStorage and DI are ready by then) it re-sends the token if a backend session is already active, and re-sends every token FirebaseMessaging.onTokenRefresh hands out while signed in. No-op on Windows/Linux and when Firebase is not initialized; fail-open."
         }
       ],
       "database": {
@@ -726,7 +752,7 @@
       ]
     },
     "users_sdk": {
-      "version": "1.5.1",
+      "version": "1.5.2",
       "files": {
         "assets/demo/users/api.user.search_user.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
         "assets/demo/users/api.user.add_user_address.json": "94040fd50c440c6ddcbbe56ce155489e70d4ae918498599ac55082d238d799ad",
@@ -755,7 +781,7 @@
       ]
     },
     "merchants_sdk": {
-      "version": "1.32.1",
+      "version": "1.34.0",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "lib/presentation/routes/merchants_customer_route_pages.dart": "94118cddd225b802a07db40ac5683697fd190d5d1de42494d955fc3f7eb79456",
@@ -823,7 +849,35 @@
       ],
       "onboarding_slides": [],
       "registration_steps": [],
-      "embedded_widgets": [],
+      "embedded_widgets": [
+        {
+          "method": "cartOrderItem",
+          "params": "{required VoidCallback add, required VoidCallback remove, required CartDetail? cart, bool? isActive, Detail? cartTwo, bool? isOwn, String? symbol, bool? isAddComment}",
+          "body": "return CartOrderItem(add: add, remove: remove, cart: cart, isActive: isActive ?? true, cartTwo: cartTwo, isOwn: isOwn ?? true, symbol: symbol, isAddComment: isAddComment ?? false);",
+          "imports": [
+            "import 'package:base_sdk/src/models/data/cart_data.dart';",
+            "import 'package:base_sdk/src/models/data/order_active_model.dart';",
+            "import 'package:merchants_sdk/src/common/presentation/pages/shop/cart/widgets/cart_order_item.dart';"
+          ]
+        },
+        {
+          "method": "cartClearDialog",
+          "params": "{required VoidCallback cancel, required VoidCallback clear, bool? isLoading}",
+          "body": "return CartClearDialog(cancel: cancel, clear: clear, isLoading: isLoading ?? false);",
+          "imports": [
+            "import 'package:merchants_sdk/src/common/presentation/pages/shop/cart/widgets/cart_clear_dialog.dart';"
+          ]
+        },
+        {
+          "method": "bonusScreen",
+          "params": "{required BonusModel? bonus}",
+          "body": "return BonusScreen(bonus: bonus);",
+          "imports": [
+            "import 'package:base_sdk/src/models/data/bonus_data.dart';",
+            "import 'package:merchants_sdk/src/common/presentation/pages/shop/widgets/bonus_screen.dart';"
+          ]
+        }
+      ],
       "di_hooks": [],
       "boot_hooks": [],
       "app_assets": [
@@ -836,7 +890,7 @@
       ]
     },
     "products_sdk": {
-      "version": "1.12.1",
+      "version": "1.12.7",
       "files": {
         "assets/demo/products/api.brand.get_brand_by_uuid.json": "2f572655239beaef3a4258dca9213d201ad23d9092a8d44e9251e68daad92fbb",
         "assets/demo/products/api.brand.get_brands.json": "e6d9aceed478a49c043f14905a208bf587418015ae67925eef65f7d7f07631ea",
@@ -872,7 +926,17 @@
       "app_routes": [],
       "onboarding_slides": [],
       "registration_steps": [],
-      "embedded_widgets": [],
+      "embedded_widgets": [
+        {
+          "method": "productScreen",
+          "params": "{String? productId, ProductData? data, String? cartId, required ScrollController controller}",
+          "body": "return ProductScreen(productId: productId, data: data, cartId: cartId, controller: controller);",
+          "imports": [
+            "import 'package:base_sdk/src/models/data/product_data.dart';",
+            "import 'package:products_sdk/src/common/presentation/pages/product/product_page.dart';"
+          ]
+        }
+      ],
       "di_hooks": [],
       "boot_hooks": [],
       "app_assets": [
@@ -880,7 +944,7 @@
       ]
     },
     "orders_sdk": {
-      "version": "1.26.0",
+      "version": "1.30.0",
       "files": {
         "lib/presentation/routes/orders_customer_route_pages.dart": "acadebdd2b7525434e765bf02683c151b97d7a392e1552d8f2af02b916a4702c"
       },
@@ -1007,7 +1071,16 @@
       ],
       "onboarding_slides": [],
       "registration_steps": [],
-      "embedded_widgets": [],
+      "embedded_widgets": [
+        {
+          "method": "orderMap",
+          "params": "{required dynamic markers, required dynamic latLng, required dynamic polylineCoordinates, required bool isLoading}",
+          "body": "return OrderMap(markers: markers, latLng: latLng, polylineCoordinates: polylineCoordinates, isLoading: isLoading);",
+          "imports": [
+            "import 'package:orders_sdk/src/common/presentation/pages/order/order_type/widgets/order_map.dart';"
+          ]
+        }
+      ],
       "di_hooks": [
         {
           "id": "orders-customer-active-order-tracker",
@@ -1024,6 +1097,7 @@
         "waitingOnYou": "waiting_on_you",
         "openOrders": "open_orders",
         "manager": "manager",
+        "paymentCancelled": "payment_cancelled",
         "ageVerification": "age_verification",
         "ageVerificationRequiredForAdultsOnly": "age_verification_is_required_to_order_adults_only_items",
         "adultsOnlyBirthDateNeeded": "this_order_includes_an_adults_only_item_please_confirm_your_date_of_birth",
@@ -1049,7 +1123,7 @@
       ]
     },
     "fav_sdk": {
-      "version": "1.1.0",
+      "version": "1.1.1",
       "files": {},
       "routes": [],
       "database": {
@@ -1072,7 +1146,7 @@
       "boot_hooks": []
     },
     "wallet_sdk": {
-      "version": "1.7.0",
+      "version": "1.8.0",
       "files": {
         "lib/presentation/routes/wallet_route_pages.dart": "86d07bc5c2e239b713c49a9caa4f2dc6007ec1e20aa9519aeb960f3fcc8ee5a7",
         "assets/demo/wallet/api.user.get_wallet_history.json": "0041f5565b4da148f0eef8d8dbc96946fc8c71c4b1ddf4e1ddce4e9912d44e26"
@@ -1120,18 +1194,45 @@
       ]
     },
     "payments_sdk": {
-      "version": "1.2.3",
+      "version": "1.3.5",
       "files": {},
       "routes": [],
       "app_routes": [],
       "onboarding_slides": [],
       "registration_steps": [],
-      "embedded_widgets": [],
+      "embedded_widgets": [
+        {
+          "method": "payFastWebView",
+          "params": "{required String url, Function(bool)? onComplete, Function(String, Map<String, String>)? onTokenCaptured, dynamic preloadedController}",
+          "body": "return PayFastWebView(url: url, onComplete: onComplete, onTokenCaptured: onTokenCaptured, preloadedController: preloadedController);",
+          "imports": [
+            "import 'package:payments_sdk/src/common/utils/payfast/payfast_webview.dart';"
+          ]
+        },
+        {
+          "method": "paymentScreen",
+          "params": "{OrderBodyData? orderData, required Function(bool) onPaymentComplete, ScrollController? scrollController, bool? tokenizeOnly}",
+          "body": "return PaymentScreen(orderData: orderData, onPaymentComplete: onPaymentComplete, scrollController: scrollController, tokenizeOnly: tokenizeOnly ?? false);",
+          "imports": [
+            "import 'package:base_sdk/src/models/data/order_body_data.dart';",
+            "import 'package:payments_sdk/src/common/presentation/pages/cards/payment_screen.dart';"
+          ]
+        },
+        {
+          "method": "savedCardsWidget",
+          "params": "{required Function(SavedCardModel?) onCardSelected, SavedCardModel? initialSelectedCard, bool? hideManagement}",
+          "body": "return SavedCardsWidget(onCardSelected: onCardSelected, initialSelectedCard: initialSelectedCard, hideManagement: hideManagement ?? false);",
+          "imports": [
+            "import 'package:base_sdk/src/models/data/saved_card.dart';",
+            "import 'package:payments_sdk/src/common/presentation/pages/cards/payment_card.dart';"
+          ]
+        }
+      ],
       "di_hooks": [],
       "boot_hooks": []
     },
     "delivery_sdk": {
-      "version": "1.28.0",
+      "version": "1.29.0",
       "files": {
         "assets/svg/balance.svg": "6f17d12b29de8e5500bc445ee89eec5c1fc8830cea42711af9bf80975e6b79ce",
         "assets/image/my_location.png": "0e6b49eb78d1f74ac96ac24ce39f834105ce68e361c302038ba9cefdcd926126",
@@ -1181,7 +1282,16 @@
       "app_routes": [],
       "onboarding_slides": [],
       "registration_steps": [],
-      "embedded_widgets": [],
+      "embedded_widgets": [
+        {
+          "method": "becomeDriverPage",
+          "params": "",
+          "body": "return const CourierRequestPage();",
+          "imports": [
+            "import 'package:delivery_sdk/src/common/presentation/pages/become_driver/courier_request_page.dart';"
+          ]
+        }
+      ],
       "di_hooks": [],
       "boot_hooks": [],
       "asset_keys": {
@@ -1221,7 +1331,7 @@
       ]
     },
     "comms_sdk": {
-      "version": "1.22.0",
+      "version": "1.22.4",
       "files": {
         "assets/demo/comms/api.notification.read_all_notifications.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
         "assets/demo/comms/api.notification.get_notification_count.json": "e81366a1ea9400e3b0cfd014aabfbdbc12cfea74d7335a64c9feda2a6025318f",
@@ -1234,10 +1344,42 @@
         "assets/demo/comms/api.system.get_global_settings.json": "bd79ef4bf926cae6e9cf15c508f2aa30b0abc3af7bd98fbe5056ee8d18dee941",
         "assets/demo/comms/api.system.get_currencies.json": "cb70e135ab501697b3c14a767decf891e029f2195fea5f40ae70e00cd64ab95b",
         "assets/demo/comms/api.translation.get_mobile_translations.json": "ad9606c0d503b0c27150d2a0c0a82ddf44037a34619f27cbdd7a050d6f7a26fa",
-        "assets/demo/comms/api.language.get_languages.json": "6933ca5d43e6ce955b43f238b728f27e5444585699da1d722e60cae67a5bc16e"
+        "assets/demo/comms/api.language.get_languages.json": "6933ca5d43e6ce955b43f238b728f27e5444585699da1d722e60cae67a5bc16e",
+        "lib/presentation/routes/comms_route_pages.dart": "8682cf053fbc68ed79011be6c49afe1c9ed86ab95e415bf9e6a39a77a31b1347"
       },
-      "routes": [],
-      "app_routes": [],
+      "routes": [
+        {
+          "path": "/chat",
+          "page": "ChatRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/comms_route_pages.dart",
+          "_comment": "paas_customer's pre-fork path and route name (MaterialRoute(path: '/chat', page: ChatRoute.page)). The shell renders comms_sdk's ChatPage."
+        },
+        {
+          "path": "/setting",
+          "page": "SettingRoute.page",
+          "type": "MaterialRoute",
+          "import": "package:${package}/presentation/routes/comms_route_pages.dart",
+          "_comment": "paas_customer's pre-fork path and route name (MaterialRoute(path: '/setting', page: SettingRoute.page)). The shell renders comms_sdk's SettingPage (notification toggles)."
+        }
+      ],
+      "app_routes": [
+        {
+          "method": "pushChatRoute",
+          "params": "BuildContext context, {dynamic name, dynamic roleId}",
+          "body": "context.router.push(ChatRoute(roleId: roleId?.toString() ?? '', name: name?.toString() ?? ''));",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        },
+        {
+          "method": "pushSettingRoute",
+          "body": "context.router.push(SettingRoute());",
+          "imports": [
+            "import 'package:${package}/presentation/routes/app_router.dart';"
+          ]
+        }
+      ],
       "onboarding_slides": [],
       "registration_steps": [],
       "embedded_widgets": [
@@ -1247,6 +1389,14 @@
           "body": "return LanguageScreen(onSave: onSave);",
           "imports": [
             "import 'package:comms_sdk/src/common/presentation/pages/setting/language_page.dart';"
+          ]
+        },
+        {
+          "method": "chatPage",
+          "params": "{required String roleId, required String name}",
+          "body": "return ChatPage(roleId: roleId, name: name);",
+          "imports": [
+            "import 'package:comms_sdk/src/common/presentation/pages/chat/chat/chat_page.dart';"
           ]
         }
       ],
@@ -1404,7 +1554,7 @@
       ]
     },
     "promotions_sdk": {
-      "version": "1.3.0",
+      "version": "1.4.0",
       "files": {
         "lib/presentation/routes/promotions_route_pages.dart": "0dc5d4de524957c7fd906b18a65e639082ddb94d18dc94b8859b5ebcceb7f77b",
         "assets/demo/promotions/api.banner.get_ads.json": "904cc2312d56782b9e12bea4bc8646d47a0dc2829d27c1465689db5b23dc6d93",
@@ -1419,7 +1569,7 @@
           "page": "StoryListRoute.page",
           "type": "MaterialRoute",
           "import": "package:${package}/presentation/routes/promotions_route_pages.dart",
-          "_comment": "Pre-fork story viewer route recovered (fix-wave 2026-09-02, route map row 17): `/storyList?index=<n>` deep links keep resolving via @QueryParam; the shell lives in promotions_route_pages.dart. Top-level: this manifest has no flavour blocks and promotions_sdk composes only into customer-family apps."
+          "_comment": "Pre-fork story viewer route recovered (fix-wave 2026-09-02, route map row 17): `/storyList?index=<n>` deep links keep resolving via @QueryParam; the shell lives in promotions_route_pages.dart. Customer only since 1.4.0."
         }
       ],
       "app_routes": [
@@ -1442,15 +1592,38 @@
       ]
     },
     "loyalty_sdk": {
-      "version": "1.0.2",
+      "version": "1.2.1",
       "files": {},
       "routes": [],
       "app_routes": [],
       "onboarding_slides": [],
       "registration_steps": [],
       "embedded_widgets": [],
-      "di_hooks": [],
-      "boot_hooks": []
+      "di_hooks": [
+        {
+          "id": "loyalty-profile-sections",
+          "order": 20,
+          "body": "registerLoyaltyProfileSections();",
+          "imports": [
+            "import 'package:loyalty_sdk/loyalty_sdk.dart';"
+          ],
+          "_comment": "Contributes the customer-subscription line to the profile header plan row (ProfileSectionRegistry action group marketplace.plan, rendered by marketplace_sdk >= 1.16.0). Requires base_sdk >= 1.23.0 (the profile host)."
+        }
+      ],
+      "boot_hooks": [],
+      "tr_keys": {
+        "subscriptionPlans": "subscription_plans",
+        "youSavedWithSubscription": "you_saved_with_your_subscription",
+        "subscriptionPastDue": "payment_overdue_benefits_are_paused",
+        "subscriptionPaymentFailed": "the_payment_did_not_go_through",
+        "changePaymentMethod": "change_payment_method",
+        "renewsWith": "renews_with",
+        "offDelivery": "off_delivery",
+        "noServiceFee": "no_service_fee",
+        "onOrdersOver": "on_orders_over",
+        "quarter": "quarter",
+        "subscriptionPending": "waiting_for_payment"
+      }
     },
     "desktop_sdk": {
       "version": "1.2.2",
@@ -1464,7 +1637,7 @@
       "boot_hooks": []
     },
     "hms_sdk": {
-      "version": "1.0.1",
+      "version": "1.0.2",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1596,60 +1769,60 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.81.0",
-      "hash": "683e8976b9945a1e"
+      "version": "1.88.3",
+      "hash": "cb276270aff0e667"
     },
     "comms": {
-      "version": "1.22.0",
-      "hash": "1f51ce3ea18e4c2f"
+      "version": "1.22.4",
+      "hash": "2433701a8531dd13"
     },
     "marketplace": {
-      "version": "1.15.0",
-      "hash": "eade7b3e730f6957"
+      "version": "1.17.0",
+      "hash": "d3e22c765e11ca91"
     },
     "merchants": {
-      "version": "1.32.1",
-      "hash": "acf603fc371813ab"
+      "version": "1.34.0",
+      "hash": "f4a0f9fbafd834b5"
     },
     "products": {
-      "version": "1.12.1",
-      "hash": "991eca5a9e9e0f60"
+      "version": "1.12.7",
+      "hash": "0243138547b02d8e"
     },
     "orders": {
-      "version": "1.26.0",
-      "hash": "2aae6e408d2edb84"
+      "version": "1.30.0",
+      "hash": "15fe2302e9e236b7"
     },
     "promotions": {
-      "version": "1.3.0",
-      "hash": "c298a8164e5f87ef"
+      "version": "1.4.0",
+      "hash": "d7bbb06fce8986e3"
     },
     "loyalty": {
-      "version": "1.0.2",
-      "hash": "5ac9fa78ff6e1dfe"
+      "version": "1.2.1",
+      "hash": "2ab62c0b6714b52a"
     },
     "auth": {
-      "version": "1.16.0",
-      "hash": "c0351f66fa8b4c5b"
+      "version": "1.20.0",
+      "hash": "f92c82812fab6f4c"
     },
     "users": {
-      "version": "1.5.1",
-      "hash": "85f8847951bf6cf9"
+      "version": "1.5.2",
+      "hash": "1e8eee291e0c3997"
     },
     "fav": {
-      "version": "1.1.0",
-      "hash": "5ce1a433d8430989"
+      "version": "1.1.1",
+      "hash": "79a8ed9e2454a772"
     },
     "wallet": {
-      "version": "1.7.0",
-      "hash": "2662085449816d36"
+      "version": "1.8.0",
+      "hash": "3a1a8b3d7fa12fc8"
     },
     "payments": {
-      "version": "1.2.3",
-      "hash": "f723edadd74f4bac"
+      "version": "1.3.5",
+      "hash": "1015adb833610df7"
     },
     "delivery": {
-      "version": "1.28.0",
-      "hash": "9e27136951871762"
+      "version": "1.29.0",
+      "hash": "cb43171cf28ab641"
     },
     "map": {
       "version": "1.5.0",
@@ -1668,8 +1841,8 @@
       "hash": "a5f94e74405057ac"
     },
     "hms": {
-      "version": "1.0.1",
-      "hash": "b030c92b54f6fefd"
+      "version": "1.0.2",
+      "hash": "fa93206c6fc6db19"
     },
     "telemetry": {
       "version": "1.0.1",
@@ -1678,6 +1851,10 @@
     "booking": {
       "version": "1.2.1",
       "hash": "cd09bab55538a382"
+    },
+    "subscriptions": {
+      "version": "1.7.0",
+      "hash": "89d7c88fee3d7aa5"
     }
   }
 }

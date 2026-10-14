@@ -137,7 +137,9 @@ class _GenericProfilePageState extends ConsumerState<GenericProfilePage> {
     ProfileSectionRegistry.I.ensureDefaultSections();
     _resolveVisibilityGates();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(profileProvider.notifier).fetchUser(context);
+      ref
+          .read(profileProvider.notifier)
+          .fetchUser(context, quietWhenOffline: true);
     });
   }
 
@@ -330,7 +332,7 @@ class _GenericProfilePageState extends ConsumerState<GenericProfilePage> {
         // Mode-resolving page surface: dark surface in dark mode, the soft
         // light-grey page in light mode — same token every themed page
         // uses. In anonymous mode this brand ground is the whole backdrop.
-        backgroundColor: AppStyle.surfaceDark,
+        backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
         body: hydrating
             ? const Loading()
             : SafeArea(
@@ -389,7 +391,9 @@ class _GenericProfilePageState extends ConsumerState<GenericProfilePage> {
             },
           ),
           12.verticalSpace,
-          CustomButton(
+          // Builder: the ink is read from the dialog's own theme at build
+          // time, so a live mode flip with the dialog open restyles it.
+          Builder(builder: (inner) => CustomButton(
             title: AppHelpers.getTranslation(TrKeys.cancel),
             background: AppStyle.transparent,
             // Mode-resolving ink, NOT the pinned AppStyle.black: this dialog
@@ -397,10 +401,10 @@ class _GenericProfilePageState extends ConsumerState<GenericProfilePage> {
             // theme's dark dialog surface (#2B2930) — against which #232B2F
             // is 1.00:1. The outlined Cancel button was invisible: no label,
             // no border, on the sign-out confirmation of every dark host.
-            borderColor: AppStyle.textPrimary,
-            textColor: AppStyle.textPrimary,
+            borderColor: AppStyle.inkFor(Theme.of(inner).brightness),
+            textColor: AppStyle.inkFor(Theme.of(inner).brightness),
             onPressed: () => Navigator.of(context).pop(),
-          ),
+          )),
         ],
       ),
     );
@@ -535,7 +539,7 @@ class _IdentityHeader extends StatelessWidget {
                             : name,
                         style: AppStyle.interSemi(
                           size: 18.sp,
-                          color: AppStyle.textPrimary,
+                          color: AppStyle.inkFor(Theme.of(context).brightness),
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -553,7 +557,7 @@ class _IdentityHeader extends StatelessWidget {
                     contact,
                     style: AppStyle.interNormal(
                       size: 13.sp,
-                      color: AppStyle.textDarkSecondary,
+                      color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -565,7 +569,7 @@ class _IdentityHeader extends StatelessWidget {
                     role,
                     style: AppStyle.interNormal(
                       size: 12.sp,
-                      color: AppStyle.textDarkSecondary,
+                      color: AppStyle.secondaryInkFor(Theme.of(context).brightness),
                     ),
                   ),
                 ],
@@ -578,7 +582,7 @@ class _IdentityHeader extends StatelessWidget {
               icon: Icon(
                 Remix.pencil_line,
                 size: 20.sp,
-                color: AppStyle.textPrimary,
+                color: AppStyle.inkFor(Theme.of(context).brightness),
               ),
             ),
         ],
@@ -594,7 +598,7 @@ class _IdentityHeader extends StatelessWidget {
     final card = Container(
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: Column(
@@ -608,7 +612,7 @@ class _IdentityHeader extends StatelessWidget {
               decoration: BoxDecoration(
                 border: Border(
                   top: BorderSide(
-                    color: AppStyle.strokeDark,
+                    color: AppStyle.strokeFor(Theme.of(context).brightness),
                     width: 0.5,
                   ),
                 ),
@@ -646,7 +650,9 @@ Widget _planRow({
   required VoidCallback? onPlanTap,
   bool divided = true,
 }) {
-  Widget row = Container(
+  // Builder: the hairline reads the inherited theme at build time, not
+  // the app-wide AppStyle.isDark static, so a live mode flip restyles it.
+  Widget row = Builder(builder: (context) => Container(
     width: double.infinity,
     margin: divided ? EdgeInsets.only(top: 12.r) : null,
     padding: divided ? EdgeInsets.only(top: 12.r) : null,
@@ -654,7 +660,7 @@ Widget _planRow({
         ? BoxDecoration(
             border: Border(
               top: BorderSide(
-                color: AppStyle.strokeDark,
+                color: AppStyle.strokeFor(Theme.of(context).brightness),
                 width: 0.5,
               ),
             ),
@@ -671,7 +677,7 @@ Widget _planRow({
         Expanded(child: plan),
       ],
     ),
-  );
+  ));
   if (onPlanTap != null) {
     row = GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -703,7 +709,7 @@ class _AnonymousHeader extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(16.r),
       decoration: BoxDecoration(
-        color: AppStyle.cardDark,
+        color: AppStyle.cardFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: _planRow(plan: plan, onPlanTap: onPlanTap, divided: false),
@@ -734,7 +740,7 @@ class _TopRow extends StatelessWidget {
             title,
             style: AppStyle.interSemi(
               size: 18.sp,
-              color: AppStyle.textPrimary,
+              color: AppStyle.inkFor(Theme.of(context).brightness),
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -857,7 +863,7 @@ class _PlanBackCard extends StatelessWidget {
         width: double.infinity,
         padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
-          color: AppStyle.cardDark,
+          color: AppStyle.cardFor(Theme.of(context).brightness),
           borderRadius: BorderRadius.circular(16.r),
         ),
         // The flip card sizes this face to the front's height; content
@@ -874,7 +880,7 @@ class _PlanBackCard extends StatelessWidget {
                   AppHelpers.getTranslation(TrKeys.tapAnywhereToFlipBack),
                   style: AppStyle.interNormal(
                     size: 10.sp,
-                    color: AppStyle.textDarkFaint,
+                    color: AppStyle.faintFor(Theme.of(context).brightness),
                   ),
                 ),
               ),

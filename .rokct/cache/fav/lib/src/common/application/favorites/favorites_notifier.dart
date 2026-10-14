@@ -54,6 +54,9 @@ class FavoritesNotifier extends Notifier<FavoritesState> {
   }
 
   /// Likes or unlikes a shop on the device; returns true when now liked.
+  /// A newly liked shop is fetched and added to [FavoritesState.shops]
+  /// when online, so the list matches the count without a manual refresh;
+  /// offline it arrives with the next [fetchFavoritesShop].
   Future<bool> toggleShop(String shopId) async {
     final liked = await _store.toggle(shopId);
     final ids = await _store.load();
@@ -63,6 +66,32 @@ class FavoritesNotifier extends Notifier<FavoritesState> {
           ? state.shops
           : state.shops.where((s) => s.id != shopId).toList(),
     );
+    if (liked && !state.shops.any((s) => s.id == shopId)) {
+      await _addShop(shopId);
+    }
     return liked;
+  }
+
+  Future<void> _addShop(String shopId) async {
+    try {
+      if (!await AppConnectivity.connectivity()) return;
+      final response = await shopsRepository.getShopsByIds([shopId]);
+      response.when(
+        success: (data) {
+          // Still liked, and not added meanwhile by a full fetch.
+          if (!state.shopIds.contains(shopId)) return;
+          final fresh = [
+            for (final s in data.data ?? const <ShopData>[])
+              if (!state.shops.any((have) => have.id == s.id)) s,
+          ];
+          if (fresh.isNotEmpty) {
+            state = state.copyWith(shops: [...state.shops, ...fresh]);
+          }
+        },
+        failure: (_, __) {},
+      );
+    } catch (_) {
+      // Best-effort: the next fetchFavoritesShop loads it.
+    }
   }
 }

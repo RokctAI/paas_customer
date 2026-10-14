@@ -21,6 +21,7 @@ import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/time_service.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
+import 'package:remixicon/remixicon.dart';
 
 class RefundInfoScreen extends StatelessWidget {
   final RefundModel? refundModel;
@@ -74,8 +75,8 @@ class RefundInfoScreen extends StatelessWidget {
                             )
                           : Icon(
                               refundModel?.status == "accepted"
-                                  ? Icons.done_all
-                                  : Icons.cancel_outlined,
+                                  ? Remix.check_double_line
+                                  : Remix.close_circle_line,
                               size: 16.r,
                             ),
                     ),

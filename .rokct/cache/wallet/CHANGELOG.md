@@ -1,3 +1,36 @@
+## 1.8.0
+
+* fix(topup): "Top up now" / "Pay with new card" is gone. It opened a card
+  list with no way to add a card, and crashed in supacharge. There is no
+  card form yet (it needs the payment gateway's own card page), so a
+  top-up uses a card saved at a checkout. With no saved card, the page
+  says so. The default card is preselected.
+* fix(topup, send): no double charges. Each top-up and phone send carries
+  a one-time key; a retry of the same top-up or send reuses it, and the
+  server answers the first result instead of charging or paying again.
+* fix(topup, send): the wallet card shows the new balance straight after a
+  top-up or a send.
+* fix(currency): the top-up, send and receive screens show the backend's
+  currency symbol. Rand ("R") is only the fallback.
+* docs: the README describes the package instead of the Flutter template.
+
+## 1.7.3
+
+* fix(wallet): the Loan button shows only in apps that have a loan screen
+  (polaris today). In supacharge it showed but did nothing. It also needs
+  lending to be enabled, as before.
+
+## 1.7.2
+
+* fix(icons): Material `Icons.*` replaced with Remixicon (`Remix.*`) per
+  the fleet icon standard; adds the `remixicon: ^1.4.1` dependency.
+
+## 1.7.1
+
+* fix(topup): "Pay with new card" no longer calls process_wallet_top_up
+  without a card. It opens the host card-capture screen, then charges the
+  newly saved card. The backend has no redirect top-up.
+
 ## 1.7.0
 
 * Demo runs the real wallet-history fetch through base_sdk 1.73.0's

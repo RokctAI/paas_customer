@@ -15,7 +15,7 @@
 // ignore_for_file: unused_result
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_remix/flutter_remix.dart';
+import 'package:remixicon/remixicon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
@@ -139,7 +139,7 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
                                         child: const Padding(
                                           padding: EdgeInsets.all(8.0),
                                           child: Icon(
-                                            FlutterRemix.arrow_up_down_line,
+                                            Remix.arrow_up_down_line,
                                           ),
                                         ),
                                       ),
@@ -149,7 +149,7 @@ class _ParcelPageState extends ConsumerState<ParcelPage> {
                                 if (state.expand)
                                   CustomButton(
                                     icon: Icon(
-                                      FlutterRemix.wallet_2_line,
+                                      Remix.wallet_2_line,
                                       color: AppStyle.inkFor(Theme.of(context).brightness),
                                     ),
                                     background: AppStyle.surfaceFor(Theme.of(context).brightness),

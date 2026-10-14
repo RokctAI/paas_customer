@@ -24,6 +24,7 @@ import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:base_sdk/src/presentation/components/app_bars/common_app_bar.dart';
 import 'package:base_sdk/src/presentation/components/sellect_address_screen.dart';
+import 'package:remixicon/remixicon.dart';
 
 class AppBarHome extends StatelessWidget {
   final HomeState state;
@@ -90,7 +91,7 @@ class AppBarHome extends StatelessWidget {
                         maxLines: 1,
                       ),
                     ),
-                    const Icon(Icons.keyboard_arrow_down_sharp),
+                    const Icon(Remix.arrow_down_s_line),
                   ],
                 ),
               ],
