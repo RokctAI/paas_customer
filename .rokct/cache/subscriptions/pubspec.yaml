@@ -1,6 +1,6 @@
 name: subscriptions_sdk
 description: "Merchant and POS subscription plans, feature toggling matrices, payment link integration, and active state tracking."
-version: 1.7.0
+version: 1.7.1
 publish_to: 'none'
 environment:
   sdk: '>=3.10.0 <4.0.0'

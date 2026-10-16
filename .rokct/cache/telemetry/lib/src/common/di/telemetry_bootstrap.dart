@@ -1,25 +1,21 @@
 // Copyright (c) 2026 ROKCT INTELLIGENCE (PTY) LTD
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published
+// by the Free Software Foundation, version 3.
 //
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Affero General Public License for more details.
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
 import 'package:base_sdk/base_sdk.dart';
+
+import 'package:telemetry_sdk/src/common/delivery/telemetry_spool.dart';
 
 /// Formal owner of base_sdk's telemetry injection seam (ADR-005/ADR-006).
 ///
@@ -27,9 +23,11 @@ import 'package:base_sdk/base_sdk.dart';
 /// and exposes exactly one delivery-override hook: `TelemetryClient.configure`
 /// with a [TelemetryTransport]. This SDK is the sanctioned caller of that
 /// hook. It ships no client of its own and no HTTP of its own: default
-/// delivery stays base_sdk's platform-gateway POST (cmd-routed), and any
-/// future policy (batching, sampling, offline spooling) plugs in HERE as an
-/// injected transport instead of a parallel pipeline. Feature SDKs extend
+/// delivery stays base_sdk's platform-gateway POST (cmd-routed), and
+/// policy plugs in HERE as an injected transport instead of a parallel
+/// pipeline. The policy the composed shell applies is [enableSpool]:
+/// [TelemetrySpool] sends online and queues offline, flushing the queue in
+/// batches when connectivity returns. Feature SDKs extend
 /// the lane the ADR-005 way — their own [TelemetryClient.track] /
 /// [TelemetryClient.logError] events through the base_sdk import they
 /// already have; they never inject a transport.
@@ -45,5 +43,21 @@ class TelemetryBootstrap {
   /// caller-facing API never throws either way.
   static void configure({TelemetryTransport? transport}) {
     TelemetryClient.configure(transport: transport);
+  }
+
+  /// Installs [TelemetrySpool] ([spool], default its process-wide
+  /// instance) as the transport and starts its connectivity-driven flush.
+  /// Online events still leave through the same platform-gateway POST;
+  /// offline ones are kept on the device and sent later instead of lost.
+  /// Called by `TelemetrySdkDependencies.register`. Fail-open: telemetry
+  /// must never break boot.
+  static void enableSpool({TelemetrySpool? spool}) {
+    final TelemetrySpool target = spool ?? TelemetrySpool.instance;
+    configure(transport: target.deliver);
+    try {
+      target.start();
+    } catch (_) {
+      // Live sends still work; the queue flushes after the next send.
+    }
   }
 }

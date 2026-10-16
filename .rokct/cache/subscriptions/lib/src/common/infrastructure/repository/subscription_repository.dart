@@ -126,15 +126,24 @@ class SubscriptionsRepository implements SubscriptionsFacade {
     return SubscriptionResponse(data: const []);
   }
 
-  /// Writes the user's OWN subscription — the Shop Subscription row
+  /// KV box the seller's own shop purchase is cached in. Deliberately NOT
+  /// the shared 'user_subscriptions' box: that row is a student's access
+  /// state (active / expiryDate / allowedSubjects, filled by the lms host
+  /// from its own entitlement endpoint), and a shop purchase written over
+  /// it flipped the student's active flag. Keeping the two in separate
+  /// boxes means a shop purchase never changes the student's subscription
+  /// state.
+  static const shopSubscriptionBox = 'shop_subscriptions';
+
+  /// Writes the user's OWN shop subscription — the Shop Subscription row
   /// `subscribe_my_shop` returns after a paid purchase — into the shared
-  /// database's generic 'user_subscriptions' box, keyed by the
-  /// authenticated user (persisted at login by auth_sdk, read through
-  /// [LocalStorage.getUser]). The row is MERGED, so keys other SDKs keep
-  /// there survive. Only fields the purchase row actually carries are
-  /// written: no title is made up (the row names its plan by docname, not
-  /// a display title), and missing subjects keep the last-known-good
-  /// value. Failures are logged but never break the purchase result.
+  /// database's [shopSubscriptionBox] box, keyed by the authenticated user
+  /// (persisted at login by auth_sdk, read through [LocalStorage.getUser]).
+  /// The row is MERGED, so other keys kept there survive. Only fields the
+  /// purchase row actually carries are written: no title is made up (the
+  /// row names its plan by docname, not a display title), and missing
+  /// subjects keep the last-known-good value. Failures are logged but
+  /// never break the purchase result.
   Future<void> _cacheOwnSubscription(Map<String, dynamic> row) async {
     final userId = LocalStorage.getUser()?.id?.toString();
     if (userId == null || userId.isEmpty) {
@@ -146,8 +155,8 @@ class SubscriptionsRepository implements SubscriptionsFacade {
     try {
       final held = SubscriptionData.fromJson(row);
       final existing =
-          await _database.getItem('user_subscriptions', userId) ?? {};
-      await _database.putItem('user_subscriptions', userId, {
+          await _database.getItem(shopSubscriptionBox, userId) ?? {};
+      await _database.putItem(shopSubscriptionBox, userId, {
         ...existing,
         'userId': userId,
         'status': held.type ?? existing['status'] ?? 'inactive',

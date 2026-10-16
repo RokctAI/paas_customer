@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.88.4",
+      "version": "1.89.0",
       "files": {
         "lib/main.dart": "92423f25fa33333d67d8bd380b35d328cc5350033e61f0b750952a6d51641c34",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -619,7 +619,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.20.0",
+      "version": "1.21.0",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "87b5d1dbc3f0f9417db5289be2c1ebbcb7dfecf1638f348b6f5ee1581f7ce4d2",
         "lib/presentation/routes/registration_step_pages.dart": "68aed195fc07db746a0919c7ba6d47ffa445ca86e7d9cf6ee50fbcb00e82d3c2",
@@ -781,7 +781,7 @@
       ]
     },
     "merchants_sdk": {
-      "version": "1.34.0",
+      "version": "1.35.0",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "lib/presentation/routes/merchants_customer_route_pages.dart": "94118cddd225b802a07db40ac5683697fd190d5d1de42494d955fc3f7eb79456",
@@ -1637,7 +1637,7 @@
       "boot_hooks": []
     },
     "hms_sdk": {
-      "version": "1.0.2",
+      "version": "1.1.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1659,7 +1659,7 @@
       ]
     },
     "telemetry_sdk": {
-      "version": "1.0.1",
+      "version": "1.1.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1769,8 +1769,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.88.4",
-      "hash": "d864cc3c9907624e"
+      "version": "1.89.0",
+      "hash": "290bd4a74796b515"
     },
     "comms": {
       "version": "1.22.4",
@@ -1781,8 +1781,8 @@
       "hash": "d3e22c765e11ca91"
     },
     "merchants": {
-      "version": "1.34.0",
-      "hash": "f4a0f9fbafd834b5"
+      "version": "1.35.0",
+      "hash": "15b8545a956c96b8"
     },
     "products": {
       "version": "1.12.7",
@@ -1801,8 +1801,8 @@
       "hash": "2ab62c0b6714b52a"
     },
     "auth": {
-      "version": "1.20.0",
-      "hash": "f92c82812fab6f4c"
+      "version": "1.21.0",
+      "hash": "e7adcc37a1e4f15c"
     },
     "users": {
       "version": "1.5.2",
@@ -1841,20 +1841,20 @@
       "hash": "a5f94e74405057ac"
     },
     "hms": {
-      "version": "1.0.2",
-      "hash": "fa93206c6fc6db19"
+      "version": "1.1.0",
+      "hash": "7f1c497916478f4e"
     },
     "telemetry": {
-      "version": "1.0.1",
-      "hash": "d72bc5e07ff1124c"
+      "version": "1.1.0",
+      "hash": "fc4dc71b7401b7bd"
     },
     "booking": {
       "version": "1.2.1",
       "hash": "cd09bab55538a382"
     },
     "subscriptions": {
-      "version": "1.7.0",
-      "hash": "89d7c88fee3d7aa5"
+      "version": "1.7.1",
+      "hash": "983d9a0e203535a8"
     }
   }
 }

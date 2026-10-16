@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.1
+
+* fix(subscriptions): a shop purchase is cached in its own `shop_subscriptions` KV row (`SubscriptionsRepository.shopSubscriptionBox`), never in the student's shared `user_subscriptions` row, so buying a shop plan can no longer flip a student's `active` flag.
+* fix(subscriptions): `subscribe_my_shop` locks the seller's Wallet row (`frappe.get_doc(..., for_update=True)`, SELECT ... FOR UPDATE) and checks the balance under the lock, so two concurrent purchases cannot overspend the wallet.
+
 ## 1.7.0
 
 * fix(subscriptions): the plan catalog is no longer cached as the user's subscription (`active` there means "published"). The user's own row is cached, merged, from the purchase result.
