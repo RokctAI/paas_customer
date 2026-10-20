@@ -1,11 +1,44 @@
 {
   "name": "wallet_sdk",
-  "version": "1.8.0",
+  "version": "1.9.0",
+  "_comment_version_1_9_0": "1.8.0 -> 1.9.0: card auto-billing (Ray, 2026-10-17). Top-up gains \"Pay with a new card\": the wallet backend's start_card_checkout (no Order) opens PayFast's hosted checkout (a server-signed form posted from CardCheckoutPage, passphrase never in the app) or Paystack's page; the wallet is credited only when the gateway confirms to the server (get_card_checkout_status polls). \"Save this card for automatic renewals\" is off until ticked and shows the consent text (renewals charged automatically, no reminder, how to remove the card); it sends consent_version 2026-10-17, which the server records on the card. The wallet history page shows saved cards with a remove button (SavedCardsSection), and every row opens WalletRowDetailSheet, with a static WalletHistoryPage.rowDetailBuilder seam a home SDK fills (lms_sdk: the billing record behind a subscription payment). New tr_keys declared below, read through WalletTrKeys, with bundled English registered by the wallet-en-bundled-translations boot hook; no base_sdk change needed. New direct dependency webview_flutter ^4.10.0 (base_sdk's pin). Needs the matching wallet backend (start_card_checkout, get_card_checkout_status, recurring_consent on get_saved_cards); against an older backend the new-card button answers the friendly failure line and nothing is charged.",
   "_comment_version_1_8_0": "1.7.3 -> 1.8.0: top-up drops the \"pay with new card\" path (no card-capture flow exists; it pushed a card list that crashed without the orders SDK) and preselects the default card; top-up and phone send send an X-Idempotency-Key (needs the matching wallet backend, which wraps process_wallet_top_up and send_wallet_balance in @idempotent); a successful top-up or send refetches the profile so the wallet card shows the new balance; amounts use the backend currency symbol (rand fallback). Adds dio as a direct dependency.",
   "_comment_version_1_7_0": "1.6.6 -> 1.7.0: the wallet history page runs the REAL fetch in a demo session (Ray, 2026-09-25). WalletSdkDependencies registers DemoFixtures.registerAssetDirectory('assets/demo/wallet'); base_sdk 1.73.0's DemoGatewayInterceptor answers users_sdk's api.user.get_wallet_history from templates/assets/demo/wallet (the same five-row ledger, net +R 793.00). DemoWalletHistory and the page's DemoSession branches are deleted. Needs base_sdk 1.73.0.",
   "_comment_version_1_6_6": "1.6.5 -> 1.6.6: dark-mode sweep - receive-screen amount chips and the active claim card use AppStyle.cardFor(brightness) instead of a fixed white fill.",
   "_comment_version_1_6_5": "1.6.4 -> 1.6.5: Ray's 2026-09-23 notes. The Send sheet follows the app's light/dark mode (fills, ink, borders and the typed text resolve from the inherited theme's brightness via base_sdk's explicit-brightness seams, base_sdk >= 1.66.7); before, it was pinned light and the typed text came out white. Top-up now opens as a modal sheet like Send, from both the profile wallet card and the history page (WalletTopUpPage(asSheet: true) / WalletTopUpPage.showAsSheet); the /wallet-topup route keeps the page form for other callers.",
   "_comment_requires": "wallet_sdk >= 1.2.0 requires base_sdk >= 1.33.0 (BaseWalletCard `wallet` param + fixed compile). The composer manifest schema has no machine-readable minimum-version field, so this is the declaration.",
+  "tr_keys": {
+      "payWithANewCard": "pay_with_a_new_card",
+      "saveCardForRenewals": "save_card_for_automatic_renewals",
+      "cardRenewalConsent": "card_automatic_renewal_consent",
+      "acceptCardConsentFirst": "accept_card_consent_first",
+      "cardCheckoutTitle": "card_checkout_title",
+      "cardCheckoutWaiting": "card_checkout_waiting",
+      "cardCheckoutCancelled": "card_checkout_cancelled",
+      "cardCheckoutFailed": "card_checkout_failed",
+      "cardSavedForRenewals": "card_saved_for_automatic_renewals",
+      "walletSavedCards": "wallet_saved_cards",
+      "removeCard": "remove_card",
+      "removeCardConfirm": "remove_card_confirm",
+      "cardRemoved": "card_removed",
+      "renewsAutomatically": "renews_automatically",
+      "walletTransactionDetails": "wallet_transaction_details",
+      "walletReference": "wallet_reference",
+      "walletTransactionType": "wallet_transaction_type",
+      "walletStatus": "wallet_status"
+  },
+  "boot_hooks": [
+      {
+          "id": "wallet-en-bundled-translations",
+          "order": 63,
+          "body": "BundledTranslations.register('en', kWalletEnTranslations);",
+          "imports": [
+              "import 'package:base_sdk/src/services/bundled_translations.dart';",
+              "import 'package:wallet_sdk/src/common/translations/wallet_translations.dart';"
+          ],
+          "_comment": "Registers wallet_sdk's bundled English for its manifest tr_keys (card auto-billing copy: the new-card button, the automatic-renewal consent, saved cards, the row detail sheet) into base_sdk's BundledTranslations at boot, the lms_sdk / auth_sdk pattern. Backend-served rows still win; these keys name their strings, so the humanized-key fallback would not read well."
+      }
+  ],
   "di_hooks": [
     {
       "id": "wallet-profile-section",

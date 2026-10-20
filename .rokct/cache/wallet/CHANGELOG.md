@@ -1,3 +1,21 @@
+## 1.9.0
+
+* feat(topup): "Pay with a new card". It opens the payment gateway's own
+  card page (PayFast or Paystack) with no order behind it, and the money
+  reaches the wallet once the gateway confirms the payment.
+* feat(topup): "Save this card for automatic renewals", off until the
+  payer ticks it. Ticking shows the consent: renewals are charged to the
+  card automatically, with no reminder before each charge, and the card
+  can be removed in the wallet under Saved cards. The server records the
+  consent on the card.
+* feat(wallet): the wallet page lists saved cards, each with a remove
+  button. Cards that pay renewals say so.
+* feat(wallet): tapping a wallet row opens its details. Another SDK can add
+  to them through `WalletHistoryPage.rowDetailBuilder`; lms_sdk shows the
+  billing record (student, plan, period) behind a subscription payment.
+* New strings go through new tr_keys with bundled English; no base_sdk
+  change. New dependency: webview_flutter (base_sdk's pin).
+
 ## 1.8.0
 
 * fix(topup): "Top up now" / "Pay with new card" is gone. It opened a card

@@ -30,13 +30,15 @@
 //     each other (ADR-005), and a shell that composes wallet_sdk without
 //     the marketplace surfaces never registers that embedded widget — the
 //     donor's call would throw.
-//   * No "pay with new card" path. The backend has no card-capture flow a
-//     top-up can use: its tokenize_card refuses typed-in card details, and
-//     PayFast saves a card only through an order checkout. The page used to
-//     push `paymentScreen(tokenizeOnly: true)`, which has no card form (it
-//     lists saved cards) and crashed in apps without the orders SDK. Until
-//     a gateway-hosted card form exists, a card saved at checkout is the
-//     only way in; with none, the page says so.
+//   * "Pay with a new card" opens the gateway's own card page (PayFast or
+//     Paystack, CardCheckoutPage) through the wallet backend's
+//     start_card_checkout, which needs no Order (Ray, 2026-10-17, C1). It
+//     never pushes the orders SDK's paymentScreen, which crashed in apps
+//     without that SDK. "Save this card for automatic renewals" is off
+//     until the payer ticks it; ticking shows the consent text, which says
+//     plainly that renewals are charged to the card automatically, with no
+//     reminder, and how to remove the card (C2, C4). The wallet is credited
+//     only when the gateway confirms the payment to the server.
 //   * Each top-up sends an X-Idempotency-Key (one per card + amount, reused
 //     on a retry) so a retried top-up cannot charge twice, and a success
 //     refreshes the profile so the wallet card shows the new balance.
@@ -68,8 +70,11 @@ import 'package:remixicon/remixicon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:wallet_sdk/src/common/infrastructure/repositories/card_billing_api.dart';
 import 'package:wallet_sdk/src/common/infrastructure/repositories/wallet_repository.dart';
+import 'package:wallet_sdk/src/common/presentation/pages/cards/card_checkout_page.dart';
 import 'package:wallet_sdk/src/common/presentation/pages/receive/wallet_receive_screen.dart';
+import 'package:wallet_sdk/src/common/translations/wallet_translations.dart';
 import 'package:wallet_sdk/src/common/utils/wallet_currency.dart';
 
 class WalletTopUpPage extends ConsumerStatefulWidget {
@@ -81,7 +86,26 @@ class WalletTopUpPage extends ConsumerStatefulWidget {
   /// other callers.
   final bool asSheet;
 
-  const WalletTopUpPage({super.key, this.asSheet = false});
+  /// The card checkout calls; a test passes a fake.
+  final CardBillingApi cardBilling;
+
+  /// Opens the gateway page and answers 'done' / 'cancelled' / null; a
+  /// test replaces it. Defaults to pushing [CardCheckoutPage].
+  final Future<String?> Function(BuildContext, CardCheckout)? openCheckout;
+
+  /// How long to wait for the gateway's confirmation after the payer
+  /// comes back, polling every [pollEvery].
+  final Duration pollEvery;
+  final int pollTries;
+
+  const WalletTopUpPage({
+    super.key,
+    this.asSheet = false,
+    this.cardBilling = const CardBillingApi(),
+    this.openCheckout,
+    this.pollEvery = const Duration(seconds: 2),
+    this.pollTries = 15,
+  });
 
   /// Opens the top-up flow as a modal bottom sheet over [context].
   static void showAsSheet(BuildContext context) {
@@ -106,6 +130,10 @@ class _WalletTopUpPageState extends ConsumerState<WalletTopUpPage> {
   bool _loadingCards = true;
   List<SavedCardModel> _savedCards = [];
   SavedCardModel? _selectedCard;
+
+  /// "Save this card for automatic renewals" - off until the payer ticks
+  /// it, which is their consent (the text shows under the box).
+  bool _saveNewCard = false;
 
   // Predefined amount options for quick selection (donor's presets).
   final List<double> _amountOptions = [50, 100, 200, 500, 1500, 2000];
@@ -299,6 +327,165 @@ class _WalletTopUpPageState extends ConsumerState<WalletTopUpPage> {
     }
   }
 
+  Future<String?> _defaultOpenCheckout(
+    BuildContext context,
+    CardCheckout checkout,
+  ) =>
+      Navigator.of(context).push<String>(
+        MaterialPageRoute(builder: (_) => CardCheckoutPage(checkout: checkout)),
+      );
+
+  /// Top up with a new card at the gateway's page, saving the card for
+  /// automatic renewals when the payer ticked the consent box.
+  Future<void> _payWithNewCard() async {
+    final amount = _validAmount();
+    if (amount == null) return;
+    setState(() {
+      _isLoading = true;
+    });
+    try {
+      final checkout = await widget.cardBilling.startCheckout(
+        amount: amount,
+        saveCard: _saveNewCard,
+      );
+      if (!mounted) return;
+      final outcome = await (widget.openCheckout ?? _defaultOpenCheckout)(
+        context,
+        checkout,
+      );
+      if (!mounted) return;
+      if (outcome == 'cancelled') {
+        setState(() {
+          _isLoading = false;
+        });
+        AppHelpers.showCheckTopSnackBarInfo(
+          context,
+          AppHelpers.getTranslation(WalletTrKeys.cardCheckoutCancelled),
+        );
+        return;
+      }
+      // The gateway confirms to the server (PayFast ITN, Paystack
+      // verify); wait for it rather than trusting the redirect.
+      var status = await widget.cardBilling.checkoutStatus(checkout.transaction);
+      for (var i = 1; status.isPending && i < widget.pollTries; i++) {
+        await Future<void>.delayed(widget.pollEvery);
+        if (!mounted) return;
+        status = await widget.cardBilling.checkoutStatus(checkout.transaction);
+      }
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+      });
+      if (status.isPaid) {
+        ref.read(profileProvider.notifier).fetchUser(context);
+        AppHelpers.showCheckTopSnackBarDone(
+          context,
+          AppHelpers.getTranslation(
+            status.cardSaved
+                ? WalletTrKeys.cardSavedForRenewals
+                : TrKeys.topUpSuccessful,
+          ),
+        );
+        _navigateBack();
+      } else if (status.isPending) {
+        AppHelpers.showCheckTopSnackBarInfo(
+          context,
+          AppHelpers.getTranslation(WalletTrKeys.cardCheckoutWaiting),
+        );
+      } else {
+        AppHelpers.showCheckTopSnackBarInfo(
+          context,
+          AppHelpers.getTranslation(WalletTrKeys.cardCheckoutFailed),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _isLoading = false;
+      });
+      _failFriendly(
+        WalletTrKeys.cardCheckoutFailed,
+        'wallet_topup_new_card_failed',
+        e,
+      );
+    }
+  }
+
+  Widget _newCardSection() {
+    final brightness = Theme.of(context).brightness;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        InkWell(
+          key: const ValueKey('save-card-consent'),
+          onTap: _isLoading
+              ? null
+              : () => setState(() => _saveNewCard = !_saveNewCard),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(
+                _saveNewCard
+                    ? Remix.checkbox_fill
+                    : Remix.checkbox_blank_line,
+                color: _saveNewCard
+                    ? AppStyle.primary
+                    : AppStyle.secondaryInkFor(brightness),
+              ),
+              8.horizontalSpace,
+              Expanded(
+                child: Text(
+                  AppHelpers.getTranslation(WalletTrKeys.saveCardForRenewals),
+                  style: AppStyle.interSemi(size: 14.sp),
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (_saveNewCard) ...[
+          6.verticalSpace,
+          Padding(
+            padding: EdgeInsets.only(left: 32.w),
+            child: Text(
+              AppHelpers.getTranslation(WalletTrKeys.cardRenewalConsent),
+              key: const ValueKey('card-consent-text'),
+              style: AppStyle.interNormal(
+                size: 12.sp,
+                color: AppStyle.secondaryInkFor(brightness),
+              ),
+            ),
+          ),
+        ],
+        12.verticalSpace,
+        ElevatedButton.icon(
+          key: const ValueKey('pay-with-new-card'),
+          onPressed: _isLoading ? null : _payWithNewCard,
+          icon: const Icon(Remix.bank_card_2_line),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: _selectedCard == null
+                ? AppStyle.primary
+                : AppStyle.transparent,
+            foregroundColor:
+                _selectedCard == null ? AppStyle.white : AppStyle.primary,
+            minimumSize: Size(double.infinity, 50.h),
+            elevation: 0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.r),
+              side: BorderSide(color: AppStyle.primary),
+            ),
+          ),
+          label: Text(
+            AppHelpers.getTranslation(WalletTrKeys.payWithANewCard),
+            style: AppStyle.interSemi(
+              size: 16.sp,
+              color: _selectedCard == null ? AppStyle.white : AppStyle.primary,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isLtr = LocalStorage.getLangLtr();
@@ -441,9 +628,8 @@ class _WalletTopUpPageState extends ConsumerState<WalletTopUpPage> {
                         ),
                 ),
             ] else
-              // No saved card: a top-up charges a saved card, and a card
-              // is saved by paying with it at a gateway checkout. There is
-              // no card form here to add one (see the header).
+              // No saved card yet: say so; the new-card button below is
+              // the way in.
               Center(
                 child: Column(
                   children: [
@@ -462,6 +648,8 @@ class _WalletTopUpPageState extends ConsumerState<WalletTopUpPage> {
                 ),
               ),
 
+            16.verticalSpace,
+            if (!_loadingCards) _newCardSection(),
             16.verticalSpace,
             Row(
               children: [Expanded(child: Divider(color: AppStyle.strokeDark))],

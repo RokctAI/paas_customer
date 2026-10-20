@@ -25,6 +25,13 @@
 //     (AppHelpers.getLendingEnabled()) AND the app provides a loan screen
 //     (EmbeddedWidgets.I.loanScreen() is declared, polaris today). An app
 //     without one, supacharge for example, shows no Loan button at all.
+//   * Each row opens a detail sheet (WalletRowDetailSheet). An SDK that
+//     knows more about a row - lms_sdk's billing record for a
+//     subscription payment (Ray, 2026-10-17, C8: billing history becomes
+//     the detail view of the wallet row) - adds it through the static
+//     [WalletHistoryPage.rowDetailBuilder] seam, set from its di_hook.
+//   * Saved cards show above the list, each with a remove button
+//     (SavedCardsSection).
 //   * No @RoutePage annotation here — the host-side shell in the installed
 //     wallet_route_pages.dart carries it (this SDK's convention, same as
 //     WalletTopUpPage).
@@ -50,6 +57,8 @@ import 'package:base_sdk/src/presentation/components/buttons/second_button.dart'
 import 'package:base_sdk/src/presentation/components/loading.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 
+import 'package:wallet_sdk/src/common/presentation/pages/cards/saved_cards_section.dart';
+import 'package:wallet_sdk/src/common/presentation/pages/history/wallet_row_detail_sheet.dart';
 import 'package:wallet_sdk/src/common/presentation/pages/send/wallet_send_screen.dart';
 import 'package:wallet_sdk/src/common/presentation/pages/topup/wallet_topup_page.dart';
 
@@ -63,6 +72,13 @@ extension StringExtension on String {
 class WalletHistoryPage extends ConsumerStatefulWidget {
   final bool isBackButton;
   const WalletHistoryPage({super.key, this.isBackButton = true});
+
+  /// Extra detail for a tapped wallet row, shown in its detail sheet under
+  /// the row's own facts. Set by a home SDK's di_hook (lms_sdk shows the
+  /// billing record behind a subscription payment); answers null for rows
+  /// it knows nothing about. Null (the default) shows the row facts only.
+  static Widget? Function(BuildContext context, WalletData row)?
+      rowDetailBuilder;
 
   @override
   ConsumerState<WalletHistoryPage> createState() => _WalletHistoryState();
@@ -214,6 +230,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                     ],
                   ),
                 ),
+                const SavedCardsSection(),
                 Expanded(
                   child: showLoading
                       ? const Center(child: Loading())
@@ -234,7 +251,14 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 scrollDirection: Axis.vertical,
                                 itemCount: history.length,
-                                itemBuilder: (context, index) => Container(
+                                itemBuilder: (context, index) => GestureDetector(
+                                  behavior: HitTestBehavior.opaque,
+                                  onTap: () => WalletRowDetailSheet.show(
+                                    context,
+                                    history[index],
+                                    WalletHistoryPage.rowDetailBuilder,
+                                  ),
+                                  child: Container(
                                   margin: EdgeInsets.only(bottom: 16.h),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12.r),
@@ -352,6 +376,7 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
                                       ),
                                     ],
                                   ),
+                                ),
                                 ),
                               ),
                             ),

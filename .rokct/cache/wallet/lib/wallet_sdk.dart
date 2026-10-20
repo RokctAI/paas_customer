@@ -16,6 +16,11 @@ library wallet_sdk;
 
 // Import concrete files via package:wallet_sdk/src/...
 export 'src/common/di/wallet_di.dart';
+export 'src/common/infrastructure/repositories/card_billing_api.dart';
+export 'src/common/presentation/pages/cards/card_checkout_page.dart';
+export 'src/common/presentation/pages/cards/saved_cards_section.dart';
+export 'src/common/presentation/pages/history/wallet_row_detail_sheet.dart';
+export 'src/common/translations/wallet_translations.dart';
 export 'src/common/domain/interface/wallet_deposit.dart';
 export 'src/common/infrastructure/models/data/wallet_deposit_data.dart';
 export 'src/common/infrastructure/repositories/wallet_deposit_repository.dart';

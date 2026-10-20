@@ -1,6 +1,6 @@
 name: wallet_sdk
 description: "wallet_sdk - extracted from paas_customer (refork 2026-07-11)."
-version: 1.8.0
+version: 1.9.0
 publish_to: 'none'
 environment:
   sdk: '>=3.10.0 <4.0.0'
@@ -23,6 +23,9 @@ dependencies:
   # `Options` (same pin as orders_sdk; already in the resolution through
   # base_sdk).
   dio: ^5.7.0
+  # The new-card checkout shows the gateway's own card page (same pin as
+  # base_sdk; already in the resolution through it).
+  webview_flutter: ^4.10.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

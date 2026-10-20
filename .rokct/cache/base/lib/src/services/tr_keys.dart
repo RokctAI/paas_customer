@@ -87,6 +87,24 @@ class TrKeys {
   static const String driverCollectsCashFromRecipient = 'driver_collects_cash_from_recipient';
   static const String enterCashAmountGreaterThanZero = 'enter_cash_amount_greater_than_zero';
   static const String underagePurchaseBlocked = 'you_must_be_18_or_older_to_order_adults_only_items';
+  static const String payWithANewCard = 'pay_with_a_new_card';
+  static const String saveCardForRenewals = 'save_card_for_automatic_renewals';
+  static const String cardRenewalConsent = 'card_automatic_renewal_consent';
+  static const String acceptCardConsentFirst = 'accept_card_consent_first';
+  static const String cardCheckoutTitle = 'card_checkout_title';
+  static const String cardCheckoutWaiting = 'card_checkout_waiting';
+  static const String cardCheckoutCancelled = 'card_checkout_cancelled';
+  static const String cardCheckoutFailed = 'card_checkout_failed';
+  static const String cardSavedForRenewals = 'card_saved_for_automatic_renewals';
+  static const String walletSavedCards = 'wallet_saved_cards';
+  static const String removeCard = 'remove_card';
+  static const String removeCardConfirm = 'remove_card_confirm';
+  static const String cardRemoved = 'card_removed';
+  static const String renewsAutomatically = 'renews_automatically';
+  static const String walletTransactionDetails = 'wallet_transaction_details';
+  static const String walletReference = 'wallet_reference';
+  static const String walletTransactionType = 'wallet_transaction_type';
+  static const String walletStatus = 'wallet_status';
   // @sdk-tr-keys-end
 
   static const String bgPicture = 'bg_picture';

@@ -14,8 +14,9 @@
 
 // compliance-ignore-file: flutter-http-timeout (test double: Dio uses a scripted in-memory adapter, no real network)
 
-// The top-up page has no "pay with new card" path (there is no card form
-// to reach) and starts on the user's default saved card.
+// The top-up page starts on the user's default saved card, and offers
+// "Pay with a new card" (the gateway's own card page) with or without
+// saved cards.
 
 import 'dart:convert';
 import 'dart:typed_data';
@@ -85,13 +86,14 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('no saved card: no top-up or new-card button, just the notice',
+  testWidgets('no saved card: the notice, the new-card button and receive',
       (tester) async {
     install(const []);
     await pumpPage(tester);
 
-    // Only "receive from a friend" is left; no button leads to a card form.
-    expect(_buttons, findsOneWidget);
+    // "Pay with a new card" (the gateway's page) + "receive from a friend".
+    expect(_buttons, findsNWidgets(2));
+    expect(find.byKey(const ValueKey('pay-with-new-card')), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
@@ -102,8 +104,9 @@ void main() {
     ]);
     await pumpPage(tester);
 
-    // Pay-with-saved-card (shown because a card is preselected) + receive.
-    expect(_buttons, findsNWidgets(2));
+    // Pay-with-saved-card (shown because a card is preselected), the
+    // new-card button and receive.
+    expect(_buttons, findsNWidgets(3));
     expect(find.textContaining('1111'), findsOneWidget);
   });
 }
