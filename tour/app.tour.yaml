@@ -35,6 +35,15 @@ video:
 store:
   # Play feature graphic hero: the shop list with ratings and delivery times (home is all placeholders).
   feature_step: marketplace_category
+  feature_style:
+    bg: "#FFE3D1"
+    bg2: "#FF9A5B"
+    ink: "#3A1400"
+    accent: "#FFFFFF"
+    shape: "circle"
+    layout: "left"
+    tilt: -4
+    headline: "Everything local, delivered."
 setup:
   imports:
     - "import 'package:base_sdk/src/models/response/languages_response.dart';"
