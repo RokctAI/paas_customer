@@ -23,6 +23,9 @@ import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
+import 'package:base_sdk/src/guide/guide_anchor.dart';
+import 'package:base_sdk/src/guide/guide_definition.dart';
+import 'package:base_sdk/src/guide/guide_host.dart';
 import 'package:booking_sdk/src/common/booking_routes.dart';
 import 'package:booking_sdk/src/common/booking_tr_keys.dart';
 import 'package:booking_sdk/src/common/infrastructure/models/booking_models.dart';
@@ -32,6 +35,8 @@ import 'package:booking_sdk/src/customer/application/my_reservations/my_reservat
 /// The customer's reservations (`/reservations`): what paas_customer used
 /// to hand off to `{webUrl}/reservations` in a web view. Signed-out users
 /// get the login gate; the bottom button starts a new reservation.
+const GuideDefinition bookingReservationsGuide = GuideDefinition(id: 'booking.reservations', steps: [GuideStep(id: 'booking.reservations.new', anchor: 'booking.reservations.new', title: 'Reserve a table', body: 'Tap here to book a table.')]);
+
 class MyReservationsView extends ConsumerStatefulWidget {
   const MyReservationsView({super.key});
 
@@ -104,8 +109,12 @@ class _MyReservationsViewState extends ConsumerState<MyReservationsView> {
     }
   }
 
+  /// The page sits under its own GuideHost, so its coach-mark shows here only
+  /// and never in the app's MaterialApp builder.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => GuideHost(definition: bookingReservationsGuide, child: _buildPage(context));
+
+  Widget _buildPage(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final state = ref.watch(myReservationsProvider);
 
@@ -166,11 +175,14 @@ class _MyReservationsViewState extends ConsumerState<MyReservationsView> {
       isDark: isDark,
       title: AppHelpers.getTranslation(BookingTrKeys.myReservations),
       bottom: _signedIn
-          ? CustomButton(
-              title: AppHelpers.getTranslation(BookingTrKeys.reserveATable),
-              background: AppStyle.primary,
-              textColor: AppStyle.white,
-              onPressed: _newReservation,
+          ? GuideAnchor(
+              id: 'booking.reservations.new',
+              child: CustomButton(
+                title: AppHelpers.getTranslation(BookingTrKeys.reserveATable),
+                background: AppStyle.primary,
+                textColor: AppStyle.white,
+                onPressed: _newReservation,
+              ),
             )
           : null,
       child: body,

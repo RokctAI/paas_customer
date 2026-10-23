@@ -29,7 +29,22 @@ import 'package:payments_sdk/src/common/utils/payfast/payfast_webview.dart';
 import 'package:payments_sdk/src/common/utils/payfast/payfast_webview_windows.dart';
 import 'package:base_sdk/src/presentation/components/buttons/custom_button.dart';
 import 'package:base_sdk/src/presentation/theme/theme.dart';
+import 'package:base_sdk/src/guide/guide_anchor.dart';
+import 'package:base_sdk/src/guide/guide_definition.dart';
+import 'package:base_sdk/src/guide/guide_host.dart';
 import 'package:payments_sdk/src/common/presentation/pages/cards/payment_card.dart';
+
+const GuideDefinition paymentsCardGuide = GuideDefinition(
+  id: 'payments.card',
+  steps: [
+    GuideStep(
+      id: 'payments.card.pay',
+      anchor: 'payments.card.pay',
+      title: 'Pay with card',
+      body: 'Tap here to continue to secure payment.',
+    ),
+  ],
+);
 
 class PaymentScreen extends ConsumerStatefulWidget {
   final OrderBodyData? orderData;
@@ -246,8 +261,13 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     }
   }
 
+  /// The sheet sits under its own GuideHost, so its coach-mark shows here only
+  /// and never in the app's MaterialApp builder.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) =>
+      GuideHost(definition: paymentsCardGuide, child: _buildPage(context));
+
+  Widget _buildPage(BuildContext context) {
     // Determine height constraint based on number of saved cards
     BoxConstraints? heightConstraint;
 
@@ -371,12 +391,15 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
                   // where there is no checkout to run it through (no order,
                   // or no orders SDK in this app).
                   if (_canPayWithNewCard) ...[
-                    CustomButton(
-                      isLoading: _isLoading,
-                      title: _selectedCard != null
-                          ? AppHelpers.getTranslation(TrKeys.payWithNewCard)
-                          : AppHelpers.getTranslation(TrKeys.payWithCard),
-                      onPressed: _redirectToPayFastWebView,
+                    GuideAnchor(
+                      id: 'payments.card.pay',
+                      child: CustomButton(
+                        isLoading: _isLoading,
+                        title: _selectedCard != null
+                            ? AppHelpers.getTranslation(TrKeys.payWithNewCard)
+                            : AppHelpers.getTranslation(TrKeys.payWithCard),
+                        onPressed: _redirectToPayFastWebView,
+                      ),
                     ),
 
                     10.verticalSpace,

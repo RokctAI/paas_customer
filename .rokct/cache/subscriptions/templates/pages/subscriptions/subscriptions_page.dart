@@ -28,6 +28,19 @@ import 'package:${package}/presentation/theme/theme.dart';
 import 'widgets/payment_dialog.dart';
 import 'widgets/subscriptions_item.dart';
 
+/// The coach-mark for the subscriptions overview: points at the plan list.
+const GuideDefinition subscriptionsGuide = GuideDefinition(
+  id: 'subscriptions.overview',
+  steps: [
+    GuideStep(
+      id: 'subscriptions.overview.plans',
+      anchor: 'subscriptions.overview',
+      title: 'Choose a plan',
+      body: 'Pick a plan here and tap Purchase to subscribe.',
+    ),
+  ],
+);
+
 /// The manager /subscriptions screen in the settled plane language
 /// (approved section 40, frames 40a/40b/40c, Ray 2026-08-30 13:08Z):
 /// shops subscribing to THEIR TENANT's plan catalog
@@ -126,8 +139,15 @@ class _SubscriptionsPageState extends ConsumerState<ManagerSubscriptionsPage> {
     }
   }
 
+  /// The page sits under its own [GuideHost], so its coach-mark shows here
+  /// only and never in the app's MaterialApp builder.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => GuideHost(
+        definition: subscriptionsGuide,
+        child: _buildPage(context),
+      );
+
+  Widget _buildPage(BuildContext context) {
     final isLrt = LocalStorage.getLangLtr();
     return Directionality(
       textDirection: isLrt ? TextDirection.ltr : TextDirection.rtl,
@@ -156,8 +176,10 @@ class _SubscriptionsPageState extends ConsumerState<ManagerSubscriptionsPage> {
                           // on three planes the leftover trails bare at
                           // the END until the payment pane claims it.
                           span: PlaneSpan.two,
-                          builder: (context) =>
-                              _Overview(paymentOpen: paneOpen, page: this),
+                          builder: (context) => GuideAnchor(
+                            id: 'subscriptions.overview',
+                            child: _Overview(paymentOpen: paneOpen, page: this),
+                          ),
                         ),
                         if (paneOpen)
                           PlanePage(

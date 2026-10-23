@@ -1,6 +1,7 @@
 {
   "name": "promotions_sdk",
-  "version": "1.4.0",
+  "version": "1.4.1",
+  "_comment_version_1_4_1": "1.4.0 -> 1.4.1: version for the coach-mark guide mounted on this SDK's primary page (GuideHost and GuideAnchor from base_sdk 1.92.0, off in demo sessions). The mount landed without a version change; see CHANGELOG.",
   "_comment_version_1_4_0": "1.3.1 -> 1.4.0: the story viewer (route pages install, /storyList, AppRoutes.pushStoryListRoute) is customer-only, under app_type.customer. Sellers make stories on the web merchant dashboard and only the customer app shows them; the manager app installed the page but never opened it (Ray, 2026-10-13: \"remove it in the app\"). The manager compose keeps promotions_sdk's repositories and demo fixtures.",
   "_comment_version_1_3_0": "1.2.3 -> 1.3.0: demo runs the REAL repositories (Ray, 2026-09-25: \"touch all sdk demos ... remove unused files\"). The DI hooks register the real repositories only and call DemoFixtures.registerAssetDirectory('assets/demo/promotions'); base_sdk 1.73.0's DemoGatewayInterceptor answers each platform cmd from templates/assets/demo/promotions/<cmd>.json (installed to assets/demo/promotions) while DemoSession.demoActive, and an unknown cmd fails with DemoFixtureMissing. The api.banner.* fixtures carry (the Weeknight deals / New Arrivals banners for Nonna's Pizzeria). Deleted: MockBannersRepository and the demo-session swap code that chose them. Needs base_sdk >= 1.73.0 (DemoFixtures / DemoGatewayInterceptor).",
   "_comment_requires": "promotions_sdk >= 1.3.0 requires base_sdk >= 1.73.0 (DemoFixtures.registerAssetDirectory and the DemoGatewayInterceptor that answers the demo fixtures).",

@@ -26,8 +26,24 @@ import 'package:base_sdk/src/presentation/components/buttons/pop_button.dart';
 import 'package:base_sdk/src/presentation/components/market_item.dart';
 import 'package:base_sdk/src/presentation/components/badges/empty_badge.dart';
 import 'package:base_sdk/src/presentation/theme/theme.dart';
+import 'package:base_sdk/src/guide/guide_anchor.dart';
+import 'package:base_sdk/src/guide/guide_definition.dart';
+import 'package:base_sdk/src/guide/guide_host.dart';
 
 import '../application/favorites/favorites_provider.dart';
+
+/// The coach-mark for the liked-shops page: points at the header.
+const GuideDefinition favShopsGuide = GuideDefinition(
+  id: 'fav.shops',
+  steps: [
+    GuideStep(
+      id: 'fav.shops.header',
+      anchor: 'fav.shops.header',
+      title: 'Your liked shops',
+      body: 'Shops you like are kept here, so you can find them again.',
+    ),
+  ],
+);
 
 /// The liked-shops list, backed by [favoritesProvider].
 ///
@@ -87,20 +103,30 @@ class _FavoriteShopsPageState extends ConsumerState<FavoriteShopsPage> {
     }
   }
 
+  /// The page sits under its own [GuideHost], so its coach-mark shows here
+  /// only and never in the app's MaterialApp builder.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => GuideHost(
+        definition: favShopsGuide,
+        child: _buildPage(context),
+      );
+
+  Widget _buildPage(BuildContext context) {
     final state = ref.watch(favoritesProvider);
     final brightness = Theme.of(context).brightness;
     return Scaffold(
       backgroundColor: AppStyle.surfaceFor(brightness),
       body: Column(
         children: [
-          CommonAppBar(
-            child: Text(
-              AppHelpers.getTranslation(TrKeys.likeRestaurants),
-              style: AppStyle.interNoSemi(
-                size: 18,
-                color: AppStyle.inkFor(brightness),
+          GuideAnchor(
+            id: 'fav.shops.header',
+            child: CommonAppBar(
+              child: Text(
+                AppHelpers.getTranslation(TrKeys.likeRestaurants),
+                style: AppStyle.interNoSemi(
+                  size: 18,
+                  color: AppStyle.inkFor(brightness),
+                ),
               ),
             ),
           ),

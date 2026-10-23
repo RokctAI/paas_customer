@@ -1,6 +1,7 @@
 {
   "name": "payments_sdk",
-  "version": "1.3.5",
+  "version": "1.3.6",
+  "_comment_version_1_3_6": "1.3.5 -> 1.3.6: version for the coach-mark guide mounted on this SDK's primary page (GuideHost and GuideAnchor from base_sdk 1.92.0, off in demo sessions). The mount landed without a version change; see CHANGELOG.",
   "_comment_version_1_3_5": "1.3.4 -> 1.3.5: the bundled flutter_braintree compiles against API 34. PaymentScreen resolves the orders repository only when the orders SDK is registered, so it opens in apps without one (supacharge); its PayFast new-card button shows only with an order and the orders SDK. setDefaultCard calls api.payment.set_default_card (needs the matching wallet backend) and saved cards carry is_default, with a set-as-default star in SavedCardsWidget. tokenizeCard refuses locally and no longer sends card numbers.",
   "_comment_version_1_3_4": "1.3.3 -> 1.3.4: declares embedded_widgets payFastWebView, paymentScreen and savedCardsWidget so the host answers EmbeddedWidgets.I for them. Nothing declared them, so the customer app's checkout card/PayFast payment and Profile Cards threw a StateError and wallet top-up with a new PayFast card showed \"not available\". preloadPayFastWebView is not declared: the composer generates only Widget-returning methods and it returns void.",
   "_comment_version_1_3_3": "1.3.2 -> 1.3.3: flutter_braintree comes from the vendored third_party/flutter_braintree (4.0.0 minus the v1-embedding Registrar code) because pub.dev 4.0.0 no longer compiles on Android with current Flutter.",

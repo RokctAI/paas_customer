@@ -1,3 +1,7 @@
+## 1.17.1
+
+* chore(guide): version for the coach-mark guide mounted on this SDK's primary page (base_sdk GuideHost and GuideAnchor). The mount landed without a version change. Needs base_sdk >= 1.92.0.
+
 ## 1.17.0
 
 * feat(main): the customer main page floats base_sdk's pill again instead of

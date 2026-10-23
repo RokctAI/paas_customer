@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.91.0",
+      "version": "1.93.0",
       "files": {
         "lib/main.dart": "92423f25fa33333d67d8bd380b35d328cc5350033e61f0b750952a6d51641c34",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -366,7 +366,7 @@
       }
     },
     "marketplace_sdk": {
-      "version": "1.17.0",
+      "version": "1.17.1",
       "files": {
         "lib/presentation/routes/marketplace_route_pages.dart": "37c6193cb69e17ce8c2f83b2a147a0fef9967a6c9ab0e5579f22582f8c60e8c1"
       },
@@ -627,7 +627,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.22.0",
+      "version": "1.22.1",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "87b5d1dbc3f0f9417db5289be2c1ebbcb7dfecf1638f348b6f5ee1581f7ce4d2",
         "lib/presentation/routes/registration_step_pages.dart": "68aed195fc07db746a0919c7ba6d47ffa445ca86e7d9cf6ee50fbcb00e82d3c2",
@@ -795,7 +795,7 @@
       ]
     },
     "merchants_sdk": {
-      "version": "1.36.0",
+      "version": "1.36.1",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "lib/presentation/routes/merchants_customer_route_pages.dart": "94118cddd225b802a07db40ac5683697fd190d5d1de42494d955fc3f7eb79456",
@@ -904,7 +904,7 @@
       ]
     },
     "products_sdk": {
-      "version": "1.12.7",
+      "version": "1.12.8",
       "files": {
         "assets/demo/products/api.brand.get_brand_by_uuid.json": "2f572655239beaef3a4258dca9213d201ad23d9092a8d44e9251e68daad92fbb",
         "assets/demo/products/api.brand.get_brands.json": "e6d9aceed478a49c043f14905a208bf587418015ae67925eef65f7d7f07631ea",
@@ -958,7 +958,7 @@
       ]
     },
     "orders_sdk": {
-      "version": "1.30.0",
+      "version": "1.31.1",
       "files": {
         "lib/presentation/routes/orders_customer_route_pages.dart": "acadebdd2b7525434e765bf02683c151b97d7a392e1552d8f2af02b916a4702c"
       },
@@ -1137,7 +1137,7 @@
       ]
     },
     "fav_sdk": {
-      "version": "1.1.1",
+      "version": "1.1.2",
       "files": {},
       "routes": [],
       "database": {
@@ -1160,7 +1160,7 @@
       "boot_hooks": []
     },
     "wallet_sdk": {
-      "version": "1.9.0",
+      "version": "1.9.1",
       "files": {
         "lib/presentation/routes/wallet_route_pages.dart": "86d07bc5c2e239b713c49a9caa4f2dc6007ec1e20aa9519aeb960f3fcc8ee5a7",
         "assets/demo/wallet/api.user.get_wallet_history.json": "0041f5565b4da148f0eef8d8dbc96946fc8c71c4b1ddf4e1ddce4e9912d44e26"
@@ -1239,7 +1239,7 @@
       }
     },
     "payments_sdk": {
-      "version": "1.3.5",
+      "version": "1.3.6",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1277,7 +1277,7 @@
       "boot_hooks": []
     },
     "delivery_sdk": {
-      "version": "1.30.0",
+      "version": "1.30.1",
       "files": {
         "assets/svg/balance.svg": "6f17d12b29de8e5500bc445ee89eec5c1fc8830cea42711af9bf80975e6b79ce",
         "assets/image/my_location.png": "0e6b49eb78d1f74ac96ac24ce39f834105ce68e361c302038ba9cefdcd926126",
@@ -1296,7 +1296,7 @@
         "assets/demo/delivery/api.delivery_man.get_deliveryman_zone_polygon.json": "3ed84cc3837b7d9f0cea54b068d56c30b05d1c224216aef349460be238865d00",
         "assets/demo/delivery/api.user.get_user_request_models.json": "906edb277266ae24b3b25c52beeee1629883fe4b4ddf0f6ace2fd9f72cca1d5d",
         "assets/demo/delivery/api.driver_order.get_driver_route.json": "7aca2264e7f9f73f048ef6ea3fcc60d3c38783e56c230fcf7168d94ddfcc61b7",
-        "assets/demo/delivery/api.order.load.get_my_load.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "assets/demo/delivery/api.order.load.get_my_load.json": "06170de6d0c8baca3208b4da641a1dd9191fb1804bc50fe0b687e60df3871942",
         "assets/demo/delivery/api.poi.get_poi_types.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
         "assets/demo/delivery/api.driver_order.get_driver_orders_paginate.json": "6fc5ffb923a0ef0e1670c8f233a96fa675682cf3be9ecf695b15c8e9a1b8ef77",
         "assets/demo/delivery/api.poi.get_my_poi_shops.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
@@ -1376,13 +1376,13 @@
       ]
     },
     "comms_sdk": {
-      "version": "1.23.1",
+      "version": "1.23.2",
       "files": {
         "assets/demo/comms/api.notification.read_all_notifications.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
-        "assets/demo/comms/api.notification.get_notification_count.json": "e81366a1ea9400e3b0cfd014aabfbdbc12cfea74d7335a64c9feda2a6025318f",
+        "assets/demo/comms/api.notification.get_notification_count.json": "7f5fe0c8c47d512222153d9e5f72618d2952b88439c3b121ff492a8f02469314",
         "assets/demo/comms/api.notification.update_notification_settings.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
         "assets/demo/comms/api.admin_content.get_admin_faqs.json": "b6224855d5a5496f8aaf3fd07e595fef6bf9071c22a110a444ce4ffe55fd0cda",
-        "assets/demo/comms/api.notification.get_user_notifications.json": "0345797eb7c9a8572a37748670cd59d03232674f0df8b9bdb5ae61d77a1c07eb",
+        "assets/demo/comms/api.notification.get_user_notifications.json": "dd6b8431fb30c2f2cc1a0e482ce6540db0cdd5ddfa847155348ea92594e49179",
         "assets/demo/comms/api.notification.read_one_notification.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
         "assets/demo/comms/api.page.get_page.json": "993f0d1ce3045b465bedbfd89c5aabf5993f80a4a10f1c93e0fc707c5f535cd9",
         "assets/demo/comms/api.notification.get_notification_settings.json": "a7b60d72591768e25c273e27972f15702efd847212ce283c982ba5aba1d45043",
@@ -1550,7 +1550,7 @@
       "boot_hooks": []
     },
     "map_sdk": {
-      "version": "1.5.0",
+      "version": "1.5.1",
       "files": {
         "lib/presentation/routes/map_route_pages.dart": "40d4309147726738a018def95efb9f3e16815684c55ac631f0559b74dfef4a50",
         "assets/demo/map/api.poi.get_customer_pois.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
@@ -1599,7 +1599,7 @@
       ]
     },
     "promotions_sdk": {
-      "version": "1.4.0",
+      "version": "1.4.1",
       "files": {
         "lib/presentation/routes/promotions_route_pages.dart": "0dc5d4de524957c7fd906b18a65e639082ddb94d18dc94b8859b5ebcceb7f77b",
         "assets/demo/promotions/api.banner.get_ads.json": "904cc2312d56782b9e12bea4bc8646d47a0dc2829d27c1465689db5b23dc6d93",
@@ -1637,7 +1637,7 @@
       ]
     },
     "loyalty_sdk": {
-      "version": "1.2.1",
+      "version": "1.2.2",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1715,7 +1715,7 @@
       "boot_hooks": []
     },
     "booking_sdk": {
-      "version": "1.2.1",
+      "version": "1.2.2",
       "files": {
         "lib/presentation/pages/reservations/reservations_page.dart": "31dd111ff24ef746f0c11208bf258ff4ace786b7ad261a74e9e75ac3ee7fa236",
         "lib/presentation/pages/reservations/new_reservation_page.dart": "48719b888173cdb8c185ed7c61f190c7b16d06d869680f76c83d862851600254"
@@ -1814,64 +1814,64 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.91.0",
-      "hash": "d3d32ef8ce8ff494"
+      "version": "1.93.0",
+      "hash": "d69a3eed7940cddf"
     },
     "comms": {
-      "version": "1.23.1",
-      "hash": "22cbd1d5d53829e9"
+      "version": "1.23.2",
+      "hash": "3cafcd2562d7b781"
     },
     "marketplace": {
-      "version": "1.17.0",
-      "hash": "d3e22c765e11ca91"
+      "version": "1.17.1",
+      "hash": "f2e862cbef8aca2f"
     },
     "merchants": {
-      "version": "1.36.0",
-      "hash": "76c378ec99fd1dff"
+      "version": "1.36.1",
+      "hash": "1bde519b36f0eb24"
     },
     "products": {
-      "version": "1.12.7",
-      "hash": "0243138547b02d8e"
+      "version": "1.12.8",
+      "hash": "11eaa7d7dde213a6"
     },
     "orders": {
-      "version": "1.30.0",
-      "hash": "15fe2302e9e236b7"
+      "version": "1.31.1",
+      "hash": "793970abd309fb45"
     },
     "promotions": {
-      "version": "1.4.0",
-      "hash": "d7bbb06fce8986e3"
+      "version": "1.4.1",
+      "hash": "f925d4e2193ba8b9"
     },
     "loyalty": {
-      "version": "1.2.1",
-      "hash": "2ab62c0b6714b52a"
+      "version": "1.2.2",
+      "hash": "f92b75903bb59390"
     },
     "auth": {
-      "version": "1.22.0",
-      "hash": "ec02f538bf96c4e7"
+      "version": "1.22.1",
+      "hash": "347f37ed729d44ad"
     },
     "users": {
       "version": "1.5.2",
       "hash": "1e8eee291e0c3997"
     },
     "fav": {
-      "version": "1.1.1",
-      "hash": "79a8ed9e2454a772"
+      "version": "1.1.2",
+      "hash": "aa6e0a0df7a828bb"
     },
     "wallet": {
-      "version": "1.9.0",
-      "hash": "066e8d6c1f86e605"
+      "version": "1.9.1",
+      "hash": "d82e52fb83fc80cb"
     },
     "payments": {
-      "version": "1.3.5",
-      "hash": "1015adb833610df7"
+      "version": "1.3.6",
+      "hash": "507b9990ba96c77c"
     },
     "delivery": {
-      "version": "1.30.0",
-      "hash": "fa504ebb48079ae1"
+      "version": "1.30.1",
+      "hash": "a70645daa7f8e685"
     },
     "map": {
-      "version": "1.5.0",
-      "hash": "34bc18c75ba4cd92"
+      "version": "1.5.1",
+      "hash": "5a71671191e4d0c7"
     },
     "corporate": {
       "version": "1.2.0",
@@ -1894,12 +1894,12 @@
       "hash": "fc4dc71b7401b7bd"
     },
     "booking": {
-      "version": "1.2.1",
-      "hash": "cd09bab55538a382"
+      "version": "1.2.2",
+      "hash": "5a91b85403513ff3"
     },
     "subscriptions": {
-      "version": "1.7.1",
-      "hash": "983d9a0e203535a8"
+      "version": "1.7.3",
+      "hash": "f6378bebe8ad5586"
     }
   }
 }

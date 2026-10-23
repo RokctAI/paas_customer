@@ -65,6 +65,9 @@ import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/telemetry.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
 import 'package:base_sdk/src/sync/sync_engine.dart';
+import 'package:base_sdk/src/guide/guide_anchor.dart';
+import 'package:base_sdk/src/guide/guide_definition.dart';
+import 'package:base_sdk/src/guide/guide_host.dart';
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -76,6 +79,18 @@ import 'package:wallet_sdk/src/common/presentation/pages/cards/card_checkout_pag
 import 'package:wallet_sdk/src/common/presentation/pages/receive/wallet_receive_screen.dart';
 import 'package:wallet_sdk/src/common/translations/wallet_translations.dart';
 import 'package:wallet_sdk/src/common/utils/wallet_currency.dart';
+
+const GuideDefinition walletTopUpGuide = GuideDefinition(
+  id: 'wallet.topup',
+  steps: [
+    GuideStep(
+      id: 'wallet.topup.card',
+      anchor: 'wallet.topup.card',
+      title: 'Top up your wallet',
+      body: 'Tap here to pay with a new card and add money.',
+    ),
+  ],
+);
 
 class WalletTopUpPage extends ConsumerStatefulWidget {
   /// Render as a bottom sheet (drag handle + title in the sheet chrome,
@@ -457,28 +472,31 @@ class _WalletTopUpPageState extends ConsumerState<WalletTopUpPage> {
           ),
         ],
         12.verticalSpace,
-        ElevatedButton.icon(
-          key: const ValueKey('pay-with-new-card'),
-          onPressed: _isLoading ? null : _payWithNewCard,
-          icon: const Icon(Remix.bank_card_2_line),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: _selectedCard == null
-                ? AppStyle.primary
-                : AppStyle.transparent,
-            foregroundColor:
-                _selectedCard == null ? AppStyle.white : AppStyle.primary,
-            minimumSize: Size(double.infinity, 50.h),
-            elevation: 0,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.r),
-              side: BorderSide(color: AppStyle.primary),
+        GuideAnchor(
+          id: 'wallet.topup.card',
+          child: ElevatedButton.icon(
+            key: const ValueKey('pay-with-new-card'),
+            onPressed: _isLoading ? null : _payWithNewCard,
+            icon: const Icon(Remix.bank_card_2_line),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: _selectedCard == null
+                  ? AppStyle.primary
+                  : AppStyle.transparent,
+              foregroundColor:
+                  _selectedCard == null ? AppStyle.white : AppStyle.primary,
+              minimumSize: Size(double.infinity, 50.h),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.r),
+                side: BorderSide(color: AppStyle.primary),
+              ),
             ),
-          ),
-          label: Text(
-            AppHelpers.getTranslation(WalletTrKeys.payWithANewCard),
-            style: AppStyle.interSemi(
-              size: 16.sp,
-              color: _selectedCard == null ? AppStyle.white : AppStyle.primary,
+            label: Text(
+              AppHelpers.getTranslation(WalletTrKeys.payWithANewCard),
+              style: AppStyle.interSemi(
+                size: 16.sp,
+                color: _selectedCard == null ? AppStyle.white : AppStyle.primary,
+              ),
             ),
           ),
         ),
@@ -486,8 +504,13 @@ class _WalletTopUpPageState extends ConsumerState<WalletTopUpPage> {
     );
   }
 
+  /// The page sits under its own GuideHost, so its coach-mark shows here only
+  /// and never in the app's MaterialApp builder.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) =>
+      GuideHost(definition: walletTopUpGuide, child: _buildPage(context));
+
+  Widget _buildPage(BuildContext context) {
     final bool isLtr = LocalStorage.getLangLtr();
     final content = SingleChildScrollView(
       child: Padding(
