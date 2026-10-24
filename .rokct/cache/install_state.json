@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.93.0",
+      "version": "1.93.1",
       "files": {
         "lib/main.dart": "92423f25fa33333d67d8bd380b35d328cc5350033e61f0b750952a6d51641c34",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -904,7 +904,7 @@
       ]
     },
     "products_sdk": {
-      "version": "1.12.8",
+      "version": "1.12.9",
       "files": {
         "assets/demo/products/api.brand.get_brand_by_uuid.json": "2f572655239beaef3a4258dca9213d201ad23d9092a8d44e9251e68daad92fbb",
         "assets/demo/products/api.brand.get_brands.json": "e6d9aceed478a49c043f14905a208bf587418015ae67925eef65f7d7f07631ea",
@@ -1814,8 +1814,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.93.0",
-      "hash": "d69a3eed7940cddf"
+      "version": "1.93.1",
+      "hash": "4c6c7e2788bf44d6"
     },
     "comms": {
       "version": "1.23.2",
@@ -1830,8 +1830,8 @@
       "hash": "1bde519b36f0eb24"
     },
     "products": {
-      "version": "1.12.8",
-      "hash": "11eaa7d7dde213a6"
+      "version": "1.12.9",
+      "hash": "56d71b1a3ec2c9a4"
     },
     "orders": {
       "version": "1.31.1",
