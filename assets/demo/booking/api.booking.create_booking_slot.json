@@ -1,0 +1,8 @@
+{
+  "name": "demo-slot-new",
+  "shop": "demo-shop",
+  "start_time": "10:00:00",
+  "end_time": "22:00:00",
+  "max_time": 180,
+  "active": 1
+}

@@ -1,0 +1,103 @@
+{
+  "$demo_select": {
+    "by": "payload.status",
+    "cases": {
+      "New": [
+        {
+          "name": "demo-reservation-1",
+          "booking": "demo-slot",
+          "table": "Window 2",
+          "start_date": "$now_iso",
+          "end_date": "$now_iso",
+          "guest_count": 2,
+          "note": "Birthday",
+          "status": "New",
+          "user": "Thandi M."
+        }
+      ],
+      "Accepted": [
+        {
+          "name": "demo-reservation-2",
+          "booking": "demo-slot",
+          "table": "Corner 5",
+          "start_date": "$now_iso",
+          "end_date": "$now_iso",
+          "guest_count": 6,
+          "note": null,
+          "status": "Accepted",
+          "user": "Sipho K."
+        },
+        {
+          "name": "demo-reservation-3",
+          "booking": "demo-slot",
+          "table": "Terrace 1",
+          "start_date": "$now_iso",
+          "end_date": "$now_iso",
+          "guest_count": 4,
+          "note": null,
+          "status": "Accepted",
+          "user": "Lerato D."
+        }
+      ],
+      "Cancelled": [
+        {
+          "name": "demo-reservation-4",
+          "booking": "demo-slot",
+          "table": "Window 1",
+          "start_date": "$now_iso",
+          "end_date": "$now_iso",
+          "guest_count": 2,
+          "note": null,
+          "status": "Cancelled",
+          "user": "Johan V."
+        }
+      ]
+    },
+    "default": [
+      {
+        "name": "demo-reservation-1",
+        "booking": "demo-slot",
+        "table": "Window 2",
+        "start_date": "$now_iso",
+        "end_date": "$now_iso",
+        "guest_count": 2,
+        "note": "Birthday",
+        "status": "New",
+        "user": "Thandi M."
+      },
+      {
+        "name": "demo-reservation-2",
+        "booking": "demo-slot",
+        "table": "Corner 5",
+        "start_date": "$now_iso",
+        "end_date": "$now_iso",
+        "guest_count": 6,
+        "note": null,
+        "status": "Accepted",
+        "user": "Sipho K."
+      },
+      {
+        "name": "demo-reservation-3",
+        "booking": "demo-slot",
+        "table": "Terrace 1",
+        "start_date": "$now_iso",
+        "end_date": "$now_iso",
+        "guest_count": 4,
+        "note": null,
+        "status": "Accepted",
+        "user": "Lerato D."
+      },
+      {
+        "name": "demo-reservation-4",
+        "booking": "demo-slot",
+        "table": "Window 1",
+        "start_date": "$now_iso",
+        "end_date": "$now_iso",
+        "guest_count": 2,
+        "note": null,
+        "status": "Cancelled",
+        "user": "Johan V."
+      }
+    ]
+  }
+}
