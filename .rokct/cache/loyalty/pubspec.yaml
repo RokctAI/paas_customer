@@ -1,6 +1,6 @@
 name: loyalty_sdk
 description: "Generic loyalty engine: account balances plus an append-only points/cashback transaction ledger."
-version: 1.2.1
+version: 1.2.2
 publish_to: 'none'
 environment:
   sdk: '>=3.10.0 <4.0.0'

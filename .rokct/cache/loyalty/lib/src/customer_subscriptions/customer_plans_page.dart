@@ -22,6 +22,8 @@ import 'customer_subscription_models.dart';
 import 'customer_subscriptions_repository.dart';
 import 'package:remixicon/remixicon.dart';
 
+const GuideDefinition loyaltyPlansGuide = GuideDefinition(id: 'loyalty.plans', steps: [GuideStep(id: 'loyalty.plans.subscribe', anchor: 'loyalty.plans.list', title: 'Choose a plan', body: 'Pick a plan and tap Subscribe.')]);
+
 String _t(String key) => AppHelpers.getTranslation(key);
 
 String _day(DateTime d) =>
@@ -196,8 +198,12 @@ class _CustomerPlansPageState extends State<CustomerPlansPage> {
     if (ok == true) await _run(_repo.cancel);
   }
 
+  /// The page sits under its own GuideHost, so its coach-mark shows here only
+  /// and never in the app's MaterialApp builder.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => GuideHost(definition: loyaltyPlansGuide, child: _buildPage(context));
+
+  Widget _buildPage(BuildContext context) {
     final brightness = Theme.of(context).brightness;
     final ink = AppStyle.inkFor(brightness);
     final muted = AppStyle.secondaryInkFor(brightness);
@@ -256,9 +262,12 @@ class _CustomerPlansPageState extends State<CustomerPlansPage> {
       ),
       body: RefreshIndicator(
         onRefresh: _load,
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: body,
+        child: GuideAnchor(
+          id: 'loyalty.plans.list',
+          child: ListView(
+            padding: const EdgeInsets.all(16),
+            children: body,
+          ),
         ),
       ),
     );

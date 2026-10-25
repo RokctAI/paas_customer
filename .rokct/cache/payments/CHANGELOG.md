@@ -1,3 +1,7 @@
+## 1.3.6
+
+* chore(guide): version for the coach-mark guide mounted on this SDK's primary page (base_sdk GuideHost and GuideAnchor). The mount landed without a version change. Needs base_sdk >= 1.92.0.
+
 ## 1.3.5
 
 * fix(build): the bundled flutter_braintree plugin now compiles against

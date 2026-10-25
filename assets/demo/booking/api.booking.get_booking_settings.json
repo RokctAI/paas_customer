@@ -1,0 +1,5 @@
+{
+  "reservation_enable_for_user": 1,
+  "reservation_time_durations": "60\n90\n120",
+  "reservation_before_time": 30
+}

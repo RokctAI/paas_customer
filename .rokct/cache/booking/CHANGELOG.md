@@ -1,3 +1,7 @@
+## 1.2.2
+
+* chore(guide): version for the coach-mark guide mounted on this SDK's primary page (base_sdk GuideHost and GuideAnchor). The mount landed without a version change. Needs base_sdk >= 1.92.0.
+
 ## 1.2.1
 
 * fix(manifest): install the `assets/demo/booking` fixtures from the top-level

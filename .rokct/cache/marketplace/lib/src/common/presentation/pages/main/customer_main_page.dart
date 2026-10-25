@@ -36,11 +36,16 @@ import 'package:base_sdk/src/presentation/pages/profile/generic_profile_page.dar
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
+import 'package:base_sdk/src/guide/guide_anchor.dart';
+import 'package:base_sdk/src/guide/guide_definition.dart';
+import 'package:base_sdk/src/guide/guide_host.dart';
 
 import '../home/home_four/home_page_four.dart';
 import '../home/home_zero/home_page.dart';
 import '../like/like_page.dart';
 import '../search/search_page.dart';
+
+const GuideDefinition marketplaceCartGuide = GuideDefinition(id: 'marketplace.cart', steps: [GuideStep(id: 'marketplace.cart.open', anchor: 'marketplace.cart', title: 'Your cart', body: 'Tap Cart to see what you have added.')]);
 
 /// The customer app's main destination — marketplace_sdk is the customer
 /// home SDK, so it owns the surface `AppHelpers.goHome()` lands on
@@ -87,8 +92,12 @@ class CustomerMainPage extends ConsumerWidget {
   /// Key for the "you are shopping at" bar.
   static const Key cartBarKey = ValueKey<String>('customer-nav-cart-bar');
 
+  /// The page sits under its own GuideHost, so its coach-mark shows here only
+  /// and never in the app's MaterialApp builder.
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context, WidgetRef ref) => GuideHost(definition: marketplaceCartGuide, child: _buildPage(context, ref));
+
+  Widget _buildPage(BuildContext context, WidgetRef ref) {
     final int selectedIndex = ref.watch(
       mainProvider.select((state) => state.selectIndex),
     );
@@ -154,6 +163,10 @@ class CustomerMainPage extends ConsumerWidget {
                         totalPrice: cart?.totalPrice,
                         onTap: openCart,
                       ),
+                    // Coach-mark target for the cart step: a zero-height anchor
+                    // at the top of the nav, so the bubble sits above it and
+                    // the layout is unchanged.
+                    const GuideAnchor(id: 'marketplace.cart', child: SizedBox.shrink()),
                     FloatingBottomNav(
                       mode: FloatingNavTabsMode(
                         tabs: [
