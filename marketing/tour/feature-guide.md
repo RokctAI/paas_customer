@@ -35,3 +35,15 @@ Forgot your password? Juvo gets you back in with a secure reset.
 ![Every shop, one home](screenshots/05-marketplace_home.png)
 
 Deals, categories and every local shop on one screen.
+
+## 6. Shop by category
+
+![Shop by category](screenshots/06-marketplace_category.png)
+
+Pick a category and see just the shops that stock it.
+
+## 7. Find it fast
+
+![Find it fast](screenshots/07-marketplace_search.png)
+
+One search across shops and products, with filters a tap away.
