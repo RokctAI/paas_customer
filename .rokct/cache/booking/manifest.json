@@ -1,6 +1,7 @@
 {
   "name": "booking_sdk",
-  "version": "1.2.2",
+  "version": "1.2.3",
+  "_comment_version_1_2_3": "1.2.2 -> 1.2.3: the manifest had two top-level installs keys; the later empty one (installs: []) won when the JSON was parsed, so the assets/demo/booking fixture install from 1.x never ran in any compose. Apps got the app_assets pubspec entry (or none) with no directory behind it: flutter build windows failed with unable to find directory entry in pubspec.yaml, and the demo showed an empty booking. The empty key is removed, so the fixture install applies to every app_type. Manifest only; see CHANGELOG.",
   "_comment_version_1_2_2": "1.2.1 -> 1.2.2: version for the coach-mark guide mounted on this SDK's primary page (GuideHost and GuideAnchor from base_sdk 1.92.0, off in demo sessions). The mount landed without a version change; see CHANGELOG.",
   "_comment_version_1_2_1": "1.2.0 -> 1.2.1: the demo fixture install moves from the app_type.customer block to the top-level installs, next to the top-level app_assets entry that registers it. The common DI registers assets/demo/booking in every role, but only customer composes copied the fixtures, so any other compose (supacharge's Windows build) got an assets/demo/booking/ pubspec entry with nothing behind it and flutter failed with 'unable to find directory entry in pubspec.yaml'. Manifest-only change; no code changes.",
   "_comment_version_1_2_0": "1.1.1 -> 1.2.0: demo runs the REAL repositories (Ray, 2026-09-25: \"touch all sdk demos ... remove unused files\"). The DI hooks register the real repositories only and call DemoFixtures.registerAssetDirectory('assets/demo/booking'); base_sdk 1.73.0's DemoGatewayInterceptor answers each platform cmd from templates/assets/demo/booking/<cmd>.json (installed to assets/demo/booking) while DemoSession.demoActive, and an unknown cmd fails with DemoFixtureMissing. The api.booking.* fixtures carry (settings, the Main hall / Terrace sections and their tables, the 10:00-22:00 slot, the weekly schedule, the customer's anniversary booking and the manager's evening of four reservations). Deleted: DemoBookingRepository, DemoSellerBookingRepository and the demo-session swap code that chose them. Needs base_sdk >= 1.73.0 (DemoFixtures / DemoGatewayInterceptor).",
@@ -14,7 +15,6 @@
       "to": "assets/demo/booking"
     }
   ],
-  "installs": [],
   "integrations": [],
   "routes": [],
   "di_hooks": [

@@ -937,7 +937,7 @@
       ]
     },
     "orders_sdk": {
-      "version": "1.31.1",
+      "version": "1.31.2",
       "files": {
         "lib/presentation/routes/orders_customer_route_pages.dart": "acadebdd2b7525434e765bf02683c151b97d7a392e1552d8f2af02b916a4702c"
       },
@@ -1694,7 +1694,7 @@
       "boot_hooks": []
     },
     "booking_sdk": {
-      "version": "1.2.2",
+      "version": "1.2.3",
       "files": {
         "lib/presentation/pages/reservations/reservations_page.dart": "31dd111ff24ef746f0c11208bf258ff4ace786b7ad261a74e9e75ac3ee7fa236",
         "lib/presentation/pages/reservations/new_reservation_page.dart": "48719b888173cdb8c185ed7c61f190c7b16d06d869680f76c83d862851600254"
@@ -1813,8 +1813,8 @@
       "hash": "56d71b1a3ec2c9a4"
     },
     "orders": {
-      "version": "1.31.1",
-      "hash": "793970abd309fb45"
+      "version": "1.31.2",
+      "hash": "8593240f378ceaa9"
     },
     "promotions": {
       "version": "1.4.1",
@@ -1873,8 +1873,8 @@
       "hash": "fc4dc71b7401b7bd"
     },
     "booking": {
-      "version": "1.2.2",
-      "hash": "5a91b85403513ff3"
+      "version": "1.2.3",
+      "hash": "8f49fe34ac10c902"
     },
     "subscriptions": {
       "version": "1.7.3",
