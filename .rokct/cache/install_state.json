@@ -345,7 +345,7 @@
       }
     },
     "marketplace_sdk": {
-      "version": "1.17.1",
+      "version": "1.17.2",
       "files": {
         "lib/presentation/routes/marketplace_route_pages.dart": "37c6193cb69e17ce8c2f83b2a147a0fef9967a6c9ab0e5579f22582f8c60e8c1"
       },
@@ -1801,8 +1801,8 @@
       "hash": "3cafcd2562d7b781"
     },
     "marketplace": {
-      "version": "1.17.1",
-      "hash": "f2e862cbef8aca2f"
+      "version": "1.17.2",
+      "hash": "8bed57a3f6106801"
     },
     "merchants": {
       "version": "1.36.1",

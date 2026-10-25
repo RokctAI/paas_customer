@@ -20,7 +20,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:marketplace_sdk/src/common/application/customer/filter/filter_provider.dart';
 import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/presentation/components/app_bars/common_app_bar.dart';
-import 'package:base_sdk/src/presentation/components/buttons/pop_button.dart';
+import 'package:marketplace_sdk/src/common/presentation/pages/home/home_zero/filter/widgets/flat_back_button.dart';
 import 'package:base_sdk/src/presentation/components/title_icon.dart';
 import 'package:marketplace_sdk/src/common/presentation/pages/home/home_zero/widgets/market_one_item.dart';
 import 'package:marketplace_sdk/src/common/presentation/pages/home/home_zero/widgets/market_three_item.dart';
@@ -154,7 +154,7 @@ class _ResultFilterState extends ConsumerState<ResultFilterPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
       floatingActionButton: Padding(
         padding: EdgeInsets.only(left: 16.w),
-        child: const PopButton(),
+        child: const FlatBackButton(),
       ),
     );
   }
