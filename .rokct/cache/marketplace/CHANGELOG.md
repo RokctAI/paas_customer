@@ -1,3 +1,14 @@
+## 1.17.2
+
+* fix(filter): the category results page (`ResultFilterPage`) no longer floats
+  base_sdk's `PopButton` over its scrolling list. PopButton is wrapped in a
+  full-rate `BackdropFilter` gaussian blur (sigma 13); on a software GPU
+  (SwiftShader, as on the CI tour emulator) compositing it over the freshly
+  pushed route's shimmer and fade-in animations segfaulted the emulator right
+  after the home step, and on low-end phones it costs a blur pass per frame.
+  The page now uses a flat `FlatBackButton` (same pill, 72% opaque fill, no
+  blur). Other pages that use PopButton are unchanged.
+
 ## 1.17.1
 
 * chore(guide): version for the coach-mark guide mounted on this SDK's primary page (base_sdk GuideHost and GuideAnchor). The mount landed without a version change. Needs base_sdk >= 1.92.0.

@@ -158,7 +158,7 @@ packages:
       path: ".rokct/cache/base"
       relative: true
     source: path
-    version: "1.94.0"
+    version: "1.94.2"
   battery_plus:
     dependency: transitive
     description:
@@ -181,7 +181,7 @@ packages:
       path: ".rokct/cache/booking"
       relative: true
     source: path
-    version: "1.2.2"
+    version: "1.2.3"
   boolean_selector:
     dependency: transitive
     description:
@@ -1633,7 +1633,7 @@ packages:
       path: ".rokct/cache/marketplace"
       relative: true
     source: path
-    version: "1.17.1"
+    version: "1.17.2"
   matcher:
     dependency: transitive
     description:
@@ -1711,7 +1711,7 @@ packages:
       path: ".rokct/cache/orders"
       relative: true
     source: path
-    version: "1.31.1"
+    version: "1.31.2"
   osm_nominatim:
     dependency: transitive
     description:

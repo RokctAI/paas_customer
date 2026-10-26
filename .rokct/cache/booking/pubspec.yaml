@@ -1,6 +1,6 @@
 name: booking_sdk
 description: "booking_sdk - table reservations (customer flow + seller management), recovered from paas_customer / paas_pos."
-version: 1.2.2
+version: 1.2.3
 publish_to: 'none'
 
 environment:
