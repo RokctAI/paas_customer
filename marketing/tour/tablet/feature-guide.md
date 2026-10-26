@@ -47,3 +47,46 @@ Pick a category and see just the shops that stock it.
 ![Find it fast](screenshots/07-marketplace_search.png)
 
 One search across shops and products, with filters a tap away.
+
+## 8. Your favourites, kept
+
+![Your favourites, kept](screenshots/08-marketplace_favourites.png)
+
+Heart a shop once and it waits for you here - your favourites, one tap away.
+
+## 9. Make it yours
+
+![Make it yours](screenshots/09-marketplace_profile.png)
+
+Addresses, language, currency and more - your account, set up your way.
+
+## 10. Speak your language
+
+![Speak your language](screenshots/10-comms_language.png)
+
+Juvo speaks your language - pick it once in the language sheet and every screen
+follows.
+
+## 11. Top up in seconds
+
+![Top up in seconds](screenshots/11-wallet_topup.png)
+
+Pick an amount, pick a card, done - money in your wallet in seconds.
+
+## 12. Every transaction, in order
+
+![Every transaction, in order](screenshots/12-wallet_history.png)
+
+Top-ups and spend, newest first - your wallet history always adds up.
+
+## 13. Your orders
+
+![Your orders](screenshots/13-customer_orders.png)
+
+Active orders up top, the rest in your history - every order in one list.
+
+## 14. Track it live
+
+![Track it live](screenshots/14-customer_order_tracking.png)
+
+Follow the order from kitchen to door - the status updates live as it moves.

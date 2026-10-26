@@ -11,14 +11,24 @@ Juvo is a multi store marketplace.
 Styled stills from the committed guided tour - regenerated on every
 tour run, so new screens appear here automatically.
 
-| Welcome | | |
+| Welcome | Marketplace Profile | Comms Language |
 | :---: | :---: | :---: |
-| ![Welcome][s01] | | |
+| ![Welcome][s01] | ![Marketplace Profile][s09] | ![Comms Language][s10] |
+| **Wallet Topup** | **Wallet History** | **Customer Orders** |
+| ![Wallet Topup][s11] | ![Wallet History][s12] | ![Customer Orders][s13] |
+| **Customer Order Tracking** | | |
+| ![Customer Order Tracking][s14] | | |
 
 The full tour lives in the [feature guide](marketing/tour/feature-guide.md),
 with walkthrough videos alongside it in [`marketing/tour/`](marketing/tour).
 
 [s01]: marketing/tour/store/01-welcome.png
+[s09]: marketing/tour/store/09-marketplace_profile.png
+[s10]: marketing/tour/store/10-comms_language.png
+[s11]: marketing/tour/store/11-wallet_topup.png
+[s12]: marketing/tour/store/12-wallet_history.png
+[s13]: marketing/tour/store/13-customer_orders.png
+[s14]: marketing/tour/store/14-customer_order_tracking.png
 <!-- @generated-tour-gallery-end -->
 
 ## Requirements
