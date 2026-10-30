@@ -38,6 +38,16 @@ store:
   # the marketplace fragment lands in the composed cache the merge only
   # warns and the assembler falls back to the default hero.
   feature_step: marketplace_home
+  feature_style:
+    bg: "#FFD9BF"
+    bg2: "#FF9F66"
+    ink: "#3A1606"
+    accent: "#FFFFFF"
+    chip: "#FF6600"
+    shape: "circle"
+    layout: "left"
+    tilt: -5
+    headline: "Everything local, delivered."
 setup:
   imports:
     - "import 'package:base_sdk/src/models/response/languages_response.dart';"
