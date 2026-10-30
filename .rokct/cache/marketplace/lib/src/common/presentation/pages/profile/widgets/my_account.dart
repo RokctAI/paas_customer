@@ -83,7 +83,6 @@ class MyAccount extends StatelessWidget {
                 AppHelpers.showCustomModalBottomSheet(
                   context: context,
                   modal: EmbeddedWidgets.I.resetPasswordPage(),
-                  isDarkMode: isDarkMode,
                 );
               },
             ),
@@ -116,7 +115,6 @@ class MyAccount extends StatelessWidget {
                       Navigator.pop(context);
                     },
                   ),
-                  isDarkMode: isDarkMode,
                 );
               },
             ),
@@ -128,7 +126,6 @@ class MyAccount extends StatelessWidget {
                 AppHelpers.showCustomModalBottomSheet(
                   context: context,
                   modal: const CurrencyScreen(),
-                  isDarkMode: isDarkMode,
                 );
               },
             ),

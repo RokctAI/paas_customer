@@ -1018,7 +1018,6 @@ class _BillingPageState extends ConsumerState<BillingPage>
       paddingTop: MediaQuery.paddingOf(context).top + 100,
       context: context,
       modal: const _AddItemsSearch(),
-      isDarkMode: false,
     );
   }
 

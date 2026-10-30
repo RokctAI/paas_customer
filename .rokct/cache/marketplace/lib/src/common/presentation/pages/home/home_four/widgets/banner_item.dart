@@ -66,7 +66,6 @@ class BannerItem extends StatelessWidget {
             buttonText: banner.buttonText,
             list: banner.shops ?? [],
           ),
-          isDarkMode: Theme.of(context).brightness == Brightness.dark,
         );
       },
       child: Stack(

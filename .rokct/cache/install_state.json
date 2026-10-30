@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.94.2",
+      "version": "1.97.0",
       "files": {
         "lib/main.dart": "92423f25fa33333d67d8bd380b35d328cc5350033e61f0b750952a6d51641c34",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -345,9 +345,9 @@
       }
     },
     "marketplace_sdk": {
-      "version": "1.17.2",
+      "version": "1.17.3",
       "files": {
-        "lib/presentation/routes/marketplace_route_pages.dart": "37c6193cb69e17ce8c2f83b2a147a0fef9967a6c9ab0e5579f22582f8c60e8c1"
+        "lib/presentation/routes/marketplace_route_pages.dart": "ba5b8dfae45b0ee10314f84d9b0adcabbccc9569a8a3f49ea1102c2ceb12d1d6"
       },
       "routes": [
         {
@@ -774,7 +774,7 @@
       ]
     },
     "merchants_sdk": {
-      "version": "1.36.1",
+      "version": "1.37.0",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "lib/presentation/routes/merchants_customer_route_pages.dart": "94118cddd225b802a07db40ac5683697fd190d5d1de42494d955fc3f7eb79456",
@@ -937,7 +937,7 @@
       ]
     },
     "orders_sdk": {
-      "version": "1.31.2",
+      "version": "1.31.5",
       "files": {
         "lib/presentation/routes/orders_customer_route_pages.dart": "acadebdd2b7525434e765bf02683c151b97d7a392e1552d8f2af02b916a4702c"
       },
@@ -1793,28 +1793,28 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.94.2",
-      "hash": "f3e905a6bbe13f14"
+      "version": "1.97.0",
+      "hash": "a6b34653b5e2d252"
     },
     "comms": {
       "version": "1.23.2",
       "hash": "3cafcd2562d7b781"
     },
     "marketplace": {
-      "version": "1.17.2",
-      "hash": "8bed57a3f6106801"
+      "version": "1.17.3",
+      "hash": "b8e5de748beb8314"
     },
     "merchants": {
-      "version": "1.36.1",
-      "hash": "1bde519b36f0eb24"
+      "version": "1.37.0",
+      "hash": "f905733dd99363f8"
     },
     "products": {
       "version": "1.12.9",
       "hash": "56d71b1a3ec2c9a4"
     },
     "orders": {
-      "version": "1.31.2",
-      "hash": "8593240f378ceaa9"
+      "version": "1.31.5",
+      "hash": "f287879a1ccef383"
     },
     "promotions": {
       "version": "1.4.1",
@@ -1877,8 +1877,8 @@
       "hash": "8f49fe34ac10c902"
     },
     "subscriptions": {
-      "version": "1.7.3",
-      "hash": "f6378bebe8ad5586"
+      "version": "1.8.0",
+      "hash": "78138740bc7802ec"
     }
   }
 }

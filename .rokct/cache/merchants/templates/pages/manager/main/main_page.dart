@@ -443,7 +443,6 @@ class _MainPageState extends State<MainPage> {
       paddingTop: MediaQuery.of(context).padding.top + 64.h,
       context: context,
       modal: modal,
-      isDarkMode: false,
     );
   }
 
