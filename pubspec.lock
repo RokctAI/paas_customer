@@ -372,7 +372,7 @@ packages:
       path: ".rokct/cache/comms"
       relative: true
     source: path
-    version: "1.23.2"
+    version: "1.23.3"
   confetti:
     dependency: transitive
     description:
@@ -1656,7 +1656,7 @@ packages:
       path: ".rokct/cache/merchants"
       relative: true
     source: path
-    version: "1.37.0"
+    version: "1.38.0"
   meta:
     dependency: transitive
     description:
@@ -1956,7 +1956,7 @@ packages:
       path: ".rokct/cache/products"
       relative: true
     source: path
-    version: "1.12.9"
+    version: "1.13.0"
   promotions_sdk:
     dependency: "direct main"
     description:

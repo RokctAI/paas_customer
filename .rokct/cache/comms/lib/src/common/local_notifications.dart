@@ -13,6 +13,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
+import 'package:flutter/services.dart' show PlatformException;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
@@ -61,8 +62,13 @@ class LocalNotifications {
 
   static Future<void> initialize() async {
     tz.initializeTimeZones();
+    // The small status-bar icon is the app's own white silhouette,
+    // res/drawable/notification_icon.png, which every app shell carries
+    // (base_sdk's Android template; FCM uses the same file). A full-colour
+    // launcher icon draws as a grey square there, so it is only the
+    // fallback for an app without the file.
     const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings(androidSmallIcon);
     const DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
           requestAlertPermission: true,
@@ -81,8 +87,43 @@ class LocalNotifications {
           iOS: initializationSettingsDarwin,
           windows: initializationSettingsWindows,
         );
-    await _notificationsPlugin.initialize(initializationSettings);
+    try {
+      await _notificationsPlugin.initialize(initializationSettings);
+    } on PlatformException catch (e) {
+      if (e.code != 'invalid_icon') rethrow;
+      await _notificationsPlugin.initialize(
+        const InitializationSettings(
+          android: AndroidInitializationSettings(androidFallbackIcon),
+          iOS: initializationSettingsDarwin,
+          windows: initializationSettingsWindows,
+        ),
+      );
+    }
   }
+
+  /// The small icon every app shell ships in res/drawable.
+  static const String androidSmallIcon = '@drawable/notification_icon';
+  static const String androidFallbackIcon = '@mipmap/ic_launcher';
+
+  /// The channel [show] posts on. A new id (was `general_notifications`):
+  /// Android keeps a channel's importance from the first time it was made,
+  /// so a phone that once made the old one quieter never popped these down.
+  static const String alertsChannelId = 'alerts';
+
+  /// What [show] posts with on Android: high importance so the alert
+  /// slides down over the screen (heads-up) with sound and vibration,
+  /// marked as a message. Public for tests.
+  static const AndroidNotificationDetails alertDetails =
+      AndroidNotificationDetails(
+        alertsChannelId,
+        'Alerts',
+        channelDescription: 'Messages and things that need you',
+        importance: Importance.max,
+        priority: Priority.max,
+        category: AndroidNotificationCategory.message,
+        playSound: true,
+        enableVibration: true,
+      );
 
   /// Shows an immediate notification on any initialized platform
   /// (Android/iOS/Windows). Callers are expected to wrap this fail-open —
@@ -96,16 +137,10 @@ class LocalNotifications {
       id,
       title,
       body,
-      const NotificationDetails(
-        android: AndroidNotificationDetails(
-          'general_notifications',
-          'Notifications',
-          channelDescription: 'General notifications',
-          importance: Importance.max,
-          priority: Priority.high,
-        ),
-        iOS: DarwinNotificationDetails(),
-        windows: WindowsNotificationDetails(),
+      NotificationDetails(
+        android: alertDetails,
+        iOS: const DarwinNotificationDetails(),
+        windows: const WindowsNotificationDetails(),
       ),
     );
   }
