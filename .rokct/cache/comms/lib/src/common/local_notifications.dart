@@ -13,6 +13,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
 import 'package:flutter/services.dart' show PlatformException;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest_all.dart' as tz;
@@ -128,22 +129,92 @@ class LocalNotifications {
   /// Shows an immediate notification on any initialized platform
   /// (Android/iOS/Windows). Callers are expected to wrap this fail-open —
   /// it throws if [initialize] has not run on this platform.
+  ///
+  /// With [group] (any stable string, e.g. one per sender) Android stacks
+  /// every notification with the same group under one heading, [groupTitle]
+  /// (default: the group's first title), and a new alert does not replace
+  /// the earlier ones as long as the caller gives it its own [id]. iOS
+  /// groups by thread id and Windows ignores it.
   static Future<void> show({
     required int id,
     required String title,
     required String body,
+    String? group,
+    String? groupTitle,
   }) async {
+    if (group == null) {
+      await _notificationsPlugin.show(
+        id,
+        title,
+        body,
+        NotificationDetails(
+          android: alertDetails,
+          iOS: const DarwinNotificationDetails(),
+          windows: const WindowsNotificationDetails(),
+        ),
+      );
+      return;
+    }
     await _notificationsPlugin.show(
       id,
       title,
       body,
       NotificationDetails(
-        android: alertDetails,
-        iOS: const DarwinNotificationDetails(),
+        android: groupedDetails(group),
+        iOS: DarwinNotificationDetails(threadIdentifier: group),
         windows: const WindowsNotificationDetails(),
       ),
     );
+    // The heading: one silent summary per group so Android folds the group
+    // even when it has fewer than four members. Android only: elsewhere the
+    // plugin would post it as a second toast or banner.
+    if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
+    await _notificationsPlugin.show(
+      summaryId(group),
+      groupTitle ?? title,
+      body,
+      NotificationDetails(android: summaryDetails(group)),
+    );
   }
+
+  /// Fixed id of a group's summary notification. Public for tests.
+  /// A fixed fold of the code units: String.hashCode may change between
+  /// runs or Dart versions, which would orphan an old summary.
+  static int summaryId(String group) {
+    var h = 17;
+    for (final c in group.codeUnits) {
+      h = (h * 31 + c) & 0x7fffffff;
+    }
+    return h;
+  }
+
+  /// [alertDetails] plus the group key. Public for tests.
+  static AndroidNotificationDetails groupedDetails(String group) =>
+      AndroidNotificationDetails(
+        alertsChannelId,
+        'Alerts',
+        channelDescription: 'Messages and things that need you',
+        importance: Importance.max,
+        priority: Priority.max,
+        category: AndroidNotificationCategory.message,
+        playSound: true,
+        enableVibration: true,
+        groupKey: group,
+      );
+
+  /// The group heading: silent, so only the member alert makes a sound.
+  static AndroidNotificationDetails summaryDetails(String group) =>
+      AndroidNotificationDetails(
+        alertsChannelId,
+        'Alerts',
+        channelDescription: 'Messages and things that need you',
+        importance: Importance.max,
+        priority: Priority.max,
+        groupKey: group,
+        setAsGroupSummary: true,
+        groupAlertBehavior: GroupAlertBehavior.children,
+        onlyAlertOnce: true,
+      );
 
   static Future<void> scheduleNotification({
     required int id,

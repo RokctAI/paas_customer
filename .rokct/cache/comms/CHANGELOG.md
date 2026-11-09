@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.23.4
+
+* feat(notifications): `LocalNotifications.show` takes optional `group` and `groupTitle`. With a group, Android stacks every alert with that key under one heading (a silent group summary), so a sender keeps all its notifications together; iOS uses the group as thread id. Callers that do not pass a group are unchanged. Covered by `test/local_notifications_alert_test.dart`.
+
 ## 1.23.3
 
 * fix(notifications): Ray, 2026-11-06, on Sticks: "it's not animating push and it's not using notification icon in res/". `LocalNotifications` now starts with `@drawable/notification_icon`, the white silhouette every app shell ships (base_sdk's Android template, also FCM's default icon), and falls back to `@mipmap/ic_launcher` only when an app has no such file (`invalid_icon`). `show()` posts on a new `alerts` channel (importance max, priority max, message category, sound and vibration), so the alert slides down over the screen. The old `general_notifications` channel is left alone: Android keeps a channel's importance from when it was first made, so reusing it could stay quiet. Every app on comms_sdk gets both. Covered by `test/local_notifications_alert_test.dart`.

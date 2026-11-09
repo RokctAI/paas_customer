@@ -606,7 +606,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.22.1",
+      "version": "1.22.3",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "87b5d1dbc3f0f9417db5289be2c1ebbcb7dfecf1638f348b6f5ee1581f7ce4d2",
         "lib/presentation/routes/registration_step_pages.dart": "68aed195fc07db746a0919c7ba6d47ffa445ca86e7d9cf6ee50fbcb00e82d3c2",
@@ -1355,7 +1355,7 @@
       ]
     },
     "comms_sdk": {
-      "version": "1.23.3",
+      "version": "1.23.4",
       "files": {
         "assets/demo/comms/api.notification.read_all_notifications.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
         "assets/demo/comms/api.notification.get_notification_count.json": "7f5fe0c8c47d512222153d9e5f72618d2952b88439c3b121ff492a8f02469314",
@@ -1797,8 +1797,8 @@
       "hash": "a6b34653b5e2d252"
     },
     "comms": {
-      "version": "1.23.3",
-      "hash": "369e33e453e03a26"
+      "version": "1.23.4",
+      "hash": "0967a0a2da1e17c4"
     },
     "marketplace": {
       "version": "1.17.3",
@@ -1825,8 +1825,8 @@
       "hash": "f92b75903bb59390"
     },
     "auth": {
-      "version": "1.22.1",
-      "hash": "347f37ed729d44ad"
+      "version": "1.22.3",
+      "hash": "66194347b6a06746"
     },
     "users": {
       "version": "1.5.2",

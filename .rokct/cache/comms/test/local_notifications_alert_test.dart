@@ -33,4 +33,15 @@ void main() {
     expect(LocalNotifications.androidSmallIcon, '@drawable/notification_icon');
     expect(LocalNotifications.androidFallbackIcon, '@mipmap/ic_launcher');
   });
+
+  test('a group stacks alerts under one silent heading', () {
+    final m = LocalNotifications.groupedDetails('stick:nandi');
+    final h = LocalNotifications.summaryDetails('stick:nandi');
+    expect(m.groupKey, 'stick:nandi');
+    expect(m.setAsGroupSummary, isNot(true));
+    expect(h.groupKey, 'stick:nandi');
+    expect(h.setAsGroupSummary, true);
+    expect(LocalNotifications.summaryId('stick:nandi'),
+        LocalNotifications.summaryId('stick:nandi'));
+  });
 }
