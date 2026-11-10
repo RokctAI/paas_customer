@@ -17,6 +17,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:base_sdk/src/services/route_memory.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -1214,12 +1215,15 @@ abstract class AppHelpers {
           context,
           shopId: AppConstants.defaultShopId,
         );
+        RouteMemory.restoreAfterHome();
         return;
       } on StateError catch (e) {
         debugPrint('==> no shop page in this app, going to main: $e');
       }
     }
     AppRoutes.I.replaceMainRoute(context);
+    // Back to the page the person was on when the phone closed the app.
+    RouteMemory.restoreAfterHome();
   }
 }
 

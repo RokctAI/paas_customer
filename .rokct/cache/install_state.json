@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.97.0",
+      "version": "1.107.0",
       "files": {
         "lib/main.dart": "92423f25fa33333d67d8bd380b35d328cc5350033e61f0b750952a6d51641c34",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -211,7 +211,7 @@
         "assets/temp/discount6.png": "784e1ff8e0b7ec4b57bd72daf84960837251f7c011029a7332c85a0bc38642c1",
         "lib/core/presentation/theme/app_style.dart": "a41cdea4c78180c66b26633ed79139d9e44555146b9a446184c36ac6b36a55ef",
         "lib/core/presentation/theme/theme.dart": "0d3a0e59c133fccfd32dd80bf649e99d580d56605936fd8bd63e5d6301c7091e",
-        "lib/presentation/app_widget.dart": "a9d3df8525970b1b6400079f34014c504b96c636cf681b52c69e612071fc02be",
+        "lib/presentation/app_widget.dart": "f86cd436227650b26495e7de75ae3983a4d000529471430ec18eb6a7fadb17bd",
         "lib/presentation/routes/app_router.dart": "3b99e50c60dab1161ccf14aa381f7481ab1baad0223575df04e4bda89a20464b",
         "lib/presentation/routes/route_pages.dart": "32ab7543d1b94e5b5aedd5a59604a390c373d6e881801c875e37f2ddd001d8c8",
         "lib/presentation/theme/theme.dart": "dccd0527934c068d0b8ef48d7d0677d068d1054e7fcc1e1eea1f6682912bfcd5",
@@ -224,7 +224,9 @@
         "assets/audio/tap.wav": "577a7e6beb2958269cc5daecb2529cad154ba9cebe5eff988530affb9aff5eb0",
         "assets/audio/wrong.wav": "a2352725dcffd5505dec676a26db5ef2f299cb5ae4340a91ecd1cef55637223f",
         "android/app/src/main/kotlin/com/app/demo/SessionHandoffActivity.kt": "3dd6b0050246ca766c13321dbb5d98702040f24698ab734fb20e7614b6e7c1ac",
-        "android/app/src/main/kotlin/com/app/demo/SessionHandoffBridge.kt": "dce4b6c62147bfce895c9cae5570b8c2c756229700fcfa2cd3dd2d08b43a53e0"
+        "android/app/src/main/kotlin/com/app/demo/SessionHandoffBridge.kt": "dce4b6c62147bfce895c9cae5570b8c2c756229700fcfa2cd3dd2d08b43a53e0",
+        "android/app/src/main/res/drawable/splash_no_icon.xml": "158735d7d563198af387803ad38ceda355e37bbc65924d36a499f12a4850f969",
+        "android/app/src/main/res/values-night/colors.xml": "7326730b7ad77f27409c3fac1737606fdaa3ba7733e738775f174d78fe18d4f3"
       },
       "routes": [
         {
@@ -1793,8 +1795,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.97.0",
-      "hash": "a6b34653b5e2d252"
+      "version": "1.107.0",
+      "hash": "3e6749e5e8144cba"
     },
     "comms": {
       "version": "1.23.4",
