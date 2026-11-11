@@ -185,7 +185,6 @@ class _AppBarHomeState extends ConsumerState<AppBarHome>
                         await AppRoutes.I.pushViewMapRoute(context);
                       },
                     ),
-                    isDarkMode: Theme.of(context).brightness == Brightness.dark,
                   );
                 },
                 child: Consumer(

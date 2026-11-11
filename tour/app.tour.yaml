@@ -40,6 +40,7 @@ store:
     bg2: "#FF9A5B"
     ink: "#3A1400"
     accent: "#FFFFFF"
+    chip: "#FF6600"
     shape: "circle"
     layout: "left"
     tilt: -4

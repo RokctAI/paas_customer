@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.94.2",
+      "version": "1.108.0",
       "files": {
         "lib/main.dart": "92423f25fa33333d67d8bd380b35d328cc5350033e61f0b750952a6d51641c34",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -211,7 +211,7 @@
         "assets/temp/discount6.png": "784e1ff8e0b7ec4b57bd72daf84960837251f7c011029a7332c85a0bc38642c1",
         "lib/core/presentation/theme/app_style.dart": "a41cdea4c78180c66b26633ed79139d9e44555146b9a446184c36ac6b36a55ef",
         "lib/core/presentation/theme/theme.dart": "0d3a0e59c133fccfd32dd80bf649e99d580d56605936fd8bd63e5d6301c7091e",
-        "lib/presentation/app_widget.dart": "a9d3df8525970b1b6400079f34014c504b96c636cf681b52c69e612071fc02be",
+        "lib/presentation/app_widget.dart": "f86cd436227650b26495e7de75ae3983a4d000529471430ec18eb6a7fadb17bd",
         "lib/presentation/routes/app_router.dart": "3b99e50c60dab1161ccf14aa381f7481ab1baad0223575df04e4bda89a20464b",
         "lib/presentation/routes/route_pages.dart": "32ab7543d1b94e5b5aedd5a59604a390c373d6e881801c875e37f2ddd001d8c8",
         "lib/presentation/theme/theme.dart": "dccd0527934c068d0b8ef48d7d0677d068d1054e7fcc1e1eea1f6682912bfcd5",
@@ -224,7 +224,9 @@
         "assets/audio/tap.wav": "577a7e6beb2958269cc5daecb2529cad154ba9cebe5eff988530affb9aff5eb0",
         "assets/audio/wrong.wav": "a2352725dcffd5505dec676a26db5ef2f299cb5ae4340a91ecd1cef55637223f",
         "android/app/src/main/kotlin/com/app/demo/SessionHandoffActivity.kt": "3dd6b0050246ca766c13321dbb5d98702040f24698ab734fb20e7614b6e7c1ac",
-        "android/app/src/main/kotlin/com/app/demo/SessionHandoffBridge.kt": "dce4b6c62147bfce895c9cae5570b8c2c756229700fcfa2cd3dd2d08b43a53e0"
+        "android/app/src/main/kotlin/com/app/demo/SessionHandoffBridge.kt": "dce4b6c62147bfce895c9cae5570b8c2c756229700fcfa2cd3dd2d08b43a53e0",
+        "android/app/src/main/res/drawable/splash_no_icon.xml": "158735d7d563198af387803ad38ceda355e37bbc65924d36a499f12a4850f969",
+        "android/app/src/main/res/values-night/colors.xml": "7326730b7ad77f27409c3fac1737606fdaa3ba7733e738775f174d78fe18d4f3"
       },
       "routes": [
         {
@@ -345,9 +347,9 @@
       }
     },
     "marketplace_sdk": {
-      "version": "1.17.2",
+      "version": "1.17.3",
       "files": {
-        "lib/presentation/routes/marketplace_route_pages.dart": "37c6193cb69e17ce8c2f83b2a147a0fef9967a6c9ab0e5579f22582f8c60e8c1"
+        "lib/presentation/routes/marketplace_route_pages.dart": "ba5b8dfae45b0ee10314f84d9b0adcabbccc9569a8a3f49ea1102c2ceb12d1d6"
       },
       "routes": [
         {
@@ -606,7 +608,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.22.1",
+      "version": "1.22.3",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "87b5d1dbc3f0f9417db5289be2c1ebbcb7dfecf1638f348b6f5ee1581f7ce4d2",
         "lib/presentation/routes/registration_step_pages.dart": "68aed195fc07db746a0919c7ba6d47ffa445ca86e7d9cf6ee50fbcb00e82d3c2",
@@ -774,7 +776,7 @@
       ]
     },
     "merchants_sdk": {
-      "version": "1.36.1",
+      "version": "1.38.0",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "lib/presentation/routes/merchants_customer_route_pages.dart": "94118cddd225b802a07db40ac5683697fd190d5d1de42494d955fc3f7eb79456",
@@ -883,7 +885,7 @@
       ]
     },
     "products_sdk": {
-      "version": "1.12.9",
+      "version": "1.13.0",
       "files": {
         "assets/demo/products/api.brand.get_brand_by_uuid.json": "2f572655239beaef3a4258dca9213d201ad23d9092a8d44e9251e68daad92fbb",
         "assets/demo/products/api.brand.get_brands.json": "e6d9aceed478a49c043f14905a208bf587418015ae67925eef65f7d7f07631ea",
@@ -937,7 +939,7 @@
       ]
     },
     "orders_sdk": {
-      "version": "1.31.2",
+      "version": "1.31.5",
       "files": {
         "lib/presentation/routes/orders_customer_route_pages.dart": "acadebdd2b7525434e765bf02683c151b97d7a392e1552d8f2af02b916a4702c"
       },
@@ -1355,7 +1357,7 @@
       ]
     },
     "comms_sdk": {
-      "version": "1.23.2",
+      "version": "1.23.4",
       "files": {
         "assets/demo/comms/api.notification.read_all_notifications.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
         "assets/demo/comms/api.notification.get_notification_count.json": "7f5fe0c8c47d512222153d9e5f72618d2952b88439c3b121ff492a8f02469314",
@@ -1793,28 +1795,28 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.94.2",
-      "hash": "f3e905a6bbe13f14"
+      "version": "1.108.0",
+      "hash": "9c80922c8df48803"
     },
     "comms": {
-      "version": "1.23.2",
-      "hash": "3cafcd2562d7b781"
+      "version": "1.23.4",
+      "hash": "0967a0a2da1e17c4"
     },
     "marketplace": {
-      "version": "1.17.2",
-      "hash": "8bed57a3f6106801"
+      "version": "1.17.3",
+      "hash": "b8e5de748beb8314"
     },
     "merchants": {
-      "version": "1.36.1",
-      "hash": "1bde519b36f0eb24"
+      "version": "1.38.0",
+      "hash": "7e335765b526826f"
     },
     "products": {
-      "version": "1.12.9",
-      "hash": "56d71b1a3ec2c9a4"
+      "version": "1.13.0",
+      "hash": "1a226c5fb278847b"
     },
     "orders": {
-      "version": "1.31.2",
-      "hash": "8593240f378ceaa9"
+      "version": "1.31.5",
+      "hash": "f287879a1ccef383"
     },
     "promotions": {
       "version": "1.4.1",
@@ -1825,8 +1827,8 @@
       "hash": "f92b75903bb59390"
     },
     "auth": {
-      "version": "1.22.1",
-      "hash": "347f37ed729d44ad"
+      "version": "1.22.3",
+      "hash": "66194347b6a06746"
     },
     "users": {
       "version": "1.5.2",
@@ -1877,8 +1879,8 @@
       "hash": "8f49fe34ac10c902"
     },
     "subscriptions": {
-      "version": "1.7.3",
-      "hash": "f6378bebe8ad5586"
+      "version": "1.8.0",
+      "hash": "78138740bc7802ec"
     }
   }
 }

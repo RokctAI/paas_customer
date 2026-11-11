@@ -47,7 +47,6 @@ class BannerItem extends StatelessWidget {
             desc: banner.translation?.description ?? "",
             list: banner.shops ?? [],
           ),
-          isDarkMode: Theme.of(context).brightness == Brightness.dark,
         );
       },
       child: Container(

@@ -25,7 +25,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:base_sdk/src/application/main/main_provider.dart';
 import 'package:base_sdk/src/application/profile/profile_provider.dart';
+import 'package:base_sdk/src/presentation/adaptive/planes.dart';
 import 'package:base_sdk/src/application/shop_order/shop_order_provider.dart';
 import 'package:base_sdk/src/navigation/app_routes.dart';
 import 'package:base_sdk/src/presentation/components/buttons/pop_button.dart';
@@ -93,7 +95,7 @@ void registerMarketplaceProfileSections() {
 /// call-sites keep working; the sections come from
 /// [registerMarketplaceProfileSections].
 @RoutePage(name: 'ProfileRoute')
-class ProfileRouteView extends StatelessWidget {
+class ProfileRouteView extends ConsumerWidget {
   final bool isBackButton;
   final Function()? onCardAdded;
 
@@ -104,21 +106,41 @@ class ProfileRouteView extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // Sections are registered at boot; the per-navigation card-added
     // callback rides this slot instead of a constructor param.
     MarketplaceProfileSections.onCardAdded = onCardAdded;
-    return Stack(
-      children: [
-        const pages.GenericProfilePage(),
-        // The old page's floating back button (FAB startFloat + 16.w pad).
-        if (isBackButton)
-          Positioned(
-            left: 32.w,
-            bottom: 16.h,
-            child: const SafeArea(child: PopButton()),
-          ),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final bool onePane = PlaneHost.planeCountFor(constraints.maxWidth) < 2;
+        return Stack(
+          children: [
+            const pages.GenericProfilePage(),
+            // A single-pane pushed profile shows the floating nav with the
+            // picture lit, like the main page's profile tab (standing rule,
+            // Ray 2026-10-30); Home/Search/Liked return to that tab.
+            if (isBackButton && onePane)
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: CustomerProfileNav(
+                    onSelect: (index) {
+                      ref.read(mainProvider.notifier).selectIndex(index);
+                      context.router.popUntilRoot();
+                    },
+                  ),
+                ),
+              )
+            // Plane widths keep the corner back pill.
+            else if (isBackButton)
+              Positioned(
+                left: 32.w,
+                bottom: 16.h,
+                child: const SafeArea(child: PopButton()),
+              ),
+          ],
+        );
+      },
     );
   }
 }

@@ -254,6 +254,49 @@ class CustomerMainPage extends ConsumerWidget {
   }
 }
 
+/// The customer floating nav on a PUSHED profile (a single pane): Home,
+/// Search and Liked with the person's picture lit, instead of a bare back
+/// pill (standing rule, Ray 2026-10-30). [onSelect] gets the tab index.
+class CustomerProfileNav extends StatelessWidget {
+  final ValueChanged<int> onSelect;
+
+  const CustomerProfileNav({super.key, required this.onSelect});
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingBottomNav(
+      mode: FloatingNavTabsMode(
+        tabs: [
+          FloatingNavTab(
+            selectIcon: Remix.home_5_fill,
+            unSelectIcon: Remix.home_5_line,
+            label: AppHelpers.getTranslation(TrKeys.home),
+          ),
+          FloatingNavTab(
+            selectIcon: Remix.search_2_fill,
+            unSelectIcon: Remix.search_2_line,
+            label: AppHelpers.getTranslation(TrKeys.search),
+          ),
+          FloatingNavTab(
+            selectIcon: Remix.heart_3_fill,
+            unSelectIcon: Remix.heart_3_line,
+            label: AppHelpers.getTranslation(TrKeys.liked),
+          ),
+        ],
+        // No tab is current: the picture is.
+        currentIndex: -1,
+        onSelect: onSelect,
+        profile: FloatingNavProfile(
+          user: LocalStorage.getUser(),
+          label: AppHelpers.getTranslation(TrKeys.profile),
+          active: true,
+          onTap: () {},
+        ),
+      ),
+    );
+  }
+}
+
 /// The legacy shell's "you are shopping at" bar: the cart's shop and its
 /// total, drawn above the floating nav in fixed-nav builds while the cart
 /// has something in it. Tapping it opens the order, like the basket.

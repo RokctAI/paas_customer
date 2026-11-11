@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.0
+
+* feat(plan): di_hook `plan-gated-sections` declares the profile sections the free tier must not see (`PlanAccess.gateProfileSections`, base_sdk 1.97.0). Inert unless the app installs the free-tier gate.
+
 ## 1.7.3
 
 * fix(subscriptions): move `subscriptionsGuide` above the page class doc comment in `templates/pages/subscriptions/subscriptions_page.dart`. It sat between `@RoutePage` and the class, so build_runner failed ("subscriptionsGuide is not a class element") in any app composing this SDK (paas_manager guided tour, run 39960305311).

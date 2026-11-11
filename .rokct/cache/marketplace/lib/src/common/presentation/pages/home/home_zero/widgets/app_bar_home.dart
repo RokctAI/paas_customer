@@ -48,7 +48,6 @@ class AppBarHome extends StatelessWidget {
                 await AppRoutes.I.pushViewMapRoute(context);
               },
             ),
-            isDarkMode: Theme.of(context).brightness == Brightness.dark,
           );
         },
         child: Row(

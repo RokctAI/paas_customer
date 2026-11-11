@@ -1,3 +1,11 @@
+## 1.17.3
+
+* feat(profile): a pushed customer profile on a single pane (`ProfileRouteView`,
+  `marketplace_route_pages.dart`) draws the floating nav (`CustomerProfileNav`,
+  `customer_main_page.dart`) with the picture lit instead of the bare back
+  pill. Home, Search and Liked return to that tab. Plane widths keep the
+  corner pill. Standing rule, Ray 2026-10-30.
+
 ## 1.17.2
 
 * fix(filter): the category results page (`ResultFilterPage`) no longer floats
