@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.107.0",
+      "version": "1.108.0",
       "files": {
         "lib/main.dart": "92423f25fa33333d67d8bd380b35d328cc5350033e61f0b750952a6d51641c34",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -1795,8 +1795,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.107.0",
-      "hash": "3e6749e5e8144cba"
+      "version": "1.108.0",
+      "hash": "9c80922c8df48803"
     },
     "comms": {
       "version": "1.23.4",
