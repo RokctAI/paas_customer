@@ -13,12 +13,14 @@ normal path and verifies each file's length *and* SHA-256 before registering
 it — so the render is provably the real Inter, and no hash is hard-coded in
 the harness.
 
-| File | Weight | Used by |
-|---|---|---|
-| `ecdb53099b1a68cd24c6900ea5beeafec81bd3c8cb9d0f3c51b9986583ba3982.ttf` | Inter 400 | `AppStyle.interRegular` |
-| `492dec3bc33255f9d81bd5fb18704ad72f96f9b9318e4171bc9f9be9dd4bf44b.ttf` | Inter 500 | `AppStyle.interNormal` |
-| `d7ba633bab7f40576e539a7e934a1301d7618dceea59c743de477c2c493462fc.ttf` | Inter 600 | `AppStyle.interNoSemi` |
-| `b7e339223d56e8c4210c86f1ba87b3d43d6c47e03956ea56f0a7a938ae61b2a3.ttf` | Inter 700 | `AppStyle.interSemi`, `AppStyle.interBold` |
+* Inter 400 (`AppStyle.interRegular`):
+  `ecdb53099b1a68cd24c6900ea5beeafec81bd3c8cb9d0f3c51b9986583ba3982.ttf`
+* Inter 500 (`AppStyle.interNormal`):
+  `492dec3bc33255f9d81bd5fb18704ad72f96f9b9318e4171bc9f9be9dd4bf44b.ttf`
+* Inter 600 (`AppStyle.interNoSemi`):
+  `d7ba633bab7f40576e539a7e934a1301d7618dceea59c743de477c2c493462fc.ttf`
+* Inter 700 (`AppStyle.interSemi`, `AppStyle.interBold`):
+  `b7e339223d56e8c4210c86f1ba87b3d43d6c47e03956ea56f0a7a938ae61b2a3.ttf`
 
 They are **not** app assets: nothing here is declared in `pubspec.yaml`, so
 none of it ships in a build. The harness reads them straight off disk.
@@ -31,16 +33,17 @@ google_fonts' own table for that family
 (`google_fonts/lib/src/google_fonts_parts/part_<letter>.g.dart`), then:
 
 ```bash
-curl -sSL -o "test/render/fonts/<hash>.ttf" "https://fonts.gstatic.com/s/a/<hash>.ttf"
+curl -sSL -o "test/render/fonts/<hash>.ttf" \
+  "https://fonts.gstatic.com/s/a/<hash>.ttf"
 ```
 
-and add a row above. The same table is what a google_fonts version bump would
+and add an entry above. The same table is what a google_fonts version bump would
 change — which is why a bump surfaces as an honest 404 rather than a silently
 wrong render.
 
 ## What is *not* fixed by adding a face here
 
-Two elements on the courier profile once rendered as solid white blocks — the
+Two elements on a profile render once rendered as solid white blocks — the
 Back pill's label and the demo avatar's "TM" initials. Neither was a missing
 Inter weight; all four weights above were already loading. They were text that
 asks the engine for a family this directory does not own, and `flutter test`
