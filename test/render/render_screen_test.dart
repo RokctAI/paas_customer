@@ -315,7 +315,6 @@ Widget buildScreen({required bool dark}) {
   );
 }
 
-
 /// TODO(harness) 7/8 - the elements the review points at.
 ///
 /// `key` is the stable identity the composer binds a number to for the life
@@ -412,7 +411,8 @@ void verifyFinders(WidgetTester tester) {
   );
 
   // marketplace_sdk's registered rows, proving the shell registered them.
-  expectCount('marketplace tile grid', find.byType(MarketplaceProfileTileGrid), 1);
+  expectCount(
+      'marketplace tile grid', find.byType(MarketplaceProfileTileGrid), 1);
 
   // Host chrome the route widget itself owns.
   expectCount('host footer', find.byType(MarketplaceProfileFooter), 1);
