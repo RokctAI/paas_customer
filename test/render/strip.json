@@ -1,0 +1,31 @@
+{
+  "title": "Customer profile - paas_customer",
+  "kicker": "render strip adoption - real render",
+  "lede": "Not hand-drawn. Every frame is the actual ProfileRouteView paas_customer composes - base_sdk's GenericProfilePage with marketplace_sdk's sections registered into it - rendered headlessly by test/render/render_screen_test.dart at 390 logical px / dpr 3. Data is the SDKs' own demo fixtures in a demo session, never a live backend.",
+  "fonts": "system",
+  "chips_default": true,
+  "frames": [
+    {
+      "section": "Shipped - what main renders today",
+      "caption": "customer profile - light",
+      "status": "SHIPPED",
+      "png": "customer_profile_light.png",
+      "rects": "customer_profile_light.json",
+      "note": "paas_customer main, composed against the pinned SDK set in composer.json"
+    },
+    {
+      "section": "Shipped - what main renders today",
+      "caption": "customer profile - dark",
+      "status": "SHIPPED",
+      "png": "customer_profile_dark.png",
+      "rects": "customer_profile_dark.json",
+      "note": "paas_customer main, composed against the pinned SDK set in composer.json"
+    }
+  ],
+  "labels": {
+    "customer.profile.theme_toggle": "Theme toggle - the light/dark pill in the host's top row",
+    "customer.profile.identity_card": "Identity card - avatar, name, email and the edit pencil",
+    "customer.profile.footer": "Host footer - app name, version and online dot",
+    "customer.profile.tile_grid": "Tile grid - orders, wallet, addresses and settings"
+  }
+}
