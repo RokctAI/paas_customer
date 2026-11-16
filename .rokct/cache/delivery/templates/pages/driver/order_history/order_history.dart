@@ -12,6 +12,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:delivery_sdk/src/driver/presentation/copy/count_line.dart';
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -74,7 +75,14 @@ class _OrderHistoryPageState extends ConsumerState<OrderHistoryPage> {
       floatingActionButtonLocation:
           FloatingActionButtonLocation.miniCenterFloat,
       floatingActionButton: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        // Lifted above the root nav pill: at the pill's height the filter
+        // button sat on the Profile tab (tour 1114b driver
+        // 09-driver_order_history, parcel history alike).
+        padding: EdgeInsets.only(
+          left: 16.w,
+          right: 16.w,
+          bottom: driverRootNavClearance() - 12.h,
+        ),
         // The back affordance moved into the floating nav's pill (see the
         // body Stack); only the filter action remains here, keeping its
         // right-edge spot.
@@ -126,11 +134,15 @@ class _OrderHistoryPageState extends ConsumerState<OrderHistoryPage> {
 
 /// The page's title and subtitle - inside the app bar on the routed page,
 /// as a plain heading at the top of the embedded pane.
-class _OrderHistoryHeading extends StatelessWidget {
+class _OrderHistoryHeading extends ConsumerWidget {
   const _OrderHistoryHeading();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // "There are N orders": the key is only the "There are" half, so the
+    // count and the noun follow it (as on the orders page). Shown bare it
+    // read "There are" with nothing after it (tour 2026-11-13, frame 09).
+    final int count = ref.watch(orderProvider).historyOrders.length;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.end,
@@ -140,7 +152,11 @@ class _OrderHistoryHeading extends StatelessWidget {
           style: AppStyle.interSemi(size: 18.sp),
         ),
         Text(
-          AppHelpers.getTranslation(TrKeys.thereAreOrders),
+          driverCountLine(
+            count: count,
+            singularKey: 'order',
+            pluralKey: TrKeys.orders,
+          ),
           style: AppStyle.interRegular(
             size: 12.sp,
             letterSpacing: -0.3,

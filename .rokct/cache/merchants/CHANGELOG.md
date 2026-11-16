@@ -1,3 +1,23 @@
+## 1.38.5
+
+- fix(pos cart): a cart line's product name wraps to 2 lines instead of ellipsizing ("Flame-grilled beef burg...", tour 1114b manager 06-pos_cart).
+
+## 1.38.4
+
+- fix(pos checkout): on the phone route the checkout column clears the status bar (the "Checkout" header sat under the clock) and the Items / Total summary reads right under the Cash | QR toggle, above the QR card, instead of at the fold beside the Back pill where Total was cut off (tour 1114, 07-pos_checkout). The planes spread is unchanged. Quick flow's last card is fixed in base_sdk 1.110.0 (`PlaneHost` fades a one-plane page out above its corner Back pill).
+
+## 1.38.3
+
+- fix(manager): the checkout's scroller ends above the Back pill so Total is not under it; a demo session with no parked records shows two sample sync issues instead of "No data" (tour 1113b).
+
+## 1.38.2
+
+- fix(loading): page-level spinners replaced by the base_sdk shimmer `Loading()` (Ray, 2026-11-13: "Remove spinners where you can and use shimmers in the apps").
+
+## 1.38.1
+
+- chore(compliance): compliance-ignore comments with reasons for the sdk_validator --compliance findings; no behaviour change.
+
 ## 1.38.0
 
 * feat(manager till): an unknown barcode is no longer ignored. When the catalog has no product for a scanned code, the camera pauses and the till says "We don't recognise this barcode", shows the code, and asks "It isn't in your products yet. Would you like to add this product?" with **Add this product** and **Scan again** (render approved by Ray 2026-10-30 19:22Z). On a phone and at the two-plane fold it is a bottom sheet; at three planes it takes the Add Items pane's place in plane 2 until answered, and the cart stays as it was.

@@ -1,5 +1,41 @@
 # Changelog
 
+## 1.111.2
+
+- fix(android): the template MainActivity registers engine bridges (`register(FlutterEngine, Activity)`) by reflection, starting with launch_sdk's `LauncherVerseWidgetBridge`, and proguard keeps it. It was never registered in a composed launcher and R8 removed it, so the Bible widget and its prompt never appeared (release APK v1.2.23 has no such class). Unverified: not compiled here.
+
+## 1.111.1
+
+- fix(copy): bundled English for `restauran_home` ("Shop to customer"); the humanized key read "Restauran home" on the driver's active-job sheet (tour 1114b, driver 05-driver_home).
+- fix(sheets): `showCustomModalBottomDragSheet` applies the near-full-height rule to the height the sheet really reaches (`maxChildSize` of the constraint). Running the constraint to the status bar and then opening at 90% of it still left a strip of the page above the sheet: the ghost "Profile settings" row behind the edit-profile header (tour 1114b, driver 21-users_profile_settings). A drag sheet that would stop within 96 logical px of the status bar now opens at full height. Not a capture timing issue.
+- feat(text fields): `UnderlinedTextField` takes `maxLines` (default 1) and `minLines`, so a long value such as a product description wraps instead of clipping (tour 1114b, manager 14-product_detail). An obscured field stays single-line.
+
+## 1.111.0
+
+- feat(floating nav): `FloatingNavFold` (`components/floating_nav/floating_nav_fold.dart`, also exported from `floating_bottom_nav.dart`), the one shared fold above a floating nav pill. Scrolling content fades out over 48 logical px and is gone before it reaches the pill, so nothing is sliced against the pill at scroll rest and nothing shows through it. Used by `GenericProfilePage`'s phone list (the list runs to the foot of the page with the pill's room as bottom padding; tour 1114 20-users_profile) and by `PlaneHost` on a one-plane screen with the corner back pill (tour 1114 manager 11-quick_flow). Paint only.
+- fix(lists): `ListScreenHeader` never ellipsizes its title. The title shares its row only with the count pill and round actions (and scales down slightly if those crowd it); the hint moves to its own line under the row, up to 3 lines. The half-width rule of 1.109.1 still let the hint squeeze the title to "Sync is...", "Order hist...", "My dri...", "Notific..." (tour 1114, manager 10/17/26/30).
+- fix(sheets): `showCustomModalBottomSheet` and `showCustomModalBottomDragSheet` run a near-full-height sheet (one that would stop within 96 logical px of the status bar) right up to the status bar, so no faded strip of the page header shows above it (tour 1114, driver 21-users_profile_settings, manager 13-add_product).
+
+## 1.110.0
+
+- feat(floating nav): `FloatingNavTabsMode.notice` takes a `FloatingNavNotice` (message, optional action button, optional close cross) drawn as a compact strip on top of the tab pill, like the usage strip above a chat composer (Ray, 2026-11-14). Optional and null by default, so every existing host renders as before. First user: Supacharge's subscription due / grace notice (lms_sdk). Tests: `test/floating_nav_notice_test.dart`.
+
+## 1.109.1
+
+- fix(layout): the generic profile list ends above the floating nav pill so rows ("Languages") no longer show through it; `showCustomModalBottomSheet` sheets never rise under the status bar (the `.r`-scaled top gap shrank on short phones); `ListScreenHeader` gives a long title its own line instead of truncating it ("Order hist...", "My dri...", "Notific...") (tour 1113b).
+
+## 1.109.0
+
+- feat(loading): shimmers instead of spinners (Ray, 2026-11-13: "Remove spinners where you can and use shimmers in the apps"). `Loading` (`components/loading.dart`) now draws a shimmer placeholder: one bar in a small box such as a button, three skeleton lines with room. `LoadingList`, `LoadingGrid` and `TabBarLoading` shimmer too. New `AppShimmer` wrapper (theme-aware colours), exported from `base_sdk.dart` with `Loading`. Constructors unchanged, so every app using `Loading()` gets the shimmer with no edit. Tour, demo data and guide unchanged: loading states do not appear in tours (renders capture after data loads).
+
+## 1.108.2
+
+- fix(floating nav): a tap anywhere on the composer block (`FloatingNavInput`), not only on the text line, focuses the field and starts typing, while the input is enabled and no panel is open. Buttons in the block keep their own taps. Most of the diff in `floating_bottom_nav.dart` is `dart format` re-indentation around the new wrapper. Tests: `test/floating_nav_input_controller_test.dart`.
+
+## 1.108.1
+
+- chore(compliance): compliance-ignore comments with reasons for the sdk_validator --compliance findings; no behaviour change.
+
 ## 1.108.0
 
 - fix(rating): follow-up to 1.107.0 (core#420 review). In an app built with `STORE_LISTED=true` every rating now goes on to the store's review sheet, not only 4 and 5 stars: showing it only to happy raters is sentiment gating, which Google Play and Apple discourage. A rating under 4 stars also asks for a private note. `AppRating.offersStore` loses its `stars` argument and `storeThreshold` is replaced by `noteBelow` / `asksNote` (new in 1.107.0, STORE_LISTED off by default, so no app was using the old form). The splash page now calls `AppRating.flush()` once a real page is up, so a rating that could not be sent is retried at the next open. `pubspec.lock` gains `in_app_review`. Tests: `test/app_rating_test.dart`.

@@ -324,37 +324,60 @@ class ListScreenHeader extends StatelessWidget {
     final Brightness brightness = Theme.of(context).brightness;
 
     final double sidePadding = compact ? 16 : 20;
+    final TextStyle titleStyle = AppStyle.interBold(
+      size: compact ? 20 : 23,
+      color: AppStyle.inkFor(brightness),
+    );
+    // TITLE FIRST, AND WHOLE. The title is the screen's name; it never
+    // ellipsizes. It shares its row only with the count pill and the round
+    // actions (fixed, small), and scales down a touch rather than cut if
+    // even those crowd it. The hint is a sentence, so it gets a line of its
+    // own under the row instead of squeezing the title: sharing the row
+    // left "Sync is...", "Order hist...", "My dri...", "Notific..." and a
+    // two-line-clipped hint (tour 1114, manager 10/17/26/30).
     return Padding(
       padding: EdgeInsets.fromLTRB(sidePadding, 14, sidePadding, 10),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Flexible(
-            child: Text(
-              title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: AppStyle.interBold(
-                size: compact ? 20 : 23,
-                color: AppStyle.inkFor(brightness),
-              ),
-            ),
-          ),
-          if (countPill != null) ...[const SizedBox(width: 10), countPill!],
-          const Spacer(),
-          if (hint != null)
-            Flexible(
-              child: Text(
-                hint!,
-                maxLines: 2,
-                textAlign: TextAlign.end,
-                overflow: TextOverflow.ellipsis,
-                style: AppStyle.interNormal(
-                  size: 11,
-                  color: AppStyle.faintFor(brightness),
+          Row(
+            children: [
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text(
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.visible,
+                    style: titleStyle,
+                  ),
                 ),
               ),
+              if (countPill != null) ...[
+                const SizedBox(width: 10),
+                countPill!,
+              ],
+              if (actions.isNotEmpty) const Spacer(),
+              for (final action in actions) ...[
+                const SizedBox(width: 8),
+                action,
+              ],
+            ],
+          ),
+          if (hint != null) ...[
+            const SizedBox(height: 6),
+            Text(
+              hint!,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: AppStyle.interNormal(
+                size: 12,
+                color: AppStyle.faintFor(brightness),
+              ),
             ),
-          for (final action in actions) ...[const SizedBox(width: 8), action],
+          ],
         ],
       ),
     );

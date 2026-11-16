@@ -27,6 +27,7 @@ import 'package:base_sdk/src/presentation/components/title_icon.dart';
 import 'package:base_sdk/src/presentation/theme/theme.dart';
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/widgets/wallet_receive_screen.dart';
 import 'package:remixicon/remixicon.dart';
+import 'package:base_sdk/src/presentation/components/loading.dart';
 // [refork] embed via EmbeddedWidgets
 
 // [refork] embed via EmbeddedWidgets
@@ -382,9 +383,7 @@ class _WalletTopUpScreenState extends ConsumerState<WalletTopUpScreen> {
 
                   // Saved Cards Section
                   if (_loadingCards)
-                    Center(
-                      child: CircularProgressIndicator(color: AppStyle.primary),
-                    )
+                    const Loading()
                   else if (_savedCards.isNotEmpty) ...[
                     Text(
                       AppHelpers.getTranslation(TrKeys.selectCard),

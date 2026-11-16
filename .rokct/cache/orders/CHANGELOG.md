@@ -1,3 +1,34 @@
+## 1.31.11
+
+- fix(pos cart): the `FoodStockItem` qty badge sizes to its label and is inset from the row edge, so "2 each" is no longer clipped on the left; the product name wraps to 2 lines (tour 1114b manager 19-order_pos_cart).
+- fix(pos cart): the order pane shows an empty-cart state and always shows the subtotal row (summed from the cart while no calculation has landed), so the tablet walk-in third pane is no longer blank (tour 1114b manager tablet 18-order_pos_products).
+- fix(issue load): the footer keeps room for the floating Back pill, which covered "Issue to driver" (tour 1114b manager 25-order_issue_load).
+
+## 1.31.10
+
+- fix(pos cart): `FoodStockItem` reads the product from the cart line itself when the row is a cart stock rather than a calculation echo. It only read the echo's nested `stock.product`, so a cart row (the pane's fallback since 1.31.9, because the demo calculation echoes no stocks) showed no name, no image, and the shelf quantity in the badge: "40 / R89.00" (tour 1114, 19-order_pos_cart). The badge now shows the ordered count; the row follows the theme (card surface, mode ink) instead of a pinned white band.
+- fix(place order): the delivery-time page fits Total above the docked Place order row on a phone: the breakdown card drops its "Total" heading (its last row already says Total) and the cards tighten their padding and row gaps, so Discount and Total no longer sit under or clip at the docked row (tour 1114, 23-order_pos_delivery_time).
+
+## 1.31.9
+
+- fix(pos): Place order docks under its cards so Total is not covered by the button, offline note or Back pill, and the summary is titled "Total" instead of "Payment - R"; walk-in product rows follow the theme (no white rows or black image boxes on dark); the POS cart lists the cart's own lines when the calculation echoes none, and its subtotal ends above the Next | Back row (tour 1113b).
+
+## 1.31.8
+
+- fix(loading): page-level spinners replaced by the base_sdk shimmer `Loading()` (Ray, 2026-11-13: "Remove spinners where you can and use shimmers in the apps").
+
+## 1.31.7
+
+- fix(manager/pos): `ProductData.unitId` is a `String?` (docname). The `int?` field threw on the demo and live `unit_id` strings, failing the whole `get_seller_products` parse, so the walk-in grid, its cart and `/load/issue` showed no products.
+- fix(manager/pos): shipping, select-user, select-section and place-order pages use the theme's `cardFor`/`inkFor`/`surfaceFor` colours instead of fixed white/black; labels, the customer field, delivery time and payment names now read in the dark app.
+- fix(manager/pos): delivery-type rows wrap/ellipsize their text instead of overflowing (RenderFlex stripes).
+- fix(manager/pos): the payment summary title shows the shop currency symbol (stored currency, or the demo rand) instead of a hard-coded `$`; the phone foot leaves room so Total is not hidden under Place order.
+- feat(i18n): boot hook `orders-en-bundled-translations` registers an English fallback for the legacy `spproximate_preparation_time: ` key: "Approximate preparation time:".
+
+## 1.31.6
+
+- chore(compliance): compliance-ignore comments with reasons for the sdk_validator --compliance findings; no behaviour change.
+
 ## 1.31.5
 
 * fix(orders): eight order and parcel modal roots (payment method, promo code, age verify, delivery time, refund, auto order, rating, parcel payments) now paint `AppStyle.surfaceFor(Theme.of(context).brightness)` instead of a fixed light grey, and their near-black body text uses `inkFor`. Dark-mode legibility of the remaining grey text is not verified on a device.

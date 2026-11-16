@@ -23,6 +23,7 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
 
 import 'package:base_sdk/src/presentation/components/loading.dart';
+import 'package:base_sdk/src/presentation/components/user_avatar.dart';
 import 'package:base_sdk/src/presentation/pages/profile/profile_section_navigator.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:${package}/presentation/pages/profile/edit_car.dart';
@@ -132,36 +133,48 @@ class _EditProfileModalState extends ConsumerState<EditProfileModal> {
                                     dimension: 50.r,
                                     child: Stack(
                                       alignment: Alignment.center,
+                                      clipBehavior: Clip.none,
                                       children: [
-                                        ShopAvatar(
-                                          radius: 16,
-                                          imageUrl: imageState.imageUrl,
-                                          path: imageState.path,
-                                          size: 50,
-                                          padding: 6,
-                                          bgColor: AppStyle.black.withOpacity(
-                                            0.27,
+                                        // A freshly picked file shows as
+                                        // picked; otherwise the person's
+                                        // own avatar (photo, else
+                                        // initials) - the one the profile
+                                        // header draws - not ShopAvatar's
+                                        // image placeholder, which is all
+                                        // a demo data: URI produced (tour
+                                        // 1113b, 21-users_profile_settings).
+                                        if ((imageState.path ?? '').isNotEmpty)
+                                          ShopAvatar(
+                                            radius: 16,
+                                            imageUrl: imageState.imageUrl,
+                                            path: imageState.path,
+                                            size: 50,
+                                            padding: 6,
+                                            bgColor: AppStyle.black
+                                                .withOpacity(0.27),
+                                          )
+                                        else
+                                          UserAvatar(
+                                            user: state.userData,
+                                            size: 50.r,
                                           ),
-                                        ),
-                                        Container(
-                                          width: 50.r,
-                                          height: 50.r,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(
-                                              16.r,
-                                            ),
-                                            color: AppStyle.black.withOpacity(
-                                              0.27,
-                                            ),
-                                          ),
-                                        ),
-                                        IconButton(
-                                          icon: Icon(
-                                            Remix.camera_fill,
-                                            color: AppStyle.white,
-                                            size: 20.r,
-                                          ),
-                                          onPressed: () async {
+                                        // The change-photo affordance is a
+                                        // small badge on the avatar's
+                                        // corner. A dimming overlay with a
+                                        // centred camera covered the whole
+                                        // avatar, so the demo courier's
+                                        // initials read as a camera
+                                        // placeholder (tour 1114,
+                                        // 21-users_profile_settings).
+                                        PositionedDirectional(
+                                          end: -4.r,
+                                          bottom: -4.r,
+                                          child: Material(
+                                          color: AppStyle.primary,
+                                          shape: const CircleBorder(),
+                                          child: InkWell(
+                                          customBorder: const CircleBorder(),
+                                          onTap: () async {
                                             final XFile? pickedFile =
                                                 await ImagePicker().pickImage(
                                                   source: ImageSource.gallery,
@@ -186,6 +199,16 @@ class _EditProfileModalState extends ConsumerState<EditProfileModal> {
                                                   );
                                             }
                                           },
+                                          child: Padding(
+                                            padding: EdgeInsets.all(4.r),
+                                            child: Icon(
+                                              Remix.camera_fill,
+                                              color: AppStyle.white,
+                                              size: 12.r,
+                                            ),
+                                          ),
+                                        ),
+                                        ),
                                         ),
                                       ],
                                     ),

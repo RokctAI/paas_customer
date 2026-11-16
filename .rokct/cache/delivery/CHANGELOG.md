@@ -1,3 +1,47 @@
+## 1.31.2
+
+- fix(driver profile settings): the edit-profile sheet fills its capped height instead of sizing to the form, so the profile menu no longer shows through above it as a faded 'Profile settings' row (tour 1114c, 21-users_profile_settings).
+
+## 1.31.1
+
+- fix(driver home): the active-job sheet's rows fade out above the root tab pill (base_sdk `FloatingNavFold`) instead of the delivery note sitting under it; the customer name keeps one line (it wrapped as "Than / di") with the phone scaling down beside it, and the delivery address wraps to 2 lines instead of being cut (tour 1114b, 05-driver_home). The "Restauran home" label is fixed by base_sdk 1.111.1's bundled English copy for `restauran_home`.
+- fix(driver history): the filter button on order and parcel history sits above the root tab pill instead of on the Profile tab; the demo history orders carry a delivery address, so the cards show it (tour 1114b, 09-driver_order_history).
+- fix(copy): the orders / parcels subtitles are pluralised: "There is 1 parcel", "There are 3 parcels" (`driverCountLine`), not "There are 1 parcels".
+
+## 1.31.0
+
+- fix(driver home): the active-job sheet opens at its full height (two thirds of the screen), so the order's Restaurant / Home distance row and the customer-code card sit above the floating root tab pill instead of under it (tour 1114, 05-driver_home). Dragging down still collapses it.
+- fix(driver route): the stop list runs to the foot of the page and fades out before the root tab pill through base_sdk's shared `FloatingNavFold` (requires base_sdk >= 1.111.0), with the pill's room as bottom padding; ending the viewport right above the pill sliced stop 3 against it (tour 1114, 08-driver_route).
+- fix(driver profile settings): the avatar shows the person's photo or initials clean, with a small camera badge on its corner; the dimming overlay with a centred camera covered the initials and read as a placeholder (tour 1114, 21-users_profile_settings). The faded header above that sheet is fixed in base_sdk 1.111.0's `showCustomModalBottomSheet`.
+
+## 1.30.8
+
+- fix(tour): the driver_home still waits for the map. HomePage now renders an empty widget keyed `driver_home_map_ready` once GoogleMap's `onMapCreated` has fired and the map has gone idle on its first camera position; the delivery tour fragment routes to /home without a still, then polls for that key (up to 45s) and allows 4s more for tiles to fill before the screenshot. The route page has no map, so it needs no wait. Not run: tour runs only in CI; templates are not analyzable here.
+
+## 1.30.7
+
+- fix(driver): the home order sheet opens tall enough that its address and phone rows sit above the floating nav; the route list and its 4th stop end above the translucent pill instead of showing through it; the profile stat labels wrap to two lines ("Delivered orders"); Profile settings shows the person's avatar (photo or initials) instead of a placeholder; a demo Sell-from-load opens with one unit of the first line so the total and Confirm are live (tour 1113b).
+
+## 1.30.6
+
+- fix(driver): online toggle follows the settings fetch (CustomToggle synced only in initState, so demo stayed Offline); rating chip no longer clipped; job/parcel sheets collapse above the root tab pill; route header sized under SafeArea and list clears the pill; parcel screens say Parcels.
+
+## 1.30.5
+
+- fix(loading): page-level spinners replaced by the base_sdk shimmer `Loading()` (Ray, 2026-11-13: "Remove spinners where you can and use shimmers in the apps").
+
+## 1.30.4
+
+- fix(driver): income page R0.00 and empty statistics in demo. delivery and revenue both ship `api.delivery_man.get_deliveryman_order_report.json`; DemoFixtures answers from the first registered directory (delivery), whose flat copy had no `data` envelope, so revenue's income model read nothing. The delivery fixture is now the superset: `data` envelope (DriverDayReport already unwraps it) carrying the day-strip keys plus `last_order_total_price`, `last_order_income` and a dated `chart`.
+- fix(driver): home showed Offline for a driver the server has online. The home reads the non-reactive `CourierStorage.getOnline()`; `fetchDriverDetails` now stores the flag before updating `driverProvider`, and the home page and bottom sheet watch `driverProvider` so they redraw with it.
+- fix(driver): parcels subtitle said "There are 0 orders" above a listed parcel: `ParcelState.totalActiveOrder` was never set. It is now the fetched count.
+- fix(driver): order and parcel history subtitles read "There are" with nothing after it; they now carry the count and noun like the orders page.
+- Verified: flutter analyze clean on changed lib files; throwaway fixture-parse test (load + report) passed; load/parcel/demo-fixture tests pass. Templates are not analyzable here (`${package}` imports).
+
+## 1.30.3
+
+- chore(compliance): compliance-ignore comments with reasons for the sdk_validator --compliance findings; no behaviour change.
+
 ## 1.30.2
 
 * fix(assets): the template marker (`templates/assets/images/marker.png`)

@@ -33,10 +33,27 @@ class FoodStockItem extends StatelessWidget {
     required this.onDelete,
   });
 
+  /// The product this row shows. A calculation echo nests it under
+  /// `stock.product`; a row straight from the cart (the pane's fallback
+  /// when the calculation echoes no stocks - the demo fixture) carries it
+  /// on the stock itself. Reading only the nested shape left cart rows with
+  /// no name or image, and the stock's INVENTORY quantity in the badge
+  /// (tour 1114, 19-order_pos_cart: "40 / R89.00").
+  ProductData? get _item => product?.stock?.product ?? product?.product;
+
+  /// How many of this line are ordered: the echo's `quantity`, or the
+  /// cart's `cartCount` (a cart stock's `quantity` is what is on the shelf).
+  num get _count => product?.stock?.product != null
+      ? (product?.quantity ?? 1)
+      : (product?.cartCount ?? product?.quantity ?? 1);
+
   @override
   Widget build(BuildContext context) {
+    // Ink resolved from the theme: the row used to be a pinned white card,
+    // which in the dark manager shell was a glaring white band.
+    final ink = AppStyle.inkFor(Theme.of(context).brightness);
     return Container(
-      color: AppStyle.white,
+      color: AppStyle.cardFor(Theme.of(context).brightness),
       margin: REdgeInsets.only(bottom: 1),
       padding: REdgeInsets.symmetric(vertical: 12),
       child: Slidable(
@@ -78,20 +95,27 @@ class FoodStockItem extends StatelessWidget {
         child: Row(
           children: [
             if ((product?.quantity ?? 0) > 0)
+              // The qty badge sizes to its label ("2 each") and sits inset
+              // from the row edge: a fixed 50px badge flush left clipped
+              // the number (tour 1114b manager 19-order_pos_cart).
               Container(
-                width: 50.r,
+                constraints: BoxConstraints(minWidth: 50.r, maxWidth: 96.r),
                 height: 78.r,
+                margin: REdgeInsetsDirectional.only(start: 12),
+                padding: REdgeInsets.symmetric(horizontal: 8),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(16.r),
-                    bottomRight: Radius.circular(16.r),
-                  ),
+                  borderRadius: BorderRadius.circular(16.r),
                   color: AppStyle.primary,
                 ),
-                child: Text(
-                  '${(product?.quantity ?? 1) * (product?.stock?.product?.interval ?? 1)} ${product?.stock?.product?.unit?.translation?.title ?? ""}',
-                  style: AppStyle.interSemi(size: 15.sp),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    '${_count * (_item?.interval ?? 1)} ${_item?.unit?.translation?.title ?? ""}'
+                        .trim(),
+                    maxLines: 1,
+                    style: AppStyle.interSemi(size: 15.sp),
+                  ),
                 ),
               ),
             16.horizontalSpace,
@@ -100,16 +124,18 @@ class FoodStockItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    product?.stock?.product?.translation?.title ?? '',
+                    _item?.translation?.title ?? '',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: AppStyle.interNormal(
                       size: 14.sp,
-                      color: AppStyle.black,
+                      color: ink,
                       letterSpacing: -0.3,
                     ),
                   ),
                   8.verticalSpace,
                   Text(
-                    product?.stock?.product?.translation?.description ?? '',
+                    _item?.translation?.description ?? '',
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,
                     style: AppStyle.interNormal(
@@ -135,7 +161,7 @@ class FoodStockItem extends StatelessWidget {
                             AppHelpers.getTranslation(e.value ?? ''),
                             style: AppStyle.interNormal(
                               size: 12.sp,
-                              color: AppStyle.black,
+                              color: ink,
                               letterSpacing: -0.3,
                             ),
                           ),
@@ -160,7 +186,7 @@ class FoodStockItem extends StatelessWidget {
                             "  ${AppHelpers.numberFormat(number: (e.totalPrice ?? 0) / (e.quantity ?? 1))} x ${e.quantity ?? 1}",
                             style: AppStyle.interNormal(
                               size: 12.sp,
-                              color: AppStyle.black,
+                              color: ink,
                               letterSpacing: -0.3,
                             ),
                           ),
@@ -174,7 +200,7 @@ class FoodStockItem extends StatelessWidget {
                       AppHelpers.getTranslation(TrKeys.shopBonus),
                       style: AppStyle.interSemi(
                         size: 14.sp,
-                        color: AppStyle.black,
+                        color: ink,
                         letterSpacing: -0.3,
                       ),
                     )
@@ -183,7 +209,7 @@ class FoodStockItem extends StatelessWidget {
                       AppHelpers.getTranslation(TrKeys.bonus),
                       style: AppStyle.interSemi(
                         size: 14.sp,
-                        color: AppStyle.black,
+                        color: ink,
                         letterSpacing: -0.3,
                       ),
                     )
@@ -192,7 +218,7 @@ class FoodStockItem extends StatelessWidget {
                       AppHelpers.numberFormat(number: product?.totalPrice),
                       style: AppStyle.interSemi(
                         size: 14.sp,
-                        color: AppStyle.black,
+                        color: ink,
                         letterSpacing: -0.3,
                       ),
                     ),
@@ -203,7 +229,7 @@ class FoodStockItem extends StatelessWidget {
             CommonImage(
               width: 110,
               height: 106,
-              url: product?.stock?.product?.img,
+              url: _item?.img,
               radius: 0,
               errorRadius: 0,
               fit: BoxFit.fitWidth,

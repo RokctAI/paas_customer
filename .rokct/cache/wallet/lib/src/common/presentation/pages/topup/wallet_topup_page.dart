@@ -80,6 +80,7 @@ import 'package:wallet_sdk/src/common/presentation/pages/receive/wallet_receive_
 import 'package:wallet_sdk/src/common/translations/wallet_translations.dart';
 import 'package:wallet_sdk/src/common/utils/wallet_currency.dart';
 
+import 'package:base_sdk/src/presentation/components/loading.dart';
 const GuideDefinition walletTopUpGuide = GuideDefinition(
   id: 'wallet.topup',
   steps: [
@@ -127,7 +128,6 @@ class WalletTopUpPage extends ConsumerStatefulWidget {
     AppHelpers.showCustomModalBottomSheet(
       context: context,
       modal: const WalletTopUpPage(asSheet: true),
-      isDarkMode: Theme.of(context).brightness == Brightness.dark,
       paddingTop: 100,
     );
   }
@@ -577,7 +577,7 @@ class _WalletTopUpPageState extends ConsumerState<WalletTopUpPage> {
                       vertical: 10.h,
                     ),
                     decoration: BoxDecoration(
-                      color: AppStyle.cardDark,
+                      color: AppStyle.cardFor(Theme.of(context).brightness),
                       borderRadius: BorderRadius.circular(8.r),
                       border: Border.all(color: AppStyle.strokeDark),
                       boxShadow: [
@@ -600,7 +600,7 @@ class _WalletTopUpPageState extends ConsumerState<WalletTopUpPage> {
 
             // Saved Cards Section
             if (_loadingCards)
-              Center(child: CircularProgressIndicator(color: AppStyle.primary))
+              const Loading()
             else if (_savedCards.isNotEmpty) ...[
               Text(
                 AppHelpers.getTranslation(TrKeys.selectCard),
@@ -736,7 +736,7 @@ class _WalletTopUpPageState extends ConsumerState<WalletTopUpPage> {
   Widget _sheet(Widget content) {
     return Container(
       decoration: BoxDecoration(
-        color: AppStyle.surfaceDark,
+        color: AppStyle.surfaceFor(Theme.of(context).brightness),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(16.r),
           topRight: Radius.circular(16.r),
@@ -799,7 +799,7 @@ class _SavedCardTile extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
           decoration: BoxDecoration(
-            color: AppStyle.cardDark,
+            color: AppStyle.cardFor(Theme.of(context).brightness),
             borderRadius: BorderRadius.circular(8.r),
             border: Border.all(
               color: selected ? AppStyle.primary : AppStyle.strokeDark,
@@ -826,7 +826,9 @@ class _SavedCardTile extends StatelessWidget {
                         card.expiryDate,
                         style: AppStyle.interNormal(
                           size: 12.sp,
-                          color: AppStyle.textDarkSecondary,
+                          color: AppStyle.secondaryInkFor(
+                            Theme.of(context).brightness,
+                          ),
                         ),
                       ),
                   ],

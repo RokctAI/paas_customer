@@ -156,7 +156,6 @@ class _WalletHistoryState extends ConsumerState<WalletHistoryPage> {
     AppHelpers.showCustomModalBottomSheet(
       context: context,
       modal: ProviderScope(child: loan),
-      isDarkMode: AppStyle.isDark,
     );
   }
 

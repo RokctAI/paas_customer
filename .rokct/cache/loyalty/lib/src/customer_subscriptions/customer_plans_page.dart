@@ -22,6 +22,7 @@ import 'customer_subscription_models.dart';
 import 'customer_subscriptions_repository.dart';
 import 'package:remixicon/remixicon.dart';
 
+import 'package:base_sdk/src/presentation/components/loading.dart';
 const GuideDefinition loyaltyPlansGuide = GuideDefinition(id: 'loyalty.plans', steps: [GuideStep(id: 'loyalty.plans.subscribe', anchor: 'loyalty.plans.list', title: 'Choose a plan', body: 'Pick a plan and tap Subscribe.')]);
 
 String _t(String key) => AppHelpers.getTranslation(key);
@@ -212,7 +213,7 @@ class _CustomerPlansPageState extends State<CustomerPlansPage> {
       body = [
         const Padding(
           padding: EdgeInsets.all(32),
-          child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+          child: const Loading(),
         ),
       ];
     } else if (_failed) {

@@ -20,6 +20,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:base_sdk/src/presentation/components/floating_nav/floating_nav_fold.dart';
 import 'package:remixicon/remixicon.dart';
 
 import 'package:base_sdk/src/application/app_widget/app_provider.dart';
@@ -103,7 +104,13 @@ class GenericProfilePage extends ConsumerStatefulWidget {
 /// edge) so the last rows — the footer's app-name meta row on a long page —
 /// scroll clear of it instead of ending underneath (Ray, 2026-09-23).
 EdgeInsets get _pagePadding =>
-    EdgeInsets.fromLTRB(16.r, 16.r, 16.r, 16.r + 96.r);
+    EdgeInsets.fromLTRB(16.r, 16.r, 16.r, 16.r + _navClearance);
+
+/// The room the floating nav pill takes at the foot of the page.
+double get _navClearance => 96.r;
+
+/// The phone list's own padding; the pill's room sits outside it.
+EdgeInsets get _listPadding => EdgeInsets.all(16.r);
 
 class _GenericProfilePageState extends ConsumerState<GenericProfilePage> {
   /// Resolved async visibility gates, keyed by section id. A gated section
@@ -346,8 +353,19 @@ class _GenericProfilePageState extends ConsumerState<GenericProfilePage> {
                         header: header,
                         sections: sections,
                       )
-                    : ListView(
-                        padding: _pagePadding,
+                    // The list runs to the foot of the page and FADES OUT
+                    // before the floating nav pill (FloatingNavFold): a
+                    // hard edge right above the pill read as the last row
+                    // sitting under the nav (tour 1114 20-users_profile),
+                    // and rows scrolled behind the translucent pill showed
+                    // through it (tour 1113b). The list's own bottom
+                    // padding lets the last row scroll clear of the pill.
+                    : FloatingNavFold(
+                      foot: _navClearance - 16.r,
+                      child: ListView(
+                        padding: _listPadding.copyWith(
+                          bottom: _listPadding.bottom + _navClearance,
+                        ),
                         children: [
                           topRow,
                           12.verticalSpace,
@@ -362,6 +380,7 @@ class _GenericProfilePageState extends ConsumerState<GenericProfilePage> {
                                 .map((section) => section.builder(context)),
                         ],
                       ),
+                    ),
               ),
       ),
     );

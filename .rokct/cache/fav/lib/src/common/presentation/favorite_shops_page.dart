@@ -32,6 +32,7 @@ import 'package:base_sdk/src/guide/guide_host.dart';
 
 import '../application/favorites/favorites_provider.dart';
 
+import 'package:base_sdk/src/presentation/components/loading.dart';
 /// The coach-mark for the liked-shops page: points at the header.
 const GuideDefinition favShopsGuide = GuideDefinition(
   id: 'fav.shops',
@@ -145,7 +146,7 @@ class _FavoriteShopsPageState extends ConsumerState<FavoriteShopsPage> {
                 ),
                 child: state.isShopLoading
                     ? (widget.loadingBuilder?.call(context) ??
-                        const Center(child: CircularProgressIndicator()))
+                        const Loading())
                     : state.shops.isEmpty
                         // Liked shops exist on the device but could not be
                         // loaded (offline): say so instead of claiming the

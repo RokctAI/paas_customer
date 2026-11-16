@@ -31,6 +31,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:wallet_sdk/src/common/infrastructure/repositories/card_billing_api.dart';
 import 'package:wallet_sdk/src/common/translations/wallet_translations.dart';
 
+import 'package:base_sdk/src/presentation/components/loading.dart';
 /// The auto-submitting HTML form for a PayFast checkout. Values are
 /// HTML-escaped; the fields are posted exactly as the server signed them.
 String payFastAutoSubmitHtml(String action, Map<String, String> fields) {
@@ -130,7 +131,7 @@ class _CardCheckoutPageState extends State<CardCheckoutPage> {
         children: [
           WebViewWidget(controller: _controller),
           if (_loading)
-            Center(child: CircularProgressIndicator(color: AppStyle.primary)),
+            const Loading(),
         ],
       ),
     );

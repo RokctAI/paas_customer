@@ -12,6 +12,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -19,6 +20,7 @@ import 'package:delivery_sdk/src/driver/infrastructure/models/data/order_detail.
 
 
 
+import 'package:base_sdk/src/presentation/components/floating_nav/floating_nav_fold.dart';
 import 'package:base_sdk/src/presentation/theme/app_style.dart';
 import 'package:${package}/presentation/pages/home/widgets/approve_dialog.dart';
 import 'package:${package}/presentation/pages/home/widgets/foods_page.dart';
@@ -212,17 +214,35 @@ class _DeliverBottomSheetScreenState extends State<DeliverBottomSheetScreen> {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Consumer(builder: (context, ref, child) {
+        final sheetHeight = ref.watch(homeProvider).isGoUser
+            ? MediaQuery.sizeOf(context).height * 1.8 / 3
+            : MediaQuery.sizeOf(context).height * 2 / 3;
+        // The collapsed sheet must keep its header (status stepper) above
+        // the floating root tab pill; a flat 0.16 left it under the pill
+        // (driver tour shot 05).
+        final minSize = ((MediaQuery.paddingOf(context).bottom +
+                    driverRootNavClearance() +
+                    120.h) /
+                sheetHeight)
+            .clamp(0.16, 0.6)
+            .toDouble();
+        // The sheet opens at its full height (maxChildSize). Sized to
+        // "about 300 logical px of header + rows" it still left the order's
+        // Restaurant / Home distance row and the customer-code card under
+        // the floating root tab pill (tour 1114, 05-driver_home): the
+        // OrderItem card alone is taller than that once the address wraps.
+        // Full height is two thirds of the screen, so the map keeps its
+        // top third; dragging down still collapses to [minSize].
+        const double openSize = 1.0;
         return SizedBox(
-          height: ref.watch(homeProvider).isGoUser
-              ? MediaQuery.sizeOf(context).height * 1.8 / 3
-              : MediaQuery.sizeOf(context).height * 2 / 3,
+          height: sheetHeight,
           width: double.infinity,
           child: DraggableScrollableSheet(
-              // Opens at half the full height (maxChildSize), so the order's
-              // header and actions clear the floating nav pill underneath.
-              initialChildSize: 0.5,
+              // Opens at the full height (maxChildSize), so the order's
+              // rows clear the floating nav pill underneath.
+              initialChildSize: openSize,
               maxChildSize: 1,
-              minChildSize: 0.16,
+              minChildSize: minSize,
               snap: true,
               builder: (context, scrollController) => Container(
                     width: MediaQuery.sizeOf(context).width,
@@ -238,7 +258,16 @@ class _DeliverBottomSheetScreenState extends State<DeliverBottomSheetScreen> {
                               blurRadius: 40,
                               offset: const Offset(0, -2))
                         ]),
-                    child: ListView(
+                    // The sheet's rows fade out before the floating nav
+                    // pill at rest instead of sitting under it (the
+                    // delivery note, tour 1114b driver 05-driver_home);
+                    // the bottom padding still lets the last row scroll
+                    // clear.
+                    child: FloatingNavFold(
+                      foot: MediaQuery.paddingOf(context).bottom +
+                          driverRootNavClearance() -
+                          12.h,
+                      child: ListView(
                       controller: scrollController,
                       padding: EdgeInsets.only(
                           top: 8.h,
@@ -490,6 +519,7 @@ class _DeliverBottomSheetScreenState extends State<DeliverBottomSheetScreen> {
                           },
                         ),
                       ],
+                    ),
                     ),
                   )),
         );

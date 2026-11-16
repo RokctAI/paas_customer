@@ -1,3 +1,21 @@
+## 1.13.4
+
+- fix(catalog): `FoodsBody` owns its product `RefreshController`. On a split-pane width, opening Quick stock rebuilds the catalog into a new plane while the old one is still mounted, and the shared page controller crashed with pull_to_refresh "Don't use one refreshController to multiple SmartRefresher" (tour 1114b manager tablet 15-quick_stock). The page's scroll listener also skips while two lists are attached.
+- fix(catalog): the phone products list fades out above the floating nav pill (base_sdk `FloatingNavFold`) and its bottom padding lets the last card scroll clear (tour 1114b manager 12-menu).
+- fix(edit product): the header shows "Edit product" with the product name on its own line (up to 2 lines) instead of one ellipsized line; the description field wraps up to 4 lines (needs base_sdk 1.111.1 `UnderlinedTextField.maxLines`) (tour 1114b manager 14-product_detail).
+
+## 1.13.3
+
+- fix(loading): page-level spinners replaced by the base_sdk shimmer `Loading()` (Ray, 2026-11-13: "Remove spinners where you can and use shimmers in the apps").
+
+## 1.13.2
+
+- fix(manager): the phone add-product sheet follows the app theme (`ModalWrap(themed: true)`, picture card on `cardFor`/`inkFor`, tab bar on theme ink). The white sheet in the dark app left the field labels nearly invisible.
+
+## 1.13.1
+
+- chore(compliance): compliance-ignore comments with reasons for the sdk_validator --compliance findings; no behaviour change.
+
 ## 1.13.0
 
 * feat(manager): the add-product form can open with a barcode prefilled, for merchants_sdk 1.38.0's till prompt on an unknown scan. `CreateProductModal.open(context, {barcode})` opens the form at any width: the bottom sheet on a phone, `ProductEditPage.openCreate` at plane widths. The foods tab's "+ New product" now calls it too (same behaviour as before). With a barcode the details form shows a Barcode field holding it (new tr_key `barcode`); it is saved the way the form already sent its code (`sku` on create).

@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.108.0",
+      "version": "1.111.2",
       "files": {
         "lib/main.dart": "92423f25fa33333d67d8bd380b35d328cc5350033e61f0b750952a6d51641c34",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -347,7 +347,7 @@
       }
     },
     "marketplace_sdk": {
-      "version": "1.17.3",
+      "version": "1.17.4",
       "files": {
         "lib/presentation/routes/marketplace_route_pages.dart": "ba5b8dfae45b0ee10314f84d9b0adcabbccc9569a8a3f49ea1102c2ceb12d1d6"
       },
@@ -608,7 +608,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.22.3",
+      "version": "1.22.7",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "87b5d1dbc3f0f9417db5289be2c1ebbcb7dfecf1638f348b6f5ee1581f7ce4d2",
         "lib/presentation/routes/registration_step_pages.dart": "68aed195fc07db746a0919c7ba6d47ffa445ca86e7d9cf6ee50fbcb00e82d3c2",
@@ -747,7 +747,7 @@
       ]
     },
     "users_sdk": {
-      "version": "1.5.2",
+      "version": "1.5.3",
       "files": {
         "assets/demo/users/api.user.search_user.json": "38e0b9de817f645c4bec37c0d4a3e58baecccb040f5718dc069a72c7385a0bed",
         "assets/demo/users/api.user.add_user_address.json": "94040fd50c440c6ddcbbe56ce155489e70d4ae918498599ac55082d238d799ad",
@@ -776,7 +776,7 @@
       ]
     },
     "merchants_sdk": {
-      "version": "1.38.0",
+      "version": "1.38.5",
       "files": {
         "assets/audio/notification.wav": "9d62af6f1c8df010941d1daa17162175d87293bd78371c787803b5a11f95cb9d",
         "lib/presentation/routes/merchants_customer_route_pages.dart": "94118cddd225b802a07db40ac5683697fd190d5d1de42494d955fc3f7eb79456",
@@ -885,7 +885,7 @@
       ]
     },
     "products_sdk": {
-      "version": "1.13.0",
+      "version": "1.13.4",
       "files": {
         "assets/demo/products/api.brand.get_brand_by_uuid.json": "2f572655239beaef3a4258dca9213d201ad23d9092a8d44e9251e68daad92fbb",
         "assets/demo/products/api.brand.get_brands.json": "e6d9aceed478a49c043f14905a208bf587418015ae67925eef65f7d7f07631ea",
@@ -939,7 +939,7 @@
       ]
     },
     "orders_sdk": {
-      "version": "1.31.5",
+      "version": "1.31.11",
       "files": {
         "lib/presentation/routes/orders_customer_route_pages.dart": "acadebdd2b7525434e765bf02683c151b97d7a392e1552d8f2af02b916a4702c"
       },
@@ -1086,7 +1086,18 @@
           ]
         }
       ],
-      "boot_hooks": [],
+      "boot_hooks": [
+        {
+          "id": "orders-en-bundled-translations",
+          "order": 64,
+          "body": "BundledTranslations.register('en', kOrdersEnTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:orders_sdk/src/translations/orders_en_translations.dart';"
+          ],
+          "_comment": "Registers English fallbacks for tr_keys whose legacy wire key humanizes badly (spproximate_preparation_time). Backend-served rows still win; the map is consulted only before the humanized-key fallback."
+        }
+      ],
       "tr_keys": {
         "ordersToAccept": "orders_to_accept",
         "waitingOnYou": "waiting_on_you",
@@ -1118,7 +1129,7 @@
       ]
     },
     "fav_sdk": {
-      "version": "1.1.2",
+      "version": "1.1.3",
       "files": {},
       "routes": [],
       "database": {
@@ -1141,7 +1152,7 @@
       "boot_hooks": []
     },
     "wallet_sdk": {
-      "version": "1.9.1",
+      "version": "1.9.3",
       "files": {
         "lib/presentation/routes/wallet_route_pages.dart": "86d07bc5c2e239b713c49a9caa4f2dc6007ec1e20aa9519aeb960f3fcc8ee5a7",
         "assets/demo/wallet/api.user.get_wallet_history.json": "0041f5565b4da148f0eef8d8dbc96946fc8c71c4b1ddf4e1ddce4e9912d44e26"
@@ -1220,7 +1231,7 @@
       }
     },
     "payments_sdk": {
-      "version": "1.3.6",
+      "version": "1.3.7",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1258,7 +1269,7 @@
       "boot_hooks": []
     },
     "delivery_sdk": {
-      "version": "1.30.2",
+      "version": "1.31.2",
       "files": {
         "assets/svg/balance.svg": "6f17d12b29de8e5500bc445ee89eec5c1fc8830cea42711af9bf80975e6b79ce",
         "assets/image/my_location.png": "0e6b49eb78d1f74ac96ac24ce39f834105ce68e361c302038ba9cefdcd926126",
@@ -1267,7 +1278,7 @@
         "assets/demo/delivery/api.user.create_request_model.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74",
         "assets/demo/delivery/api.driver_parcel.set_current_parcel_order.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74",
         "assets/demo/delivery/api.driver_order.convert_cod_to_credit.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74",
-        "assets/demo/delivery/api.delivery_man.get_deliveryman_order_report.json": "2585bbfb634ed1766fee7a51c08cfe0434c65ca84847b7f4166b56a3cb115847",
+        "assets/demo/delivery/api.delivery_man.get_deliveryman_order_report.json": "e37cb156152d162b36c9b28ad8f631174ac525e6ec6779521cade93f40c4a6bd",
         "assets/demo/delivery/api.driver_order.update_driver_order_status.json": "a17fcf0a2f50e2d495e4f90ce263410edc183add6c62699a2facbccf60410f74",
         "assets/demo/delivery/api.poi.lookup_poi_owner.json": "a473231bb47f7b2ef5202851c1fe1697ded4db0e0f4e76b18a4cbda8fc11e02e",
         "assets/demo/delivery/api.user.update_profile.json": "9dbe3f8e1224a9192908777a4f5c74b0c199c98a8c0e2decf10e63e4b6cba65d",
@@ -1279,7 +1290,7 @@
         "assets/demo/delivery/api.driver_order.get_driver_route.json": "7aca2264e7f9f73f048ef6ea3fcc60d3c38783e56c230fcf7168d94ddfcc61b7",
         "assets/demo/delivery/api.order.load.get_my_load.json": "06170de6d0c8baca3208b4da641a1dd9191fb1804bc50fe0b687e60df3871942",
         "assets/demo/delivery/api.poi.get_poi_types.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
-        "assets/demo/delivery/api.driver_order.get_driver_orders_paginate.json": "6fc5ffb923a0ef0e1670c8f233a96fa675682cf3be9ecf695b15c8e9a1b8ef77",
+        "assets/demo/delivery/api.driver_order.get_driver_orders_paginate.json": "ec9b991a8558f6a338cadd4f4d464b573c76684fa373bcc0f43761d176842f1c",
         "assets/demo/delivery/api.poi.get_my_poi_shops.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
         "assets/demo/delivery/api.driver_order.attach_order_to_me.json": "e5ad01294501ef89506d1e257820ec66e9b9dd15ba57a7090fb8b5ef8b5c32d6",
         "assets/demo/delivery/api.dispatch_route.get_my_dispatch_route.json": "ed1d37906da8a6b10140aca9b911faa75f3a467a97f21d6108bbce1ca4de5a12",
@@ -1483,7 +1494,7 @@
       ]
     },
     "corporate_sdk": {
-      "version": "1.2.0",
+      "version": "1.2.1",
       "files": {
         "lib/presentation/routes/corporate_route_pages.dart": "7bd7deacfebf5ae507821ca4778a460cb5ac709158254b1ae725003efc6992fe"
       },
@@ -1531,7 +1542,7 @@
       "boot_hooks": []
     },
     "map_sdk": {
-      "version": "1.5.1",
+      "version": "1.5.2",
       "files": {
         "lib/presentation/routes/map_route_pages.dart": "40d4309147726738a018def95efb9f3e16815684c55ac631f0559b74dfef4a50",
         "assets/demo/map/api.poi.get_customer_pois.json": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
@@ -1580,7 +1591,7 @@
       ]
     },
     "promotions_sdk": {
-      "version": "1.4.1",
+      "version": "1.4.2",
       "files": {
         "lib/presentation/routes/promotions_route_pages.dart": "0dc5d4de524957c7fd906b18a65e639082ddb94d18dc94b8859b5ebcceb7f77b",
         "assets/demo/promotions/api.banner.get_ads.json": "904cc2312d56782b9e12bea4bc8646d47a0dc2829d27c1465689db5b23dc6d93",
@@ -1618,7 +1629,7 @@
       ]
     },
     "loyalty_sdk": {
-      "version": "1.2.2",
+      "version": "1.2.3",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1663,7 +1674,7 @@
       "boot_hooks": []
     },
     "hms_sdk": {
-      "version": "1.1.0",
+      "version": "1.1.1",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1685,7 +1696,7 @@
       ]
     },
     "telemetry_sdk": {
-      "version": "1.1.0",
+      "version": "1.1.1",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1696,7 +1707,7 @@
       "boot_hooks": []
     },
     "booking_sdk": {
-      "version": "1.2.3",
+      "version": "1.2.4",
       "files": {
         "lib/presentation/pages/reservations/reservations_page.dart": "31dd111ff24ef746f0c11208bf258ff4ace786b7ad261a74e9e75ac3ee7fa236",
         "lib/presentation/pages/reservations/new_reservation_page.dart": "48719b888173cdb8c185ed7c61f190c7b16d06d869680f76c83d862851600254"
@@ -1795,68 +1806,68 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.108.0",
-      "hash": "9c80922c8df48803"
+      "version": "1.111.2",
+      "hash": "110ad516b506569a"
     },
     "comms": {
       "version": "1.23.4",
       "hash": "0967a0a2da1e17c4"
     },
     "marketplace": {
-      "version": "1.17.3",
-      "hash": "b8e5de748beb8314"
+      "version": "1.17.4",
+      "hash": "0ace4518e4661b5a"
     },
     "merchants": {
-      "version": "1.38.0",
-      "hash": "7e335765b526826f"
+      "version": "1.38.5",
+      "hash": "11398f3d0ba43310"
     },
     "products": {
-      "version": "1.13.0",
-      "hash": "1a226c5fb278847b"
+      "version": "1.13.4",
+      "hash": "2f5ef7cde06e3167"
     },
     "orders": {
-      "version": "1.31.5",
-      "hash": "f287879a1ccef383"
+      "version": "1.31.11",
+      "hash": "514638052d7119b3"
     },
     "promotions": {
-      "version": "1.4.1",
-      "hash": "f925d4e2193ba8b9"
+      "version": "1.4.2",
+      "hash": "81f94a720e5af68c"
     },
     "loyalty": {
-      "version": "1.2.2",
-      "hash": "f92b75903bb59390"
+      "version": "1.2.3",
+      "hash": "459d0a902f1fe854"
     },
     "auth": {
-      "version": "1.22.3",
-      "hash": "66194347b6a06746"
+      "version": "1.22.7",
+      "hash": "5dcd1a8f9ae34d23"
     },
     "users": {
-      "version": "1.5.2",
-      "hash": "1e8eee291e0c3997"
+      "version": "1.5.3",
+      "hash": "8555e8c1bd980a7e"
     },
     "fav": {
-      "version": "1.1.2",
-      "hash": "aa6e0a0df7a828bb"
+      "version": "1.1.3",
+      "hash": "e8d5d2bacd7ec2dd"
     },
     "wallet": {
-      "version": "1.9.1",
-      "hash": "d82e52fb83fc80cb"
+      "version": "1.9.3",
+      "hash": "69d5462e22f9fa5e"
     },
     "payments": {
-      "version": "1.3.6",
-      "hash": "507b9990ba96c77c"
+      "version": "1.3.7",
+      "hash": "efa7e2900fe7c723"
     },
     "delivery": {
-      "version": "1.30.2",
-      "hash": "8ec1c722341f2b6b"
+      "version": "1.31.2",
+      "hash": "0f65b9473b58ed62"
     },
     "map": {
-      "version": "1.5.1",
-      "hash": "5a71671191e4d0c7"
+      "version": "1.5.2",
+      "hash": "40fd2fb0807a2a2a"
     },
     "corporate": {
-      "version": "1.2.0",
-      "hash": "ef378600c400e1cf"
+      "version": "1.2.1",
+      "hash": "4d90077fb4af2486"
     },
     "processing": {
       "version": "1.0.2",
@@ -1867,16 +1878,16 @@
       "hash": "a5f94e74405057ac"
     },
     "hms": {
-      "version": "1.1.0",
-      "hash": "7f1c497916478f4e"
+      "version": "1.1.1",
+      "hash": "9413501caf93bf5d"
     },
     "telemetry": {
-      "version": "1.1.0",
-      "hash": "fc4dc71b7401b7bd"
+      "version": "1.1.1",
+      "hash": "396500678188b0f2"
     },
     "booking": {
-      "version": "1.2.3",
-      "hash": "8f49fe34ac10c902"
+      "version": "1.2.4",
+      "hash": "c606a8b6e4771d1f"
     },
     "subscriptions": {
       "version": "1.8.0",

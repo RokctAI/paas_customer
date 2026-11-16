@@ -1,3 +1,7 @@
+## 1.2.4
+
+- chore(compliance): compliance-ignore comments with reasons for the sdk_validator --compliance findings; no behaviour change.
+
 ## 1.2.3
 
 * fix(manifest): remove the duplicate empty top-level `installs` key that overrode the demo fixture install. Manifest only.

@@ -34,6 +34,7 @@ import 'package:base_sdk/src/guide/guide_definition.dart';
 import 'package:base_sdk/src/guide/guide_host.dart';
 import 'package:payments_sdk/src/common/presentation/pages/cards/payment_card.dart';
 
+import 'package:base_sdk/src/presentation/components/loading.dart';
 const GuideDefinition paymentsCardGuide = GuideDefinition(
   id: 'payments.card',
   steps: [
@@ -302,7 +303,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     if (widget.tokenizeOnly) {
       // Simplified tokenize-only mode
       return _loadingCards
-          ? Center(child: CircularProgressIndicator(color: AppStyle.primary))
+          ? const Loading()
           : Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -336,7 +337,7 @@ class _PaymentScreenState extends ConsumerState<PaymentScreen> {
     } else {
       // Regular payment mode with proper styling
       return _loadingCards
-          ? Center(child: CircularProgressIndicator(color: AppStyle.primary))
+          ? const Loading()
           : SingleChildScrollView(
               controller: widget.scrollController,
               child: Column(

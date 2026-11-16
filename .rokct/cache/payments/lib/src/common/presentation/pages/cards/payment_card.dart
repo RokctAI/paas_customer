@@ -25,6 +25,7 @@ import 'package:base_sdk/src/presentation/theme/theme.dart';
 
 import 'package:base_sdk/src/presentation/components/buttons/custom_button.dart';
 
+import 'package:base_sdk/src/presentation/components/loading.dart';
 /// A widget for displaying, selecting, and managing saved payment cards
 class SavedCardsWidget extends ConsumerStatefulWidget {
   final Function(SavedCardModel?) onCardSelected;
@@ -233,7 +234,7 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
-      return Center(child: CircularProgressIndicator(color: AppStyle.primary));
+      return const Loading();
     }
 
     if (_savedCards.isEmpty) {
@@ -398,12 +399,7 @@ class _SavedCardsWidgetState extends ConsumerState<SavedCardsWidget> {
 
         if (_deletingCard) ...[
           16.verticalSpace,
-          Center(
-            child: CircularProgressIndicator(
-              color: AppStyle.primary,
-              strokeWidth: 3,
-            ),
-          ),
+          const Loading(),
         ],
       ],
     );

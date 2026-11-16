@@ -15,6 +15,8 @@
 // Demo runs the REAL BannersRepository: base_sdk's DemoGatewayInterceptor
 // answers every api.banner.* cmd from templates/assets/demo/promotions.
 
+// compliance-ignore-file: obs-flutter-trace (no outgoing HTTP to our backend here (flagged by file name or an external download); backend calls go through base_sdk's HttpService, which registers TraceIdInterceptor)
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:promotions_sdk/src/common/infrastructure/repositories/banners_repository.dart';
 

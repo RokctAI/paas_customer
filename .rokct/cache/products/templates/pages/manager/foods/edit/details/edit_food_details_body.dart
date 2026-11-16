@@ -109,12 +109,7 @@ class _EditFoodDetailsBodyState extends ConsumerState<EditFoodDetailsBody> {
             final event = ref.read(editFoodDetailsProvider.notifier);
             final foodsEvent = ref.read(foodsProvider.notifier);
             return state.product == null
-                ? Center(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 3.r,
-                      color: AppStyle.primary,
-                    ),
-                  )
+                ? const Loading()
                 : Form(
                     key: _formKey,
                     child: Column(
@@ -143,7 +138,10 @@ class _EditFoodDetailsBodyState extends ConsumerState<EditFoodDetailsBody> {
                         UnderlinedTextField(
                           label:
                               '${AppHelpers.getTranslation(TrKeys.description)}*',
-                          inputType: TextInputType.text,
+                          inputType: TextInputType.multiline,
+                          // Wraps instead of clipping a long description
+                          // (tour 1114b manager 14-product_detail).
+                          maxLines: 4,
                           textCapitalization: TextCapitalization.sentences,
                           textInputAction: TextInputAction.next,
                           onChanged: event.setDescription,

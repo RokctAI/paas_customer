@@ -35,6 +35,7 @@ import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:base_sdk/src/services/key_sound.dart';
 import 'package:base_sdk/src/services/local_storage.dart';
 import 'package:base_sdk/src/services/tr_keys.dart';
+import 'package:merchants_sdk/src/manager/presentation/main/manager_nav_clearance.dart';
 import 'package:merchants_sdk/src/manager/application/pos_cart/pos_cart_provider.dart';
 import 'package:merchants_sdk/src/manager/application/pos_cart/pos_cart_state.dart';
 import 'package:merchants_sdk/src/manager/application/pos_cart/pos_sale_finish.dart';
@@ -638,7 +639,17 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
     Widget column(List<Widget> children) => CustomScrollView(
           slivers: [
             SliverPadding(
-              padding: EdgeInsets.all(16.r),
+              // The phone route draws edge to edge (no SafeArea, no app
+              // bar), so the column clears the status bar itself: the
+              // "Checkout" header sat under the clock (tour 1114,
+              // 07-pos_checkout). Hosted in planes, the host owns the
+              // insets.
+              padding: EdgeInsets.fromLTRB(
+                16.r,
+                16.r + (inPlanes ? 0 : MediaQuery.paddingOf(context).top),
+                16.r,
+                16.r,
+              ),
               sliver: SliverList(delegate: SliverChildListDelegate(children)),
             ),
           ],
@@ -726,6 +737,11 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
         ],
         _methodToggle(context),
         20.verticalSpace,
+        // The ticket's Items / Total reads first on the phone, above the
+        // QR: under it, the summary landed at the fold beside the Back
+        // pill and the Total row was cut off (tour 1114, 07-pos_checkout).
+        _summary(context, state),
+        20.verticalSpace,
         if (showQr) ...[
           if (offline) _offlineBanner(context) else _qrHintBanner(context),
           20.verticalSpace,
@@ -752,7 +768,6 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
           ],
           6.verticalSpace,
         ],
-        _summary(context, state),
         if (showAutodial) ...[
           14.verticalSpace,
           _autodialCard(context, state),
@@ -760,7 +775,7 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
         20.verticalSpace,
         // An empty ticket has nothing to finish: no finish buttons.
         if (state.lines.isNotEmpty) _finishButtons(context, state),
-        120.verticalSpace,
+        20.verticalSpace,
       ]);
     }
 
@@ -768,7 +783,19 @@ class _CheckoutPageState extends ConsumerState<CheckoutPage> {
       backgroundColor: AppStyle.surfaceFor(Theme.of(context).brightness),
       body: Stack(
         children: [
-          body,
+          // On the phone the scroller ENDS above the back pill rather than
+          // running under it: the summary's Total row sat behind the
+          // translucent pill at scroll rest (tour 1113b, checkout).
+          if (inPlanes)
+            body
+          else
+            Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.paddingOf(context).bottom +
+                    managerNavClearance(),
+              ),
+              child: body,
+            ),
           // The floating nav's back-only pill (FloatingNavBack, core#125 —
           // design strip section 12's one-back rule): the shared pill
           // housing carrying only the leading back segment, this screen's

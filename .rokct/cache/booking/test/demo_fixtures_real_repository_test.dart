@@ -16,6 +16,8 @@
 // base_sdk's DemoGatewayInterceptor answers every api.booking.* cmd from
 // templates/assets/demo/booking.
 
+// compliance-ignore-file: obs-flutter-trace (no outgoing HTTP to our backend here (flagged by file name or an external download); backend calls go through base_sdk's HttpService, which registers TraceIdInterceptor)
+
 import 'package:booking_sdk/src/common/infrastructure/models/booking_models.dart';
 import 'package:booking_sdk/src/common/infrastructure/repositories/booking_repository.dart';
 import 'package:booking_sdk/src/manager/infrastructure/repositories/seller_booking_repository.dart';

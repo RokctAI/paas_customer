@@ -729,6 +729,22 @@ abstract class AppHelpers {
   ///
   /// [isDarkMode] is accepted for existing callers and is not read: the
   /// brightness comes from the theme the sheet is shown in.
+  /// The tallest a modal sheet may be: [paddingTop] (scaled by `.r`) below
+  /// the top of the screen, never under the status bar. A sheet that would
+  /// stop within 96 logical pixels of the status bar runs right up to it
+  /// instead: the thin gap showed a faded strip of the page underneath -
+  /// its header ("Profile settings", "Products") peeking out under the
+  /// clock (tour 1114, driver 21-users_profile_settings, manager
+  /// 13-add_product). A sheet that stops well short of the top keeps its
+  /// gap.
+  static double _sheetMaxHeight(BuildContext context, double paddingTop) {
+    final double screenHeight = MediaQuery.sizeOf(context).height;
+    final double underStatusBar =
+        screenHeight - MediaQuery.paddingOf(context).top;
+    final double height = min(screenHeight - paddingTop.r, underStatusBar);
+    return underStatusBar - height < 96 ? underStatusBar : height;
+  }
+
   static void showCustomModalBottomSheet({
     required BuildContext context,
     required Widget modal,
@@ -754,7 +770,10 @@ abstract class AppHelpers {
       ),
       isScrollControlled: true,
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.sizeOf(context).height - paddingTop.r,
+        // Never taller than the space under the status bar: paddingTop is
+        // scaled by .r, which shrinks below 1 on short phones (tour 1113b).
+        // See [_sheetMaxHeight] for the near-full-height rule.
+        maxHeight: _sheetMaxHeight(context, paddingTop),
         maxWidth: anchorEnd ? double.infinity : maxWidth,
       ),
       backgroundColor: AppStyle.transparent,
@@ -789,6 +808,22 @@ abstract class AppHelpers {
     // Compact windows keep the classic full-width sheet; anything wider
     // anchors the sheet to the END side instead of centering it.
     final bool anchorEnd = windowSizeOf(context).isAtLeastMedium;
+    // The drag sheet is maxChildSize of the constrained height, so the
+    // near-full-height rule must look at the height it really reaches:
+    // running the constraint up to the status bar and then taking 90% of
+    // it still left a strip of the page above the sheet - the ghost
+    // "Profile settings" row behind the edit-profile header (tour 1114b,
+    // driver 21-users_profile_settings). A drag sheet that would stop
+    // within 96 logical px of the status bar opens at full height.
+    final double screenHeight = MediaQuery.sizeOf(context).height;
+    final double underStatusBar =
+        screenHeight - MediaQuery.paddingOf(context).top;
+    double sheetMaxHeight = _sheetMaxHeight(context, paddingTop);
+    double childSize = maxChildSize;
+    if (underStatusBar - sheetMaxHeight * childSize < 96) {
+      sheetMaxHeight = underStatusBar;
+      childSize = 1.0;
+    }
     showModalBottomSheet(
       isDismissible: isDismissible,
       enableDrag: isDrag,
@@ -800,15 +835,18 @@ abstract class AppHelpers {
       ),
       isScrollControlled: true,
       constraints: BoxConstraints(
-        maxHeight: MediaQuery.sizeOf(context).height - paddingTop.r,
+        // Never taller than the space under the status bar: paddingTop is
+        // scaled by .r, which shrinks below 1 on short phones (tour 1113b).
+        // See [_sheetMaxHeight] for the near-full-height rule.
+        maxHeight: sheetMaxHeight,
         maxWidth: anchorEnd ? double.infinity : maxWidth,
       ),
       backgroundColor: AppStyle.transparent,
       context: context,
       builder: (context) {
         final Widget sheet = DraggableScrollableSheet(
-          initialChildSize: maxChildSize,
-          maxChildSize: maxChildSize,
+          initialChildSize: childSize,
+          maxChildSize: childSize,
           expand: false,
           builder: (BuildContext context, ScrollController scrollController) {
             return modal(scrollController);
