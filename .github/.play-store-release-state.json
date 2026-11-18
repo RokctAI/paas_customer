@@ -1,8 +1,8 @@
 {
-  "last_version": "2.8.12",
+  "last_version": "2.8.13",
   "package_name": "app.juvo.food",
-  "last_release_iso_week": "2026-W42",
-  "last_release_date": "2026-10-16T00:00:00Z",
-  "last_release_sha": "128dd89a89af943a668fe32f24e180365704def3",
-  "track": "internal"
+  "last_release_iso_week": "2026-W47",
+  "last_release_date": "2026-11-18T09:10:43Z",
+  "last_release_sha": "576052f073339783c4b02ec1ef8e491d715ed241",
+  "track": "production"
 }
