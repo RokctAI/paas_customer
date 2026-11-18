@@ -3,7 +3,7 @@
 Juvo is a multi store marketplace.
 
 <!-- @generated-store-description-start -->
-Juvo is every store in one app. Browse deals, categories and every local shop on one home screen, search across shops and products with filters, and save your favourite shops so they wait for you.
+Juvo is every store in one app. Shop a single store or a multi-vendor marketplace, depending on how the platform is set up. Browse deals, categories and every shop on one home screen, search across shops and products with filters, and save your favourite shops so they wait for you.
 
 Sign in or create an account in a few easy steps, reset your password securely, and set up the app your way: addresses, language and currency.
 
