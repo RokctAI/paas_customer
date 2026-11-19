@@ -3,15 +3,24 @@
 Juvo is a multi store marketplace.
 
 <!-- @generated-store-description-start -->
-Juvo is every store in one app. Shop a single store or a multi-vendor marketplace, depending on how the platform is set up. Browse deals, categories and every shop on one home screen, search across shops and products with filters, and save your favourite shops so they wait for you.
+Juvo is every store in one app. Shop a single store or a multi-vendor
+marketplace, depending on how the platform is set up. Browse deals, categories
+and every shop on one home screen, search across shops and products with
+filters, and save your favourite shops so they wait for you.
 
-Sign in or create an account in a few easy steps, reset your password securely, and set up the app your way: addresses, language and currency.
+Sign in or create an account in a few easy steps, reset your password securely,
+and set up the app your way: addresses, language and currency.
 
-Top up your Juvo wallet in seconds with an amount and a card, and follow every top-up and spend in a history that always adds up.
+Top up your Juvo wallet in seconds with an amount and a card, and follow every
+top-up and spend in a history that always adds up.
 
-See your orders in one list, with active orders first and the rest in your history. Track each order live, from the kitchen to the door, as its status updates.
+See your orders in one list, with active orders first and the rest in your
+history. Track each order live, from the kitchen to the door, as its status
+updates.
 
-Juvo is the customer app of a white-label delivery platform. The stores, the drivers and the delivery run behind it are the ones the platform's operator runs.
+Juvo is the customer app of a white-label delivery platform. The stores, the
+drivers and the delivery run behind it are the ones the platform's operator
+runs.
 <!-- @generated-store-description-end -->
 
 <!-- @generated-tour-gallery-start -->
