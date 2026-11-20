@@ -39,6 +39,11 @@ android/app/release
 # (CI regenerates it in-place on every guided-tour run).
 !integration_test/tour_steps.g.dart
 
+# Same exception for the render strip's generated screen list: the committed
+# copy is an empty stub so test/render/render_screen_test.dart compiles; the
+# strip run regenerates it in place.
+!test/render/render_screens.g.dart
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

@@ -18,7 +18,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-// Render harness for paas_customer — the customer PROFILE screen.
+// Render harness for paas_customer — the customer PROFILE screen, plus the
+// guided tour's screens from kGeneratedScreens (see the loop in main).
 //
 // Copied from RokctAI/shared-workflows templates/render-harness/ and worked
 // through its eight `TODO(harness)` markers. Everything below the
@@ -76,6 +77,8 @@ import 'package:base_sdk/src/domain/interface/auth.dart';
 // ApiResult's `when` is an extension declared in its freezed part, so the
 // library that declares it has to be imported for the pattern to be in scope.
 import 'package:base_sdk/src/handlers/api_result.dart';
+import 'package:base_sdk/src/models/data/address_old_data.dart';
+import 'package:base_sdk/src/models/data/location.dart';
 import 'package:base_sdk/src/presentation/adaptive/breakpoints.dart';
 import 'package:base_sdk/src/presentation/components/floating_nav/floating_bottom_nav.dart';
 import 'package:base_sdk/src/presentation/pages/profile/generic_profile_page.dart';
@@ -103,6 +106,12 @@ import 'package:marketplace_sdk/marketplace_sdk.dart'
 // ignore: implementation_imports
 import 'package:marketplace_sdk/src/common/presentation/pages/profile/marketplace_profile_sections.dart';
 
+// Tour screens: one entry per guided-tour step that an SDK's render fragment
+// (templates/render/*.render.yaml) binds by name. Written by shared-workflows'
+// merge_render_fragments.py on every strip run; the committed copy is an empty
+// stub so this test compiles (and renders only the profile) without it.
+import 'render_screens.g.dart';
+
 // ---------------------------------------------------------------------------
 // Render settings - phone size the reviews are judged at. Only change these
 // if the whole review is moving to a different device class.
@@ -118,6 +127,12 @@ const double kDevicePixelRatio = 3.0;
 /// Tall probe viewport for the first pass. Must exceed the tallest screen; the
 /// second pass shrinks to the measured content height.
 const double kProbeHeight = 2600;
+
+/// Height of a generated tour screen's frame: one phone screen, as the tour's
+/// own stills capture it. A generated screen has no numbered chips to fit the
+/// frame to, and a screen-sized page (a Scaffold) fills any viewport it is
+/// given, so its content height cannot be measured the way the profile's is.
+const double kGeneratedHeight = 844;
 
 /// Slack below the last element in the final frame, in logical pixels.
 const double kBottomPadding = 20;
@@ -268,7 +283,7 @@ void registerScreen() {
 /// real one either way, and it is what owns everything on the frame.
 ///
 /// No overrides — the providers resolve against the demo DI registered above.
-Widget buildScreen({required bool dark}) {
+Widget buildScreen({required bool dark, Widget? screen}) {
   return ProviderScope(
     child: LayoutBuilder(
       builder: (context, constraints) {
@@ -307,7 +322,7 @@ Widget buildScreen({required bool dark}) {
             // before the first pump, so the Material tree and AppStyle's own
             // mode-resolving tokens agree.
             themeMode: dark ? ThemeMode.dark : ThemeMode.light,
-            home: const ProfileRouteView(isBackButton: false),
+            home: screen ?? const ProfileRouteView(isBackButton: false),
           ),
         );
       },
@@ -772,12 +787,24 @@ Future<void> renderVariant(
   required bool dark,
   required String name,
   required String dbDir,
+  // A tour screen from kGeneratedScreens: its widget and the finder that
+  // proves it is on screen. When set, this shell's own profile specs
+  // (elementSpecs/verifyFinders) do not apply - the frame is the whole screen
+  // at one phone height, with no numbered chips.
+  Widget Function()? screen,
+  Finder Function()? screenFinder,
 }) async {
   final outDir = Directory('${Directory.current.path}/out')
     ..createSync(recursive: true);
 
   _mockPathProvider(dbDir);
   _mockAbsentPlugins();
+
+  // Each variant starts from nothing. rootBundle caches every loadString
+  // FUTURE, and DemoGatewayInterceptor reads each fixture through it: a load
+  // the previous variant started in its fake-async zone and never finished
+  // is awaited forever by the next one.
+  rootBundle.clear();
 
   // App-wide state the screen reads before it builds. LocalStorage backs the
   // profile header, the language direction and the stored theme mode; the
@@ -791,6 +818,20 @@ Future<void> renderVariant(
     // Demo on: the mock preferences above start empty, so the persisted flag
     // is set again for each variant. DemoGatewayInterceptor reads it.
     await DemoSession.instance.activate();
+    if (screen != null) {
+      // The state the guided tour seeds in its first marketplace step
+      // (marketplace.tour.yaml): a selected address, so home's post-frame
+      // address check does not cover the screen with the AddAddress dialog on
+      // a fresh store, and one saved shop ("1", the demo fixtures' Corner
+      // Kitchen) so the favourites list is stocked.
+      await LocalStorage.setAddressSelected(AddressData(
+        id: 1,
+        title: 'Home',
+        address: '14 Jacaranda Road, Melville',
+        location: LocationModel(latitude: -26.2041, longitude: 28.0473),
+      ));
+      await LocalStorage.setSavedShopsList(<String>['1']);
+    }
   });
   AppStyle.setBrightness(dark ? Brightness.dark : Brightness.light);
 
@@ -815,10 +856,18 @@ Future<void> renderVariant(
   await tester.pumpWidget(
     RepaintBoundary(
       key: boundaryKey,
-      child: buildScreen(dark: dark),
+      child: buildScreen(dark: dark, screen: screen?.call()),
     ),
   );
   await _drain(tester);
+  final generated = screen != null;
+  if (generated) {
+    expect(
+      screenFinder!(),
+      findsOneWidget,
+      reason: 'the tour screen did not build under the harness',
+    );
+  }
 
   // Pass 1 measures the real content height in the tall probe viewport; pass 2
   // re-renders at exactly that height so the PNG is a full-length strip with
@@ -828,22 +877,29 @@ Future<void> renderVariant(
   // Before a single rect is taken: prove every finder still means what it
   // meant. A silently over- or under-matching finder is invisible in the
   // PNG, so it has to be caught here or not at all.
-  verifyFinders(tester);
+  if (!generated) verifyFinders(tester);
 
-  var measured = _measure(tester, elementSpecs());
-  expect(
-    measured,
-    isNotEmpty,
-    reason: 'no elements matched - check elementSpecs() and the gates in '
-        'registerScreen()',
-  );
+  var measured = generated ? <_Measured>[] : _measure(tester, elementSpecs());
+  if (!generated) {
+    expect(
+      measured,
+      isNotEmpty,
+      reason: 'no elements matched - check elementSpecs() and the gates in '
+          'registerScreen()',
+    );
+  }
 
-  final contentBottom =
-      measured.map((m) => m.rect.bottom).reduce((a, b) => a > b ? a : b);
-  final targetHeight = (contentBottom + kBottomPadding).clamp(
-    400.0,
-    kProbeHeight,
-  );
+  final double targetHeight;
+  if (generated) {
+    targetHeight = kGeneratedHeight;
+  } else {
+    final contentBottom =
+        measured.map((m) => m.rect.bottom).reduce((a, b) => a > b ? a : b);
+    targetHeight = (contentBottom + kBottomPadding).clamp(
+      400.0,
+      kProbeHeight,
+    );
+  }
 
   tester.view.physicalSize = Size(
     kLogicalWidth * kDevicePixelRatio,
@@ -851,7 +907,7 @@ Future<void> renderVariant(
   );
   await tester.pump(const Duration(milliseconds: 50));
   await _drain(tester, rounds: 4);
-  measured = _measure(tester, elementSpecs());
+  measured = generated ? <_Measured>[] : _measure(tester, elementSpecs());
 
   await tester.runAsync(() async {
     final boundary =
@@ -933,4 +989,36 @@ void main() {
       dbDir: dbDir,
     );
   });
+
+  // The guided tour's screens. run_strip.sh passes the tour plan to
+  // merge_render_fragments.py, which writes render_screens.g.dart with one
+  // entry per tour step that an SDK's render fragment names the same as the
+  // step key (marketplace_home, wallet_topup, customer_orders, ...). Nothing
+  // is named here: with the committed empty stub this loop has no entries.
+  //
+  // A screen the harness cannot render headlessly must not fail the run: it
+  // is logged and skipped, no PNG is written, and the strip config drops its
+  // frame (merge_render_fragments.py --prune-config). Check the log for
+  // "SKIPPED tour screen" lines when a screen is missing from the strip.
+  for (final entry in kGeneratedScreens.entries) {
+    for (final dark in <bool>[true, false]) {
+      final mode = dark ? 'dark' : 'light';
+      testWidgets('render tour screen ${entry.key} - $mode', (tester) async {
+        try {
+          await renderVariant(
+            tester,
+            dark: dark,
+            name: '${entry.key}_$mode$suffix',
+            dbDir: dbDir,
+            screen: entry.value.build,
+            screenFinder: entry.value.finder,
+          );
+        } catch (error) {
+          // ignore: avoid_print
+          print('SKIPPED tour screen ${entry.key} - $mode: $error');
+          tester.takeException();
+        }
+      });
+    }
+  }
 }
