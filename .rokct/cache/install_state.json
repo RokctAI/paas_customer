@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.111.2",
+      "version": "1.113.0",
       "files": {
         "lib/main.dart": "92423f25fa33333d67d8bd380b35d328cc5350033e61f0b750952a6d51641c34",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -347,7 +347,7 @@
       }
     },
     "marketplace_sdk": {
-      "version": "1.17.5",
+      "version": "1.17.6",
       "files": {
         "lib/presentation/routes/marketplace_route_pages.dart": "ba5b8dfae45b0ee10314f84d9b0adcabbccc9569a8a3f49ea1102c2ceb12d1d6"
       },
@@ -939,7 +939,7 @@
       ]
     },
     "orders_sdk": {
-      "version": "1.31.12",
+      "version": "1.32.1",
       "files": {
         "lib/presentation/routes/orders_customer_route_pages.dart": "acadebdd2b7525434e765bf02683c151b97d7a392e1552d8f2af02b916a4702c"
       },
@@ -1096,6 +1096,16 @@
             "import 'package:orders_sdk/src/translations/orders_en_translations.dart';"
           ],
           "_comment": "Registers English fallbacks for tr_keys whose legacy wire key humanizes badly (spproximate_preparation_time). Backend-served rows still win; the map is consulted only before the humanized-key fallback."
+        },
+        {
+          "id": "orders-af-bundled-translations",
+          "order": 65,
+          "body": "BundledTranslations.register('af', kOrdersAfTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:orders_sdk/src/translations/orders_af_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled copy for its manifest tr_keys at boot (lms_sdk precedent). Backend-served rows still win."
         }
       ],
       "tr_keys": {
@@ -1104,6 +1114,17 @@
         "openOrders": "open_orders",
         "manager": "manager",
         "paymentCancelled": "payment_cancelled",
+        "ordersInsufficientWalletBalance": "orders_insufficient_wallet_balance",
+        "ordersTopUpCreate": "orders_top_up_create",
+        "ordersTrackOrder": "orders_track_order",
+        "ordersCallDriver": "orders_call_driver",
+        "ordersOrderPlaced": "orders_order_placed",
+        "ordersPreparingYourOrder": "orders_preparing_your_order",
+        "ordersArrivingNow": "orders_arriving_now",
+        "ordersOnTheWay": "orders_on_the_way",
+        "ordersRateOrder": "orders_rate_order",
+        "ordersOrderCancelled": "orders_order_cancelled",
+        "ordersGetHelp": "orders_get_help",
         "ageVerification": "age_verification",
         "ageVerificationRequiredForAdultsOnly": "age_verification_is_required_to_order_adults_only_items",
         "adultsOnlyBirthDateNeeded": "this_order_includes_an_adults_only_item_please_confirm_your_date_of_birth",
@@ -1231,7 +1252,7 @@
       }
     },
     "payments_sdk": {
-      "version": "1.3.7",
+      "version": "1.4.0",
       "files": {},
       "routes": [],
       "app_routes": [],
@@ -1266,10 +1287,35 @@
         }
       ],
       "di_hooks": [],
-      "boot_hooks": []
+      "boot_hooks": [
+        {
+          "id": "payments-af-bundled-translations",
+          "order": 61,
+          "body": "BundledTranslations.register('af', kPaymentsAfTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:payments_sdk/src/translations/payments_af_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled copy for its manifest tr_keys at boot (lms_sdk precedent). Backend-served rows still win."
+        },
+        {
+          "id": "payments-en-bundled-translations",
+          "order": 62,
+          "body": "BundledTranslations.register('en', kPaymentsEnTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:payments_sdk/src/translations/payments_en_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled copy for its manifest tr_keys at boot (lms_sdk precedent). Backend-served rows still win."
+        }
+      ],
+      "tr_keys": {
+        "paymentsInstallWebview2Runtime": "payments_install_webview2_runtime",
+        "paymentsRetry": "payments_retry"
+      }
     },
     "delivery_sdk": {
-      "version": "1.31.2",
+      "version": "1.32.0",
       "files": {
         "assets/svg/balance.svg": "6f17d12b29de8e5500bc445ee89eec5c1fc8830cea42711af9bf80975e6b79ce",
         "assets/image/my_location.png": "0e6b49eb78d1f74ac96ac24ce39f834105ce68e361c302038ba9cefdcd926126",
@@ -1330,7 +1376,28 @@
         }
       ],
       "di_hooks": [],
-      "boot_hooks": [],
+      "boot_hooks": [
+        {
+          "id": "delivery-af-bundled-translations",
+          "order": 61,
+          "body": "BundledTranslations.register('af', kDeliveryAfTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:delivery_sdk/src/translations/delivery_af_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled copy for its manifest tr_keys at boot (lms_sdk precedent). Backend-served rows still win."
+        },
+        {
+          "id": "delivery-en-bundled-translations",
+          "order": 62,
+          "body": "BundledTranslations.register('en', kDeliveryEnTranslations);",
+          "imports": [
+            "import 'package:base_sdk/src/services/bundled_translations.dart';",
+            "import 'package:delivery_sdk/src/translations/delivery_en_translations.dart';"
+          ],
+          "_comment": "Registers this SDK's bundled copy for its manifest tr_keys at boot (lms_sdk precedent). Backend-served rows still win."
+        }
+      ],
       "asset_keys": {
         "pngMyLocation": "assets/image/my_location.png",
         "svgBalance": "assets/svg/balance.svg",
@@ -1352,7 +1419,10 @@
         "jobInHand": "job.in.hand",
         "noJobRightNow": "no.job.right.now",
         "pickUp": "pick.up",
-        "drop": "drop"
+        "drop": "drop",
+        "deliveryUser": "delivery_user",
+        "deliveryOnlineWaitingForOrders": "delivery_online_waiting_for_orders",
+        "deliveryNavigate": "delivery_navigate"
       },
       "integrations": [
         {
@@ -1806,16 +1876,16 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.111.2",
-      "hash": "110ad516b506569a"
+      "version": "1.113.0",
+      "hash": "3be4e1c419690bbb"
     },
     "comms": {
       "version": "1.23.4",
       "hash": "0967a0a2da1e17c4"
     },
     "marketplace": {
-      "version": "1.17.5",
-      "hash": "fb85f07e3e874bea"
+      "version": "1.17.6",
+      "hash": "5c73ac63d074f0db"
     },
     "merchants": {
       "version": "1.38.5",
@@ -1826,8 +1896,8 @@
       "hash": "2f5ef7cde06e3167"
     },
     "orders": {
-      "version": "1.31.12",
-      "hash": "79898c6fa7f5c6fc"
+      "version": "1.32.1",
+      "hash": "b781b36eb7b3051e"
     },
     "promotions": {
       "version": "1.4.2",
@@ -1854,12 +1924,12 @@
       "hash": "fc8e90fafcb03b9e"
     },
     "payments": {
-      "version": "1.3.7",
-      "hash": "efa7e2900fe7c723"
+      "version": "1.4.0",
+      "hash": "9c49279af321825d"
     },
     "delivery": {
-      "version": "1.31.2",
-      "hash": "0f65b9473b58ed62"
+      "version": "1.32.0",
+      "hash": "687c609cb4c5ee30"
     },
     "map": {
       "version": "1.5.2",

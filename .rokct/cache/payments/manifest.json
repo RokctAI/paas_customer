@@ -1,6 +1,7 @@
 {
   "name": "payments_sdk",
-  "version": "1.3.7",
+  "version": "1.4.0",
+  "_comment_version_1_4_0": "1.3.7 -> 1.4.0: feat(i18n). Hardcoded UI copy goes through trkeys (Ray, 2026-11-20): new payments_* tr_keys with bundled English and Afrikaans copy. Existing keys unchanged.",
   "_comment_version_1_3_6": "1.3.5 -> 1.3.6: version for the coach-mark guide mounted on this SDK's primary page (GuideHost and GuideAnchor from base_sdk 1.92.0, off in demo sessions). The mount landed without a version change; see CHANGELOG.",
   "_comment_version_1_3_5": "1.3.4 -> 1.3.5: the bundled flutter_braintree compiles against API 34. PaymentScreen resolves the orders repository only when the orders SDK is registered, so it opens in apps without one (supacharge); its PayFast new-card button shows only with an order and the orders SDK. setDefaultCard calls api.payment.set_default_card (needs the matching wallet backend) and saved cards carry is_default, with a set-as-default star in SavedCardsWidget. tokenizeCard refuses locally and no longer sends card numbers.",
   "_comment_version_1_3_4": "1.3.3 -> 1.3.4: declares embedded_widgets payFastWebView, paymentScreen and savedCardsWidget so the host answers EmbeddedWidgets.I for them. Nothing declared them, so the customer app's checkout card/PayFast payment and Profile Cards threw a StateError and wallet top-up with a new PayFast card showed \"not available\". preloadPayFastWebView is not declared: the composer generates only Widget-returning methods and it returns void.",
@@ -37,6 +38,32 @@
         "import 'package:base_sdk/src/models/data/saved_card.dart';",
         "import 'package:payments_sdk/src/common/presentation/pages/cards/payment_card.dart';"
       ]
+    }
+  ],
+  "tr_keys": {
+    "paymentsInstallWebview2Runtime": "payments_install_webview2_runtime",
+    "paymentsRetry": "payments_retry"
+  },
+  "boot_hooks": [
+    {
+      "id": "payments-af-bundled-translations",
+      "order": 61,
+      "body": "BundledTranslations.register('af', kPaymentsAfTranslations);",
+      "imports": [
+        "import 'package:base_sdk/src/services/bundled_translations.dart';",
+        "import 'package:payments_sdk/src/translations/payments_af_translations.dart';"
+      ],
+      "_comment": "Registers this SDK's bundled copy for its manifest tr_keys at boot (lms_sdk precedent). Backend-served rows still win."
+    },
+    {
+      "id": "payments-en-bundled-translations",
+      "order": 62,
+      "body": "BundledTranslations.register('en', kPaymentsEnTranslations);",
+      "imports": [
+        "import 'package:base_sdk/src/services/bundled_translations.dart';",
+        "import 'package:payments_sdk/src/translations/payments_en_translations.dart';"
+      ],
+      "_comment": "Registers this SDK's bundled copy for its manifest tr_keys at boot (lms_sdk precedent). Backend-served rows still win."
     }
   ]
 }

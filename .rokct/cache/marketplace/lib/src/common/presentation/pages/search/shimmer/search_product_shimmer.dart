@@ -12,6 +12,8 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:base_sdk/src/services/tr_keys.dart';
+import 'package:base_sdk/src/services/app_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -26,7 +28,7 @@ class SearchProductShimmer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        TitleAndIcon(title: "Products", rightTitle: "Found results"),
+        TitleAndIcon(title: AppHelpers.getTranslation(TrKeys.products), rightTitle: "Found results"),
         20.verticalSpace,
         AnimationLimiter(
           child: ListView.builder(

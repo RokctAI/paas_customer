@@ -13,14 +13,14 @@
 # from assets/demo/orders (api.order.list_orders, api.order.get_order_details);
 # order 3 is the fixtures' live, on-the-way order, the one the tour tracks.
 #
+# customer_order_tracking is not bound: its live map is a platform view
+# (MissingPluginException in a widget test) and leaves a timer running after
+# dispose, which fails the render test and blocks the tour (paas_customer run
+# 44738923180). The tour's own screenshot still covers that screen.
+#
 # Format: RokctAI/shared-workflows scripts/render/README.md
 screens:
   - name: customer_orders
     caption: Customer orders
     widget: OrdersListRouteView
     import: package:{package}/presentation/routes/orders_customer_route_pages.dart
-  - name: customer_order_tracking
-    caption: Customer order tracking
-    widget: OrderProgressRouteView
-    import: package:{package}/presentation/routes/orders_customer_route_pages.dart
-    construct: "const OrderProgressRouteView(orderId: '3')"

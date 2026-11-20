@@ -1,3 +1,7 @@
+## 1.17.6
+
+- fix(i18n): the search shimmer headers use the existing `products` / `restaurants` trkeys (Ray, 2026-11-20).
+
 ## 1.17.5
 
 - chore(render): render fragment `templates/render/marketplace.render.yaml` binds the five tour screens (marketplace_home, marketplace_category, marketplace_search, marketplace_favourites, marketplace_profile) to their widgets so the render strip can draw them from the tour plan. Templates only; no code change.

@@ -12,6 +12,7 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import 'package:payments_sdk/src/common/payments_tr_keys.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:remixicon/remixicon.dart';
@@ -315,14 +316,14 @@ class _PayFastWebViewWindowsState extends State<PayFastWebViewWindows> {
               ),
               24.verticalSpace,
               CustomButton(
-                title: 'Install WebView2 Runtime',
+                title: AppHelpers.getTranslation(PaymentsTrKeys.paymentsInstallWebview2Runtime),
                 onPressed: _openWebView2Installer,
               ),
               12.verticalSpace,
               CustomButton(
                 borderColor: AppStyle.black,
                 background: AppStyle.transparent,
-                title: 'Retry',
+                title: AppHelpers.getTranslation(PaymentsTrKeys.paymentsRetry),
                 onPressed: () {
                   setState(() {
                     _webView2Available = null;

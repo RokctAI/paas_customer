@@ -1,3 +1,7 @@
+## 1.4.0
+
+- feat(i18n): hardcoded UI copy goes through trkeys (Ray, 2026-11-20): 2 new `payments_*` tr_keys with bundled English and Afrikaans copy.
+
 ## 1.3.7
 
 - fix(loading): page-level spinners replaced by the base_sdk shimmer `Loading()` (Ray, 2026-11-13: "Remove spinners where you can and use shimmers in the apps").

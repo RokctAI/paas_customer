@@ -75,11 +75,25 @@ class TrKeys {
   static const String noJobRightNow = 'no.job.right.now';
   static const String pickUp = 'pick.up';
   static const String drop = 'drop';
+  static const String deliveryUser = 'delivery_user';
+  static const String deliveryOnlineWaitingForOrders = 'delivery_online_waiting_for_orders';
+  static const String deliveryNavigate = 'delivery_navigate';
   static const String ordersToAccept = 'orders_to_accept';
   static const String waitingOnYou = 'waiting_on_you';
   static const String openOrders = 'open_orders';
   static const String manager = 'manager';
   static const String paymentCancelled = 'payment_cancelled';
+  static const String ordersInsufficientWalletBalance = 'orders_insufficient_wallet_balance';
+  static const String ordersTopUpCreate = 'orders_top_up_create';
+  static const String ordersTrackOrder = 'orders_track_order';
+  static const String ordersCallDriver = 'orders_call_driver';
+  static const String ordersOrderPlaced = 'orders_order_placed';
+  static const String ordersPreparingYourOrder = 'orders_preparing_your_order';
+  static const String ordersArrivingNow = 'orders_arriving_now';
+  static const String ordersOnTheWay = 'orders_on_the_way';
+  static const String ordersRateOrder = 'orders_rate_order';
+  static const String ordersOrderCancelled = 'orders_order_cancelled';
+  static const String ordersGetHelp = 'orders_get_help';
   static const String ageVerification = 'age_verification';
   static const String ageVerificationRequiredForAdultsOnly = 'age_verification_is_required_to_order_adults_only_items';
   static const String adultsOnlyBirthDateNeeded = 'this_order_includes_an_adults_only_item_please_confirm_your_date_of_birth';
@@ -87,6 +101,8 @@ class TrKeys {
   static const String driverCollectsCashFromRecipient = 'driver_collects_cash_from_recipient';
   static const String enterCashAmountGreaterThanZero = 'enter_cash_amount_greater_than_zero';
   static const String underagePurchaseBlocked = 'you_must_be_18_or_older_to_order_adults_only_items';
+  static const String paymentsInstallWebview2Runtime = 'payments_install_webview2_runtime';
+  static const String paymentsRetry = 'payments_retry';
   static const String payWithANewCard = 'pay_with_a_new_card';
   static const String saveCardForRenewals = 'save_card_for_automatic_renewals';
   static const String cardRenewalConsent = 'card_automatic_renewal_consent';
@@ -1357,4 +1373,9 @@ class TrKeys {
   static const String schoolReportMarks = 'school_report_marks';
   static const String enterTheLatestMarksFromTheSchoolReport = 'enter_the_latest_marks_from_the_school_report';
   static const String admissionPointScore = 'admission_point_score';
+
+  // Hardcoded UI copy moved to trkeys (Ray, 2026-11-20).
+  static const String checkConnectionAndTryAgain = 'check_connection_and_try_again';
+  static const String continueOffline = 'continue_offline';
+  static const String skipGuide = 'skip_guide';
 }
