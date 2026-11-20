@@ -14,5 +14,5 @@ class GeneratedScreen {
   final Finder Function() finder;
 }
 
-final Map<String, GeneratedScreen> kGeneratedScreens = <String, GeneratedScreen>{
-};
+final Map<String, GeneratedScreen> kGeneratedScreens =
+    <String, GeneratedScreen>{};
