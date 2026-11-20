@@ -1056,6 +1056,21 @@ void main() {
           // ignore: avoid_print
           print('SKIPPED tour screen ${entry.key} - $mode: '
               '${problems.length} error(s); first: ${problems.first}');
+          // One JSON line per skipped screen, for the render strip's
+          // plain-language list (run_strip.sh turns these into
+          // render-skipped.md). Only the first line of the error is kept.
+          final reason = problems.first.toString().split('\n').first.trim();
+          Directory(outDir).createSync(recursive: true);
+          File('$outDir/skipped.jsonl').writeAsStringSync(
+            '${jsonEncode(<String, String>{
+              'key': entry.key,
+              'mode': mode,
+              'reason': reason.length > 200
+                  ? '${reason.substring(0, 197)}...'
+                  : reason,
+            })}\n',
+            mode: FileMode.append,
+          );
         }
       });
     }
