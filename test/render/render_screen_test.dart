@@ -1017,13 +1017,14 @@ void main() {
       final mode = dark ? 'dark' : 'light';
       testWidgets('render tour screen ${entry.key} - $mode', (tester) async {
         final name = '${entry.key}_$mode$suffix';
-        // Framework errors (a build that throws, an overflow, a failed
-        // lookup) are reported through FlutterError.onError, not thrown to
-        // the caller, and would otherwise fail the test from the binding's
-        // end-of-test check. Collect them for THIS screen instead and treat
-        // any as a skip; the handler is restored afterwards.
+        // Framework errors (a build that throws, a failed lookup, an
+        // overflow) are reported through FlutterError.onError, not thrown to
+        // the caller. Collect them for THIS screen instead. The handler is
+        // restored in the finally block below and again in a tear-down, as
+        // flutter_test checks FlutterError.onError is back to its original.
         final problems = <Object>[];
         final priorOnError = FlutterError.onError;
+        addTearDown(() => FlutterError.onError = priorOnError);
         FlutterError.onError = (FlutterErrorDetails details) {
           problems.add(details.exception);
         };
@@ -1042,11 +1043,26 @@ void main() {
             await tester.pumpWidget(const SizedBox.shrink());
           });
         } finally {
+          // The frame is captured (or given up on) by now; what follows is
+          // clean-up, and nothing from it may change the outcome.
+          final captured = problems.length;
+          await _drainPending(tester);
+          if (problems.length > captured) problems.length = captured;
+          while (tester.takeException() != null) {}
           FlutterError.onError = priorOnError;
-          tester.takeException();
         }
-        if (problems.isNotEmpty) {
-          // A screen that reported errors is not a trustworthy frame: drop
+        // A RenderFlex overflow is a cosmetic layout warning: the frame is
+        // still drawn and its PNG is worth keeping. Only other errors (a
+        // build that throws, a failed lookup) make a frame untrustworthy.
+        final hard = problems.where((e) => !_isOverflow(e)).toList();
+        if (problems.isNotEmpty && hard.isEmpty) {
+          // ignore: avoid_print
+          print('NOTE tour screen ${entry.key} - $mode: '
+              '${problems.length} layout overflow(s), PNG kept; '
+              'first: ${problems.first.toString().split('\n').first}');
+        }
+        if (hard.isNotEmpty) {
+          // A screen that reported hard errors is not a trustworthy frame: drop
           // anything it wrote so it is skipped, not half-composed.
           final outDir = '${Directory.current.path}/out';
           for (final ext in <String>['png', 'json']) {
@@ -1055,11 +1071,11 @@ void main() {
           }
           // ignore: avoid_print
           print('SKIPPED tour screen ${entry.key} - $mode: '
-              '${problems.length} error(s); first: ${problems.first}');
+              '${problems.length} error(s); first: ${hard.first}');
           // One JSON line per skipped screen, for the render strip's
           // plain-language list (run_strip.sh turns these into
           // render-skipped.md). Only the first line of the error is kept.
-          final reason = problems.first.toString().split('\n').first.trim();
+          final reason = hard.first.toString().split('\n').first.trim();
           Directory(outDir).createSync(recursive: true);
           File('$outDir/skipped.jsonl').writeAsStringSync(
             '${jsonEncode(<String, String>{
@@ -1097,4 +1113,21 @@ Future<void> _runGuarded(
     problems.add(error);
   });
   return done.future;
+}
+
+/// Whether [error] is only a RenderFlex/RenderBox overflow warning.
+bool _isOverflow(Object error) => error.toString().contains('overflowed by');
+
+/// Lets everything still scheduled after the screen was unmounted (a zero
+/// length timer from an in-flight request, a timeout) run on the fake clock.
+/// flutter_test fails a test that ends with a timer pending, and a tour screen
+/// that kicks off a request would otherwise fail the whole run for it.
+Future<void> _drainPending(WidgetTester tester) async {
+  for (var i = 0; i < 12; i++) {
+    try {
+      await tester.pump(const Duration(seconds: 30));
+    } catch (_) {
+      // Ignored: the frame is already captured.
+    }
+  }
 }
