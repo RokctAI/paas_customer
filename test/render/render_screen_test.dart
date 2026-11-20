@@ -401,28 +401,41 @@ List<ElementSpec> elementSpecs() {
 /// `label` freely; never reword `key`.
 List<ElementSpec> _textChip(String key, String label, String text) =>
     <ElementSpec>[
-      ElementSpec(key: key, label: label, finder: find.textContaining(text, findRichText: true).first),
+      ElementSpec(
+          key: key,
+          label: label,
+          finder: find.textContaining(text, findRichText: true).first),
     ];
 
 final Map<String, List<ElementSpec> Function()> kTourScreenChips =
     <String, List<ElementSpec> Function()>{
   'marketplace_home': () => <ElementSpec>[
-        ..._textChip('customer.home.address', 'Delivery address - where orders are sent', 'Delivery address'),
-        ..._textChip('customer.home.categories', 'Categories - tap one to see its shops', 'Burgers'),
-        ..._textChip('customer.home.brands', 'Favourite brands - shops you come back to', 'Favourite brands'),
-        ..._textChip('customer.home.discounts', 'Discounts - new items on sale', 'New items with a discount'),
+        ..._textChip('customer.home.address',
+            'Delivery address - where orders are sent', 'Delivery address'),
+        ..._textChip('customer.home.categories',
+            'Categories - tap one to see its shops', 'Burgers'),
+        ..._textChip('customer.home.brands',
+            'Favourite brands - shops you come back to', 'Favourite brands'),
+        ..._textChip('customer.home.discounts', 'Discounts - new items on sale',
+            'New items with a discount'),
       ],
   'marketplace_category': () => <ElementSpec>[
-        ..._textChip('customer.category.title', 'All shops in this category', 'All shops'),
-        ..._textChip('customer.category.count', 'Result count - how many shops match', 'Found'),
-        ..._textChip('customer.category.shop', 'Shop card - delivery time and rating', 'Flame-grilled'),
+        ..._textChip('customer.category.title', 'All shops in this category',
+            'All shops'),
+        ..._textChip('customer.category.count',
+            'Result count - how many shops match', 'Found'),
+        ..._textChip('customer.category.shop',
+            'Shop card - delivery time and rating', 'Flame-grilled'),
       ],
   'marketplace_search': () => <ElementSpec>[
-        ..._textChip('customer.search.field', 'Search box - shops and products', 'Search'),
-        ..._textChip('customer.search.recent', 'Recent searches - clear them any time', 'Recently'),
+        ..._textChip('customer.search.field', 'Search box - shops and products',
+            'Search'),
+        ..._textChip('customer.search.recent',
+            'Recent searches - clear them any time', 'Recently'),
       ],
   'marketplace_favourites': () => <ElementSpec>[
-        ..._textChip('customer.favourites.shop', 'Saved shop - tap to order again', 'Flame-grilled'),
+        ..._textChip('customer.favourites.shop',
+            'Saved shop - tap to order again', 'Flame-grilled'),
       ],
   'marketplace_profile': () => <ElementSpec>[
         ElementSpec(
@@ -435,21 +448,30 @@ final Map<String, List<ElementSpec> Function()> kTourScreenChips =
           label: 'Tile grid - orders, wallet, addresses and settings',
           finder: find.byType(MarketplaceProfileTileGrid),
         ),
-        ..._textChip('customer.profile.delete', 'Delete account', 'Delete account'),
+        ..._textChip(
+            'customer.profile.delete', 'Delete account', 'Delete account'),
       ],
   'wallet_topup': () => <ElementSpec>[
-        ..._textChip('customer.topup.amount', 'Amount - type how much to add', 'Enter amount'),
-        ..._textChip('customer.topup.quick', 'Quick amounts - one tap', 'Quick amount'),
-        ..._textChip('customer.topup.pay', 'Pay with a new card', 'Pay with a new card'),
-        ..._textChip('customer.topup.receive', 'Receive money from a friend', 'Receive from a friend'),
+        ..._textChip('customer.topup.amount', 'Amount - type how much to add',
+            'Enter amount'),
+        ..._textChip(
+            'customer.topup.quick', 'Quick amounts - one tap', 'Quick amount'),
+        ..._textChip(
+            'customer.topup.pay', 'Pay with a new card', 'Pay with a new card'),
+        ..._textChip('customer.topup.receive', 'Receive money from a friend',
+            'Receive from a friend'),
       ],
   'wallet_history': () => <ElementSpec>[
-        ..._textChip('customer.wallet.topup', 'Top up and Send buttons', 'Topup'),
-        ..._textChip('customer.wallet.list', 'Transactions - every payment in and out', 'Transactions'),
+        ..._textChip(
+            'customer.wallet.topup', 'Top up and Send buttons', 'Topup'),
+        ..._textChip('customer.wallet.list',
+            'Transactions - every payment in and out', 'Transactions'),
       ],
   'customer_orders': () => <ElementSpec>[
-        ..._textChip('customer.orders.tabs', 'Tabs - active orders, history and refunds', 'Active orders'),
-        ..._textChip('customer.orders.card', 'Order card - shop, total and the open arrow', 'Pizzeria'),
+        ..._textChip('customer.orders.tabs',
+            'Tabs - active orders, history and refunds', 'Active orders'),
+        ..._textChip('customer.orders.card',
+            'Order card - shop, total and the open arrow', 'Pizzeria'),
       ],
 };
 
