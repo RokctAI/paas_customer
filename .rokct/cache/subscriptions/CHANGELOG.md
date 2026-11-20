@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.1
+
+- feat(i18n): Afrikaans copy for 8 translation keys this SDK uses and English copy for 8, so both languages are complete. No behaviour change in English except proper wording where a key was humanized.
+
 ## 1.8.0
 
 * feat(plan): di_hook `plan-gated-sections` declares the profile sections the free tier must not see (`PlanAccess.gateProfileSections`, base_sdk 1.97.0). Inert unless the app installs the free-tier gate.

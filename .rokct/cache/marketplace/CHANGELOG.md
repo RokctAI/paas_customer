@@ -1,3 +1,7 @@
+## 1.17.7
+
+- feat(i18n): Afrikaans copy for 13 translation keys this SDK uses and English copy for 13, so both languages are complete. No behaviour change in English except proper wording where a key was humanized.
+
 ## 1.17.6
 
 - fix(i18n): the search shimmer headers use the existing `products` / `restaurants` trkeys (Ray, 2026-11-20).

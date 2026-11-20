@@ -77,4 +77,18 @@ const Map<String, String> kWalletEnTranslations = {
   'wallet_reference': 'Reference',
   'wallet_transaction_type': 'Type',
   'wallet_status': 'Status',
+
+  // Filled by scripts/trkeys-gaps (every key the SDK uses now has copy).
+  'amount_is_set_by_the_code': 'The amount is set by the code',
+  'cancel_code': 'Cancel code',
+  'code_from_friend': 'Code from a friend',
+  'code_valid_for_24_hours': 'The code is valid for 24 hours',
+  'enter_code_from_friend': 'Enter the code from your friend',
+  'enter_friend_phone_number': 'Enter your friend\'s phone number',
+  'enter_valid_six_digit_code': 'Enter a valid six-digit code',
+  'generate_code': 'Make a code',
+  'generate_new_code': 'Make a new code',
+  'hand_this_code_to_the_sender': 'Give this code to the person sending the money',
+  'receive_from_a_friend': 'Receive from a friend',
+  'send_to': 'Send to',
 };

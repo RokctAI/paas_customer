@@ -1,4 +1,12 @@
+## 1.113.2
+
+- feat: `UserRepositoryFacade.updatePassword` takes an optional `currentPassword` (the server requires it for a logged-in change; the forgot-password reset session is exempt). New trkeys `current_password` and `enter_your_current_password`, English and Afrikaans.
+
 # Changelog
+
+## 1.113.1
+
+- feat(i18n): Afrikaans copy for 9 translation keys this SDK uses and English copy for 9, so both languages are complete. No behaviour change in English except proper wording where a key was humanized.
 
 ## 1.113.0
 

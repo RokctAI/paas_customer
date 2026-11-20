@@ -1,0 +1,20 @@
+# Render fragment for booking_sdk (manager role).
+#
+# The manager reservation steps of templates/tour/booking.tour.yaml; `name`
+# equals the tour step key. The customer steps (reservations,
+# new_reservation) are not bound: no customer app composes booking_sdk yet.
+#
+# Format: RokctAI/shared-workflows scripts/render/README.md
+screens:
+  - name: shop_reservations
+    caption: Reservations
+    widget: ShopReservationsPage
+    import: package:{package}/presentation/pages/reservations/shop_reservations_page.dart
+  - name: reservation_tables
+    caption: Reservation tables
+    widget: ReservationTablesPage
+    import: package:{package}/presentation/pages/reservations/reservation_tables_page.dart
+  - name: reservation_schedule
+    caption: Reservation schedule
+    widget: ReservationSchedulePage
+    import: package:{package}/presentation/pages/reservations/reservation_schedule_page.dart

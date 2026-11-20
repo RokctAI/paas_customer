@@ -1,3 +1,7 @@
+## 1.4.1
+
+- feat(i18n): Afrikaans copy for 1 translation keys this SDK uses and English copy for 1, so both languages are complete. No behaviour change in English except proper wording where a key was humanized.
+
 ## 1.4.0
 
 - feat(i18n): hardcoded UI copy goes through trkeys (Ray, 2026-11-20): 2 new `payments_*` tr_keys with bundled English and Afrikaans copy.

@@ -1,6 +1,28 @@
 {
   "name": "marketplace_sdk",
-  "version": "1.17.6",
+  "version": "1.17.7",
+  "boot_hooks": [
+    {
+      "id": "marketplace-en-bundled-translations",
+      "order": 65,
+      "body": "BundledTranslations.register('en', kMarketplaceEnTranslations);",
+      "imports": [
+        "import 'package:base_sdk/src/services/bundled_translations.dart';",
+        "import 'package:marketplace_sdk/src/translations/marketplace_en_translations.dart';"
+      ],
+      "_comment": "Registers this SDK's bundled English (en) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+    },
+    {
+      "id": "marketplace-af-bundled-translations",
+      "order": 64,
+      "body": "BundledTranslations.register('af', kMarketplaceAfTranslations);",
+      "imports": [
+        "import 'package:base_sdk/src/services/bundled_translations.dart';",
+        "import 'package:marketplace_sdk/src/translations/marketplace_af_translations.dart';"
+      ],
+      "_comment": "Registers this SDK's bundled Afrikaans (af) map into base_sdk's BundledTranslations at boot. Backend-served rows still win."
+    }
+  ],
   "_comment_version_1_17_6": "1.17.5 -> 1.17.6: fix(i18n). The search shimmer headers use the existing products/restaurants trkeys (Ray, 2026-11-20).",
   "_comment_version_1_17_1": "1.17.0 -> 1.17.1: version for the coach-mark guide mounted on this SDK's primary page (GuideHost and GuideAnchor from base_sdk 1.92.0, off in demo sessions). The mount landed without a version change; see CHANGELOG.",
   "_comment_version_1_17_0": "1.16.1 -> 1.17.0: CustomerMainPage floats base_sdk's FloatingBottomNav instead of a docked BottomNavigationBar, restoring the legacy paas_customer nav: Home/Search/Liked tabs, the person's picture as FloatingNavTabsMode.profile (signed out: login), the basket as FloatingNavTabsMode.companion with the cart line count (pushOrderRoute), and in fixed-nav builds the 'you are shopping at' bar with the total. Requires base_sdk >= 1.87.0.",

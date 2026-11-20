@@ -1,3 +1,11 @@
+## 1.2.6
+
+- feat(i18n): bundled Afrikaans (and missing English) copy for every translation key this SDK uses, so both languages are complete.
+
+## 1.2.5
+
+- feat(render): templates/render/booking.render.yaml binds the manager tour steps shop_reservations, reservation_tables and reservation_schedule.
+
 ## 1.2.4
 
 - chore(compliance): compliance-ignore comments with reasons for the sdk_validator --compliance findings; no behaviour change.

@@ -19,4 +19,7 @@ const Map<String, String> kPaymentsEnTranslations = {
   // Hardcoded UI copy moved to trkeys (Ray, 2026-11-20).
   'payments_install_webview2_runtime': 'Install WebView2 Runtime',
   'payments_retry': 'Retry',
+
+  // Filled by scripts/trkeys-gaps (every key the SDK uses now has copy).
+  'set_as_default': 'Set as default',
 };

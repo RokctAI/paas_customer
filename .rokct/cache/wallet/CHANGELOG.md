@@ -1,3 +1,7 @@
+## 1.9.5
+
+- feat(i18n): Afrikaans copy for 30 translation keys this SDK uses and English copy for 12, so both languages are complete. No behaviour change in English except proper wording where a key was humanized.
+
 ## 1.9.4
 
 - chore(render): render fragment `templates/render/wallet.render.yaml` binds the tour screens (wallet_topup, wallet_history) to their route views so the render strip can draw them from the tour plan. Templates only; no code change.
