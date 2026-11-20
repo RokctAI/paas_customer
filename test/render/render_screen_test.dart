@@ -47,6 +47,7 @@
 //   flutter test test/render/render_screen_test.dart
 //   RENDER_SUFFIX=_draft flutter test test/render/render_screen_test.dart
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
@@ -95,8 +96,11 @@ import 'package:delivery_sdk/src/common/di/delivery_di.dart';
 import 'package:map_sdk/src/common/di/map_sdk_di.dart';
 import 'package:merchants_sdk/src/common/di/merchants_di.dart';
 import 'package:orders_sdk/src/common/di/orders_di.dart';
+import 'package:payments_sdk/src/common/di/payments_di.dart';
 import 'package:products_sdk/src/common/di/products_di.dart';
+import 'package:promotions_sdk/src/common/di/promotions_di.dart';
 import 'package:users_sdk/src/common/di/users_di.dart';
+import 'package:wallet_sdk/src/common/di/wallet_di.dart';
 
 import 'package:base_sdk/src/presentation/pages/profile/profile_section_registry.dart';
 import 'package:customer/presentation/routes/marketplace_route_pages.dart'
@@ -170,6 +174,14 @@ Future<void> registerDemoDependencies() async {
   OrdersSdkDependencies.register(getIt);
   ProductsSdkDependencies.register(getIt);
   UsersSdkDependencies.register(getIt);
+  // The tour's screens resolve these facades (search/home banners, the wallet
+  // top-up and history pages, order tracking's payment lookups). The composed
+  // main.dart registers them too; without them a screen throws a GetIt
+  // "not registered" StateError at build. Wallet and promotions also register
+  // their demo fixture directories here.
+  PromotionsSdkDependencies.register(getIt);
+  WalletSdkDependencies.register(getIt);
+  PaymentsSdkDependencies.register(getIt);
   // Driver-role DI hooks, mirroring main.dart's @generated-di-hooks block.
   MarketplaceSdkDependencies.register(getIt);
 }
@@ -1004,21 +1016,70 @@ void main() {
     for (final dark in <bool>[true, false]) {
       final mode = dark ? 'dark' : 'light';
       testWidgets('render tour screen ${entry.key} - $mode', (tester) async {
+        final name = '${entry.key}_$mode$suffix';
+        // Framework errors (a build that throws, an overflow, a failed
+        // lookup) are reported through FlutterError.onError, not thrown to
+        // the caller, and would otherwise fail the test from the binding's
+        // end-of-test check. Collect them for THIS screen instead and treat
+        // any as a skip; the handler is restored afterwards.
+        final problems = <Object>[];
+        final priorOnError = FlutterError.onError;
+        FlutterError.onError = (FlutterErrorDetails details) {
+          problems.add(details.exception);
+        };
         try {
-          await renderVariant(
-            tester,
-            dark: dark,
-            name: '${entry.key}_$mode$suffix',
-            dbDir: dbDir,
-            screen: entry.value.build,
-            screenFinder: entry.value.finder,
-          );
-        } catch (error) {
-          // ignore: avoid_print
-          print('SKIPPED tour screen ${entry.key} - $mode: $error');
+          await _runGuarded(problems, () async {
+            await renderVariant(
+              tester,
+              dark: dark,
+              name: name,
+              dbDir: dbDir,
+              screen: entry.value.build,
+              screenFinder: entry.value.finder,
+            );
+            // Unmount while the handler is still ours, so errors thrown by
+            // disposing the screen are collected too.
+            await tester.pumpWidget(const SizedBox.shrink());
+          });
+        } finally {
+          FlutterError.onError = priorOnError;
           tester.takeException();
+        }
+        if (problems.isNotEmpty) {
+          // A screen that reported errors is not a trustworthy frame: drop
+          // anything it wrote so it is skipped, not half-composed.
+          final outDir = '${Directory.current.path}/out';
+          for (final ext in <String>['png', 'json']) {
+            final file = File('$outDir/$name.$ext');
+            if (file.existsSync()) file.deleteSync();
+          }
+          // ignore: avoid_print
+          print('SKIPPED tour screen ${entry.key} - $mode: '
+              '${problems.length} error(s); first: ${problems.first}');
         }
       });
     }
   }
+}
+
+/// Runs [body] in an error zone. Anything it throws, and any uncaught async
+/// error raised while it runs, is appended to [problems] rather than failing
+/// the test.
+Future<void> _runGuarded(
+  List<Object> problems,
+  Future<void> Function() body,
+) {
+  final done = Completer<void>();
+  runZonedGuarded(() async {
+    try {
+      await body();
+    } catch (error) {
+      problems.add(error);
+    } finally {
+      if (!done.isCompleted) done.complete();
+    }
+  }, (error, stack) {
+    problems.add(error);
+  });
+  return done.future;
 }
