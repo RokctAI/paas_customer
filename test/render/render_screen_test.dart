@@ -392,6 +392,67 @@ List<ElementSpec> elementSpecs() {
   ];
 }
 
+/// Chips for the guided tour's generated screens, keyed by tour step key.
+///
+/// Written by hand, one entry per screen, so a NEW tour screen renders clean
+/// until someone adds its chips here (and its labels in strip.json). Finders
+/// anchor on the visible demo-fixture text, so a point that no longer
+/// resolves is simply dropped by [_measure] - it never fails the run. Reword
+/// `label` freely; never reword `key`.
+List<ElementSpec> _textChip(String key, String label, String text) =>
+    <ElementSpec>[
+      ElementSpec(key: key, label: label, finder: find.textContaining(text).first),
+    ];
+
+final Map<String, List<ElementSpec> Function()> kTourScreenChips =
+    <String, List<ElementSpec> Function()>{
+  'marketplace_home': () => <ElementSpec>[
+        ..._textChip('customer.home.address', 'Delivery address - where orders are sent', 'Delivery address'),
+        ..._textChip('customer.home.categories', 'Categories - tap one to see its shops', 'Burgers'),
+        ..._textChip('customer.home.brands', 'Favourite brands - shops you come back to', 'Favourite brands'),
+        ..._textChip('customer.home.discounts', 'Discounts - new items on sale', 'New items with a discount'),
+      ],
+  'marketplace_category': () => <ElementSpec>[
+        ..._textChip('customer.category.title', 'All shops in this category', 'All shops'),
+        ..._textChip('customer.category.count', 'Result count - how many shops match', 'Found'),
+        ..._textChip('customer.category.shop', 'Shop card - delivery time and rating', 'Corner Kitchen'),
+      ],
+  'marketplace_search': () => <ElementSpec>[
+        ..._textChip('customer.search.field', 'Search box - shops and products', 'Search'),
+        ..._textChip('customer.search.recent', 'Recent searches - clear them any time', 'Recently'),
+      ],
+  'marketplace_favourites': () => <ElementSpec>[
+        ..._textChip('customer.favourites.shop', 'Saved shop - tap to order again', 'Corner Kitchen'),
+      ],
+  'marketplace_profile': () => <ElementSpec>[
+        ElementSpec(
+          key: 'customer.profile.identity_card',
+          label: 'Identity card - avatar, name, email and the edit pencil',
+          finder: find.byKey(GenericProfilePage.accountHeaderKey),
+        ),
+        ElementSpec(
+          key: 'customer.profile.tile_grid',
+          label: 'Tile grid - orders, wallet, addresses and settings',
+          finder: find.byType(MarketplaceProfileTileGrid),
+        ),
+        ..._textChip('customer.profile.delete', 'Delete account', 'Delete account'),
+      ],
+  'wallet_topup': () => <ElementSpec>[
+        ..._textChip('customer.topup.amount', 'Amount - type how much to add', 'Enter amount'),
+        ..._textChip('customer.topup.quick', 'Quick amounts - one tap', 'Quick amount'),
+        ..._textChip('customer.topup.pay', 'Pay with a new card', 'Pay with a new card'),
+        ..._textChip('customer.topup.receive', 'Receive money from a friend', 'Receive from a friend'),
+      ],
+  'wallet_history': () => <ElementSpec>[
+        ..._textChip('customer.wallet.topup', 'Top up and Send buttons', 'Topup'),
+        ..._textChip('customer.wallet.list', 'Transactions - every payment in and out', 'Transactions'),
+      ],
+  'customer_orders': () => <ElementSpec>[
+        ..._textChip('customer.orders.tabs', 'Tabs - active orders, history and refunds', 'Active orders'),
+        ..._textChip('customer.orders.card', 'Order card - shop, total and the open arrow', 'Pizzeria'),
+      ],
+};
+
 /// Fails the run, loudly and with a reason, when a finder stops meaning what
 /// it meant.
 ///
@@ -805,6 +866,9 @@ Future<void> renderVariant(
   // at one phone height, with no numbered chips.
   Widget Function()? screen,
   Finder Function()? screenFinder,
+  // The numbered points for a tour screen (kTourScreenChips). Optional: a
+  // screen without an entry renders clean, with no chips.
+  List<ElementSpec> Function()? screenChips,
 }) async {
   final outDir = Directory('${Directory.current.path}/out')
     ..createSync(recursive: true);
@@ -891,7 +955,9 @@ Future<void> renderVariant(
   // PNG, so it has to be caught here or not at all.
   if (!generated) verifyFinders(tester);
 
-  var measured = generated ? <_Measured>[] : _measure(tester, elementSpecs());
+  var measured = generated
+      ? (screenChips == null ? <_Measured>[] : _measure(tester, screenChips()))
+      : _measure(tester, elementSpecs());
   if (!generated) {
     expect(
       measured,
@@ -919,7 +985,9 @@ Future<void> renderVariant(
   );
   await tester.pump(const Duration(milliseconds: 50));
   await _drain(tester, rounds: 4);
-  measured = generated ? <_Measured>[] : _measure(tester, elementSpecs());
+  measured = generated
+      ? (screenChips == null ? <_Measured>[] : _measure(tester, screenChips()))
+      : _measure(tester, elementSpecs());
 
   await tester.runAsync(() async {
     final boundary =
@@ -1037,6 +1105,7 @@ void main() {
               dbDir: dbDir,
               screen: entry.value.build,
               screenFinder: entry.value.finder,
+              screenChips: kTourScreenChips[entry.key],
             );
             // Unmount while the handler is still ours, so errors thrown by
             // disposing the screen are collected too.
