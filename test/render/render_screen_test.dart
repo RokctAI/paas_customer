@@ -415,14 +415,14 @@ final Map<String, List<ElementSpec> Function()> kTourScreenChips =
   'marketplace_category': () => <ElementSpec>[
         ..._textChip('customer.category.title', 'All shops in this category', 'All shops'),
         ..._textChip('customer.category.count', 'Result count - how many shops match', 'Found'),
-        ..._textChip('customer.category.shop', 'Shop card - delivery time and rating', 'Corner Kitchen'),
+        ..._textChip('customer.category.shop', 'Shop card - delivery time and rating', 'Flame-grilled'),
       ],
   'marketplace_search': () => <ElementSpec>[
         ..._textChip('customer.search.field', 'Search box - shops and products', 'Search'),
         ..._textChip('customer.search.recent', 'Recent searches - clear them any time', 'Recently'),
       ],
   'marketplace_favourites': () => <ElementSpec>[
-        ..._textChip('customer.favourites.shop', 'Saved shop - tap to order again', 'Corner Kitchen'),
+        ..._textChip('customer.favourites.shop', 'Saved shop - tap to order again', 'Flame-grilled'),
       ],
   'marketplace_profile': () => <ElementSpec>[
         ElementSpec(
