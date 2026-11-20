@@ -1,0 +1,21 @@
+# Render fragment for wallet_sdk.
+#
+# One screen per guided-tour step this SDK owns (templates/tour/
+# wallet.tour.yaml); `name` equals the tour step key. The widgets are the
+# route views the tour opens (/wallet-topup, /wallet-history), installed into
+# the shell by this SDK's manifest.
+#
+# Demo data: none to seed. Top-up renders its presets locally and shows the
+# no-saved-cards state; history renders the in-SDK demo rows (DemoWalletHistory
+# from assets/demo/wallet) in a demo session, as in the tour.
+#
+# Format: RokctAI/shared-workflows scripts/render/README.md
+screens:
+  - name: wallet_topup
+    caption: Wallet top-up
+    widget: WalletTopUpRouteView
+    import: package:{package}/presentation/routes/wallet_route_pages.dart
+  - name: wallet_history
+    caption: Wallet history
+    widget: WalletHistoryRouteView
+    import: package:{package}/presentation/routes/wallet_route_pages.dart

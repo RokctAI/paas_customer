@@ -1,0 +1,42 @@
+# Render fragment for marketplace_sdk (customer role).
+#
+# One screen per guided-tour step this SDK owns (templates/tour/
+# marketplace.tour.yaml); `name` equals the tour step key, which is how
+# RokctAI/shared-workflows scripts/render binds a screen to a step. The
+# widgets are the same pages the tour pushes, built standalone.
+#
+# Demo data: no seed here. The harness runs in a demo session, so the real
+# repositories are answered from the commerce SDKs' fixtures (assets/demo/
+# <sdk>), exactly as in the tour. The tour's first step also seeds a selected
+# address and one saved shop ("1", the fixtures' Corner Kitchen) into
+# LocalStorage; the shell's render test does the same for generated screens
+# (home's address check otherwise covers the screen with the AddAddress
+# dialog, and favourites would be empty).
+#
+# marketplace_profile is base_sdk's generic profile host, composed from the
+# sections this SDK registers at boot - the page the tour pushes. It renders
+# its guest state (no token), as in the tour.
+#
+# Format: RokctAI/shared-workflows scripts/render/README.md
+screens:
+  - name: marketplace_home
+    caption: Marketplace home
+    widget: HomePage
+    import: package:marketplace_sdk/src/common/presentation/pages/home/home_zero/home_page.dart
+  - name: marketplace_category
+    caption: Marketplace category
+    widget: ResultFilterPage
+    import: package:marketplace_sdk/src/common/presentation/pages/home/home_zero/filter/result_filter.dart
+    construct: "const ResultFilterPage(categoryId: '1')"
+  - name: marketplace_search
+    caption: Marketplace search
+    widget: SearchPage
+    import: package:marketplace_sdk/src/common/presentation/pages/search/search_page.dart
+  - name: marketplace_favourites
+    caption: Marketplace favourites
+    widget: LikePage
+    import: package:marketplace_sdk/src/common/presentation/pages/like/like_page.dart
+  - name: marketplace_profile
+    caption: Marketplace profile
+    widget: GenericProfilePage
+    import: package:base_sdk/src/presentation/pages/profile/generic_profile_page.dart

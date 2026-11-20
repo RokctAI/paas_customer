@@ -1649,7 +1649,7 @@ packages:
       path: ".rokct/cache/marketplace"
       relative: true
     source: path
-    version: "1.17.4"
+    version: "1.17.5"
   matcher:
     dependency: transitive
     description:
@@ -1727,7 +1727,7 @@ packages:
       path: ".rokct/cache/orders"
       relative: true
     source: path
-    version: "1.31.11"
+    version: "1.31.12"
   osm_nominatim:
     dependency: transitive
     description:
@@ -2548,7 +2548,7 @@ packages:
       path: ".rokct/cache/wallet"
       relative: true
     source: path
-    version: "1.9.3"
+    version: "1.9.4"
   watcher:
     dependency: transitive
     description:

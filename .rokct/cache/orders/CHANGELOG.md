@@ -1,3 +1,7 @@
+## 1.31.12
+
+- chore(render): render fragment `templates/render/orders.render.yaml` binds the customer order steps (customer_orders, customer_order_tracking) to their route views, order 3 for tracking, so the render strip can draw them from the tour plan. Templates only; no code change.
+
 ## 1.31.11
 
 - fix(pos cart): the `FoodStockItem` qty badge sizes to its label and is inset from the row edge, so "2 each" is no longer clipped on the left; the product name wraps to 2 lines (tour 1114b manager 19-order_pos_cart).

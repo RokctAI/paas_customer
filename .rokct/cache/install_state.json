@@ -347,7 +347,7 @@
       }
     },
     "marketplace_sdk": {
-      "version": "1.17.4",
+      "version": "1.17.5",
       "files": {
         "lib/presentation/routes/marketplace_route_pages.dart": "ba5b8dfae45b0ee10314f84d9b0adcabbccc9569a8a3f49ea1102c2ceb12d1d6"
       },
@@ -939,7 +939,7 @@
       ]
     },
     "orders_sdk": {
-      "version": "1.31.11",
+      "version": "1.31.12",
       "files": {
         "lib/presentation/routes/orders_customer_route_pages.dart": "acadebdd2b7525434e765bf02683c151b97d7a392e1552d8f2af02b916a4702c"
       },
@@ -1152,7 +1152,7 @@
       "boot_hooks": []
     },
     "wallet_sdk": {
-      "version": "1.9.3",
+      "version": "1.9.4",
       "files": {
         "lib/presentation/routes/wallet_route_pages.dart": "86d07bc5c2e239b713c49a9caa4f2dc6007ec1e20aa9519aeb960f3fcc8ee5a7",
         "assets/demo/wallet/api.user.get_wallet_history.json": "0041f5565b4da148f0eef8d8dbc96946fc8c71c4b1ddf4e1ddce4e9912d44e26"
@@ -1814,8 +1814,8 @@
       "hash": "0967a0a2da1e17c4"
     },
     "marketplace": {
-      "version": "1.17.4",
-      "hash": "0ace4518e4661b5a"
+      "version": "1.17.5",
+      "hash": "fb85f07e3e874bea"
     },
     "merchants": {
       "version": "1.38.5",
@@ -1826,8 +1826,8 @@
       "hash": "2f5ef7cde06e3167"
     },
     "orders": {
-      "version": "1.31.11",
-      "hash": "514638052d7119b3"
+      "version": "1.31.12",
+      "hash": "79898c6fa7f5c6fc"
     },
     "promotions": {
       "version": "1.4.2",
@@ -1850,8 +1850,8 @@
       "hash": "e8d5d2bacd7ec2dd"
     },
     "wallet": {
-      "version": "1.9.3",
-      "hash": "69d5462e22f9fa5e"
+      "version": "1.9.4",
+      "hash": "fc8e90fafcb03b9e"
     },
     "payments": {
       "version": "1.3.7",

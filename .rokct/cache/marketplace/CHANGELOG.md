@@ -1,3 +1,7 @@
+## 1.17.5
+
+- chore(render): render fragment `templates/render/marketplace.render.yaml` binds the five tour screens (marketplace_home, marketplace_category, marketplace_search, marketplace_favourites, marketplace_profile) to their widgets so the render strip can draw them from the tour plan. Templates only; no code change.
+
 ## 1.17.4
 
 - fix(loading): page-level spinners replaced by the base_sdk shimmer `Loading()` (Ray, 2026-11-13: "Remove spinners where you can and use shimmers in the apps").
