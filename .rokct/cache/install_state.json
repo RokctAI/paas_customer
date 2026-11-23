@@ -1,7 +1,7 @@
 {
   "packages": {
     "base_sdk": {
-      "version": "1.113.4",
+      "version": "1.113.8",
       "files": {
         "lib/main.dart": "92423f25fa33333d67d8bd380b35d328cc5350033e61f0b750952a6d51641c34",
         "lib/core/presentation/app_widget.dart": "84693c3c20ad9b9ef484145f704299b5e2c008b582d99a9686eb683eb0899e1f",
@@ -629,7 +629,7 @@
       ]
     },
     "auth_sdk": {
-      "version": "1.22.8",
+      "version": "1.22.9",
       "files": {
         "lib/presentation/routes/auth_route_pages.dart": "87b5d1dbc3f0f9417db5289be2c1ebbcb7dfecf1638f348b6f5ee1581f7ce4d2",
         "lib/presentation/routes/registration_step_pages.dart": "68aed195fc07db746a0919c7ba6d47ffa445ca86e7d9cf6ee50fbcb00e82d3c2",
@@ -1979,8 +1979,8 @@
   },
   "sdk_cache": {
     "base": {
-      "version": "1.113.4",
-      "hash": "900e0c4f94227801"
+      "version": "1.113.8",
+      "hash": "ed895a7b4d56a88c"
     },
     "comms": {
       "version": "1.23.5",
@@ -2011,8 +2011,8 @@
       "hash": "e363320501796768"
     },
     "auth": {
-      "version": "1.22.8",
-      "hash": "23bc47b120cf47fd"
+      "version": "1.22.9",
+      "hash": "6e5be5450b82aecc"
     },
     "users": {
       "version": "1.5.4",
