@@ -473,7 +473,7 @@ packages:
       path: ".rokct/cache/desktop"
       relative: true
     source: path
-    version: "1.2.2"
+    version: "1.2.3"
   dio:
     dependency: transitive
     description:
